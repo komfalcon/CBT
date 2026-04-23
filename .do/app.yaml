@@ -1,0 +1,75 @@
+name: jamb-cbt-backend
+services:
+  - name: jamb-cbt-backend
+    dockerfile_path: /backend/Dockerfile
+    source_dir: /
+    github:
+      repo: komfalcon/CBT
+      branch: main
+      deploy_on_push: true
+    http_port: 3000
+    health_check:
+      http_path: /health
+    envs:
+      - key: NODE_ENV
+        value: ${NODE_ENV}
+      - key: PORT
+        value: ${PORT}
+      - key: FRONTEND_URL
+        value: ${FRONTEND_URL}
+      - key: API_BASE_URL
+        value: ${API_BASE_URL}
+      - key: MONGODB_URI
+        value: ${MONGODB_URI}
+      - key: MONGO_INITDB_ROOT_USERNAME
+        value: ${MONGO_INITDB_ROOT_USERNAME}
+      - key: MONGO_INITDB_ROOT_PASSWORD
+        value: ${MONGO_INITDB_ROOT_PASSWORD}
+      - key: REDIS_URL
+        value: ${REDIS_URL}
+      - key: REDIS_PASSWORD
+        value: ${REDIS_PASSWORD}
+      - key: ELASTICSEARCH_URL
+        value: ${ELASTICSEARCH_URL}
+      - key: RABBITMQ_URL
+        value: ${RABBITMQ_URL}
+      - key: RABBITMQ_USER
+        value: ${RABBITMQ_USER}
+      - key: RABBITMQ_PASS
+        value: ${RABBITMQ_PASS}
+      - key: JWT_PRIVATE_KEY
+        value: ${JWT_PRIVATE_KEY}
+      - key: JWT_PUBLIC_KEY
+        value: ${JWT_PUBLIC_KEY}
+      - key: JWT_EXPIRY
+        value: ${JWT_EXPIRY}
+      - key: JWT_REFRESH_EXPIRY
+        value: ${JWT_REFRESH_EXPIRY}
+      - key: GOOGLE_CLIENT_ID
+        value: ${GOOGLE_CLIENT_ID}
+      - key: GOOGLE_CLIENT_SECRET
+        value: ${GOOGLE_CLIENT_SECRET}
+      - key: MICROSOFT_CLIENT_ID
+        value: ${MICROSOFT_CLIENT_ID}
+      - key: MICROSOFT_CLIENT_SECRET
+        value: ${MICROSOFT_CLIENT_SECRET}
+      - key: SENDGRID_API_KEY
+        value: ${SENDGRID_API_KEY}
+      - key: SENDGRID_FROM_EMAIL
+        value: ${SENDGRID_FROM_EMAIL}
+      - key: TERMII_API_KEY
+        value: ${TERMII_API_KEY}
+      - key: TERMII_SENDER_ID
+        value: ${TERMII_SENDER_ID}
+      - key: AWS_ACCESS_KEY_ID
+        value: ${AWS_ACCESS_KEY_ID}
+      - key: AWS_SECRET_ACCESS_KEY
+        value: ${AWS_SECRET_ACCESS_KEY}
+      - key: AWS_S3_BUCKET
+        value: ${AWS_S3_BUCKET}
+      - key: AWS_REGION
+        value: ${AWS_REGION}
+      - key: CF_PAGES_PROJECT_NAME
+        value: ${CF_PAGES_PROJECT_NAME}
+      - key: DO_APP_NAME
+        value: ${DO_APP_NAME}
