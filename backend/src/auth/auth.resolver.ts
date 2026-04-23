@@ -1,5 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
+import { RegisterDto } from './dto/register.dto';
 
 @Resolver()
 export class AuthResolver {
@@ -13,7 +14,13 @@ export class AuthResolver {
     @Args('phone', { nullable: true }) phone?: string,
     @Args('role', { nullable: true }) role?: string,
   ) {
-    const response = await this.authService.register({ fullName, email, password, phone, role });
+    const response = await this.authService.register({
+      fullName,
+      email,
+      password,
+      phone,
+      role: role as RegisterDto['role'],
+    });
     return response.message;
   }
 

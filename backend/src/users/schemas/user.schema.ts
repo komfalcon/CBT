@@ -184,7 +184,5 @@ export class User {
 export type UserDocument = HydratedDocument<User>;
 export const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.index({ email: 1 }, { unique: true });
-UserSchema.index({ jamb_reg_no: 1 }, { unique: true, sparse: true });
 UserSchema.index({ role: 1, account_status: 1 });
 UserSchema.index({ created_at: 1 });

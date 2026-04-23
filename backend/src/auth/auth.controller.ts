@@ -42,7 +42,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
-  login(@Req() req: Request & { user: unknown }, @Ip() ipAddress?: string, @Body() _: LoginDto) {
+  login(@Req() req: Request & { user: unknown }, @Body() _: LoginDto, @Ip() ipAddress?: string) {
     return this.authService.completeLogin(req.user as never, ipAddress);
   }
 

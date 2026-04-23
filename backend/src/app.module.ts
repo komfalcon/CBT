@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { join } from 'path';
+import { Request } from 'express';
 import { AuthModule } from './auth/auth.module';
 import { ExamModule } from './exam/exam.module';
 import { QuestionsModule } from './questions/questions.module';
@@ -36,7 +37,7 @@ import { HealthService } from './health.service';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
       playground: true,
-      context: ({ req }) => ({ req }),
+      context: ({ req }: { req: Request }) => ({ req }),
     }),
     AuthModule,
     ExamModule,
