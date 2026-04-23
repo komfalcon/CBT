@@ -17,6 +17,7 @@ import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { UserDocument } from '../users/schemas/user.schema';
 
 class VerifyEmailDto {
   token!: string;
@@ -42,8 +43,12 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
-  login(@Req() req: Request & { user: unknown }, @Body() _: LoginDto, @Ip() ipAddress?: string) {
-    return this.authService.completeLogin(req.user as never, ipAddress);
+  login(
+    @Req() req: Request & { user: UserDocument },
+    @Body() _: LoginDto,
+    @Ip() ipAddress?: string,
+  ) {
+    return this.authService.completeLogin(req.user, ipAddress);
   }
 
   @Post('verify-otp')

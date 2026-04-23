@@ -102,7 +102,6 @@ export class AuthService {
         email: user.email,
         role: user.role,
         tokenType: 'email_verification',
-        purpose: 'email_verification',
       },
       '24h',
     );
@@ -118,7 +117,7 @@ export class AuthService {
 
   async verifyEmail(token: string) {
     const payload = await this.verifyToken(token);
-    if (payload.purpose !== 'email_verification') {
+    if (payload.tokenType !== 'email_verification') {
       throw new BadRequestException('Invalid verification token.');
     }
 
@@ -184,7 +183,6 @@ export class AuthService {
           email: user.email,
           role: user.role,
           tokenType: 'mfa',
-          purpose: 'mfa',
         },
         '5m',
       );
@@ -205,7 +203,7 @@ export class AuthService {
 
   async verifyOtp(tempToken: string, otp: string, ipAddress?: string) {
     const payload = await this.verifyToken(tempToken);
-    if (payload.purpose !== 'mfa') {
+    if (payload.tokenType !== 'mfa') {
       throw new BadRequestException('Invalid MFA token.');
     }
 
@@ -258,7 +256,6 @@ export class AuthService {
           email: user.email,
           role: user.role,
           tokenType: 'password_reset',
-          purpose: 'password_reset',
         },
         '1h',
       );

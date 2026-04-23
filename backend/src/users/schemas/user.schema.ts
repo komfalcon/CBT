@@ -124,7 +124,7 @@ export class User {
   role!: UserRole;
 
   @Prop({
-    set: (value?: string) => (value ? encryptFieldValue(value) : value),
+    set: (value?: string) => (value ? encryptFieldValue(value) : undefined),
     get: (value?: string) => decryptFieldValue(value),
   })
   mfa_secret?: string;

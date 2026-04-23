@@ -1,6 +1,30 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Field, Mutation, ObjectType, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
+
+@ObjectType()
+class AuthTokensResponse {
+  @Field()
+  requiresMFA!: boolean;
+
+  @Field({ nullable: true })
+  tempToken?: string;
+
+  @Field({ nullable: true })
+  accessToken?: string;
+
+  @Field({ nullable: true })
+  refreshToken?: string;
+}
+
+@ObjectType()
+class RefreshTokenResponse {
+  @Field()
+  accessToken!: string;
+
+  @Field()
+  refreshToken!: string;
+}
 
 @Resolver()
 export class AuthResolver {
@@ -36,29 +60,26 @@ export class AuthResolver {
     return response.message;
   }
 
-  @Mutation(() => String)
+  @Mutation(() => AuthTokensResponse)
   async login(
     @Args('email') email: string,
     @Args('password') password: string,
     @Args('ipAddress', { nullable: true }) ipAddress?: string,
-  ) {
-    const response = await this.authService.loginWithCredentials(email, password, ipAddress);
-    return JSON.stringify(response);
+  ): Promise<AuthTokensResponse> {
+    return this.authService.loginWithCredentials(email, password, ipAddress);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => AuthTokensResponse)
   async verifyOtp(
     @Args('tempToken') tempToken: string,
     @Args('otp') otp: string,
     @Args('ipAddress', { nullable: true }) ipAddress?: string,
-  ) {
-    const response = await this.authService.verifyOtp(tempToken, otp, ipAddress);
-    return JSON.stringify(response);
+  ): Promise<AuthTokensResponse> {
+    return this.authService.verifyOtp(tempToken, otp, ipAddress);
   }
 
-  @Mutation(() => String)
-  async refreshToken(@Args('refreshToken') refreshToken: string) {
-    const response = await this.authService.refreshTokens(refreshToken);
-    return JSON.stringify(response);
+  @Mutation(() => RefreshTokenResponse)
+  async refreshToken(@Args('refreshToken') refreshToken: string): Promise<RefreshTokenResponse> {
+    return this.authService.refreshTokens(refreshToken);
   }
 }
