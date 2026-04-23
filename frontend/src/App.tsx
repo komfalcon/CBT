@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import AuthPage from './features/auth/AuthPage';
 
 function App() {
-  const { t } = useTranslation();
-
   return (
-    <main className="min-h-screen bg-background p-4 text-text-primary">
-      <h1 className="text-xl font-semibold">{t('welcome')}</h1>
-    </main>
+    <Routes>
+      <Route path="/auth" element={<AuthPage />} />
+      <Route path="*" element={<Navigate to="/auth" replace />} />
+    </Routes>
   );
 }
 
