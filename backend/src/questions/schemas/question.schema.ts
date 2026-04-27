@@ -159,7 +159,7 @@ export class Question {
   @Prop({ type: [Number], default: [], select: false })
   embedding_vector!: number[];
 
-  @Prop({ index: true })
+  @Prop()
   import_batch_id?: string;
 
   @Prop({ type: String, enum: QUESTION_SOURCES, default: 'manual' })

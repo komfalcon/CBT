@@ -10,8 +10,10 @@ import { parse } from 'csv-parse/sync';
 import ExcelJS from 'exceljs';
 import Redis from 'ioredis';
 import { v4 as uuidv4 } from 'uuid';
+import { CreateQuestionDto } from '../dto/create-question.dto';
 import { ImportQuestionsDto } from '../dto/import-questions.dto';
 import { QuestionsService } from '../questions.service';
+import { QUESTION_SUBJECTS } from '../types/question.types';
 
 type ParsedImport = {
   importId: string;
@@ -100,15 +102,16 @@ export class ImportService {
 
   private async parseExcel(content: Buffer): Promise<Record<string, string>[]> {
     const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.load(content);
+    await workbook.xlsx.load(content as never);
     const worksheet = workbook.worksheets[0];
     if (!worksheet) {
       return [];
     }
 
     const headerRow = worksheet.getRow(1);
-    const headers = headerRow.values
-      .filter((value) => typeof value === 'string')
+    const rawValues = Array.isArray(headerRow.values) ? headerRow.values : [];
+    const headers = rawValues
+      .filter((value): value is string => typeof value === 'string')
       .map((value) => String(value).trim());
 
     const rows: Record<string, string>[] = [];
@@ -118,7 +121,7 @@ export class ImportService {
       }
 
       const data: Record<string, string> = {};
-      headers.forEach((header, index) => {
+      headers.forEach((header: string, index: number) => {
         const cellValue = row.getCell(index + 1).value;
         data[header] = cellValue ? String(cellValue).trim() : '';
       });
@@ -180,14 +183,17 @@ export class ImportService {
     };
   }
 
-  private mapRow(row: Record<string, string>, mapping: Record<string, string>) {
+  private mapRow(row: Record<string, string>, mapping: Record<string, string>): CreateQuestionDto {
     const read = (target: string): string => {
       const sourceKey = mapping[target] ?? target;
       return String(row[sourceKey] ?? '').trim();
     };
 
     const subject = read('subject').toLowerCase().replace(/\s+/g, '_');
-    const options = [
+    if (!QUESTION_SUBJECTS.includes(subject as (typeof QUESTION_SUBJECTS)[number])) {
+      throw new BadRequestException(`Invalid subject value: ${subject}`);
+    }
+    const options: CreateQuestionDto['options'] = [
       { id: 'A', text: read('option_a') },
       { id: 'B', text: read('option_b') },
       { id: 'C', text: read('option_c') },
@@ -204,18 +210,25 @@ export class ImportService {
       .map((entry) => entry.trim())
       .filter(Boolean);
 
+    const bloomValue = read('bloom_level');
+    const bloomLevel = bloomValue
+      ? (['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create'].includes(bloomValue)
+          ? bloomValue
+          : undefined)
+      : undefined;
+
     return {
-      subject,
+      subject: subject as CreateQuestionDto['subject'],
       topic: read('topic') || 'General',
       subtopic: read('subtopic') || undefined,
       year_sourced: read('year_sourced') ? Number(read('year_sourced')) : undefined,
       question_text: read('question_text'),
       options,
-      correct_option: read('correct_option').toUpperCase(),
+      correct_option: read('correct_option').toUpperCase() as CreateQuestionDto['correct_option'],
       explanation: read('explanation') || undefined,
-      question_type: read('question_type') || 'mcq_single',
+      question_type: (read('question_type') || 'mcq_single') as CreateQuestionDto['question_type'],
       difficulty_level: read('difficulty_level') ? Number(read('difficulty_level')) : 3,
-      bloom_level: read('bloom_level') || undefined,
+      bloom_level: bloomLevel as CreateQuestionDto['bloom_level'],
       estimated_solve_time_seconds: read('estimated_solve_time_seconds')
         ? Number(read('estimated_solve_time_seconds'))
         : 60,
