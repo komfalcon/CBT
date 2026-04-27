@@ -15,7 +15,7 @@ import { FilterQuestionsDto } from './dto/filter-questions.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
 import { Question, QuestionDocument } from './schemas/question.schema';
 import { SearchService } from './search/search.service';
-import { QUESTION_STATUSES } from './types/question.types';
+import { QUESTION_STATUSES, QUESTION_SUBJECTS } from './types/question.types';
 
 const duplicateStatuses = ['published', 'approved', 'under_review'];
 
@@ -135,6 +135,10 @@ export class QuestionsService {
 
   private normalizeTags(tags?: string[]): string[] {
     return (tags ?? []).map((entry) => entry.trim().toLowerCase()).filter(Boolean);
+  }
+
+  private sanitizeTextSearchInput(input: string): string {
+    return input.replace(/[^a-zA-Z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 300);
   }
 
   private async runDuplicateCheck(params: {
@@ -301,13 +305,18 @@ export class QuestionsService {
     difficulty_level?: number;
     status?: string;
   }) {
+    const sanitizedQuery = this.sanitizeTextSearchInput(params.q);
+    if (!sanitizedQuery) {
+      throw new BadRequestException('Search query is required');
+    }
+
     const filters: Record<string, unknown> = {
       subject: params.subject,
       difficulty_level: params.difficulty_level,
       status: params.status,
     };
 
-    const esResult = await this.searchService.searchQuestions(params.q, filters, {
+    const esResult = await this.searchService.searchQuestions(sanitizedQuery, filters, {
       page: params.page,
       limit: params.limit,
     });
@@ -326,21 +335,28 @@ export class QuestionsService {
       };
     }
 
-    const mongoQuery: FilterQuery<QuestionDocument> = { $text: { $search: params.q } };
-    if (params.subject) mongoQuery.subject = params.subject;
-    if (params.difficulty_level) mongoQuery.difficulty_level = params.difficulty_level;
-    if (params.status) mongoQuery.status = params.status;
+    const subjectFilter = params.subject && QUESTION_SUBJECTS.includes(params.subject as never) ? params.subject : undefined;
+    const statusFilter =
+      params.status && QUESTION_STATUSES.includes(params.status as never) ? params.status : undefined;
+    const difficultyFilter =
+      typeof params.difficulty_level === 'number' && params.difficulty_level >= 1 && params.difficulty_level <= 5
+        ? params.difficulty_level
+        : undefined;
 
-    const [data, total] = await Promise.all([
-      this.questionModel
-        .find(mongoQuery, { score: { $meta: 'textScore' } })
-        .sort({ score: { $meta: 'textScore' } })
-        .skip((params.page - 1) * params.limit)
-        .limit(params.limit)
-        .lean()
-        .exec(),
-      this.questionModel.countDocuments(mongoQuery).exec(),
-    ]);
+    const allQuestions = await this.questionModel.find().lean().exec();
+    const searchTokens = sanitizedQuery.toLowerCase().split(' ').filter(Boolean);
+    const filtered = allQuestions.filter((question) => {
+      if (subjectFilter && question.subject !== subjectFilter) return false;
+      if (statusFilter && question.status !== statusFilter) return false;
+      if (difficultyFilter && question.difficulty_level !== difficultyFilter) return false;
+
+      const text = question.question_text.toLowerCase();
+      return searchTokens.every((token) => text.includes(token));
+    });
+
+    const total = filtered.length;
+    const start = (params.page - 1) * params.limit;
+    const data = filtered.slice(start, start + params.limit);
 
     return {
       data,
