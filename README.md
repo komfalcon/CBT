@@ -9,13 +9,24 @@ Production-grade Computer-Based Test platform scaffold for Nigerian JAMB UTME.
 
 ## Run locally
 
-1. From the repository root:
+1. **Start the databases** (from the root directory):
    ```bash
-   docker compose up --build
+   docker compose up -d
    ```
-2. Open the app through nginx:
-   - Frontend: http://localhost:80
-   - Backend health: http://localhost:80/api/health
+2. **Start the backend API** (in a new terminal):
+   ```bash
+   cd backend
+   npm install
+   npm run start:dev
+   ```
+3. **Start the frontend UI** (in another terminal):
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   
+Your backend will run at http://localhost:3000 and your frontend at http://localhost:5173.
 
 ## Verify health check
 

@@ -49,8 +49,11 @@ export class AuthResolver {
   }
 
   @Mutation(() => String)
-  async verifyEmail(@Args('token') token: string) {
-    const response = await this.authService.verifyEmail(token);
+  async verifyEmail(
+    @Args('email') email: string,
+    @Args('code') code: string,
+  ) {
+    const response = await this.authService.verifyEmail(email, code);
     return response.message;
   }
 

@@ -1,1 +1,42 @@
-type Query { health: String }
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthTokensResponse {
+  requiresMFA: Boolean!
+  tempToken: String
+  accessToken: String
+  refreshToken: String
+}
+
+type RefreshTokenResponse {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type QuestionSubjectCount {
+  subject: String!
+  count: Int!
+}
+
+type QuestionListResponse {
+  total: Int!
+  page: Int!
+  limit: Int!
+  totalPages: Int!
+  questionIds: [String!]!
+}
+
+type Query {
+  questionSubjects: [QuestionSubjectCount!]!
+  questionSearch(q: String!, page: Int, limit: Int): QuestionListResponse!
+}
+
+type Mutation {
+  register(fullName: String!, email: String!, password: String!, phone: String, role: String): String!
+  verifyEmail(email: String!, code: String!): String!
+  forgotPassword(email: String!): String!
+  login(email: String!, password: String!, ipAddress: String): AuthTokensResponse!
+  verifyOtp(tempToken: String!, otp: String!, ipAddress: String): AuthTokensResponse!
+  refreshToken(refreshToken: String!): RefreshTokenResponse!
+}

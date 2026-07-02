@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Ip,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -17,10 +19,22 @@ import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { UserDocument } from '../users/schemas/user.schema';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { GoogleLoginDto } from './dto/google-login.dto';
+import { CbtKeyLoginDto } from './dto/cbt-key-login.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { JwtPayload } from './types/jwt-payload.type';
 
 class VerifyEmailDto {
-  token!: string;
+  @IsEmail()
+  email!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  code!: string;
 }
 
 @Controller('auth')
@@ -37,7 +51,7 @@ export class AuthController {
 
   @Post('verify-email')
   verifyEmail(@Body(new ValidationPipe({ whitelist: true })) body: VerifyEmailDto) {
-    return this.authService.verifyEmail(body.token);
+    return this.authService.verifyEmail(body.email, body.code);
   }
 
   @Post('login')
@@ -74,5 +88,46 @@ export class AuthController {
     @Body(new ValidationPipe({ whitelist: true, transform: true })) forgotPasswordDto: ForgotPasswordDto,
   ) {
     return this.authService.forgotPassword(forgotPasswordDto.email);
+  }
+
+  @Post('reset-password')
+  @HttpCode(200)
+  resetPassword(
+    @Body(new ValidationPipe({ whitelist: true, transform: true })) resetPasswordDto: ResetPasswordDto,
+  ) {
+    return this.authService.resetPassword(resetPasswordDto.email, resetPasswordDto.code, resetPasswordDto.password);
+  }
+
+  @Post('google')
+  @HttpCode(200)
+  loginGoogle(
+    @Body(new ValidationPipe({ whitelist: true, transform: true })) googleLoginDto: GoogleLoginDto,
+    @Ip() ipAddress?: string,
+  ) {
+    return this.authService.loginWithGoogle(googleLoginDto.credential, ipAddress);
+  }
+
+  @Post('login/cbt-key')
+  @HttpCode(200)
+  loginCbtKey(
+    @Body(new ValidationPipe({ whitelist: true, transform: true })) cbtKeyLoginDto: CbtKeyLoginDto,
+    @Ip() ipAddress?: string,
+  ) {
+    return this.authService.loginWithCbtKey(cbtKeyLoginDto.cbtKey, ipAddress);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  getMe(@Req() req: Request & { user: JwtPayload }) {
+    return this.authService.getProfile(req.user.sub);
+  }
+
+  @Patch('me')
+  @UseGuards(JwtAuthGuard)
+  updateMe(
+    @Req() req: Request & { user: JwtPayload },
+    @Body(new ValidationPipe({ whitelist: true, transform: true })) updateProfileDto: UpdateProfileDto,
+  ) {
+    return this.authService.updateProfile(req.user.sub, updateProfileDto);
   }
 }

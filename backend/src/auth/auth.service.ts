@@ -3,8 +3,11 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -87,6 +90,7 @@ export class AuthService {
       parallelism: 2,
     });
 
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
     const user = await this.userModel.create({
       fullName: parsed.data.fullName,
       email: normalizedEmail,
@@ -94,39 +98,44 @@ export class AuthService {
       passwordHash,
       role: parsed.data.role ?? 'student',
       account_status: 'pending_verification',
+      verification_code: code,
+      verification_code_expires: new Date(Date.now() + 24 * 3600 * 1000),
     });
-
-    const verificationToken = await this.signToken(
-      {
-        sub: user.userId,
-        email: user.email,
-        role: user.role,
-        tokenType: 'email_verification',
-      },
-      '24h',
-    );
 
     await this.notificationsService.queueEmailVerification({
       email: user.email,
       fullName: user.fullName,
-      token: verificationToken,
+      token: code,
     });
 
-    return { message: 'Registration successful. Check email to verify.' };
+    const isDev = this.configService.get<string>('NODE_ENV') === 'development';
+    return {
+      message: 'Registration successful. Check email to verify.',
+      cbt_key: user.cbt_key,
+      ...(isDev ? { token: code } : {}),
+    };
   }
 
-  async verifyEmail(token: string) {
-    const payload = await this.verifyToken(token);
-    if (payload.tokenType !== 'email_verification') {
-      throw new BadRequestException('Invalid verification token.');
+  async verifyEmail(email: string, code: string) {
+    const normalizedEmail = email.toLowerCase().trim();
+    const formattedCode = code.trim();
+
+    const user = await this.userModel.findOne({
+      email: normalizedEmail,
+      verification_code: formattedCode,
+    }).exec();
+
+    if (!user) {
+      throw new BadRequestException('Invalid email or verification code.');
     }
 
-    const user = await this.userModel.findOne({ userId: payload.sub }).exec();
-    if (!user) {
-      throw new BadRequestException('User not found for verification token.');
+    if (user.verification_code_expires && user.verification_code_expires.getTime() < Date.now()) {
+      throw new BadRequestException('Verification code has expired. Please register again.');
     }
 
     user.account_status = 'active';
+    user.verification_code = undefined;
+    user.verification_code_expires = undefined;
     await user.save();
 
     return { message: 'Email verified successfully.' };
@@ -249,26 +258,24 @@ export class AuthService {
     const normalizedEmail = email.toLowerCase();
     const user = await this.userModel.findOne({ email: normalizedEmail }).exec();
 
+    let code: string | undefined;
     if (user) {
-      const resetToken = await this.signToken(
-        {
-          sub: user.userId,
-          email: user.email,
-          role: user.role,
-          tokenType: 'password_reset',
-        },
-        '1h',
-      );
+      code = Math.floor(100000 + Math.random() * 900000).toString();
+      user.password_reset_code = code;
+      user.password_reset_expires = new Date(Date.now() + 3600 * 1000);
+      await user.save();
 
       await this.notificationsService.queuePasswordReset({
         email: user.email,
         fullName: user.fullName,
-        token: resetToken,
+        token: code,
       });
     }
 
+    const isDev = this.configService.get<string>('NODE_ENV') === 'development';
     return {
-      message: 'If this email is registered, a password reset link has been sent.',
+      message: 'If this email is registered, a password reset code has been sent.',
+      ...(isDev && code ? { token: code } : {}),
     };
   }
 
@@ -329,5 +336,164 @@ export class AuthService {
     const expectedOtp = (parseInt(digest.slice(-8), 16) % 1_000_000).toString().padStart(6, '0');
 
     return expectedOtp === otp;
+  }
+
+  async resetPassword(email: string, code: string, newPassword: string) {
+    const normalizedEmail = email.toLowerCase().trim();
+    const formattedCode = code.trim();
+
+    const user = await this.userModel.findOne({
+      email: normalizedEmail,
+      password_reset_code: formattedCode,
+    }).exec();
+
+    if (!user) {
+      throw new BadRequestException('Invalid email or reset code.');
+    }
+
+    if (user.password_reset_expires && user.password_reset_expires.getTime() < Date.now()) {
+      throw new BadRequestException('Reset code has expired. Please request a new one.');
+    }
+
+    const passwordHash = await argon2.hash(newPassword, {
+      type: argon2.argon2id,
+      memoryCost: 65_536,
+      timeCost: 3,
+      parallelism: 2,
+    });
+
+    user.passwordHash = passwordHash;
+    user.failed_login_attempts = 0;
+    user.lockout_until = undefined;
+    user.password_reset_code = undefined;
+    user.password_reset_expires = undefined;
+    await user.save();
+
+    return { message: 'Password has been reset successfully.' };
+  }
+
+  async loginWithGoogle(credential: string, ipAddress?: string) {
+    if (!credential) {
+      throw new BadRequestException('Credential is required.');
+    }
+
+    let googleUser: { email: string; name: string; picture?: string };
+    try {
+      const { data } = await axios.get<{
+        email: string;
+        name: string;
+        picture?: string;
+        email_verified: string | boolean;
+      }>(`https://oauth2.googleapis.com/tokeninfo?id_token=${credential}`);
+
+      if (!data.email) {
+        throw new UnauthorizedException('Invalid Google token.');
+      }
+      googleUser = {
+        email: data.email,
+        name: data.name || data.email.split('@')[0],
+        picture: data.picture,
+      };
+    } catch (error) {
+      throw new UnauthorizedException('Failed to verify Google token.');
+    }
+
+    const normalizedEmail = googleUser.email.toLowerCase();
+    let user = await this.userModel.findOne({ email: normalizedEmail }).exec();
+
+    if (!user) {
+      const dummyPassword = await argon2.hash(uuidv4(), {
+        type: argon2.argon2id,
+        memoryCost: 65_536,
+        timeCost: 3,
+        parallelism: 2,
+      });
+
+      user = await this.userModel.create({
+        fullName: googleUser.name,
+        email: normalizedEmail,
+        passwordHash: dummyPassword,
+        profile_photo_url: googleUser.picture,
+        role: 'student',
+        account_status: 'active',
+      });
+    } else {
+      if (user.account_status === 'pending_verification') {
+        user.account_status = 'active';
+      }
+      if (googleUser.picture && !user.profile_photo_url) {
+        user.profile_photo_url = googleUser.picture;
+      }
+      await user.save();
+    }
+
+    return this.completeLogin(user, ipAddress);
+  }
+
+  async loginWithCbtKey(cbtKey: string, ipAddress?: string) {
+    if (!cbtKey) {
+      throw new BadRequestException('CBT Key is required.');
+    }
+
+    const formattedKey = cbtKey.trim().toUpperCase();
+    const user = await this.userModel.findOne({ cbt_key: formattedKey }).exec();
+    if (!user) {
+      throw new UnauthorizedException('Invalid CBT Key.');
+    }
+
+    if (user.account_status !== 'active') {
+      throw new ForbiddenException(
+        `Account is ${user.account_status}. Please verify your account first.`,
+      );
+    }
+
+    return this.completeLogin(user, ipAddress);
+  }
+
+  async getProfile(userId: string) {
+    const user = await this.userModel.findOne({ userId }).exec();
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+    return user;
+  }
+
+  async updateProfile(userId: string, payload: { fullName?: string; phone?: string; exam_subject_combination?: string[] }) {
+    const user = await this.userModel.findOne({ userId }).exec();
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    if (payload.fullName !== undefined) {
+      user.fullName = payload.fullName;
+    }
+    if (payload.phone !== undefined) {
+      user.phone = payload.phone;
+    }
+    if (payload.exam_subject_combination !== undefined) {
+      const subjects = payload.exam_subject_combination.map(s => s.toLowerCase());
+      if (subjects.length > 0) {
+        if (!subjects.includes('english')) {
+          throw new BadRequestException('English Language is a compulsory subject and must be included.');
+        }
+        if (subjects.length !== 4) {
+          throw new BadRequestException('Subject combination must contain exactly 4 subjects.');
+        }
+        const validSubjects = [
+          'english', 'mathematics', 'physics', 'chemistry', 'biology',
+          'geography', 'economics', 'government', 'literature', 'commerce',
+          'accounting', 'agriculture', 'civic_education', 'crk', 'irk'
+        ];
+        for (const sub of subjects) {
+          if (!validSubjects.includes(sub)) {
+            throw new BadRequestException(`Invalid subject name: ${sub}`);
+          }
+        }
+      }
+      user.exam_subject_combination = subjects;
+    }
+
+    await user.save();
+    return user;
   }
 }

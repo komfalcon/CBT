@@ -96,6 +96,15 @@ export function decryptFieldValue(encryptedValue?: string): string | undefined {
   return decrypted.toString('utf8');
 }
 
+export function generateCbtKey(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `CBT-${code}`;
+}
+
 @Schema({
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   toJSON: { getters: true },
@@ -104,6 +113,9 @@ export function decryptFieldValue(encryptedValue?: string): string | undefined {
 export class User {
   @Prop({ default: uuidv4, unique: true })
   userId!: string;
+
+  @Prop({ default: generateCbtKey, unique: true, index: true, sparse: true })
+  cbt_key!: string;
 
   @Prop({ unique: true, sparse: true })
   jamb_reg_no?: string;
@@ -134,6 +146,18 @@ export class User {
 
   @Prop()
   profile_photo_url?: string;
+
+  @Prop()
+  verification_code?: string;
+
+  @Prop()
+  verification_code_expires?: Date;
+
+  @Prop()
+  password_reset_code?: string;
+
+  @Prop()
+  password_reset_expires?: Date;
 
   @Prop()
   state?: string;

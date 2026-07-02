@@ -18,12 +18,12 @@ export async function register(payload: {
   password: string;
   role?: 'super_admin' | 'admin' | 'examiner' | 'proctor' | 'student';
 }) {
-  const { data } = await api.post<{ message: string }>('/register', payload);
+  const { data } = await api.post<{ message: string; token?: string; cbt_key?: string }>('/register', payload);
   return data;
 }
 
-export async function verifyEmail(token: string) {
-  const { data } = await api.post<{ message: string }>('/verify-email', { token });
+export async function verifyEmail(payload: { email: string; code: string }) {
+  const { data } = await api.post<{ message: string }>('/verify-email', payload);
   return data;
 }
 
@@ -45,6 +45,38 @@ export async function refreshToken(refreshToken: string) {
 }
 
 export async function forgotPassword(email: string) {
-  const { data } = await api.post<{ message: string }>('/forgot-password', { email });
+  const { data } = await api.post<{ message: string; token?: string }>('/forgot-password', { email });
+  return data;
+}
+
+export async function resetPassword(payload: { email: string; code: string; password: string }) {
+  const { data } = await api.post<{ message: string }>('/reset-password', payload);
+  return data;
+}
+
+export async function googleLogin(payload: { credential: string }) {
+  const { data } = await api.post<LoginResponse>('/google', payload);
+  return data;
+}
+
+export async function loginWithCbtKey(payload: { cbtKey: string }) {
+  const { data } = await api.post<LoginResponse>('/login/cbt-key', payload);
+  return data;
+}
+
+export async function getMe(token: string) {
+  const { data } = await api.get<Record<string, any>>('/me', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return data;
+}
+
+export async function updateMe(
+  token: string,
+  payload: { fullName?: string; phone?: string; exam_subject_combination?: string[] },
+) {
+  const { data } = await api.patch<Record<string, any>>('/me', payload, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   return data;
 }
