@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMe, updateMe } from '../features/auth/api';
+import { getResultsHistory, GradedResultRecord } from '../features/results/api';
+import { createExamSession } from '../features/exam/api';
 import {
   User,
   BookOpen,
@@ -13,6 +15,9 @@ import {
   AlertTriangle,
   Grid,
   CheckCircle2,
+  History,
+  Target,
+  ArrowRight,
 } from 'lucide-react';
 
 const SUBJECT_LABELS: Record<string, string> = {
@@ -31,6 +36,8 @@ const SUBJECT_LABELS: Record<string, string> = {
   civic_education: 'Civic Education',
   crk: 'Christian Religious Knowledge',
   irk: 'Islamic Religious Knowledge',
+  history: 'History',
+  further_mathematics: 'Further Mathematics',
 };
 
 const AVAILABLE_SUBJECTS = Object.keys(SUBJECT_LABELS).filter((s) => s !== 'english');
@@ -46,6 +53,12 @@ export default function StudentDashboard() {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [message, setMessage] = useState<string>('');
 
+  // Results & drills states
+  const [resultsList, setResultsList] = useState<GradedResultRecord[]>([]);
+  const [isDrillModalOpen, setIsDrillModalOpen] = useState<boolean>(false);
+  const [drillSubject, setDrillSubject] = useState<string>('');
+  const [drillCount, setDrillCount] = useState<number>(20);
+
   useEffect(() => {
     const savedToken = localStorage.getItem('accessToken');
     if (!savedToken) {
@@ -53,15 +66,18 @@ export default function StudentDashboard() {
       return;
     }
     setToken(savedToken);
-    fetchProfile(savedToken);
+    fetchProfileAndHistory(savedToken);
   }, [navigate]);
 
-  const fetchProfile = async (authToken: string) => {
+  const fetchProfileAndHistory = async (authToken: string) => {
     setLoading(true);
     try {
-      const data = await getMe(authToken);
-      setStudent(data);
-      setSelectedSubjects(data.exam_subject_combination || ['english']);
+      const profile = await getMe(authToken);
+      setStudent(profile);
+      setSelectedSubjects(profile.exam_subject_combination || ['english']);
+
+      const history = await getResultsHistory(authToken);
+      setResultsList(history);
     } catch (err: any) {
       console.error(err);
       setError('Session expired or failed to load profile.');
@@ -69,6 +85,34 @@ export default function StudentDashboard() {
       localStorage.removeItem('refreshToken');
       navigate('/auth?mode=login');
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStartMock = async () => {
+    try {
+      setLoading(true);
+      const session = await createExamSession(token, { type: 'mock' });
+      navigate(`/exam/${session.sessionId}`);
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Failed to initialize mock exam.');
+      setLoading(false);
+    }
+  };
+
+  const handleStartDrill = async () => {
+    if (!drillSubject) return;
+    try {
+      setLoading(true);
+      const session = await createExamSession(token, {
+        type: 'drill',
+        subject: drillSubject,
+        count: drillCount,
+      });
+      setIsDrillModalOpen(false);
+      navigate(`/exam/${session.sessionId}`);
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Failed to initialize subject drill.');
       setLoading(false);
     }
   };
@@ -293,7 +337,7 @@ export default function StudentDashboard() {
           <div className="rounded-2xl border border-slate-900 bg-slate-900/40 p-6">
             <div className="flex items-center gap-2 mb-4">
               <Play className="h-5 w-5 text-indigo-400" />
-              <h3 className="text-sm font-bold text-white">UTME practice Center</h3>
+              <h3 className="text-sm font-bold text-white">UTME Practice Center</h3>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
@@ -301,13 +345,13 @@ export default function StudentDashboard() {
               <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 flex flex-col justify-between">
                 <div>
                   <h4 className="text-base font-bold text-white mb-2">4-Subject Mock Exam</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                  <p className="text-xs text-slate-405 leading-relaxed mb-4">
                     Full computer-based simulation mirroring the 180 questions and strict countdown timer of the JAMB UTME exam.
                   </p>
                 </div>
                 <button
                   disabled={!isCombinationValid}
-                  onClick={() => alert('Practice Exam logic will load in the Exam Simulator module.')}
+                  onClick={handleStartMock}
                   className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 py-3 text-sm font-bold text-white hover:from-indigo-500 hover:to-violet-500 transition-all disabled:opacity-30 disabled:pointer-events-none"
                 >
                   Start Simulation Mock
@@ -317,23 +361,26 @@ export default function StudentDashboard() {
               {/* Launcher Card 2: Single Subject Practice */}
               <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 flex flex-col justify-between">
                 <div>
-                  <h4 className="text-base font-bold text-white mb-2">Single Subject drills</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                  <h4 className="text-base font-bold text-white mb-2">Single Subject Drills</h4>
+                  <p className="text-xs text-slate-405 leading-relaxed mb-4">
                     Focus on individual areas. Practice 10, 20, or 40 questions at your own speed with instant feedback.
                   </p>
                 </div>
                 <button
                   disabled={!isCombinationValid}
-                  onClick={() => alert('Practice drill will load in the Exam Simulator.')}
+                  onClick={() => {
+                    if (combination.length > 0) setDrillSubject(combination[0]);
+                    setIsDrillModalOpen(true);
+                  }}
                   className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 py-3 text-sm font-bold text-slate-200 transition-all disabled:opacity-30 disabled:pointer-events-none"
                 >
-                  Configure Subject drill
+                  Configure Subject Drill
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Performance Dashboard Mock charts */}
+          {/* Performance Dashboard charts */}
           <div className="rounded-2xl border border-slate-900 bg-slate-900/40 p-6">
             <div className="flex items-center gap-2 mb-4">
               <Award className="h-5 w-5 text-indigo-400" />
@@ -342,20 +389,81 @@ export default function StudentDashboard() {
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="rounded-xl bg-slate-950 p-4 border border-slate-850 text-center">
                 <div className="text-xs text-slate-400">Total Exams Completed</div>
-                <div className="text-2xl font-black text-white mt-1">0</div>
+                <div className="text-2xl font-black text-white mt-1">
+                  {resultsList.length}
+                </div>
                 <span className="text-[10px] text-slate-500">Practice makes perfect</span>
               </div>
               <div className="rounded-xl bg-slate-950 p-4 border border-slate-850 text-center">
                 <div className="text-xs text-slate-400">Average UTME Score</div>
-                <div className="text-2xl font-black text-indigo-400 mt-1">N/A</div>
+                <div className="text-2xl font-black text-indigo-400 mt-1">
+                  {resultsList.filter((r) => r.type === 'mock').length > 0
+                    ? Math.round(
+                        resultsList
+                          .filter((r) => r.type === 'mock')
+                          .reduce((acc, r) => acc + r.totalScore, 0) /
+                          resultsList.filter((r) => r.type === 'mock').length,
+                      )
+                    : 'N/A'}
+                </div>
                 <span className="text-[10px] text-slate-500">Target score is 300+</span>
               </div>
               <div className="rounded-xl bg-slate-950 p-4 border border-slate-850 text-center">
-                <div className="text-xs text-slate-400">Syllabus Completion</div>
-                <div className="text-2xl font-black text-violet-400 mt-1">0%</div>
-                <span className="text-[10px] text-slate-500">All subjects included</span>
+                <div className="text-xs text-slate-400">Streak Count</div>
+                <div className="text-2xl font-black text-violet-400 mt-1">
+                  {student?.streak_count || 0} days
+                </div>
+                <span className="text-[10px] text-slate-500">Consecutive days practice</span>
               </div>
             </div>
+          </div>
+
+          {/* Recent Attempts History */}
+          <div className="rounded-2xl border border-slate-900 bg-slate-900/40 p-6 space-y-4">
+            <div className="flex items-center gap-2">
+              <History className="h-5 w-5 text-indigo-400" />
+              <h3 className="text-sm font-bold text-white">Recent Attempts History</h3>
+            </div>
+            {resultsList.length > 0 ? (
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {resultsList.map((res) => (
+                  <div
+                    key={res.resultId}
+                    className="flex justify-between items-center rounded-xl border border-slate-850 bg-slate-950 p-4"
+                  >
+                    <div>
+                      <div className="text-xs font-bold text-white uppercase tracking-wider">
+                        {res.type === 'mock' ? '4-Subject Mock' : 'Single Subject Drill'}
+                      </div>
+                      <div className="text-[10px] text-slate-500 mt-1">
+                        {new Date(res.completedAt).toLocaleDateString()} at{' '}
+                        {new Date(res.completedAt).toLocaleTimeString()}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="text-right">
+                        <span className="text-sm font-bold text-indigo-400">
+                          {res.type === 'mock' ? res.totalScore : `${res.totalScore}%`}
+                        </span>
+                        <span className="text-[10px] text-slate-500 block">
+                          {res.type === 'mock' ? 'score' : 'accuracy'}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => navigate(`/results/${res.resultId}`)}
+                        className="rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 hover:text-white p-2 text-xs font-semibold"
+                      >
+                        Review
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-slate-500 text-center py-4">
+                No past attempts history detected. Complete your combination to start practicing.
+              </p>
+            )}
           </div>
         </div>
       </main>
@@ -428,6 +536,75 @@ export default function StudentDashboard() {
                   Save Selection
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Subject Drill Configuration Modal */}
+      {isDrillModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl border border-slate-850 bg-slate-900 p-6 space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <h3 className="text-lg font-bold text-white">Configure Subject Drill</h3>
+              <button
+                onClick={() => setIsDrillModalOpen(false)}
+                className="text-slate-450 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold uppercase text-slate-400">Select Subject</label>
+                <select
+                  value={drillSubject}
+                  onChange={(e) => setDrillSubject(e.target.value)}
+                  className="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-sm text-slate-200 focus:outline-none"
+                >
+                  {combination.map((sub: string) => (
+                    <option key={sub} value={sub}>
+                      {SUBJECT_LABELS[sub] || sub}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold uppercase text-slate-400">Questions Count</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[10, 20, 40].map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setDrillCount(c)}
+                      className={`rounded-xl border p-3 text-xs font-bold transition-all ${
+                        drillCount === c
+                          ? 'border-indigo-500 bg-indigo-500/10 text-white'
+                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      {c} Qs
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-4 border-t border-slate-800">
+              <button
+                onClick={() => setIsDrillModalOpen(false)}
+                className="rounded-lg border border-slate-800 bg-slate-900 hover:bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleStartDrill}
+                className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-xs font-bold text-white"
+              >
+                Launch Drill
+              </button>
             </div>
           </div>
         </div>

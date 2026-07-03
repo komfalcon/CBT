@@ -14,6 +14,8 @@ export const QUESTION_SUBJECTS = [
   'civic_education',
   'crk',
   'irk',
+  'history',
+  'further_mathematics',
 ] as const;
 
 export type QuestionSubject = (typeof QUESTION_SUBJECTS)[number];

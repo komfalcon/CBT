@@ -160,6 +160,12 @@ export class Question {
   embedding_vector!: number[];
 
   @Prop()
+  diagram_svg?: string;
+
+  @Prop()
+  latex?: string;
+
+  @Prop()
   import_batch_id?: string;
 
   @Prop({ type: String, enum: QUESTION_SOURCES, default: 'manual' })
