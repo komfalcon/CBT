@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+RUN rm -f tsconfig.tsbuildinfo && rm -rf dist
 RUN npm run build
 
 # Stage 2: Production runtime environment
@@ -12,4 +13,5 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --only=production
 COPY --from=builder /app/dist ./dist
-CMD ["node", "-e", "console.log(require('fs').readdirSync('/app/dist/auth/dto'))"]
+EXPOSE 3000
+CMD ["npm", "run", "start"]
