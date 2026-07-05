@@ -155,6 +155,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
             </div>
           </div>
         </div>
+        </div>
       )}
 
       {/* Toggle Button */}

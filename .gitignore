@@ -6,3 +6,6 @@ coverage
 frontend/node_modules
 backend/node_modules
 *.tsbuildinfo
+frontend/.env
+backend/.env
+env
