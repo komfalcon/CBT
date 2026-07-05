@@ -231,7 +231,7 @@ export default function LandingPage() {
               </h1>
 
               <p className="max-w-lg text-[15px] sm:text-[17px] text-slate-400 leading-relaxed">
-                Experience the exact JAMB exam environment. Practice with <strong className="text-slate-200">50,000+ curated questions</strong> across all 17 subjects, get AI-powered explanations, and track your progress to exam day.
+                Experience the exact JAMB exam environment. Practice with <strong className="text-slate-200">1,000,000+ curated questions</strong> across all 17 subjects, get AI-powered explanations, and track your progress to exam day.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
@@ -305,7 +305,7 @@ export default function LandingPage() {
         <div ref={statsRef.ref} className="mx-auto max-w-7xl px-6 py-12">
           <div className={`grid grid-cols-2 md:grid-cols-4 gap-8 ${statsRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
             {[
-              { value: 50000, suffix: '+', label: 'Practice Questions', icon: <BookOpen className="h-5 w-5" /> },
+              { value: 1000000, suffix: '+', label: 'Practice Questions', icon: <BookOpen className="h-5 w-5" /> },
               { value: 17, suffix: '', label: 'JAMB Subjects', icon: <Layers className="h-5 w-5" /> },
               { value: 100000, suffix: '+', label: 'Students Enrolled', icon: <Users className="h-5 w-5" /> },
               { value: 300, suffix: '+', label: 'Avg. Score Boost', icon: <TrendingUp className="h-5 w-5" /> },
