@@ -14,6 +14,9 @@ export const ACCOUNT_STATUSES = [
 ] as const;
 export type AccountStatus = (typeof ACCOUNT_STATUSES)[number];
 
+export const SUBSCRIPTION_TIERS = ['free', 'plus', 'pro', 'max'] as const;
+export type SubscriptionTier = (typeof SUBSCRIPTION_TIERS)[number];
+
 @Schema({ _id: false })
 export class AccessibilityPreferences {
   @Prop()
@@ -200,6 +203,15 @@ export class User {
 
   @Prop({ default: 0 })
   streak_count!: number;
+
+  @Prop({ type: String, enum: SUBSCRIPTION_TIERS, default: 'free', index: true })
+  subscription_tier!: SubscriptionTier;
+
+  @Prop({ default: 0 })
+  ai_messages_remaining!: number;
+
+  @Prop()
+  ai_messages_last_reset?: Date;
 
   created_at!: Date;
   updated_at!: Date;

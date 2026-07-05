@@ -4,7 +4,8 @@ import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(helmet());
+  app.enableCors(); // allow frontend to access
+  app.use(helmet({ crossOriginOpenerPolicy: false }));
   const port = process.env.PORT ? Number(process.env.PORT) : 3000;
   await app.listen(port, '0.0.0.0');
 }

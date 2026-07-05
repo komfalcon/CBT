@@ -2,7 +2,7 @@ import urllib.request
 import json
 import os
 
-API_KEY = "doo_v1_7295e7f68d7a4ca99a3b424ad4bc7c994799ecc4fea99b12cabd3082221068a7"
+API_KEY = ""
 API_URL = "https://inference.do-ai.run/v1/models"
 
 req = urllib.request.Request(

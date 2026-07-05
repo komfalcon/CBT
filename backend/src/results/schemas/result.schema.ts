@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import { Question, QuestionSchema } from '../../questions/schemas/question.schema';
+import { Question } from '../../questions/schemas/question.schema';
 
 @Schema({ _id: false })
 export class SubjectScore {
@@ -53,7 +53,7 @@ export class ExamResult {
   @Prop({ type: Map, of: String, default: {} })
   answers!: Map<string, string>;
 
-  @Prop({ type: [QuestionSchema], required: true })
+  @Prop({ type: [Object], required: true })
   questionsSnapshot!: Question[];
 
   @Prop({ required: true, default: Date.now })

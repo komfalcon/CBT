@@ -10,7 +10,7 @@ import {
   googleLogin,
   loginWithCbtKey,
 } from './api';
-import { Lock, Mail, User, Phone, Key, HelpCircle, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
+import { Lock, Mail, User, Phone, Key, HelpCircle, ArrowRight, ShieldAlert, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
 
 type AuthMode = 'login' | 'register' | 'verify-email' | 'forgot-password' | 'reset-password' | 'cbt-key-login';
 
@@ -34,7 +34,7 @@ export default function AuthPage() {
 
   // Form Inputs
   const [loginState, setLoginState] = useState({ email: '', password: '' });
-  const [registerState, setRegisterState] = useState({ fullName: '', email: '', phone: '', password: '' });
+  const [registerState, setRegisterState] = useState({ fullName: '', email: '', phone: '', password: '', confirmPassword: '' });
 
   // Sandbox Google Mock state
   const [isGoogleMockOpen, setIsGoogleMockOpen] = useState<boolean>(false);
@@ -70,10 +70,9 @@ export default function AuthPage() {
     return () => {
       document.body.removeChild(clientScript);
     };
-  }, []);
+  }, [mode]); // Re-initialize Google Auth when mode changes to ensure DOM element is ready
 
   const initializeGoogleAuth = () => {
-    // Check if google is loaded in global window
     const google = (window as any).google;
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
     
@@ -83,10 +82,13 @@ export default function AuthPage() {
           client_id: clientId,
           callback: handleGoogleLoginResponse,
         });
-        google.accounts.id.renderButton(
-          document.getElementById('google-signin-btn'),
-          { theme: 'dark', size: 'large', width: 340, shape: 'pill' }
-        );
+        const googleBtn = document.getElementById('google-signin-btn');
+        if (googleBtn) {
+          google.accounts.id.renderButton(
+            googleBtn,
+            { theme: 'dark', size: 'large', shape: 'pill', type: 'standard' }
+          );
+        }
       } catch (err) {
         console.warn('Google client init failed. Falling back to sandbox mode.', err);
       }
@@ -117,21 +119,13 @@ export default function AuthPage() {
     }
   };
 
-  // Development bypass / sandbox mock Google login handler
   const handleGoogleMockLogin = async () => {
-    // We construct a mock JWT payload representing verified Google user info
-    // For local backend validation bypass, we send a mocked id_token or create the user directly.
-    // In our backend `loginWithGoogle` verifies via oauth2.googleapis.com, so we simulate this by calling register
-    // or we tell the developer how to add VITE_GOOGLE_CLIENT_ID.
-    // Here we can trigger registering/logging in a student profile.
     try {
       setMessageType('info');
       setMessage('Simulating sandbox sign-in...');
       
-      // We will perform a custom mock auth registration/login payload
       const dummyPassword = 'MockPassword123!';
       try {
-        // Try registering user first
         await register({
           fullName: mockGoogleName,
           email: mockGoogleEmail,
@@ -142,7 +136,6 @@ export default function AuthPage() {
         // Ignore if already registered
       }
 
-      // Login using credentials
       const response = await login({ email: mockGoogleEmail, password: dummyPassword });
       localStorage.setItem('accessToken', response.accessToken || '');
       localStorage.setItem('refreshToken', response.refreshToken || '');
@@ -159,10 +152,35 @@ export default function AuthPage() {
 
   const handleRegister = async (event: FormEvent) => {
     event.preventDefault();
+
+    if (registerState.password !== registerState.confirmPassword) {
+      setMessageType('error');
+      setMessage('Passwords do not match.');
+      return;
+    }
+
+    // Password requirements verification
+    const pass = registerState.password;
+    const hasMinLength = pass.length >= 8;
+    const hasUpper = /[A-Z]/.test(pass);
+    const hasNumber = /[0-9]/.test(pass);
+    const hasSpecial = /[^A-Za-z0-9]/.test(pass);
+
+    if (!hasMinLength || !hasUpper || !hasNumber || !hasSpecial) {
+      setMessageType('error');
+      setMessage('Password does not meet the requirements.');
+      return;
+    }
+
     try {
       setMessageType('info');
       setMessage('Creating account...');
-      const response = await register(registerState);
+      const response = await register({
+        fullName: registerState.fullName,
+        email: registerState.email,
+        phone: registerState.phone,
+        password: registerState.password,
+      });
       
       if (response.token) {
         console.log('--- Development Email Verification Code ---');
@@ -307,6 +325,25 @@ export default function AuthPage() {
 
   const isGoogleAvailable = !!import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
+  // Password Requirement Checks
+  const pass = registerState.password;
+  const reqs = {
+    length: pass.length >= 8,
+    upper: /[A-Z]/.test(pass),
+    number: /[0-9]/.test(pass),
+    special: /[^A-Za-z0-9]/.test(pass),
+  };
+
+  const strengthCount = Object.values(reqs).filter(Boolean).length;
+  const strengthText = 
+    strengthCount === 0 ? '' :
+    strengthCount <= 2 ? 'Weak' :
+    strengthCount === 3 ? 'Medium' : 'Strong';
+  const strengthColor = 
+    strengthCount === 0 ? 'bg-slate-800' :
+    strengthCount <= 2 ? 'bg-rose-500' :
+    strengthCount === 3 ? 'bg-amber-500' : 'bg-emerald-500';
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center font-sans p-6 overflow-hidden relative">
       {/* Glow Orbs */}
@@ -360,29 +397,6 @@ export default function AuthPage() {
           </div>
         )}
 
-        {/* Google Authentication container */}
-        {(mode === 'login' || mode === 'register' || mode === 'cbt-key-login') && (
-          <div className="space-y-4 mb-6">
-            {isGoogleAvailable ? (
-              <div className="flex justify-center" id="google-signin-btn"></div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setIsGoogleMockOpen(true)}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 py-3 text-sm font-semibold text-slate-200 transition-colors shadow-lg active:scale-95"
-              >
-                <span className="h-4 w-4 rounded-full border border-indigo-400/30 flex items-center justify-center bg-indigo-500/10 text-[10px] font-bold text-indigo-400">G</span>
-                Sign in with Google (Sandbox)
-              </button>
-            )}
-            <div className="relative flex py-2 items-center">
-              <div className="flex-grow border-t border-slate-800"></div>
-              <span className="flex-shrink mx-4 text-[10px] text-slate-500 font-semibold uppercase">Or email address</span>
-              <div className="flex-grow border-t border-slate-800"></div>
-            </div>
-          </div>
-        )}
-
         {/* Main Forms */}
         {mode === 'login' && !tempToken && (
           <form className="space-y-4" onSubmit={handleLogin}>
@@ -431,6 +445,29 @@ export default function AuthPage() {
             >
               Sign In <ArrowRight className="h-4 w-4" />
             </button>
+
+            {/* Google Authentication Section - repositioned under password form */}
+            <div className="pt-2">
+              <div className="relative flex py-2 items-center mb-4">
+                <div className="flex-grow border-t border-slate-800"></div>
+                <span className="flex-shrink mx-4 text-[10px] text-slate-500 font-semibold uppercase">Or join with</span>
+                <div className="flex-grow border-t border-slate-800"></div>
+              </div>
+              {isGoogleAvailable ? (
+                <div className="flex justify-center w-full" id="google-signin-btn"></div>
+              ) : (
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setIsGoogleMockOpen(true)}
+                    className="flex items-center justify-center gap-2 rounded-full bg-slate-950 border border-slate-800 hover:border-slate-700 px-6 py-2.5 text-xs font-semibold text-slate-200 transition-colors shadow-lg active:scale-95"
+                  >
+                    <span className="h-4 w-4 rounded-full border border-indigo-400/30 flex items-center justify-center bg-indigo-500/10 text-[9px] font-bold text-indigo-400">G</span>
+                    Sign in with Google
+                  </button>
+                </div>
+              )}
+            </div>
           </form>
         )}
 
@@ -487,12 +524,83 @@ export default function AuthPage() {
                 <input
                   type="password"
                   required
-                  placeholder="Min. 8 chars (A-z, 0-9, special)"
+                  placeholder="Create password"
                   value={registerState.password}
                   onChange={(e) => setRegisterState((prev) => ({ ...prev, password: e.target.value }))}
                   className="w-full rounded-xl bg-slate-950 border border-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
                 />
               </div>
+
+              {/* Password strength and requirements with animations */}
+              {pass.length > 0 && (
+                <div className="pt-2 pb-1 space-y-2 animate-slide-up">
+                  {/* Strength Bar */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-semibold text-slate-400">Password Strength:</span>
+                    <span className="text-[10px] font-bold text-slate-200">{strengthText}</span>
+                  </div>
+                  <div className="h-1.5 w-full bg-slate-850 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full ${strengthColor} transition-all duration-500`} 
+                      style={{ width: `${(strengthCount / 4) * 100}%` }}
+                    />
+                  </div>
+
+                  {/* Checklist */}
+                  <div className="grid grid-cols-2 gap-2 text-[10px] pt-1">
+                    <div className="flex items-center gap-1.5 transition-colors duration-300">
+                      {reqs.length ? (
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                      ) : (
+                        <AlertCircle className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                      )}
+                      <span className={reqs.length ? 'text-emerald-400' : 'text-slate-500'}>Min 8 characters</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 transition-colors duration-300">
+                      {reqs.upper ? (
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                      ) : (
+                        <AlertCircle className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                      )}
+                      <span className={reqs.upper ? 'text-emerald-400' : 'text-slate-500'}>1 uppercase letter</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 transition-colors duration-300">
+                      {reqs.number ? (
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                      ) : (
+                        <AlertCircle className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                      )}
+                      <span className={reqs.number ? 'text-emerald-400' : 'text-slate-500'}>1 number</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 transition-colors duration-300">
+                      {reqs.special ? (
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                      ) : (
+                        <AlertCircle className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                      )}
+                      <span className={reqs.special ? 'text-emerald-400' : 'text-slate-500'}>1 special character</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Confirm Password</label>
+              <div className="relative">
+                <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <input
+                  type="password"
+                  required
+                  placeholder="Repeat password"
+                  value={registerState.confirmPassword}
+                  onChange={(e) => setRegisterState((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+                  className="w-full rounded-xl bg-slate-950 border border-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                />
+              </div>
+              {registerState.confirmPassword.length > 0 && registerState.password !== registerState.confirmPassword && (
+                <p className="text-[10px] text-rose-400 animate-slide-up">Passwords do not match.</p>
+              )}
             </div>
 
             <button
@@ -501,6 +609,29 @@ export default function AuthPage() {
             >
               Register Candidate <ArrowRight className="h-4 w-4" />
             </button>
+
+            {/* Google Authentication Section - repositioned under password form */}
+            <div className="pt-2">
+              <div className="relative flex py-2 items-center mb-4">
+                <div className="flex-grow border-t border-slate-800"></div>
+                <span className="flex-shrink mx-4 text-[10px] text-slate-500 font-semibold uppercase">Or join with</span>
+                <div className="flex-grow border-t border-slate-800"></div>
+              </div>
+              {isGoogleAvailable ? (
+                <div className="flex justify-center w-full" id="google-signin-btn"></div>
+              ) : (
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setIsGoogleMockOpen(true)}
+                    className="flex items-center justify-center gap-2 rounded-full bg-slate-950 border border-slate-800 hover:border-slate-700 px-6 py-2.5 text-xs font-semibold text-slate-200 transition-colors shadow-lg active:scale-95"
+                  >
+                    <span className="h-4 w-4 rounded-full border border-indigo-400/30 flex items-center justify-center bg-indigo-500/10 text-[9px] font-bold text-indigo-400">G</span>
+                    Sign up with Google
+                  </button>
+                </div>
+              )}
+            </div>
           </form>
         )}
 
@@ -531,6 +662,29 @@ export default function AuthPage() {
             >
               Quick Login <ArrowRight className="h-4 w-4" />
             </button>
+
+            {/* Google Authentication Section - repositioned under password form */}
+            <div className="pt-2">
+              <div className="relative flex py-2 items-center mb-4">
+                <div className="flex-grow border-t border-slate-800"></div>
+                <span className="flex-shrink mx-4 text-[10px] text-slate-500 font-semibold uppercase">Or join with</span>
+                <div className="flex-grow border-t border-slate-800"></div>
+              </div>
+              {isGoogleAvailable ? (
+                <div className="flex justify-center w-full" id="google-signin-btn"></div>
+              ) : (
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setIsGoogleMockOpen(true)}
+                    className="flex items-center justify-center gap-2 rounded-full bg-slate-950 border border-slate-800 hover:border-slate-700 px-6 py-2.5 text-xs font-semibold text-slate-200 transition-colors shadow-lg active:scale-95"
+                  >
+                    <span className="h-4 w-4 rounded-full border border-indigo-400/30 flex items-center justify-center bg-indigo-500/10 text-[9px] font-bold text-indigo-400">G</span>
+                    Sign in with Google
+                  </button>
+                </div>
+              )}
+            </div>
           </form>
         )}
 

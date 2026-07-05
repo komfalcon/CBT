@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import { Question, QuestionSchema } from '../../questions/schemas/question.schema';
+import { Question } from '../../questions/schemas/question.schema';
 
 export const SESSION_STATUSES = ['active', 'completed', 'expired'] as const;
 export type SessionStatus = (typeof SESSION_STATUSES)[number];
@@ -24,7 +24,7 @@ export class ExamSession {
   @Prop({ type: [String], required: true })
   subjects!: string[];
 
-  @Prop({ type: [QuestionSchema], required: true })
+  @Prop({ type: [Object], required: true })
   questions!: Question[];
 
   @Prop({ type: Map, of: String, default: {} })

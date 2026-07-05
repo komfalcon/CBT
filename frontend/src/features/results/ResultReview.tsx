@@ -13,6 +13,10 @@ import {
   PieChart,
   ListCollapse,
 } from 'lucide-react';
+import { AiChatWidget } from '../ai/AiChatWidget';
+import { ExplainButton } from '../ai/ExplainButton';
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
 
 const SUBJECT_LABELS: Record<string, string> = {
   english: 'Use of English',
@@ -95,6 +99,31 @@ export default function ResultReview() {
       return matchSubject && matchStatus;
     });
   }, [result, filterSubject, filterStatus]);
+
+  const aiContextPayload = useMemo(() => {
+    if (!result) return undefined;
+    return JSON.stringify({
+      examType: result.type,
+      totalScore: result.totalScore,
+      subjectScores: result.subjectScores.map(sc => ({
+        subject: sc.subject,
+        score: sc.score,
+        correct: sc.correctCount,
+        wrong: sc.incorrectCount,
+        skipped: sc.unansweredCount
+      })),
+      incorrectQuestions: result.questionsSnapshot.filter((q) => {
+        const userChoice = result.answers?.[q.questionId];
+        return userChoice && userChoice.toUpperCase() !== q.correct_option?.toUpperCase();
+      }).map(q => ({
+        subject: q.subject,
+        topic: q.topic,
+        question: q.question_text,
+        studentAnswer: result.answers?.[q.questionId],
+        correctAnswer: q.correct_option
+      }))
+    });
+  }, [result]);
 
   if (loading) {
     return (
@@ -338,9 +367,9 @@ export default function ResultReview() {
                   </div>
 
                   {/* Question Stem text */}
-                  <div className="text-sm font-medium leading-relaxed text-slate-100">
+                  <div className="text-sm font-medium leading-relaxed text-slate-100 overflow-x-auto">
                     <span className="text-slate-500 font-bold mr-1.5">{idx + 1}.</span>
-                    {q.question_text}
+                    <Latex>{q.question_text}</Latex>
                   </div>
 
                   {/* Diagrams SVG */}
@@ -380,7 +409,7 @@ export default function ResultReview() {
                           >
                             {option.id}
                           </span>
-                          <span className="flex-1 leading-normal font-medium">{option.text}</span>
+                          <span className="flex-1 leading-normal font-medium overflow-x-auto"><Latex>{option.text}</Latex></span>
                         </div>
                       );
                     })}
@@ -392,11 +421,18 @@ export default function ResultReview() {
                       <div className="flex items-center gap-1.5 text-indigo-400 text-xs font-bold">
                         <BookOpen className="h-4 w-4" /> Solution Explanation:
                       </div>
-                      <p className="text-xs text-slate-405 leading-relaxed bg-slate-950/50 rounded-xl border border-slate-850 p-4">
-                        {q.explanation}
+                      <p className="text-xs text-slate-405 leading-relaxed bg-slate-950/50 rounded-xl border border-slate-850 p-4 overflow-x-auto">
+                        <Latex>{q.explanation}</Latex>
                       </p>
                     </div>
                   )}
+                  {/* AI Explanation Button */}
+                  <ExplainButton
+                    questionId={q.questionId}
+                    questionText={q.question_text}
+                    correctAnswer={q.options.find((o: any) => o.id === q.correct_option)?.text || q.correct_option}
+                    studentAnswer={q.options.find((o: any) => o.id === userChoice)?.text || 'Unanswered'}
+                  />
                 </div>
               );
             })
@@ -408,6 +444,7 @@ export default function ResultReview() {
           )}
         </section>
       </main>
+      <AiChatWidget contextPayload={aiContextPayload} />
     </div>
   );
 }

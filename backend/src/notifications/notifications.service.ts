@@ -34,6 +34,9 @@ export class NotificationsService {
 
     try {
       connection = await amqp.connect(rabbitUrl, { timeout: 2000 });
+      connection.on('error', (err) => {
+        this.logger.error('RabbitMQ connection error', err);
+      });
       channel = await connection.createChannel();
       await channel.assertQueue(queueName, { durable: true });
       channel.sendToQueue(queueName, Buffer.from(JSON.stringify(payload)), { persistent: true });
