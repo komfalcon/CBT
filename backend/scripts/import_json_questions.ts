@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import mongoose from 'mongoose';
 import { QuestionSchema } from '../src/questions/schemas/question.schema';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://admin:secret@localhost:27017/jamb_cbt?authSource=admin';
 const DATA_DIR = path.join(__dirname, '..', 'data');

@@ -138,6 +138,9 @@ export class Question {
   @Prop()
   approved_at?: Date;
 
+  @Prop({ default: false })
+  is_bonus!: boolean;
+
   @Prop({ type: [QuestionVersionSchema], default: [] })
   versions!: QuestionVersion[];
 

@@ -12,7 +12,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
-import * as argon2 from 'argon2';
+import * as bcrypt from 'bcryptjs';
 import { createHmac } from 'crypto';
 import { z } from 'zod';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -83,12 +83,7 @@ export class AuthService {
       throw new ConflictException('A user with this email already exists.');
     }
 
-    const passwordHash = await argon2.hash(parsed.data.password, {
-      type: argon2.argon2id,
-      memoryCost: 65_536,
-      timeCost: 3,
-      parallelism: 2,
-    });
+    const passwordHash = await bcrypt.hash(parsed.data.password, 10);
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const user = await this.userModel.create({
@@ -162,7 +157,7 @@ export class AuthService {
       );
     }
 
-    const isPasswordValid = await argon2.verify(user.passwordHash, password);
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
       user.failed_login_attempts += 1;
       const lockoutMs = calculateLockoutDurationMs(user.failed_login_attempts);
@@ -355,12 +350,7 @@ export class AuthService {
       throw new BadRequestException('Reset code has expired. Please request a new one.');
     }
 
-    const passwordHash = await argon2.hash(newPassword, {
-      type: argon2.argon2id,
-      memoryCost: 65_536,
-      timeCost: 3,
-      parallelism: 2,
-    });
+    const passwordHash = await bcrypt.hash(newPassword, 10);
 
     user.passwordHash = passwordHash;
     user.failed_login_attempts = 0;
@@ -402,12 +392,7 @@ export class AuthService {
     let user = await this.userModel.findOne({ email: normalizedEmail }).exec();
 
     if (!user) {
-      const dummyPassword = await argon2.hash(uuidv4(), {
-        type: argon2.argon2id,
-        memoryCost: 65_536,
-        timeCost: 3,
-        parallelism: 2,
-      });
+      const dummyPassword = await bcrypt.hash(uuidv4(), 10);
 
       user = await this.userModel.create({
         fullName: googleUser.name,

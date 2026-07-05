@@ -12,6 +12,8 @@ import {
   AlertTriangle,
   Monitor,
 } from 'lucide-react';
+import 'katex/dist/katex.min.css';
+import Latex from 'react-latex-next';
 
 const SUBJECT_LABELS: Record<string, string> = {
   english: 'Use of English',
@@ -353,8 +355,8 @@ export default function ExamConsole() {
                 </div>
 
                 {/* Question Text */}
-                <div className="text-base sm:text-lg leading-relaxed text-slate-100 font-medium">
-                  {activeQuestion.question_text}
+                <div className="text-base sm:text-lg leading-relaxed text-slate-100 font-medium overflow-x-auto">
+                  <Latex>{activeQuestion.question_text}</Latex>
                 </div>
 
                 {/* SVGs/Diagram Rendering */}
@@ -388,7 +390,7 @@ export default function ExamConsole() {
                         >
                           {option.id}
                         </span>
-                        <span className="flex-1 leading-normal font-medium">{option.text}</span>
+                        <span className="flex-1 leading-normal font-medium overflow-x-auto"><Latex>{option.text}</Latex></span>
                       </button>
                     );
                   })}

@@ -615,6 +615,73 @@ export class QuestionsService {
     return rows.map((row) => ({ subject: row._id as string, count: row.count as number }));
   }
 
+  async updateTags(id: string, tags: string[]): Promise<QuestionDocument> {
+    const doc = await this.questionModel.findOneAndUpdate({ questionId: id }, { tags }, { new: true }).exec();
+    if (!doc) {
+      throw new NotFoundException('Question not found');
+    }
+    return doc;
+  }
+
+  async insertGeneratedQuestions(subject: string, rawQuestions: any[]): Promise<QuestionDocument[]> {
+    if (!rawQuestions || rawQuestions.length === 0) return [];
+
+    const documentsToInsert = rawQuestions.map(q => {
+      // Ensure we have a unique ID to avoid E11000 dup key errors if any index was left behind
+      const uniqueId = `${subject}_ai_${Math.random().toString(36).substring(2, 9)}`;
+      
+      const parsedOptions = (q.options || []).map((opt: any, optIndex: number) => {
+        const id = ['A', 'B', 'C', 'D', 'E'][optIndex];
+        return {
+          id: opt.id || id,
+          text: opt.text || `Option ${id}`
+        };
+      });
+
+      // Ensure 4 options at minimum
+      while(parsedOptions.length < 4) {
+        const id = ['A', 'B', 'C', 'D', 'E'][parsedOptions.length];
+        parsedOptions.push({ id, text: `Option ${id}` });
+      }
+
+      let correctOpt = q.correct_option;
+      let isBonus = false;
+      if (!['A', 'B', 'C', 'D', 'E'].includes(correctOpt)) {
+        correctOpt = 'A'; // Fallback to pass validation
+        isBonus = true; // Mark as bonus since AI hallucinated
+      }
+
+      return {
+        questionId: uniqueId,
+        subject: subject,
+        topic: q.topic || 'General',
+        question_text: q.question_text || 'Generated Question',
+        options: parsedOptions,
+        correct_option: correctOpt,
+        explanation: q.explanation || undefined,
+        difficulty_level: q.difficulty ? Number(q.difficulty) : 3,
+        question_type: 'mcq_single',
+        status: 'published',
+        source: 'ai_generated',
+        created_by: 'ai-generator',
+        tags: q.tags || ['ai-generated'],
+        is_bonus: isBonus
+      };
+    });
+
+    try {
+      const inserted = await this.questionModel.insertMany(documentsToInsert, { ordered: false });
+      return inserted as unknown as QuestionDocument[];
+    } catch (error: any) {
+      // In case of any duplicate key errors (code 11000) from bulk insert, we can filter them out
+      if (error.code === 11000 && error.insertedDocs) {
+        return error.insertedDocs;
+      }
+      this.logger.error('Failed inserting AI generated questions', error.stack);
+      return [];
+    }
+  }
+
   async getVersions(questionId: string) {
     const question = await this.questionModel.findOne({ questionId }).select({ versions: 1 }).lean().exec();
     if (!question) {
@@ -647,5 +714,14 @@ export class QuestionsService {
     }
 
     return { message: 'Bulk tag update completed' };
+  }
+
+  async correctQuestionError(questionId: string, newCorrectOption: string, newExplanation?: string): Promise<void> {
+    const updatePayload: any = { correct_option: newCorrectOption };
+    if (newExplanation) {
+      updatePayload.explanation = newExplanation;
+    }
+    await this.questionModel.updateOne({ questionId }, { $set: updatePayload }).exec();
+    this.logger.log(`Question ${questionId} corrected via AI vetting: ${newCorrectOption}`);
   }
 }
