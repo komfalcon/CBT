@@ -117,7 +117,7 @@ export class User {
   @Prop({ default: uuidv4, unique: true })
   userId!: string;
 
-  @Prop({ default: generateCbtKey, unique: true, index: true, sparse: true })
+  @Prop({ default: generateCbtKey, unique: true, index: true, sparse: true, immutable: true })
   cbt_key!: string;
 
   @Prop({ unique: true, sparse: true })
