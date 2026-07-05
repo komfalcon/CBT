@@ -59,10 +59,12 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <>
+      {/* Modal/Widget Container */}
       {isOpen && (
-        <div className="mb-4 w-80 sm:w-96 h-[500px] bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5">
-          {/* Header */}
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[60] flex flex-col sm:items-end">
+          <div className="w-full h-full sm:w-96 sm:h-[500px] sm:mb-4 bg-slate-900 sm:border border-slate-700 sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5">
+            {/* Header */}
           <div className="bg-indigo-600 p-4 flex justify-between items-center text-white">
             <div className="flex items-center gap-2">
               <Bot className="w-5 h-5" />
@@ -157,13 +159,15 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
 
       {/* Toggle Button */}
       {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full p-4 shadow-lg shadow-indigo-500/20 transition-transform hover:scale-110 flex items-center gap-2"
-        >
-          <Bot className="w-6 h-6" />
-        </button>
+        <div className="fixed bottom-6 right-6 z-50">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full p-4 shadow-lg shadow-indigo-500/20 transition-transform hover:scale-110 flex items-center gap-2"
+          >
+            <Bot className="w-6 h-6" />
+          </button>
+        </div>
       )}
-    </div>
+    </>
   );
 };

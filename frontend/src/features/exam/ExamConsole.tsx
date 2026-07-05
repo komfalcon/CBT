@@ -49,7 +49,7 @@ export default function ExamConsole() {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [timeRemaining, setTimeRemaining] = useState<number>(7200);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   const token = useMemo(() => localStorage.getItem('accessToken') || '', []);
@@ -423,8 +423,8 @@ export default function ExamConsole() {
 
         {/* Right Side: Interactive Index Grid */}
         <aside
-          className={`border-l border-slate-900 bg-slate-950/40 backdrop-blur-md w-80 p-6 flex flex-col z-10 transition-all ${
-            isSidebarOpen ? 'translate-x-0' : 'translate-x-full hidden'
+          className={`absolute inset-y-0 right-0 md:relative border-l border-slate-900 bg-slate-950/95 md:bg-slate-950/40 backdrop-blur-xl w-[85%] max-w-sm md:w-80 p-6 flex flex-col z-50 md:z-10 transition-transform duration-300 ${
+            isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'
           }`}
         >
           <div className="flex items-center justify-between pb-4 border-b border-slate-900 mb-4">

@@ -5,7 +5,7 @@ import {
   BarChart3, Brain, Clock, MessageSquare, Check, X, Star,
   ChevronDown, Globe, Sparkles, Target, TrendingUp, Users,
   Instagram, Twitter, Linkedin, Youtube, Mail, Phone,
-  CreditCard, Play, Monitor,
+  CreditCard, Play, Monitor, Menu,
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
@@ -187,7 +187,7 @@ export default function LandingPage() {
               className="md:hidden p-2 text-slate-400 hover:text-white"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <ChevronDown className={`h-5 w-5 transition-transform ${mobileMenuOpen ? 'rotate-180' : ''}`} />
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
@@ -303,7 +303,7 @@ export default function LandingPage() {
           ══════════════════════════════════════ */}
       <section className="relative z-10 border-y border-slate-800/60 bg-slate-900/30 backdrop-blur-md">
         <div ref={statsRef.ref} className="mx-auto max-w-7xl px-6 py-12">
-          <div className={`grid grid-cols-2 md:grid-cols-4 gap-8 ${statsRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
+          <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 ${statsRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
             {[
               { value: 1000000, suffix: '+', label: 'Practice Questions', icon: <BookOpen className="h-5 w-5" /> },
               { value: 17, suffix: '', label: 'JAMB Subjects', icon: <Layers className="h-5 w-5" /> },
@@ -486,7 +486,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {ALL_SUBJECTS.map((sub, idx) => (
               <div
                 key={idx}
