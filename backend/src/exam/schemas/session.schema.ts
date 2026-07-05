@@ -25,7 +25,7 @@ export class ExamSession {
   subjects!: string[];
 
   @Prop({ type: [Object], required: true })
-  questions!: Question[];
+  questions!: Record<string, any>[];
 
   @Prop({ type: Map, of: String, default: {} })
   answers!: Map<string, string>;
