@@ -668,7 +668,9 @@ export class QuestionsService {
         source: 'ai_generated',
         created_by: 'ai-generator',
         tags: q.tags || ['ai-generated'],
-        is_bonus: isBonus
+        is_bonus: isBonus,
+        has_diagram: !!q.has_diagram,
+        diagram_svg: q.diagram_svg || undefined
       };
     });
 

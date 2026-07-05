@@ -166,6 +166,8 @@ Each object must have the exact following keys:
 - "explanation": A brief explanation of why the answer is correct.
 - "difficulty": A number from 1 to 5 representing difficulty.
 - "topic": The general topic of the question.
+- "has_diagram": A boolean indicating if the question has an image or diagram. Set to true for about 20% of questions.
+- "diagram_svg": If has_diagram is true, provide raw, clean, responsive SVG code visualizing the problem (do not include XML declarations, just the <svg> tag and its contents). If false, omit this key.
 Focus on variety to prevent duplicates.`
       },
       {
