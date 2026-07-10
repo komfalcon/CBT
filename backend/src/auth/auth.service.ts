@@ -103,11 +103,9 @@ export class AuthService {
       token: code,
     });
 
-    const isDev = this.configService.get<string>('NODE_ENV') === 'development';
     return {
       message: 'Registration successful. Check email to verify.',
       cbt_key: user.cbt_key,
-      ...(isDev ? { token: code } : {}),
     };
   }
 
@@ -267,10 +265,8 @@ export class AuthService {
       });
     }
 
-    const isDev = this.configService.get<string>('NODE_ENV') === 'development';
     return {
       message: 'If this email is registered, a password reset code has been sent.',
-      ...(isDev && code ? { token: code } : {}),
     };
   }
 

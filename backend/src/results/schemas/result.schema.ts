@@ -54,7 +54,7 @@ export class ExamResult {
   answers!: Map<string, string>;
 
   @Prop({ type: [Object], required: true })
-  questionsSnapshot!: Question[];
+  questionsSnapshot!: Record<string, any>[];
 
   @Prop({ required: true, default: Date.now })
   completedAt!: Date;

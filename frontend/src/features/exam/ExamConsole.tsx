@@ -52,6 +52,15 @@ export default function ExamConsole() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
+  // Modal and Alert states
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [alertConfig, setAlertConfig] = useState<{ show: boolean; title: string; message: string; onConfirm?: () => void } | null>(null);
+
+  const showAlert = (title: string, message: string, onConfirm?: () => void) => {
+    setAlertConfig({ show: true, title, message, onConfirm });
+  };
+
   const token = useMemo(() => localStorage.getItem('accessToken') || '', []);
 
   // Fetch session details on mount
@@ -63,8 +72,9 @@ export default function ExamConsole() {
         const data = await getExamSession(token, sessionId);
         if (data.status === 'completed') {
           // If already completed, redirect to review or results list
-          alert('This exam session is already submitted.');
-          navigate('/dashboard');
+          showAlert('Session Completed', 'This exam session has already been submitted.', () => {
+            navigate('/dashboard');
+          });
           return;
         }
         setSession(data);
@@ -180,6 +190,21 @@ export default function ExamConsole() {
     }
   }, [activeQuestionIndex, session, activeSubject]);
 
+  const isLastQuestion = useMemo(() => {
+    if (!session || !session.subjects || !activeSubject || currentSubjectQuestions.length === 0) return false;
+    const isLastSubject = session.subjects.indexOf(activeSubject) === session.subjects.length - 1;
+    const isLastQuestionInSubject = activeQuestionIndex === currentSubjectQuestions.length - 1;
+    return isLastSubject && isLastQuestionInSubject;
+  }, [session, activeSubject, activeQuestionIndex, currentSubjectQuestions]);
+
+  const handleNextClick = useCallback(() => {
+    if (isLastQuestion) {
+      setShowSubmitModal(true);
+    } else {
+      handleNext();
+    }
+  }, [isLastQuestion, handleNext]);
+
   // Keyboard Event Handlers
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -189,7 +214,7 @@ export default function ExamConsole() {
       if (['A', 'B', 'C', 'D', 'E'].includes(key) && activeQuestion) {
         handleSelectOption(activeQuestion.questionId, key);
       } else if (e.key === 'ArrowRight' || key === 'N') {
-        handleNext();
+        handleNextClick();
       } else if (e.key === 'ArrowLeft' || key === 'P') {
         handlePrev();
       } else if (key === 'S' && e.altKey) {
@@ -199,20 +224,22 @@ export default function ExamConsole() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [loading, submitting, activeQuestion, handleNext, handlePrev]);
+  }, [loading, submitting, activeQuestion, handleNextClick, handlePrev]);
 
-  const handleSubmitClick = async () => {
-    const confirmSubmit = window.confirm(
-      'Are you sure you want to submit your exam? You cannot change your choices after submitting.',
-    );
-    if (!confirmSubmit || !sessionId) return;
+  const handleSubmitClick = () => {
+    setSubmitError('');
+    setShowSubmitModal(true);
+  };
 
+  const executeSubmit = async () => {
+    if (!sessionId) return;
     try {
       setSubmitting(true);
+      setSubmitError('');
       const result = await submitExamSession(token, sessionId);
       navigate(`/results/${result.resultId}`);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Submission failed.');
+      setSubmitError(err.response?.data?.message || 'Submission failed.');
       setSubmitting(false);
     }
   };
@@ -409,10 +436,20 @@ export default function ExamConsole() {
                   Keyboard shortcuts active • Press option key directly
                 </span>
                 <button
-                  onClick={handleNext}
-                  className="rounded-xl bg-indigo-600 hover:bg-indigo-500 px-5 py-3 text-xs font-bold text-white flex items-center gap-1 transition-all"
+                  onClick={handleNextClick}
+                  className={`rounded-xl px-5 py-3 text-xs font-bold text-white flex items-center gap-1 transition-all ${
+                    isLastQuestion ? 'bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/10' : 'bg-indigo-600 hover:bg-indigo-500'
+                  }`}
                 >
-                  Next <ChevronRight className="h-4 w-4" />
+                  {isLastQuestion ? (
+                    <>
+                      Submit <Send className="h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      Next <ChevronRight className="h-4 w-4" />
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -483,6 +520,94 @@ export default function ExamConsole() {
       >
         <Monitor className="h-4 w-4" />
       </button>
+
+      {/* Custom Submit Confirmation Modal */}
+      {showSubmitModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center gap-3 text-rose-500">
+              <div className="h-10 w-10 rounded-full bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
+                <AlertTriangle className="h-5 w-5 text-rose-550" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Submit Exam</h3>
+                <p className="text-xs text-slate-400">Confirmation Required</p>
+              </div>
+            </div>
+            
+            <p className="text-sm text-slate-300 leading-normal">
+              Are you sure you want to submit your exam? You cannot change your choices after submitting.
+            </p>
+
+            {submitError && (
+              <div className="rounded-lg bg-rose-500/10 border border-rose-500/20 p-3 text-xs text-rose-400">
+                {submitError}
+              </div>
+            )}
+            
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                onClick={() => {
+                  setShowSubmitModal(false);
+                  setSubmitError('');
+                }}
+                disabled={submitting}
+                className="rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={executeSubmit}
+                disabled={submitting}
+                className="rounded-xl bg-rose-600 hover:bg-rose-500 px-5 py-2.5 text-xs font-bold text-white flex items-center gap-1.5 transition-all shadow-lg shadow-rose-600/10 disabled:opacity-50"
+              >
+                {submitting ? (
+                  <>
+                    Submitting <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    Confirm Submit <Send className="h-3.5 w-3.5" />
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Alert Modal */}
+      {alertConfig && alertConfig.show && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center gap-3 text-indigo-400">
+              <div className="h-10 w-10 rounded-full bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
+                <AlertTriangle className="h-5 w-5 text-indigo-400" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">{alertConfig.title}</h3>
+              </div>
+            </div>
+            
+            <p className="text-sm text-slate-300 leading-normal">
+              {alertConfig.message}
+            </p>
+            
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={() => {
+                  const onConfirm = alertConfig.onConfirm;
+                  setAlertConfig(null);
+                  if (onConfirm) onConfirm();
+                }}
+                className="rounded-xl bg-indigo-600 hover:bg-indigo-500 px-6 py-2.5 text-xs font-bold text-white transition-all shadow-lg shadow-indigo-600/10"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
