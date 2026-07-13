@@ -11,6 +11,7 @@ import {
   ChevronRightSquare,
   AlertTriangle,
   Monitor,
+  Calculator,
 } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
@@ -59,6 +60,85 @@ export default function ExamConsole() {
 
   const showAlert = (title: string, message: string, onConfirm?: () => void) => {
     setAlertConfig({ show: true, title, message, onConfirm });
+  };
+
+  // Calculator states
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [calcInput, setCalcInput] = useState('');
+  const [calcResult, setCalcResult] = useState('');
+  const [calcPosition, setCalcPosition] = useState({ x: window.innerWidth - 340, y: 100 });
+  const [isDraggingCalc, setIsDraggingCalc] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
+  const handleCalcMouseDown = (e: React.MouseEvent) => {
+    setIsDraggingCalc(true);
+    setDragStart({
+      x: e.clientX - calcPosition.x,
+      y: e.clientY - calcPosition.y
+    });
+  };
+
+  const handleCalcMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDraggingCalc) return;
+    const newX = Math.max(0, Math.min(window.innerWidth - 300, e.clientX - dragStart.x));
+    const newY = Math.max(0, Math.min(window.innerHeight - 360, e.clientY - dragStart.y));
+    setCalcPosition({ x: newX, y: newY });
+  }, [isDraggingCalc, dragStart]);
+
+  const handleCalcMouseUp = useCallback(() => {
+    setIsDraggingCalc(false);
+  }, []);
+
+  useEffect(() => {
+    if (isDraggingCalc) {
+      window.addEventListener('mousemove', handleCalcMouseMove);
+      window.addEventListener('mouseup', handleCalcMouseUp);
+    }
+    return () => {
+      window.removeEventListener('mousemove', handleCalcMouseMove);
+      window.removeEventListener('mouseup', handleCalcMouseUp);
+    };
+  }, [isDraggingCalc, handleCalcMouseMove, handleCalcMouseUp]);
+
+  const handleCalcBtnClick = (val: string) => {
+    if (val === 'C') {
+      setCalcInput('');
+      setCalcResult('');
+    } else if (val === 'Back') {
+      setCalcInput((prev) => prev.slice(0, -1));
+    } else if (val === '=') {
+      try {
+        const expression = calcInput.replace(/×/g, '*').replace(/÷/g, '/');
+        if (!/^[0-9.+\-*/%()\s]*$/.test(expression)) {
+          setCalcResult('Error');
+          return;
+        }
+        // eslint-disable-next-line no-eval
+        const res = eval(expression);
+        if (isNaN(res) || !isFinite(res)) {
+          setCalcResult('Error');
+        } else {
+          setCalcResult(String(Number(res.toFixed(8))));
+        }
+      } catch (err) {
+        setCalcResult('Error');
+      }
+    } else if (val === '√') {
+      try {
+        const num = parseFloat(calcInput || '0');
+        if (num < 0) {
+          setCalcResult('Error');
+        } else {
+          const res = Math.sqrt(num);
+          setCalcInput(`√(${num})`);
+          setCalcResult(String(Number(res.toFixed(8))));
+        }
+      } catch {
+        setCalcResult('Error');
+      }
+    } else {
+      setCalcInput((prev) => prev + val);
+    }
   };
 
   const token = useMemo(() => localStorage.getItem('accessToken') || '', []);
@@ -319,6 +399,19 @@ export default function ExamConsole() {
             <Clock className={`h-4 w-4 ${timeRemaining < 300 ? 'text-rose-400' : 'text-indigo-400'}`} />
             {formatTime(timeRemaining)}
           </div>
+
+          <button
+            onClick={() => setShowCalculator((prev) => !prev)}
+            className={`flex items-center gap-2 rounded-lg border px-3.5 py-1.5 text-xs font-bold transition-all active:scale-95 shadow-md ${
+              showCalculator
+                ? 'border-indigo-500 bg-indigo-600 text-white shadow-indigo-600/10'
+                : 'border-slate-800 bg-slate-900/40 text-slate-300 hover:text-white hover:bg-slate-900'
+            }`}
+            title="Toggle Calculator"
+          >
+            <Calculator className="h-3.5 w-3.5" />
+            Calculator
+          </button>
 
           <button
             onClick={handleSubmitClick}
@@ -605,6 +698,169 @@ export default function ExamConsole() {
                 OK
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Draggable Calculator */}
+      {showCalculator && (
+        <div
+          style={{
+            position: 'fixed',
+            left: `${calcPosition.x}px`,
+            top: `${calcPosition.y}px`,
+            zIndex: 40,
+          }}
+          className="w-64 bg-slate-900/90 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md select-none animate-in fade-in zoom-in-95 duration-150"
+        >
+          {/* Header Drag Bar */}
+          <div
+            onMouseDown={handleCalcMouseDown}
+            className="bg-slate-950 px-4 py-2.5 flex items-center justify-between cursor-move border-b border-slate-850"
+          >
+            <div className="flex items-center gap-2 text-indigo-450">
+              <Calculator className="h-4 w-4 text-indigo-400" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">Calculator</span>
+            </div>
+            <button
+              onClick={() => setShowCalculator(false)}
+              className="text-slate-400 hover:text-white text-xs font-semibold px-1.5 py-0.5 rounded hover:bg-slate-900 transition-colors animate-all"
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Calculator Screen */}
+          <div className="p-4 bg-slate-950/60 border-b border-slate-850 text-right font-mono flex flex-col justify-end min-h-[72px] break-all">
+            <div className="text-xs text-slate-500 overflow-x-auto whitespace-nowrap min-h-[16px]">{calcInput || '0'}</div>
+            <div className="text-xl font-bold text-white overflow-x-auto whitespace-nowrap pt-1 min-h-[28px]">{calcResult || ' '}</div>
+          </div>
+
+          {/* Calculator Keyboard */}
+          <div className="p-3 grid grid-cols-4 gap-1.5 bg-slate-900/40">
+            {/* Row 1 */}
+            <button
+              onClick={() => handleCalcBtnClick('C')}
+              className="col-span-2 h-10 rounded-lg bg-rose-950/30 border border-rose-900/20 text-rose-400 font-bold hover:bg-rose-950/50 hover:border-rose-500/30 transition-all text-xs"
+            >
+              CLEAR
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('Back')}
+              className="h-10 rounded-lg bg-slate-800/40 border border-slate-700/20 text-slate-300 hover:bg-slate-800 transition-all text-xs flex items-center justify-center font-bold"
+            >
+              ⌫
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('÷')}
+              className="h-10 rounded-lg bg-indigo-950/40 border border-indigo-900/20 text-indigo-400 font-bold hover:bg-indigo-950 transition-all"
+            >
+              ÷
+            </button>
+
+            {/* Row 2 */}
+            <button
+              onClick={() => handleCalcBtnClick('7')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              7
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('8')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              8
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('9')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              9
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('*')}
+              className="h-10 rounded-lg bg-indigo-950/40 border border-indigo-900/20 text-indigo-400 font-bold hover:bg-indigo-950 transition-all"
+            >
+              ×
+            </button>
+
+            {/* Row 3 */}
+            <button
+              onClick={() => handleCalcBtnClick('4')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              4
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('5')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              5
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('6')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              6
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('-')}
+              className="h-10 rounded-lg bg-indigo-950/40 border border-indigo-900/20 text-indigo-400 font-bold hover:bg-indigo-950 transition-all"
+            >
+              -
+            </button>
+
+            {/* Row 4 */}
+            <button
+              onClick={() => handleCalcBtnClick('1')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              1
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('2')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              2
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('3')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              3
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('+')}
+              className="h-10 rounded-lg bg-indigo-950/40 border border-indigo-900/20 text-indigo-400 font-bold hover:bg-indigo-950 transition-all"
+            >
+              +
+            </button>
+
+            {/* Row 5 */}
+            <button
+              onClick={() => handleCalcBtnClick('0')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              0
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('.')}
+              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+            >
+              .
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('√')}
+              className="h-10 rounded-lg bg-indigo-950/40 border border-indigo-900/20 text-indigo-400 font-bold hover:bg-indigo-950 transition-all text-xs"
+            >
+              √
+            </button>
+            <button
+              onClick={() => handleCalcBtnClick('=')}
+              className="h-10 rounded-lg bg-indigo-600 border border-indigo-500 text-white font-bold hover:bg-indigo-500 transition-all shadow-md shadow-indigo-600/10"
+            >
+              =
+            </button>
           </div>
         </div>
       )}
