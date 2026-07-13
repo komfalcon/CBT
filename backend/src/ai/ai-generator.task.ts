@@ -14,7 +14,7 @@ export class AiGeneratorTask {
     private readonly questionsService: QuestionsService,
   ) {}
 
-  @Cron(CronExpression.EVERY_MINUTE)
+  // @Cron(CronExpression.EVERY_MINUTE)
   async handleQuestionGeneration() {
     if (this.isGenerating) {
       return;
