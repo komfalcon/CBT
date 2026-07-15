@@ -127,7 +127,7 @@ export default function StudentDashboard() {
     }
 
     const handler = paystackPop.setup({
-      key: 'pk_test_98c42d37faaee5dc107e7d35aecf49faf3a1b283',
+      key: 'pk_live_068536d7f4bbe687175bcda53e3f5d116fea99dc',
       email: student.email,
       amount: amount * 100, // in kobo
       currency: 'NGN',
