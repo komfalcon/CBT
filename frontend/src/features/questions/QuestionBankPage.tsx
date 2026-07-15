@@ -8,6 +8,7 @@ import {
   searchQuestions,
   uploadImportFile,
 } from './api';
+import { Button, Card, Input, Alert } from '../../components';
 
 const defaultCreateState = {
   subject: 'english',
@@ -213,112 +214,144 @@ export default function QuestionBankPage() {
   };
 
   return (
-    <main className="mx-auto min-h-screen max-w-6xl space-y-6 bg-background p-6 text-text-primary">
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold">Question Bank</h1>
-        <p className="text-sm text-gray-600">Manage questions, search, stats, and bulk import.</p>
-        <input
-          className="w-full rounded border p-2"
-          placeholder="Paste examiner/admin JWT token"
+    <main className="mx-auto min-h-screen max-w-6xl space-y-6 bg-bg-primary p-6 text-text-primary md:p-8">
+      <header className="space-y-3">
+        <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+          Question Bank Management
+        </h1>
+        <p className="text-xs text-text-secondary">
+          Manage, search, view stats, and perform bulk question imports for CBT.
+        </p>
+        <Input
+          label="Examiner/Admin JWT Token"
+          placeholder="Paste examiner/admin JWT token to authorize changes..."
           value={token}
           onChange={(event) => setToken(event.target.value)}
         />
       </header>
 
-      <section className="grid gap-4 md:grid-cols-2">
-        <div className="rounded border p-4">
-          <h2 className="mb-2 font-medium">Search Questions</h2>
-          <form className="space-y-2" onSubmit={performSearch}>
-            <input
-              className="w-full rounded border p-2"
-              placeholder="Search question text"
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Search Questions */}
+        <Card className="flex flex-col h-full">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-text-primary border-b border-border pb-3 mb-4">
+            Search Questions
+          </h2>
+          <form className="space-y-4" onSubmit={performSearch}>
+            <Input
+              label="Search Query"
+              placeholder="Search question text..."
               value={query}
               onChange={(event) => setQuery(event.target.value)}
             />
             <div className="flex gap-2">
-              <button className="rounded border px-3 py-1" type="submit">
+              <Button type="submit" size="sm">
                 Search
-              </button>
-              <button className="rounded border px-3 py-1" onClick={loadQuestions} type="button">
+              </Button>
+              <Button variant="secondary" size="sm" onClick={loadQuestions} type="button">
                 Load All
-              </button>
-              <button className="rounded border px-3 py-1" onClick={loadStats} type="button">
+              </Button>
+              <Button variant="secondary" size="sm" onClick={loadStats} type="button">
                 Load Stats
-              </button>
+              </Button>
             </div>
           </form>
-          <p className="mt-3 text-sm">Total results: {listResult.total}</p>
-          <ul className="mt-2 max-h-72 space-y-2 overflow-auto">
-            {listResult.data.map((question) => (
-              <li key={String(question.questionId)} className="rounded border p-2 text-sm">
-                <p className="font-medium">{String(question.question_text)}</p>
-                <p className="text-xs text-gray-600">
-                  {String(question.subject)} • {String(question.topic)} • difficulty {String(question.difficulty_level)}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
+          <div className="mt-4 pt-4 border-t border-border flex-1 flex flex-col justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-text-secondary">
+              Total results: <strong className="text-primary">{listResult.total}</strong>
+            </span>
+            <ul className="mt-3 max-h-80 space-y-2.5 overflow-y-auto pr-1">
+              {listResult.data.map((question) => (
+                <li
+                  key={String(question.questionId)}
+                  className="rounded-xl border border-border bg-bg-secondary/20 p-3 text-xs leading-relaxed transition-all hover:bg-bg-secondary/40"
+                >
+                  <p className="font-semibold text-text-primary">{String(question.question_text)}</p>
+                  <p className="text-[10px] text-text-muted mt-1.5 font-medium uppercase tracking-wider">
+                    {String(question.subject)} • {String(question.topic)} • Difficulty {String(question.difficulty_level)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Card>
 
-        <div className="rounded border p-4">
-          <h2 className="mb-2 font-medium">Create Question</h2>
-          <form className="space-y-2" onSubmit={submitCreateQuestion}>
-            <input
-              className="w-full rounded border p-2"
-              placeholder="Subject"
-              value={createState.subject}
-              onChange={(event) => setCreateState((prev) => ({ ...prev, subject: event.target.value }))}
-            />
-            <input
-              className="w-full rounded border p-2"
-              placeholder="Topic"
-              value={createState.topic}
-              onChange={(event) => setCreateState((prev) => ({ ...prev, topic: event.target.value }))}
-            />
-            <textarea
-              className="min-h-20 w-full rounded border p-2"
-              placeholder="Question text"
-              value={createState.question_text}
-              onChange={(event) =>
-                setCreateState((prev) => ({ ...prev, question_text: event.target.value }))
-              }
-            />
-            <input
-              className="w-full rounded border p-2"
-              placeholder="Option A"
-              value={createState.option_a}
-              onChange={(event) => setCreateState((prev) => ({ ...prev, option_a: event.target.value }))}
-            />
-            <input
-              className="w-full rounded border p-2"
-              placeholder="Option B"
-              value={createState.option_b}
-              onChange={(event) => setCreateState((prev) => ({ ...prev, option_b: event.target.value }))}
-            />
-            <input
-              className="w-full rounded border p-2"
-              placeholder="Option C"
-              value={createState.option_c}
-              onChange={(event) => setCreateState((prev) => ({ ...prev, option_c: event.target.value }))}
-            />
-            <input
-              className="w-full rounded border p-2"
-              placeholder="Option D"
-              value={createState.option_d}
-              onChange={(event) => setCreateState((prev) => ({ ...prev, option_d: event.target.value }))}
-            />
-            <div className="grid grid-cols-2 gap-2">
-              <input
-                className="w-full rounded border p-2"
-                placeholder="Correct option"
+        {/* Create Question */}
+        <Card>
+          <h2 className="text-sm font-bold uppercase tracking-wider text-text-primary border-b border-border pb-3 mb-4">
+            Create Question
+          </h2>
+          <form className="space-y-4" onSubmit={submitCreateQuestion}>
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                label="Subject"
+                placeholder="e.g. english, mathematics"
+                value={createState.subject}
+                onChange={(event) => setCreateState((prev) => ({ ...prev, subject: event.target.value }))}
+              />
+              <Input
+                label="Topic"
+                placeholder="e.g. Calculus, Mechanics"
+                value={createState.topic}
+                onChange={(event) => setCreateState((prev) => ({ ...prev, topic: event.target.value }))}
+              />
+            </div>
+            
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+                Question Text
+              </label>
+              <textarea
+                className="min-h-24 w-full rounded-xl bg-bg-secondary border border-border p-3 text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
+                placeholder="Write question stem text..."
+                value={createState.question_text}
+                onChange={(event) =>
+                  setCreateState((prev) => ({ ...prev, question_text: event.target.value }))
+                }
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                label="Option A"
+                placeholder="Option A text..."
+                value={createState.option_a}
+                onChange={(event) => setCreateState((prev) => ({ ...prev, option_a: event.target.value }))}
+              />
+              <Input
+                label="Option B"
+                placeholder="Option B text..."
+                value={createState.option_b}
+                onChange={(event) => setCreateState((prev) => ({ ...prev, option_b: event.target.value }))}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                label="Option C"
+                placeholder="Option C text..."
+                value={createState.option_c}
+                onChange={(event) => setCreateState((prev) => ({ ...prev, option_c: event.target.value }))}
+              />
+              <Input
+                label="Option D"
+                placeholder="Option D text..."
+                value={createState.option_d}
+                onChange={(event) => setCreateState((prev) => ({ ...prev, option_d: event.target.value }))}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                label="Correct Option"
+                placeholder="e.g. A, B, C, D"
                 value={createState.correct_option}
                 onChange={(event) =>
                   setCreateState((prev) => ({ ...prev, correct_option: event.target.value.toUpperCase() }))
                 }
               />
-              <input
-                className="w-full rounded border p-2"
-                placeholder="Difficulty (1-5)"
+              <Input
+                label="Difficulty (1-5)"
+                placeholder="Difficulty level..."
                 type="number"
                 min={1}
                 max={5}
@@ -328,64 +361,88 @@ export default function QuestionBankPage() {
                 }
               />
             </div>
-            <input
-              className="w-full rounded border p-2"
-              placeholder="Tags (comma-separated)"
+
+            <Input
+              label="Tags"
+              placeholder="comma-separated tags..."
               value={createState.tags}
               onChange={(event) => setCreateState((prev) => ({ ...prev, tags: event.target.value }))}
             />
-            <button className="rounded bg-primary px-4 py-2 text-white" type="submit">
-              Save Draft
-            </button>
-          </form>
-        </div>
-      </section>
 
-      <section className="rounded border p-4">
-        <h2 className="mb-2 font-medium">Bulk Import (CSV/XLSX/XLS)</h2>
-        <div className="flex flex-wrap gap-2">
+            <Button type="submit" className="w-full">
+              Save Draft
+            </Button>
+          </form>
+        </Card>
+      </div>
+
+      {/* Bulk Import */}
+      <Card className="space-y-4">
+        <h2 className="text-sm font-bold uppercase tracking-wider text-text-primary border-b border-border pb-3 mb-2">
+          Bulk Import (CSV/XLSX/XLS)
+        </h2>
+        <div className="flex flex-wrap items-center gap-4">
           <input
             type="file"
             accept=".csv,.xlsx,.xls"
+            className="text-xs text-text-secondary file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border file:border-border file:bg-bg-secondary file:text-text-primary hover:file:bg-bg-secondary/80 cursor-pointer focus:outline-none"
             onChange={(event) => setImportFile(event.target.files?.[0] ?? null)}
           />
-          <button className="rounded border px-3 py-1" onClick={handleImportUpload} type="button">
-            Upload
-          </button>
-          <button className="rounded border px-3 py-1" onClick={handleCommitImport} type="button">
-            Commit Import
-          </button>
+          <div className="flex gap-2">
+            <Button size="sm" onClick={handleImportUpload}>
+              Upload File
+            </Button>
+            <Button size="sm" variant="secondary" onClick={handleCommitImport}>
+              Commit Import
+            </Button>
+          </div>
         </div>
 
         {importUpload.importId && (
-          <div className="mt-3 text-sm">
-            <p>Import ID: {importUpload.importId}</p>
-            <p>Rows detected: {importUpload.totalRows}</p>
-            <p>Detected columns: {(importUpload.columns ?? []).join(', ')}</p>
-            <pre className="mt-2 overflow-auto rounded bg-gray-50 p-2 text-xs">
+          <div className="mt-4 pt-4 border-t border-border text-xs text-text-secondary space-y-2 animate-in fade-in duration-200">
+            <p>Import ID: <strong className="text-primary font-mono">{importUpload.importId}</strong></p>
+            <p>Rows detected: <strong className="text-text-primary">{importUpload.totalRows}</strong></p>
+            <p>Detected columns: <strong className="text-text-primary">{(importUpload.columns ?? []).join(', ')}</strong></p>
+            <pre className="mt-2 overflow-auto rounded-xl border border-border bg-bg-secondary/40 p-3 text-[10px] max-h-60 font-mono text-text-secondary leading-relaxed">
               {JSON.stringify(importUpload.preview ?? [], null, 2)}
             </pre>
           </div>
         )}
-      </section>
+      </Card>
 
-      <section className="rounded border p-4">
-        <h2 className="mb-2 font-medium">Published Subject Counts</h2>
-        <ul className="list-disc pl-5 text-sm">
+      {/* Published Subject Counts */}
+      <Card>
+        <h2 className="text-sm font-bold uppercase tracking-wider text-text-primary border-b border-border pb-3 mb-4">
+          Published Subject Counts
+        </h2>
+        <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-4">
           {subjects.map((entry) => (
-            <li key={entry.subject}>
-              {entry.subject}: {entry.count}
-            </li>
+            <div
+              key={entry.subject}
+              className="rounded-xl border border-border bg-bg-secondary/20 p-3.5 text-xs text-center flex flex-col justify-center"
+            >
+              <span className="text-text-secondary uppercase font-bold tracking-wider text-[9px] mb-1">
+                {entry.subject}
+              </span>
+              <span className="text-lg font-bold text-white">{entry.count} Qs</span>
+            </div>
           ))}
-        </ul>
+        </div>
         {stats && (
-          <pre className="mt-3 overflow-auto rounded bg-gray-50 p-2 text-xs">
-            {JSON.stringify(stats, null, 2)}
-          </pre>
+          <div className="mt-4 pt-4 border-t border-border">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Detailed Stats JSON</span>
+            <pre className="mt-2 overflow-auto rounded-xl border border-border bg-bg-secondary/40 p-3 text-[10px] max-h-60 font-mono text-text-secondary leading-relaxed">
+              {JSON.stringify(stats, null, 2)}
+            </pre>
+          </div>
         )}
-      </section>
+      </Card>
 
-      {message && <p className="rounded border border-blue-200 bg-blue-50 p-3 text-sm">{message}</p>}
+      {message && (
+        <Alert variant="info" className="mt-4">
+          {message}
+        </Alert>
+      )}
     </main>
   );
 }

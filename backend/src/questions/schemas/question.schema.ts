@@ -162,6 +162,9 @@ export class Question {
   @Prop({ type: [Number], default: [], select: false })
   embedding_vector!: number[];
 
+  @Prop({ default: false })
+  has_diagram!: boolean;
+
   @Prop()
   diagram_svg?: string;
 

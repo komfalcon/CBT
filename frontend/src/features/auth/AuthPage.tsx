@@ -11,6 +11,7 @@ import {
   loginWithCbtKey,
 } from './api';
 import { Lock, Mail, User, Phone, Key, HelpCircle, ArrowRight, ShieldAlert, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Button, Alert, Card, Input, Modal } from '../../components';
 
 type AuthMode = 'login' | 'register' | 'verify-email' | 'forgot-password' | 'reset-password' | 'cbt-key-login';
 
@@ -57,41 +58,52 @@ export default function AuthPage() {
   }, [searchParams]);
 
   // Load Google GIS SDK
+  // Load Google GIS SDK once on mount
   useEffect(() => {
-    const clientScript = document.createElement('script');
-    clientScript.src = 'https://accounts.google.com/gsi/client';
-    clientScript.async = true;
-    clientScript.defer = true;
-    clientScript.onload = () => {
+    let clientScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]') as HTMLScriptElement;
+    if (!clientScript) {
+      clientScript = document.createElement('script');
+      clientScript.src = 'https://accounts.google.com/gsi/client';
+      clientScript.async = true;
+      clientScript.defer = true;
+      clientScript.onload = () => {
+        initializeGoogleAuth();
+      };
+      document.body.appendChild(clientScript);
+    } else if ((window as any).google) {
       initializeGoogleAuth();
-    };
-    document.body.appendChild(clientScript);
+    }
+  }, []);
 
-    return () => {
-      document.body.removeChild(clientScript);
-    };
-  }, [mode]); // Re-initialize Google Auth when mode changes to ensure DOM element is ready
+  // Re-initialize/render Google button on mode changes when SDK is loaded
+  useEffect(() => {
+    if ((window as any).google) {
+      initializeGoogleAuth();
+    }
+  }, [mode]);
 
   const initializeGoogleAuth = () => {
     const google = (window as any).google;
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
     
     if (google && clientId) {
-      try {
-        google.accounts.id.initialize({
-          client_id: clientId,
-          callback: handleGoogleLoginResponse,
-        });
-        const googleBtn = document.getElementById('google-signin-btn');
-        if (googleBtn) {
-          google.accounts.id.renderButton(
-            googleBtn,
-            { theme: 'dark', size: 'large', shape: 'pill', type: 'standard' }
-          );
+      setTimeout(() => {
+        try {
+          google.accounts.id.initialize({
+            client_id: clientId,
+            callback: handleGoogleLoginResponse,
+          });
+          const googleBtn = document.getElementById('google-signin-btn');
+          if (googleBtn) {
+            google.accounts.id.renderButton(
+              googleBtn,
+              { theme: 'dark', size: 'large', shape: 'pill', type: 'standard' }
+            );
+          }
+        } catch (err) {
+          console.warn('Google client init failed. Falling back to sandbox mode.', err);
         }
-      } catch (err) {
-        console.warn('Google client init failed. Falling back to sandbox mode.', err);
-      }
+      }, 50);
     }
   };
 
@@ -345,19 +357,19 @@ export default function AuthPage() {
     strengthCount === 3 ? 'bg-amber-500' : 'bg-emerald-500';
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center font-sans p-6 overflow-hidden relative">
+    <div className="min-h-screen bg-bg-primary text-text-primary flex items-center justify-center font-sans p-6 overflow-hidden relative">
       {/* Glow Orbs */}
-      <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-indigo-900/10 blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] rounded-full bg-violet-900/10 blur-[150px] pointer-events-none" />
+      <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-primary/5 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] rounded-full bg-indigo-500/5 blur-[150px] pointer-events-none" />
 
       {/* Floating Auth Card */}
-      <div className="w-full max-w-md rounded-3xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-8 shadow-2xl relative">
+      <Card className="w-full max-w-md rounded-3xl border border-border bg-bg-card/40 backdrop-blur-xl p-8 shadow-2xl relative">
         <div className="text-center space-y-2 mb-8">
           <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent flex items-center justify-center gap-2">
-            <Sparkles className="h-6 w-6 text-indigo-400" />
+            <Sparkles className="h-6 w-6 text-primary" />
             CBT Portal
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-text-secondary">
             {mode === 'login' && 'Sign in to start practicing exams'}
             {mode === 'register' && 'Create your candidate profile'}
             {mode === 'cbt-key-login' && 'Device Roaming Cafe Quick Access'}
@@ -369,27 +381,27 @@ export default function AuthPage() {
 
         {/* Tab Controls for Auth modes */}
         {(mode === 'login' || mode === 'register' || mode === 'cbt-key-login') && (
-          <div className="grid grid-cols-3 gap-1 bg-slate-950/80 rounded-xl p-1 mb-6 border border-slate-850">
+          <div className="grid grid-cols-3 gap-1 bg-bg-primary/80 rounded-xl p-1 mb-6 border border-border">
             <button
               onClick={() => setMode('login')}
-              className={`rounded-lg py-2 text-xs font-semibold transition-all ${
-                mode === 'login' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+              className={`rounded-lg py-2 text-xs font-bold transition-all duration-200 ${
+                mode === 'login' ? 'bg-primary text-text-on-accent shadow-md' : 'text-text-secondary hover:text-text-primary'
               }`}
             >
               Sign In
             </button>
             <button
               onClick={() => setMode('register')}
-              className={`rounded-lg py-2 text-xs font-semibold transition-all ${
-                mode === 'register' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+              className={`rounded-lg py-2 text-xs font-bold transition-all duration-200 ${
+                mode === 'register' ? 'bg-primary text-text-on-accent shadow-md' : 'text-text-secondary hover:text-text-primary'
               }`}
             >
               Sign Up
             </button>
             <button
               onClick={() => setMode('cbt-key-login')}
-              className={`rounded-lg py-2 text-xs font-semibold transition-all ${
-                mode === 'cbt-key-login' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
+              className={`rounded-lg py-2 text-xs font-bold transition-all duration-200 ${
+                mode === 'cbt-key-login' ? 'bg-primary text-text-on-accent shadow-md' : 'text-text-secondary hover:text-text-primary'
               }`}
             >
               CBT Key
@@ -401,50 +413,47 @@ export default function AuthPage() {
         {mode === 'login' && !tempToken && (
           <form className="space-y-4" onSubmit={handleLogin}>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Email</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="email"
                   required
                   placeholder="name@domain.com"
                   value={loginState.email}
                   onChange={(e) => setLoginState((prev) => ({ ...prev, email: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-650 focus:border-indigo-500 focus:outline-none transition-colors"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
               <div className="flex justify-between items-center">
-                <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Password</label>
+                <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Password</label>
                 <button
                   type="button"
                   onClick={() => setMode('forgot-password')}
-                  className="text-[10px] text-indigo-400 hover:underline"
+                  className="text-[10px] text-primary hover:underline"
                 >
                   Forgot Password?
                 </button>
               </div>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="password"
                   required
                   placeholder="••••••••"
                   value={loginState.password}
                   onChange={(e) => setLoginState((prev) => ({ ...prev, password: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-650 focus:border-indigo-500 focus:outline-none transition-colors"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 py-3 text-sm font-bold text-white transition-all transform active:scale-95 shadow-lg shadow-indigo-600/20"
-            >
+            <Button type="submit" fullWidth>
               Sign In <ArrowRight className="h-4 w-4" />
-            </button>
+            </Button>
 
             {/* Google Authentication Section - repositioned under password form */}
             <div className="pt-2">
@@ -474,60 +483,60 @@ export default function AuthPage() {
         {mode === 'register' && (
           <form className="space-y-4" onSubmit={handleRegister}>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Full Name</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Full Name</label>
               <div className="relative">
-                <User className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <User className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="text"
                   required
                   placeholder="Chinedu Okafor"
                   value={registerState.fullName}
                   onChange={(e) => setRegisterState((prev) => ({ ...prev, fullName: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Email Address</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="email"
                   required
                   placeholder="candidate@domain.ng"
                   value={registerState.email}
                   onChange={(e) => setRegisterState((prev) => ({ ...prev, email: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Phone (Optional)</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Phone (Optional)</label>
               <div className="relative">
-                <Phone className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <Phone className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="text"
                   placeholder="08012345678"
                   value={registerState.phone}
                   onChange={(e) => setRegisterState((prev) => ({ ...prev, phone: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Password</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="password"
                   required
                   placeholder="Create password"
                   value={registerState.password}
                   onChange={(e) => setRegisterState((prev) => ({ ...prev, password: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
 
@@ -536,10 +545,10 @@ export default function AuthPage() {
                 <div className="pt-2 pb-1 space-y-2 animate-slide-up">
                   {/* Strength Bar */}
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-semibold text-slate-400">Password Strength:</span>
-                    <span className="text-[10px] font-bold text-slate-200">{strengthText}</span>
+                    <span className="text-[10px] font-semibold text-text-secondary">Password Strength:</span>
+                    <span className="text-[10px] font-bold text-text-primary">{strengthText}</span>
                   </div>
-                  <div className="h-1.5 w-full bg-slate-850 rounded-full overflow-hidden">
+                  <div className="h-1.5 w-full bg-bg-secondary rounded-full overflow-hidden">
                     <div 
                       className={`h-full ${strengthColor} transition-all duration-500`} 
                       style={{ width: `${(strengthCount / 4) * 100}%` }}
@@ -595,40 +604,39 @@ export default function AuthPage() {
                   placeholder="Repeat password"
                   value={registerState.confirmPassword}
                   onChange={(e) => setRegisterState((prev) => ({ ...prev, confirmPassword: e.target.value }))}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
               {registerState.confirmPassword.length > 0 && registerState.password !== registerState.confirmPassword && (
-                <p className="text-[10px] text-rose-400 animate-slide-up">Passwords do not match.</p>
+                <p className="text-[10px] text-error animate-slide-up">Passwords do not match.</p>
               )}
             </div>
 
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 py-3 text-sm font-bold text-white transition-all transform active:scale-95 shadow-lg shadow-indigo-600/20"
-            >
+            <Button type="submit" fullWidth>
               Register Candidate <ArrowRight className="h-4 w-4" />
-            </button>
+            </Button>
 
             {/* Google Authentication Section - repositioned under password form */}
             <div className="pt-2">
               <div className="relative flex py-2 items-center mb-4">
-                <div className="flex-grow border-t border-slate-800"></div>
-                <span className="flex-shrink mx-4 text-[10px] text-slate-500 font-semibold uppercase">Or join with</span>
-                <div className="flex-grow border-t border-slate-800"></div>
+                <div className="flex-grow border-t border-border"></div>
+                <span className="flex-shrink mx-4 text-[10px] text-text-muted font-semibold uppercase">Or join with</span>
+                <div className="flex-grow border-t border-border"></div>
               </div>
               {isGoogleAvailable ? (
                 <div className="flex justify-center w-full" id="google-signin-btn"></div>
               ) : (
                 <div className="flex justify-center">
-                  <button
+                  <Button
                     type="button"
                     onClick={() => setIsGoogleMockOpen(true)}
-                    className="flex items-center justify-center gap-2 rounded-full bg-slate-950 border border-slate-800 hover:border-slate-700 px-6 py-2.5 text-xs font-semibold text-slate-200 transition-colors shadow-lg active:scale-95"
+                    variant="secondary"
+                    size="sm"
+                    className="rounded-full px-6"
                   >
-                    <span className="h-4 w-4 rounded-full border border-indigo-400/30 flex items-center justify-center bg-indigo-500/10 text-[9px] font-bold text-indigo-400">G</span>
+                    <span className="h-4 w-4 rounded-full border border-primary/30 flex items-center justify-center bg-primary/10 text-[9px] font-bold text-primary">G</span>
                     Sign up with Google
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
@@ -637,31 +645,27 @@ export default function AuthPage() {
 
         {mode === 'cbt-key-login' && (
           <form className="space-y-4" onSubmit={handleCbtKeyLogin}>
-            <div className="rounded-xl border border-indigo-500/20 bg-indigo-950/20 p-4 text-[11px] text-indigo-300 leading-normal space-y-1">
-              <strong>Quick Cafe Roaming Access:</strong>
-              <p>Type your 8-digit unique access key (e.g. CBT-AB12XY) allotted during registration to login directly without typing your password.</p>
-            </div>
+            <Alert variant="info" title="Quick Cafe Roaming Access">
+              Type your 8-digit unique access key (e.g. CBT-AB12XY) allotted during registration to login directly without typing your password.
+            </Alert>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">CBT Access Key</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">CBT Access Key</label>
               <div className="relative">
-                <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="text"
                   required
                   placeholder="CBT-XXXXXX"
                   value={cbtKey}
                   onChange={(e) => setCbtKey(e.target.value)}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800/80 pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-650 focus:border-indigo-500 focus:outline-none transition-colors font-mono tracking-wide"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150 font-mono tracking-wide"
                 />
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 py-3 text-sm font-bold text-white transition-all transform active:scale-95"
-            >
+            <Button type="submit" fullWidth>
               Quick Login <ArrowRight className="h-4 w-4" />
-            </button>
+            </Button>
 
             {/* Google Authentication Section - repositioned under password form */}
             <div className="pt-2">
@@ -674,14 +678,16 @@ export default function AuthPage() {
                 <div className="flex justify-center w-full" id="google-signin-btn"></div>
               ) : (
                 <div className="flex justify-center">
-                  <button
+                  <Button
                     type="button"
                     onClick={() => setIsGoogleMockOpen(true)}
-                    className="flex items-center justify-center gap-2 rounded-full bg-slate-950 border border-slate-800 hover:border-slate-700 px-6 py-2.5 text-xs font-semibold text-slate-200 transition-colors shadow-lg active:scale-95"
+                    variant="secondary"
+                    size="sm"
+                    className="rounded-full px-6"
                   >
-                    <span className="h-4 w-4 rounded-full border border-indigo-400/30 flex items-center justify-center bg-indigo-500/10 text-[9px] font-bold text-indigo-400">G</span>
+                    <span className="h-4 w-4 rounded-full border border-primary/30 flex items-center justify-center bg-primary/10 text-[9px] font-bold text-primary">G</span>
                     Sign in with Google
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
@@ -691,44 +697,40 @@ export default function AuthPage() {
         {tempToken && (
           <form className="mt-4 space-y-4 animate-fade-in" onSubmit={handleVerifyOtp}>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">MFA Security Code</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">MFA Security Code</label>
               <input
                 type="text"
                 required
                 placeholder="6-digit OTP code"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
-                className="w-full rounded-xl bg-slate-950 border border-slate-800 pl-4 pr-4 py-3 text-sm text-center font-mono tracking-widest text-slate-200 focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-xl bg-bg-secondary border border-border pl-4 pr-4 py-3 text-sm text-center font-mono tracking-widest text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
               />
             </div>
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 py-3 text-sm font-bold text-white transition-all"
-            >
+            <Button type="submit" fullWidth>
               Verify OTP Code
-            </button>
+            </Button>
           </form>
         )}
 
         {mode === 'verify-email' && (
           <form className="space-y-4 animate-fade-in" onSubmit={handleVerifyEmail}>
-            <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4 text-[11px] text-indigo-300 leading-normal">
-              <strong>Check Browser Console (F12):</strong>
-              <p>Copy the 6-digit verification code printed in the browser console logs and enter it below.</p>
-            </div>
+            <Alert variant="info" title="Check Browser Console (F12)">
+              Copy the 6-digit verification code printed in the browser console logs and enter it below.
+            </Alert>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Email Address</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Email Address</label>
               <input
                 type="email"
                 required
                 placeholder="candidate@domain.com"
                 value={verifyEmailAddress}
                 onChange={(e) => setVerifyEmailAddress(e.target.value)}
-                className="w-full rounded-xl bg-slate-950 border border-slate-800 pl-4 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-xl bg-bg-secondary border border-border pl-4 pr-4 py-3 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
               />
             </div>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">6-Digit Verification Code</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">6-Digit Verification Code</label>
               <input
                 type="text"
                 required
@@ -736,19 +738,16 @@ export default function AuthPage() {
                 placeholder="123456"
                 value={verificationToken}
                 onChange={(e) => setVerificationToken(e.target.value)}
-                className="w-full rounded-xl bg-slate-950 border border-slate-800 pl-4 pr-4 py-3 text-sm text-center font-mono tracking-widest text-indigo-400 focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-xl bg-bg-secondary border border-border pl-4 pr-4 py-3 text-sm text-center font-mono tracking-widest text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
               />
             </div>
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 py-3 text-sm font-bold text-white transition-all animate-pulse"
-            >
+            <Button type="submit" fullWidth className="animate-pulse">
               Complete Email Verification
-            </button>
+            </Button>
             <button
               type="button"
               onClick={() => setMode('login')}
-              className="w-full text-center text-xs text-slate-400 hover:text-white"
+              className="w-full text-center text-xs text-text-secondary hover:text-text-primary transition-colors"
             >
               Back to Login
             </button>
@@ -758,29 +757,26 @@ export default function AuthPage() {
         {mode === 'forgot-password' && (
           <form className="space-y-4 animate-fade-in" onSubmit={handleForgotPassword}>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Email Address</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="email"
                   required
                   placeholder="registered@email.com"
                   value={forgotEmail}
                   onChange={(e) => setForgotEmail(e.target.value)}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 pl-10 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
             </div>
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 py-3 text-sm font-bold text-white transition-all"
-            >
+            <Button type="submit" fullWidth>
               Generate Reset Token
-            </button>
+            </Button>
             <button
               type="button"
               onClick={() => setMode('login')}
-              className="w-full text-center text-xs text-slate-400 hover:text-white"
+              className="w-full text-center text-xs text-text-secondary hover:text-text-primary transition-colors"
             >
               Back to Sign In
             </button>
@@ -789,28 +785,27 @@ export default function AuthPage() {
 
         {mode === 'reset-password' && (
           <form className="space-y-4 animate-fade-in" onSubmit={handleResetPassword}>
-            <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4 text-[11px] text-indigo-300 leading-normal">
-              <strong>Check Browser Console (F12):</strong>
-              <p>Enter the 6-digit reset code printed in the browser console logs below.</p>
-            </div>
+            <Alert variant="info" title="Check Browser Console (F12)">
+              Enter the 6-digit reset code printed in the browser console logs below.
+            </Alert>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Email Address</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="email"
                   required
                   placeholder="candidate@domain.com"
                   value={verifyEmailAddress}
                   onChange={(e) => setVerifyEmailAddress(e.target.value)}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 pl-10 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
             </div>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">6-Digit Reset Code</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">6-Digit Reset Code</label>
               <div className="relative">
-                <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="text"
                   required
@@ -818,106 +813,95 @@ export default function AuthPage() {
                   placeholder="123456"
                   value={resetToken}
                   onChange={(e) => setResetToken(e.target.value)}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 pl-10 pr-4 py-3 text-sm text-center font-mono tracking-widest text-indigo-400 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-center font-mono tracking-widest text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
             </div>
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">New Password</label>
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">New Password</label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
                 <input
                   type="password"
                   required
                   placeholder="Min. 8 characters"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 pl-10 pr-4 py-3 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
                 />
               </div>
             </div>
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 py-3 text-sm font-bold text-white transition-all"
-            >
+            <Button type="submit" fullWidth>
               Update Password
-            </button>
+            </Button>
           </form>
         )}
 
         {/* Global Feedback Banner */}
         {message && (
-          <div className={`mt-6 rounded-xl border p-4 text-xs flex gap-2 items-start animate-fade-in ${
-            messageType === 'error'
-              ? 'border-rose-500/20 bg-rose-500/10 text-rose-300'
-              : messageType === 'success'
-              ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
-              : 'border-blue-500/20 bg-blue-500/10 text-blue-300'
-          }`}>
-            <HelpCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
-            <div className="leading-normal flex-1">{message}</div>
-          </div>
+          <Alert variant={messageType === 'error' ? 'error' : messageType === 'success' ? 'success' : 'info'} className="mt-6">
+            {message}
+          </Alert>
         )}
-      </div>
+      </Card>
 
       {/* Mock Google Login modal */}
-      {isGoogleMockOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-2xl border border-slate-850 bg-slate-900 p-6 space-y-6">
-            <div className="flex items-center gap-2 text-indigo-400 pb-2 border-b border-slate-800">
-              <ShieldAlert className="h-5 w-5" />
-              <h3 className="text-base font-bold text-white">Google Sandbox Mock Auth</h3>
-            </div>
-            
-            <p className="text-xs text-slate-400 leading-relaxed">
-              No Client ID configuration was detected in the environment. Use this local sandbox dropdown to simulate returning valid authenticated details from Google OAuth.
-            </p>
+      <Modal
+        isOpen={isGoogleMockOpen}
+        onClose={() => setIsGoogleMockOpen(false)}
+        title="Google Sandbox Mock Auth"
+        maxWidth="sm"
+      >
+        <div className="space-y-6">
+          <Alert variant="warning">
+            No Client ID configuration was detected in the environment. Use this local sandbox dropdown to simulate returning valid authenticated details from Google OAuth.
+          </Alert>
 
-            <div className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-slate-400">Profile Name</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Jane Doe"
-                  value={mockGoogleName}
-                  onChange={(e) => setMockGoogleName(e.target.value)}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 pl-4 pr-4 py-2.5 text-sm text-slate-200 focus:outline-none"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-slate-400">Profile Email</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="jane.doe@gmail.com"
-                  value={mockGoogleEmail}
-                  onChange={(e) => setMockGoogleEmail(e.target.value)}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 pl-4 pr-4 py-2.5 text-sm text-slate-200 focus:outline-none"
-                />
-              </div>
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold uppercase text-text-secondary">Profile Name</label>
+              <input
+                type="text"
+                required
+                placeholder="Jane Doe"
+                value={mockGoogleName}
+                onChange={(e) => setMockGoogleName(e.target.value)}
+                className="w-full rounded-xl bg-bg-secondary border border-border pl-4 pr-4 py-2.5 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
+              />
             </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
-              <button
-                type="button"
-                onClick={() => setIsGoogleMockOpen(false)}
-                className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2 text-xs font-semibold text-slate-300"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleGoogleMockLogin}
-                className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-xs font-bold text-white"
-              >
-                Simulate Login
-              </button>
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold uppercase text-text-secondary">Profile Email</label>
+              <input
+                type="email"
+                required
+                placeholder="jane.doe@gmail.com"
+                value={mockGoogleEmail}
+                onChange={(e) => setMockGoogleEmail(e.target.value)}
+                className="w-full rounded-xl bg-bg-secondary border border-border pl-4 pr-4 py-2.5 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
+              />
             </div>
           </div>
+
+          <div className="flex justify-end gap-2 pt-4 border-t border-border">
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsGoogleMockOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              onClick={handleGoogleMockLogin}
+            >
+              Simulate Login
+            </Button>
+          </div>
         </div>
-      )}
+      </Modal>
     </div>
   );
 }

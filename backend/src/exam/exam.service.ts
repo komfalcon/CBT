@@ -67,13 +67,7 @@ export class ExamService {
       // Fetch questions: English (60), other 3 subjects (40 each)
       for (const sub of subjectsList) {
         const targetCount = sub === 'english' ? 60 : 40;
-        const subQuestions = await this.questionModel
-          .aggregate<Question>([
-            { $match: { subject: sub, status: 'published' } },
-            { $sample: { size: targetCount } },
-          ])
-          .exec();
-
+        const subQuestions = await this.getUniqueQuestionsForSubject(sub, targetCount);
         questionsList.push(...subQuestions);
       }
     } else {
@@ -85,12 +79,7 @@ export class ExamService {
       subjectsList = [subject];
       timeRemaining = finalCount * 60; // 1 minute per question
 
-      const subQuestions = await this.questionModel
-        .aggregate<Question>([
-          { $match: { subject, status: 'published' } },
-          { $sample: { size: finalCount } },
-        ])
-        .exec();
+      const subQuestions = await this.getUniqueQuestionsForSubject(subject, finalCount);
 
       if (subQuestions.length === 0) {
         throw new BadRequestException(`No published questions found for subject: ${subject}`);
@@ -253,5 +242,33 @@ export class ExamService {
       return rest;
     });
     return plain;
+  }
+
+  private async getUniqueQuestionsForSubject(subject: string, targetCount: number): Promise<Question[]> {
+    const uniqueQuestions = await this.questionModel
+      .aggregate<Question>([
+        { $match: { subject, status: 'published' } },
+        { $group: { _id: "$question_text", doc: { $first: "$$ROOT" } } },
+        { $replaceRoot: { newRoot: "$doc" } },
+        { $sample: { size: targetCount } }
+      ])
+      .exec();
+
+    if (uniqueQuestions.length === 0) {
+      return [];
+    }
+
+    let result = uniqueQuestions;
+    if (result.length < targetCount) {
+      // Repeat questions up to 3 times to fill to targetCount
+      const repeated: Question[] = [];
+      for (let r = 0; r < 3 && repeated.length < targetCount; r++) {
+        // Shuffle each pass to mix up order
+        const pass = [...result].sort(() => Math.random() - 0.5);
+        repeated.push(...pass);
+      }
+      result = repeated.slice(0, targetCount);
+    }
+    return result;
   }
 }

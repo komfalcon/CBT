@@ -24,6 +24,7 @@ import {
   X,
 } from 'lucide-react';
 import { AiChatWidget } from '../features/ai/AiChatWidget';
+import { Button, Card, Modal, Alert, Badge } from '../components';
 
 const SUBJECT_LABELS: Record<string, string> = {
   english: 'Use of English (Compulsory)',
@@ -127,11 +128,12 @@ export default function StudentDashboard() {
     }
 
     const handler = paystackPop.setup({
-      key: 'pk_live_068536d7f4bbe687175bcda53e3f5d116fea99dc',
+      key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_live_068536d7f4bbe687175bcda53e3f5d116fea99dc',
       email: student.email,
       amount: amount * 100, // in kobo
       currency: 'NGN',
       plan: planCode,
+      channels: ['card'],
       callback: (response: any) => {
         verifyPayment(response.reference, planCode, tierName);
       },
@@ -253,7 +255,7 @@ export default function StudentDashboard() {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-100">
         <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-indigo-500" />
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary" />
           <p className="text-sm text-slate-400">Loading student profile...</p>
         </div>
       </div>
@@ -264,16 +266,16 @@ export default function StudentDashboard() {
   const isCombinationValid = combination.length === 4 && combination.includes('english');
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans overflow-auto relative">
+    <div className="min-h-screen bg-bg-primary text-text-primary font-sans overflow-auto relative">
       {/* Decorative Blur */}
-      <div className="absolute top-0 right-0 w-[40%] h-[40%] rounded-full bg-indigo-900/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[40%] h-[40%] rounded-full bg-violet-900/10 blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
 
       {/* Header */}
-      <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
+      <header className="border-b border-border bg-bg-primary/80 backdrop-blur-md sticky top-0 z-40">
         <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center font-bold text-white">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-primary to-blue-600 flex items-center justify-center font-bold text-text-on-accent">
               CBT
             </div>
             <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
@@ -281,13 +283,14 @@ export default function StudentDashboard() {
             </span>
           </div>
 
-          <button
+          <Button
             onClick={handleLogout}
-            className="flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+            variant="ghost"
+            size="sm"
           >
             <LogOut className="h-4 w-4" />
             Logout
-          </button>
+          </Button>
         </div>
       </header>
 
@@ -296,120 +299,120 @@ export default function StudentDashboard() {
         {/* Left Column: Profile Card & Roaming CBT Key */}
         <div className="space-y-6">
           {/* Student Profile Info */}
-          <div className="rounded-2xl border border-slate-900 bg-slate-900/40 backdrop-blur-md p-6 relative overflow-hidden">
+          <Card className="relative overflow-hidden">
             <div className="flex items-center gap-4">
-              <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center font-bold text-2xl text-white shadow-xl shadow-indigo-500/20">
+              <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-primary to-blue-600 flex items-center justify-center font-bold text-2xl text-text-on-accent shadow-xl shadow-primary/20">
                 {student?.fullName ? student.fullName.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase() : 'ST'}
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">{student?.fullName}</h2>
-                <p className="text-xs text-slate-400">{student?.email}</p>
+                <h2 className="text-lg font-bold text-text-primary">{student?.fullName}</h2>
+                <p className="text-xs text-text-secondary">{student?.email}</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-500/10 px-2.5 py-0.5 text-xs font-semibold text-indigo-300">
+                  <Badge variant="info">
                     UTME Candidate
-                  </span>
-                  <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider
-                    ${student?.subscription_tier === 'max' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 
-                      student?.subscription_tier === 'pro' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' :
-                      student?.subscription_tier === 'plus' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' :
-                      'bg-slate-800 text-slate-400 border border-slate-700'}
-                  `}>
+                  </Badge>
+                  <Badge variant={
+                    student?.subscription_tier === 'max' ? 'ai-flag' : 
+                    student?.subscription_tier === 'pro' ? 'success' :
+                    student?.subscription_tier === 'plus' ? 'primary' : 'draft'
+                  }>
                     {student?.subscription_tier || 'Free'} Plan
-                  </span>
+                  </Badge>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-3 gap-2 border-t border-slate-900 pt-4 text-center">
+            <div className="mt-6 grid grid-cols-3 gap-2 border-t border-border pt-4 text-center">
               <div>
-                <div className="text-xs text-slate-400">Level</div>
-                <div className="text-sm font-bold text-indigo-400">{student?.level || 1}</div>
+                <div className="text-xs text-text-secondary font-semibold">Level</div>
+                <div className="text-sm font-bold text-primary">{student?.level || 1}</div>
               </div>
               <div>
-                <div className="text-xs text-slate-400">XP Points</div>
-                <div className="text-sm font-bold text-violet-400">{student?.xp_points || 0} XP</div>
+                <div className="text-xs text-text-secondary font-semibold">XP Points</div>
+                <div className="text-sm font-bold text-primary">{student?.xp_points || 0} XP</div>
               </div>
               <div>
-                <div className="text-xs text-slate-400">Streak</div>
+                <div className="text-xs text-text-secondary font-semibold">Streak</div>
                 <div className="text-sm font-bold text-pink-400">{student?.streak_count || 0} days</div>
               </div>
             </div>
 
-            <button
+            <Button
               onClick={() => setShowUpgradeModal(true)}
-              className="mt-5 w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 py-3 text-xs font-bold text-white shadow-lg shadow-indigo-600/10 active:scale-95 transition-all"
+              variant="gradient"
+              fullWidth
+              className="mt-5"
             >
               <CreditCard className="h-4 w-4" />
               Upgrade Subscription Plan
-            </button>
-          </div>
+            </Button>
+          </Card>
 
           {/* CBT Access Key - Cafe Roaming Code */}
-          <div className="rounded-2xl border border-indigo-500/20 bg-indigo-950/20 p-6 space-y-4">
+          <Card variant="secondary" className="space-y-4">
             <div className="flex items-center gap-2">
-              <User className="h-5 w-5 text-indigo-400" />
-              <h3 className="text-sm font-bold text-white">Cafe Roaming CBT Access Key</h3>
+              <User className="h-5 w-5 text-primary" />
+              <h3 className="text-sm font-bold text-text-primary">Cafe Roaming CBT Access Key</h3>
             </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-text-secondary leading-relaxed">
               Use this key to sign in quickly at cafe terminals or CBT training halls without inputting your password. Keep this key secure.
             </p>
-            <div className="flex items-center gap-2 rounded-xl bg-slate-950 border border-slate-800 p-3">
-              <span className="font-mono text-sm tracking-wider text-indigo-300 select-all flex-1">
+            <div className="flex items-center gap-2 rounded-xl bg-bg-primary border border-border p-3">
+              <span className="font-mono text-sm tracking-wider text-primary select-all flex-1">
                 {student?.cbt_key}
               </span>
               <button
                 onClick={handleCopyKey}
-                className="p-1 rounded-lg bg-slate-900 border border-slate-850 hover:bg-slate-800 hover:text-white transition-colors"
+                className="p-1.5 rounded-lg bg-bg-secondary border border-border hover:bg-bg-secondary/80 hover:text-text-primary transition-colors"
                 title="Copy CBT Key"
               >
-                {copied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4 text-slate-400" />}
+                {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4 text-text-secondary" />}
               </button>
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* Center/Right Column: Subject Selection & Simulator Launchers */}
         <div className="md:col-span-2 space-y-6">
           {message && (
-            <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-4 text-sm text-blue-300 flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-blue-400 flex-shrink-0" />
+            <Alert variant="info" className="p-4 flex items-center gap-2">
               {message}
-            </div>
+            </Alert>
           )}
 
           {/* Combination Warning */}
           {!isCombinationValid && (
-            <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-6 flex flex-col sm:flex-row items-start gap-4">
-              <AlertTriangle className="h-6 w-6 text-amber-400 flex-shrink-0 mt-0.5" />
-              <div className="space-y-2 flex-1">
-                <h4 className="text-sm font-bold text-white">Complete Your Subject Combination First!</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
+            <Alert variant="warning" title="Complete Your Subject Combination First!" className="p-6">
+              <div className="space-y-3">
+                <p>
                   JAMB UTME mandates that you register English Language and 3 elective subjects matching your chosen university course. Set this up to enable practice launchers.
                 </p>
-                <button
+                <Button
                   onClick={() => setIsEditModalOpen(true)}
-                  className="rounded-lg bg-amber-500 px-4 py-2 text-xs font-bold text-slate-950 hover:bg-amber-400 transition-colors"
+                  size="sm"
                 >
                   Set Combination Now
-                </button>
+                </Button>
               </div>
-            </div>
+            </Alert>
           )}
 
           {/* Subject Combination Showcase */}
-          <div className="rounded-2xl border border-slate-900 bg-slate-900/40 p-6">
+          <Card>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Grid className="h-5 w-5 text-indigo-400" />
-                <h3 className="text-sm font-bold text-white">Your Subject Combination</h3>
+                <Grid className="h-5 w-5 text-primary" />
+                <h3 className="text-sm font-bold text-text-primary">Your Subject Combination</h3>
               </div>
               {isCombinationValid && (
-                <button
+                <Button
                   onClick={() => setIsEditModalOpen(true)}
-                  className="text-xs font-medium text-indigo-400 hover:text-indigo-300 hover:underline"
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs font-bold text-primary hover:text-primary-hover"
                 >
                   Change
-                </button>
+                </Button>
               )}
             </div>
 
@@ -418,474 +421,458 @@ export default function StudentDashboard() {
                 {combination.map((sub: string) => (
                   <div
                     key={sub}
-                    className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-950 p-4"
+                    className="flex items-center gap-3 rounded-xl border border-border bg-bg-secondary p-4"
                   >
-                    <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-bold text-xs text-indigo-400">
+                    <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-xs text-primary">
                       {sub.slice(0, 3).toUpperCase()}
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-white">{SUBJECT_LABELS[sub] || sub}</div>
-                      <div className="text-xs text-slate-500">JAMB UTME Syllabus</div>
+                      <div className="text-sm font-bold text-text-primary">{SUBJECT_LABELS[sub] || sub}</div>
+                      <div className="text-xs text-text-muted">JAMB UTME Syllabus</div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-slate-500 py-4 text-center">No subject combination configured.</p>
+              <p className="text-sm text-text-muted py-4 text-center">No subject combination configured.</p>
             )}
-          </div>
+          </Card>
 
           {/* Test Launcher Grid */}
-          <div className="rounded-2xl border border-slate-900 bg-slate-900/40 p-6">
+          <Card>
             <div className="flex items-center gap-2 mb-4">
-              <Play className="h-5 w-5 text-indigo-400" />
-              <h3 className="text-sm font-bold text-white">UTME Practice Center</h3>
+              <Play className="h-5 w-5 text-primary" />
+              <h3 className="text-sm font-bold text-text-primary">UTME Practice Center</h3>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
               {/* Launcher Card 1: 4-Subject Mock */}
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 flex flex-col justify-between">
+              <div className="rounded-xl border border-border bg-bg-secondary p-6 flex flex-col justify-between">
                 <div>
-                  <h4 className="text-base font-bold text-white mb-2">4-Subject Mock Exam</h4>
-                  <p className="text-xs text-slate-405 leading-relaxed mb-4">
+                  <h4 className="text-base font-bold text-text-primary mb-2">4-Subject Mock Exam</h4>
+                  <p className="text-xs text-text-secondary leading-relaxed mb-4">
                     Full computer-based simulation mirroring the 180 questions and strict countdown timer of the JAMB UTME exam.
                   </p>
                 </div>
-                <button
+                <Button
                   disabled={!isCombinationValid}
                   onClick={handleStartMock}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 py-3 text-sm font-bold text-white hover:from-indigo-500 hover:to-violet-500 transition-all disabled:opacity-30 disabled:pointer-events-none"
+                  variant="gradient"
+                  fullWidth
                 >
                   Start Simulation Mock
-                </button>
+                </Button>
               </div>
 
               {/* Launcher Card 2: Single Subject Practice */}
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 flex flex-col justify-between">
+              <div className="rounded-xl border border-border bg-bg-secondary p-6 flex flex-col justify-between">
                 <div>
-                  <h4 className="text-base font-bold text-white mb-2">Single Subject Drills</h4>
-                  <p className="text-xs text-slate-405 leading-relaxed mb-4">
+                  <h4 className="text-base font-bold text-text-primary mb-2">Single Subject Drills</h4>
+                  <p className="text-xs text-text-secondary leading-relaxed mb-4">
                     Focus on individual areas. Practice 10, 20, or 40 questions at your own speed with instant feedback.
                   </p>
                 </div>
-                <button
+                <Button
                   disabled={!isCombinationValid}
                   onClick={() => {
                     if (combination.length > 0) setDrillSubject(combination[0]);
                     setIsDrillModalOpen(true);
                   }}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 py-3 text-sm font-bold text-slate-200 transition-all disabled:opacity-30 disabled:pointer-events-none"
+                  variant="secondary"
+                  fullWidth
                 >
                   Configure Subject Drill
-                </button>
+                </Button>
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Performance Dashboard charts */}
-          <div className="rounded-2xl border border-slate-900 bg-slate-900/40 p-6">
+          <Card>
             <div className="flex items-center gap-2 mb-4">
-              <Award className="h-5 w-5 text-indigo-400" />
-              <h3 className="text-sm font-bold text-white">UTME Performance Overview</h3>
+              <Award className="h-5 w-5 text-primary" />
+              <h3 className="text-sm font-bold text-text-primary">UTME Performance Overview</h3>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-xl bg-slate-950 p-4 border border-slate-850 text-center">
-                <div className="text-xs text-slate-400">Total Exams Completed</div>
-                <div className="text-2xl font-black text-white mt-1">
+              <div className="rounded-xl bg-bg-secondary p-4 border border-border text-center">
+                <div className="text-xs text-text-secondary">Total Exams Completed</div>
+                <div className="text-2xl font-black text-text-primary mt-1">
                   {resultsList.length}
                 </div>
-                <span className="text-[10px] text-slate-500">Practice makes perfect</span>
+                <span className="text-[10px] text-text-muted">Practice makes perfect</span>
               </div>
-              <div className="rounded-xl bg-slate-950 p-4 border border-slate-850 text-center">
-                <div className="text-xs text-slate-400">Average UTME Score</div>
-                <div className="text-2xl font-black text-indigo-400 mt-1">
+              <div className="rounded-xl bg-bg-secondary p-4 border border-border text-center">
+                <div className="text-xs text-text-secondary">Average UTME Score</div>
+                <div className="text-2xl font-black text-primary mt-1">
                   {resultsList.filter((r) => r.type === 'mock').length > 0
                     ? Math.round(
                         resultsList
                           .filter((r) => r.type === 'mock')
                           .reduce((acc, r) => acc + r.totalScore, 0) /
-                          resultsList.filter((r) => r.type === 'mock').length,
+                           resultsList.filter((r) => r.type === 'mock').length,
                       )
                     : 'N/A'}
                 </div>
-                <span className="text-[10px] text-slate-500">Target score is 300+</span>
+                <span className="text-[10px] text-text-muted">Target score is 300+</span>
               </div>
-              <div className="rounded-xl bg-slate-950 p-4 border border-slate-850 text-center">
-                <div className="text-xs text-slate-400">Streak Count</div>
-                <div className="text-2xl font-black text-violet-400 mt-1">
+              <div className="rounded-xl bg-bg-secondary p-4 border border-border text-center">
+                <div className="text-xs text-text-secondary">Streak Count</div>
+                <div className="text-2xl font-black text-pink-400 mt-1">
                   {student?.streak_count || 0} days
                 </div>
-                <span className="text-[10px] text-slate-500">Consecutive days practice</span>
+                <span className="text-[10px] text-text-muted">Consecutive days practice</span>
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Recent Attempts History */}
-          <div className="rounded-2xl border border-slate-900 bg-slate-900/40 p-6 space-y-4">
+          <Card className="space-y-4">
             <div className="flex items-center gap-2">
-              <History className="h-5 w-5 text-indigo-400" />
-              <h3 className="text-sm font-bold text-white">Recent Attempts History</h3>
+              <History className="h-5 w-5 text-primary" />
+              <h3 className="text-sm font-bold text-text-primary">Recent Attempts History</h3>
             </div>
             {resultsList.length > 0 ? (
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 {resultsList.map((res) => (
                   <div
                     key={res.resultId}
-                    className="flex justify-between items-center rounded-xl border border-slate-850 bg-slate-950 p-4"
+                    className="flex justify-between items-center rounded-xl border border-border bg-bg-secondary p-4"
                   >
                     <div>
-                      <div className="text-xs font-bold text-white uppercase tracking-wider">
+                      <div className="text-xs font-bold text-text-primary uppercase tracking-wider">
                         {res.type === 'mock' ? '4-Subject Mock' : 'Single Subject Drill'}
                       </div>
-                      <div className="text-[10px] text-slate-500 mt-1">
+                      <div className="text-[10px] text-text-muted mt-1 font-medium">
                         {new Date(res.completedAt).toLocaleDateString()} at{' '}
                         {new Date(res.completedAt).toLocaleTimeString()}
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <span className="text-sm font-bold text-indigo-400">
+                        <span className="text-sm font-bold text-primary">
                           {res.type === 'mock' ? res.totalScore : `${res.totalScore}%`}
                         </span>
-                        <span className="text-[10px] text-slate-500 block">
+                        <span className="text-[10px] text-text-muted block font-medium">
                           {res.type === 'mock' ? 'score' : 'accuracy'}
                         </span>
                       </div>
-                      <button
+                      <Button
                         onClick={() => navigate(`/results/${res.resultId}`)}
-                        className="rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 hover:text-white p-2 text-xs font-semibold"
+                        variant="secondary"
+                        size="sm"
                       >
                         Review
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-slate-500 text-center py-4">
+              <p className="text-xs text-text-muted text-center py-4">
                 No past attempts history detected. Complete your combination to start practicing.
               </p>
             )}
-          </div>
+          </Card>
         </div>
       </main>
 
       {/* Edit Subject Modal */}
-      {isEditModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="w-full max-w-xl rounded-2xl border border-slate-850 bg-slate-900 p-6 space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <h3 className="text-lg font-bold text-white">Select Your Subject Combination</h3>
-              <button
-                onClick={() => setIsEditModalOpen(false)}
-                className="text-slate-400 hover:text-white"
-              >
-                ✕
-              </button>
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title="Select Your Subject Combination"
+        maxWidth="xl"
+      >
+        <div className="space-y-6">
+          <p className="text-xs text-text-secondary leading-relaxed">
+            Every candidate must sit for Use of English. You must select **exactly three (3) elective subjects** to complete your JAMB combination.
+          </p>
+
+          <div className="grid gap-2 sm:grid-cols-2 max-h-60 overflow-y-auto pr-1">
+            <div className="flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 p-3 select-none opacity-80">
+              <Check className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-text-primary">Use of English (Compulsory)</span>
             </div>
 
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Every candidate must sit for Use of English. You must select **exactly three (3) elective subjects** to complete your JAMB combination.
-            </p>
-
-            <div className="grid gap-2 sm:grid-cols-2 max-h-60 overflow-y-auto pr-1">
-              <div className="flex items-center gap-3 rounded-lg border border-indigo-500/30 bg-indigo-500/5 p-3 select-none opacity-80">
-                <Check className="h-4 w-4 text-indigo-400" />
-                <span className="text-sm font-semibold text-white">Use of English (Compulsory)</span>
-              </div>
-
-              {AVAILABLE_SUBJECTS.map((subject) => {
-                const isSelected = selectedSubjects.includes(subject);
-                return (
-                  <button
-                    key={subject}
-                    type="button"
-                    onClick={() => handleToggleSubject(subject)}
-                    className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-all ${
-                      isSelected
-                        ? 'border-indigo-500 bg-indigo-500/10 text-white'
-                        : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+            {AVAILABLE_SUBJECTS.map((subject) => {
+              const isSelected = selectedSubjects.includes(subject);
+              return (
+                <button
+                  key={subject}
+                  type="button"
+                  onClick={() => handleToggleSubject(subject)}
+                  className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-all ${
+                    isSelected
+                      ? 'border-primary bg-primary/10 text-text-primary'
+                      : 'border-border bg-bg-secondary text-text-secondary hover:border-border-hover hover:text-text-primary'
+                  }`}
+                >
+                  <span
+                    className={`h-4 w-4 rounded flex items-center justify-center border text-[10px] font-bold ${
+                      isSelected ? 'border-primary bg-primary text-text-on-accent' : 'border-border bg-bg-primary'
                     }`}
                   >
-                    <span
-                      className={`h-4 w-4 rounded flex items-center justify-center border text-[10px] font-bold ${
-                        isSelected ? 'border-indigo-500 bg-indigo-500' : 'border-slate-700 bg-slate-900'
-                      }`}
-                    >
-                      {isSelected && '✓'}
-                    </span>
-                    <span className="text-sm font-medium">{SUBJECT_LABELS[subject]}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="flex items-center justify-between border-t border-slate-800 pt-4">
-              <span className="text-xs text-slate-400">
-                Selected: <strong className="text-indigo-400">{selectedSubjects.filter((s) => s !== 'english').length + 1} / 4</strong> (Needs exactly 4)
-              </span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setIsEditModalOpen(false)}
-                  className="rounded-lg border border-slate-800 bg-slate-900 hover:bg-slate-800 px-4 py-2 text-xs font-bold text-slate-300"
-                >
-                  Cancel
+                    {isSelected && '✓'}
+                  </span>
+                  <span className="text-sm font-medium">{SUBJECT_LABELS[subject]}</span>
                 </button>
-                <button
-                  onClick={handleSaveCombination}
-                  className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-xs font-bold text-white"
-                >
-                  Save Selection
-                </button>
-              </div>
-            </div>
+              );
+            })}
           </div>
-        </div>
-      )}
 
-      {/* Subject Drill Configuration Modal */}
-      {isDrillModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-2xl border border-slate-850 bg-slate-900 p-6 space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <h3 className="text-lg font-bold text-white">Configure Subject Drill</h3>
-              <button
-                onClick={() => setIsDrillModalOpen(false)}
-                className="text-slate-450 hover:text-white"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-slate-400">Select Subject</label>
-                <select
-                  value={drillSubject}
-                  onChange={(e) => setDrillSubject(e.target.value)}
-                  className="w-full rounded-xl bg-slate-950 border border-slate-800 p-3 text-sm text-slate-200 focus:outline-none"
-                >
-                  {combination.map((sub: string) => (
-                    <option key={sub} value={sub}>
-                      {SUBJECT_LABELS[sub] || sub}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-slate-400">Questions Count</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {[10, 20, 40].map((c) => (
-                    <button
-                      key={c}
-                      type="button"
-                      onClick={() => setDrillCount(c)}
-                      className={`rounded-xl border p-3 text-xs font-bold transition-all ${
-                        drillCount === c
-                          ? 'border-indigo-500 bg-indigo-500/10 text-white'
-                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200'
-                      }`}
-                    >
-                      {c} Qs
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2 pt-4 border-t border-slate-800">
-              <button
-                onClick={() => setIsDrillModalOpen(false)}
-                className="rounded-lg border border-slate-800 bg-slate-900 hover:bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-400"
+          <div className="flex items-center justify-between border-t border-border pt-4">
+            <span className="text-xs text-text-secondary">
+              Selected: <strong className="text-primary">{selectedSubjects.filter((s) => s !== 'english').length + 1} / 4</strong> (Needs exactly 4)
+            </span>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setIsEditModalOpen(false)}
+                variant="secondary"
+                size="sm"
               >
                 Cancel
-              </button>
-              <button
-                onClick={handleStartDrill}
-                className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-2 text-xs font-bold text-white"
+              </Button>
+              <Button
+                onClick={handleSaveCombination}
+                size="sm"
               >
-                Launch Drill
-              </button>
+                Save Selection
+              </Button>
             </div>
           </div>
         </div>
-      )}
+      </Modal>
+      {/* Subject Drill Configuration Modal */}
+      <Modal
+        isOpen={isDrillModalOpen}
+        onClose={() => setIsDrillModalOpen(false)}
+        title="Configure Subject Drill"
+        maxWidth="sm"
+      >
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold uppercase text-text-secondary">Select Subject</label>
+              <select
+                value={drillSubject}
+                onChange={(e) => setDrillSubject(e.target.value)}
+                className="w-full rounded-xl bg-bg-secondary border border-border p-3 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all"
+              >
+                {combination.map((sub: string) => (
+                  <option key={sub} value={sub}>
+                    {SUBJECT_LABELS[sub] || sub}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold uppercase text-text-secondary">Questions Count</label>
+              <div className="grid grid-cols-3 gap-2">
+                {[10, 20, 40].map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setDrillCount(c)}
+                    className={`rounded-xl border p-3 text-xs font-bold transition-all ${
+                      drillCount === c
+                        ? 'border-primary bg-primary/10 text-text-primary'
+                        : 'border-border bg-bg-secondary text-text-secondary hover:text-text-primary'
+                    }`}
+                  >
+                    {c} Qs
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-4 border-t border-border">
+            <Button
+              onClick={() => setIsDrillModalOpen(false)}
+              variant="secondary"
+              size="sm"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleStartDrill}
+              size="sm"
+            >
+              Launch Drill
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Payment Success Modal */}
-      {paymentSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-2xl border border-emerald-500/30 bg-slate-900 p-6 space-y-6 text-center shadow-2xl animate-in fade-in zoom-in-95 duration-150">
-            <div className="mx-auto h-12 w-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-              <Check className="h-6 w-6 text-emerald-400" />
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-lg font-bold text-white">Payment Successful!</h3>
-              <p className="text-xs text-slate-450 leading-relaxed">{paymentSuccess}</p>
-            </div>
-            <button
-              onClick={() => setPaymentSuccess('')}
-              className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-550 py-3 text-xs font-bold text-white transition-all active:scale-95"
-            >
-              Start Practicing
-            </button>
+      <Modal
+        isOpen={!!paymentSuccess}
+        onClose={() => setPaymentSuccess('')}
+        title="Payment Success"
+        maxWidth="sm"
+      >
+        <div className="space-y-6 text-center">
+          <div className="mx-auto h-12 w-12 rounded-full bg-success/10 border border-success/20 flex items-center justify-center">
+            <Check className="h-6 w-6 text-success" />
           </div>
+          <div className="space-y-2">
+            <h3 className="text-lg font-bold text-text-primary">Payment Successful!</h3>
+            <p className="text-xs text-text-secondary leading-relaxed">{paymentSuccess}</p>
+          </div>
+          <Button onClick={() => setPaymentSuccess('')} fullWidth>
+            Start Practicing
+          </Button>
         </div>
-      )}
+      </Modal>
 
       {/* Subscription Plans Modal */}
-      {showUpgradeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-sm overflow-y-auto">
-          <div className="w-full max-w-4xl rounded-2xl border border-slate-850 bg-slate-900 p-6 md:p-8 space-y-8 my-8 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
-            <button
-              onClick={() => setShowUpgradeModal(false)}
-              className="absolute top-4 right-4 text-slate-450 hover:text-white transition-colors"
-              disabled={isProcessingPayment}
-            >
-              <X className="h-5 w-5" />
-            </button>
+      <Modal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        title="Upgrade Your CBT Account"
+        maxWidth="4xl"
+      >
+        <div className="space-y-6">
+          <p className="text-xs text-text-secondary text-center max-w-xl mx-auto">
+            Unlock mock exams, detailed reviews, and advanced AI-powered tutoring to score 300+ in your UTME.
+          </p>
 
-            <div className="text-center max-w-xl mx-auto space-y-2">
-              <h3 className="text-xl md:text-2xl font-bold text-white bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                Upgrade Your CBT Account
-              </h3>
-              <p className="text-xs text-slate-400">
-                Unlock mock exams, detailed reviews, and advanced AI-powered tutoring to score 300+ in your UTME.
-              </p>
+          {paymentError && (
+            <Alert variant="error" className="p-4 flex items-center gap-2">
+              <span>{paymentError}</span>
+            </Alert>
+          )}
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Plus Plan Card */}
+            <div className="rounded-2xl border border-border bg-bg-secondary/40 p-6 flex flex-col justify-between hover:border-primary/20 transition-all group">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <Zap className="h-4 w-4 text-primary" />
+                  </div>
+                  <span className="text-sm font-bold text-text-primary">Plus Plan</span>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex items-baseline gap-0.5">
+                    <span className="text-2xl font-bold text-text-primary">₦3,500</span>
+                    <span className="text-[10px] text-text-muted">/mo</span>
+                  </div>
+                  <span className="inline-block text-[10px] font-bold text-primary bg-primary/5 border border-primary/10 px-2 py-0.5 rounded">
+                    1 Mock Exam Daily
+                  </span>
+                </div>
+
+                <ul className="space-y-2.5 text-[11px] text-text-secondary pt-2 border-t border-border">
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> 1 full mock exam daily</li>
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> Detailed score reviews</li>
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> CBT Access Key</li>
+                  <li className="flex items-center gap-2 text-text-muted"><X className="h-3 w-3 text-text-muted/60 flex-shrink-0" /> Subject-specific drills</li>
+                  <li className="flex items-center gap-2 text-text-muted"><X className="h-3 w-3 text-text-muted/60 flex-shrink-0" /> AI Conversational Tutor</li>
+                </ul>
+              </div>
+
+              <Button
+                onClick={() => handleUpgradeClick('PLN_3pu5sd2pl33k7qw', 3500, 'plus')}
+                disabled={isProcessingPayment}
+                variant="secondary"
+                fullWidth
+                className="mt-6"
+              >
+                {isProcessingPayment ? 'Processing...' : 'Subscribe to Plus'}
+              </Button>
             </div>
 
-            {paymentError && (
-              <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4 text-xs text-rose-450 flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-rose-450 flex-shrink-0" />
-                <span>{paymentError}</span>
+            {/* Pro Plan Card */}
+            <div className="rounded-2xl border border-primary/25 bg-bg-secondary/40 p-6 flex flex-col justify-between relative hover:border-primary/40 transition-all group">
+              <div className="absolute top-3 right-3 text-[9px] font-extrabold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                Popular
               </div>
-            )}
-
-            <div className="grid md:grid-cols-3 gap-6">
-              {/* Plus Plan Card */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 flex flex-col justify-between hover:border-indigo-500/20 transition-all group">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-                      <Zap className="h-4 w-4 text-indigo-400" />
-                    </div>
-                    <span className="text-sm font-bold text-white">Plus Plan</span>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="h-8 w-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <Award className="h-4 w-4 text-primary" />
                   </div>
-
-                  <div className="space-y-1">
-                    <div className="flex items-baseline gap-0.5">
-                      <span className="text-2xl font-bold text-white">₦3,500</span>
-                      <span className="text-[10px] text-slate-500">/mo</span>
-                    </div>
-                    <span className="inline-block text-[10px] font-bold text-indigo-400 bg-indigo-500/5 border border-indigo-500/10 px-2 py-0.5 rounded">
-                      1 Mock Exam Daily
-                    </span>
-                  </div>
-
-                  <ul className="space-y-2.5 text-[11px] text-slate-400 pt-2 border-t border-slate-900">
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> 1 full mock exam daily</li>
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> Detailed score reviews</li>
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> CBT Access Key</li>
-                    <li className="flex items-center gap-2 text-slate-600"><X className="h-3 w-3 text-slate-700 flex-shrink-0" /> Subject-specific drills</li>
-                    <li className="flex items-center gap-2 text-slate-650"><X className="h-3 w-3 text-slate-705 flex-shrink-0" /> AI Conversational Tutor</li>
-                  </ul>
+                  <span className="text-sm font-bold text-text-primary">Pro Plan</span>
                 </div>
 
-                <button
-                  onClick={() => handleUpgradeClick('PLN_3pu5sd2pl33k7qw', 3500, 'plus')}
-                  disabled={isProcessingPayment}
-                  className="mt-6 w-full rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 py-3 text-xs font-bold text-slate-300 hover:text-white transition-all disabled:opacity-50 active:scale-95"
-                >
-                  {isProcessingPayment ? 'Processing...' : 'Subscribe to Plus'}
-                </button>
-              </div>
-
-              {/* Pro Plan Card */}
-              <div className="rounded-2xl border border-violet-500/30 bg-slate-950/40 p-6 flex flex-col justify-between relative hover:border-violet-500/50 transition-all">
-                <div className="absolute top-3 right-3 text-[9px] font-extrabold text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                  Popular
-                </div>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-8 w-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-                      <Award className="h-4 w-4 text-violet-400" />
-                    </div>
-                    <span className="text-sm font-bold text-white">Pro Plan</span>
+                <div className="space-y-1">
+                  <div className="flex items-baseline gap-0.5">
+                    <span className="text-2xl font-bold text-text-primary">₦6,000</span>
+                    <span className="text-[10px] text-text-muted">/mo</span>
                   </div>
-
-                  <div className="space-y-1">
-                    <div className="flex items-baseline gap-0.5">
-                      <span className="text-2xl font-bold text-white">₦6,000</span>
-                      <span className="text-[10px] text-slate-500">/mo</span>
-                    </div>
-                    <span className="inline-block text-[10px] font-bold text-violet-400 bg-violet-500/5 border border-violet-500/10 px-2 py-0.5 rounded">
-                      2 Mock Exams Daily
-                    </span>
-                  </div>
-
-                  <ul className="space-y-2.5 text-[11px] text-slate-400 pt-2 border-t border-slate-900">
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> 2 full mock exams daily</li>
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> Subject-specific drills</li>
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> Detailed score reviews</li>
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> CBT Access Key</li>
-                    <li className="flex items-center gap-2 text-slate-650"><X className="h-3 w-3 text-slate-705 flex-shrink-0" /> AI Conversational Tutor</li>
-                  </ul>
+                  <span className="inline-block text-[10px] font-bold text-primary bg-primary/5 border border-primary/10 px-2 py-0.5 rounded">
+                    2 Mock Exams Daily
+                  </span>
                 </div>
 
-                <button
-                  onClick={() => handleUpgradeClick('PLN_yzw49g99ybur0c1', 6000, 'pro')}
-                  disabled={isProcessingPayment}
-                  className="mt-6 w-full rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-550 hover:to-purple-550 py-3 text-xs font-bold text-white transition-all shadow-md shadow-violet-650/10 disabled:opacity-50 active:scale-95"
-                >
-                  {isProcessingPayment ? 'Processing...' : 'Subscribe to Pro'}
-                </button>
+                <ul className="space-y-2.5 text-[11px] text-text-secondary pt-2 border-t border-border">
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> 2 full mock exams daily</li>
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> Subject-specific drills</li>
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> Detailed score reviews</li>
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> CBT Access Key</li>
+                  <li className="flex items-center gap-2 text-text-muted"><X className="h-3 w-3 text-text-muted/60 flex-shrink-0" /> AI Conversational Tutor</li>
+                </ul>
               </div>
 
-              {/* Max Plan Card */}
-              <div className="rounded-2xl border border-pink-500/30 bg-slate-950/40 p-6 flex flex-col justify-between hover:border-pink-500/50 transition-all">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-8 w-8 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center">
-                      <Brain className="h-4 w-4 text-pink-400" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-white block leading-none">Max Plan</span>
-                      <span className="text-[8px] text-pink-400 font-semibold uppercase tracking-wide">Tutor Edition</span>
-                    </div>
-                  </div>
+              <Button
+                onClick={() => handleUpgradeClick('PLN_yzw49g99ybur0c1', 6000, 'pro')}
+                disabled={isProcessingPayment}
+                variant="gradient"
+                fullWidth
+                className="mt-6"
+              >
+                {isProcessingPayment ? 'Processing...' : 'Subscribe to Pro'}
+              </Button>
+            </div>
 
-                  <div className="space-y-1">
-                    <div className="flex items-baseline gap-0.5">
-                      <span className="text-2xl font-bold text-white">₦14,000</span>
-                      <span className="text-[10px] text-slate-500">/mo</span>
-                    </div>
-                    <span className="inline-block text-[10px] font-bold text-pink-400 bg-pink-500/5 border border-pink-500/10 px-2 py-0.5 rounded">
-                      5 Mock Exams Daily + AI
-                    </span>
+            {/* Max Plan Card */}
+            <div className="rounded-2xl border border-ai-flag/25 bg-bg-secondary/40 p-6 flex flex-col justify-between hover:border-ai-flag/45 transition-all group">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="h-8 w-8 rounded-lg bg-ai-flag/10 border border-ai-flag/20 flex items-center justify-center">
+                    <Brain className="h-4 w-4 text-ai-flag" />
                   </div>
-
-                  <ul className="space-y-2.5 text-[11px] text-slate-400 pt-2 border-t border-slate-900">
-                    <li className="flex items-center gap-2 text-pink-300 font-medium"><Sparkles className="h-3 w-3 text-pink-400 flex-shrink-0" /> AI Conversational Tutor</li>
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> 5 full mock exams daily</li>
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> Subject-specific drills</li>
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> Detailed score reviews</li>
-                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> CBT Access Key</li>
-                  </ul>
+                  <div>
+                    <span className="text-sm font-bold text-text-primary block leading-none">Max Plan</span>
+                    <span className="text-[8px] text-ai-flag font-semibold uppercase tracking-wide">Tutor Edition</span>
+                  </div>
                 </div>
 
-                <button
-                  onClick={() => handleUpgradeClick('PLN_015edt1c8m9nnow', 14000, 'max')}
-                  disabled={isProcessingPayment}
-                  className="mt-6 w-full rounded-xl bg-gradient-to-r from-pink-650 to-violet-650 hover:from-pink-550 hover:to-violet-550 py-3 text-xs font-bold text-white transition-all shadow-md shadow-pink-650/10 disabled:opacity-50 active:scale-95"
-                >
-                  {isProcessingPayment ? 'Processing...' : 'Subscribe to Max'}
-                </button>
+                <div className="space-y-1">
+                  <div className="flex items-baseline gap-0.5">
+                    <span className="text-2xl font-bold text-text-primary">₦14,000</span>
+                    <span className="text-[10px] text-text-muted">/mo</span>
+                  </div>
+                  <span className="inline-block text-[10px] font-bold text-ai-flag bg-ai-flag/5 border border-ai-flag/10 px-2 py-0.5 rounded">
+                    5 Mock Exams Daily + AI
+                  </span>
+                </div>
+
+                <ul className="space-y-2.5 text-[11px] text-text-secondary pt-2 border-t border-border">
+                  <li className="flex items-center gap-2 text-ai-flag font-bold"><Sparkles className="h-3 w-3 text-ai-flag flex-shrink-0" /> AI Conversational Tutor</li>
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> 5 full mock exams daily</li>
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> Subject-specific drills</li>
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> Detailed score reviews</li>
+                  <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> CBT Access Key</li>
+                </ul>
               </div>
+
+              <Button
+                onClick={() => handleUpgradeClick('PLN_015edt1c8m9nnow', 14000, 'max')}
+                disabled={isProcessingPayment}
+                fullWidth
+                className="mt-6 bg-ai-flag hover:bg-ai-flag-hover text-text-on-accent border-ai-flag hover:border-ai-flag-hover"
+              >
+                {isProcessingPayment ? 'Processing...' : 'Subscribe to Max'}
+              </Button>
             </div>
           </div>
         </div>
-      )}
+      </Modal>
       <AiChatWidget />
     </div>
   );
-};
+}

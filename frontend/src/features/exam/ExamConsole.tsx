@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
+import { QuestionCard, Button, Modal, Alert, Badge } from '../../components';
 
 const SUBJECT_LABELS: Record<string, string> = {
   english: 'Use of English',
@@ -337,7 +338,7 @@ export default function ExamConsole() {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-100">
-        <Loader2 className="h-10 w-10 text-indigo-500 animate-spin mb-4" />
+        <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
         <p className="text-sm text-slate-400">Assembling exam questions from database...</p>
       </div>
     );
@@ -351,7 +352,7 @@ export default function ExamConsole() {
         <p className="text-sm text-slate-400 mb-6 text-center max-w-sm">{error}</p>
         <button
           onClick={() => navigate('/dashboard')}
-          className="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-semibold hover:bg-indigo-500 transition-colors"
+          className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold hover:bg-primary-hover transition-colors"
         >
           Return to Dashboard
         </button>
@@ -366,14 +367,14 @@ export default function ExamConsole() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col relative overflow-hidden">
       {/* Decorative Orbs */}
-      <div className="absolute top-0 right-0 w-[50%] h-[50%] rounded-full bg-indigo-900/5 blur-[150px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[50%] h-[50%] rounded-full bg-primary/5 blur-[150px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-full bg-violet-900/5 blur-[150px] pointer-events-none" />
 
       {/* Top Banner Control Hub */}
       <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md h-16 flex items-center justify-between px-6 z-20 sticky top-0">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center font-bold text-sm text-white">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-bold text-sm text-white">
               CBT
             </div>
             <span className="text-sm font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent hidden sm:inline">
@@ -393,10 +394,10 @@ export default function ExamConsole() {
             className={`flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-mono font-bold shadow-lg ${
               timeRemaining < 300
                 ? 'border-rose-500/30 bg-rose-550/10 text-rose-450 animate-pulse'
-                : 'border-indigo-500/20 bg-indigo-950/20 text-indigo-300'
+                : 'border-primary/20 bg-bg-secondary/30 text-primary-hover'
             }`}
           >
-            <Clock className={`h-4 w-4 ${timeRemaining < 300 ? 'text-rose-400' : 'text-indigo-400'}`} />
+            <Clock className={`h-4 w-4 ${timeRemaining < 300 ? 'text-rose-400' : 'text-primary'}`} />
             {formatTime(timeRemaining)}
           </div>
 
@@ -404,7 +405,7 @@ export default function ExamConsole() {
             onClick={() => setShowCalculator((prev) => !prev)}
             className={`flex items-center gap-2 rounded-lg border px-3.5 py-1.5 text-xs font-bold transition-all active:scale-95 shadow-md ${
               showCalculator
-                ? 'border-indigo-500 bg-indigo-600 text-white shadow-indigo-600/10'
+                ? 'border-primary bg-primary text-white shadow-primary/10'
                 : 'border-slate-800 bg-slate-900/40 text-slate-300 hover:text-white hover:bg-slate-900'
             }`}
             title="Toggle Calculator"
@@ -448,7 +449,7 @@ export default function ExamConsole() {
                   }}
                   className={`rounded-xl px-4 py-2.5 text-xs font-bold transition-all flex items-center gap-2 flex-shrink-0 ${
                     isActive
-                      ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10'
+                      ? 'bg-primary text-white shadow-lg shadow-primary/10'
                       : 'bg-slate-900/40 border border-slate-900 text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -464,58 +465,13 @@ export default function ExamConsole() {
           {/* Question Text details Card */}
           {activeQuestion ? (
             <div className="flex-1 flex flex-col justify-between space-y-8 max-w-4xl">
-              <div className="space-y-6">
-                <div className="flex justify-between items-center text-xs text-slate-400">
-                  <span className="font-semibold text-indigo-400 uppercase tracking-wider">
-                    Question {activeQuestionIndex + 1} of {currentSubjectQuestions.length}
-                  </span>
-                  <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800">
-                    Difficulty {activeQuestion.difficulty_level}/5
-                  </span>
-                </div>
-
-                {/* Question Text */}
-                <div className="text-base sm:text-lg leading-relaxed text-slate-100 font-medium overflow-x-auto">
-                  <Latex>{activeQuestion.question_text}</Latex>
-                </div>
-
-                {/* SVGs/Diagram Rendering */}
-                {activeQuestion.has_diagram && activeQuestion.diagram_svg && (
-                  <div
-                    className="border border-slate-900 bg-slate-950/60 rounded-xl p-4 flex justify-center overflow-auto max-w-lg"
-                    dangerouslySetInnerHTML={{ __html: activeQuestion.diagram_svg }}
-                  />
-                )}
-
-                {/* Multiple choice options */}
-                <div className="grid gap-3 mt-8">
-                  {activeQuestion.options.map((option) => {
-                    const isSelected = answers[activeQuestion.questionId] === option.id;
-                    return (
-                      <button
-                        key={option.id}
-                        onClick={() => handleSelectOption(activeQuestion.questionId, option.id)}
-                        className={`w-full text-left rounded-xl border p-4 text-sm transition-all flex gap-4 items-center group relative overflow-hidden ${
-                          isSelected
-                            ? 'border-indigo-500 bg-indigo-500/10 text-white'
-                            : 'border-slate-850 bg-slate-900/20 text-slate-350 hover:border-slate-700 hover:bg-slate-900/40'
-                        }`}
-                      >
-                        <span
-                          className={`h-7 w-7 rounded-lg border font-bold text-xs flex items-center justify-center transition-all ${
-                            isSelected
-                              ? 'border-indigo-500 bg-indigo-500 text-white shadow-md'
-                              : 'border-slate-805 bg-slate-950 text-slate-400 group-hover:border-slate-700 group-hover:text-slate-200'
-                          }`}
-                        >
-                          {option.id}
-                        </span>
-                        <span className="flex-1 leading-normal font-medium overflow-x-auto"><Latex>{option.text}</Latex></span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              <QuestionCard
+                question={activeQuestion}
+                index={activeQuestionIndex}
+                totalCount={currentSubjectQuestions.length}
+                selectedOption={answers[activeQuestion.questionId]}
+                onSelectOption={(optionId) => handleSelectOption(activeQuestion.questionId, optionId)}
+              />
 
               {/* Navigation Controls footer */}
               <div className="flex justify-between items-center pt-6 border-t border-slate-900 mt-auto">
@@ -531,7 +487,7 @@ export default function ExamConsole() {
                 <button
                   onClick={handleNextClick}
                   className={`rounded-xl px-5 py-3 text-xs font-bold text-white flex items-center gap-1 transition-all ${
-                    isLastQuestion ? 'bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/10' : 'bg-indigo-600 hover:bg-indigo-500'
+                    isLastQuestion ? 'bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/10' : 'bg-primary hover:bg-primary-hover'
                   }`}
                 >
                   {isLastQuestion ? (
@@ -559,7 +515,7 @@ export default function ExamConsole() {
         >
           <div className="flex items-center justify-between pb-4 border-b border-slate-900 mb-4">
             <div className="flex items-center gap-2">
-              <Grid className="h-4 w-4 text-indigo-400" />
+              <Grid className="h-4 w-4 text-primary" />
               <h3 className="text-xs font-bold text-white uppercase tracking-wider">Subjects Navigator</h3>
             </div>
             <span className="text-[10px] text-slate-400 font-bold bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
@@ -579,9 +535,9 @@ export default function ExamConsole() {
                     onClick={() => setActiveQuestionIndex(idx)}
                     className={`h-9 w-9 rounded-lg border text-xs font-bold transition-all flex items-center justify-center ${
                       isSelected
-                        ? 'border-indigo-500 ring-2 ring-indigo-500/20 bg-indigo-500/20 text-white'
+                        ? 'border-primary ring-2 ring-primary/20 bg-primary/20 text-white'
                         : isAnswered
-                        ? 'border-indigo-600/30 bg-indigo-600/20 text-indigo-300'
+                        ? 'border-primary/30 bg-primary/20 text-primary-hover'
                         : 'border-slate-900 bg-slate-950/60 text-slate-500 hover:border-slate-800 hover:text-slate-300'
                     }`}
                   >
@@ -594,7 +550,7 @@ export default function ExamConsole() {
 
           <div className="mt-4 pt-4 border-t border-slate-900 space-y-2 text-[10px] text-slate-500 leading-normal">
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded bg-indigo-600/20 border border-indigo-600/30 block" />
+              <span className="h-2 w-2 rounded bg-primary/20 border border-primary/30 block" />
               <span>Answered question</span>
             </div>
             <div className="flex items-center gap-2">
@@ -673,9 +629,9 @@ export default function ExamConsole() {
       {alertConfig && alertConfig.show && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center gap-3 text-indigo-400">
-              <div className="h-10 w-10 rounded-full bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
-                <AlertTriangle className="h-5 w-5 text-indigo-400" />
+            <div className="flex items-center gap-3 text-primary">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+                <AlertTriangle className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <h3 className="text-base font-bold text-white">{alertConfig.title}</h3>
@@ -693,7 +649,7 @@ export default function ExamConsole() {
                   setAlertConfig(null);
                   if (onConfirm) onConfirm();
                 }}
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-500 px-6 py-2.5 text-xs font-bold text-white transition-all shadow-lg shadow-indigo-600/10"
+                className="rounded-xl bg-primary hover:bg-primary-hover px-6 py-2.5 text-xs font-bold text-white transition-all shadow-lg shadow-primary/10"
               >
                 OK
               </button>
@@ -718,8 +674,8 @@ export default function ExamConsole() {
             onMouseDown={handleCalcMouseDown}
             className="bg-slate-950 px-4 py-2.5 flex items-center justify-between cursor-move border-b border-slate-850"
           >
-            <div className="flex items-center gap-2 text-indigo-450">
-              <Calculator className="h-4 w-4 text-indigo-400" />
+            <div className="flex items-center gap-2 text-primary">
+              <Calculator className="h-4 w-4 text-primary" />
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">Calculator</span>
             </div>
             <button
@@ -753,7 +709,7 @@ export default function ExamConsole() {
             </button>
             <button
               onClick={() => handleCalcBtnClick('÷')}
-              className="h-10 rounded-lg bg-indigo-950/40 border border-indigo-900/20 text-indigo-400 font-bold hover:bg-indigo-950 transition-all"
+              className="h-10 rounded-lg bg-bg-secondary/40 border border-border/50 text-primary font-bold hover:bg-bg-secondary transition-all"
             >
               ÷
             </button>
@@ -779,7 +735,7 @@ export default function ExamConsole() {
             </button>
             <button
               onClick={() => handleCalcBtnClick('*')}
-              className="h-10 rounded-lg bg-indigo-950/40 border border-indigo-900/20 text-indigo-400 font-bold hover:bg-indigo-950 transition-all"
+              className="h-10 rounded-lg bg-bg-secondary/40 border border-border/50 text-primary font-bold hover:bg-bg-secondary transition-all"
             >
               ×
             </button>
@@ -805,7 +761,7 @@ export default function ExamConsole() {
             </button>
             <button
               onClick={() => handleCalcBtnClick('-')}
-              className="h-10 rounded-lg bg-indigo-950/40 border border-indigo-900/20 text-indigo-400 font-bold hover:bg-indigo-950 transition-all"
+              className="h-10 rounded-lg bg-bg-secondary/40 border border-border/50 text-primary font-bold hover:bg-bg-secondary transition-all"
             >
               -
             </button>
@@ -831,7 +787,7 @@ export default function ExamConsole() {
             </button>
             <button
               onClick={() => handleCalcBtnClick('+')}
-              className="h-10 rounded-lg bg-indigo-950/40 border border-indigo-900/20 text-indigo-400 font-bold hover:bg-indigo-950 transition-all"
+              className="h-10 rounded-lg bg-bg-secondary/40 border border-border/50 text-primary font-bold hover:bg-bg-secondary transition-all"
             >
               +
             </button>
@@ -851,13 +807,13 @@ export default function ExamConsole() {
             </button>
             <button
               onClick={() => handleCalcBtnClick('√')}
-              className="h-10 rounded-lg bg-indigo-950/40 border border-indigo-900/20 text-indigo-400 font-bold hover:bg-indigo-950 transition-all text-xs"
+              className="h-10 rounded-lg bg-bg-secondary/40 border border-border/50 text-primary font-bold hover:bg-bg-secondary transition-all text-xs"
             >
               √
             </button>
             <button
               onClick={() => handleCalcBtnClick('=')}
-              className="h-10 rounded-lg bg-indigo-600 border border-indigo-500 text-white font-bold hover:bg-indigo-500 transition-all shadow-md shadow-indigo-600/10"
+              className="h-10 rounded-lg bg-primary border border-primary text-white font-bold hover:bg-primary-hover transition-all shadow-md shadow-primary/10"
             >
               =
             </button>

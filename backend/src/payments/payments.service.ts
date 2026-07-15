@@ -48,8 +48,16 @@ export class PaymentsService {
       }
 
       // Verify the plan code in the Paystack transaction matches the requested one
-      const paystackPlan = data.plan;
-      if (paystackPlan !== planCode) {
+      let paystackPlanCode: string | null = null;
+      if (data.plan) {
+        if (typeof data.plan === 'string') {
+          paystackPlanCode = data.plan;
+        } else if (typeof data.plan === 'object' && data.plan.plan_code) {
+          paystackPlanCode = data.plan.plan_code;
+        }
+      }
+
+      if (paystackPlanCode !== planCode) {
         throw new BadRequestException('Transaction plan code does not match.');
       }
 

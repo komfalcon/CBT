@@ -5,20 +5,39 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#2563EB',
-        success: '#16A34A',
-        danger: '#DC2626',
-        warning: '#FACC15',
-        background: '#F9FAFB',
-        surface: '#FFFFFF',
-        'text-primary': '#111827',
-        'text-secondary': '#6B7280',
-        border: '#E5E7EB',
-        'dark-blue': '#1E3A8A',
+        primary: {
+          DEFAULT: '#3b82f6',
+          hover: '#60a5fa',
+        },
+        error: '#ef4444',
+        success: '#22c55e',
+        warning: '#f59e0b',
+        'ai-flag': {
+          DEFAULT: '#c9a84c',
+          hover: '#e0bc6a',
+        },
+        // Core Neutrals (Dark Theme as default)
+        bg: {
+          primary: '#0a0a0a',
+          secondary: '#111111',
+          card: '#161616',
+        },
+        text: {
+          primary: '#ffffff',
+          secondary: '#a0a0a0',
+          muted: '#555555',
+          'on-accent': '#0a0a0a',
+        },
+        border: {
+          DEFAULT: '#222222',
+          hover: '#333333',
+        },
+        overlay: 'rgba(10,10,10,0.8)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Space Grotesk', 'system-ui', 'sans-serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       fontSize: {

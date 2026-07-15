@@ -61,7 +61,7 @@ function FloatingParticles() {
       {Array.from({ length: 20 }).map((_, i) => (
         <div
           key={i}
-          className="absolute rounded-full bg-indigo-400/20"
+          className="absolute rounded-full bg-primary/20"
           style={{
             width: `${Math.random() * 6 + 2}px`,
             height: `${Math.random() * 6 + 2}px`,
@@ -83,18 +83,18 @@ function OrbitRings() {
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       {/* Outer ring */}
-      <div className="absolute w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full border border-indigo-500/10 animate-spin-slow" />
+      <div className="absolute w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full border border-primary/10 animate-spin-slow" />
       {/* Inner ring */}
-      <div className="absolute w-[400px] h-[400px] md:w-[550px] md:h-[550px] rounded-full border border-violet-500/10 animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
+      <div className="absolute w-[400px] h-[400px] md:w-[550px] md:h-[550px] rounded-full border border-primary/10 animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
       {/* Orbiting dots */}
       <div className="absolute animate-orbit">
-        <div className="w-3 h-3 rounded-full bg-indigo-500/60 shadow-lg shadow-indigo-500/50" />
+        <div className="w-3 h-3 rounded-full bg-primary/60 shadow-lg shadow-primary/50" />
       </div>
       <div className="absolute animate-orbit" style={{ animationDelay: '-7s', animationDuration: '18s' }}>
-        <div className="w-2 h-2 rounded-full bg-violet-400/60 shadow-lg shadow-violet-400/50" />
+        <div className="w-2 h-2 rounded-full bg-blue-300/60 shadow-lg shadow-blue-400/50" />
       </div>
       <div className="absolute animate-orbit" style={{ animationDelay: '-14s', animationDuration: '25s' }}>
-        <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/40 shadow-lg shadow-emerald-400/40" />
+        <div className="w-2.5 h-2.5 rounded-full bg-success/40 shadow-lg shadow-success/40" />
       </div>
     </div>
   );
@@ -138,10 +138,10 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500 selection:text-white overflow-hidden relative">
+    <div className="min-h-screen bg-bg-primary text-text-primary font-sans selection:bg-primary selection:text-white overflow-hidden relative">
       {/* ──────── Background Gradients ──────── */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] rounded-full bg-indigo-900/15 blur-[160px]" />
+        <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] rounded-full bg-primary/10 blur-[160px]" />
         <div className="absolute bottom-[-20%] right-[-15%] w-[60%] h-[60%] rounded-full bg-violet-900/15 blur-[160px]" />
         <div className="absolute top-[40%] left-[50%] w-[30%] h-[30%] rounded-full bg-emerald-900/10 blur-[120px]" />
       </div>
@@ -149,23 +149,23 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════
           HEADER
           ══════════════════════════════════════ */}
-      <header className="border-b border-slate-800/60 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-50">
+      <header className="border-b border-border/60 bg-bg-primary/70 backdrop-blur-xl sticky top-0 z-50">
         <div className="mx-auto max-w-7xl px-6 h-[72px] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center font-display font-bold text-[13px] text-white shadow-lg shadow-indigo-500/30 tracking-tight">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-display font-bold text-[13px] text-white shadow-lg shadow-indigo-500/30 tracking-tight">
               CBT
             </div>
             <div className="flex flex-col">
               <span className="text-[17px] font-display font-bold tracking-tight bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent leading-tight">
                 JAMB UTME Prep
               </span>
-              <span className="text-[10px] text-indigo-400 font-medium tracking-widest uppercase leading-tight">
+              <span className="text-[10px] text-primary font-medium tracking-widest uppercase leading-tight">
                 by Aurikex
               </span>
             </div>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-slate-400">
+          <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-text-secondary">
             <a href="#features" className="hover:text-white transition-colors duration-200">Features</a>
             <a href="#subjects" className="hover:text-white transition-colors duration-200">Subjects</a>
             <a href="#how-it-works" className="hover:text-white transition-colors duration-200">How It Works</a>
@@ -173,18 +173,18 @@ export default function LandingPage() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Link to="/auth?mode=login" className="hidden sm:inline-flex text-[13px] font-medium text-slate-300 hover:text-white transition-colors">
+            <Link to="/auth?mode=login" className="hidden sm:inline-flex text-[13px] font-medium text-text-secondary hover:text-white transition-colors">
               Sign In
             </Link>
             <Link
               to="/auth?mode=register"
-              className="rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2.5 text-[13px] font-bold text-white shadow-lg shadow-indigo-600/25 hover:shadow-indigo-600/40 hover:from-indigo-500 hover:to-violet-500 transition-all active:scale-95"
+              className="rounded-xl bg-gradient-to-r from-primary to-blue-600 px-5 py-2.5 text-[13px] font-bold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:from-primary-hover hover:to-blue-500 transition-all active:scale-95"
             >
               Get Started
             </Link>
             {/* Mobile menu toggle */}
             <button
-              className="md:hidden p-2 text-slate-400 hover:text-white"
+              className="md:hidden p-2 text-text-secondary hover:text-white"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -194,12 +194,12 @@ export default function LandingPage() {
 
         {/* Mobile nav */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-800/60 bg-slate-950/95 backdrop-blur-xl px-6 py-4 space-y-3 animate-slide-up">
-            <a href="#features" className="block text-[13px] text-slate-300 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Features</a>
-            <a href="#subjects" className="block text-[13px] text-slate-300 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Subjects</a>
-            <a href="#how-it-works" className="block text-[13px] text-slate-300 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
-            <a href="#pricing" className="block text-[13px] text-slate-300 hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-            <Link to="/auth?mode=login" className="block text-[13px] text-slate-300 hover:text-white py-2">Sign In</Link>
+          <div className="md:hidden border-t border-border/60 bg-bg-primary/95 backdrop-blur-xl px-6 py-4 space-y-3 animate-slide-up">
+            <a href="#features" className="block text-[13px] text-text-secondary hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Features</a>
+            <a href="#subjects" className="block text-[13px] text-text-secondary hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Subjects</a>
+            <a href="#how-it-works" className="block text-[13px] text-text-secondary hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
+            <a href="#pricing" className="block text-[13px] text-text-secondary hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
+            <Link to="/auth?mode=login" className="block text-[13px] text-text-secondary hover:text-white py-2">Sign In</Link>
           </div>
         )}
       </header>
@@ -215,8 +215,8 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left — copy */}
             <div className={`space-y-8 ${heroRef.visible ? 'animate-slide-in-left' : 'opacity-0'}`}>
-              <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-[11px] font-semibold text-indigo-300 backdrop-blur-md">
-                <Sparkles className="h-3 w-3 text-indigo-400 animate-pulse" />
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-[11px] font-semibold text-primary-hover backdrop-blur-md">
+                <Sparkles className="h-3 w-3 text-primary animate-pulse" />
                 Nigeria's #1 UTME Exam Simulator
               </div>
 
@@ -225,26 +225,26 @@ export default function LandingPage() {
                   Ace Your JAMB
                 </span>
                 <br />
-                <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-primary-hover via-blue-400 to-indigo-400 bg-clip-text text-transparent">
                   UTME Exam
                 </span>
               </h1>
 
-              <p className="max-w-lg text-[15px] sm:text-[17px] text-slate-400 leading-relaxed">
+              <p className="max-w-lg text-[15px] sm:text-[17px] text-text-secondary leading-relaxed">
                 Experience the exact JAMB exam environment. Practice with <strong className="text-slate-200">1,000,000+ curated questions</strong> across all 17 subjects, get AI-powered explanations, and track your progress to exam day.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   to="/auth?mode=register"
-                  className="group flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 px-8 py-4 text-[15px] font-bold text-white shadow-xl shadow-indigo-600/25 hover:shadow-indigo-600/40 hover:from-indigo-500 hover:to-violet-500 transition-all transform hover:-translate-y-0.5 active:scale-95"
+                  className="group flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-primary to-blue-600 px-8 py-4 text-[15px] font-bold text-white shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:from-primary-hover hover:to-blue-500 transition-all transform hover:-translate-y-0.5 active:scale-95"
                 >
                   Start Practicing
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <a
                   href="#how-it-works"
-                  className="group flex items-center justify-center gap-2 rounded-2xl border border-slate-700/80 bg-slate-900/40 backdrop-blur-sm px-8 py-4 text-[15px] font-bold text-slate-300 hover:bg-slate-800/60 hover:text-white hover:border-slate-600 transition-all transform hover:-translate-y-0.5"
+                  className="group flex items-center justify-center gap-2 rounded-2xl border border-border/80 bg-bg-secondary/40 backdrop-blur-sm px-8 py-4 text-[15px] font-bold text-text-secondary hover:bg-slate-800/60 hover:text-white hover:border-slate-600 transition-all transform hover:-translate-y-0.5"
                 >
                   <Play className="h-4 w-4" />
                   See How It Works
@@ -253,15 +253,15 @@ export default function LandingPage() {
 
               {/* Trust badges */}
               <div className="flex items-center gap-6 pt-2">
-                <div className="flex items-center gap-2 text-[12px] text-slate-500">
+                <div className="flex items-center gap-2 text-[12px] text-text-muted">
                   <Shield className="h-4 w-4 text-emerald-500" />
                   <span>Secure & Private</span>
                 </div>
-                <div className="flex items-center gap-2 text-[12px] text-slate-500">
-                  <Users className="h-4 w-4 text-indigo-400" />
+                <div className="flex items-center gap-2 text-[12px] text-text-muted">
+                  <Users className="h-4 w-4 text-primary" />
                   <span>100K+ Students</span>
                 </div>
-                <div className="flex items-center gap-2 text-[12px] text-slate-500">
+                <div className="flex items-center gap-2 text-[12px] text-text-muted">
                   <Star className="h-4 w-4 text-amber-400" />
                   <span>4.9 Rating</span>
                 </div>
@@ -271,25 +271,25 @@ export default function LandingPage() {
             {/* Right — hero image with glow effects */}
             <div className={`relative ${heroRef.visible ? 'animate-slide-in-right' : 'opacity-0'}`} style={{ animationDelay: '0.2s' }}>
               {/* Glow behind image */}
-              <div className="absolute -inset-8 rounded-3xl bg-gradient-to-r from-indigo-500/20 via-violet-500/20 to-purple-500/20 blur-3xl animate-glow-pulse" />
+              <div className="absolute -inset-8 rounded-3xl bg-gradient-to-r from-primary/20 via-blue-500/10 to-transparent blur-3xl animate-glow-pulse" />
               
-              <div className="relative rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl shadow-indigo-500/10">
+              <div className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl shadow-primary/10">
                 <img
                   src="/images/hero-illustration.png"
                   alt="JAMB CBT Exam Interface"
                   className="w-full h-auto animate-float-slow"
                 />
                 {/* Floating UI elements over image */}
-                <div className="absolute top-4 right-4 rounded-xl bg-slate-900/80 backdrop-blur-md border border-slate-700/50 px-3 py-2 animate-float" style={{ animationDelay: '1s' }}>
+                <div className="absolute top-4 right-4 rounded-xl bg-bg-secondary/80 backdrop-blur-md border border-border/50 px-3 py-2 animate-float" style={{ animationDelay: '1s' }}>
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
                     <span className="text-[11px] font-semibold text-emerald-300">Live Exam Mode</span>
                   </div>
                 </div>
-                <div className="absolute bottom-4 left-4 rounded-xl bg-slate-900/80 backdrop-blur-md border border-slate-700/50 px-3 py-2 animate-float" style={{ animationDelay: '2s' }}>
+                <div className="absolute bottom-4 left-4 rounded-xl bg-bg-secondary/80 backdrop-blur-md border border-border/50 px-3 py-2 animate-float" style={{ animationDelay: '2s' }}>
                   <div className="flex items-center gap-2">
-                    <Clock className="h-3 w-3 text-indigo-400" />
-                    <span className="text-[11px] font-semibold text-slate-300">02:00:00 Timer</span>
+                    <Clock className="h-3 w-3 text-primary" />
+                    <span className="text-[11px] font-semibold text-text-secondary">02:00:00 Timer</span>
                   </div>
                 </div>
               </div>
@@ -301,7 +301,7 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════
           STATS BANNER
           ══════════════════════════════════════ */}
-      <section className="relative z-10 border-y border-slate-800/60 bg-slate-900/30 backdrop-blur-md">
+      <section className="relative z-10 border-y border-border/60 bg-bg-secondary/30 backdrop-blur-md">
         <div ref={statsRef.ref} className="mx-auto max-w-7xl px-6 py-12">
           <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 ${statsRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
             {[
@@ -311,11 +311,11 @@ export default function LandingPage() {
               { value: 300, suffix: '+', label: 'Avg. Score Boost', icon: <TrendingUp className="h-5 w-5" /> },
             ].map((stat, idx) => (
               <div key={idx} className="text-center space-y-2">
-                <div className="flex justify-center text-indigo-400 mb-2">{stat.icon}</div>
+                <div className="flex justify-center text-primary mb-2">{stat.icon}</div>
                 <div className="text-3xl sm:text-4xl font-display font-extrabold text-white tracking-tight">
                   <AnimatedCounter target={stat.value} suffix={stat.suffix} />
                 </div>
-                <div className="text-[12px] text-slate-400 font-medium">{stat.label}</div>
+                <div className="text-[12px] text-text-secondary font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -328,13 +328,13 @@ export default function LandingPage() {
       <section id="features" className="relative py-24 z-10">
         <div className="mx-auto max-w-7xl px-6">
           <div ref={featuresRef.ref} className={`text-center max-w-3xl mx-auto mb-20 space-y-4 ${featuresRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-1.5 text-[11px] font-semibold text-indigo-400 mb-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-[11px] font-semibold text-primary mb-4">
               POWERFUL FEATURES
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
               Engineered for Score Excellence
             </h2>
-            <p className="text-[15px] text-slate-400 max-w-2xl mx-auto">
+            <p className="text-[15px] text-text-secondary max-w-2xl mx-auto">
               Every tool you need to dominate the JAMB UTME, built by engineers who understand the Nigerian education system.
             </p>
           </div>
@@ -385,9 +385,9 @@ export default function LandingPage() {
               },
             ].map((feature, idx) => {
               const colorMap: Record<string, string> = {
-                indigo: 'border-indigo-500/30 hover:border-indigo-500/60 bg-indigo-500/5 text-indigo-400',
-                violet: 'border-violet-500/30 hover:border-violet-500/60 bg-violet-500/5 text-violet-400',
-                purple: 'border-purple-500/30 hover:border-purple-500/60 bg-purple-500/5 text-purple-400',
+                indigo: 'border-primary/30 hover:border-primary/60 bg-primary/5 text-primary',
+                violet: 'border-primary/30 hover:border-primary/60 bg-primary/5 text-blue-300',
+                purple: 'border-blue-500/30 hover:border-blue-500/60 bg-blue-500/5 text-blue-300',
                 emerald: 'border-emerald-500/30 hover:border-emerald-500/60 bg-emerald-500/5 text-emerald-400',
                 amber: 'border-amber-500/30 hover:border-amber-500/60 bg-amber-500/5 text-amber-400',
                 pink: 'border-pink-500/30 hover:border-pink-500/60 bg-pink-500/5 text-pink-400',
@@ -398,14 +398,14 @@ export default function LandingPage() {
               return (
                 <div
                   key={idx}
-                  className={`group rounded-2xl border ${borderColor} ${hoverBorder} bg-slate-900/20 p-8 transition-all duration-500 hover:bg-slate-900/40 hover:-translate-y-1 hover:shadow-xl`}
+                  className={`group rounded-2xl border ${borderColor} ${hoverBorder} bg-bg-secondary/20 p-8 transition-all duration-500 hover:bg-bg-secondary/40 hover:-translate-y-1 hover:shadow-xl`}
                   style={{ animationDelay: feature.delay }}
                 >
                   <div className={`h-12 w-12 rounded-xl ${bgColor} border ${borderColor} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${textColor}`}>
                     {feature.icon}
                   </div>
                   <h3 className="text-[18px] font-display font-bold text-white mb-3">{feature.title}</h3>
-                  <p className="text-[13px] text-slate-400 leading-relaxed">{feature.description}</p>
+                  <p className="text-[13px] text-text-secondary leading-relaxed">{feature.description}</p>
                 </div>
               );
             })}
@@ -416,13 +416,13 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════
           AI ASSISTANT SHOWCASE
           ══════════════════════════════════════ */}
-      <section className="relative py-24 z-10 border-y border-slate-800/40">
+      <section className="relative py-24 z-10 border-y border-border/40">
         <div className="mx-auto max-w-7xl px-6">
           <div ref={aiRef.ref} className={`grid md:grid-cols-2 gap-16 items-center ${aiRef.visible ? '' : 'opacity-0'}`}>
             {/* Left — image */}
             <div className={`relative ${aiRef.visible ? 'animate-slide-in-left' : ''}`}>
               <div className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-violet-600/20 to-pink-600/20 blur-2xl animate-glow-pulse" />
-              <div className="relative rounded-2xl overflow-hidden border border-slate-700/40 shadow-2xl">
+              <div className="relative rounded-2xl overflow-hidden border border-border/40 shadow-2xl">
                 <img
                   src="/images/ai-chat-feature.png"
                   alt="AI Study Assistant"
@@ -438,9 +438,9 @@ export default function LandingPage() {
                 MAX PLAN EXCLUSIVE
               </div>
               <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-white">
-                Your Personal <span className="bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent">AI Study Partner</span>
+                Your Personal <span className="bg-gradient-to-r from-blue-300 to-pink-400 bg-clip-text text-transparent">AI Study Partner</span>
               </h2>
-              <p className="text-[15px] text-slate-400 leading-relaxed">
+              <p className="text-[15px] text-text-secondary leading-relaxed">
                 Don't just practice — <strong className="text-slate-200">understand</strong>. Our AI tutor engages you in real conversations about JAMB topics. Ask it anything — from photosynthesis to quadratic equations — and get clear, curriculum-aligned explanations instantly.
               </p>
               <ul className="space-y-4">
@@ -450,8 +450,8 @@ export default function LandingPage() {
                   'Identifies your weak areas and creates targeted drills',
                   'Available 24/7 — study at your own pace',
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-[14px] text-slate-300">
-                    <div className="mt-0.5 h-5 w-5 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+                  <li key={i} className="flex items-start gap-3 text-[14px] text-text-secondary">
+                    <div className="mt-0.5 h-5 w-5 rounded-full bg-gradient-to-r from-primary to-pink-500 flex items-center justify-center flex-shrink-0">
                       <Check className="h-3 w-3 text-white" />
                     </div>
                     {item}
@@ -481,7 +481,7 @@ export default function LandingPage() {
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
               All 17 JAMB Subjects Covered
             </h2>
-            <p className="text-[15px] text-slate-400 max-w-2xl mx-auto">
+            <p className="text-[15px] text-text-secondary max-w-2xl mx-auto">
               From Use of English to Further Mathematics — every official JAMB subject with thousands of updated, curriculum-aligned questions.
             </p>
           </div>
@@ -490,22 +490,22 @@ export default function LandingPage() {
             {ALL_SUBJECTS.map((sub, idx) => (
               <div
                 key={idx}
-                className={`group rounded-xl border bg-slate-900/20 p-5 hover:bg-slate-900/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+                className={`group rounded-xl border bg-bg-secondary/20 p-5 hover:bg-bg-secondary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
                   sub.compulsory
-                    ? 'border-indigo-500/40 hover:border-indigo-500/60 shadow-indigo-500/5'
-                    : 'border-slate-800/60 hover:border-slate-700'
+                    ? 'border-indigo-500/40 hover:border-primary/60 shadow-indigo-500/5'
+                    : 'border-border/60 hover:border-border'
                 }`}
               >
                 <div className="flex items-start justify-between mb-3">
                   <span className="text-2xl">{sub.icon}</span>
                   {sub.compulsory && (
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full">
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-full">
                       Compulsory
                     </span>
                   )}
                 </div>
-                <div className="text-[14px] font-bold text-white mb-1 group-hover:text-indigo-200 transition-colors">{sub.name}</div>
-                <div className="text-[11px] text-slate-500 leading-relaxed">{sub.topics}</div>
+                <div className="text-[14px] font-bold text-white mb-1 group-hover:text-blue-200 transition-colors">{sub.name}</div>
+                <div className="text-[11px] text-text-muted leading-relaxed">{sub.topics}</div>
               </div>
             ))}
           </div>
@@ -515,16 +515,16 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════
           HOW IT WORKS
           ══════════════════════════════════════ */}
-      <section id="how-it-works" className="relative py-24 z-10 border-y border-slate-800/40 bg-slate-900/20">
+      <section id="how-it-works" className="relative py-24 z-10 border-y border-border/40 bg-bg-secondary/20">
         <div className="mx-auto max-w-7xl px-6">
           <div ref={howItWorksRef.ref} className={`text-center max-w-3xl mx-auto mb-20 space-y-4 ${howItWorksRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/5 px-4 py-1.5 text-[11px] font-semibold text-violet-400 mb-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-[11px] font-semibold text-blue-300 mb-4">
               SIMPLE STEPS
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
               How It Works
             </h2>
-            <p className="text-[15px] text-slate-400">
+            <p className="text-[15px] text-text-secondary">
               From registration to your first 300+ score — it takes less than 5 minutes to get started.
             </p>
           </div>
@@ -541,14 +541,14 @@ export default function LandingPage() {
                 {idx < 3 && (
                   <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-px bg-gradient-to-r from-indigo-500/40 to-transparent" />
                 )}
-                <div className="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-violet-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform duration-300">
+                <div className="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-blue-500/5 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
                   {item.icon}
-                  <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 flex items-center justify-center text-[10px] font-bold text-white">
+                  <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gradient-to-r from-primary to-blue-400 flex items-center justify-center text-[10px] font-bold text-white">
                     {item.step}
                   </div>
                 </div>
                 <h3 className="text-[16px] font-display font-bold text-white">{item.title}</h3>
-                <p className="text-[12px] text-slate-400 leading-relaxed max-w-[200px] mx-auto">{item.description}</p>
+                <p className="text-[12px] text-text-secondary leading-relaxed max-w-[200px] mx-auto">{item.description}</p>
               </div>
             ))}
           </div>
@@ -570,7 +570,7 @@ export default function LandingPage() {
               <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-white">
                 Know Exactly Where <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">You Stand</span>
               </h2>
-              <p className="text-[15px] text-slate-400 leading-relaxed">
+              <p className="text-[15px] text-text-secondary leading-relaxed">
                 Our analytics dashboard breaks down your performance by subject, topic, and difficulty level. See detailed statistics after every test — identify weak spots and focus your revision where it matters most.
               </p>
               <ul className="space-y-3">
@@ -580,7 +580,7 @@ export default function LandingPage() {
                   'Difficulty-based performance trends',
                   'Progress tracking over time',
                 ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-[14px] text-slate-300">
+                  <li key={i} className="flex items-center gap-3 text-[14px] text-text-secondary">
                     <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" />
                     {item}
                   </li>
@@ -591,7 +591,7 @@ export default function LandingPage() {
             {/* Dashboard image */}
             <div className="relative">
               <div className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-emerald-600/15 to-cyan-600/15 blur-2xl animate-glow-pulse" />
-              <div className="relative rounded-2xl overflow-hidden border border-slate-700/40 shadow-2xl">
+              <div className="relative rounded-2xl overflow-hidden border border-border/40 shadow-2xl">
                 <img
                   src="/images/stats-dashboard.png"
                   alt="Performance Analytics Dashboard"
@@ -606,7 +606,7 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════
           PRICING SECTION
           ══════════════════════════════════════ */}
-      <section id="pricing" className="relative py-24 z-10 border-t border-slate-800/40 bg-slate-900/20">
+      <section id="pricing" className="relative py-24 z-10 border-t border-border/40 bg-bg-secondary/20">
         <div className="mx-auto max-w-7xl px-6">
           <div ref={pricingRef.ref} className={`text-center max-w-3xl mx-auto mb-16 space-y-4 ${pricingRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
             <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-4 py-1.5 text-[11px] font-semibold text-amber-400 mb-4">
@@ -615,7 +615,7 @@ export default function LandingPage() {
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
               Plans for Every Student
             </h2>
-            <p className="text-[15px] text-slate-400 max-w-2xl mx-auto">
+            <p className="text-[15px] text-text-secondary max-w-2xl mx-auto">
               Choose a monthly plan or pay per test. No hidden fees, no surprises — just results.
             </p>
           </div>
@@ -624,22 +624,22 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
 
             {/* ── PLUS ── */}
-            <div className="rounded-2xl border border-slate-700/60 bg-slate-900/30 p-8 flex flex-col justify-between hover:border-indigo-500/30 transition-all duration-300 hover:-translate-y-1 group">
+            <div className="rounded-2xl border border-border/60 bg-bg-secondary/30 p-8 flex flex-col justify-between hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 group">
               <div>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
-                    <Zap className="h-5 w-5 text-indigo-400" />
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <Zap className="h-5 w-5 text-primary" />
                   </div>
                   <h3 className="text-[18px] font-display font-bold text-white">Plus</h3>
                 </div>
 
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-4xl font-display font-extrabold text-white tracking-tight">₦3,500</span>
-                  <span className="text-[13px] text-slate-400">/ month</span>
+                  <span className="text-[13px] text-text-secondary">/ month</span>
                 </div>
-                <p className="text-[12px] text-indigo-400 font-medium mb-6">1 test daily</p>
+                <p className="text-[12px] text-primary font-medium mb-6">1 test daily</p>
 
-                <ul className="space-y-3.5 text-[13px] text-slate-300">
+                <ul className="space-y-3.5 text-[13px] text-text-secondary">
                   {[
                     { text: 'Full mock exam (4 subjects)', included: true },
                     { text: 'Detailed score reviews', included: true },
@@ -654,7 +654,7 @@ export default function LandingPage() {
                       ) : (
                         <X className="h-4 w-4 text-slate-600 flex-shrink-0" />
                       )}
-                      <span className={item.included ? '' : 'text-slate-500'}>{item.text}</span>
+                      <span className={item.included ? '' : 'text-text-muted'}>{item.text}</span>
                     </li>
                   ))}
                 </ul>
@@ -662,36 +662,36 @@ export default function LandingPage() {
 
               <Link
                 to="/auth?mode=register"
-                className="mt-8 block w-full text-center rounded-xl border border-indigo-500/30 bg-indigo-500/5 py-3.5 text-[14px] font-bold text-indigo-300 hover:bg-indigo-500/10 hover:border-indigo-500/50 transition-all active:scale-95"
+                className="mt-8 block w-full text-center rounded-xl border border-primary/30 bg-primary/5 py-3.5 text-[14px] font-bold text-primary-hover hover:bg-primary-hover/10 hover:border-primary/50 transition-all active:scale-95"
               >
                 Get Plus
               </Link>
             </div>
 
             {/* ── PRO (Recommended) ── */}
-            <div className="rounded-2xl border-2 border-violet-500/60 bg-slate-900/40 p-8 flex flex-col justify-between relative hover:-translate-y-2 transition-all duration-300 shadow-xl shadow-violet-500/10">
+            <div className="rounded-2xl border-2 border-primary/60 bg-bg-secondary/40 p-8 flex flex-col justify-between relative hover:-translate-y-2 transition-all duration-300 shadow-xl shadow-primary/10">
               {/* Badge */}
               <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="rounded-full bg-gradient-to-r from-violet-500 to-purple-500 px-4 py-1 text-[10px] font-bold text-white uppercase tracking-wider shadow-lg shadow-violet-500/30">
+                <div className="rounded-full bg-gradient-to-r from-primary to-blue-500 px-4 py-1 text-[10px] font-bold text-white uppercase tracking-wider shadow-lg shadow-primary/30">
                   ⭐ Most Popular
                 </div>
               </div>
 
               <div>
                 <div className="flex items-center gap-3 mb-6 mt-2">
-                  <div className="h-10 w-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
-                    <Award className="h-5 w-5 text-violet-400" />
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <Award className="h-5 w-5 text-blue-300" />
                   </div>
                   <h3 className="text-[18px] font-display font-bold text-white">Pro</h3>
                 </div>
 
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-4xl font-display font-extrabold text-white tracking-tight">₦6,000</span>
-                  <span className="text-[13px] text-slate-400">/ month</span>
+                  <span className="text-[13px] text-text-secondary">/ month</span>
                 </div>
-                <p className="text-[12px] text-violet-400 font-medium mb-6">2 tests daily</p>
+                <p className="text-[12px] text-blue-300 font-medium mb-6">2 tests daily</p>
 
-                <ul className="space-y-3.5 text-[13px] text-slate-300">
+                <ul className="space-y-3.5 text-[13px] text-text-secondary">
                   {[
                     { text: 'Full mock exams (4 subjects)', included: true },
                     { text: 'Detailed score reviews', included: true },
@@ -707,7 +707,7 @@ export default function LandingPage() {
                       ) : (
                         <X className="h-4 w-4 text-slate-600 flex-shrink-0" />
                       )}
-                      <span className={item.included ? '' : 'text-slate-500'}>{item.text}</span>
+                      <span className={item.included ? '' : 'text-text-muted'}>{item.text}</span>
                     </li>
                   ))}
                 </ul>
@@ -715,20 +715,20 @@ export default function LandingPage() {
 
               <Link
                 to="/auth?mode=register"
-                className="mt-8 block w-full text-center rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3.5 text-[14px] font-bold text-white shadow-lg shadow-violet-600/20 hover:from-violet-500 hover:to-purple-500 hover:shadow-violet-600/40 transition-all active:scale-95"
+                className="mt-8 block w-full text-center rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3.5 text-[14px] font-bold text-white shadow-lg shadow-violet-600/20 hover:from-primary hover:to-blue-500 hover:shadow-violet-600/40 transition-all active:scale-95"
               >
                 Get Pro
               </Link>
             </div>
 
             {/* ── MAX ── */}
-            <div className="rounded-2xl border border-slate-700/60 bg-slate-900/30 p-8 flex flex-col justify-between hover:border-pink-500/30 transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden">
+            <div className="rounded-2xl border border-border/60 bg-bg-secondary/30 p-8 flex flex-col justify-between hover:border-pink-500/30 transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden">
               {/* Shimmer effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-pink-500/5 to-transparent bg-[length:200%_100%] animate-shimmer pointer-events-none" />
 
               <div className="relative">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-pink-500/20 to-violet-500/20 border border-pink-500/20 flex items-center justify-center">
+                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-pink-500/20 to-blue-500/20 border border-pink-500/20 flex items-center justify-center">
                     <Brain className="h-5 w-5 text-pink-400" />
                   </div>
                   <div>
@@ -739,11 +739,11 @@ export default function LandingPage() {
 
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-4xl font-display font-extrabold text-white tracking-tight">₦14,000</span>
-                  <span className="text-[13px] text-slate-400">/ month</span>
+                  <span className="text-[13px] text-text-secondary">/ month</span>
                 </div>
                 <p className="text-[12px] text-pink-400 font-medium mb-6">5 tests daily + AI Chat</p>
 
-                <ul className="space-y-3.5 text-[13px] text-slate-300">
+                <ul className="space-y-3.5 text-[13px] text-text-secondary">
                   {[
                     'Full mock exams (4 subjects)',
                     'Detailed score reviews',
@@ -764,7 +764,7 @@ export default function LandingPage() {
 
               <Link
                 to="/auth?mode=register"
-                className="relative mt-8 block w-full text-center rounded-xl bg-gradient-to-r from-pink-600 to-violet-600 py-3.5 text-[14px] font-bold text-white shadow-lg shadow-pink-600/20 hover:from-pink-500 hover:to-violet-500 hover:shadow-pink-600/40 transition-all active:scale-95"
+                className="relative mt-8 block w-full text-center rounded-xl bg-gradient-to-r from-pink-600 to-violet-600 py-3.5 text-[14px] font-bold text-white shadow-lg shadow-pink-600/20 hover:from-pink-500 hover:to-blue-500 hover:shadow-pink-600/40 transition-all active:scale-95"
               >
                 Get Max
               </Link>
@@ -773,25 +773,25 @@ export default function LandingPage() {
 
           {/* Per-test pricing */}
           <div className="max-w-2xl mx-auto">
-            <div className="rounded-2xl border border-slate-700/40 bg-slate-900/20 p-8 text-center space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full bg-slate-800/50 px-4 py-1.5 text-[11px] font-semibold text-slate-300">
-                <CreditCard className="h-3 w-3 text-slate-400" />
+            <div className="rounded-2xl border border-border/40 bg-bg-secondary/20 p-8 text-center space-y-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-slate-800/50 px-4 py-1.5 text-[11px] font-semibold text-text-secondary">
+                <CreditCard className="h-3 w-3 text-text-secondary" />
                 PAY PER TEST
               </div>
               <h3 className="text-[22px] font-display font-bold text-white">
                 No subscription? No problem.
               </h3>
-              <p className="text-[14px] text-slate-400 max-w-md mx-auto">
+              <p className="text-[14px] text-text-secondary max-w-md mx-auto">
                 Pay only when you practice. Buy individual tests without any monthly commitment.
               </p>
               <div className="flex justify-center gap-6 pt-2">
-                <div className="rounded-xl border border-slate-700/60 bg-slate-800/30 px-6 py-4 text-center">
+                <div className="rounded-xl border border-border/60 bg-slate-800/30 px-6 py-4 text-center">
                   <div className="text-2xl font-display font-extrabold text-white">₦300</div>
-                  <div className="text-[11px] text-slate-400 mt-1">per drill test</div>
+                  <div className="text-[11px] text-text-secondary mt-1">per drill test</div>
                 </div>
-                <div className="rounded-xl border border-slate-700/60 bg-slate-800/30 px-6 py-4 text-center">
+                <div className="rounded-xl border border-border/60 bg-slate-800/30 px-6 py-4 text-center">
                   <div className="text-2xl font-display font-extrabold text-white">₦500</div>
-                  <div className="text-[11px] text-slate-400 mt-1">per mock exam</div>
+                  <div className="text-[11px] text-text-secondary mt-1">per mock exam</div>
                 </div>
               </div>
             </div>
@@ -805,14 +805,14 @@ export default function LandingPage() {
       <section className="relative py-24 z-10">
         <div className="mx-auto max-w-4xl px-6 text-center space-y-8">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold text-white leading-tight">
-            Ready to Score <span className="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">300+</span> in JAMB?
+            Ready to Score <span className="bg-gradient-to-r from-indigo-400 to-blue-300 bg-clip-text text-transparent">300+</span> in JAMB?
           </h2>
-          <p className="text-[16px] text-slate-400 max-w-xl mx-auto">
+          <p className="text-[16px] text-text-secondary max-w-xl mx-auto">
             Join over 100,000 Nigerian students already using the most advanced UTME preparation platform. Your journey to university starts here.
           </p>
           <Link
             to="/auth?mode=register"
-            className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 px-10 py-5 text-[16px] font-bold text-white shadow-xl shadow-indigo-600/30 hover:from-indigo-500 hover:to-violet-500 hover:shadow-indigo-600/50 transition-all transform hover:-translate-y-1 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-primary to-blue-600 px-10 py-5 text-[16px] font-bold text-white shadow-xl shadow-primary/30 hover:from-primary-hover hover:to-blue-500 hover:shadow-indigo-600/50 transition-all transform hover:-translate-y-1 active:scale-95"
           >
             Start Practicing Now — It's Free
             <ArrowRight className="h-5 w-5" />
@@ -823,22 +823,22 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════
           FOOTER
           ══════════════════════════════════════ */}
-      <footer className="relative z-10 border-t border-slate-800/60 bg-slate-950 pt-16 pb-8">
+      <footer className="relative z-10 border-t border-border/60 bg-bg-primary pt-16 pb-8">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid md:grid-cols-4 gap-12 mb-16">
 
             {/* Brand column */}
             <div className="md:col-span-1 space-y-5">
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center font-display font-bold text-[13px] text-white shadow-lg shadow-indigo-500/20">
+                <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-display font-bold text-[13px] text-white shadow-lg shadow-primary/20">
                   CBT
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[15px] font-display font-bold text-white leading-tight">JAMB UTME Prep</span>
-                  <span className="text-[10px] text-slate-500 leading-tight">by Aurikex</span>
+                  <span className="text-[10px] text-text-muted leading-tight">by Aurikex</span>
                 </div>
               </div>
-              <p className="text-[12px] text-slate-500 leading-relaxed">
+              <p className="text-[12px] text-text-muted leading-relaxed">
                 Nigeria's most advanced Computer-Based Test simulator, built to help every student achieve their dream UTME score.
               </p>
               {/* Social links */}
@@ -856,7 +856,7 @@ export default function LandingPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="h-9 w-9 rounded-lg border border-slate-800 bg-slate-900/50 flex items-center justify-center text-slate-500 hover:text-white hover:border-indigo-500/40 hover:bg-indigo-500/10 transition-all duration-200"
+                    className="h-9 w-9 rounded-lg border border-border bg-bg-secondary/50 flex items-center justify-center text-text-muted hover:text-white hover:border-indigo-500/40 hover:bg-primary-hover/10 transition-all duration-200"
                   >
                     {social.icon}
                   </a>
@@ -867,7 +867,7 @@ export default function LandingPage() {
             {/* Product links */}
             <div className="space-y-4">
               <h4 className="text-[13px] font-display font-bold text-white uppercase tracking-wider">Product</h4>
-              <ul className="space-y-3 text-[12px] text-slate-500">
+              <ul className="space-y-3 text-[12px] text-text-muted">
                 <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
                 <li><a href="#subjects" className="hover:text-white transition-colors">Subjects</a></li>
                 <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
@@ -878,7 +878,7 @@ export default function LandingPage() {
             {/* Support links */}
             <div className="space-y-4">
               <h4 className="text-[13px] font-display font-bold text-white uppercase tracking-wider">Support</h4>
-              <ul className="space-y-3 text-[12px] text-slate-500">
+              <ul className="space-y-3 text-[12px] text-text-muted">
                 <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
@@ -889,7 +889,7 @@ export default function LandingPage() {
             {/* Contact info */}
             <div className="space-y-4">
               <h4 className="text-[13px] font-display font-bold text-white uppercase tracking-wider">Contact</h4>
-              <ul className="space-y-3 text-[12px] text-slate-500">
+              <ul className="space-y-3 text-[12px] text-text-muted">
                 <li className="flex items-center gap-2">
                   <Mail className="h-3.5 w-3.5 text-slate-600" />
                   <a href="mailto:hello@aurikex.com" className="hover:text-white transition-colors">hello@aurikex.com</a>
@@ -907,11 +907,11 @@ export default function LandingPage() {
           </div>
 
           {/* Bottom bar */}
-          <div className="border-t border-slate-800/60 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="border-t border-border/60 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-[11px] text-slate-600 text-center md:text-left space-y-1">
               <p>© {new Date().getFullYear()} JAMB CBT Prep. All rights reserved.</p>
               <p>
-                Founded by <span className="text-slate-400 font-medium">Omotosho Korede Samuel</span> · A product of <span className="text-slate-400 font-medium">Aurikex</span>
+                Founded by <span className="text-text-secondary font-medium">Omotosho Korede Samuel</span> · A product of <span className="text-text-secondary font-medium">Aurikex</span>
               </p>
             </div>
             <div className="flex items-center gap-6 text-[11px] text-slate-600">

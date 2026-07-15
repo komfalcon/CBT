@@ -63,98 +63,98 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
       {/* Modal/Widget Container */}
       {isOpen && (
         <div className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[60] flex flex-col sm:items-end">
-          <div className="w-full h-full sm:w-96 sm:h-[500px] sm:mb-4 bg-slate-900 sm:border border-slate-700 sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5">
+          <div className="w-full h-full sm:w-96 sm:h-[500px] sm:mb-4 bg-bg-card sm:border border-border sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5">
             {/* Header */}
-          <div className="bg-indigo-600 p-4 flex justify-between items-center text-white">
-            <div className="flex items-center gap-2">
-              <Bot className="w-5 h-5" />
-              <h3 className="font-semibold">Aurikex AI Tutor</h3>
-            </div>
-            <button onClick={() => setIsOpen(false)} className="hover:bg-indigo-700 p-1 rounded-full transition-colors">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-900/50">
-            {messages.length === 0 && !error && (
-              <div className="text-center text-slate-400 mt-8">
-                <Bot className="w-12 h-12 mx-auto mb-3 opacity-50 text-indigo-400" />
-                <p>Hi! I'm your AI Tutor.</p>
-                <p className="text-sm">Ask me to explain concepts, review topics, or help you study!</p>
+            <div className="bg-bg-secondary border-b border-border p-4 flex justify-between items-center text-text-primary">
+              <div className="flex items-center gap-2">
+                <Bot className="w-5 h-5 text-ai-flag animate-pulse" />
+                <h3 className="font-semibold text-sm">Aurikex AI Tutor</h3>
               </div>
-            )}
-            
-            {messages.map((msg, idx) => (
-              <div key={idx} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {msg.role === 'assistant' && (
-                  <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-white" />
-                  </div>
-                )}
-                <div className={`max-w-[80%] rounded-2xl p-3 text-sm ${msg.role === 'user' ? 'bg-indigo-500 text-white rounded-br-none' : 'bg-slate-800 text-slate-200 rounded-bl-none'}`}>
-                  {msg.role === 'assistant' ? (
-                    <div className="prose prose-invert prose-sm overflow-x-auto">
-                       <ReactMarkdown
-                         remarkPlugins={[remarkMath]}
-                         rehypePlugins={[rehypeKatex]}
-                       >
-                         {msg.content}
-                       </ReactMarkdown>
-                    </div>
-                  ) : (
-                    msg.content
-                  )}
-                </div>
-                {msg.role === 'user' && (
-                  <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center flex-shrink-0">
-                    <UserIcon className="w-4 h-4 text-slate-300" />
-                  </div>
-                )}
-              </div>
-            ))}
-            
-            {isLoading && (
-              <div className="flex gap-2 justify-start">
-                <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-4 h-4 text-white" />
-                </div>
-                <div className="bg-slate-800 text-slate-400 rounded-2xl rounded-bl-none p-3 text-sm flex items-center gap-2">
-                  <Loader2 className="w-4 h-4 animate-spin" /> Thinking...
-                </div>
-              </div>
-            )}
-            
-            {error && (
-              <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-xl text-sm text-center">
-                {error}
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input Area */}
-          <div className="p-3 bg-slate-900 border-t border-slate-800">
-            <div className="relative flex items-center">
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask me anything..."
-                className="w-full bg-slate-800 border border-slate-700 rounded-full py-2 pl-4 pr-10 text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
-                disabled={isLoading}
-              />
-              <button
-                onClick={handleSend}
-                disabled={!inputValue.trim() || isLoading}
-                className="absolute right-1 p-1.5 bg-indigo-600 text-white rounded-full hover:bg-indigo-500 disabled:opacity-50 transition-colors"
-              >
-                <Send className="w-4 h-4" />
+              <button onClick={() => setIsOpen(false)} className="hover:bg-bg-card p-1 rounded-full transition-colors text-text-secondary hover:text-text-primary">
+                <X className="w-5 h-5" />
               </button>
             </div>
+
+            {/* Chat Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-bg-secondary/40">
+              {messages.length === 0 && !error && (
+                <div className="text-center text-text-secondary mt-8 space-y-2">
+                  <Bot className="w-12 h-12 mx-auto mb-3 text-ai-flag opacity-80" />
+                  <p className="font-bold text-sm text-text-primary">Hi! I'm your AI Tutor.</p>
+                  <p className="text-xs text-text-secondary max-w-[240px] mx-auto leading-relaxed">Ask me to explain concepts, review topics, or help you study!</p>
+                </div>
+              )}
+              
+              {messages.map((msg, idx) => (
+                <div key={idx} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  {msg.role === 'assistant' && (
+                    <div className="w-8 h-8 rounded-full bg-ai-flag/10 border border-ai-flag/20 flex items-center justify-center flex-shrink-0">
+                      <Bot className="w-4 h-4 text-ai-flag" />
+                    </div>
+                  )}
+                  <div className={`max-w-[80%] rounded-2xl p-3 text-sm leading-relaxed ${msg.role === 'user' ? 'bg-primary text-text-on-accent rounded-br-none font-medium' : 'bg-bg-secondary border border-border text-text-secondary rounded-bl-none'}`}>
+                    {msg.role === 'assistant' ? (
+                      <div className="prose prose-invert prose-sm overflow-x-auto">
+                         <ReactMarkdown
+                           remarkPlugins={[remarkMath]}
+                           rehypePlugins={[rehypeKatex]}
+                         >
+                           {msg.content}
+                         </ReactMarkdown>
+                      </div>
+                    ) : (
+                      msg.content
+                    )}
+                  </div>
+                  {msg.role === 'user' && (
+                    <div className="w-8 h-8 rounded-full bg-bg-secondary border border-border flex items-center justify-center flex-shrink-0">
+                      <UserIcon className="w-4 h-4 text-text-secondary" />
+                    </div>
+                  )}
+                </div>
+              ))}
+              
+              {isLoading && (
+                <div className="flex gap-2 justify-start">
+                  <div className="w-8 h-8 rounded-full bg-ai-flag/10 border border-ai-flag/20 flex items-center justify-center flex-shrink-0">
+                    <Bot className="w-4 h-4 text-ai-flag" />
+                  </div>
+                  <div className="bg-bg-secondary border border-border text-text-secondary rounded-2xl rounded-bl-none p-3 text-sm flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-ai-flag" /> Thinking...
+                  </div>
+                </div>
+              )}
+              
+              {error && (
+                <div className="bg-error/10 border border-error/20 text-error p-3 rounded-xl text-xs text-center">
+                  {error}
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Area */}
+            <div className="p-3 bg-bg-card border-t border-border">
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask me anything..."
+                  className="w-full bg-bg-secondary border border-border rounded-full py-2 pl-4 pr-10 text-sm text-text-primary focus:outline-none focus:border-ai-flag focus:ring-1 focus:ring-ai-flag/25 transition-all"
+                  disabled={isLoading}
+                />
+                <button
+                  onClick={handleSend}
+                  disabled={!inputValue.trim() || isLoading}
+                  className="absolute right-1.5 p-1.5 bg-ai-flag text-text-on-accent rounded-full hover:bg-ai-flag-hover disabled:opacity-50 transition-colors"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
         </div>
       )}
 
@@ -163,9 +163,9 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
         <div className="fixed bottom-6 right-6 z-50">
           <button
             onClick={() => setIsOpen(true)}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full p-4 shadow-lg shadow-indigo-500/20 transition-transform hover:scale-110 flex items-center gap-2"
+            className="bg-ai-flag hover:bg-ai-flag-hover text-text-on-accent rounded-full p-4 shadow-lg shadow-ai-flag/20 transition-all hover:scale-110 flex items-center gap-2 border border-ai-flag/10 active:scale-95"
           >
-            <Bot className="w-6 h-6" />
+            <Bot className="w-6 h-6 animate-pulse" />
           </button>
         </div>
       )}

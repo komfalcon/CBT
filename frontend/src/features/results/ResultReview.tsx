@@ -17,6 +17,7 @@ import { AiChatWidget } from '../ai/AiChatWidget';
 import { ExplainButton } from '../ai/ExplainButton';
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
+import { QuestionCard } from '../../components';
 
 const SUBJECT_LABELS: Record<string, string> = {
   english: 'Use of English',
@@ -128,7 +129,7 @@ export default function ResultReview() {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-100">
-        <Loader2 className="h-10 w-10 text-indigo-500 animate-spin mb-4" />
+        <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
         <p className="text-sm text-slate-400">Grading mock answers and preparing solution map...</p>
       </div>
     );
@@ -142,7 +143,7 @@ export default function ResultReview() {
         <p className="text-sm text-slate-400 mb-6 text-center max-w-sm">{error || 'Result details missing.'}</p>
         <button
           onClick={() => navigate('/dashboard')}
-          className="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-semibold hover:bg-indigo-500 transition-colors"
+          className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold hover:bg-primary-hover transition-colors"
         >
           Return to Dashboard
         </button>
@@ -153,7 +154,7 @@ export default function ResultReview() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans pb-16 relative overflow-auto">
       {/* Decorative Orbs */}
-      <div className="absolute top-0 left-0 w-[40%] h-[40%] rounded-full bg-indigo-900/10 blur-[150px] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-[40%] h-[40%] rounded-full bg-primary/10 blur-[150px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[40%] h-[40%] rounded-full bg-violet-900/10 blur-[150px] pointer-events-none" />
 
       {/* Header */}
@@ -176,10 +177,10 @@ export default function ResultReview() {
         {/* Score Visual Block */}
         <section className="grid gap-6 md:grid-cols-3">
           {/* Main Score Card */}
-          <div className="rounded-2xl border border-indigo-500/20 bg-indigo-950/10 p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 to-violet-500/5 pointer-events-none" />
-            <Award className="h-10 w-10 text-indigo-400 mb-3" />
-            <div className="text-[10px] uppercase font-bold text-indigo-300 tracking-wider">Aggregate Grade</div>
+          <div className="rounded-2xl border border-primary/20 bg-bg-secondary/20 p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-blue-500/5 pointer-events-none" />
+            <Award className="h-10 w-10 text-primary mb-3" />
+            <div className="text-[10px] uppercase font-bold text-primary-hover tracking-wider">Aggregate Grade</div>
             <div className="mt-2 text-5xl font-black text-white">
               {result.type === 'mock' ? (
                 <>
@@ -262,7 +263,7 @@ export default function ResultReview() {
                 <span>{accuracyRate}%</span>
               </div>
               <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-900">
-                <div className="bg-indigo-500 h-1.5 rounded-full" style={{ width: `${accuracyRate}%` }} />
+                <div className="bg-primary h-1.5 rounded-full" style={{ width: `${accuracyRate}%` }} />
               </div>
             </div>
           </div>
@@ -271,7 +272,7 @@ export default function ResultReview() {
         {/* Subjects Score breakdown list */}
         <section className="rounded-2xl border border-slate-900 bg-slate-900/40 p-6 space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-900">
-            <BookOpen className="h-5 w-5 text-indigo-400" />
+            <BookOpen className="h-5 w-5 text-primary" />
             <h3 className="text-sm font-bold text-white">Performance Scorecard per Subject</h3>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
@@ -287,7 +288,7 @@ export default function ResultReview() {
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-xl font-black text-indigo-400">{scoreCard.score}</span>
+                  <span className="text-xl font-black text-primary">{scoreCard.score}</span>
                   <span className="text-[10px] text-slate-500 block">/ 100</span>
                 </div>
               </div>
@@ -298,7 +299,7 @@ export default function ResultReview() {
         {/* Filters Controls block */}
         <section className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between pb-4 border-b border-slate-900">
           <div className="flex items-center gap-2">
-            <ListCollapse className="h-4 w-4 text-indigo-400" />
+            <ListCollapse className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-bold text-white">Correction Map Corrections</h3>
           </div>
 
@@ -349,8 +350,8 @@ export default function ResultReview() {
                   }`}
                 >
                   {/* Status Tag Badge */}
-                  <div className="flex justify-between items-center text-[10px] font-bold tracking-wider uppercase">
-                    <span className="text-indigo-400">
+                  <div className="flex justify-between items-center text-[10px] font-bold tracking-wider uppercase mb-4">
+                    <span className="text-primary">
                       {SUBJECT_LABELS[q.subject] || q.subject} • {q.topic}
                     </span>
                     <span
@@ -366,66 +367,13 @@ export default function ResultReview() {
                     </span>
                   </div>
 
-                  {/* Question Stem text */}
-                  <div className="text-sm font-medium leading-relaxed text-slate-100 overflow-x-auto">
-                    <span className="text-slate-500 font-bold mr-1.5">{idx + 1}.</span>
-                    <Latex>{q.question_text}</Latex>
-                  </div>
-
-                  {/* Diagrams SVG */}
-                  {q.has_diagram && q.diagram_svg && (
-                    <div
-                      className="border border-slate-900 bg-slate-950/60 rounded-xl p-4 flex justify-center max-w-md overflow-auto"
-                      dangerouslySetInnerHTML={{ __html: q.diagram_svg }}
-                    />
-                  )}
-
-                  {/* Options List */}
-                  <div className="grid gap-2 sm:grid-cols-2 mt-4">
-                    {q.options.map((option: any) => {
-                      const isOptionSelected = userChoice === option.id;
-                      const isCorrect = q.correct_option === option.id;
-
-                      let optionStyle = 'border-slate-900 bg-slate-950/30 text-slate-400';
-                      if (isCorrect) {
-                        optionStyle = 'border-emerald-500 bg-emerald-500/10 text-white';
-                      } else if (isOptionSelected) {
-                        optionStyle = 'border-rose-500 bg-rose-500/10 text-white';
-                      }
-
-                      return (
-                        <div
-                          key={option.id}
-                          className={`rounded-xl border p-3.5 text-xs flex gap-3 items-center ${optionStyle}`}
-                        >
-                          <span
-                            className={`h-5 w-5 rounded font-bold text-[10px] flex items-center justify-center ${
-                              isCorrect
-                                ? 'bg-emerald-500 text-white'
-                                : isOptionSelected
-                                ? 'bg-rose-500 text-white'
-                                : 'bg-slate-900 border border-slate-800 text-slate-500'
-                            }`}
-                          >
-                            {option.id}
-                          </span>
-                          <span className="flex-1 leading-normal font-medium overflow-x-auto"><Latex>{option.text}</Latex></span>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Explanation Solutions mapping */}
-                  {q.explanation && (
-                    <div className="mt-4 pt-4 border-t border-slate-900 space-y-2">
-                      <div className="flex items-center gap-1.5 text-indigo-400 text-xs font-bold">
-                        <BookOpen className="h-4 w-4" /> Solution Explanation:
-                      </div>
-                      <p className="text-xs text-slate-405 leading-relaxed bg-slate-950/50 rounded-xl border border-slate-850 p-4 overflow-x-auto">
-                        <Latex>{q.explanation}</Latex>
-                      </p>
-                    </div>
-                  )}
+                  <QuestionCard
+                    question={q}
+                    index={idx}
+                    selectedOption={userChoice}
+                    showFeedback={true}
+                    correctOption={q.correct_option}
+                  />
                   {/* AI Explanation Button */}
                   <ExplainButton
                     questionId={q.questionId}

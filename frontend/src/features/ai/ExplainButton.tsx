@@ -41,7 +41,7 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
       {!explanation && !isLoading && !error && (
         <button
           onClick={handleExplain}
-          className="flex items-center gap-2 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors bg-indigo-500/10 hover:bg-indigo-500/20 px-3 py-1.5 rounded-lg border border-indigo-500/20"
+          className="flex items-center gap-2 text-sm font-medium text-ai-flag hover:text-ai-flag-hover transition-colors bg-ai-flag/10 hover:bg-ai-flag/20 px-3 py-1.5 rounded-lg border border-ai-flag/20"
         >
           <Sparkles className="w-4 h-4" />
           Explain with AI
@@ -49,30 +49,30 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
       )}
 
       {isLoading && (
-        <div className="flex items-center gap-2 text-sm text-indigo-400">
+        <div className="flex items-center gap-2 text-sm text-ai-flag">
           <Loader2 className="w-4 h-4 animate-spin" />
           AI is thinking...
         </div>
       )}
 
       {error && (
-        <div className="text-sm text-red-400 bg-red-400/10 p-3 rounded-lg border border-red-400/20 flex justify-between items-start">
+        <div className="text-sm text-error bg-error/10 p-3 rounded-lg border border-error/20 flex justify-between items-start">
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="text-red-400 hover:text-red-300">
+          <button onClick={() => setError(null)} className="text-error hover:text-error/80">
             <X className="w-4 h-4" />
           </button>
         </div>
       )}
 
       {explanation && (
-        <div className="bg-slate-800/80 border border-slate-700 p-4 rounded-xl relative animate-in fade-in slide-in-from-top-2">
+        <div className="bg-bg-secondary/80 border border-border p-4 rounded-xl relative animate-in fade-in slide-in-from-top-2">
           <button 
             onClick={() => setExplanation(null)} 
-            className="absolute top-2 right-2 p-1 text-slate-400 hover:text-slate-200 transition-colors"
+            className="absolute top-2 right-2 p-1 text-text-secondary hover:text-text-primary transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
-          <div className="flex items-center gap-2 mb-2 text-indigo-400 font-medium text-sm">
+          <div className="flex items-center gap-2 mb-2 text-ai-flag font-medium text-sm">
             <Sparkles className="w-4 h-4" />
             AI Explanation
           </div>
