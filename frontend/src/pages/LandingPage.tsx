@@ -824,10 +824,10 @@ export default function LandingPage() {
           ══════════════════════════════════════ */}
       <footer className="relative z-10 border-t border-border/60 bg-bg-primary pt-16 pb-8">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
 
             {/* Brand column */}
-            <div className="sm:col-span-2 md:col-span-1 space-y-5">
+            <div className="col-span-2 md:col-span-1 space-y-5">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-display font-bold text-[13px] text-white shadow-lg shadow-primary/20">
                   CBT
