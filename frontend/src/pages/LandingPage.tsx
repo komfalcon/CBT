@@ -878,10 +878,10 @@ export default function LandingPage() {
             <div className="space-y-4">
               <h4 className="text-[13px] font-display font-bold text-white uppercase tracking-wider">Support</h4>
               <ul className="space-y-3 text-[12px] text-text-muted">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                <li><Link to="/help" className="hover:text-white transition-colors">Help Center</Link></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
+                <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
               </ul>
             </div>
 
@@ -916,8 +916,8 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="flex items-center gap-6 text-[11px] text-slate-600">
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
+              <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+              <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
               <a href="#" className="hover:text-white transition-colors">Cookies</a>
             </div>
           </div>
