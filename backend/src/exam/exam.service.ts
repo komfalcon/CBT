@@ -31,6 +31,33 @@ export class ExamService {
     }
 
     if (type === 'mock') {
+      const tier = user.subscription_tier || 'free';
+      let limit = 0;
+      if (tier === 'plus') {
+        limit = 1;
+      } else if (tier === 'pro') {
+        limit = 2;
+      } else if (tier === 'max') {
+        limit = 5;
+      }
+
+      if (tier === 'free' || limit === 0) {
+        throw new BadRequestException('Mock exams are not available on the Free plan. Please upgrade to a Plus, Pro, or Max plan to take mock exams.');
+      }
+
+      const startOfToday = new Date();
+      startOfToday.setUTCHours(0, 0, 0, 0);
+
+      const mockCount = await this.sessionModel.countDocuments({
+        userId,
+        type: 'mock',
+        startedAt: { $gte: startOfToday }
+      }).exec();
+
+      if (mockCount >= limit) {
+        throw new BadRequestException(`You have reached your daily limit of ${limit} mock exam(s) for the ${tier.toUpperCase()} plan. Please upgrade your plan to take more mock exams.`);
+      }
+
       const combination = user.exam_subject_combination || [];
       if (combination.length !== 4 || !combination.includes('english')) {
         throw new BadRequestException('Configure a valid 4-subject combination including English first.');

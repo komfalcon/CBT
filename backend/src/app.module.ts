@@ -14,6 +14,7 @@ import { ResultsModule } from './results/results.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { AiModule } from './ai/ai.module';
+import { PaymentsModule } from './payments/payments.module';
 import { AppController } from './app.controller';
 import { HealthService } from './health.service';
 
@@ -49,6 +50,7 @@ import { HealthService } from './health.service';
     AnalyticsModule,
     NotificationsModule,
     AiModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [HealthService],

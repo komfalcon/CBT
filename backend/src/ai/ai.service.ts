@@ -48,12 +48,8 @@ export class AiService {
     const user = await this.userModel.findOne({ userId }).exec();
     if (!user) throw new UnauthorizedException('User not found');
 
-    if (isChat && user.subscription_tier !== 'max') {
-      throw new UnauthorizedException('Conversational AI Tutor requires the Max plan.');
-    }
-
-    if (!isChat && user.subscription_tier === 'free') {
-      throw new UnauthorizedException('AI Explanations are available on Plus, Pro, and Max plans.');
+    if (user.subscription_tier !== 'max') {
+      throw new BadRequestException('AI features (including Conversational Tutor and Explanations) are only available on the Max plan.');
     }
 
     // Reset daily limit if it's a new day

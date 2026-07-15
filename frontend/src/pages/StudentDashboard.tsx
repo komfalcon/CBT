@@ -18,6 +18,10 @@ import {
   History,
   Target,
   ArrowRight,
+  CreditCard,
+  Sparkles,
+  Brain,
+  X,
 } from 'lucide-react';
 import { AiChatWidget } from '../features/ai/AiChatWidget';
 
@@ -59,6 +63,85 @@ export default function StudentDashboard() {
   const [isDrillModalOpen, setIsDrillModalOpen] = useState<boolean>(false);
   const [drillSubject, setDrillSubject] = useState<string>('');
   const [drillCount, setDrillCount] = useState<number>(20);
+
+  // Paystack & Subscription states
+  const [showUpgradeModal, setShowUpgradeModal] = useState<boolean>(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState<boolean>(false);
+  const [paymentError, setPaymentError] = useState<string>('');
+  const [paymentSuccess, setPaymentSuccess] = useState<string>('');
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://js.paystack.co/v1/inline.js';
+    script.async = true;
+    document.head.appendChild(script);
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
+  const verifyPayment = async (reference: string, planCode: string, newTier: string) => {
+    try {
+      setIsProcessingPayment(true);
+      setPaymentError('');
+      const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiBase}/payments/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        body: JSON.stringify({ reference, planCode }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Payment verification failed.');
+      }
+
+      setStudent((prev: any) => ({
+        ...prev,
+        subscription_tier: data.subscription_tier,
+        ai_messages_remaining: data.ai_messages_remaining,
+      }));
+
+      setPaymentSuccess(`Successfully upgraded to the ${newTier.toUpperCase()} plan!`);
+      setShowUpgradeModal(false);
+    } catch (err: any) {
+      setPaymentError(err.message || 'An error occurred during payment verification.');
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
+  const handleUpgradeClick = (planCode: string, amount: number, tierName: string) => {
+    if (!student) return;
+    
+    setPaymentError('');
+    setPaymentSuccess('');
+
+    const paystackPop = (window as any).PaystackPop;
+    if (!paystackPop) {
+      setPaymentError('Paystack checkout is loading. Please try again in a few seconds.');
+      return;
+    }
+
+    const handler = paystackPop.setup({
+      key: 'pk_live_068536d7f4bbe687175bcda53e3f5d116fea99dc',
+      email: student.email,
+      amount: amount * 100, // in kobo
+      currency: 'NGN',
+      plan: planCode,
+      callback: (response: any) => {
+        verifyPayment(response.reference, planCode, tierName);
+      },
+      onClose: () => {
+        // Payment closed
+      }
+    });
+
+    handler.openIframe();
+  };
 
   useEffect(() => {
     const savedToken = localStorage.getItem('accessToken');
@@ -251,6 +334,14 @@ export default function StudentDashboard() {
                 <div className="text-sm font-bold text-pink-400">{student?.streak_count || 0} days</div>
               </div>
             </div>
+
+            <button
+              onClick={() => setShowUpgradeModal(true)}
+              className="mt-5 w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 py-3 text-xs font-bold text-white shadow-lg shadow-indigo-600/10 active:scale-95 transition-all"
+            >
+              <CreditCard className="h-4 w-4" />
+              Upgrade Subscription Plan
+            </button>
           </div>
 
           {/* CBT Access Key - Cafe Roaming Code */}
@@ -616,6 +707,180 @@ export default function StudentDashboard() {
               >
                 Launch Drill
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Success Modal */}
+      {paymentSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-2xl border border-emerald-500/30 bg-slate-900 p-6 space-y-6 text-center shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+            <div className="mx-auto h-12 w-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <Check className="h-6 w-6 text-emerald-400" />
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-lg font-bold text-white">Payment Successful!</h3>
+              <p className="text-xs text-slate-450 leading-relaxed">{paymentSuccess}</p>
+            </div>
+            <button
+              onClick={() => setPaymentSuccess('')}
+              className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-550 py-3 text-xs font-bold text-white transition-all active:scale-95"
+            >
+              Start Practicing
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Subscription Plans Modal */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-sm overflow-y-auto">
+          <div className="w-full max-w-4xl rounded-2xl border border-slate-850 bg-slate-900 p-6 md:p-8 space-y-8 my-8 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
+            <button
+              onClick={() => setShowUpgradeModal(false)}
+              className="absolute top-4 right-4 text-slate-450 hover:text-white transition-colors"
+              disabled={isProcessingPayment}
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <h3 className="text-xl md:text-2xl font-bold text-white bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+                Upgrade Your CBT Account
+              </h3>
+              <p className="text-xs text-slate-400">
+                Unlock mock exams, detailed reviews, and advanced AI-powered tutoring to score 300+ in your UTME.
+              </p>
+            </div>
+
+            {paymentError && (
+              <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4 text-xs text-rose-450 flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-rose-450 flex-shrink-0" />
+                <span>{paymentError}</span>
+              </div>
+            )}
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Plus Plan Card */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-6 flex flex-col justify-between hover:border-indigo-500/20 transition-all group">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-8 w-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center">
+                      <Zap className="h-4 w-4 text-indigo-400" />
+                    </div>
+                    <span className="text-sm font-bold text-white">Plus Plan</span>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex items-baseline gap-0.5">
+                      <span className="text-2xl font-bold text-white">₦3,500</span>
+                      <span className="text-[10px] text-slate-500">/mo</span>
+                    </div>
+                    <span className="inline-block text-[10px] font-bold text-indigo-400 bg-indigo-500/5 border border-indigo-500/10 px-2 py-0.5 rounded">
+                      1 Mock Exam Daily
+                    </span>
+                  </div>
+
+                  <ul className="space-y-2.5 text-[11px] text-slate-400 pt-2 border-t border-slate-900">
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> 1 full mock exam daily</li>
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> Detailed score reviews</li>
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> CBT Access Key</li>
+                    <li className="flex items-center gap-2 text-slate-600"><X className="h-3 w-3 text-slate-700 flex-shrink-0" /> Subject-specific drills</li>
+                    <li className="flex items-center gap-2 text-slate-650"><X className="h-3 w-3 text-slate-705 flex-shrink-0" /> AI Conversational Tutor</li>
+                  </ul>
+                </div>
+
+                <button
+                  onClick={() => handleUpgradeClick('PLN_3pu5sd2pl33k7qw', 3500, 'plus')}
+                  disabled={isProcessingPayment}
+                  className="mt-6 w-full rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 py-3 text-xs font-bold text-slate-300 hover:text-white transition-all disabled:opacity-50 active:scale-95"
+                >
+                  {isProcessingPayment ? 'Processing...' : 'Subscribe to Plus'}
+                </button>
+              </div>
+
+              {/* Pro Plan Card */}
+              <div className="rounded-2xl border border-violet-500/30 bg-slate-950/40 p-6 flex flex-col justify-between relative hover:border-violet-500/50 transition-all">
+                <div className="absolute top-3 right-3 text-[9px] font-extrabold text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                  Popular
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-8 w-8 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
+                      <Award className="h-4 w-4 text-violet-400" />
+                    </div>
+                    <span className="text-sm font-bold text-white">Pro Plan</span>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex items-baseline gap-0.5">
+                      <span className="text-2xl font-bold text-white">₦6,000</span>
+                      <span className="text-[10px] text-slate-500">/mo</span>
+                    </div>
+                    <span className="inline-block text-[10px] font-bold text-violet-400 bg-violet-500/5 border border-violet-500/10 px-2 py-0.5 rounded">
+                      2 Mock Exams Daily
+                    </span>
+                  </div>
+
+                  <ul className="space-y-2.5 text-[11px] text-slate-400 pt-2 border-t border-slate-900">
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> 2 full mock exams daily</li>
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> Subject-specific drills</li>
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> Detailed score reviews</li>
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> CBT Access Key</li>
+                    <li className="flex items-center gap-2 text-slate-650"><X className="h-3 w-3 text-slate-705 flex-shrink-0" /> AI Conversational Tutor</li>
+                  </ul>
+                </div>
+
+                <button
+                  onClick={() => handleUpgradeClick('PLN_yzw49g99ybur0c1', 6000, 'pro')}
+                  disabled={isProcessingPayment}
+                  className="mt-6 w-full rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-550 hover:to-purple-550 py-3 text-xs font-bold text-white transition-all shadow-md shadow-violet-650/10 disabled:opacity-50 active:scale-95"
+                >
+                  {isProcessingPayment ? 'Processing...' : 'Subscribe to Pro'}
+                </button>
+              </div>
+
+              {/* Max Plan Card */}
+              <div className="rounded-2xl border border-pink-500/30 bg-slate-950/40 p-6 flex flex-col justify-between hover:border-pink-500/50 transition-all">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-8 w-8 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center">
+                      <Brain className="h-4 w-4 text-pink-400" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-bold text-white block leading-none">Max Plan</span>
+                      <span className="text-[8px] text-pink-400 font-semibold uppercase tracking-wide">Tutor Edition</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex items-baseline gap-0.5">
+                      <span className="text-2xl font-bold text-white">₦14,000</span>
+                      <span className="text-[10px] text-slate-500">/mo</span>
+                    </div>
+                    <span className="inline-block text-[10px] font-bold text-pink-400 bg-pink-500/5 border border-pink-500/10 px-2 py-0.5 rounded">
+                      5 Mock Exams Daily + AI
+                    </span>
+                  </div>
+
+                  <ul className="space-y-2.5 text-[11px] text-slate-400 pt-2 border-t border-slate-900">
+                    <li className="flex items-center gap-2 text-pink-300 font-medium"><Sparkles className="h-3 w-3 text-pink-400 flex-shrink-0" /> AI Conversational Tutor</li>
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> 5 full mock exams daily</li>
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> Subject-specific drills</li>
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> Detailed score reviews</li>
+                    <li className="flex items-center gap-2"><Check className="h-3 w-3 text-emerald-400 flex-shrink-0" /> CBT Access Key</li>
+                  </ul>
+                </div>
+
+                <button
+                  onClick={() => handleUpgradeClick('PLN_015edt1c8m9nnow', 14000, 'max')}
+                  disabled={isProcessingPayment}
+                  className="mt-6 w-full rounded-xl bg-gradient-to-r from-pink-650 to-violet-650 hover:from-pink-550 hover:to-violet-550 py-3 text-xs font-bold text-white transition-all shadow-md shadow-pink-650/10 disabled:opacity-50 active:scale-95"
+                >
+                  {isProcessingPayment ? 'Processing...' : 'Subscribe to Max'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
