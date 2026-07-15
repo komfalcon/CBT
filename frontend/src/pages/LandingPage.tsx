@@ -272,7 +272,7 @@ export default function LandingPage() {
             <div className={`relative ${heroRef.visible ? 'animate-slide-in-right' : 'opacity-0'}`} style={{ animationDelay: '0.2s' }}>
               {/* Glow behind image */}
               <div className="absolute -inset-8 rounded-3xl bg-gradient-to-r from-primary/20 via-blue-500/10 to-transparent blur-3xl animate-glow-pulse" />
-              
+
               <div className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl shadow-primary/10">
                 <img
                   src="/images/hero-illustration.png"
@@ -490,11 +490,10 @@ export default function LandingPage() {
             {ALL_SUBJECTS.map((sub, idx) => (
               <div
                 key={idx}
-                className={`group rounded-xl border bg-bg-secondary/20 p-5 hover:bg-bg-secondary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
-                  sub.compulsory
-                    ? 'border-indigo-500/40 hover:border-primary/60 shadow-indigo-500/5'
-                    : 'border-border/60 hover:border-border'
-                }`}
+                className={`group rounded-xl border bg-bg-secondary/20 p-5 hover:bg-bg-secondary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${sub.compulsory
+                  ? 'border-indigo-500/40 hover:border-primary/60 shadow-indigo-500/5'
+                  : 'border-border/60 hover:border-border'
+                  }`}
               >
                 <div className="flex items-start justify-between mb-3">
                   <span className="text-2xl">{sub.icon}</span>
@@ -825,10 +824,10 @@ export default function LandingPage() {
           ══════════════════════════════════════ */}
       <footer className="relative z-10 border-t border-border/60 bg-bg-primary pt-16 pb-8">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="grid md:grid-cols-4 gap-12 mb-16">
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-12 mb-16">
 
             {/* Brand column */}
-            <div className="md:col-span-1 space-y-5">
+            <div className="sm:col-span-2 md:col-span-1 space-y-5">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-display font-bold text-[13px] text-white shadow-lg shadow-primary/20">
                   CBT
@@ -892,15 +891,17 @@ export default function LandingPage() {
               <ul className="space-y-3 text-[12px] text-text-muted">
                 <li className="flex items-center gap-2">
                   <Mail className="h-3.5 w-3.5 text-slate-600" />
-                  <a href="mailto:hello@aurikex.com" className="hover:text-white transition-colors">hello@aurikex.com</a>
+                  <a href="mailto:info@aurikex.tech" className="hover:text-white transition-colors">info@aurikex.tech</a>
                 </li>
                 <li className="flex items-center gap-2">
                   <Phone className="h-3.5 w-3.5 text-slate-600" />
-                  <a href="tel:+2348000000000" className="hover:text-white transition-colors">+234 800 000 0000</a>
+                  <a href="tel:++2349113683395" className="hover:text-white transition-colors">+234 911 368 3395</a>
                 </li>
                 <li className="flex items-center gap-2">
                   <Globe className="h-3.5 w-3.5 text-slate-600" />
-                  <a href="#" className="hover:text-white transition-colors">www.aurikex.com</a>
+                  <a href="https://www.aurikex.tech" className="hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+                    www.aurikex.tech
+                  </a>
                 </li>
               </ul>
             </div>

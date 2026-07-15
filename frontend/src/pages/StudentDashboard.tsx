@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { AiChatWidget } from '../features/ai/AiChatWidget';
 import { Button, Card, Modal, Alert, Badge } from '../components';
+import { useToast } from '../components';
 
 const SUBJECT_LABELS: Record<string, string> = {
   english: 'Use of English (Compulsory)',
@@ -50,6 +51,7 @@ const AVAILABLE_SUBJECTS = Object.keys(SUBJECT_LABELS).filter((s) => s !== 'engl
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
+  const { addToast } = useToast();
   const [token, setToken] = useState<string>('');
   const [student, setStudent] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -117,7 +119,7 @@ export default function StudentDashboard() {
 
   const handleUpgradeClick = (planCode: string, amount: number, tierName: string) => {
     if (!student) return;
-    
+
     setPaymentError('');
     setPaymentSuccess('');
 
@@ -181,7 +183,11 @@ export default function StudentDashboard() {
       const session = await createExamSession(token, { type: 'mock' });
       navigate(`/exam/${session.sessionId}`);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to initialize mock exam.');
+      addToast({
+        type: 'error',
+        title: 'Exam Failed',
+        message: err.response?.data?.message || 'Failed to initialize mock exam.',
+      });
       setLoading(false);
     }
   };
@@ -198,7 +204,11 @@ export default function StudentDashboard() {
       setIsDrillModalOpen(false);
       navigate(`/exam/${session.sessionId}`);
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to initialize subject drill.');
+      addToast({
+        type: 'error',
+        title: 'Drill Failed',
+        message: err.response?.data?.message || 'Failed to initialize subject drill.',
+      });
       setLoading(false);
     }
   };
@@ -312,9 +322,9 @@ export default function StudentDashboard() {
                     UTME Candidate
                   </Badge>
                   <Badge variant={
-                    student?.subscription_tier === 'max' ? 'ai-flag' : 
-                    student?.subscription_tier === 'pro' ? 'success' :
-                    student?.subscription_tier === 'plus' ? 'primary' : 'draft'
+                    student?.subscription_tier === 'max' ? 'ai-flag' :
+                      student?.subscription_tier === 'pro' ? 'success' :
+                        student?.subscription_tier === 'plus' ? 'primary' : 'draft'
                   }>
                     {student?.subscription_tier || 'Free'} Plan
                   </Badge>
@@ -506,11 +516,11 @@ export default function StudentDashboard() {
                 <div className="text-2xl font-black text-primary mt-1">
                   {resultsList.filter((r) => r.type === 'mock').length > 0
                     ? Math.round(
-                        resultsList
-                          .filter((r) => r.type === 'mock')
-                          .reduce((acc, r) => acc + r.totalScore, 0) /
-                           resultsList.filter((r) => r.type === 'mock').length,
-                      )
+                      resultsList
+                        .filter((r) => r.type === 'mock')
+                        .reduce((acc, r) => acc + r.totalScore, 0) /
+                      resultsList.filter((r) => r.type === 'mock').length,
+                    )
                     : 'N/A'}
                 </div>
                 <span className="text-[10px] text-text-muted">Target score is 300+</span>
@@ -601,16 +611,14 @@ export default function StudentDashboard() {
                   key={subject}
                   type="button"
                   onClick={() => handleToggleSubject(subject)}
-                  className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-all ${
-                    isSelected
+                  className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-all ${isSelected
                       ? 'border-primary bg-primary/10 text-text-primary'
                       : 'border-border bg-bg-secondary text-text-secondary hover:border-border-hover hover:text-text-primary'
-                  }`}
+                    }`}
                 >
                   <span
-                    className={`h-4 w-4 rounded flex items-center justify-center border text-[10px] font-bold ${
-                      isSelected ? 'border-primary bg-primary text-text-on-accent' : 'border-border bg-bg-primary'
-                    }`}
+                    className={`h-4 w-4 rounded flex items-center justify-center border text-[10px] font-bold ${isSelected ? 'border-primary bg-primary text-text-on-accent' : 'border-border bg-bg-primary'
+                      }`}
                   >
                     {isSelected && '✓'}
                   </span>
@@ -674,11 +682,10 @@ export default function StudentDashboard() {
                     key={c}
                     type="button"
                     onClick={() => setDrillCount(c)}
-                    className={`rounded-xl border p-3 text-xs font-bold transition-all ${
-                      drillCount === c
+                    className={`rounded-xl border p-3 text-xs font-bold transition-all ${drillCount === c
                         ? 'border-primary bg-primary/10 text-text-primary'
                         : 'border-border bg-bg-secondary text-text-secondary hover:text-text-primary'
-                    }`}
+                      }`}
                   >
                     {c} Qs
                   </button>
