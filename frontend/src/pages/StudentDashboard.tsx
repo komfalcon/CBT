@@ -191,10 +191,16 @@ export default function StudentDashboard() {
       setTopicStats(stats);
     } catch (err: any) {
       console.error(err);
-      setError('Session expired or failed to load profile.');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      navigate('/auth?mode=login');
+      // Only force logout on explicit 401 Unauthorized (token truly invalid/expired)
+      // Do NOT logout on network errors, server errors, or other transient failures
+      const status = err?.response?.status;
+      if (status === 401) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        navigate('/auth?mode=login');
+      } else {
+        setError('Failed to load your profile. Please refresh the page.');
+      }
     } finally {
       setLoading(false);
     }

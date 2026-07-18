@@ -117,12 +117,15 @@ export default function AuthPage() {
         setTempToken(response.tempToken);
         setMode('login'); // Will show OTP form
         setMessage('MFA required. Enter your 6-digit OTP code.');
-      } else {
-        localStorage.setItem('accessToken', response.accessToken || '');
-        localStorage.setItem('refreshToken', response.refreshToken || '');
+      } else if (response.accessToken && response.refreshToken) {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
         setMessage('Google login successful!');
         setMessageType('success');
         navigate('/dashboard');
+      } else {
+        setMessageType('error');
+        setMessage('Google sign-in failed: no tokens returned. Please try again.');
       }
     } catch (err: any) {
       console.error(err);
