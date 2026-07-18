@@ -81,6 +81,11 @@ export async function getQuestionSubjects() {
   return data;
 }
 
+export async function getSubjectTopics(subject: string) {
+  const { data } = await questionApi.get<string[]>('/topics', { params: { subject } });
+  return data;
+}
+
 export async function uploadImportFile(token: string, file: File) {
   const formData = new FormData();
   formData.append('file', file);

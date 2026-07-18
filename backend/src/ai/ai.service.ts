@@ -66,6 +66,41 @@ export class AiService {
     return user;
   }
 
+  async generateDiagram(questionId: string): Promise<string> {
+    // Note: We bypass user AI quota checks because this is a system feature
+    const question = await this.questionsService.getQuestion(questionId);
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
+    if (question.diagram_svg) {
+      return question.diagram_svg; // Already generated
+    }
+
+    const messages = [
+      {
+        role: 'system',
+        content: `You are an expert SVG diagram generator. 
+Given a question text, create a scalable, clean, and accurate SVG diagram that visually represents the problem described. 
+Only output the raw SVG string. Do not include markdown code blocks, do not include explanations.
+The SVG should have a transparent background and use standard web-safe fonts and clear strokes.`
+      },
+      {
+        role: 'user',
+        content: `Question: ${question.question_text}`
+      }
+    ];
+
+    let svgContent = await this.callDigitalOceanApi(messages, 1500);
+    
+    // Clean up potentially wrapped markdown
+    svgContent = svgContent.replace(/```xml/gi, '').replace(/```svg/gi, '').replace(/```/g, '').trim();
+
+    // Save to database
+    await this.questionsService.saveDiagramSVG(questionId, svgContent);
+
+    return svgContent;
+  }
+
   private async deductCredit(user: UserDocument) {
     user.ai_messages_remaining -= 1;
     await user.save();

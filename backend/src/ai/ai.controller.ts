@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, Param } from '@nestjs/common';
 import { AiService } from './ai.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -33,5 +33,10 @@ export class AiController {
       body.history || [],
       body.contextPayload
     );
+  }
+  @Post('generate-diagram/:questionId')
+  async generateDiagram(@Param('questionId') questionId: string) {
+    const svg = await this.aiService.generateDiagram(questionId);
+    return { svg };
   }
 }

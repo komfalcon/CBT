@@ -93,6 +93,14 @@ export class QuestionsController {
     return this.questionsService.getPublishedSubjectCounts();
   }
 
+  @Get('topics')
+  getTopics(@Query('subject') subject: string) {
+    if (!subject) {
+      throw new BadRequestException('subject is required');
+    }
+    return this.questionsService.getTopics(subject);
+  }
+
   @Post('bulk-tag')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin', 'super_admin')

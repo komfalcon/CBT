@@ -475,6 +475,10 @@ export class QuestionsService {
     return { message: 'Question retired successfully' };
   }
 
+  async saveDiagramSVG(questionId: string, svg: string) {
+    await this.questionModel.updateOne({ questionId }, { $set: { diagram_svg: svg } }).exec();
+  }
+
   async rollbackQuestion(questionId: string, versionNumber: number, user: CurrentUser) {
     const question = await this.questionModel.findOne({ questionId }).exec();
     if (!question) {
@@ -616,6 +620,18 @@ export class QuestionsService {
       .exec();
 
     return rows.map((row) => ({ subject: row._id as string, count: row.count as number }));
+  }
+
+  async getTopics(subject: string) {
+    const rows = await this.questionModel
+      .aggregate([
+        { $match: { subject, status: 'published', topic: { $exists: true, $ne: null } } },
+        { $group: { _id: '$topic' } },
+        { $sort: { _id: 1 } },
+      ])
+      .exec();
+
+    return rows.map((row) => row._id as string).filter(Boolean);
   }
 
   async updateTags(id: string, tags: string[]): Promise<QuestionDocument> {

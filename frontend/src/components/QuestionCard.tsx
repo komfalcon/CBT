@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { generateQuestionDiagram } from '../features/ai/api';
 import { BookOpen } from 'lucide-react';
 import Latex from 'react-latex-next';
 
@@ -102,6 +103,27 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 }) => {
   const isEditable = !!onSelectOption;
 
+  const [diagramSvg, setDiagramSvg] = useState<string | null | undefined>(question.diagram_svg);
+  const [isLoadingDiagram, setIsLoadingDiagram] = useState(false);
+
+  useEffect(() => {
+    setDiagramSvg(question.diagram_svg);
+    
+    if (question.has_diagram && !question.diagram_svg) {
+      setIsLoadingDiagram(true);
+      generateQuestionDiagram(question.questionId)
+        .then((res) => {
+          setDiagramSvg(res.svg);
+        })
+        .catch((err) => {
+          console.error('Failed to generate diagram:', err);
+        })
+        .finally(() => {
+          setIsLoadingDiagram(false);
+        });
+    }
+  }, [question.questionId, question.has_diagram, question.diagram_svg]);
+
   return (
     <div className="flex-1 flex flex-col justify-between space-y-6 w-full">
       <div className="space-y-6">
@@ -123,12 +145,18 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         </div>
 
         {/* Diagrams SVG */}
-        {question.diagram_svg && (
+        {isLoadingDiagram && (
+          <div className="border border-border bg-bg-secondary/40 rounded-xl p-8 flex flex-col items-center justify-center space-y-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+            <p className="text-xs text-text-secondary font-medium animate-pulse">AI Tutor is generating diagram...</p>
+          </div>
+        )}
+        {!isLoadingDiagram && diagramSvg && (
           <div className="border border-border bg-bg-secondary/40 rounded-xl p-4 flex justify-center overflow-auto max-w-lg">
-            {isTikz(question.diagram_svg) ? (
-              <TikzRenderer code={question.diagram_svg} />
+            {isTikz(diagramSvg) ? (
+              <TikzRenderer code={diagramSvg} />
             ) : (
-              <div dangerouslySetInnerHTML={{ __html: question.diagram_svg }} />
+              <div dangerouslySetInnerHTML={{ __html: diagramSvg }} />
             )}
           </div>
         )}

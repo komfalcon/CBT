@@ -13,6 +13,11 @@ export class ResultsController {
     return this.resultsService.listResults(user.sub);
   }
 
+  @Get('topic-stats')
+  async getTopicStats(@CurrentUser() user: any) {
+    return this.resultsService.getTopicStats(user.sub);
+  }
+
   @Get(':resultId')
   async getResult(@CurrentUser() user: any, @Param('resultId') resultId: string) {
     return this.resultsService.getResult(resultId, user.sub);

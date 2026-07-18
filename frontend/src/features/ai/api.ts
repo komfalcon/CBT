@@ -21,3 +21,9 @@ export const chatWithTutor = async (data: { message: string; history: any[]; con
   const res = await api.post('/chat', data);
   return res.data;
 };
+
+export const generateQuestionDiagram = async (questionId: string) => {
+  const res = await api.post(/generate-diagram/);
+  return res.data as { svg: string };
+};
+

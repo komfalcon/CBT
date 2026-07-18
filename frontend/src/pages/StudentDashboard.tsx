@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMe, updateMe } from '../features/auth/api';
-import { getResultsHistory, GradedResultRecord } from '../features/results/api';
+import { getResultsHistory, GradedResultRecord, getTopicStats, TopicStatRecord } from '../features/results/api';
+import { getSubjectTopics } from '../features/questions/api';
 import { createExamSession } from '../features/exam/api';
 import {
   User,
@@ -64,9 +65,27 @@ export default function StudentDashboard() {
 
   // Results & drills states
   const [resultsList, setResultsList] = useState<GradedResultRecord[]>([]);
+  const [topicStats, setTopicStats] = useState<TopicStatRecord[]>([]);
   const [isDrillModalOpen, setIsDrillModalOpen] = useState<boolean>(false);
   const [drillSubject, setDrillSubject] = useState<string>('');
   const [drillCount, setDrillCount] = useState<number>(20);
+  const [drillDifficulty, setDrillDifficulty] = useState<string>('any');
+  const [drillTopics, setDrillTopics] = useState<string[]>([]);
+  const [availableTopics, setAvailableTopics] = useState<string[]>([]);
+  const [isLoadingTopics, setIsLoadingTopics] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isDrillModalOpen && drillSubject) {
+      setIsLoadingTopics(true);
+      getSubjectTopics(drillSubject)
+        .then((topics) => {
+          setAvailableTopics(topics);
+          setDrillTopics([]);
+        })
+        .catch((err) => console.error('Failed to load topics', err))
+        .finally(() => setIsLoadingTopics(false));
+    }
+  }, [drillSubject, isDrillModalOpen]);
 
   // Paystack & Subscription states
   const [showUpgradeModal, setShowUpgradeModal] = useState<boolean>(false);
@@ -167,6 +186,9 @@ export default function StudentDashboard() {
 
       const history = await getResultsHistory(authToken);
       setResultsList(history);
+
+      const stats = await getTopicStats(authToken);
+      setTopicStats(stats);
     } catch (err: any) {
       console.error(err);
       setError('Session expired or failed to load profile.');
@@ -201,6 +223,8 @@ export default function StudentDashboard() {
         type: 'drill',
         subject: drillSubject,
         count: drillCount,
+        difficultyLevel: drillDifficulty,
+        topics: drillTopics.length > 0 ? drillTopics : undefined,
       });
       setIsDrillModalOpen(false);
       navigate(`/exam/${session.sessionId}`);
@@ -587,6 +611,47 @@ export default function StudentDashboard() {
               </p>
             )}
           </Card>
+
+          {/* Cumulative Topic Stats */}
+          <Card className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Target className="h-5 w-5 text-primary" />
+              <h3 className="text-sm font-bold text-text-primary">Cumulative Topic Stats</h3>
+            </div>
+            {topicStats.length > 0 ? (
+              <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                {topicStats.map((stat, i) => (
+                  <div key={i} className="flex justify-between items-center rounded-xl border border-border bg-bg-secondary p-3">
+                    <div className="flex-1 min-w-0 pr-4">
+                      <div className="text-xs font-bold text-text-primary truncate" title={stat.topic}>
+                        {stat.topic}
+                      </div>
+                      <div className="text-[10px] text-text-muted mt-0.5">
+                        {SUBJECT_LABELS[stat.subject] || stat.subject}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 flex-shrink-0">
+                      <div className="text-right">
+                        <div className="text-xs font-bold text-text-primary">
+                          {stat.correct} / {stat.total}
+                        </div>
+                        <div className="text-[9px] text-text-muted uppercase">Correct</div>
+                      </div>
+                      <div className="w-12 text-right">
+                        <span className={`text-sm font-black ${stat.accuracy >= 70 ? 'text-success' : stat.accuracy >= 40 ? 'text-warning' : 'text-danger'}`}>
+                          {Math.round(stat.accuracy)}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-text-muted text-center py-4">
+                Keep practicing to generate topic performance statistics.
+              </p>
+            )}
+          </Card>
         </div>
       </main>
 
@@ -694,6 +759,53 @@ export default function StudentDashboard() {
                     {c} Qs
                   </button>
                 ))}
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold uppercase text-text-secondary">Difficulty</label>
+              <select
+                value={drillDifficulty}
+                onChange={(e) => setDrillDifficulty(e.target.value)}
+                className="w-full rounded-xl bg-bg-secondary border border-border p-3 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all"
+              >
+                <option value="any">Any Difficulty</option>
+                <option value="1">Easy (Level 1)</option>
+                <option value="2">Easy-Medium (Level 2)</option>
+                <option value="3">Medium (Level 3)</option>
+                <option value="4">Medium-Hard (Level 4)</option>
+                <option value="5">Hard (Level 5)</option>
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold uppercase text-text-secondary">
+                Specific Topics (Optional)
+              </label>
+              <div className="max-h-32 overflow-y-auto rounded-xl border border-border bg-bg-secondary p-2 space-y-1">
+                {isLoadingTopics ? (
+                  <div className="text-xs text-text-muted p-2">Loading topics...</div>
+                ) : availableTopics.length === 0 ? (
+                  <div className="text-xs text-text-muted p-2">No specific topics available</div>
+                ) : (
+                  availableTopics.map(topic => (
+                    <label key={topic} className="flex items-center gap-2 p-1.5 hover:bg-bg-primary rounded cursor-pointer transition-colors">
+                      <input 
+                        type="checkbox"
+                        checked={drillTopics.includes(topic)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setDrillTopics(prev => [...prev, topic]);
+                          } else {
+                            setDrillTopics(prev => prev.filter(t => t !== topic));
+                          }
+                        }}
+                        className="rounded border-border text-primary focus:ring-primary"
+                      />
+                      <span className="text-xs text-text-primary">{topic}</span>
+                    </label>
+                  ))
+                )}
               </div>
             </div>
           </div>

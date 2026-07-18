@@ -44,7 +44,7 @@ export type ExamSessionRecord = {
 
 export async function createExamSession(
   token: string,
-  payload: { type: 'mock' | 'drill'; subject?: string; count?: number },
+  payload: { type: 'mock' | 'drill'; subject?: string; count?: number; difficultyLevel?: string; topics?: string[] },
 ) {
   const { data } = await examApi.post<ExamSessionRecord>('/sessions', payload, withAuth(token));
   return data;

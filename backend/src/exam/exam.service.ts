@@ -20,6 +20,8 @@ export class ExamService {
     type: 'mock' | 'drill',
     subject?: string,
     count?: number,
+    difficultyLevel?: string,
+    topics?: string[]
   ): Promise<ExamSessionDocument> {
     let subjectsList: string[] = [];
     const questionsList: Question[] = [];
@@ -67,7 +69,7 @@ export class ExamService {
       // Fetch questions: English (60), other 3 subjects (40 each)
       for (const sub of subjectsList) {
         const targetCount = sub === 'english' ? 60 : 40;
-        const subQuestions = await this.getUniqueQuestionsForSubject(sub, targetCount);
+        const subQuestions = await this.getUniqueQuestionsForSubject(sub, targetCount, difficultyLevel, topics);
         questionsList.push(...subQuestions);
       }
     } else {
@@ -79,7 +81,7 @@ export class ExamService {
       subjectsList = [subject];
       timeRemaining = finalCount * 60; // 1 minute per question
 
-      const subQuestions = await this.getUniqueQuestionsForSubject(subject, finalCount);
+      const subQuestions = await this.getUniqueQuestionsForSubject(subject, finalCount, difficultyLevel, topics);
 
       if (subQuestions.length === 0) {
         throw new BadRequestException(`No published questions found for subject: ${subject}`);
@@ -244,10 +246,20 @@ export class ExamService {
     return plain;
   }
 
-  private async getUniqueQuestionsForSubject(subject: string, targetCount: number): Promise<Question[]> {
+  private async getUniqueQuestionsForSubject(subject: string, targetCount: number, difficultyLevel?: string, topics?: string[]): Promise<Question[]> {
+    const matchStage: any = { subject, status: 'published' };
+    
+    if (difficultyLevel && difficultyLevel !== 'any') {
+      matchStage.difficulty_level = Number(difficultyLevel);
+    }
+    
+    if (topics && topics.length > 0) {
+      matchStage.topic = { $in: topics };
+    }
+
     const uniqueQuestions = await this.questionModel
       .aggregate<Question>([
-        { $match: { subject, status: 'published' } },
+        { $match: matchStage },
         { $group: { _id: "$question_text", doc: { $first: "$$ROOT" } } },
         { $replaceRoot: { newRoot: "$doc" } },
         { $sample: { size: targetCount } }

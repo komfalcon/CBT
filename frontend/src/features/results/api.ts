@@ -40,3 +40,18 @@ export async function getResultDetail(token: string, resultId: string) {
   const { data } = await resultsApi.get<GradedResultRecord>(`/${resultId}`, withAuth(token));
   return data;
 }
+
+export type TopicStatRecord = {
+  topic: string;
+  subject: string;
+  total: number;
+  correct: number;
+  incorrect: number;
+  unanswered: number;
+  accuracy: number;
+};
+
+export async function getTopicStats(token: string) {
+  const { data } = await resultsApi.get<TopicStatRecord[]>('/topic-stats', withAuth(token));
+  return data;
+}
