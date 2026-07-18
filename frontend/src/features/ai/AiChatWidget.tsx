@@ -45,7 +45,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
     try {
       // Map frontend messages to format expected by backend (which expects role/content objects)
       const history = messages.map(m => ({ role: m.role, content: m.content }));
-      
+
       const response = await chatWithTutor({ message: userMsg, history, contextPayload });
       setMessages((prev) => [...prev, { role: 'assistant', content: response.reply }]);
     } catch (err: any) {
@@ -100,7 +100,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                   <p className="text-xs text-text-secondary max-w-[240px] mx-auto leading-relaxed">Built by the Aurikex team to help Nigerian students ace JAMB UTME. Ask me to explain concepts, review topics, or help you study!</p>
                 </div>
               )}
-              
+
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.role === 'assistant' && (
@@ -111,12 +111,12 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                   <div className={`max-w-[80%] rounded-2xl p-3 text-sm leading-relaxed ${msg.role === 'user' ? 'bg-primary text-text-on-accent rounded-br-none font-medium' : 'bg-bg-secondary border border-border text-text-secondary rounded-bl-none'}`}>
                     {msg.role === 'assistant' ? (
                       <div className="prose prose-invert prose-sm overflow-x-auto">
-                         <ReactMarkdown
-                           remarkPlugins={[remarkMath]}
-                           rehypePlugins={[rehypeKatex]}
-                         >
-                           {msg.content}
-                         </ReactMarkdown>
+                        <ReactMarkdown
+                          remarkPlugins={[remarkMath]}
+                          rehypePlugins={[rehypeKatex]}
+                        >
+                          {msg.content}
+                        </ReactMarkdown>
                       </div>
                     ) : (
                       msg.content
@@ -129,7 +129,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                   )}
                 </div>
               ))}
-              
+
               {isLoading && (
                 <div className="flex gap-2 justify-start">
                   <div className="w-8 h-8 rounded-full bg-ai-flag/10 border border-ai-flag/20 flex items-center justify-center flex-shrink-0">
@@ -140,7 +140,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                   </div>
                 </div>
               )}
-              
+
               {error && (
                 <div className="bg-error/10 border border-error/20 text-error p-3 rounded-xl text-xs text-center">
                   {error}
