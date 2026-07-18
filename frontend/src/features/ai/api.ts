@@ -23,7 +23,7 @@ export const chatWithTutor = async (data: { message: string; history: any[]; con
 };
 
 export const generateQuestionDiagram = async (questionId: string) => {
-  const res = await api.post(/generate-diagram/);
+  const res = await api.post(`/generate-diagram/${questionId}`);
   return res.data as { svg: string };
 };
 
