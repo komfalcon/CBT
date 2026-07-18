@@ -97,7 +97,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                 <div className="text-center text-text-secondary mt-8 space-y-2">
                   <Bot className="w-12 h-12 mx-auto mb-3 text-ai-flag opacity-80" />
                   <p className="font-bold text-sm text-text-primary">Hi! I'm Falke AI.</p>
-                  <p className="text-xs text-text-secondary max-w-[240px] mx-auto leading-relaxed">Your personal JAMB UTME tutor. Ask me to explain concepts, review topics, or help you study!</p>
+                  <p className="text-xs text-text-secondary max-w-[240px] mx-auto leading-relaxed">Built by the Aurikex team to help Nigerian students ace JAMB UTME. Ask me to explain concepts, review topics, or help you study!</p>
                 </div>
               )}
               
