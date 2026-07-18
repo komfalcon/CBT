@@ -12,12 +12,12 @@ export class AiService {
   // Use DO proxy key if available, else standard env variable
   private readonly apiKey = process.env.DIGITALOCEAN_INFERENCE_KEY || '';
   // Standard generic chat model available on DigitalOcean Inference
-  private readonly model = 'gemma-4-31B-it'; 
+  private readonly model = 'gemma-4-31B-it';
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private questionsService: QuestionsService,
-  ) {}
+  ) { }
 
   private async callDigitalOceanApi(messages: any[], maxTokens: number = 500) {
     try {
@@ -36,7 +36,7 @@ export class AiService {
           },
         }
       );
-      
+
       return response.data.choices[0].message.content;
     } catch (error: any) {
       this.logger.error('Error calling DigitalOcean Inference API', error?.response?.data || error);
@@ -91,7 +91,7 @@ The SVG should have a transparent background and use standard web-safe fonts and
     ];
 
     let svgContent = await this.callDigitalOceanApi(messages, 1500);
-    
+
     // Clean up potentially wrapped markdown
     svgContent = svgContent.replace(/```xml/gi, '').replace(/```svg/gi, '').replace(/```/g, '').trim();
 
@@ -130,7 +130,7 @@ If there is no error in the system's answer, do not output the JSON block.`
 
     let explanation = await this.callDigitalOceanApi(messages, 800);
     await this.deductCredit(user);
-    
+
     // Check for vetted errors
     if (questionId && explanation.includes('```json')) {
       try {
@@ -184,7 +184,7 @@ FORBIDDEN PHRASES - NEVER USE THESE:
 
 You are a personalized AI tutor for ${user.fullName}. Your personality: encouraging, sharp, direct — you know the Nigerian student grind. You use motivating phrases when appropriate. You use the Socratic method to make students think. You are always focused on helping ${user.fullName} crush their JAMB UTME.`;
 
-    
+
     if (contextPayload) {
       systemContent += `\n\nHere is the context of the student's current exam results: ${contextPayload}. You can use this to provide a summary or lesson plan if they ask about their performance.`;
     }
@@ -233,14 +233,14 @@ Focus on variety to prevent duplicates.`
     try {
       const rawResponse = await this.callDigitalOceanApi(messages, 2000); // Need more tokens for batch
       let jsonStr = rawResponse.trim();
-      
+
       // Strip markdown code blocks if the model insists on adding them
       if (jsonStr.startsWith('\`\`\`json')) {
         jsonStr = jsonStr.replace(/^\`\`\`json\n/, '').replace(/\n\`\`\`$/, '');
       } else if (jsonStr.startsWith('\`\`\`')) {
         jsonStr = jsonStr.replace(/^\`\`\`\n/, '').replace(/\n\`\`\`$/, '');
       }
-      
+
       const parsed = JSON.parse(jsonStr);
       if (Array.isArray(parsed)) {
         return parsed;
