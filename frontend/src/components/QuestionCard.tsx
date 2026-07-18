@@ -38,14 +38,26 @@ export const TikzRenderer: React.FC<{ code: string }> = ({ code }) => {
 
 const addLatexDelimiters = (text: string): string => {
   if (!text) return text;
-  // If the text already contains properly delimited math, return as-is
-  if (/[$\\(start\\[]/.test(text.replace('\\(','(start'))) return text;
-  // Wrap bare LaTeX commands in $ delimiters
-  return text.replace(
-    /(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|pi|sigma|omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|log|ln|exp|binom|text|mathrm|mathbf|mathbb|hat|vec|bar|overline|left|right|begin|end)(?:\{[^}]*\}|\[[^\]]*\]|[^\s\\{])*(?:[\^_](?:\{[^}]*\}|[^\s]))*)+/g,
-    (match) => `$${match}$`
+
+  // If already has math delimiters, pass through as-is
+  if (/\$|\\\(|\\\[/.test(text)) return text;
+
+  // Step 1: Wrap complete \begin{env}...\end{env} blocks in $$ ... $$
+  let result = text.replace(
+    /\\begin\s*\{([^}]+)\}[\s\S]*?\\end\s*\{\1\}/g,
+    (match) => `$$${match}$$`
   );
+
+  // Step 2: Wrap remaining bare inline LaTeX commands in $ ... $
+  // Only wrap if not already inside a $$ block
+  result = result.replace(
+    /(\$\$[\s\S]*?\$\$)|(?<!\$)(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|cot|sec|csc|log|ln|exp|det|lim|max|min|binom|hat|vec|bar|dot|ddot|tilde|overline|underline|overbrace|underbrace|left|right|mathbf|mathbb|mathrm|text|bold|it)(?:\{[^}]*\}|\[[^\]]*\])?(?:[_^](?:\{[^}]*\}|[^\s{]))*)/g,
+    (match, doubleBlock) => doubleBlock ?? `$${match}$`
+  );
+
+  return result;
 };
+
 
 export const SmartTextRenderer: React.FC<{ text: string }> = ({ text }) => {
   if (!text) return null;

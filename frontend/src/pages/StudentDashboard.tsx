@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMe, updateMe } from '../features/auth/api';
 import { getResultsHistory, GradedResultRecord, getTopicStats, TopicStatRecord } from '../features/results/api';
-import { getSubjectTopics } from '../features/questions/api';
+import { getSubjectTopics, getQuestionSubjects } from '../features/questions/api';
 import { createExamSession } from '../features/exam/api';
 import {
   User,
@@ -66,6 +66,7 @@ export default function StudentDashboard() {
   // Results & drills states
   const [resultsList, setResultsList] = useState<GradedResultRecord[]>([]);
   const [topicStats, setTopicStats] = useState<TopicStatRecord[]>([]);
+  // Drill modal state
   const [isDrillModalOpen, setIsDrillModalOpen] = useState<boolean>(false);
   const [drillSubject, setDrillSubject] = useState<string>('');
   const [drillCount, setDrillCount] = useState<number>(20);
@@ -73,19 +74,43 @@ export default function StudentDashboard() {
   const [drillTopics, setDrillTopics] = useState<string[]>([]);
   const [availableTopics, setAvailableTopics] = useState<string[]>([]);
   const [isLoadingTopics, setIsLoadingTopics] = useState<boolean>(false);
+  // Mock modal state
+  const [isMockModalOpen, setIsMockModalOpen] = useState<boolean>(false);
+  const [mockSubject, setMockSubject] = useState<string>('all');
+  const [mockDifficulty, setMockDifficulty] = useState<string>('any');
+  const [mockTopics, setMockTopics] = useState<string[]>([]);
+  const [availableMockTopics, setAvailableMockTopics] = useState<string[]>([]);
+  const [isLoadingMockTopics, setIsLoadingMockTopics] = useState<boolean>(false);
+  // All subjects from DB
+  const [allSubjects, setAllSubjects] = useState<string[]>([]);
 
+  // Fetch topics when drill subject changes
   useEffect(() => {
-    if (isDrillModalOpen && drillSubject) {
-      setIsLoadingTopics(true);
-      getSubjectTopics(drillSubject)
-        .then((topics) => {
-          setAvailableTopics(topics);
-          setDrillTopics([]);
-        })
-        .catch((err) => console.error('Failed to load topics', err))
-        .finally(() => setIsLoadingTopics(false));
+    if (!drillSubject) return;
+    setIsLoadingTopics(true);
+    setAvailableTopics([]);
+    setDrillTopics([]);
+    getSubjectTopics(drillSubject)
+      .then((topics) => setAvailableTopics(topics))
+      .catch((err) => console.error('Failed to load topics', err))
+      .finally(() => setIsLoadingTopics(false));
+  }, [drillSubject]);
+
+  // Fetch topics when mock subject changes
+  useEffect(() => {
+    if (!mockSubject || mockSubject === 'all') {
+      setAvailableMockTopics([]);
+      setMockTopics([]);
+      return;
     }
-  }, [drillSubject, isDrillModalOpen]);
+    setIsLoadingMockTopics(true);
+    setAvailableMockTopics([]);
+    setMockTopics([]);
+    getSubjectTopics(mockSubject)
+      .then((topics) => setAvailableMockTopics(topics))
+      .catch((err) => console.error('Failed to load mock topics', err))
+      .finally(() => setIsLoadingMockTopics(false));
+  }, [mockSubject]);
 
   // Paystack & Subscription states
   const [showUpgradeModal, setShowUpgradeModal] = useState<boolean>(false);
@@ -208,8 +233,12 @@ export default function StudentDashboard() {
 
   const handleStartMock = async () => {
     try {
+      setIsMockModalOpen(false);
       setLoading(true);
-      const session = await createExamSession(token, { type: 'mock' });
+      const payload: any = { type: 'mock', difficultyLevel: mockDifficulty };
+      if (mockSubject && mockSubject !== 'all') payload.subject = mockSubject;
+      if (mockTopics.length > 0) payload.topics = mockTopics;
+      const session = await createExamSession(token, payload);
       navigate(`/exam/${session.sessionId}`);
     } catch (err: any) {
       addToast({
@@ -381,15 +410,27 @@ export default function StudentDashboard() {
               </div>
             </div>
 
-            <Button
-              onClick={() => setShowUpgradeModal(true)}
-              variant="gradient"
-              fullWidth
-              className="mt-5"
-            >
-              <CreditCard className="h-4 w-4" />
-              Upgrade Subscription Plan
-            </Button>
+            {student?.subscription_tier === 'max' ? (
+              <div className="mt-5 rounded-xl border border-border bg-bg-secondary p-3 text-center">
+                <p className="text-xs text-text-secondary">You're on the <span className="font-bold text-primary">MAX plan</span> — the highest tier.</p>
+                <a
+                  href="/contact"
+                  className="mt-1 inline-block text-xs font-semibold text-primary underline underline-offset-2 hover:opacity-80 transition-opacity"
+                >
+                  Contact support for custom limits
+                </a>
+              </div>
+            ) : (
+              <Button
+                onClick={() => setShowUpgradeModal(true)}
+                variant="gradient"
+                fullWidth
+                className="mt-5"
+              >
+                <CreditCard className="h-4 w-4" />
+                Upgrade Subscription Plan
+              </Button>
+            )}
           </Card>
 
           {/* CBT Access Key - Cafe Roaming Code */}
@@ -500,7 +541,14 @@ export default function StudentDashboard() {
                 </div>
                 <Button
                   disabled={!isCombinationValid}
-                  onClick={handleStartMock}
+                  onClick={() => {
+                    // Load all subjects when opening mock modal
+                    getQuestionSubjects().then(rows => setAllSubjects(rows.map((r: any) => r.subject)));
+                    setMockSubject('all');
+                    setMockDifficulty('any');
+                    setMockTopics([]);
+                    setIsMockModalOpen(true);
+                  }}
                   variant="gradient"
                   fullWidth
                 >
@@ -519,7 +567,10 @@ export default function StudentDashboard() {
                 <Button
                   disabled={!isCombinationValid}
                   onClick={() => {
-                    if (combination.length > 0) setDrillSubject(combination[0]);
+                    const firstSub = combination[0] || '';
+                    setDrillSubject(firstSub);
+                    setDrillCount(20);
+                    setDrillDifficulty('any');
                     setIsDrillModalOpen(true);
                   }}
                   variant="secondary"
@@ -785,9 +836,23 @@ export default function StudentDashboard() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase text-text-secondary">
-                Specific Topics (Optional)
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="text-[10px] font-bold uppercase text-text-secondary">
+                  Specific Topics (Optional)
+                </label>
+                {availableTopics.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const random = availableTopics[Math.floor(Math.random() * availableTopics.length)];
+                      setDrillTopics([random]);
+                    }}
+                    className="text-[10px] font-bold text-primary hover:opacity-70 transition-opacity px-2 py-0.5 rounded-lg border border-primary/30 bg-primary/5"
+                  >
+                    🎲 Random Topic
+                  </button>
+                )}
+              </div>
               <div className="max-h-32 overflow-y-auto rounded-xl border border-border bg-bg-secondary p-2 space-y-1">
                 {isLoadingTopics ? (
                   <div className="text-xs text-text-muted p-2">Loading topics...</div>
@@ -834,7 +899,103 @@ export default function StudentDashboard() {
         </div>
       </Modal>
 
-      {/* Payment Success Modal */}
+      {/* Mock Exam Configuration Modal */}
+      <Modal
+        isOpen={isMockModalOpen}
+        onClose={() => setIsMockModalOpen(false)}
+        title="Configure Simulation Mock"
+        maxWidth="sm"
+      >
+        <div className="space-y-6">
+          <div className="space-y-4">
+            {/* Subject Selector */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold uppercase text-text-secondary">Focus Subject (Optional)</label>
+              <select
+                value={mockSubject}
+                onChange={(e) => setMockSubject(e.target.value)}
+                className="w-full rounded-xl bg-bg-secondary border border-border p-3 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all"
+              >
+                <option value="all">All 4 Subjects (Full Mock)</option>
+                {allSubjects.map(sub => (
+                  <option key={sub} value={sub}>{SUBJECT_LABELS[sub] || sub}</option>
+                ))}
+              </select>
+              <p className="text-[10px] text-text-muted">Pick a subject to focus on, or leave as "All" for a real JAMB simulation.</p>
+            </div>
+
+            {/* Difficulty */}
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold uppercase text-text-secondary">Difficulty</label>
+              <select
+                value={mockDifficulty}
+                onChange={(e) => setMockDifficulty(e.target.value)}
+                className="w-full rounded-xl bg-bg-secondary border border-border p-3 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all"
+              >
+                <option value="any">Any Difficulty</option>
+                <option value="1">Easy (Level 1)</option>
+                <option value="2">Easy-Medium (Level 2)</option>
+                <option value="3">Medium (Level 3)</option>
+                <option value="4">Medium-Hard (Level 4)</option>
+                <option value="5">Hard (Level 5)</option>
+              </select>
+            </div>
+
+            {/* Topics (only show if a subject is selected) */}
+            {mockSubject && mockSubject !== 'all' && (
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-bold uppercase text-text-secondary">Specific Topics (Optional)</label>
+                  {availableMockTopics.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const random = availableMockTopics[Math.floor(Math.random() * availableMockTopics.length)];
+                        setMockTopics([random]);
+                      }}
+                      className="text-[10px] font-bold text-primary hover:opacity-70 transition-opacity px-2 py-0.5 rounded-lg border border-primary/30 bg-primary/5"
+                    >
+                      🎲 Random Topic
+                    </button>
+                  )}
+                </div>
+                <div className="max-h-32 overflow-y-auto rounded-xl border border-border bg-bg-secondary p-2 space-y-1">
+                  {isLoadingMockTopics ? (
+                    <div className="text-xs text-text-muted p-2">Loading topics...</div>
+                  ) : availableMockTopics.length === 0 ? (
+                    <div className="text-xs text-text-muted p-2">No topics found for this subject</div>
+                  ) : (
+                    availableMockTopics.map(topic => (
+                      <label key={topic} className="flex items-center gap-2 p-1.5 hover:bg-bg-primary rounded cursor-pointer transition-colors">
+                        <input
+                          type="checkbox"
+                          checked={mockTopics.includes(topic)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setMockTopics(prev => [...prev, topic]);
+                            } else {
+                              setMockTopics(prev => prev.filter(t => t !== topic));
+                            }
+                          }}
+                          className="rounded border-border text-primary focus:ring-primary"
+                        />
+                        <span className="text-xs text-text-primary">{topic}</span>
+                      </label>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-end gap-2 pt-4 border-t border-border">
+            <Button onClick={() => setIsMockModalOpen(false)} variant="secondary" size="sm">Cancel</Button>
+            <Button onClick={handleStartMock} size="sm">
+              🚀 Start Mock Exam
+            </Button>
+          </div>
+        </div>
+      </Modal>
       <Modal
         isOpen={!!paymentSuccess}
         onClose={() => setPaymentSuccess('')}
