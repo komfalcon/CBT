@@ -6,33 +6,33 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#3b82f6',
-          hover: '#60a5fa',
+          DEFAULT: 'var(--color-accent-primary)',
+          hover: 'var(--color-accent-primary-hover)',
         },
-        error: '#ef4444',
-        success: '#22c55e',
-        warning: '#f59e0b',
+        error: 'var(--color-error)',
+        success: 'var(--color-success)',
+        warning: 'var(--color-warning)',
         'ai-flag': {
-          DEFAULT: '#c9a84c',
-          hover: '#e0bc6a',
+          DEFAULT: 'var(--color-accent-ai-flag)',
+          hover: 'var(--color-accent-ai-flag-hover)',
         },
-        // Core Neutrals (Dark Theme as default)
+        // Core Neutrals
         bg: {
-          primary: '#0a0a0a',
-          secondary: '#111111',
-          card: '#161616',
+          primary: 'var(--color-bg-primary)',
+          secondary: 'var(--color-bg-secondary)',
+          card: 'var(--color-bg-card)',
         },
         text: {
-          primary: '#ffffff',
-          secondary: '#a0a0a0',
-          muted: '#555555',
-          'on-accent': '#0a0a0a',
+          primary: 'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
+          muted: 'var(--color-text-muted)',
+          'on-accent': 'var(--color-text-on-accent)',
         },
         border: {
-          DEFAULT: '#222222',
-          hover: '#333333',
+          DEFAULT: 'var(--color-border)',
+          hover: 'var(--color-border-hover)',
         },
-        overlay: 'rgba(10,10,10,0.8)',
+        overlay: 'var(--color-overlay)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

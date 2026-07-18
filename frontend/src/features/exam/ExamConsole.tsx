@@ -16,6 +16,7 @@ import {
 import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 import { QuestionCard, Button, Modal, Alert, Badge } from '../../components';
+import { ThemeToggle } from '../../components/ThemeToggle';
 
 const SUBJECT_LABELS: Record<string, string> = {
   english: 'Use of English',
@@ -337,19 +338,19 @@ export default function ExamConsole() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-100">
+      <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center text-text-primary">
         <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
-        <p className="text-sm text-slate-400">Assembling exam questions from database...</p>
+        <p className="text-sm text-text-secondary">Assembling exam questions from database...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-100 p-6">
+      <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center text-text-primary p-6">
         <AlertTriangle className="h-12 w-12 text-rose-500 mb-4" />
         <h2 className="text-lg font-bold mb-2">Error Loading Exam</h2>
-        <p className="text-sm text-slate-400 mb-6 text-center max-w-sm">{error}</p>
+        <p className="text-sm text-text-secondary mb-6 text-center max-w-sm">{error}</p>
         <button
           onClick={() => navigate('/dashboard')}
           className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold hover:bg-primary-hover transition-colors"
@@ -365,16 +366,16 @@ export default function ExamConsole() {
   ).length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-bg-primary text-text-primary font-sans flex flex-col relative overflow-hidden">
       {/* Decorative Orbs */}
       <div className="absolute top-0 right-0 w-[50%] h-[50%] rounded-full bg-primary/5 blur-[150px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-full bg-violet-900/5 blur-[150px] pointer-events-none" />
 
       {/* Top Banner Control Hub */}
-      <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md h-16 flex items-center justify-between px-6 z-20 sticky top-0">
+      <header className="border-b border-border bg-bg-primary backdrop-blur-md h-16 flex items-center justify-between px-6 z-20 sticky top-0">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-bold text-sm text-white">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-bold text-sm text-text-primary">
               CBT
             </div>
             <span className="text-sm font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent hidden sm:inline">
@@ -382,7 +383,7 @@ export default function ExamConsole() {
             </span>
           </div>
           {lastSaved && (
-            <span className="text-[10px] text-slate-500 italic hidden md:inline">
+            <span className="text-[10px] text-text-muted italic hidden md:inline">
               Auto-saved {lastSaved.toLocaleTimeString()}
             </span>
           )}
@@ -405,8 +406,8 @@ export default function ExamConsole() {
             onClick={() => setShowCalculator((prev) => !prev)}
             className={`flex items-center gap-2 rounded-lg border px-3.5 py-1.5 text-xs font-bold transition-all active:scale-95 shadow-md ${
               showCalculator
-                ? 'border-primary bg-primary text-white shadow-primary/10'
-                : 'border-slate-800 bg-slate-900/40 text-slate-300 hover:text-white hover:bg-slate-900'
+                ? 'border-primary bg-primary text-text-primary shadow-primary/10'
+                : 'border-border bg-bg-secondary text-text-secondary hover:text-text-primary hover:bg-bg-secondary'
             }`}
             title="Toggle Calculator"
           >
@@ -414,10 +415,12 @@ export default function ExamConsole() {
             Calculator
           </button>
 
+          <ThemeToggle />
+
           <button
             onClick={handleSubmitClick}
             disabled={submitting}
-            className="flex items-center gap-2 rounded-lg bg-rose-600 px-4 py-2 text-xs font-bold text-white hover:bg-rose-500 active:scale-95 transition-all shadow-lg shadow-rose-600/10 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg bg-rose-600 px-4 py-2 text-xs font-bold text-text-primary hover:bg-rose-500 active:scale-95 transition-all shadow-lg shadow-rose-600/10 disabled:opacity-50"
           >
             {submitting ? (
               <Loader2 className="h-3 w-3 animate-spin" />
@@ -434,7 +437,7 @@ export default function ExamConsole() {
         {/* Left Side: Question Pane */}
         <main className="flex-1 flex flex-col p-6 overflow-y-auto space-y-6">
           {/* Subjects Tabs switcher */}
-          <div className="flex gap-2 overflow-x-auto pb-1 border-b border-slate-900">
+          <div className="flex gap-2 overflow-x-auto pb-1 border-b border-border">
             {session.subjects.map((sub: string) => {
               const isActive = sub === activeSubject;
               const hasUnanswered = session.questions
@@ -449,8 +452,8 @@ export default function ExamConsole() {
                   }}
                   className={`rounded-xl px-4 py-2.5 text-xs font-bold transition-all flex items-center gap-2 flex-shrink-0 ${
                     isActive
-                      ? 'bg-primary text-white shadow-lg shadow-primary/10'
-                      : 'bg-slate-900/40 border border-slate-900 text-slate-400 hover:text-slate-200'
+                      ? 'bg-primary text-text-primary shadow-lg shadow-primary/10'
+                      : 'bg-bg-secondary border border-border text-text-secondary hover:text-text-primary'
                   }`}
                 >
                   {SUBJECT_LABELS[sub] || sub}
@@ -474,19 +477,19 @@ export default function ExamConsole() {
               />
 
               {/* Navigation Controls footer */}
-              <div className="flex justify-between items-center pt-6 border-t border-slate-900 mt-auto">
+              <div className="flex justify-between items-center pt-6 border-t border-border mt-auto">
                 <button
                   onClick={handlePrev}
-                  className="rounded-xl border border-slate-850 bg-slate-900/40 hover:bg-slate-900 px-5 py-3 text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1 transition-all"
+                  className="rounded-xl border border-border bg-bg-secondary hover:bg-bg-secondary px-5 py-3 text-xs font-bold text-text-secondary hover:text-text-primary flex items-center gap-1 transition-all"
                 >
                   <ChevronLeft className="h-4 w-4" /> Previous
                 </button>
-                <span className="text-[10px] text-slate-500 font-semibold tracking-wider uppercase hidden sm:inline">
+                <span className="text-[10px] text-text-muted font-semibold tracking-wider uppercase hidden sm:inline">
                   Keyboard shortcuts active • Press option key directly
                 </span>
                 <button
                   onClick={handleNextClick}
-                  className={`rounded-xl px-5 py-3 text-xs font-bold text-white flex items-center gap-1 transition-all ${
+                  className={`rounded-xl px-5 py-3 text-xs font-bold text-text-primary flex items-center gap-1 transition-all ${
                     isLastQuestion ? 'bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/10' : 'bg-primary hover:bg-primary-hover'
                   }`}
                 >
@@ -503,22 +506,22 @@ export default function ExamConsole() {
               </div>
             </div>
           ) : (
-            <p className="text-slate-500">No questions mapped to this subject.</p>
+            <p className="text-text-muted">No questions mapped to this subject.</p>
           )}
         </main>
 
         {/* Right Side: Interactive Index Grid */}
         <aside
-          className={`absolute inset-y-0 right-0 md:relative border-l border-slate-900 bg-slate-950/95 md:bg-slate-950/40 backdrop-blur-xl w-[85%] max-w-sm md:w-80 p-6 flex flex-col z-50 md:z-10 transition-transform duration-300 ${
+          className={`absolute inset-y-0 right-0 md:relative border-l border-border bg-bg-primary md:bg-bg-primary backdrop-blur-xl w-[85%] max-w-sm md:w-80 p-6 flex flex-col z-50 md:z-10 transition-transform duration-300 ${
             isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'
           }`}
         >
-          <div className="flex items-center justify-between pb-4 border-b border-slate-900 mb-4">
+          <div className="flex items-center justify-between pb-4 border-b border-border mb-4">
             <div className="flex items-center gap-2">
               <Grid className="h-4 w-4 text-primary" />
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Subjects Navigator</h3>
+              <h3 className="text-xs font-bold text-text-primary uppercase tracking-wider">Subjects Navigator</h3>
             </div>
-            <span className="text-[10px] text-slate-400 font-bold bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+            <span className="text-[10px] text-text-secondary font-bold bg-bg-secondary px-2 py-0.5 rounded border border-border">
               {answeredInActiveSubject} / {currentSubjectQuestions.length} answered
             </span>
           </div>
@@ -535,10 +538,10 @@ export default function ExamConsole() {
                     onClick={() => setActiveQuestionIndex(idx)}
                     className={`h-9 w-9 rounded-lg border text-xs font-bold transition-all flex items-center justify-center ${
                       isSelected
-                        ? 'border-primary ring-2 ring-primary/20 bg-primary/20 text-white'
+                        ? 'border-primary ring-2 ring-primary/20 bg-primary/20 text-text-primary'
                         : isAnswered
                         ? 'border-primary/30 bg-primary/20 text-primary-hover'
-                        : 'border-slate-900 bg-slate-950/60 text-slate-500 hover:border-slate-800 hover:text-slate-300'
+                        : 'border-border bg-bg-primary text-text-muted hover:border-border hover:text-text-secondary'
                     }`}
                   >
                     {idx + 1}
@@ -548,13 +551,13 @@ export default function ExamConsole() {
             </div>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-slate-900 space-y-2 text-[10px] text-slate-500 leading-normal">
+          <div className="mt-4 pt-4 border-t border-border space-y-2 text-[10px] text-text-muted leading-normal">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded bg-primary/20 border border-primary/30 block" />
               <span>Answered question</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded bg-slate-950/60 border border-slate-900 block" />
+              <span className="h-2 w-2 rounded bg-bg-primary border border-border block" />
               <span>Unanswered question</span>
             </div>
           </div>
@@ -564,7 +567,7 @@ export default function ExamConsole() {
       {/* Floating Panel toggle button */}
       <button
         onClick={() => setIsSidebarOpen((prev) => !prev)}
-        className="fixed bottom-6 right-6 z-30 h-10 w-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center shadow-2xl hover:text-white"
+        className="fixed bottom-6 right-6 z-30 h-10 w-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center shadow-2xl hover:text-text-primary"
         title="Toggle Question Grid"
       >
         <Monitor className="h-4 w-4" />
@@ -572,19 +575,19 @@ export default function ExamConsole() {
 
       {/* Custom Submit Confirmation Modal */}
       {showSubmitModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 bg-bg-primary backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-bg-secondary border border-border rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center gap-3 text-rose-500">
               <div className="h-10 w-10 rounded-full bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
                 <AlertTriangle className="h-5 w-5 text-rose-550" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">Submit Exam</h3>
-                <p className="text-xs text-slate-400">Confirmation Required</p>
+                <h3 className="text-base font-bold text-text-primary">Submit Exam</h3>
+                <p className="text-xs text-text-secondary">Confirmation Required</p>
               </div>
             </div>
             
-            <p className="text-sm text-slate-300 leading-normal">
+            <p className="text-sm text-text-secondary leading-normal">
               Are you sure you want to submit your exam? You cannot change your choices after submitting.
             </p>
 
@@ -601,14 +604,14 @@ export default function ExamConsole() {
                   setSubmitError('');
                 }}
                 disabled={submitting}
-                className="rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+                className="rounded-xl border border-border bg-bg-primary px-4 py-2.5 text-xs font-bold text-text-secondary hover:text-text-primary transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={executeSubmit}
                 disabled={submitting}
-                className="rounded-xl bg-rose-600 hover:bg-rose-500 px-5 py-2.5 text-xs font-bold text-white flex items-center gap-1.5 transition-all shadow-lg shadow-rose-600/10 disabled:opacity-50"
+                className="rounded-xl bg-rose-600 hover:bg-rose-500 px-5 py-2.5 text-xs font-bold text-text-primary flex items-center gap-1.5 transition-all shadow-lg shadow-rose-600/10 disabled:opacity-50"
               >
                 {submitting ? (
                   <>
@@ -627,18 +630,18 @@ export default function ExamConsole() {
 
       {/* Custom Alert Modal */}
       {alertConfig && alertConfig.show && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 bg-bg-primary backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-bg-secondary border border-border rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center gap-3 text-primary">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
                 <AlertTriangle className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">{alertConfig.title}</h3>
+                <h3 className="text-base font-bold text-text-primary">{alertConfig.title}</h3>
               </div>
             </div>
             
-            <p className="text-sm text-slate-300 leading-normal">
+            <p className="text-sm text-text-secondary leading-normal">
               {alertConfig.message}
             </p>
             
@@ -649,7 +652,7 @@ export default function ExamConsole() {
                   setAlertConfig(null);
                   if (onConfirm) onConfirm();
                 }}
-                className="rounded-xl bg-primary hover:bg-primary-hover px-6 py-2.5 text-xs font-bold text-white transition-all shadow-lg shadow-primary/10"
+                className="rounded-xl bg-primary hover:bg-primary-hover px-6 py-2.5 text-xs font-bold text-text-primary transition-all shadow-lg shadow-primary/10"
               >
                 OK
               </button>
@@ -667,33 +670,33 @@ export default function ExamConsole() {
             top: `${calcPosition.y}px`,
             zIndex: 40,
           }}
-          className="w-64 bg-slate-900/90 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md select-none animate-in fade-in zoom-in-95 duration-150"
+          className="w-72 bg-bg-secondary border border-border rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md select-none animate-in fade-in zoom-in-95 duration-150"
         >
           {/* Header Drag Bar */}
           <div
             onMouseDown={handleCalcMouseDown}
-            className="bg-slate-950 px-4 py-2.5 flex items-center justify-between cursor-move border-b border-slate-850"
+            className="bg-bg-primary px-4 py-2.5 flex items-center justify-between cursor-move border-b border-border"
           >
             <div className="flex items-center gap-2 text-primary">
               <Calculator className="h-4 w-4 text-primary" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300">Calculator</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Calculator</span>
             </div>
             <button
               onClick={() => setShowCalculator(false)}
-              className="text-slate-400 hover:text-white text-xs font-semibold px-1.5 py-0.5 rounded hover:bg-slate-900 transition-colors animate-all"
+              className="text-text-secondary hover:text-text-primary text-xs font-semibold px-1.5 py-0.5 rounded hover:bg-bg-secondary transition-colors animate-all"
             >
               ✕
             </button>
           </div>
 
           {/* Calculator Screen */}
-          <div className="p-4 bg-slate-950/60 border-b border-slate-850 text-right font-mono flex flex-col justify-end min-h-[72px] break-all">
-            <div className="text-xs text-slate-500 overflow-x-auto whitespace-nowrap min-h-[16px]">{calcInput || '0'}</div>
-            <div className="text-xl font-bold text-white overflow-x-auto whitespace-nowrap pt-1 min-h-[28px]">{calcResult || ' '}</div>
+          <div className="p-4 bg-bg-primary border-b border-border text-right font-mono flex flex-col justify-end min-h-[88px] break-all">
+            <div className="text-sm text-text-secondary overflow-x-auto whitespace-nowrap min-h-[20px] pb-0.5">{calcInput || '0'}</div>
+            <div className="text-3xl font-black text-text-primary overflow-x-auto whitespace-nowrap pt-1 min-h-[40px] tracking-tight">{calcResult || '–'}</div>
           </div>
 
           {/* Calculator Keyboard */}
-          <div className="p-3 grid grid-cols-4 gap-1.5 bg-slate-900/40">
+          <div className="p-3 grid grid-cols-4 gap-1.5 bg-bg-secondary">
             {/* Row 1 */}
             <button
               onClick={() => handleCalcBtnClick('C')}
@@ -703,7 +706,7 @@ export default function ExamConsole() {
             </button>
             <button
               onClick={() => handleCalcBtnClick('Back')}
-              className="h-10 rounded-lg bg-slate-800/40 border border-slate-700/20 text-slate-300 hover:bg-slate-800 transition-all text-xs flex items-center justify-center font-bold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-secondary hover:bg-bg-card transition-all text-xs flex items-center justify-center font-bold"
             >
               ⌫
             </button>
@@ -717,19 +720,19 @@ export default function ExamConsole() {
             {/* Row 2 */}
             <button
               onClick={() => handleCalcBtnClick('7')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               7
             </button>
             <button
               onClick={() => handleCalcBtnClick('8')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               8
             </button>
             <button
               onClick={() => handleCalcBtnClick('9')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               9
             </button>
@@ -743,19 +746,19 @@ export default function ExamConsole() {
             {/* Row 3 */}
             <button
               onClick={() => handleCalcBtnClick('4')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               4
             </button>
             <button
               onClick={() => handleCalcBtnClick('5')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               5
             </button>
             <button
               onClick={() => handleCalcBtnClick('6')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               6
             </button>
@@ -769,19 +772,19 @@ export default function ExamConsole() {
             {/* Row 4 */}
             <button
               onClick={() => handleCalcBtnClick('1')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               1
             </button>
             <button
               onClick={() => handleCalcBtnClick('2')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               2
             </button>
             <button
               onClick={() => handleCalcBtnClick('3')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               3
             </button>
@@ -795,13 +798,13 @@ export default function ExamConsole() {
             {/* Row 5 */}
             <button
               onClick={() => handleCalcBtnClick('0')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               0
             </button>
             <button
               onClick={() => handleCalcBtnClick('.')}
-              className="h-10 rounded-lg bg-slate-800/20 border border-slate-700/10 text-slate-200 hover:bg-slate-800/40 transition-all font-semibold"
+              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
             >
               .
             </button>
@@ -813,7 +816,7 @@ export default function ExamConsole() {
             </button>
             <button
               onClick={() => handleCalcBtnClick('=')}
-              className="h-10 rounded-lg bg-primary border border-primary text-white font-bold hover:bg-primary-hover transition-all shadow-md shadow-primary/10"
+              className="h-10 rounded-lg bg-primary border border-primary text-text-primary font-bold hover:bg-primary-hover transition-all shadow-md shadow-primary/10"
             >
               =
             </button>

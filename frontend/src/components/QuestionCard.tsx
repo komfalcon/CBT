@@ -35,6 +35,17 @@ export const TikzRenderer: React.FC<{ code: string }> = ({ code }) => {
   return <div ref={containerRef} className="flex justify-center items-center overflow-auto max-w-full" />;
 };
 
+const addLatexDelimiters = (text: string): string => {
+  if (!text) return text;
+  // If the text already contains properly delimited math, return as-is
+  if (/[$\\(start\\[]/.test(text.replace('\\(','(start'))) return text;
+  // Wrap bare LaTeX commands in $ delimiters
+  return text.replace(
+    /(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|pi|sigma|omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|log|ln|exp|binom|text|mathrm|mathbf|mathbb|hat|vec|bar|overline|left|right|begin|end)(?:\{[^}]*\}|\[[^\]]*\]|[^\s\\{])*(?:[\^_](?:\{[^}]*\}|[^\s]))*)+/g,
+    (match) => `$${match}$`
+  );
+};
+
 export const SmartTextRenderer: React.FC<{ text: string }> = ({ text }) => {
   if (!text) return null;
   const parts = splitTikz(text);
@@ -48,7 +59,7 @@ export const SmartTextRenderer: React.FC<{ text: string }> = ({ text }) => {
             </div>
           );
         }
-        return <Latex key={index}>{part}</Latex>;
+        return <Latex key={index}>{addLatexDelimiters(part)}</Latex>;
       })}
     </>
   );

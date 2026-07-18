@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { AiChatWidget } from '../features/ai/AiChatWidget';
 import { Button, Card, Modal, Alert, Badge } from '../components';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { useToast } from '../components';
 
 const SUBJECT_LABELS: Record<string, string> = {
@@ -87,7 +88,7 @@ export default function StudentDashboard() {
     try {
       setIsProcessingPayment(true);
       setPaymentError('');
-      const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const response = await fetch(`${apiBase}/payments/verify`, {
         method: 'POST',
         headers: {
@@ -132,7 +133,7 @@ export default function StudentDashboard() {
     const handler = paystackPop.setup({
       key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_live_068536d7f4bbe687175bcda53e3f5d116fea99dc',
       email: student.email,
-      amount: amount * 100, // in kobo
+      // amount: amount * 100, // Omit amount so Paystack handles it as a subscription and restricts checkout to cards
       currency: 'NGN',
       plan: planCode,
       channels: ['card'],
@@ -293,14 +294,17 @@ export default function StudentDashboard() {
             </span>
           </div>
 
-          <Button
-            onClick={handleLogout}
-            variant="ghost"
-            size="sm"
-          >
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <Button
+              onClick={handleLogout}
+              variant="ghost"
+              size="sm"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
 

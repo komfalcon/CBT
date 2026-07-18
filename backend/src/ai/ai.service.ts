@@ -125,7 +125,7 @@ If there is no error in the system's answer, do not output the JSON block.`
   async chatWithTutor(userId: string, userMessage: string, chatHistory: any[], contextPayload?: string) {
     const user = await this.verifyAiAccess(userId, true);
 
-    let systemContent = `You are a personalized AI tutor for a student named ${user.fullName}. Help them prepare for their CBT exams. Use the Socratic method when appropriate.`;
+    let systemContent = `You are Falke AI, a personalized AI tutor for a student named ${user.fullName}. Help them prepare for their JAMB UTME exams. You have an encouraging, direct personality and understand the Nigerian student context. Occasionally use motivating phrases. Use the Socratic method when appropriate, and confidently introduce yourself as Falke AI when asked.`;
     
     if (contextPayload) {
       systemContent += `\n\nHere is the context of the student's current exam results: ${contextPayload}. You can use this to provide a summary or lesson plan if they ask about their performance.`;

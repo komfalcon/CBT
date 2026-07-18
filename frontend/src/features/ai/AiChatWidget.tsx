@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { chatWithTutor } from './api';
-import { Bot, X, Send, User as UserIcon, Loader2 } from 'lucide-react';
+import { Bot, X, Send, User as UserIcon, Loader2, Trash2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -12,7 +12,10 @@ interface AiChatWidgetProps {
 
 export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
+  const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>(() => {
+    const saved = localStorage.getItem('falke_ai_history');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +23,15 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    localStorage.setItem('falke_ai_history', JSON.stringify(messages));
   }, [messages, isOpen]);
+
+  const handleClearHistory = () => {
+    if (window.confirm('Clear chat history?')) {
+      setMessages([]);
+      localStorage.removeItem('falke_ai_history');
+    }
+  };
 
   const handleSend = async () => {
     if (!inputValue.trim()) return;
@@ -68,11 +79,16 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
             <div className="bg-bg-secondary border-b border-border p-4 flex justify-between items-center text-text-primary">
               <div className="flex items-center gap-2">
                 <Bot className="w-5 h-5 text-ai-flag animate-pulse" />
-                <h3 className="font-semibold text-sm">Aurikex AI Tutor</h3>
+                <h3 className="font-semibold text-sm">Falke AI</h3>
               </div>
-              <button onClick={() => setIsOpen(false)} className="hover:bg-bg-card p-1 rounded-full transition-colors text-text-secondary hover:text-text-primary">
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button onClick={handleClearHistory} title="Clear History" className="hover:bg-bg-card p-1 rounded-full transition-colors text-text-secondary hover:text-text-primary">
+                  <Trash2 className="w-4 h-4" />
+                </button>
+                <button onClick={() => setIsOpen(false)} className="hover:bg-bg-card p-1 rounded-full transition-colors text-text-secondary hover:text-text-primary">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* Chat Messages */}
@@ -80,8 +96,8 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
               {messages.length === 0 && !error && (
                 <div className="text-center text-text-secondary mt-8 space-y-2">
                   <Bot className="w-12 h-12 mx-auto mb-3 text-ai-flag opacity-80" />
-                  <p className="font-bold text-sm text-text-primary">Hi! I'm your AI Tutor.</p>
-                  <p className="text-xs text-text-secondary max-w-[240px] mx-auto leading-relaxed">Ask me to explain concepts, review topics, or help you study!</p>
+                  <p className="font-bold text-sm text-text-primary">Hi! I'm Falke AI.</p>
+                  <p className="text-xs text-text-secondary max-w-[240px] mx-auto leading-relaxed">Your personal JAMB UTME tutor. Ask me to explain concepts, review topics, or help you study!</p>
                 </div>
               )}
               
