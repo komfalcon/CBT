@@ -113,7 +113,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
 
     try {
       const history = messages.map(m => ({ role: m.role, content: m.content }));
-      const response = await chatWithTutor({ message: userMsg, history, contextPayload, sessionId: targetSessionId });
+      const response = await chatWithTutor({ message: userMsg, history, contextPayload, sessionId: targetSessionId || undefined });
       setMessages((prev) => [...prev, { role: 'assistant', content: response.reply }]);
     } catch (err: any) {
       if (err.response?.status === 401 || err.response?.status === 403) {
