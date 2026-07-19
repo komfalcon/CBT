@@ -13,7 +13,7 @@ export class ExamService {
     @InjectModel(ExamResult.name) private readonly resultModel: Model<ExamResultDocument>,
     @InjectModel(Question.name) private readonly questionModel: Model<QuestionDocument>,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-  ) {}
+  ) { }
 
   async createSession(
     userId: string,
@@ -77,17 +77,17 @@ export class ExamService {
       // Fetch questions: English (60), other 3 subjects (40 each)
       for (const sub of subjectsList) {
         const targetCount = sub === 'english' ? 60 : 40;
-        
+
         // Check if there's a specific config for this subject
         const config = subjectConfigs?.[sub];
         let topicsToUse = topics;
-        
+
         if (config?.mode === 'specific' && config.topics.length > 0) {
           topicsToUse = config.topics;
         } else if (config?.mode === 'random' || !config) {
           topicsToUse = undefined; // No topic filter
         }
-        
+
         const { questions: subQuestions, warnings } = await this.getUniqueQuestionsForSubject(sub, targetCount, difficultyLevel, topicsToUse);
         questionsList.push(...subQuestions);
         sessionWarnings.push(...warnings);
@@ -245,7 +245,7 @@ export class ExamService {
     const user = await this.userModel.findOne({ userId }).exec();
     if (user) {
       user.xp_points = (user.xp_points || 0) + xpReward;
-      
+
       // Streak tracking
       user.streak_count = (user.streak_count || 0) + 1;
 
@@ -271,11 +271,11 @@ export class ExamService {
   private async getUniqueQuestionsForSubject(subject: string, targetCount: number, difficultyLevel?: string, topics?: string[]): Promise<{ questions: Question[]; warnings: string[] }> {
     const matchStage: any = { subject, status: 'published' };
     const warnings: string[] = [];
-    
+
     if (difficultyLevel && difficultyLevel !== 'any') {
       matchStage.difficulty_level = Number(difficultyLevel);
     }
-    
+
     if (topics && topics.length > 0) {
       matchStage.topic = { $in: topics };
     }
@@ -295,17 +295,17 @@ export class ExamService {
     if (topics && topics.length > 0 && result.length < targetCount) {
       const remainingCount = targetCount - result.length;
       const fetchedIds = result.map(q => q.questionId);
-      
-      const fallbackMatchStage: any = { 
-        subject, 
+
+      const fallbackMatchStage: any = {
+        subject,
         status: 'published',
         questionId: { $nin: fetchedIds }
       };
-      
+
       if (difficultyLevel && difficultyLevel !== 'any') {
         fallbackMatchStage.difficulty_level = Number(difficultyLevel);
       }
-      
+
       const fallbackQuestions = await this.questionModel
         .aggregate<Question>([
           { $match: fallbackMatchStage },
@@ -314,7 +314,7 @@ export class ExamService {
           { $sample: { size: remainingCount } }
         ])
         .exec();
-        
+
       if (fallbackQuestions.length > 0) {
         warnings.push(`${subject} only has ${result.length} questions for the selected topics, filled the remaining ${fallbackQuestions.length} with random ${subject} questions.`);
         result = [...result, ...fallbackQuestions];

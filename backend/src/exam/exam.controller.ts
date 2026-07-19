@@ -6,12 +6,12 @@ import { ExamService } from './exam.service';
 @Controller('exam')
 @UseGuards(JwtAuthGuard)
 export class ExamController {
-  constructor(private readonly examService: ExamService) {}
+  constructor(private readonly examService: ExamService) { }
 
   @Post('sessions')
   async createSession(
     @CurrentUser() user: any,
-    @Body() body: { 
+    @Body() body: {
       type: 'mock' | 'drill'
       subject?: string
       subjects?: string[]
@@ -37,7 +37,7 @@ export class ExamController {
   @Get('sessions/:sessionId')
   async getSession(@CurrentUser() user: any, @Param('sessionId') sessionId: string) {
     const session = await this.examService.getSession(sessionId, user.sub);
-    
+
     // If the session is already completed, we can return the raw version or refer them to results.
     // If it's active, sanitize it to strip correct options.
     if (session.status === 'active') {

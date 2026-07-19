@@ -256,7 +256,7 @@ export default function StudentDashboard() {
         return prev.filter((s) => s !== subject);
       } else {
         if (prev.length >= 4) {
-          return prev; 
+          return prev;
         }
         return [...prev, subject];
       }
@@ -809,7 +809,7 @@ export default function StudentDashboard() {
                 ) : (
                   availableTopics.map(t => (
                     <label key={t.topic} className="flex items-center gap-2 p-1.5 hover:bg-bg-primary rounded cursor-pointer transition-colors">
-                      <input 
+                      <input
                         type="checkbox"
                         checked={drillTopics.includes(t.topic)}
                         onChange={(e) => {
