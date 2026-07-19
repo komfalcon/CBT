@@ -76,7 +76,7 @@ export default function StudentDashboard() {
   const [isLoadingTopics, setIsLoadingTopics] = useState<boolean>(false);
   // Mock modal state
   const [isMockModalOpen, setIsMockModalOpen] = useState<boolean>(false);
-  const [mockSubject, setMockSubject] = useState<string>('all');
+  const [mockSubjects, setMockSubjects] = useState<string[]>([]);
   const [mockDifficulty, setMockDifficulty] = useState<string>('any');
   const [mockTopics, setMockTopics] = useState<string[]>([]);
   const [availableMockTopics, setAvailableMockTopics] = useState<string[]>([]);
@@ -96,9 +96,9 @@ export default function StudentDashboard() {
       .finally(() => setIsLoadingTopics(false));
   }, [drillSubject]);
 
-  // Fetch topics when mock subject changes
+  // Fetch topics when mock subject changes (only if single subject selected)
   useEffect(() => {
-    if (!mockSubject || mockSubject === 'all') {
+    if (mockSubjects.length !== 1) {
       setAvailableMockTopics([]);
       setMockTopics([]);
       return;
@@ -106,11 +106,11 @@ export default function StudentDashboard() {
     setIsLoadingMockTopics(true);
     setAvailableMockTopics([]);
     setMockTopics([]);
-    getSubjectTopics(mockSubject)
+    getSubjectTopics(mockSubjects[0])
       .then((topics) => setAvailableMockTopics(topics))
       .catch((err) => console.error('Failed to load mock topics', err))
       .finally(() => setIsLoadingMockTopics(false));
-  }, [mockSubject]);
+  }, [mockSubjects]);
 
   // Paystack & Subscription states
   const [showUpgradeModal, setShowUpgradeModal] = useState<boolean>(false);
@@ -236,7 +236,7 @@ export default function StudentDashboard() {
       setIsMockModalOpen(false);
       setLoading(true);
       const payload: any = { type: 'mock', difficultyLevel: mockDifficulty };
-      if (mockSubject && mockSubject !== 'all') payload.subject = mockSubject;
+      if (mockSubjects.length > 0) payload.subjects = mockSubjects;
       if (mockTopics.length > 0) payload.topics = mockTopics;
       const session = await createExamSession(token, payload);
       navigate(`/exam/${session.sessionId}`);
@@ -544,7 +544,7 @@ export default function StudentDashboard() {
                   onClick={() => {
                     // Load all subjects when opening mock modal
                     getQuestionSubjects().then(rows => setAllSubjects(rows.map((r: any) => r.subject)));
-                    setMockSubject('all');
+                    setMockSubjects(['all']);
                     setMockDifficulty('any');
                     setMockTopics([]);
                     setIsMockModalOpen(true);
@@ -738,8 +738,8 @@ export default function StudentDashboard() {
                   type="button"
                   onClick={() => handleToggleSubject(subject)}
                   className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-all ${isSelected
-                      ? 'border-primary bg-primary/10 text-text-primary'
-                      : 'border-border bg-bg-secondary text-text-secondary hover:border-border-hover hover:text-text-primary'
+                    ? 'border-primary bg-primary/10 text-text-primary'
+                    : 'border-border bg-bg-secondary text-text-secondary hover:border-border-hover hover:text-text-primary'
                     }`}
                 >
                   <span
@@ -809,8 +809,8 @@ export default function StudentDashboard() {
                     type="button"
                     onClick={() => setDrillCount(c)}
                     className={`rounded-xl border p-3 text-xs font-bold transition-all ${drillCount === c
-                        ? 'border-primary bg-primary/10 text-text-primary'
-                        : 'border-border bg-bg-secondary text-text-secondary hover:text-text-primary'
+                      ? 'border-primary bg-primary/10 text-text-primary'
+                      : 'border-border bg-bg-secondary text-text-secondary hover:text-text-primary'
                       }`}
                   >
                     {c} Qs
@@ -861,7 +861,7 @@ export default function StudentDashboard() {
                 ) : (
                   availableTopics.map(topic => (
                     <label key={topic} className="flex items-center gap-2 p-1.5 hover:bg-bg-primary rounded cursor-pointer transition-colors">
-                      <input 
+                      <input
                         type="checkbox"
                         checked={drillTopics.includes(topic)}
                         onChange={(e) => {
@@ -908,20 +908,43 @@ export default function StudentDashboard() {
       >
         <div className="space-y-6">
           <div className="space-y-4">
-            {/* Subject Selector */}
+            {/* Subject Selector - Multiple Checkboxes (Max 4) */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase text-text-secondary">Focus Subject (Optional)</label>
-              <select
-                value={mockSubject}
-                onChange={(e) => setMockSubject(e.target.value)}
-                className="w-full rounded-xl bg-bg-secondary border border-border p-3 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all"
-              >
-                <option value="all">All 4 Subjects (Full Mock)</option>
-                {allSubjects.map(sub => (
-                  <option key={sub} value={sub}>{SUBJECT_LABELS[sub] || sub}</option>
-                ))}
-              </select>
-              <p className="text-[10px] text-text-muted">Pick a subject to focus on, or leave as "All" for a real JAMB simulation.</p>
+              <div className="flex items-center justify-between">
+                <label className="text-[10px] font-bold uppercase text-text-secondary">Select Subjects (Max 4)</label>
+                {mockSubjects.length > 0 && (
+                  <span className="text-[10px] text-text-secondary bg-primary/10 px-2 py-0.5 rounded-full">
+                    {mockSubjects.length}/4
+                  </span>
+                )}
+              </div>
+              <div className="max-h-40 overflow-y-auto rounded-xl border border-border bg-bg-secondary p-2 space-y-1">
+                {allSubjects.length === 0 ? (
+                  <div className="text-xs text-text-muted p-2">Loading subjects...</div>
+                ) : (
+                  allSubjects.map(sub => (
+                    <label key={sub} className="flex items-center gap-2 p-1.5 hover:bg-bg-primary rounded cursor-pointer transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={mockSubjects.includes(sub)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            if (mockSubjects.length < 4) {
+                              setMockSubjects(prev => [...prev, sub]);
+                            }
+                          } else {
+                            setMockSubjects(prev => prev.filter(s => s !== sub));
+                          }
+                        }}
+                        disabled={mockSubjects.length >= 4 && !mockSubjects.includes(sub)}
+                        className="rounded border-border text-primary focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                      />
+                      <span className="text-xs text-text-primary">{SUBJECT_LABELS[sub] || sub}</span>
+                    </label>
+                  ))
+                )}
+              </div>
+              <p className="text-[10px] text-text-muted">Select up to 4 subjects for this exam session. Leave empty for a full mock with all subjects.</p>
             </div>
 
             {/* Difficulty */}
@@ -941,8 +964,8 @@ export default function StudentDashboard() {
               </select>
             </div>
 
-            {/* Topics (only show if a subject is selected) */}
-            {mockSubject && mockSubject !== 'all' && (
+            {/* Topics (only show if a single subject is selected) */}
+            {mockSubjects.length === 1 && (
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <label className="text-[10px] font-bold uppercase text-text-secondary">Specific Topics (Optional)</label>
