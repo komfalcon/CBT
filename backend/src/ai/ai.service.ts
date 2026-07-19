@@ -68,7 +68,7 @@ export class AiService {
 
   async generateDiagram(questionId: string): Promise<string> {
     // Note: We bypass user AI quota checks because this is a system feature
-    const question = await this.questionsService.getQuestion(questionId);
+    const question = await this.questionsService.getQuestionById(questionId);
     if (!question) {
       throw new NotFoundException('Question not found');
     }
