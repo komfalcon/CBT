@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, UnauthorizedException, BadRequestException, Logger } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException, BadRequestException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument, User } from '../users/schemas/user.schema';
@@ -27,7 +27,7 @@ export class AiService {
           model: this.model,
           messages,
           max_tokens: maxTokens,
-          temperature: 0.7,
+          temperature: 0.3,
         },
         {
           headers: {
@@ -193,6 +193,15 @@ You are a personalized AI tutor for ${user.fullName}. Your personality: encourag
       {
         role: 'system',
         content: systemContent
+      },
+      // Identity priming exchange to ensure model follows identity rules
+      {
+        role: 'user',
+        content: 'Who are you?'
+      },
+      {
+        role: 'assistant',
+        content: 'My name is Falke AI. I was built by the Aurikex team to help Nigerian students ace their JAMB UTME exams. I am not made by Google or any other company — I am exclusively Falke AI, your personal JAMB tutor.'
       },
       ...chatHistory,
       {
