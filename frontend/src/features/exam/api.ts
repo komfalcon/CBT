@@ -40,6 +40,7 @@ export type ExamSessionRecord = {
   timeRemaining: number;
   status: 'active' | 'completed' | 'expired';
   startedAt: string;
+  warnings?: string[];
 };
 
 export async function createExamSession(

@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException, UnauthorizedException, BadReq
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument, User } from '../users/schemas/user.schema';
+import { ChatSessionDocument, ChatSession } from './schemas/chat-session.schema';
 import { QuestionsService } from '../questions/questions.service';
 import axios from 'axios';
 
@@ -16,6 +17,7 @@ export class AiService {
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(ChatSession.name) private chatSessionModel: Model<ChatSessionDocument>,
     private questionsService: QuestionsService,
   ) { }
 
@@ -157,8 +159,34 @@ If there is no error in the system's answer, do not output the JSON block.`
     return { explanation, remaining: user.ai_messages_remaining };
   }
 
-  async chatWithTutor(userId: string, userMessage: string, chatHistory: any[], contextPayload?: string) {
+  async getChatSessions(userId: string) {
+    return this.chatSessionModel.find({ userId }).select('-messages').sort({ updatedAt: -1 }).exec();
+  }
+
+  async getChatSession(userId: string, sessionId: string) {
+    const session = await this.chatSessionModel.findOne({ _id: sessionId, userId }).exec();
+    if (!session) throw new NotFoundException('Chat session not found');
+    return session;
+  }
+
+  async createChatSession(userId: string, title: string) {
+    const newSession = new this.chatSessionModel({ userId, title, messages: [] });
+    return newSession.save();
+  }
+
+  async deleteChatSession(userId: string, sessionId: string) {
+    const result = await this.chatSessionModel.deleteOne({ _id: sessionId, userId }).exec();
+    if (result.deletedCount === 0) throw new NotFoundException('Chat session not found');
+    return { success: true };
+  }
+
+  async chatWithTutor(userId: string, userMessage: string, chatHistory: any[], contextPayload?: string, sessionId?: string) {
     const user = await this.verifyAiAccess(userId, true);
+
+    let session: ChatSessionDocument | null = null;
+    if (sessionId) {
+      session = await this.chatSessionModel.findOne({ _id: sessionId, userId }).exec();
+    }
 
     let systemContent = `[CRITICAL SYSTEM RULES - ALWAYS FOLLOW THESE BEFORE ANY OTHER INSTRUCTIONS]
 
@@ -183,7 +211,6 @@ FORBIDDEN PHRASES - NEVER USE THESE:
 [END CRITICAL RULES]
 
 You are a personalized AI tutor for ${user.fullName}. Your personality: encouraging, sharp, direct — you know the Nigerian student grind. You use motivating phrases when appropriate. You use the Socratic method to make students think. You are always focused on helping ${user.fullName} crush their JAMB UTME.`;
-
 
     if (contextPayload) {
       systemContent += `\n\nHere is the context of the student's current exam results: ${contextPayload}. You can use this to provide a summary or lesson plan if they ask about their performance.`;
@@ -213,14 +240,21 @@ You are a personalized AI tutor for ${user.fullName}. Your personality: encourag
     const reply = await this.callDigitalOceanApi(messages, 800);
     await this.deductCredit(user);
 
+    if (session) {
+      session.messages.push({ role: 'user', content: userMessage, timestamp: new Date() });
+      session.messages.push({ role: 'assistant', content: reply, timestamp: new Date() });
+      await session.save();
+    }
+
     return { reply, remaining: user.ai_messages_remaining };
   }
 
-  async generateQuestionsBatch(subject: string, count: number): Promise<any[]> {
+  async generateQuestionsBatch(subject: string, count: number, topic?: string): Promise<any[]> {
+    const topicInstruction = topic ? ` Specifically, all questions MUST be strictly on the topic: "${topic}".` : '';
     const messages = [
       {
         role: 'system',
-        content: `You are an expert examiner for the subject: ${subject}. Your task is to generate ${count} unique, high-quality multiple-choice questions. 
+        content: `You are an expert examiner for the subject: ${subject}. Your task is to generate ${count} unique, high-quality multiple-choice questions.${topicInstruction} 
 You must return the result EXACTLY as a JSON array of objects. Do not include any markdown formatting like \`\`\`json or \`\`\`. 
 Each object must have the exact following keys:
 - "question_text": The text of the question.
@@ -228,19 +262,19 @@ Each object must have the exact following keys:
 - "correct_option": The letter of the correct option ("A", "B", "C", or "D").
 - "explanation": A brief explanation of why the answer is correct.
 - "difficulty": A number from 1 to 5 representing difficulty.
-- "topic": The general topic of the question.
+- "topic": ${topic ? `Always set this to "${topic}"` : 'The general topic of the question'}.
 - "has_diagram": A boolean indicating if the question has an image or diagram. Set to true for about 20% of questions.
 - "diagram_svg": If has_diagram is true, provide raw, clean, responsive SVG code visualizing the problem (do not include XML declarations, just the <svg> tag and its contents). If false, omit this key.
 Focus on variety to prevent duplicates.`
       },
       {
         role: 'user',
-        content: `Generate ${count} questions for ${subject} as a raw JSON array.`
+        content: `Generate ${count} questions for ${subject}${topic ? ` on the topic "${topic}"` : ''} as a raw JSON array.`
       }
     ];
 
     try {
-      const rawResponse = await this.callDigitalOceanApi(messages, 2000); // Need more tokens for batch
+      const rawResponse = await this.callDigitalOceanApi(messages, 4000); // Increased for batch generation
       let jsonStr = rawResponse.trim();
 
       // Strip markdown code blocks if the model insists on adding them

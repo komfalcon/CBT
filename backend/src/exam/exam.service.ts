@@ -19,12 +19,15 @@ export class ExamService {
     userId: string,
     type: 'mock' | 'drill',
     subject?: string,
+    subjects?: string[],
+    subjectConfigs?: Record<string, { mode: 'random' | 'specific'; topics: string[] }>,
     count?: number,
     difficultyLevel?: string,
     topics?: string[]
   ): Promise<ExamSessionDocument> {
     let subjectsList: string[] = [];
     const questionsList: Question[] = [];
+    const sessionWarnings: string[] = [];
     let timeRemaining = 7200; // default 2 hours (120 mins) for mock
 
     const user = await this.userModel.findOne({ userId }).exec();
@@ -60,17 +63,34 @@ export class ExamService {
         throw new BadRequestException(`You have reached your daily limit of ${limit} mock exam(s) for the ${tier.toUpperCase()} plan. Please upgrade your plan to take more mock exams.`);
       }
 
-      const combination = user.exam_subject_combination || [];
-      if (combination.length !== 4 || !combination.includes('english')) {
-        throw new BadRequestException('Configure a valid 4-subject combination including English first.');
+      // Use custom subjects if provided, otherwise use user's default combination
+      if (subjects && subjects.length > 0) {
+        subjectsList = subjects;
+      } else {
+        const combination = user.exam_subject_combination || [];
+        if (combination.length !== 4 || !combination.includes('english')) {
+          throw new BadRequestException('Configure a valid 4-subject combination including English first.');
+        }
+        subjectsList = combination;
       }
-      subjectsList = combination;
 
       // Fetch questions: English (60), other 3 subjects (40 each)
       for (const sub of subjectsList) {
         const targetCount = sub === 'english' ? 60 : 40;
-        const subQuestions = await this.getUniqueQuestionsForSubject(sub, targetCount, difficultyLevel, topics);
+        
+        // Check if there's a specific config for this subject
+        const config = subjectConfigs?.[sub];
+        let topicsToUse = topics;
+        
+        if (config?.mode === 'specific' && config.topics.length > 0) {
+          topicsToUse = config.topics;
+        } else if (config?.mode === 'random' || !config) {
+          topicsToUse = undefined; // No topic filter
+        }
+        
+        const { questions: subQuestions, warnings } = await this.getUniqueQuestionsForSubject(sub, targetCount, difficultyLevel, topicsToUse);
         questionsList.push(...subQuestions);
+        sessionWarnings.push(...warnings);
       }
     } else {
       // Drill
@@ -81,13 +101,14 @@ export class ExamService {
       subjectsList = [subject];
       timeRemaining = finalCount * 60; // 1 minute per question
 
-      const subQuestions = await this.getUniqueQuestionsForSubject(subject, finalCount, difficultyLevel, topics);
+      const { questions: subQuestions, warnings } = await this.getUniqueQuestionsForSubject(subject, finalCount, difficultyLevel, topics);
 
       if (subQuestions.length === 0) {
         throw new BadRequestException(`No published questions found for subject: ${subject}`);
       }
 
       questionsList.push(...subQuestions);
+      sessionWarnings.push(...warnings);
     }
 
     const session = await this.sessionModel.create({
@@ -99,6 +120,7 @@ export class ExamService {
       timeRemaining,
       status: 'active',
       startedAt: new Date(),
+      warnings: sessionWarnings,
     });
 
     return session;
@@ -246,8 +268,9 @@ export class ExamService {
     return plain;
   }
 
-  private async getUniqueQuestionsForSubject(subject: string, targetCount: number, difficultyLevel?: string, topics?: string[]): Promise<Question[]> {
+  private async getUniqueQuestionsForSubject(subject: string, targetCount: number, difficultyLevel?: string, topics?: string[]): Promise<{ questions: Question[]; warnings: string[] }> {
     const matchStage: any = { subject, status: 'published' };
+    const warnings: string[] = [];
     
     if (difficultyLevel && difficultyLevel !== 'any') {
       matchStage.difficulty_level = Number(difficultyLevel);
@@ -266,11 +289,42 @@ export class ExamService {
       ])
       .exec();
 
-    if (uniqueQuestions.length === 0) {
-      return [];
+    let result = uniqueQuestions;
+
+    // Graceful Fallback (Option A)
+    if (topics && topics.length > 0 && result.length < targetCount) {
+      const remainingCount = targetCount - result.length;
+      const fetchedIds = result.map(q => q.questionId);
+      
+      const fallbackMatchStage: any = { 
+        subject, 
+        status: 'published',
+        questionId: { $nin: fetchedIds }
+      };
+      
+      if (difficultyLevel && difficultyLevel !== 'any') {
+        fallbackMatchStage.difficulty_level = Number(difficultyLevel);
+      }
+      
+      const fallbackQuestions = await this.questionModel
+        .aggregate<Question>([
+          { $match: fallbackMatchStage },
+          { $group: { _id: "$question_text", doc: { $first: "$$ROOT" } } },
+          { $replaceRoot: { newRoot: "$doc" } },
+          { $sample: { size: remainingCount } }
+        ])
+        .exec();
+        
+      if (fallbackQuestions.length > 0) {
+        warnings.push(`${subject} only has ${result.length} questions for the selected topics, filled the remaining ${fallbackQuestions.length} with random ${subject} questions.`);
+        result = [...result, ...fallbackQuestions];
+      }
     }
 
-    let result = uniqueQuestions;
+    if (result.length === 0) {
+      return { questions: [], warnings };
+    }
+
     if (result.length < targetCount) {
       // Repeat questions up to 3 times to fill to targetCount
       const repeated: Question[] = [];
@@ -281,6 +335,6 @@ export class ExamService {
       }
       result = repeated.slice(0, targetCount);
     }
-    return result;
+    return { questions: result, warnings };
   }
 }

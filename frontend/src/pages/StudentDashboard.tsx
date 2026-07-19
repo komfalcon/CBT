@@ -72,15 +72,12 @@ export default function StudentDashboard() {
   const [drillCount, setDrillCount] = useState<number>(20);
   const [drillDifficulty, setDrillDifficulty] = useState<string>('any');
   const [drillTopics, setDrillTopics] = useState<string[]>([]);
-  const [availableTopics, setAvailableTopics] = useState<string[]>([]);
+  const [availableTopics, setAvailableTopics] = useState<Array<{ topic: string, count: number }>>([]);
   const [isLoadingTopics, setIsLoadingTopics] = useState<boolean>(false);
-  // Mock modal state
-  const [isMockModalOpen, setIsMockModalOpen] = useState<boolean>(false);
-  const [mockSubjects, setMockSubjects] = useState<string[]>([]);
-  const [mockDifficulty, setMockDifficulty] = useState<string>('any');
-  const [mockTopics, setMockTopics] = useState<string[]>([]);
-  const [availableMockTopics, setAvailableMockTopics] = useState<string[]>([]);
-  const [isLoadingMockTopics, setIsLoadingMockTopics] = useState<boolean>(false);
+  // Mock route launcher
+  const handleNavigateMockSetup = () => {
+    navigate('/mock-setup');
+  };
   // All subjects from DB
   const [allSubjects, setAllSubjects] = useState<string[]>([]);
 
@@ -96,21 +93,7 @@ export default function StudentDashboard() {
       .finally(() => setIsLoadingTopics(false));
   }, [drillSubject]);
 
-  // Fetch topics when mock subject changes (only if single subject selected)
-  useEffect(() => {
-    if (mockSubjects.length !== 1) {
-      setAvailableMockTopics([]);
-      setMockTopics([]);
-      return;
-    }
-    setIsLoadingMockTopics(true);
-    setAvailableMockTopics([]);
-    setMockTopics([]);
-    getSubjectTopics(mockSubjects[0])
-      .then((topics) => setAvailableMockTopics(topics))
-      .catch((err) => console.error('Failed to load mock topics', err))
-      .finally(() => setIsLoadingMockTopics(false));
-  }, [mockSubjects]);
+
 
   // Paystack & Subscription states
   const [showUpgradeModal, setShowUpgradeModal] = useState<boolean>(false);
@@ -177,7 +160,6 @@ export default function StudentDashboard() {
     const handler = paystackPop.setup({
       key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_live_068536d7f4bbe687175bcda53e3f5d116fea99dc',
       email: student.email,
-      // amount: amount * 100, // Omit amount so Paystack handles it as a subscription and restricts checkout to cards
       currency: 'NGN',
       plan: planCode,
       channels: ['card'],
@@ -216,8 +198,6 @@ export default function StudentDashboard() {
       setTopicStats(stats);
     } catch (err: any) {
       console.error(err);
-      // Only force logout on explicit 401 Unauthorized (token truly invalid/expired)
-      // Do NOT logout on network errors, server errors, or other transient failures
       const status = err?.response?.status;
       if (status === 401) {
         localStorage.removeItem('accessToken');
@@ -227,25 +207,6 @@ export default function StudentDashboard() {
         setError('Failed to load your profile. Please refresh the page.');
       }
     } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleStartMock = async () => {
-    try {
-      setIsMockModalOpen(false);
-      setLoading(true);
-      const payload: any = { type: 'mock', difficultyLevel: mockDifficulty };
-      if (mockSubjects.length > 0) payload.subjects = mockSubjects;
-      if (mockTopics.length > 0) payload.topics = mockTopics;
-      const session = await createExamSession(token, payload);
-      navigate(`/exam/${session.sessionId}`);
-    } catch (err: any) {
-      addToast({
-        type: 'error',
-        title: 'Exam Failed',
-        message: err.response?.data?.message || 'Failed to initialize mock exam.',
-      });
       setLoading(false);
     }
   };
@@ -261,6 +222,9 @@ export default function StudentDashboard() {
         difficultyLevel: drillDifficulty,
         topics: drillTopics.length > 0 ? drillTopics : undefined,
       });
+      if (session.warnings && session.warnings.length > 0) {
+        session.warnings.forEach(w => addToast({ type: 'info', title: 'Notice', message: w }));
+      }
       setIsDrillModalOpen(false);
       navigate(`/exam/${session.sessionId}`);
     } catch (err: any) {
@@ -292,7 +256,7 @@ export default function StudentDashboard() {
         return prev.filter((s) => s !== subject);
       } else {
         if (prev.length >= 4) {
-          return prev; // Max 4 subjects (English + 3 choices)
+          return prev; 
         }
         return [...prev, subject];
       }
@@ -300,7 +264,6 @@ export default function StudentDashboard() {
   };
 
   const handleSaveCombination = async () => {
-    // English is mandatory
     const updatedCombination = ['english', ...selectedSubjects.filter((s) => s !== 'english')];
     if (updatedCombination.length !== 4) {
       setMessage('You must select exactly 3 elective subjects plus English.');
@@ -335,13 +298,18 @@ export default function StudentDashboard() {
   const combination = student?.exam_subject_combination || [];
   const isCombinationValid = combination.length === 4 && combination.includes('english');
 
+  const drillSelectedTopicsCount = availableTopics
+    .filter(t => drillTopics.includes(t.topic))
+    .reduce((acc, t) => acc + t.count, 0);
+  const isDrillShort = drillTopics.length > 0 && drillSelectedTopicsCount < drillCount;
+
+
+
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary font-sans overflow-auto relative">
-      {/* Decorative Blur */}
       <div className="absolute top-0 right-0 w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
 
-      {/* Header */}
       <header className="border-b border-border bg-bg-primary/80 backdrop-blur-md sticky top-0 z-40">
         <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -367,11 +335,8 @@ export default function StudentDashboard() {
         </div>
       </header>
 
-      {/* Main Grid */}
       <main className="mx-auto max-w-7xl px-6 py-8 grid gap-8 md:grid-cols-3">
-        {/* Left Column: Profile Card & Roaming CBT Key */}
         <div className="space-y-6">
-          {/* Student Profile Info */}
           <Card className="relative overflow-hidden">
             <div className="flex items-center gap-4">
               <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-primary to-blue-600 flex items-center justify-center font-bold text-2xl text-text-on-accent shadow-xl shadow-primary/20">
@@ -433,7 +398,6 @@ export default function StudentDashboard() {
             )}
           </Card>
 
-          {/* CBT Access Key - Cafe Roaming Code */}
           <Card variant="secondary" className="space-y-4">
             <div className="flex items-center gap-2">
               <User className="h-5 w-5 text-primary" />
@@ -457,7 +421,6 @@ export default function StudentDashboard() {
           </Card>
         </div>
 
-        {/* Center/Right Column: Subject Selection & Simulator Launchers */}
         <div className="md:col-span-2 space-y-6">
           {message && (
             <Alert variant="info" className="p-4 flex items-center gap-2">
@@ -465,7 +428,6 @@ export default function StudentDashboard() {
             </Alert>
           )}
 
-          {/* Combination Warning */}
           {!isCombinationValid && (
             <Alert variant="warning" title="Complete Your Subject Combination First!" className="p-6">
               <div className="space-y-3">
@@ -482,7 +444,6 @@ export default function StudentDashboard() {
             </Alert>
           )}
 
-          {/* Subject Combination Showcase */}
           <Card>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
@@ -523,7 +484,6 @@ export default function StudentDashboard() {
             )}
           </Card>
 
-          {/* Test Launcher Grid */}
           <Card>
             <div className="flex items-center gap-2 mb-4">
               <Play className="h-5 w-5 text-primary" />
@@ -531,7 +491,6 @@ export default function StudentDashboard() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
-              {/* Launcher Card 1: 4-Subject Mock */}
               <div className="rounded-xl border border-border bg-bg-secondary p-6 flex flex-col justify-between">
                 <div>
                   <h4 className="text-base font-bold text-text-primary mb-2">4-Subject Mock Exam</h4>
@@ -541,22 +500,14 @@ export default function StudentDashboard() {
                 </div>
                 <Button
                   disabled={!isCombinationValid}
-                  onClick={() => {
-                    // Load all subjects when opening mock modal
-                    getQuestionSubjects().then(rows => setAllSubjects(rows.map((r: any) => r.subject)));
-                    setMockSubjects(['all']);
-                    setMockDifficulty('any');
-                    setMockTopics([]);
-                    setIsMockModalOpen(true);
-                  }}
+                  onClick={handleNavigateMockSetup}
                   variant="gradient"
-                  fullWidth
+                  className="w-full mt-4"
                 >
                   Start Simulation Mock
                 </Button>
               </div>
 
-              {/* Launcher Card 2: Single Subject Practice */}
               <div className="rounded-xl border border-border bg-bg-secondary p-6 flex flex-col justify-between">
                 <div>
                   <h4 className="text-base font-bold text-text-primary mb-2">Single Subject Drills</h4>
@@ -571,6 +522,7 @@ export default function StudentDashboard() {
                     setDrillSubject(firstSub);
                     setDrillCount(20);
                     setDrillDifficulty('any');
+                    setDrillTopics([]);
                     setIsDrillModalOpen(true);
                   }}
                   variant="secondary"
@@ -582,7 +534,6 @@ export default function StudentDashboard() {
             </div>
           </Card>
 
-          {/* Performance Dashboard charts */}
           <Card>
             <div className="flex items-center gap-2 mb-4">
               <Award className="h-5 w-5 text-primary" />
@@ -620,7 +571,6 @@ export default function StudentDashboard() {
             </div>
           </Card>
 
-          {/* Recent Attempts History */}
           <Card className="space-y-4">
             <div className="flex items-center gap-2">
               <History className="h-5 w-5 text-primary" />
@@ -669,7 +619,6 @@ export default function StudentDashboard() {
             )}
           </Card>
 
-          {/* Cumulative Topic Stats */}
           <Card className="space-y-4">
             <div className="flex items-center gap-2">
               <Target className="h-5 w-5 text-primary" />
@@ -712,7 +661,6 @@ export default function StudentDashboard() {
         </div>
       </main>
 
-      {/* Edit Subject Modal */}
       <Modal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
@@ -776,7 +724,7 @@ export default function StudentDashboard() {
           </div>
         </div>
       </Modal>
-      {/* Subject Drill Configuration Modal */}
+
       <Modal
         isOpen={isDrillModalOpen}
         onClose={() => setIsDrillModalOpen(false)}
@@ -845,7 +793,7 @@ export default function StudentDashboard() {
                     type="button"
                     onClick={() => {
                       const random = availableTopics[Math.floor(Math.random() * availableTopics.length)];
-                      setDrillTopics([random]);
+                      setDrillTopics([random.topic]);
                     }}
                     className="text-[10px] font-bold text-primary hover:opacity-70 transition-opacity px-2 py-0.5 rounded-lg border border-primary/30 bg-primary/5"
                   >
@@ -859,25 +807,31 @@ export default function StudentDashboard() {
                 ) : availableTopics.length === 0 ? (
                   <div className="text-xs text-text-muted p-2">No specific topics available</div>
                 ) : (
-                  availableTopics.map(topic => (
-                    <label key={topic} className="flex items-center gap-2 p-1.5 hover:bg-bg-primary rounded cursor-pointer transition-colors">
-                      <input
+                  availableTopics.map(t => (
+                    <label key={t.topic} className="flex items-center gap-2 p-1.5 hover:bg-bg-primary rounded cursor-pointer transition-colors">
+                      <input 
                         type="checkbox"
-                        checked={drillTopics.includes(topic)}
+                        checked={drillTopics.includes(t.topic)}
                         onChange={(e) => {
                           if (e.target.checked) {
-                            setDrillTopics(prev => [...prev, topic]);
+                            setDrillTopics(prev => [...prev, t.topic]);
                           } else {
-                            setDrillTopics(prev => prev.filter(t => t !== topic));
+                            setDrillTopics(prev => prev.filter(x => x !== t.topic));
                           }
                         }}
                         className="rounded border-border text-primary focus:ring-primary"
                       />
-                      <span className="text-xs text-text-primary">{topic}</span>
+                      <span className="text-xs text-text-primary flex-1">{t.topic}</span>
+                      <span className="text-[10px] font-mono text-text-muted">{t.count}</span>
                     </label>
                   ))
                 )}
               </div>
+              {isDrillShort && (
+                <p className="text-[10px] text-amber-500 font-medium">
+                  Warning: Selected topics only have {drillSelectedTopicsCount} questions available. The remaining {drillCount - drillSelectedTopicsCount} will be filled with random {drillSubject} questions.
+                </p>
+              )}
             </div>
           </div>
 
@@ -899,126 +853,7 @@ export default function StudentDashboard() {
         </div>
       </Modal>
 
-      {/* Mock Exam Configuration Modal */}
-      <Modal
-        isOpen={isMockModalOpen}
-        onClose={() => setIsMockModalOpen(false)}
-        title="Configure Simulation Mock"
-        maxWidth="sm"
-      >
-        <div className="space-y-6">
-          <div className="space-y-4">
-            {/* Subject Selector - Multiple Checkboxes (Max 4) */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <label className="text-[10px] font-bold uppercase text-text-secondary">Select Subjects (Max 4)</label>
-                {mockSubjects.length > 0 && (
-                  <span className="text-[10px] text-text-secondary bg-primary/10 px-2 py-0.5 rounded-full">
-                    {mockSubjects.length}/4
-                  </span>
-                )}
-              </div>
-              <div className="max-h-40 overflow-y-auto rounded-xl border border-border bg-bg-secondary p-2 space-y-1">
-                {allSubjects.length === 0 ? (
-                  <div className="text-xs text-text-muted p-2">Loading subjects...</div>
-                ) : (
-                  allSubjects.map(sub => (
-                    <label key={sub} className="flex items-center gap-2 p-1.5 hover:bg-bg-primary rounded cursor-pointer transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={mockSubjects.includes(sub)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            if (mockSubjects.length < 4) {
-                              setMockSubjects(prev => [...prev, sub]);
-                            }
-                          } else {
-                            setMockSubjects(prev => prev.filter(s => s !== sub));
-                          }
-                        }}
-                        disabled={mockSubjects.length >= 4 && !mockSubjects.includes(sub)}
-                        className="rounded border-border text-primary focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
-                      />
-                      <span className="text-xs text-text-primary">{SUBJECT_LABELS[sub] || sub}</span>
-                    </label>
-                  ))
-                )}
-              </div>
-              <p className="text-[10px] text-text-muted">Select up to 4 subjects for this exam session. Leave empty for a full mock with all subjects.</p>
-            </div>
 
-            {/* Difficulty */}
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase text-text-secondary">Difficulty</label>
-              <select
-                value={mockDifficulty}
-                onChange={(e) => setMockDifficulty(e.target.value)}
-                className="w-full rounded-xl bg-bg-secondary border border-border p-3 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all"
-              >
-                <option value="any">Any Difficulty</option>
-                <option value="1">Easy (Level 1)</option>
-                <option value="2">Easy-Medium (Level 2)</option>
-                <option value="3">Medium (Level 3)</option>
-                <option value="4">Medium-Hard (Level 4)</option>
-                <option value="5">Hard (Level 5)</option>
-              </select>
-            </div>
-
-            {/* Topics (only show if a single subject is selected) */}
-            {mockSubjects.length === 1 && (
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-bold uppercase text-text-secondary">Specific Topics (Optional)</label>
-                  {availableMockTopics.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const random = availableMockTopics[Math.floor(Math.random() * availableMockTopics.length)];
-                        setMockTopics([random]);
-                      }}
-                      className="text-[10px] font-bold text-primary hover:opacity-70 transition-opacity px-2 py-0.5 rounded-lg border border-primary/30 bg-primary/5"
-                    >
-                      🎲 Random Topic
-                    </button>
-                  )}
-                </div>
-                <div className="max-h-32 overflow-y-auto rounded-xl border border-border bg-bg-secondary p-2 space-y-1">
-                  {isLoadingMockTopics ? (
-                    <div className="text-xs text-text-muted p-2">Loading topics...</div>
-                  ) : availableMockTopics.length === 0 ? (
-                    <div className="text-xs text-text-muted p-2">No topics found for this subject</div>
-                  ) : (
-                    availableMockTopics.map(topic => (
-                      <label key={topic} className="flex items-center gap-2 p-1.5 hover:bg-bg-primary rounded cursor-pointer transition-colors">
-                        <input
-                          type="checkbox"
-                          checked={mockTopics.includes(topic)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setMockTopics(prev => [...prev, topic]);
-                            } else {
-                              setMockTopics(prev => prev.filter(t => t !== topic));
-                            }
-                          }}
-                          className="rounded border-border text-primary focus:ring-primary"
-                        />
-                        <span className="text-xs text-text-primary">{topic}</span>
-                      </label>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="flex justify-end gap-2 pt-4 border-t border-border">
-            <Button onClick={() => setIsMockModalOpen(false)} variant="secondary" size="sm">Cancel</Button>
-            <Button onClick={handleStartMock} size="sm">
-              🚀 Start Mock Exam
-            </Button>
-          </div>
-        </div>
-      </Modal>
       <Modal
         isOpen={!!paymentSuccess}
         onClose={() => setPaymentSuccess('')}

@@ -11,9 +11,26 @@ export class ExamController {
   @Post('sessions')
   async createSession(
     @CurrentUser() user: any,
-    @Body() body: { type: 'mock' | 'drill'; subject?: string; count?: number; difficultyLevel?: string; topics?: string[] },
+    @Body() body: { 
+      type: 'mock' | 'drill'
+      subject?: string
+      subjects?: string[]
+      subjectConfigs?: Record<string, { mode: 'random' | 'specific'; topics: string[] }>
+      count?: number
+      difficultyLevel?: string
+      topics?: string[]
+    },
   ) {
-    const session = await this.examService.createSession(user.sub, body.type, body.subject, body.count, body.difficultyLevel, body.topics);
+    const session = await this.examService.createSession(
+      user.sub,
+      body.type,
+      body.subject,
+      body.subjects,
+      body.subjectConfigs,
+      body.count,
+      body.difficultyLevel,
+      body.topics
+    );
     return this.examService.sanitizeSession(session);
   }
 

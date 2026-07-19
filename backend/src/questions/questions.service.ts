@@ -626,12 +626,12 @@ export class QuestionsService {
     const rows = await this.questionModel
       .aggregate([
         { $match: { subject, status: 'published', topic: { $exists: true, $ne: null } } },
-        { $group: { _id: '$topic' } },
+        { $group: { _id: '$topic', count: { $sum: 1 } } },
         { $sort: { _id: 1 } },
       ])
       .exec();
 
-    return rows.map((row) => row._id as string).filter(Boolean);
+    return rows.map((row) => ({ topic: row._id as string, count: row.count as number })).filter(row => Boolean(row.topic));
   }
 
   async updateTags(id: string, tags: string[]): Promise<QuestionDocument> {

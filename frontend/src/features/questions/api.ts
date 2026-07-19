@@ -82,7 +82,7 @@ export async function getQuestionSubjects() {
 }
 
 export async function getSubjectTopics(subject: string) {
-  const { data } = await questionApi.get<string[]>('/topics', { params: { subject } });
+  const { data } = await questionApi.get<Array<{ topic: string, count: number }>>('/topics', { params: { subject } });
   return data;
 }
 

@@ -41,6 +41,9 @@ export class ExamSession {
 
   @Prop()
   completedAt?: Date;
+
+  @Prop({ type: [String], default: [] })
+  warnings?: string[];
 }
 
 export type ExamSessionDocument = HydratedDocument<ExamSession>;

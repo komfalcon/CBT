@@ -12,6 +12,7 @@ import {
 } from './api';
 import { Lock, Mail, User, Phone, Key, HelpCircle, ArrowRight, ShieldAlert, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Button, Alert, Card, Input, Modal } from '../../components';
+import { ThemeToggle } from '../../components/ThemeToggle';
 
 type AuthMode = 'login' | 'register' | 'verify-email' | 'forgot-password' | 'reset-password' | 'cbt-key-login';
 
@@ -361,6 +362,9 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary flex items-center justify-center font-sans p-6 overflow-hidden relative">
+      <div className="absolute top-6 right-6 z-50">
+        <ThemeToggle />
+      </div>
       {/* Glow Orbs */}
       <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-primary/5 blur-[150px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] rounded-full bg-indigo-500/5 blur-[150px] pointer-events-none" />
@@ -472,7 +476,7 @@ export default function AuthPage() {
                   <button
                     type="button"
                     onClick={() => setIsGoogleMockOpen(true)}
-                    className="flex items-center justify-center gap-2 rounded-full bg-slate-950 border border-slate-800 hover:border-slate-700 px-6 py-2.5 text-xs font-semibold text-slate-200 transition-colors shadow-lg active:scale-95"
+                    className="flex items-center justify-center gap-2 rounded-full bg-slate-950 border border-slate-800 hover:border-slate-700 px-6 py-2.5 text-xs font-semibold text-text-primary dark:text-slate-200 transition-colors shadow-lg active:scale-95"
                   >
                     <span className="h-4 w-4 rounded-full border border-indigo-400/30 flex items-center justify-center bg-indigo-500/10 text-[9px] font-bold text-indigo-400">G</span>
                     Sign in with Google
@@ -564,7 +568,7 @@ export default function AuthPage() {
                       {reqs.length ? (
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
                       ) : (
-                        <AlertCircle className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                        <AlertCircle className="h-3.5 w-3.5 text-text-muted dark:text-slate-600 shrink-0" />
                       )}
                       <span className={reqs.length ? 'text-emerald-400' : 'text-slate-500'}>Min 8 characters</span>
                     </div>
@@ -572,7 +576,7 @@ export default function AuthPage() {
                       {reqs.upper ? (
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
                       ) : (
-                        <AlertCircle className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                        <AlertCircle className="h-3.5 w-3.5 text-text-muted dark:text-slate-600 shrink-0" />
                       )}
                       <span className={reqs.upper ? 'text-emerald-400' : 'text-slate-500'}>1 uppercase letter</span>
                     </div>
@@ -580,7 +584,7 @@ export default function AuthPage() {
                       {reqs.number ? (
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
                       ) : (
-                        <AlertCircle className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                        <AlertCircle className="h-3.5 w-3.5 text-text-muted dark:text-slate-600 shrink-0" />
                       )}
                       <span className={reqs.number ? 'text-emerald-400' : 'text-slate-500'}>1 number</span>
                     </div>
@@ -588,7 +592,7 @@ export default function AuthPage() {
                       {reqs.special ? (
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
                       ) : (
-                        <AlertCircle className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                        <AlertCircle className="h-3.5 w-3.5 text-text-muted dark:text-slate-600 shrink-0" />
                       )}
                       <span className={reqs.special ? 'text-emerald-400' : 'text-slate-500'}>1 special character</span>
                     </div>
@@ -598,7 +602,7 @@ export default function AuthPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Confirm Password</label>
+              <label className="text-[10px] font-bold uppercase text-text-muted dark:text-slate-400 tracking-wider">Confirm Password</label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
                 <input

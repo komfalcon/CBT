@@ -7,6 +7,7 @@ import {
   Instagram, Twitter, Linkedin, Youtube, Mail, Phone,
   CreditCard, Play, Monitor, Menu,
 } from 'lucide-react';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 /* ─────────────────────────────────────────────
    Intersection Observer hook for scroll reveals
@@ -52,53 +53,6 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }: { target: number;
   return <span ref={ref}>{prefix}{count.toLocaleString()}{suffix}</span>;
 }
 
-/* ────────────────────────
-   Floating particle system
-   ──────────────────────── */
-function FloatingParticles() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: 20 }).map((_, i) => (
-        <div
-          key={i}
-          className="absolute rounded-full bg-primary/20"
-          style={{
-            width: `${Math.random() * 6 + 2}px`,
-            height: `${Math.random() * 6 + 2}px`,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animation: `float ${6 + Math.random() * 8}s ease-in-out infinite`,
-            animationDelay: `${Math.random() * 5}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-/* ─────────────────────────
-   Orbiting ring decoration
-   ───────────────────────── */
-function OrbitRings() {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      {/* Outer ring */}
-      <div className="absolute w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full border border-primary/10 animate-spin-slow" />
-      {/* Inner ring */}
-      <div className="absolute w-[400px] h-[400px] md:w-[550px] md:h-[550px] rounded-full border border-primary/10 animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
-      {/* Orbiting dots */}
-      <div className="absolute animate-orbit">
-        <div className="w-3 h-3 rounded-full bg-primary/60 shadow-lg shadow-primary/50" />
-      </div>
-      <div className="absolute animate-orbit" style={{ animationDelay: '-7s', animationDuration: '18s' }}>
-        <div className="w-2 h-2 rounded-full bg-blue-300/60 shadow-lg shadow-blue-400/50" />
-      </div>
-      <div className="absolute animate-orbit" style={{ animationDelay: '-14s', animationDuration: '25s' }}>
-        <div className="w-2.5 h-2.5 rounded-full bg-success/40 shadow-lg shadow-success/40" />
-      </div>
-    </div>
-  );
-}
 
 /* ──────────────────────
    Subject data (all 17)
@@ -138,13 +92,8 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary font-sans selection:bg-primary selection:text-white overflow-hidden relative">
-      {/* ──────── Background Gradients ──────── */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-15%] w-[60%] h-[60%] rounded-full bg-primary/10 blur-[160px]" />
-        <div className="absolute bottom-[-20%] right-[-15%] w-[60%] h-[60%] rounded-full bg-violet-900/15 blur-[160px]" />
-        <div className="absolute top-[40%] left-[50%] w-[30%] h-[30%] rounded-full bg-emerald-900/10 blur-[120px]" />
-      </div>
+    <div className="min-h-screen bg-bg-primary text-text-primary font-sans selection:bg-primary selection:text-text-primary dark:text-white overflow-hidden relative">
+
 
       {/* ══════════════════════════════════════
           HEADER
@@ -166,14 +115,15 @@ export default function LandingPage() {
           </div>
 
           <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-text-secondary">
-            <a href="#features" className="hover:text-white transition-colors duration-200">Features</a>
-            <a href="#subjects" className="hover:text-white transition-colors duration-200">Subjects</a>
-            <a href="#how-it-works" className="hover:text-white transition-colors duration-200">How It Works</a>
-            <a href="#pricing" className="hover:text-white transition-colors duration-200">Pricing</a>
+            <a href="#features" className="hover:text-text-primary dark:text-white transition-colors duration-200">Features</a>
+            <a href="#subjects" className="hover:text-text-primary dark:text-white transition-colors duration-200">Subjects</a>
+            <a href="#how-it-works" className="hover:text-text-primary dark:text-white transition-colors duration-200">How It Works</a>
+            <a href="#pricing" className="hover:text-text-primary dark:text-white transition-colors duration-200">Pricing</a>
           </nav>
 
           <div className="flex items-center gap-4">
-            <Link to="/auth?mode=login" className="hidden sm:inline-flex text-[13px] font-medium text-text-secondary hover:text-white transition-colors">
+            <ThemeToggle />
+            <Link to="/auth?mode=login" className="hidden sm:inline-flex text-[13px] font-medium text-text-secondary hover:text-text-primary dark:text-white transition-colors">
               Sign In
             </Link>
             <Link
@@ -184,7 +134,7 @@ export default function LandingPage() {
             </Link>
             {/* Mobile menu toggle */}
             <button
-              className="md:hidden p-2 text-text-secondary hover:text-white"
+              className="md:hidden p-2 text-text-secondary hover:text-text-primary dark:text-white"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -195,11 +145,11 @@ export default function LandingPage() {
         {/* Mobile nav */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-border/60 bg-bg-primary/95 backdrop-blur-xl px-6 py-4 space-y-3 animate-slide-up">
-            <a href="#features" className="block text-[13px] text-text-secondary hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Features</a>
-            <a href="#subjects" className="block text-[13px] text-text-secondary hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Subjects</a>
-            <a href="#how-it-works" className="block text-[13px] text-text-secondary hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
-            <a href="#pricing" className="block text-[13px] text-text-secondary hover:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-            <Link to="/auth?mode=login" className="block text-[13px] text-text-secondary hover:text-white py-2">Sign In</Link>
+            <a href="#features" className="block text-[13px] text-text-secondary hover:text-text-primary dark:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Features</a>
+            <a href="#subjects" className="block text-[13px] text-text-secondary hover:text-text-primary dark:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Subjects</a>
+            <a href="#how-it-works" className="block text-[13px] text-text-secondary hover:text-text-primary dark:text-white py-2" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
+            <a href="#pricing" className="block text-[13px] text-text-secondary hover:text-text-primary dark:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
+            <Link to="/auth?mode=login" className="block text-[13px] text-text-secondary hover:text-text-primary dark:text-white py-2">Sign In</Link>
           </div>
         )}
       </header>
@@ -208,8 +158,7 @@ export default function LandingPage() {
           HERO SECTION
           ══════════════════════════════════════ */}
       <section className="relative pt-16 pb-12 md:pt-28 md:pb-20 overflow-hidden">
-        <OrbitRings />
-        <FloatingParticles />
+
 
         <div ref={heroRef.ref} className="relative z-10 mx-auto max-w-7xl px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -231,7 +180,7 @@ export default function LandingPage() {
               </h1>
 
               <p className="max-w-lg text-[15px] sm:text-[17px] text-text-secondary leading-relaxed">
-                Experience the exact JAMB exam environment. Practice with <strong className="text-slate-200">1,000,000+ curated questions</strong> across all 17 subjects, get AI-powered explanations, and track your progress to exam day.
+                Experience the exact JAMB exam environment. Practice with <strong className="text-text-primary dark:text-slate-200">1,000,000+ curated questions</strong> across all 17 subjects, get AI-powered explanations, and track your progress to exam day.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
@@ -244,7 +193,7 @@ export default function LandingPage() {
                 </Link>
                 <a
                   href="#how-it-works"
-                  className="group flex items-center justify-center gap-2 rounded-2xl border border-border/80 bg-bg-secondary/40 backdrop-blur-sm px-8 py-4 text-[15px] font-bold text-text-secondary hover:bg-slate-800/60 hover:text-white hover:border-slate-600 transition-all transform hover:-translate-y-0.5"
+                  className="group flex items-center justify-center gap-2 rounded-2xl border border-border/80 bg-bg-secondary/40 backdrop-blur-sm px-8 py-4 text-[15px] font-bold text-text-secondary hover:bg-slate-800/60 hover:text-text-primary dark:text-white hover:border-slate-600 transition-all transform hover:-translate-y-0.5"
                 >
                   <Play className="h-4 w-4" />
                   See How It Works
@@ -312,7 +261,7 @@ export default function LandingPage() {
             ].map((stat, idx) => (
               <div key={idx} className="text-center space-y-2">
                 <div className="flex justify-center text-primary mb-2">{stat.icon}</div>
-                <div className="text-3xl sm:text-4xl font-display font-extrabold text-white tracking-tight">
+                <div className="text-3xl sm:text-4xl font-display font-extrabold text-text-primary dark:text-white tracking-tight">
                   <AnimatedCounter target={stat.value} suffix={stat.suffix} />
                 </div>
                 <div className="text-[12px] text-text-secondary font-medium">{stat.label}</div>
@@ -404,7 +353,7 @@ export default function LandingPage() {
                   <div className={`h-12 w-12 rounded-xl ${bgColor} border ${borderColor} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${textColor}`}>
                     {feature.icon}
                   </div>
-                  <h3 className="text-[18px] font-display font-bold text-white mb-3">{feature.title}</h3>
+                  <h3 className="text-[18px] font-display font-bold text-text-primary dark:text-white mb-3">{feature.title}</h3>
                   <p className="text-[13px] text-text-secondary leading-relaxed">{feature.description}</p>
                 </div>
               );
@@ -437,11 +386,11 @@ export default function LandingPage() {
                 <Brain className="h-3 w-3" />
                 MAX PLAN EXCLUSIVE
               </div>
-              <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-white">
+              <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-text-primary dark:text-white">
                 Your Personal <span className="bg-gradient-to-r from-blue-300 to-pink-400 bg-clip-text text-transparent">AI Study Partner</span>
               </h2>
               <p className="text-[15px] text-text-secondary leading-relaxed">
-                Don't just practice — <strong className="text-slate-200">understand</strong>. Our AI tutor engages you in real conversations about JAMB topics. Ask it anything — from photosynthesis to quadratic equations — and get clear, curriculum-aligned explanations instantly.
+                Don't just practice — <strong className="text-text-primary dark:text-slate-200">understand</strong>. Our AI tutor engages you in real conversations about JAMB topics. Ask it anything — from photosynthesis to quadratic equations — and get clear, curriculum-aligned explanations instantly.
               </p>
               <ul className="space-y-4">
                 {[
@@ -452,7 +401,7 @@ export default function LandingPage() {
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-[14px] text-text-secondary">
                     <div className="mt-0.5 h-5 w-5 rounded-full bg-gradient-to-r from-primary to-pink-500 flex items-center justify-center flex-shrink-0">
-                      <Check className="h-3 w-3 text-white" />
+                      <Check className="h-3 w-3 text-text-primary dark:text-white" />
                     </div>
                     {item}
                   </li>
@@ -460,7 +409,7 @@ export default function LandingPage() {
               </ul>
               <Link
                 to="/auth?mode=register"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-pink-600 px-6 py-3 text-[14px] font-bold text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-600/40 transition-all active:scale-95"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-pink-600 px-6 py-3 text-[14px] font-bold text-text-primary dark:text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-600/40 transition-all active:scale-95"
               >
                 Try AI Assistant <MessageSquare className="h-4 w-4" />
               </Link>
@@ -503,7 +452,7 @@ export default function LandingPage() {
                     </span>
                   )}
                 </div>
-                <div className="text-[14px] font-bold text-white mb-1 group-hover:text-blue-200 transition-colors">{sub.name}</div>
+                <div className="text-[14px] font-bold text-text-primary dark:text-white mb-1 group-hover:text-blue-200 transition-colors">{sub.name}</div>
                 <div className="text-[11px] text-text-muted leading-relaxed">{sub.topics}</div>
               </div>
             ))}
@@ -542,11 +491,11 @@ export default function LandingPage() {
                 )}
                 <div className="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-blue-500/5 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
                   {item.icon}
-                  <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gradient-to-r from-primary to-blue-400 flex items-center justify-center text-[10px] font-bold text-white">
+                  <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gradient-to-r from-primary to-blue-400 flex items-center justify-center text-[10px] font-bold text-text-primary dark:text-white">
                     {item.step}
                   </div>
                 </div>
-                <h3 className="text-[16px] font-display font-bold text-white">{item.title}</h3>
+                <h3 className="text-[16px] font-display font-bold text-text-primary dark:text-white">{item.title}</h3>
                 <p className="text-[12px] text-text-secondary leading-relaxed max-w-[200px] mx-auto">{item.description}</p>
               </div>
             ))}
@@ -566,7 +515,7 @@ export default function LandingPage() {
                 <BarChart3 className="h-3 w-3" />
                 PERFORMANCE INSIGHTS
               </div>
-              <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-white">
+              <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-text-primary dark:text-white">
                 Know Exactly Where <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">You Stand</span>
               </h2>
               <p className="text-[15px] text-text-secondary leading-relaxed">
@@ -629,11 +578,11 @@ export default function LandingPage() {
                   <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
                     <Zap className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="text-[18px] font-display font-bold text-white">Plus</h3>
+                  <h3 className="text-[18px] font-display font-bold text-text-primary dark:text-white">Plus</h3>
                 </div>
 
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-display font-extrabold text-white tracking-tight">₦3,500</span>
+                  <span className="text-4xl font-display font-extrabold text-text-primary dark:text-white tracking-tight">₦3,500</span>
                   <span className="text-[13px] text-text-secondary">/ month</span>
                 </div>
                 <p className="text-[12px] text-primary font-medium mb-6">1 test daily</p>
@@ -651,7 +600,7 @@ export default function LandingPage() {
                       {item.included ? (
                         <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" />
                       ) : (
-                        <X className="h-4 w-4 text-slate-600 flex-shrink-0" />
+                        <X className="h-4 w-4 text-text-muted dark:text-slate-600 flex-shrink-0" />
                       )}
                       <span className={item.included ? '' : 'text-text-muted'}>{item.text}</span>
                     </li>
@@ -671,7 +620,7 @@ export default function LandingPage() {
             <div className="rounded-2xl border-2 border-primary/60 bg-bg-secondary/40 p-8 flex flex-col justify-between relative hover:-translate-y-2 transition-all duration-300 shadow-xl shadow-primary/10">
               {/* Badge */}
               <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="rounded-full bg-gradient-to-r from-primary to-blue-500 px-4 py-1 text-[10px] font-bold text-white uppercase tracking-wider shadow-lg shadow-primary/30">
+                <div className="rounded-full bg-gradient-to-r from-primary to-blue-500 px-4 py-1 text-[10px] font-bold text-text-primary dark:text-white uppercase tracking-wider shadow-lg shadow-primary/30">
                   ⭐ Most Popular
                 </div>
               </div>
@@ -681,11 +630,11 @@ export default function LandingPage() {
                   <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
                     <Award className="h-5 w-5 text-blue-300" />
                   </div>
-                  <h3 className="text-[18px] font-display font-bold text-white">Pro</h3>
+                  <h3 className="text-[18px] font-display font-bold text-text-primary dark:text-white">Pro</h3>
                 </div>
 
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-display font-extrabold text-white tracking-tight">₦6,000</span>
+                  <span className="text-4xl font-display font-extrabold text-text-primary dark:text-white tracking-tight">₦6,000</span>
                   <span className="text-[13px] text-text-secondary">/ month</span>
                 </div>
                 <p className="text-[12px] text-blue-300 font-medium mb-6">2 tests daily</p>
@@ -704,7 +653,7 @@ export default function LandingPage() {
                       {item.included ? (
                         <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" />
                       ) : (
-                        <X className="h-4 w-4 text-slate-600 flex-shrink-0" />
+                        <X className="h-4 w-4 text-text-muted dark:text-slate-600 flex-shrink-0" />
                       )}
                       <span className={item.included ? '' : 'text-text-muted'}>{item.text}</span>
                     </li>
@@ -714,7 +663,7 @@ export default function LandingPage() {
 
               <Link
                 to="/auth?mode=register"
-                className="mt-8 block w-full text-center rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3.5 text-[14px] font-bold text-white shadow-lg shadow-violet-600/20 hover:from-primary hover:to-blue-500 hover:shadow-violet-600/40 transition-all active:scale-95"
+                className="mt-8 block w-full text-center rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3.5 text-[14px] font-bold text-text-primary dark:text-white shadow-lg shadow-violet-600/20 hover:from-primary hover:to-blue-500 hover:shadow-violet-600/40 transition-all active:scale-95"
               >
                 Get Pro
               </Link>
@@ -731,13 +680,13 @@ export default function LandingPage() {
                     <Brain className="h-5 w-5 text-pink-400" />
                   </div>
                   <div>
-                    <h3 className="text-[18px] font-display font-bold text-white">Max</h3>
+                    <h3 className="text-[18px] font-display font-bold text-text-primary dark:text-white">Max</h3>
                     <span className="text-[10px] text-pink-400 font-semibold uppercase tracking-wider">+ AI Tutor</span>
                   </div>
                 </div>
 
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-display font-extrabold text-white tracking-tight">₦14,000</span>
+                  <span className="text-4xl font-display font-extrabold text-text-primary dark:text-white tracking-tight">₦14,000</span>
                   <span className="text-[13px] text-text-secondary">/ month</span>
                 </div>
                 <p className="text-[12px] text-pink-400 font-medium mb-6">5 tests daily + AI Chat</p>
@@ -763,7 +712,7 @@ export default function LandingPage() {
 
               <Link
                 to="/auth?mode=register"
-                className="relative mt-8 block w-full text-center rounded-xl bg-gradient-to-r from-pink-600 to-violet-600 py-3.5 text-[14px] font-bold text-white shadow-lg shadow-pink-600/20 hover:from-pink-500 hover:to-blue-500 hover:shadow-pink-600/40 transition-all active:scale-95"
+                className="relative mt-8 block w-full text-center rounded-xl bg-gradient-to-r from-pink-600 to-violet-600 py-3.5 text-[14px] font-bold text-text-primary dark:text-white shadow-lg shadow-pink-600/20 hover:from-pink-500 hover:to-blue-500 hover:shadow-pink-600/40 transition-all active:scale-95"
               >
                 Get Max
               </Link>
@@ -777,7 +726,7 @@ export default function LandingPage() {
                 <CreditCard className="h-3 w-3 text-text-secondary" />
                 PAY PER TEST
               </div>
-              <h3 className="text-[22px] font-display font-bold text-white">
+              <h3 className="text-[22px] font-display font-bold text-text-primary dark:text-white">
                 No subscription? No problem.
               </h3>
               <p className="text-[14px] text-text-secondary max-w-md mx-auto">
@@ -785,11 +734,11 @@ export default function LandingPage() {
               </p>
               <div className="flex justify-center gap-6 pt-2">
                 <div className="rounded-xl border border-border/60 bg-slate-800/30 px-6 py-4 text-center">
-                  <div className="text-2xl font-display font-extrabold text-white">₦300</div>
+                  <div className="text-2xl font-display font-extrabold text-text-primary dark:text-white">₦300</div>
                   <div className="text-[11px] text-text-secondary mt-1">per drill test</div>
                 </div>
                 <div className="rounded-xl border border-border/60 bg-slate-800/30 px-6 py-4 text-center">
-                  <div className="text-2xl font-display font-extrabold text-white">₦500</div>
+                  <div className="text-2xl font-display font-extrabold text-text-primary dark:text-white">₦500</div>
                   <div className="text-[11px] text-text-secondary mt-1">per mock exam</div>
                 </div>
               </div>
@@ -803,7 +752,7 @@ export default function LandingPage() {
           ══════════════════════════════════════ */}
       <section className="relative py-24 z-10">
         <div className="mx-auto max-w-4xl px-6 text-center space-y-8">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold text-white leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold text-text-primary dark:text-white leading-tight">
             Ready to Score <span className="bg-gradient-to-r from-indigo-400 to-blue-300 bg-clip-text text-transparent">300+</span> in JAMB?
           </h2>
           <p className="text-[16px] text-text-secondary max-w-xl mx-auto">
@@ -833,7 +782,7 @@ export default function LandingPage() {
                   CBT
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[15px] font-display font-bold text-white leading-tight">JAMB UTME Prep</span>
+                  <span className="text-[15px] font-display font-bold text-text-primary dark:text-white leading-tight">JAMB UTME Prep</span>
                   <span className="text-[10px] text-text-muted leading-tight">by Aurikex</span>
                 </div>
               </div>
@@ -855,7 +804,7 @@ export default function LandingPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="h-9 w-9 rounded-lg border border-border bg-bg-secondary/50 flex items-center justify-center text-text-muted hover:text-white hover:border-indigo-500/40 hover:bg-primary-hover/10 transition-all duration-200"
+                    className="h-9 w-9 rounded-lg border border-border bg-bg-secondary/50 flex items-center justify-center text-text-muted hover:text-text-primary dark:text-white hover:border-indigo-500/40 hover:bg-primary-hover/10 transition-all duration-200"
                   >
                     {social.icon}
                   </a>
@@ -865,41 +814,41 @@ export default function LandingPage() {
 
             {/* Product links */}
             <div className="space-y-4">
-              <h4 className="text-[13px] font-display font-bold text-white uppercase tracking-wider">Product</h4>
+              <h4 className="text-[13px] font-display font-bold text-text-primary dark:text-white uppercase tracking-wider">Product</h4>
               <ul className="space-y-3 text-[12px] text-text-muted">
-                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#subjects" className="hover:text-white transition-colors">Subjects</a></li>
-                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
+                <li><a href="#features" className="hover:text-text-primary dark:text-white transition-colors">Features</a></li>
+                <li><a href="#subjects" className="hover:text-text-primary dark:text-white transition-colors">Subjects</a></li>
+                <li><a href="#pricing" className="hover:text-text-primary dark:text-white transition-colors">Pricing</a></li>
+                <li><a href="#how-it-works" className="hover:text-text-primary dark:text-white transition-colors">How It Works</a></li>
               </ul>
             </div>
 
             {/* Support links */}
             <div className="space-y-4">
-              <h4 className="text-[13px] font-display font-bold text-white uppercase tracking-wider">Support</h4>
+              <h4 className="text-[13px] font-display font-bold text-text-primary dark:text-white uppercase tracking-wider">Support</h4>
               <ul className="space-y-3 text-[12px] text-text-muted">
-                <li><Link to="/help" className="hover:text-white transition-colors">Help Center</Link></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-                <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                <li><Link to="/help" className="hover:text-text-primary dark:text-white transition-colors">Help Center</Link></li>
+                <li><Link to="/contact" className="hover:text-text-primary dark:text-white transition-colors">Contact Us</Link></li>
+                <li><Link to="/privacy" className="hover:text-text-primary dark:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-text-primary dark:text-white transition-colors">Terms of Service</Link></li>
               </ul>
             </div>
 
             {/* Contact info */}
             <div className="space-y-4">
-              <h4 className="text-[13px] font-display font-bold text-white uppercase tracking-wider">Contact</h4>
+              <h4 className="text-[13px] font-display font-bold text-text-primary dark:text-white uppercase tracking-wider">Contact</h4>
               <ul className="space-y-3 text-[12px] text-text-muted">
                 <li className="flex items-center gap-2">
-                  <Mail className="h-3.5 w-3.5 text-slate-600" />
-                  <a href="mailto:info@aurikex.tech" className="hover:text-white transition-colors">info@aurikex.tech</a>
+                  <Mail className="h-3.5 w-3.5 text-text-muted dark:text-slate-600" />
+                  <a href="mailto:info@aurikex.tech" className="hover:text-text-primary dark:text-white transition-colors">info@aurikex.tech</a>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Phone className="h-3.5 w-3.5 text-slate-600" />
-                  <a href="tel:++2349113683395" className="hover:text-white transition-colors">+234 911 368 3395</a>
+                  <Phone className="h-3.5 w-3.5 text-text-muted dark:text-slate-600" />
+                  <a href="tel:++2349113683395" className="hover:text-text-primary dark:text-white transition-colors">+234 911 368 3395</a>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Globe className="h-3.5 w-3.5 text-slate-600" />
-                  <a href="https://www.aurikex.tech" className="hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+                  <Globe className="h-3.5 w-3.5 text-text-muted dark:text-slate-600" />
+                  <a href="https://www.aurikex.tech" className="hover:text-text-primary dark:text-white transition-colors" target="_blank" rel="noopener noreferrer">
                     www.aurikex.tech
                   </a>
                 </li>
@@ -909,16 +858,16 @@ export default function LandingPage() {
 
           {/* Bottom bar */}
           <div className="border-t border-border/60 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-[11px] text-slate-600 text-center md:text-left space-y-1">
+            <div className="text-[11px] text-text-muted dark:text-slate-600 text-center md:text-left space-y-1">
               <p>© {new Date().getFullYear()} JAMB CBT Prep. All rights reserved.</p>
               <p>
                 Founded by <span className="text-text-secondary font-medium">Omotosho Korede Samuel</span> · A product of <span className="text-text-secondary font-medium">Aurikex</span>
               </p>
             </div>
-            <div className="flex items-center gap-6 text-[11px] text-slate-600">
-              <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-              <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
-              <a href="#" className="hover:text-white transition-colors">Cookies</a>
+            <div className="flex items-center gap-6 text-[11px] text-text-muted dark:text-slate-600">
+              <Link to="/privacy" className="hover:text-text-primary dark:text-white transition-colors">Privacy</Link>
+              <Link to="/terms" className="hover:text-text-primary dark:text-white transition-colors">Terms</Link>
+              <a href="#" className="hover:text-text-primary dark:text-white transition-colors">Cookies</a>
             </div>
           </div>
         </div>
