@@ -1,0 +1,185 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>AI Diagram Preview</title>
+      <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; padding: 2rem; color: #111827; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem; }
+        .card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .subject { display: inline-block; padding: 0.25rem 0.75rem; background: #e0e7ff; color: #4338ca; border-radius: 999px; font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; text-transform: uppercase; }
+        .question { font-size: 1rem; font-weight: 500; margin-bottom: 1.5rem; line-height: 1.5; }
+        .diagram { border: 1px dashed #cbd5e1; border-radius: 8px; padding: 1rem; background: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 200px; }
+        .diagram svg { max-width: 100%; height: auto; }
+        h1 { margin-bottom: 2rem; text-align: center; }
+      </style>
+    </head>
+    <body>
+      <h1>AI Generated Diagrams Preview (Random Sample)</h1>
+      <div class="grid">
+  
+        <div class="card">
+          <span class="subject">government - Arms of Government and Electoral Processes</span>
+          <div class="question">What is the primary role of the legislature in a system of government with separation of powers, and how does this role impact the exercise of executive power?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='50' y='50' width='100' height='50' fill='#28a745'/><rect x='170' y='50' width='100' height='50' fill='#17a2b8'/></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">agriculture - General Agriculture and Ecology</span>
+          <div class="question">In the diagram below, the life cycle of a certain pest is shown. If the pest is controlled at stage C, what is the likely impact on the pest population?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><ellipse cx='160' cy='100' rx='80' ry='60' fill='none' stroke='black'/><text x='160' y='90' text-anchor='middle'>Egg</text><path d='M 240 100 L 280 100' stroke='black' fill='none'/><text x='290' y='100'>A</text><path d='M 160 140 L 160 180' stroke='black' fill='none'/><text x='170' y='190'>C</text><path d='M 80 100 L 40 100' stroke='black' fill='none'/><text x='30' y='100'>B</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">civic_education - Government Systems and Civic Processes</span>
+          <div class="question">The diagram below illustrates the consequences of electoral malpractice on a democratic system. In the diagram, what is the primary effect of electoral malpractice on the legitimacy of the government?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='180' fill='#f0f0f0'/><text x='160' y='100' text-anchor='middle'>Electoral Malpractice</text><text x='160' y='120' text-anchor='middle'>Legitimacy Crisis</text><line x1='150' y1='130' x2='170' y2='150' stroke='black'/></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">history - Post-Independence Nigeria and Foreign Relations</span>
+          <div class="question">In the diagram below, a map illustrates the territories involved in a significant conflict. The Nigerian Civil War was fought primarily between which two regions?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><path d='M10 10 L100 100 L200 20 Z' fill='#cccccc'/><rect x='50' y='50' width='100' height='100' fill='none' stroke='black'/></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">chemistry - Organic Chemistry</span>
+          <div class="question">Which of the following sets of compounds constitutes a pair of enantiomers?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><text x='20' y='40' font-family='Arial' font-size='14'>A: (2R, 3R)-tartaric acid and (2S, 3S)-tartaric acid</text><text x='20' y='70' font-family='Arial' font-size='14'>B: (2R, 3R)-tartaric acid and (2R, 3S)-tartaric acid</text><text x='20' y='100' font-family='Arial' font-size='14'>C: (2R, 3S)-tartaric acid and (2S, 3R)-tartaric acid</text><text x='20' y='130' font-family='Arial' font-size='14'>D: (2S, 3S)-tartaric acid and (2R, 3S)-tartaric acid</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">economics - Money, Banking and Inflation</span>
+          <div class="question">In the diagram below, the money market equilibrium is shown. In the diagram below, what does the point 'E' represent?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='20' y='20' width='280' height='160' fill='none' stroke='black'/><line x1='40' y1='180' x2='300' y2='180' stroke='black'/><line x1='40' y1='180' x2='40' y2='20' stroke='black'/><text x='150' y='100' text-anchor='middle'>E</text><path d='M 40 100 L 300 100' stroke='black' fill='none'/><path d='M 40 180 L 300 40' stroke='black' fill='none'/></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">agriculture - Agricultural Engineering and Technology</span>
+          <div class="question">In the diagram below, a farm implement is shown. The component labeled 'M' is most likely used for what purpose? In the diagram, <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='50' height='50' fill='#ccc' stroke='black'/><text x='35' y='35' font-size='24'>M</text></svg></div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='50' height='50' fill='#ccc' stroke='black'/><text x='35' y='35' font-size='24'>M</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">commerce - Introduction to Commerce and Occupations</span>
+          <div class="question">In the diagram below, a production process is illustrated. What is the primary benefit of the division of labour as shown?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='20' y='20' width='50' height='50' fill='#ccc'/><rect x='100' y='20' width='50' height='50' fill='#ccc'/><rect x='180' y='20' width='50' height='50' fill='#ccc'/><text x='35' y='40'>Task 1</text><text x='115' y='40'>Task 2</text><text x='195' y='40'>Task 3</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">civic_education - National Values, Rights and Obligations</span>
+          <div class="question">Promoting national unity involves fostering a sense of shared identity among citizens. Which of the following strategies is most effective in achieving this goal?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><circle cx='160' cy='100' r='80' fill='#cccccc'/><text x='160' y='105' text-anchor='middle'>Shared Identity</text><text x='160' y='125' text-anchor='middle'>through</text><text x='160' y='145' text-anchor='middle'>Cultural Exchange</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">literature - Narrative Structure</span>
+          <div class="question">In the context of the provided diagram representing the 'Freytag's Pyramid' plot structure, which section is characterized by the highest point of tension and the turning point of the protagonist's fate?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 400 200' xmlns='http://www.w3.org/2000/svg'><path d='M 20 180 L 100 120 L 200 40 L 300 120 L 380 180' fill='none' stroke='black' stroke-width='2'/><text x='20' y='195' font-family='Arial' font-size='12'>Exposition</text><text x='110' y='110' font-family='Arial' font-size='12'>Rising Action</text><text x='185' y='30' font-family='Arial' font-size='12' font-weight='bold'>Climax</text><text x='280' y='110' font-family='Arial' font-size='12'>Falling Action</text><text x='320' y='195' font-family='Arial' font-size='12'>Resolution</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">government - Nigeria's Foreign Policy and International Relations</span>
+          <div class="question">What is the primary objective of Nigeria's participation in the Economic Community of West African States (ECOWAS), and how does this objective impact the country's foreign policy?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><circle cx='160' cy='100' r='90' fill='#CCCCCC'/></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">agriculture - Agronomy (Crop Production)</span>
+          <div class="question">In the diagram below, a soil profile is shown. In the diagram, the layer labeled 'B' is most likely to be rich in which nutrient? The diagram shows three distinct layers labeled 'A', 'B', and 'C'.</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='40' height='180' fill='#964B00'/><rect x='60' y='30' width='40' height='160' fill='#786C3B'/><rect x='110' y='50' width='40' height='140' fill='#C9C4B5'/><text x='20' y='100' fill='black'>A</text><text x='70' y='120' fill='black'>B</text><text x='120' y='140' fill='black'>C</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">history - Post-Independence Nigeria and Foreign Relations</span>
+          <div class="question">In the diagram below, a map illustrates the territorial control during the Nigerian Civil War. What was a major consequence of the war?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='180' fill='#f0f0f0'/><text x='160' y='100' text-anchor='middle'>Map illustrating territorial control during the Nigerian Civil War</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">chemistry - Electrochemistry</span>
+          <div class="question">In the diagram below, an aqueous solution of \( \mathrm{CuCl_2} \) is electrolyzed using inert platinum electrodes. Which of the following correctly describes the observation at the anode?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='80' y='80' width='160' height='80' fill='#e1f5fe' stroke='black' stroke-width='2'/><rect x='110' y='40' width='10' height='40' fill='grey' stroke='black'/><rect x='190' y='40' width='10' height='40' fill='grey' stroke='black'/><line x1='115' y1='40' x2='115' y2='20' stroke='black'/><line x1='195' y1='40' x2='195' y2='20' stroke='black'/><line x1='115' y1='20' x2='195' y2='20' stroke='black' stroke-width='2'/><text x='100' y='30' font-size='12'>Anode (+)</text><text x='180' y='30' font-size='12'>Cathode (-)</text><text x='140' y='130' font-size='12'>CuCl\(_2\)(aq)</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">agriculture - Agricultural Engineering and Technology</span>
+          <div class="question">In the diagram below, a tractor-drawn implement is shown. The component labeled 'R' is most likely to be used for what purpose? In the diagram below, ...</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='50' y='50' width='100' height='50' fill='#ccc' /><text x='75' y='75' font-size='24'>R</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">irk - Islamic History and Culture in West Africa</span>
+          <div class="question">In the diagram below, a timeline shows the reigns of the Rightly Guided Caliphs. Identify the caliph who ruled from 644 to 656 CE.</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='180' fill='#f0f0f0'/><text x='20' y='30'>Timeline of Rightly Guided Caliphs</text><line x1='50' y1='50' x2='280' y2='50' stroke='black'/><rect x='50' y='60' width='50' height='20' fill='#cccccc'/><text x='55' y='75'>Abu Bakr</text><rect x='110' y='60' width='60' height='20' fill='#cccccc'/><text x='115' y='75'>Umar</text><rect x='180' y='60' width='40' height='20' fill='#cccccc'/><text x='185' y='75'>Uthman</text><rect x='230' y='60' width='50' height='20' fill='#cccccc'/><text x='235' y='75'>Ali</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">civic_education - Government Systems and Civic Processes</span>
+          <div class="question">The diagram below illustrates the consequences of electoral malpractice. In the diagram, what is the primary effect on the democratic process?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='180' fill='#f0f0f0'/><text x='160' y='100' text-anchor='middle'>Electoral Malpractice</text><text x='160' y='120' text-anchor='middle'>Loss of Trust</text><text x='160' y='140' text-anchor='middle'>Political Instability</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">crk - The Early Church and Paul's Mission</span>
+          <div class="question">In the diagram below, a map illustrates Paul's first missionary journey. In the context of Acts 13:4-14:28, what was the significance of this journey?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><path d='M 50 50 L 100 150 L 200 50 Z' fill='none' stroke='black'/></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">history - World Empires</span>
+          <div class="question">Analyze the map provided. Which empire's territorial peak is represented by the highlighted region spanning from the Atlantic to the Persian Gulf during the 16th century?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 400 200' xmlns='http://www.w3.org/2000/svg'><rect width='400' height='200' fill='#f0f0f0'/><path d='M100,80 Q150,50 200,80 T300,70 L320,120 L200,150 L100,120 Z' fill='#d4a017' stroke='#000' stroke-width='2'/><text x='160' y='110' font-family='Arial' font-size='14' fill='#000'>Highlighted Region</text><text x='10' y='20' font-family='Arial' font-size='12'>Simplified Map of Eurasia/Africa</text></svg>
+          </div>
+        </div>
+    
+        <div class="card">
+          <span class="subject">history - Post-Independence Nigeria and Foreign Relations</span>
+          <div class="question">In the diagram below, the map shows the regions involved in the Nigerian Civil War. Which region declared independence as the Republic of Biafra?</div>
+          <div class="diagram">
+            <svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='50' height='30' fill='#ccc'/><text x='20' y='25'>Biafra</text></svg>
+          </div>
+        </div>
+    
+      </div>
+    </body>
+    </html>

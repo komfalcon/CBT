@@ -33,7 +33,7 @@ type Query {
 }
 
 type Mutation {
-  register(fullName: String!, email: String!, password: String!, phone: String, role: String): String!
+  register(fullName: String!, email: String!, password: String!, phone: String): String!
   verifyEmail(email: String!, code: String!): String!
   forgotPassword(email: String!): String!
   login(email: String!, password: String!, ipAddress: String): AuthTokensResponse!

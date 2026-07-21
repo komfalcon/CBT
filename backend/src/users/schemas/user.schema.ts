@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { randomBytes, createCipheriv, createDecipheriv } from 'crypto';
+import { randomBytes, createCipheriv, createDecipheriv, randomInt } from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 
 export const USER_ROLES = ['super_admin', 'admin', 'examiner', 'proctor', 'student'] as const;
@@ -103,7 +103,7 @@ export function generateCbtKey(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code = '';
   for (let i = 0; i < 6; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
+    code += chars.charAt(randomInt(0, chars.length));
   }
   return `CBT-${code}`;
 }
@@ -117,8 +117,16 @@ export class User {
   @Prop({ default: uuidv4, unique: true })
   userId!: string;
 
-  @Prop({ default: generateCbtKey, unique: true, index: true, sparse: true, immutable: true })
-  cbt_key!: string;
+  @Prop({
+    unique: true,
+    sparse: true,
+    set: (value?: string) => (value ? encryptFieldValue(value) : undefined),
+    get: (value?: string) => decryptFieldValue(value),
+  })
+  cbt_key?: string;
+
+  @Prop({ unique: true, index: true, sparse: true, immutable: true })
+  cbt_key_hash?: string;
 
   @Prop({ unique: true, sparse: true })
   jamb_reg_no?: string;

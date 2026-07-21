@@ -1,5 +1,4 @@
-import { IsEmail, IsIn, IsOptional, IsString, MinLength } from 'class-validator';
-import { USER_ROLES } from '../../users/schemas/user.schema';
+import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class RegisterDto {
   @IsString()
@@ -16,8 +15,4 @@ export class RegisterDto {
   @IsString()
   @MinLength(8)
   password!: string;
-
-  @IsOptional()
-  @IsIn([...USER_ROLES])
-  role?: (typeof USER_ROLES)[number];
 }

@@ -48,3 +48,6 @@ export class ExamSession {
 
 export type ExamSessionDocument = HydratedDocument<ExamSession>;
 export const ExamSessionSchema = SchemaFactory.createForClass(ExamSession);
+
+ExamSessionSchema.index({ userId: 1, type: 1, startedAt: -1 });
+

@@ -59,6 +59,7 @@ export class QuestionsController {
   }
 
   @Get('search')
+  @UseGuards(OptionalJwtAuthGuard)
   search(
     @Query('q') q: string,
     @Query('subject') subject?: string,
@@ -66,19 +67,23 @@ export class QuestionsController {
     @Query('status') status?: string,
     @Query('page') page = '1',
     @Query('limit') limit = '20',
+    @CurrentUser() user?: { sub?: string; userId?: string; role?: UserRole },
   ) {
     if (!q) {
       throw new BadRequestException('q is required');
     }
 
-    return this.questionsService.searchQuestions({
-      q,
-      subject,
-      status,
-      difficulty_level: difficultyLevel ? Number(difficultyLevel) : undefined,
-      page: Number(page) || 1,
-      limit: Math.min(Number(limit) || 20, 100),
-    });
+    return this.questionsService.searchQuestions(
+      {
+        q,
+        subject,
+        status,
+        difficulty_level: difficultyLevel ? Number(difficultyLevel) : undefined,
+        page: Number(page) || 1,
+        limit: Math.min(Number(limit) || 20, 100),
+      },
+      user,
+    );
   }
 
   @Get('stats')

@@ -2,6 +2,7 @@ import { Injectable, BadRequestException, InternalServerErrorException } from '@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../users/schemas/user.schema';
+import { PaymentLog, PaymentLogDocument } from './schemas/payment-log.schema';
 import axios from 'axios';
 
 @Injectable()
@@ -15,7 +16,10 @@ export class PaymentsService {
     'PLN_015edt1c8m9nnow': 'max',
   };
 
-  constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @InjectModel(PaymentLog.name) private readonly paymentLogModel: Model<PaymentLogDocument>,
+  ) {}
 
   async verifyTransaction(userId: string, reference: string, planCode: string): Promise<UserDocument> {
     if (!this.paystackSecretKey) {
@@ -29,6 +33,12 @@ export class PaymentsService {
     const tier = this.planMappings[planCode];
     if (!tier) {
       throw new BadRequestException('Invalid plan code.');
+    }
+
+    // 1. Prevent Replay Attack / Double-spending
+    const existingLog = await this.paymentLogModel.findOne({ reference }).exec();
+    if (existingLog) {
+      throw new BadRequestException('This transaction reference has already been verified.');
     }
 
     console.log(`Verifying transaction: reference=${reference}, planCode=${planCode}, tier=${tier}`);
@@ -67,6 +77,11 @@ export class PaymentsService {
         throw new BadRequestException('User not found.');
       }
 
+      // 2. Prevent Ownership Bypass: Check email matches
+      if (data.customer?.email?.toLowerCase() !== user.email.toLowerCase()) {
+        throw new BadRequestException('Transaction owner email mismatch.');
+      }
+
       user.subscription_tier = tier as any;
       
       // If upgrading to max, reset AI messages to a default value (e.g. 50 or 100)
@@ -74,6 +89,16 @@ export class PaymentsService {
         user.ai_messages_remaining = 100;
         user.ai_messages_last_reset = new Date();
       }
+
+      // 3. Log the verified reference
+      await this.paymentLogModel.create({
+        reference,
+        userId,
+        planCode,
+        amount: data.amount,
+        email: data.customer?.email?.toLowerCase() || user.email.toLowerCase(),
+        verifiedAt: new Date(),
+      });
 
       await user.save();
       console.log(`Successfully upgraded user ${userId} to ${tier} tier.`);

@@ -1,3 +1,4 @@
+import React, { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AuthPage from './features/auth/AuthPage';
 import QuestionBankPage from './features/questions/QuestionBankPage';
@@ -11,6 +12,10 @@ import ContactUs from './pages/ContactUs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
+
+const AdminDashboard = React.lazy(() => import('./pages/AdminDashboard'));
+
 function App() {
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-primary selection:text-white flex flex-col">
@@ -23,6 +28,16 @@ function App() {
           <Route path="/questions" element={<ProtectedRoute><QuestionBankPage /></ProtectedRoute>} />
           <Route path="/exam/:sessionId" element={<ProtectedRoute><ExamConsole /></ProtectedRoute>} />
           <Route path="/results/:resultId" element={<ProtectedRoute><ResultReview /></ProtectedRoute>} />
+          <Route
+            path="/admin/*"
+            element={
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#0b0f19] text-slate-400">Loading Control Center...</div>}>
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              </Suspense>
+            }
+          />
           <Route path="/help" element={<HelpCenter />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />

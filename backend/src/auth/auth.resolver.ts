@@ -36,14 +36,12 @@ export class AuthResolver {
     @Args('email') email: string,
     @Args('password') password: string,
     @Args('phone', { nullable: true }) phone?: string,
-    @Args('role', { nullable: true }) role?: string,
   ) {
     const response = await this.authService.register({
       fullName,
       email,
       password,
       phone,
-      role: role as RegisterDto['role'],
     });
     return response.message;
   }

@@ -262,7 +262,7 @@ export class ExamService {
   sanitizeSession(session: ExamSessionDocument) {
     const plain = session.toObject();
     plain.questions = plain.questions.map((q: any) => {
-      const { correct_option, explanation, embedding_vector, ...rest } = q;
+      const { correct_option, explanation, embedding_vector, versions, ...rest } = q;
       return rest;
     });
     return plain;

@@ -300,14 +300,17 @@ export class QuestionsService {
     };
   }
 
-  async searchQuestions(params: {
-    q: string;
-    page: number;
-    limit: number;
-    subject?: string;
-    difficulty_level?: number;
-    status?: string;
-  }) {
+  async searchQuestions(
+    params: {
+      q: string;
+      page: number;
+      limit: number;
+      subject?: string;
+      difficulty_level?: number;
+      status?: string;
+    },
+    user?: { role?: string },
+  ) {
     const sanitizedQuery = this.sanitizeTextSearchInput(params.q);
     if (!sanitizedQuery) {
       throw new BadRequestException('Search query is required');
@@ -329,8 +332,12 @@ export class QuestionsService {
       const data = await this.questionModel.find({ questionId: { $in: esResult.ids } }).lean().exec();
       data.sort((a, b) => (indexedOrder.get(a.questionId) ?? 0) - (indexedOrder.get(b.questionId) ?? 0));
 
+      const processedData = (!user?.role || user.role === 'student')
+        ? data.map((q) => this.sanitizeForStudents(q))
+        : data;
+
       return {
-        data,
+        data: processedData,
         total: esResult.total,
         page: params.page,
         limit: params.limit,
@@ -361,8 +368,12 @@ export class QuestionsService {
     const start = (params.page - 1) * params.limit;
     const data = filtered.slice(start, start + params.limit);
 
+    const processedData = (!user?.role || user.role === 'student')
+      ? data.map((q) => this.sanitizeForStudents(q))
+      : data;
+
     return {
-      data,
+      data: processedData,
       total,
       page: params.page,
       limit: params.limit,
@@ -375,7 +386,7 @@ export class QuestionsService {
       typeof (question as QuestionDocument).toObject === 'function'
         ? (question as QuestionDocument).toObject()
         : question;
-    const { correct_option, ...rest } = plain as Question & { correct_option: string };
+    const { correct_option, explanation, versions, embedding_vector, ...rest } = plain as any;
     return rest;
   }
 

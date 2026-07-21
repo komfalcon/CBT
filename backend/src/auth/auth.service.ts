@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  OnModuleInit,
 } from '@nestjs/common';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,10 +14,10 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
-import { createHmac } from 'crypto';
+import { createHmac, randomInt, createHash } from 'crypto';
 import { z } from 'zod';
 import { NotificationsService } from '../notifications/notifications.service';
-import { User, UserDocument } from '../users/schemas/user.schema';
+import { User, UserDocument, generateCbtKey } from '../users/schemas/user.schema';
 import { RegisterDto } from './dto/register.dto';
 import { JwtPayload } from './types/jwt-payload.type';
 
@@ -59,17 +60,38 @@ const registerValidationSchema = z.object({
     .regex(/[A-Z]/, 'Password must include an uppercase letter')
     .regex(/[0-9]/, 'Password must include a number')
     .regex(/[^A-Za-z0-9]/, 'Password must include a special character'),
-  role: z.enum(['super_admin', 'admin', 'examiner', 'proctor', 'student']).optional(),
 });
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly notificationsService: NotificationsService,
   ) {}
+
+  async onModuleInit() {
+    // Migrate legacy plaintext cbt_key fields if they exist in DB
+    const legacyUsers = await this.userModel.find({ cbt_key: { $exists: true } }).exec();
+    if (legacyUsers.length > 0) {
+      console.log(`[Migration] Found ${legacyUsers.length} users with legacy cbt_key. Hashing them...`);
+      for (const user of legacyUsers) {
+        const plainKey = (user as any).cbt_key;
+        if (plainKey && !user.cbt_key_hash) {
+          const hash = createHash('sha256').update(plainKey).digest('hex');
+          await this.userModel.updateOne(
+            { _id: user._id },
+            { 
+              $set: { cbt_key_hash: hash }, 
+              $unset: { cbt_key: 1 } 
+            }
+          );
+        }
+      }
+      console.log(`[Migration] Legacy CBT keys successfully migrated to hashed format.`);
+    }
+  }
 
   async register(payload: RegisterDto) {
     const parsed = registerValidationSchema.safeParse(payload);
@@ -85,16 +107,20 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(parsed.data.password, 10);
 
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const code = randomInt(100000, 999999).toString();
+    const plainCbtKey = generateCbtKey();
+    const cbtKeyHash = createHash('sha256').update(plainCbtKey).digest('hex');
+
     const user = await this.userModel.create({
       fullName: parsed.data.fullName,
       email: normalizedEmail,
       phone: parsed.data.phone,
       passwordHash,
-      role: parsed.data.role ?? 'student',
+      role: 'student',
       account_status: 'pending_verification',
       verification_code: code,
       verification_code_expires: new Date(Date.now() + 24 * 3600 * 1000),
+      cbt_key_hash: cbtKeyHash,
     });
 
     await this.notificationsService.queueEmailVerification({
@@ -105,7 +131,7 @@ export class AuthService {
 
     return {
       message: 'Registration successful. Check email to verify.',
-      cbt_key: user.cbt_key,
+      cbt_key: plainCbtKey,
     };
   }
 
@@ -251,9 +277,8 @@ export class AuthService {
     const normalizedEmail = email.toLowerCase();
     const user = await this.userModel.findOne({ email: normalizedEmail }).exec();
 
-    let code: string | undefined;
     if (user) {
-      code = Math.floor(100000 + Math.random() * 900000).toString();
+      const code = randomInt(100000, 999999).toString();
       user.password_reset_code = code;
       user.password_reset_expires = new Date(Date.now() + 3600 * 1000);
       await user.save();
@@ -417,7 +442,8 @@ export class AuthService {
     }
 
     const formattedKey = cbtKey.trim().toUpperCase();
-    const user = await this.userModel.findOne({ cbt_key: formattedKey }).exec();
+    const hash = createHash('sha256').update(formattedKey).digest('hex');
+    const user = await this.userModel.findOne({ cbt_key_hash: hash }).exec();
     if (!user) {
       throw new UnauthorizedException('Invalid CBT Key.');
     }
