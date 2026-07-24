@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Mail, Key, ShieldAlert } from 'lucide-react';
-import { login } from '../../features/auth/api';
+import { login, verifyOtp } from '../../features/auth/api';
 import { Button, Input } from '../../components';
 import { ThemeToggle } from '../../components/ThemeToggle';
 
@@ -11,6 +11,8 @@ export default function SecureAccess() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [tempToken, setTempToken] = useState('');
+  const [otp, setOtp] = useState('');
 
   const handleAdminLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -20,7 +22,10 @@ export default function SecureAccess() {
       
       const response = await login({ email, password });
       
-      if (response.accessToken) {
+      if (response.requiresMFA && response.tempToken) {
+        setTempToken(response.tempToken);
+        setMessage('MFA required. Enter your 6-digit code.');
+      } else if (response.accessToken) {
         localStorage.setItem('accessToken', response.accessToken);
         localStorage.setItem('refreshToken', response.refreshToken || '');
         navigate('/admin/overview', { replace: true });
@@ -29,6 +34,32 @@ export default function SecureAccess() {
       }
     } catch (error: any) {
       setMessage(error.response?.data?.message || 'Access Denied. Invalid credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOtpSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (otp.length !== 6) {
+      setMessage('Please enter a valid 6-digit OTP code.');
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      setMessage('Verifying OTP code...');
+      const response = await verifyOtp({ tempToken, otp });
+      
+      if (response.accessToken) {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken || '');
+        navigate('/admin/overview', { replace: true });
+      } else {
+        setMessage('Access Denied. Invalid token.');
+      }
+    } catch (error: any) {
+      setMessage(error.response?.data?.message || 'Access Denied. Invalid OTP.');
     } finally {
       setLoading(false);
     }
@@ -58,44 +89,87 @@ export default function SecureAccess() {
             </div>
           </div>
 
-          <form onSubmit={handleAdminLogin} className="flex flex-col gap-5">
-            <Input
-              label="Admin Email"
-              type="email"
-              placeholder="sysadmin@aurikex.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            
-            <Input
-              label="Admin Password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+          {!tempToken ? (
+            <form onSubmit={handleAdminLogin} className="flex flex-col gap-5">
+              <Input
+                label="Admin Email"
+                type="email"
+                placeholder="sysadmin@aurikex.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              
+              <Input
+                label="Admin Password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
 
-            {message && (
-              <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium px-4 py-3 rounded-xl flex items-center justify-center text-center">
-                {message}
-              </div>
-            )}
+              {message && (
+                <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium px-4 py-3 rounded-xl flex items-center justify-center text-center">
+                  {message}
+                </div>
+              )}
 
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full mt-2 group relative overflow-hidden"
-              size="lg"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-rose-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative flex items-center justify-center gap-2">
-                <Lock className="w-5 h-5" />
-                {loading ? 'Authenticating...' : 'Authenticate'}
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full mt-2 group relative overflow-hidden"
+                size="lg"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-rose-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative flex items-center justify-center gap-2">
+                  <Lock className="w-5 h-5" />
+                  {loading ? 'Authenticating...' : 'Authenticate'}
+                </div>
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleOtpSubmit} className="flex flex-col gap-5 animate-slide-up">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Authenticator Code</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="000000"
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                  className="w-full rounded-xl bg-bg-secondary border border-border px-4 py-3 text-sm text-text-primary focus:border-red-500 focus:ring-2 focus:ring-red-500/25 outline-none transition-all duration-150 font-mono tracking-[0.5em] text-center"
+                />
               </div>
-            </Button>
-          </form>
+
+              {message && (
+                <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-medium px-4 py-3 rounded-xl flex items-center justify-center text-center">
+                  {message}
+                </div>
+              )}
+
+              <Button
+                type="submit"
+                disabled={loading || otp.length !== 6}
+                className="w-full mt-2 group relative overflow-hidden"
+                size="lg"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-rose-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative flex items-center justify-center gap-2">
+                  <Key className="w-5 h-5" />
+                  {loading ? 'Verifying...' : 'Verify Code'}
+                </div>
+              </Button>
+              <button
+                type="button"
+                onClick={() => { setTempToken(''); setOtp(''); setMessage(''); }}
+                className="w-full text-xs text-text-secondary hover:text-text-primary transition-colors text-center mt-2"
+              >
+                Cancel and go back
+              </button>
+            </form>
+          )}
         </div>
         
         <p className="text-center text-xs text-text-muted mt-8 font-mono opacity-50 hover:opacity-100 transition-opacity">

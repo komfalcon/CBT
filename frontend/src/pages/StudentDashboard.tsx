@@ -25,7 +25,7 @@ import {
   X,
 } from 'lucide-react';
 import { AiChatWidget } from '../features/ai/AiChatWidget';
-import { Button, Card, Modal, Alert, Badge } from '../components';
+import { Button, Card, Modal, Alert, Badge, SecuritySettings } from '../components';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { useToast } from '../components';
 
@@ -419,6 +419,12 @@ export default function StudentDashboard() {
               </button>
             </div>
           </Card>
+
+          <SecuritySettings 
+            token={token} 
+            mfaEnabled={student?.mfa_enabled || false} 
+            onUpdate={() => fetchProfileAndHistory(token)} 
+          />
         </div>
 
         <div className="md:col-span-2 space-y-6">

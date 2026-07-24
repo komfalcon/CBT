@@ -7,3 +7,4 @@ export * from './Badge';
 export * from './QuestionCard';
 export * from './Toast';
 export * from './ToastProvider';
+export * from './SecuritySettings';

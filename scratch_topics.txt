@@ -1,0 +1,1654 @@
+
+--- accounting ---
+others: 1435
+General: 820
+Fixed Assets: 39
+Public Sector Accounting: 35
+Manufacturing Accounts: 35
+Revenue Recognition: 34
+Departmental and Branch Accounts: 18
+Partnership Accounts: 17
+Company Accounts: 17
+Financial Statements: 16
+Cash Book and Bank Reconciliation: 15
+Principles of Accounting: 14
+Accrual Accounting: 12
+Inventory Valuation: 11
+Financial Ratios: 10
+Financial Analysis: 10
+Chart of Accounts: 7
+Debits and Credits: 7
+Double Entry Bookkeeping: 6
+Accounting Principles: 6
+Accounting Equation: 5
+Inventory Accounting: 5
+Final Accounts of Sole Traders: 5
+Basic Accounting Principles: 4
+Final Accounts of a Sole Trader: 4
+Financial Ratio Analysis: 4
+Financial Statement Analysis: 3
+Account Classifications: 3
+Given Opening stock:  raw materials [10,000 ], work-in-progress [16,000],  Purchases of raw materials [95,500] , Direct labour wages paid [13,500], Royalties paid [6,200], Accrued wages[2,800], Closing stock- raw materials [7,500], work-in-progress[ 8,500], 	Manufacturing overhead [10,000]: 3
+Ordinary shares of  N1each  [500,000], 8% preference shares of  N1each [200,000], Interim dividends paid:  - ordinary shares [40,000], - preference shares [12,000], Profit for the year [100,000]: 3
+Motor vehicles (at cost) 1/1/2002   [N1,000,000],  Addition to motor vehicles 1/7/2003  [N  600,000] 	Depreciation rate 10%: 3
+Use the following information to answer question. Net profit [ 60,000], Total Assets [ 520,000], Current liabilities [ 150,000], Current assets[ 280,000] : 3
+Adjusting Entries: 3
+An asset was bought on 1st January, 1992 for N= 20,000. Depreciation was provided for annually at 20% on cost. It was sold for N= 7,000 on 1st July, 1995.: 3
+Use the following information to answer questions: Mr. White acquired Mr. Black’s business for GHc/ 410,000. The total assets were GHc/ 670,000 and liabilities amounted to GHc/ 320,000: 3
+A company charges out goods to a branch at cost plus 25 percent.  It invoiced  N 12,000 worth of goods: 2
+Beginning inventory [ ? ]; Purchases [? ]; Ending inventory [ N4,800 ]; Sales [ N12,800 ]; Wages [ N1,040 ]; Gross profit [N 5,900]. The beginning inventory was estimated at 80% of sales.: 2
+Use the information to answer questions: I.Operating machine II. Furniture  III .Fixtures and fittings IV.  Loan from friends V. Creditors: 2
+Use the Information below to answer questions: Balance as per cash book [N13, 560 ]; Unpresented cheques [N5, 120]; Uncredited lodgments [N2, 300] ; Dividend received not entered in the cash book  [N2, 000]; Bank charges [280 ]; Standing order payments [N600] Balance as per bank statement 	[?]: 2
+A company’s authorized share capital was one million ordinary shares at N 1 each. It issued 80% of its shares at N 1.10 per share. 70k was payable on application, 25k on allotment, 10k due on first call and the balance on second call. : 2
+Use the following information to answer question: The total sales of a business was GHc/ 2,160,000. The average mark-up for the year was 50%.: 2
+Use the information to answer questions: Work-in-progress 1/1[N 1,000 ];	Work-in-progress 31/12 	[N 2,000 ]; Production cost of goods manufactured 	[N 20,000 ] Sales [N 50,000]; Stock of finished goods 1/1 [N 4,000 ]; Stock of finished goods 31/12 [N 5,000 ]; Selling and distribution expenses[  N 2,000 ]; Administrative expenses [ 1,000 ]: 2
+The Accounting Equation: 2
+Use the information below to answer the question that follows. A machine bought for N 35,000 was estimated to have a life span of 5 years with a scrap value of N= 9, 000. : 2
+ Use the following information to answer question: Branch stock account (at selling price)  D346,000 - debit Branch mark-up account D62,000 - debit: 2
+Jumoke and Kunle have an original investment of N 25,000 and N15,000 respectively in a partnership.   The articles of partnership provide 3% interest on capital and salaries of N1,500 and N 1,000 respectively for the partners.   The profits and losses are to be shared in the ratio 3:2. Miscellaneous expenses of N 2,500 were incurred with gross profit of N 6,500 during the financial year.: 2
+Use the following information to answer questions:: Cash in hand	[D 1,440]; Cash at Bank [D 2,440]; Stock [D 2,500]; Furniture and fittings [D 2,200]; Creditors [D 1,000]: 2
+Aminn local Government prepared its receipts and payments account from the following: Fines [ 20,000 ] Market rates [120,000], Salaries [ 60,000] Maintenance of vehicles [49,000 ], Park collections [ 100,000]: 2
+Asset Disposal: 2
+Materials consumed 	[N 16,600 ]; Direct cost  [N 5,400 ]; Factory rent  [N 2,300 ]; Factory lighting 	[N 1,200]. Cost of production to be transferred at cost plus 20% mark-up.: 2
+On January 1, 2000, a club’s assets and liabilities were as follows: Club house [ N8,000 ]; Subscription in arrears [ N300]; Cash [N1,000]; Wages owed [N100]. The club has 50 members and annual subscription is N 100 per member. Subscription received is N 4,000 and this includes 1999 arrears of  N 200.: 2
+Lighting [N2, 925]; Rent [ N2, 640]; Salary [N4, 050] The expenses are for three different products: Zema, Zeta and Zera. They are apportioned on the basis of production. 4500 units of the products are produced, out of which 1260 and 2060 units are for Zema and Zeta respectively.: 2
+Introduction to Financial Accounting: 2
+The Health Department of Zango Local Government incurred the following expenditure in 2010. Construction of hospital wards [ Le 300,000 ]; Purchase of hospital beds [ Le  40,000 ]; Salaries and wages  [ Le 80,000]; Purchase of drugs  [ Le 55,000]; Purchase of X-ray machine [ Le 150,000]: 2
+Use the information below to answer questions: Stock (1/1/02) at selling price [N2, 000 ]; Goods sent to branch (selling price)    [  ?  ]; Sales by branch (selling price)   [4, 500 ]; Stock (31/12/02)   [  	?    ] Opening stock is 1/4 of goods sent to branch.: 2
+Adjustments to Final Accounts: 2
+A business whose assets consisted of stock  N 15,000 and debtors   N  8,000 was bought by issuing 20,000 ordinary shares of   N  1 each at a premium of  20 percent.: 2
+Balance as per cash book [8,400], Bank charges [300], Standing order paid [2,500 ], Unpresented cheques [2,800]: 2
+Cash Flow Statement: 2
+Equity: 2
+An asset was purchased for  N 343 m in 2003. The estimated life of the asset was 3 years with a residual value of  N28 m.: 2
+Use the information below to answer question: Net loss [N2,300]; Capital [N10,500]; Liabilities [N7, 200]: 2
+Use the following information to answer question:	Cost of motor vehicle-1/1/12 [ 85,000 ];  Residual value [ 5,000 ]; Estimated useful lifespan 10 years . The business makes use of the straight line method for 	providing depreciation.: 2
+Kudi Local Government Council incurred the following expenditure in 1995: Payment of salaries [ 140,000], Purchase of drugs for dispensaries [ 80,000 ], Purchase of books for Library [ 30,000], 	Sinking of wells [ 70,000 ], Extension of Council offices [ 160,000]: 2
+Given: Returns inwards [N1, 500]; Cash [N1, 550]; Discount received [N2, 850]; Capital [N3, 800 ]; Debtors [N900];	Sundry expenses [  ?  ]; 	The value of sundry expenses is 150% of returns inwards plus 50% of debtors.: 2
+Use the information below to answer questions 43 and 44	 A company advertised and issued 750,000,12% preference shares of  N 1 each to be issued at  N 1.50 per share. Applications for 1,370,000 were received at 30k per share. 70k per share (including premium) was due on allotment while 25k per share was due on each of the remaining two calls. All amounts due were received. Application money for 120,000 shares was refunded to unsuccessful applicants and the remaining applicants were allotted shares on pro-rata basis.: 2
+Use the information to answer question: Jan. 1 Received 1,000 units at   N 10 each; Jan. 2 Received 2,000 units at   N  12 each; Jan. 3 Issued 1,500 units; Jan. 4 Received 1,000 units at   N  11 eac; Jan. 5 Issued 1000 units: 2
+Use the information to answer question: Total current assets [N2,000 ]; Total fixed assets [N 4,000 ]; Current liabilities [N 1,200 ]; Drawings [N 200 ]; Long-term loan 	[N 2,000 ]: 2
+Opening balance [N 10,640 ]; Purchases [N 26,912 ]; Returns inwards [N 492 ]; Returns outwards [N 810 ]; Cash discount received [N 1,348 ]; Cash discount allowed [N 1,560 ]; Cash paid to suppliers [N 20,808 ] : 2
+Use the information below to answer question: Debtors [N20 000]; Provision for bad debts 10%; Provision for discount on debtors 5%.: 2
+Use the following information to answer question:  Stock of raw materials 1/1/09  [ 5,000 ], Stock of raw materials 31/12/09   [ 5,500], Purchase of raw materials [ 50,000], Carriage inwards [3,000], Direct labour [ 12,000], Factory overhead [17,500]: 2
+Entrance fees [N 1,200 ]; Subscription (including N 850 arrears) [N 4,310 ]; Donations received [N 1,500]; Proceeds from sales [N 2 ,300]; Total payments [N 8,200 ]; Depreciation [N 2,100]; Closing cash balance [N 1,110 ]. The club deposited 200% of the closing cash balance in the bank during the period.: 2
+Materials consumed  16,600;	Direct cost 5,400; Factory rent 2,300; Factory  lighting 1,200 	Cost of production to be transferred at cost plus 20% mark-up. : 2
+I.   Members subscription II.  Fines  from members  III. Donation  IV.  Loan from bank: 1
+Account Types: 1
+Financial Accounting Principles: 1
+Given: Opening capital [N7, 000 ]; Additional capital [N3, 500 ]; Net profit [N2 500 ]; Closing capital [N10, 250]: 1
+Given: Prepaid b/f [N10, 000 ]; Cash paid during the year  [N20, 000]; Prepaid c/f [N5, 000] : 1
+Fixed Asset Disposal: 1
+Debit and Credit Rules: 1
+Stock at start: Raw materials [N57, 000]; Work-in-progress [42, 000]; Finished goods [71, 000 ]: 1
+Double Entry System: 1
+Normal Balances: 1
+Statement of Cash Flows: 1
+Shaku Company Ltd: Stock [N 3,600, 000]; Cash at hand [N800, 000]; Cash in bank [2,400, 000]; Debtors [ 580, 000]; Trade creditors [N 920, 000 ]; 	Bank overdraft [ N200, 000 ]; Tax liabilities [N600, 000]; Salary owed to staff {N 180, 000]: 1
+Equity and Dividends: 1
+Given: Capital [N 2, 375, 000 ]; Debtors [N 495, 000 ]; Motor vehicles [N 870, 000 ]; Creditors [N 245,000 ]; Prepayments [N 500, 000 ]; Bills receivable [N 505, 000 ]; Furniture [N 150, 000 ]: 1
+Given: Balance as per cash book [N20,000 ]; Unpresented cheques [N 5,200 ]; Direct credit to the bank [	  N 1,000 ]; 	Direct debit from the bank [N 1,000 ]; Credit in the cash book [N 500 ]: 1
+Given: Furniture and fittings [N 20,000]  Equipment [N15,000] Bank overdrafts [ N6,500] Bar creditors [ N4,800 ] Subscription in arrears [ N4,700 ] Subscription in advance [ N650]: 1
+Trial Balance: 1
+Financial Reporting: 1
+ Liabilities   overstated   N600:    net income understated N600: 1
+Double-Entry Bookkeeping: 1
+Rent accrued 1st January, 2005 [600], Rent paid in 2005 [11,300], Rent prepaid 31st December, 2005 [500]: 1
+Current Liabilities: 1
+Accounting Cycle: 1
+Accounts Payable: 1
+Asset Depreciation: 1
+Cash Control: 1
+I.   The amount of the imprest is the same from one organization to another. II. At the end of a fixed period, the petty cashier received a fixed sum of money.  III.  At the end of a period, the petty-cashier is reimbursed, with the amount spent in that period. IV. The system is a method by which a measure  of control is kept on petty cash expenses: 1
+Adjustments and Corrections: 1
+Account Classification: 1
+Journal Entries: 1
+Given: General expenses account Paid by cheque [ N671 ]; Paid by cash [N 70 ]; Accrued b/f [N 65 ] Accrued c/f [N 115 ]: 1
+
+--- agriculture ---
+Agronomy (Crop Production): 2850
+Agricultural Economics and Extension: 2117
+Animal Science and Production: 1950
+General Agriculture and Ecology: 1098
+Agricultural Engineering and Technology: 514
+General: 199
+Soil Science: 71
+Agricultural Technology: 67
+Agronomy: 53
+General Agriculture: 42
+Plant Physiology: 38
+Plant Nutrition: 35
+Crop Protection: 28
+Modern Farming Techniques: 26
+Animal Production: 20
+Sustainable Agriculture: 19
+Irrigation and Water Management: 13
+Soil Science and Microbiology: 11
+Sustainable Farming: 11
+Water Management: 11
+Horticulture: 10
+Crop Production: 9
+Hydroponics: 9
+Pest Management: 8
+Plant Pathology: 8
+Crop Management: 6
+Irrigation: 5
+Plant Protection: 5
+Agricultural History: 5
+Soil Management: 4
+Controlled Environment Agriculture: 4
+Crop Nutrition: 3
+Soil Science & Microbiology: 3
+Soil Microbiology: 3
+Modern Farming Methods: 2
+Modern Agriculture: 2
+Protected Cultivation: 2
+Soil Chemistry: 2
+Plant Breeding: 2
+Plant Pathology and Physiology: 1
+Cropping Patterns: 1
+Plant Pathology and Nutrition: 1
+Agri-Technology: 1
+Irrigation Management: 1
+Precision Farming: 1
+Plant Biology: 1
+Integrated Pest Management: 1
+Soil Science and Crop Management: 1
+Crop Improvement: 1
+Agronomy/Plant Biology: 1
+Irrigation Systems: 1
+Plant Hormones: 1
+Sustainable Farming Practices: 1
+Cropping Systems: 1
+Precision Agriculture: 1
+Nutrient Management: 1
+Crop Physiology: 1
+Soil Science & Crop Rotation: 1
+Plant Pathology/Nutrition: 1
+
+--- biology ---
+Ecology: 2229
+Genetics and Evolution: 2218
+Plant Anatomy and Physiology: 1946
+Human Anatomy and Physiology: 1216
+General: 864
+others: 383
+Cell Biology: 202
+Genetics: 61
+Cellular Respiration: 57
+Form and Functions: 40
+Variety of Organisms: 39
+Molecular Genetics: 39
+Endocrinology: 35
+Reproduction: 29
+Photosynthesis: 28
+Evolution: 26
+Animal Physiology: 24
+Enzymology: 20
+Molecular Biology: 17
+Plant Physiology: 13
+Population Genetics: 12
+Cell Division: 9
+Microorganisms: 9
+Human Physiology: 7
+Microbiology: 4
+Plant Biology: 4
+Biochemistry: 3
+Cell Signaling: 3
+Plant Anatomy: 2
+Physiology: 2
+Metabolism: 2
+Genetics and Cell Division: 2
+Cell Cycle: 2
+Biochemistry/Enzymology: 1
+Genetics/Meiosis: 1
+Homeostasis: 1
+Plant Biology/Photosynthesis: 1
+Bioenergetics: 1
+Neurobiology: 1
+Genetics/Molecular Biology: 1
+Cell Biology/Cell Division: 1
+Comparative Anatomy: 1
+Genetics/Cell Division: 1
+Animal Biology: 1
+
+--- chemistry ---
+others: 794
+General: 730
+Organic Chemistry: 439
+Chemical Kinetics and Equilibrium: 416
+Electrochemistry: 369
+Atomic Structure and Periodicity: 244
+Acids, Bases and Salts: 213
+Stoichiometry: 185
+Thermochemistry: 134
+Chemical Bonding: 132
+Chemical Equilibrium: 44
+Intermolecular Forces: 36
+Chemical Kinetics: 31
+Redox Reactions: 24
+Chemical Equilibria: 23
+States of Matter: 22
+Metals and their Compounds: 20
+Air and Water: 20
+Coordination Chemistry: 20
+Atomic Structure and Bonding: 19
+Molecular Geometry: 19
+Atomic Structure: 17
+Acids and Bases: 15
+Kinetic Theory of Matter and Gas Laws: 15
+Acid-Base Equilibria: 13
+Molecular Geometry and Polarity: 12
+Acid-Base Chemistry: 11
+Nuclear Chemistry: 10
+Energy Changes: 10
+Chemical Combination: 10
+Non-metals and their Compounds: 10
+Rates of Chemical Reaction: 10
+Oxidation and Reduction: 9
+Organic Chemistry - Acidity: 7
+Periodic Trends: 6
+Environmental Pollution: 5
+Electrolysis: 5
+Acid-Base Equilibrium: 5
+Periodic Table: 4
+Periodic Table Trends: 4
+Environmental Chemistry: 4
+Quantum Chemistry: 3
+Stereochemistry: 3
+Quantum Mechanics: 3
+Colligative Properties: 3
+Chemical Bonding and Molecular Structure: 3
+Coordination Compounds: 3
+Thermodynamics: 2
+Inorganic Chemistry: 2
+Redox Chemistry: 1
+Organic Chemistry / Hybridization: 1
+Periodic Table and Trends: 1
+Chemical Bonding and Molecular Geometry: 1
+Oxidation States: 1
+Molecular Structure: 1
+Organic Chemistry / Acidity: 1
+Solutions and Solubility: 1
+Molecular Polarity: 1
+Periodic Table & Periodicity: 1
+Ionic Equilibrium: 1
+Chemical Bonding and Structure: 1
+Periodic Table and Periodicity: 1
+VSEPR Theory: 1
+Molecular Orbital Theory: 1
+Biochemistry: 1
+Coordination Chemistry/Periodic Table: 1
+Organic Chemistry - Nucleophilic Substitution: 1
+Properties of Matter: 1
+
+--- christian-religious-studies ---
+others: 1018
+
+--- civic_education ---
+National Values, Rights and Obligations: 3260
+Government Systems and Civic Processes: 1906
+Emerging Societal Issues: 886
+Human Rights: 89
+Citizenship: 68
+Constitutionalism: 45
+Governance and Democracy: 38
+Democracy and Governance: 34
+Constitutional Law: 31
+Values and Ethics: 21
+Legal Principles: 17
+Systems of Government: 16
+Types of Government: 15
+Government Structure: 13
+Forms of Government: 12
+Democratic Processes: 12
+Human Rights and Law: 10
+Democratic Systems: 9
+Civil Society: 9
+Government Structures: 8
+Legal Systems: 8
+Governance and Law: 7
+Rights and Responsibilities: 7
+Democratic Principles: 6
+Legal Frameworks: 5
+Political Systems: 5
+Types of Democracy: 4
+Civic Participation: 3
+Democratic Governance: 3
+Law and Justice: 3
+Rights and Liberties: 3
+Political Theory: 2
+Legal Systems and Governance: 2
+Public Administration: 2
+Separation of Powers: 2
+Governance and Power: 2
+Citizenship and Rights: 2
+Citizenship and Responsibility: 2
+Citizenship and Responsibilities: 2
+Governance: 2
+Rule of Law: 2
+Principles of Democracy: 1
+Governance and Constitution: 1
+Civil Rights: 1
+The Rule of Law: 1
+Civic Rights and Duties: 1
+Governmental Systems: 1
+Citizenship and Governance: 1
+Human Rights and Liberties: 1
+Law and Rights: 1
+Direct Democracy: 1
+Legal Foundations: 1
+Comparative Government: 1
+Electoral Process: 1
+Democratic Theories: 1
+Comparative Politics: 1
+Democracy: 1
+Ethics and Accountability: 1
+Ethics and Public Service: 1
+Principles of Government: 1
+Civic Duty: 1
+Principles of Governance: 1
+Government Systems: 1
+Social Integration: 1
+Societal Diversity: 1
+Civic Engagement: 1
+Legal Framework: 1
+Legal Rights and Justice: 1
+Legal Frameworks and Governance: 1
+Civic Values: 1
+Justice and Law: 1
+
+--- civiledu ---
+General: 405
+Ada:      Wanja, where are you going to in this ungodly hour of the night? <br> 	Wanja:   I am heading towards my usual joint to enjoy myself <br>	 	Ada:       Which joint?<br> 	Wanja:   XYZ. Night Club, where I take marijuana and alcoholic beverages. I really want to be high 			      tonight so that when people see me tomorrow, they will fear and respect me.<br> 	Ada:     Remember, people who work under the influence of hard drugs and alcoholic beverages are prone to either psychiatric problems or premature death. Softly young man, imbibe good - natured character, you have the world at your feet and a destiny to fulfil. Pray you will not be the architect of your own misfortune.: 5
+A certain man came to visit his friend at Shomolu one early morning. Unexpectedly the man fainted and slumped. He lay on the floor for several hours and looking lifeless. The crowd and even the friend he came to visit kept a reasonable distance from him. No one came to his rescue or even attempted to touch him. As luck would have it he regained his strength after about five hours and managed to go back to his house: 4
+One major trend in Kantoga Republic today, especially during elections, is the engagement of youths by some politicians for political thuggery, rigging, stuffing of ballot boxes and other related electoral offences. Most of the youths who are engaged in these crimes have no means of livelihood or are school drop-outs. These youths are Kantoguans who ought to benefit from the enormous wealth and resources of the nation.<br><br>  Unfortunately, this is not the case at the moment. Indeed, it is the duty of government , especially at the centre, to provide entrepreneurial skill acquisition program and start-up funds for small scale businesses to empower the youths. This will reduce the chances of engagement of youths for wrong purposes.: 3
+<strong>Zubar: </strong> Today is the day for gubernatorial elections, Ade what are you waiting for? Let us go and cast our votes for candidates of our choice<br><br> 	<strong>Ade: </strong> I have no interest in an election which not yield any dividend of democracy. Our political elite are only concerned about their interest when they get to the position 	of authority. For crying out loud, I have made up my mind that l will not vote again. <br><br> 	<strong>Zubar: </strong> Haba! Ade, don’t you remember Abraham Lincoln’s words that ‘all men are not just, all men are not true. But ...... for every scoundrel there is a hero, that for every selfish politician, there is a dedicated leader!’ Come on, go and cast your vote so that we can choose the right person for the position and change the political, economic and social directions of our great state.: 3
+Chief Bilisi was a prominent politician and honourable minister in Kantoga Republic. He had sponsored several candidates to power and made them to swear oath of allegiance to him. In return, they awarded contracts and offered financial and material assistance to him at the expense of the public. This had resulted in the non - provision of social amenities. These were some of the grievances the community had against him for which a mob gathered in front of his house shouting and hauling abusive words at him. They did not stop at that as they vandalized property and obstructed vehicular movement: 3
+Oh Motherland, you were a precious country, a beacon of hope and aspiration as well as toga of pride of your citizens at independence. However, today you are bedeviled with evil, engulfed in darkness and to say the obvious, at the edge of total moral collapse. Corruption, fraud, deception and dishonesty are prevalent; drug peddlers are having a field day. In schools and colleges, radicalism, prostitution, cultism, examination malpractice among other social vices are order of the day.: 3
+Dr. Fajir was the Minister of Works and Urban Development in the Gambia Republic. As such, he was entrusted with the public fund so that his ministry could construct new roads and rehabilitate the existing ones. Unfortunately. Dr Fajir embezzled the money entrusted in his care and siphoned same to his foreign accounts. This led to the deplorable conditions of roads in the Republic. The Crime Commission arrested and prosecuted him accordingly. Subsequently, he was given the opportunity to be defended by lawyers of his choice in a Court of Law. However, he was found guilty and sentenced to 15 years imprisonment with hard labour without the option of a fine. In addition, he forfeited all his ill-gotten wealth to the Republic.: 3
+NEWS: ‘Rival Cult Group Killed Ten on Campus’<br> 	STUDENT: I will definitely need a bullet proof vest before I can go back to the Campus.<br>: 2
+Imoh lived with her parents in Kakuri. They were good citizens who detested all forms of immoral acts. Both at home and in school, Imoh had been taught the virtues and values of a good citizen. However, while in a bus on her way home from school, the conductor forgot to ask for her fare. She knew that the right thing to do was to pay even when the conductor had forgotten to collect the fare. She also knew that there were other things she could do with the money if it was not paid, but she did what was expected by informing the conductor and paying the fare.: 2
+“Here is your country. Cherish these natural wonders, cherish the natural resources, cherish the history and romance as sacred heritage, for your children and your children’s children. Do not let selfish men or greedy interests skin your country of its beauty, its riches...”: 1
+The Bawali High Court has ordered the police in Area Z Command to produce Mr. Zeb, who is in police custody for an alleged offence. The court insists that Mr. Zeb cannot be punished until he is found guilty of breach of any law of the land by a court of competent jurisdiction.: 1
+“All human beings are born free and equal in dignity and rights. They are endowed with reason and 		conscience and should act towards one another in a spirit of brotherhood”.: 1
+
+--- commerce ---
+Business Units and Finance: 3552
+Aids to Trade: 1804
+General: 1312
+Commercial Regulations and Legal Aspects: 1288
+others: 886
+Trade (Home and Foreign): 510
+Introduction to Commerce and Occupations: 276
+International Trade: 73
+Business Organizations: 59
+Marketing: 48
+Insurance: 40
+Money and Banking: 35
+Accounting: 35
+Communication and Transport: 33
+Trade and Trade Facilitation: 20
+Consumer Protection: 20
+Business Organization: 19
+Business Law: 18
+Accounting Principles: 14
+Financial Management: 14
+Market Structures: 11
+Financial Accounting: 10
+Operations Management: 10
+Company Law: 8
+Corporate Finance: 6
+Business Finance: 6
+Financial Markets: 6
+Business Strategy: 5
+Finance: 5
+Economics: 5
+Economics in Commerce: 4
+Banking and Finance: 4
+Corporate Law: 3
+Inventory Management: 3
+The following information was extracted from the books of Rubies Enterprises Limited as at31st December 2010. Sales [115,000], Creditors [15,000], Bank overdraft [5,000], Stock [10,000], Cost of goods sold [75,000], Debenture [35,000]; Prepayments [5,000], Rent [ 2,000 ]: 3
+Pricing Strategies: 3
+Ojo purchased the following items from Sani at the specified prices on credit: 200 cartons of milk at N1,000 per carton; 150 bags of sugar at N500 per bag; 50 bags of rice at  N3 000 per bag. Sani allowed 10% trade discount and 5% cash discount, if payment is made within the agreed period. Ojo paid within the agreed period.: 2
+Financial Statements: 2
+Companies I, II, III and IV produce and sell electronic videos. Company I sells its videos for N= 14 000 each and offers advice on how to fix and operate them. Company II sells at N14 000 and its representatives go to install at no additional cost. Company III sells at N15 500 and offers credit sales at N15 500 per video while company IV sells at N= 15 000 each.: 2
+Macroeconomics/BoP: 2
+Business Management: 2
+Economics/Market Structures: 2
+Use the information given  to answer question: Opening stock  [ N=1,000], Closing stock  [ N=9,000 ], Purchases  [N=14,000]: 2
+Cost Accounting: 2
+Accounting & Finance: 2
+Partnership Accounts: 2
+Forms of Business Organization: 2
+Mr. Awala is a retailer of a single product. He sells at the standard price. He gives a trade discount of 5%,quantity discount of 3% for a volume above 1000 units and a cash discount of 2/10 net 30  the existing selling price of the product is N= 100 per unit. Mr. Bacus purchased 1500 units of the product on credit and promised to pay Mr. Awala in cash in the first 10 days after purchase.: 2
+International Business: 2
+Musa rented a room to Adamu for N= 1, 500 and N= 1,000 part-payment was made. Adamu brought Audu and Jacob his friends to stay in the room. The two friends later paid the balance of N= 500 to Musa.: 2
+Corporate Governance: 2
+Supply Chain Management: 1
+Financial Analysis: 1
+Accounting/Finance: 1
+Accountancy: 1
+Production and Costs: 1
+Use the following equation to answer question  Gross Profit=(Closing stock + P) less (Opening stock + G): 1
+Assets and Liabilities: 1
+Logistics and Supply Chain: 1
+Economics/Market Analysis: 1
+Procurement: 1
+Finance and Trading: 1
+Banking and Trade Finance: 1
+Investment Management: 1
+Balance of Payments: 1
+Finance and Investment: 1
+Public Finance: 1
+Business Law/Corporate Governance: 1
+Forms of Business Ownership: 1
+Accounting Assets: 1
+Stock Market: 1
+Marketing Management: 1
+Business Forms: 1
+Business Communication: 1
+Transportation: 1
+Use the following equation to answer question   Gross Profit=(Closing stock + P) less (Opening stock + G): 1
+Microeconomics: 1
+Macroeconomics/Commerce: 1
+Transportation and Logistics: 1
+Business Law and Agency: 1
+Economics/Finance: 1
+Banking: 1
+Monetary Policy: 1
+
+--- crk ---
+New Testament (Life and Ministry of Jesus): 3528
+The Early Church and Paul's Mission: 3132
+Old Testament (Creation to Exile): 2282
+General: 1219
+Creation and the Fall: 29
+The Early Church: 25
+The Prophets: 20
+The Judges and Kings: 19
+The Exodus: 19
+The Gospels: 14
+Game Mechanics: 10
+The Patriarchs: 9
+Soteriology: 8
+Epistles: 6
+Church History: 5
+Toppings and Equipment: 4
+Christology: 4
+Sacraments: 4
+Progression: 4
+Equipment and Toppings: 3
+Resource Management: 3
+Knowledge Management: 3
+Toppings and Gear: 3
+Biblical Covenants: 3
+Synchronization: 3
+Parables of Jesus: 3
+PvP Strategy: 3
+Character Progression: 3
+Game Modes: 3
+Cookie Roles: 3
+Combat Roles: 3
+New Testament Teachings: 2
+Concurrency: 2
+Theology: 2
+Combat Mechanics: 2
+Liturgical Calendar: 2
+Critical Reflection: 2
+Cluster Stability: 2
+Knowledge Types: 2
+Biblical Studies: 2
+Prophetic Stories: 2
+Fault Tolerance: 2
+Kingdom Management: 2
+Grace: 2
+Treasures: 2
+Data Synchronization: 2
+Distributed Systems: 2
+Performance Metrics: 2
+Character Roles: 2
+Pauline Theology: 2
+Performance Optimization: 2
+Complexity Analysis: 2
+Model Evaluation: 2
+Concurrency Control: 2
+Kernel Architecture: 2
+Foundations of CRK: 2
+Cultural Rituals: 1
+Interrupt Handling: 1
+Resource Classification: 1
+Old Testament: 1
+System Architecture: 1
+Database Management: 1
+Theological Concepts: 1
+Exodus: 1
+Advanced Gear: 1
+Spreadsheet Functions: 1
+Church Law and Morality: 1
+Reliability & Recovery: 1
+Monitoring Metrics: 1
+Philosophy and Ethics: 1
+Anthropology: 1
+API Design: 1
+Biostatistics: 1
+Process Flow: 1
+System Comparison: 1
+Modulation: 1
+Reaction Mechanisms: 1
+Data Integrity: 1
+New Testament Epistles: 1
+Customer Analytics: 1
+High Availability: 1
+Aqeedah: 1
+System Initialization: 1
+Risk Frameworks: 1
+Infrastructure Testing: 1
+Mitigation Strategies: 1
+Risk Assessment Basics: 1
+PvP Mechanics: 1
+CRK Implementation Risks: 1
+Comparison of Methods: 1
+Key Management: 1
+Error Handling: 1
+Risk Calculation: 1
+Ethics and Regulation: 1
+Timestamping: 1
+Data Organization: 1
+Pneumatology: 1
+Comparative Analysis: 1
+Deities: 1
+Knowledge Loss: 1
+Foundations of Reflection: 1
+Virtual Memory: 1
+Parables and Teaching: 1
+Creation and Anthropology: 1
+Architectural Components: 1
+Religious Art and Iconography: 1
+Old Testament History: 1
+Knowledge Management Lifecycle: 1
+Wisdom Literature: 1
+Catalysis: 1
+Intellectual Property Strategies: 1
+Order of Salvation: 1
+Clinical Trial Phases: 1
+Intellectual Property and Traditional Knowledge: 1
+Old Testament Theology: 1
+Christian Theology: 1
+Institutional Governance: 1
+Parameter Tuning: 1
+System Optimization: 1
+Memory Management: 1
+String Matching: 1
+Christian Ethics: 1
+New Testament Theology: 1
+Information Literacy: 1
+Combat Strategy: 1
+Ecclesiology and Politics: 1
+ Teachings of Jesus: 1
+RAG Optimization: 1
+Logical Fallacies: 1
+Covenant Theology: 1
+Progression Systems: 1
+Eschatology: 1
+Risk Mitigation: 1
+Organizational Culture: 1
+Doctrine of Salvation: 1
+Clustering Algorithms: 1
+Security: 1
+Old Testament - Exodus: 1
+System Resilience: 1
+Lore and Characters: 1
+Status Effects: 1
+Biblical Narrative: 1
+Reflective Practice: 1
+Quantitative Analysis: 1
+State Management: 1
+Data Actionability: 1
+Relational Hierarchy: 1
+Eucharistic Liturgy: 1
+Application: 1
+Systemic Safety: 1
+Genetics: 1
+Equipment: 1
+System Stability: 1
+Internal Controls: 1
+Christian Anthropology: 1
+Consistency Models: 1
+Evaluation Metrics: 1
+Rate Laws: 1
+Liturgy: 1
+Barriers to Implementation: 1
+Signal Stability: 1
+Character Customization: 1
+Distributed Consensus: 1
+Law and Justice: 1
+Signal Integrity: 1
+Oscillators: 1
+Risk Management: 1
+Customer Data Integration: 1
+Seerah: 1
+Temperature Dependence: 1
+Biblical Interpretation: 1
+System Calls: 1
+Kernel Management: 1
+Patient Identification: 1
+Neural Networks: 1
+Religious Practices: 1
+Auditing Process: 1
+Operational Logic: 1
+Data Architecture: 1
+Relational Attributes: 1
+Epistemology: 1
+Cluster Architecture: 1
+Optimization: 1
+Reliability Analysis: 1
+Scalability: 1
+Biblical Teachings: 1
+Query Optimization: 1
+Old Testament Covenants: 1
+Theology and Proclamation: 1
+System Scalability: 1
+Advanced Gameplay: 1
+Competitive Play: 1
+Cultural Preservation: 1
+Digital Timing: 1
+Religious Theory: 1
+Belief Systems: 1
+Biodiversity and Ethics: 1
+Risk Management Frameworks: 1
+Data Ingestion: 1
+Stochastic Analysis: 1
+Fiqh: 1
+Social Doctrine: 1
+Formal Logic: 1
+Order of the Mass: 1
+Spiritual Goals: 1
+System Layers: 1
+New Testament - Parables: 1
+Folklore and Mythology: 1
+Economics: 1
+Scripture: 1
+Aqidah: 1
+Gameplay Mechanics: 1
+Data Validation: 1
+Core Definitions: 1
+Conceptual Framework: 1
+Professional Practice: 1
+Quranic Studies: 1
+Scriptural Interpretation: 1
+SQL Queries: 1
+Administrative Law: 1
+Spreadsheet Logic: 1
+Emergency Protocols: 1
+Challenges: 1
+Framework Definitions: 1
+Resource Allocation: 1
+Advanced Risk Assessment: 1
+Sermon on the Mount: 1
+Entity Resolution: 1
+Molecular Biology: 1
+Kernel Scheduling: 1
+Neurology Fundamentals: 1
+Old Testament Law: 1
+Pauline Epistles: 1
+Teachings of Jesus: 1
+Moral Teachings: 1
+Philosophy of Religion: 1
+Spiritual Laws: 1
+Cellular Metabolism: 1
+Fiqh (Jurisprudence): 1
+Resource Theory: 1
+Architecture: 1
+Predestination: 1
+Toppings and Optimization: 1
+Decision Making: 1
+Types of Knowledge: 1
+CRK Architecture: 1
+Cognitive Science: 1
+Context Management: 1
+Core Doctrines: 1
+Team Composition: 1
+Conflict Resolution: 1
+Configuration: 1
+Critical Analysis: 1
+Cookie Progression: 1
+Software Application: 1
+Cumulative Risk Concepts: 1
+Error Analysis: 1
+Study Design: 1
+Knowledge Lifecycle: 1
+Scriptures: 1
+Old Testament - Law: 1
+Core Control Logic: 1
+Liturgical Structure: 1
+International Law: 1
+Ecclesiastical Law: 1
+Advanced Strategy: 1
+State Synchronization: 1
+Kernel Functions: 1
+Data Structures: 1
+Advanced Equipment: 1
+New Testament - Epistles: 1
+Cluster Health: 1
+Performance Analysis: 1
+Validation Methods: 1
+CRK Objectives: 1
+CRK Lifecycle: 1
+Doctrine: 1
+Toppings: 1
+Parables: 1
+Reflective Frameworks: 1
+Political Theory: 1
+Archaeology: 1
+
+--- currentaffairs ---
+General: 44
+
+--- economics ---
+General: 1088
+Market Structures: 819
+Theory of Production, Cost and Revenue: 812
+Basic Economic Concepts and Systems: 768
+others: 655
+International Trade and Economic Organizations: 628
+National Income and Economic Analysis: 582
+Money, Banking and Inflation: 516
+Public Finance: 493
+International Trade: 86
+Macroeconomics: 34
+National Income: 29
+Monetary Policy: 28
+Consumer Theory: 22
+Economic Growth and Development: 20
+Basic Economic Concepts: 20
+Microeconomics - Market Structures: 17
+Microeconomics - Consumer Theory: 11
+Demand and Supply: 11
+Money and Inflation: 10
+Elasticity: 10
+Theory of Production: 9
+Macroeconomics - Monetary Policy: 9
+Economic Development: 9
+Theory of Consumer Behaviour: 9
+Microeconomics - Consumer Behavior: 6
+Population: 5
+Microeconomics: 5
+Fundamental Economic Concepts: 5
+Monetary Economics: 4
+Macroeconomics - Inflation: 4
+Macroeconomics - IS-LM Model: 4
+Microeconomics - Demand and Supply: 4
+Macroeconomics - Monetary Theory: 4
+Macroeconomics: Monetary Policy: 4
+Macroeconomics: IS-LM Model: 4
+Macroeconomics - Fiscal Policy: 4
+Supply and Demand: 3
+Microeconomics: Demand and Supply: 3
+Use the value to answer question: Units  of Variable factor [1,2,3,4,5,]  Total Product [25,31,40,48,55]: 3
+Microeconomics: Market Structures: 3
+Microeconomics: Elasticity: 3
+Market Failure: 3
+Macroeconomics: Fiscal Policy: 2
+Use the table below to answer questions. Unit of capital [1,2,3,4,5,6]	  Total output (kg) [16, 64, 126, 212, 425, 684]: 2
+Information Economics: 2
+Economic Growth: 2
+Macroeconomics - Consumption: 2
+Microeconomics: Consumer Theory: 2
+International Economics: 2
+Microeconomics: Demand: 2
+Fundamental Concepts: 2
+Microeconomics - Demand Theory: 2
+Development Economics: 2
+Demand Theory: 2
+Macroeconomics: Aggregate Supply/Demand: 1
+Macroeconomics / Monetary Policy: 1
+Macroeconomics - AD/AS Model: 1
+Game Theory: 1
+Macroeconomics - Labor Markets: 1
+Macroeconomics: AD-AS Model: 1
+Microeconomics: Theory of the Firm: 1
+Use the data below to answer question:  Output [1, 2, 3, 4, 5]  Total Revenue(N=) [40, 49, 56, 61, 65]: 1
+Fiscal Policy: 1
+Market Failures: 1
+Consumer Behavior: 1
+Microeconomics / Firm Theory: 1
+International Economics - Exchange Rates: 1
+Macroeconomics - Finance: 1
+Microeconomics - Firm Theory: 1
+Microeconomics / Market Structures: 1
+Macroeconomics - Keynesian Theory: 1
+Production Theory: 1
+Microeconomics/Game Theory: 1
+International Economics: Trade Theory: 1
+Microeconomics - Elasticity: 1
+Macroeconomics/Inequality: 1
+Macroeconomics - Open Economy: 1
+Macroeconomic Indicators: 1
+International Finance: 1
+Microeconomics - Firm Behavior: 1
+Macroeconomics: Monetary Theory: 1
+Microeconomics: Firm Theory: 1
+Macroeconomics - National Income Accounting: 1
+Microeconomics - Production Possibilities: 1
+Keynesian Economics: 1
+International Economics - Trade Theory: 1
+
+--- english ---
+Lexis and Structure: 558
+General: 155
+Comprehension and Sentence Interpretation: 110
+choose the option that best completes the gap(s).: 85
+Literary Devices: 81
+choose the option opposite in meaning to the word or phrase in italics.: 73
+Vocabulary: 68
+Grammar and Syntax: 55
+Oral English: 50
+choose the option nearest in meaning to the word or phrase in italics.: 45
+Summary Writing: 42
+Grammar: 40
+choose the option that best completes the gap(s): 39
+Idioms and Phrasal Verbs: 35
+most appropriate option: 25
+Comprehension: 23
+choose the option  best completes the gap(s) .: 20
+select the option that best explains the information conveyed in the sentence.: 20
+Figures of Speech: 18
+opposite in meaning to the word(s) or phrase in italics : 15
+choose the option nearest in meaning to the word or phrase  in italics : 15
+choose the option nearest in meaning to the word or phrase In Italics: 15
+choose the option nearest  in meaning to the word or phrase in Italics.: 15
+choose the option nearest in meaning to the word or phrase in italics: 15
+Choose the option opposite in meaning to the word or phrase in italics.: 15
+choose the option nearest in meaning to the word(s) or phrase in italics.: 15
+choose the option opposite In meaning to the word or phrase In Italics: 15
+choose the option that has the same consonant sound as the one represented by the letter(s) underlined.: 11
+choose the appropriate stress pattern from the options. The syllables are written in capital letters.: 10
+choose the option that has the stress on the first syllable.: 10
+the option that best explains the information conveyed in the sentence. : 10
+ select the option that best explains the Information conveyed In the sentence. : 10
+select the option that bost explains the information conveyed in the sentence.: 10
+select the option that best explains the information conveyed in the sentence. : 10
+Grammar - Moods: 9
+Grammar and Usage: 9
+choose the option that has the same vowel sound as the one represented by the letter(s) underlined.: 8
+Vocabulary in Context: 6
+choose the option that has the same consonant sound as the one represented by the letter(s) underlined: 6
+choose the option that rhymes with the given word.: 6
+that best explains the information conveyed in the sentence.: 5
+Grammar - Verb Moods: 5
+Grammar - Modifiers: 5
+Grammar and Mood: 5
+choose the option that has a different stress pattern from the others.: 5
+choose the option that has the same stress pattern as the given word.: 5
+choose the option that has a different vowel sound from the others.: 5
+that best explains the information conveyed : 5
+Vocabulary and Tone: 4
+Sentence Structure: 4
+Advanced Grammar: 4
+Subject-Verb Agreement: 4
+choose the appropriate  stress pattern from the options. The syllables are written in capital letters.: 3
+choose the option that has the same vowel sound as the letter(s) underlined.: 3
+choose the option that has the same vowel sound as the represented by the letter(s) underlined.: 3
+choose the option that has the same vowel sound as the one represented by the letter(s) underlined: 3
+choose the appropriate stress pattern from the options. The syllables are written in capital letters: 3
+Vocabulary - Antonyms: 3
+choose the option has a different stress pattern from the others.: 3
+choose the most appropriate stress pattern from the options. The stressed syllable are written in capital letter(s): 3
+choose the option that has the same vowel sound as the one represented the letter(s) underlined.: 3
+choose the option that has the same vowel sound as the one represented by the letters underlined.: 3
+Punctuation: 3
+choose the option that has the same consonant sound as the one represented by the letter(s) underline.: 3
+the word in capital letters has the emphatic stress. Choose the option which the given sentence relates.: 3
+Syntax: 3
+the word in capital letters has the emphatic stress. Choose the option to which the given sentence relates: 2
+choose the option that has a different stress pattern from the others. : 2
+Rhetorical Devices: 2
+Parts of Speech: 2
+Verb Tenses: 2
+choose the option that has a different stress pattern from the others: 2
+the word in capital letters has the emphatic stress.  Choose the option to which the given sentence relates.: 2
+Writing Skills: 2
+Verb Moods: 2
+choose the option that has same stress pattern as the given word.: 2
+the word in capital letters has the <i>emphatic stress</i>. Choose the option to which the given sentence relates: 2
+ choose the option that has the same consonant sound as the one represented by the letter(s) underlined.: 2
+word in capital letters has the emphatic stress. Choose the option to which the sentence relates.: 2
+Syntax and Sentence Structure: 2
+choose the option that has a different consonant sound from the others.: 2
+Punctuation and Usage: 1
+Syntax and Style: 1
+Vocabulary and Idioms: 1
+Academic Writing: 1
+Syntax/Grammar: 1
+Conditional Sentences: 1
+Writing and Composition: 1
+Grammar - Subject-Verb Agreement: 1
+Grammar - Pronoun Case: 1
+Syntax and Errors: 1
+Phrases and Clauses: 1
+Grammar - Sentence Structure: 1
+Syntax and Modifiers: 1
+Vocabulary/Analogies: 1
+Advanced Rhetoric: 1
+Literary Terms: 1
+the word in capital letters has the <i>emphatic stress.</i> Choose the option to which the given sentence relates: 1
+Grammar - Syntax: 1
+choose the option that has the same consonant sound as the one represented by the letter(s) underlined.  : 1
+Transitions and Cohesion: 1
+Literature - Plot Structure: 1
+Verb Tenses and Moods: 1
+Advanced Literary Devices: 1
+Critical Thinking and Logic: 1
+Critical Writing: 1
+
+--- english-language ---
+others: 1543
+register: 90
+passage-a: 62
+passage-b: 58
+passage-c: 45
+
+--- englishlit ---
+General: 608
+Based on General Literary Principles.: 10
+based on Literary Appreciation: 10
+based on General Literary Principles.: 10
+Based on selected poems from Johnson, 	R. et al (eds.): New Poetry from Africa; Soyirvka, W. (ed.): Poems of Black Africa; Senanu, K.E. and Vincent, T. (eds.): A Selection of African Poetry; Maduka, C.T. et al: Exam Focus: Literature in English; Eruvbetine, A. E. et al (eds.): Longman Examination Guides; Nwoga, D. I. (ed.): West African Verse and Adeoti G.: Naked Soles.: 10
+based on Literary Appreciation.: 10
+Question is  based  on Joe de Graft’s Sons and Daughters.: 5
+Based on George Orwell’s Nineteen  	Eighty-Four.: 5
+Question is based on African and Non-African Poetry  : 5
+WILLIAM SHAKESPEARE: The Tempest<br><br> 		<strong>X:</strong> We two, my lord,<br> 			Will guard your person while you take your rest, <br> 			And watch your safety. <br> 			<br> 		<strong>Y:</strong> Thank you. - Wondrous heavy. <br> 			(Act II, Scene One, lines 184 - 187): 5
+WILLIAM SHAKESPEARE: The Tempest<br><br>  		Ariel:	All hail, great master! Grave sir, hail! I come<br> 			To answer thy best pleasure; be’t to fly, <br> 			To swim, to dive into the fire, to ride<br> 			On the curled clouds, to thy strong bidding task<br> 			Ariel and all his quality. <br> 			(Act I, Scene  Two, lines 189 - 193)	: 5
+Question is are based on selected African poems.: 5
+Based on J.C. De Graft’s Sons and  	Daughters.: 5
+	WILLIAM SHAKESPEARE: The Tempest<br><br> 		Silence! One word more<br> 		Shall make me chide thee, if not hate thee. What!<br> 		An advocate for an impostor! Hush!<br> 		(Act I, Scene Two, lines 478 - 480): 5
+Question is  based on literary appreciation: 5
+based on selected poems from Ker, D. et al (eds.) New poetry from Africa; Soyinka W. (ed.): Poems of Black Africa: Senanu, K E and Vincent, T. (eds.): A Selection of African poetry; Umukoro, M et al (eels.): Exam Focus: Lit¬erature in English; Eruvbetine, A. E. et al (eds.): Longman Examination guides; Nwoga, D.I (ed.): West African Verse andAdeoti G: Naked Soles.: 5
+A modest two-room hut built of mud and roofed with straw graciously sheltered the Mensahs. One of the rooms advertised itself as a living room. The kind earthenware pot willingly kept company with four ever-smiling stools. The pot eternally contained cool water for guests. The second room was a warm-hearted bedroom without a bed. The poor pair had to sleep on bare straw mats on the polished dirt floor. Some over washed rags deputized for blankets and sheets and pillows. Two strong dry logs, facing each other like bitter rivals burned themselves out at night, not merely to keep the couple warm but mainly to ward off hungry mosquitoes and other hostile pests.<br><br> There was no door to ward off the cold night air. Some rude 	devices, however, were contrived to keep the room quite safe from prying eyes and curious domestic animals. Would any thief be ever tempted to peep into <strong>such a rude room of such a poor pair</strong>?: 5
+based on William Shake¬speare’s  	Romeo and Juliet.: 5
+based on selected poems from Ker, D. et al (eds.) New poetry from Africa; Soyinka W. (ed.): Poems of Black Africa: Senanu, K E and Vincent, T. (eds.): A Selection of African poetry; Umukoro, M et al (eels.): Exam Focus: Lit-erature in English; Eruvbetine, A. E. et al (eds.): Longman Examination guides; Nwoga, D.I (ed.): West African Verse andAdeoti G: Naked Soles.: 5
+Question is  based on Oyono’s Old man hand the medal: 5
+Based on William Shakespeare’s  	Romeo and Juliet.: 5
+Proud mothers of the coming age,<br> 		‘Tis good to find you now engage<br> 		Your minds and time your lives to raise<br> 		Above the level of bygone days<br> 		<br> 		‘Tis good to see you play your part<br> 		With spirit and undaunted heart,<br> 		It gives young Afric’s throbbing soul<br> 		A glimpse of a bright and glorious goal<br> 		<br> 		God bless you, mothers of our race,<br> 		God cause to shine on you His face;<br> 		And give you strength and all you crave<br> 		To bring forth sons and daughters brave.: 5
+WILLIAM SHAKESPEARE: The Tempest<br><br> 		You cram these words into mine ears against<br> 		The stomach of my sense. Would l had never<br> 		Married my daughter there! For, coming thence,<br> 		My son is lost, and, in my rate, she too,<br> 				(Act II, Scene One, lines 99 - 102)<br>: 5
+based on George Orwell’s  	Nineteen Eighty-Four: 4
+Question is based on William Shakespeare’s Romeo and Juliet: 4
+Based on J.C. De Graft’s  	Sons and Daughter. : 4
+Based on William Shakespeare’s Romeo and Juliet.: 4
+Questions is based on Non-African Poetry: 4
+Pan, O great Pan, to thee'<br> 		Thus do we sing!<br> 		Thou who keep’st chaste and free<br> 		As the young spring<br> 		Ever be thy honour spake<br> 		From that place the morn is broke<br> 		To the place day doth unyoke: 3
+Question is based on General literary principles.: 3
+Question is  based on Ferdinand Oyono’s The Old Man and the Medal.: 3
+Based on Buchi Emecheta’s  	The Joys of  Motherhood.: 3
+Based on Buchi Emecheta’s The Joys of Motherhood.: 3
+based on Ferdinand Oyono’s,  	The Old Man and the Medal.: 3
+Question is based on Joe de Graft’s Sons and daughters: 3
+Based on Ferdinand Oyono’s The Old Man and the Medal.: 3
+question is on Thomas hardy's Tess of the d'Urbervilles: 3
+based on Buchi Emecheta’s  	The Joys of Motherhood: 3
+Question is drawn from William Shakespeare’s ROMEO and JULIET: 3
+Question is based on George Orwell’s Nineteen Eighty Four: 3
+question is on Attahiru, Ahmed Yerima's play: 3
+Based on George Orwell’s  	Nineteen Eighty-Four.: 3
+question is on William Shakespeare's hamlet: 3
+(Extract for question)\nAgosu, if you go tell them,\nTell Nyidevu, Kpeti, and Kove\nThat they have done us evil;\nTell them house is falling \nAnd the tree in the fence\nHave been eaten by termites \n: 2
+(Extract for question )\nBlessed Nigerians,\nWho eat pestilence to sleep\nBlessed the poor \nWho inherit thorns. . . . . . \n: 2
+Question is based on George Orwell’s Nineteen Eight Four: 2
+Question is based on Buchi Emecheta’s The Joys of Motherhood.: 2
+Move him into the sun,<br> 	Gently its touch awoke him once, ,<br> 	At home, whispering of  fields unsown,<br> 	Always it woke him even in France,<br> 	Until this morning and this snow,<br> 	If anything might rouse him now ,<br> 	This kind old sun will know,<br> 	Think how it wakes the seeds,<br> 	Woke, once, the clays of a cold star,<br> 	Are limbs, so dear achieved, are,<br> 	sides Full nerved still warm too hard ,<br> 	to stir Was it, for this the clay grew,<br> 	tall? O what made fatuous sunbeams ,<br> 	toil To break earth’s sleep at all. ,<br>: 2
+Question is based on George Orwell’s Nineteen Eighty-four: 2
+Based on Ferdina  and Oyono’s  	The Old Man and the Medal.: 2
+Question is based on selected poems: 2
+Read the following extract from a poem to answer questions \nAmong rocks, I am the loose one,\nAmong arrows, I am the heart\nAmong daughters, I am the recluse,\nAmong sons, the one who dies young\n: 2
+Our leaders will not compromise freedom<br> 	Nor will our heads give up liberty.: 2
+‘Basha: You dumb skull of a bone head.... you will face court martial for this. You look everywhere? You search inside toilet bowl? ( Wole Soyinka: King Baabu): 2
+Question is based on Ferdinand Oyono’s\nThe Old Man and medal and The joys of motherhood   \n: 2
+(Extract for question)I thank you God for creating me black\nFor making of me\nPorter of all sorrows\nSetting on my mind\nThe world\n: 2
+The Ministry of Plenty : 1
+“We own this land \n And the swamps\n The palms\n And the mangroves;\n We ‘ll die defending them”\n Tony Afejuku “Land Song”  \n: 1
+These only tears\nDripping down the tears on your depressed face.\nWill one day be staunche.\nI swear’ \n: 1
+\" ... This is a Montague, our foe; A villain, that is hither come in spit. To scorn at out solemnity this night. William Shakespeare: Romeo and Juliet I:V,61-63. : 1
+(Extract for question)\nThe human beings who I most admire are those without sterling qualities but are extraordinary in their ordinariness, the unsung heroes who will never be in the limelight or boulevard of fame, people who do great things when no one is watching or those who are not marked with the maple leaves of chieftaincy titles. They only wear fate, hard work, perseverance, anonymity and time. Yet, they are passionate, caring, visionary, sincere, determined and honest. These qualities mold those that are special without being aware. I strive to stay true to some of these qualities that I admire. To find a person with a few of these qualities is rare these days. To know someone who has all of them is amazing and a true blessing. [Excerpt from Tomorrow Left Us Yesterday-Tayo Olafioye]\n: 1
+“Her voice is a shell borne by the waves to crack the egg my soul sorely craves”\nSegun Adekoya  “Love Blues” \n: 1
+A cursing rogue with a merry farce,<br>  	A bundle of rags upon a crutch, ,<br> 	Stumbled upon that windy place,<br> 	Called cruachan, and it was as much.	: 1
+question is on an extract form a poem by Thomas Hardy. Read the lines carefully and answer the question that follow:\nWe stood by a pond that winter day.\nAnd the sun was white, as though children of God.: 1
+But the towering earth was tired sitting in one position. She moved, suddenly, and the houses crumbled, the mountains heaved horribly, and the work of a million years was lost	: 1
+Don’t panic. Be calm. If you are somehow upset.... try to regain your exposure.: 1
+question is on an extract form a poem by Thomas Hardy. Read the lines carefully and answer the question that follow:\nWe stood by a pond that winter day.\nAnd the sun was white, as though children of God.\nAnd a few leaves lay on the starving sod,\n…. They had fallen from an ash, and were gray\n: 1
+That age is best which is the first,<br> 	When youth and blood are warmer, <br> 	But being spent, the worse, and worst <br> 	Time still succeed the former. : 1
+‘That year the harvest was sad, like a funeral, and many farmers wept as they dug up the miserable yams. One man tied his cloth to a tree branch and hanged himself.’ (Chinua Achebe: Things Fall Apart): 1
+‘You kiss her on the cheek \nYou kiss her open-sore lips\nAs white people do.\nYou suck slimy saliva\nFrom each other’s moths.\nAs white people do.\nOkot P’ Breck’s song of larie\n: 1
+And your laughter like a flame<br>	 	Piercing the shadows<br> 	Has revealed Africa to me beyond<br> 	The snow of yesterday<br>: 1
+This is my letter to the world\nThat never wrote to me\nThe simple news nature told\nWith tender majesty\nHer message is committed\nTo hands, I cannot see;\nFor love of her, set countrymen,\nJudge tenderly one me.\n: 1
+“I come and go\na pilgrim\ngrubbily unkempt\nstubbornly cheerful\ndefiantly whistling hope\nand grubbing for crumbs of success\nout of all near-defeats.\n: 1
+
+--- further_mathematics ---
+Calculus: 157
+Pure Mathematics: 117
+Statistics and Probability: 85
+Vectors and Mechanics: 84
+Differential Equations: 67
+Complex Numbers: 55
+Linear Algebra: 52
+Trigonometry: 38
+Coordinate Geometry: 20
+Matrices: 17
+Logic: 15
+Matrices and Linear Transformations: 14
+Laplace Transforms: 11
+Integration: 10
+Complex Analysis: 8
+Numerical Methods: 6
+Abstract Algebra: 2
+Matrices and Differential Equations: 2
+Series and Expansions: 2
+Calculus/Series: 1
+Calculus / Sequences and Series: 1
+Calculus/Power Series: 1
+Numerical Integration: 1
+Fourier Series and Orthogonality: 1
+Complex Analysis and Special Functions: 1
+Linear Algebra and Differential Equations: 1
+Special Functions: 1
+Recurrence Relations: 1
+Calculus/Integration: 1
+Infinite Series: 1
+Series and Sequences: 1
+Calculus/Special Functions: 1
+Calculus (Series): 1
+
+--- geography ---
+Human and Regional Geography: 1684
+Physical Geography: 1556
+Introduction to Geographic Information Systems (GIS): 804
+General: 679
+others: 436
+Practical Geography and Map Work: 336
+Climatology: 85
+Human Geography: 55
+Regional Geography of Nigeria: 34
+Environmental Interaction: 29
+Geomorphology: 25
+Economic Geography: 25
+Map Reading and Interpretation: 18
+Plate Tectonics: 17
+Regional Geography: 16
+Urban Geography: 13
+Fluvial Geomorphology: 12
+Meteorology: 9
+Weather, Climate and Seasons: 8
+Oceanography: 7
+Hydrology: 5
+Tectonics: 4
+Geology: 4
+Environmental Geography: 4
+Biogeography: 3
+Paleogeography: 3
+Population Geography: 3
+Introduction to GIS: 2
+Atmospheric Science: 2
+Oceanography/Meteorology: 1
+Climate Classification: 1
+Chestnut: 1
+Climatology and Geomorphology: 1
+World Geography: 1
+Atmospheric Geography: 1
+Biomes and Climate: 1
+b: 1
+World Regional Geography: 1
+Pedology: 1
+
+--- government ---
+Constitutional Developments in Nigeria: 2834
+Basic Concepts in Government: 2624
+Nigeria's Foreign Policy and International Relations: 2570
+Arms of Government and Electoral Processes: 2364
+others: 1491
+General: 1173
+Political Systems and Ideologies: 362
+Comparative Government: 59
+Forms of Government: 46
+Systems of Government: 42
+Foreign Policy: 39
+Federalism: 34
+Public Administration: 33
+Constitutional Principles: 21
+Electoral Process: 19
+Judiciary: 18
+Legal Principles: 18
+Constitutional Theory: 15
+Political Systems: 14
+Political Theory: 14
+Separation of Powers: 13
+The Judiciary: 11
+Constitution: 10
+State Structures: 9
+Constitutional Law: 7
+Parliamentary Systems: 7
+Legislative Structures: 6
+Electoral Systems: 5
+Political Ideologies: 5
+Government Structures: 5
+International Organizations: 5
+Legal Foundations: 4
+Legislative Processes: 4
+Civil Liberties: 3
+Government Structure: 3
+Legal Theory: 3
+Structures of Government: 2
+Elections and Voting: 2
+Types of Governance: 2
+Governance Principles: 2
+Political Regimes: 2
+Democratic Systems: 2
+Political Structures: 2
+Systems of Governance: 2
+Constitutional Framework: 2
+Types of Government: 2
+Constitutional Structures: 2
+Forms of State: 2
+Comparative Politics: 2
+Civil Liberties and Law: 1
+Unitary Systems: 1
+Legislative Process: 1
+Principles of Democracy: 1
+Judiciary and Law: 1
+Authoritarianism: 1
+Legislative Branch: 1
+Bureaucracy and Administration: 1
+Executive Power: 1
+Political Science Theory: 1
+Federalism and Governance: 1
+Distribution of Power: 1
+Executive Structures: 1
+State Structure: 1
+Democracy: 1
+Legislature: 1
+Political Philosophy: 1
+Political Economy: 1
+Democratic Theory: 1
+Legislative Systems: 1
+Legal Frameworks: 1
+Parliamentary vs Presidential Systems: 1
+Types of States: 1
+Democratic Processes: 1
+Types of Regime: 1
+
+--- history ---
+European Contact and British Conquest: 4779
+Nationalist Movements and Independence: 3031
+Pre-colonial Nigeria: 1719
+Post-Independence Nigeria and Foreign Relations: 480
+General: 90
+Asian History: 53
+World History: 52
+French Revolution: 48
+Early Modern European History: 39
+Post-colonial Nigeria: 34
+Colonial Nigeria: 23
+African History: 21
+Early Modern Europe: 20
+Ancient Civilizations: 19
+Historiography: 18
+Modern Asian History: 18
+European History: 17
+European Revolutions: 11
+Modern European History: 11
+East Asian History: 7
+Ancient History: 7
+Ancient China: 6
+Economic History: 6
+Ancient Chinese History: 5
+Age of Discovery: 5
+Early Modern History: 5
+Ancient Rome: 5
+World War I: 5
+Medieval History: 4
+World History - Asia: 4
+Modern History: 3
+Ancient Mesopotamia: 3
+20th Century History: 2
+20th Century International Relations: 2
+Modern Japanese History: 2
+Age of Exploration: 2
+Modern World History: 2
+Industrial Revolution: 2
+Roman Empire: 2
+20th Century Global History: 2
+Colonial History: 2
+Renaissance and Reformation: 1
+Diplomatic History: 1
+Ancient India: 1
+Global Exploration: 1
+20th Century World History: 1
+Cold War History: 1
+Medieval English History: 1
+Ancient Indian History: 1
+20th Century Middle East: 1
+Early Modern Economics: 1
+Ancient Egypt: 1
+Ancient East Asian History: 1
+Intellectual History: 1
+Pre-Columbian Americas: 1
+Ancient World History: 1
+Ancient History - China: 1
+Classical Civilizations: 1
+European Reformation: 1
+Modern Chinese History: 1
+Classical Antiquity: 1
+Age of Revolution: 1
+19th Century Europe: 1
+Ancient Asia: 1
+Cold War: 1
+Modern Revolutions: 1
+The French Revolution: 1
+Modern Latin American History: 1
+20th Century Global Conflict: 1
+
+--- insurance ---
+General: 348
+XYC Industries Limited proposed a fire risk to Adequate Insurance Plc. on a total sum insured of N= 5,000,000.00. The risk was accepted on a premium rate of 0.35%. After survey, the insurer charged a rate of 0.275%.: 2
+
+--- irk ---
+Hadith (Study of Prophetic Sayings): 1741
+The Qur'an (Revelation and Compilation): 1490
+Tawhid and Fiqh (Islamic Law): 1455
+General: 150
+Islamic History and Culture in West Africa: 51
+Sirah (Life of the Prophet): 40
+Fiqh (Islamic Jurisprudence): 33
+Quran: 30
+Tawhid (Islamic Theology): 28
+Islamic History: 25
+Collective Bargaining: 21
+Hadith: 18
+Evaluation Metrics: 15
+Islamic Ethics and Morality: 15
+IR Perspectives: 15
+Dispute Resolution: 12
+Linguistics: 10
+Differential Kinematics: 8
+Indexing: 8
+Conflict Resolution: 7
+Theoretical Frameworks: 7
+Kinematic Modeling: 7
+Inverse Kinematics: 6
+Industrial Disputes: 5
+Weighting Schemes: 5
+Shariah Law (Sources and Applications): 5
+Concurrency: 5
+Preprocessing: 5
+Error Handling: 5
+Synonyms: 5
+Knowledge Representation: 5
+State Management: 4
+Knowledge Management: 4
+System Architecture: 4
+Optimization: 4
+Indexing and Weighting: 4
+Memory Management: 4
+Boolean Retrieval: 4
+IRK Representation: 3
+Antonyms: 3
+Contextual Application: 3
+Vector Space Model: 3
+Command Line Interface: 3
+Text Preprocessing: 3
+Performance Optimization: 3
+Industrial Relations Perspectives: 3
+Architecture: 3
+Kinematics: 3
+IR Theories: 3
+Security Studies: 3
+Configuration: 3
+Emotional Intensity: 3
+Synchronization: 3
+Definition and Meaning: 2
+Singularities: 2
+Knowledge Integration: 2
+Robot Singularities: 2
+Link Analysis: 2
+Vocabulary and Meaning: 2
+Industrial Action: 2
+International Relations Theory: 2
+IRC Protocol Commands: 2
+Power Dynamics: 2
+Behavioral Psychology: 2
+Pillars of Islam (Salat, Zakat, Sawm, Hajj): 2
+Liberalism: 2
+Retrieval Models: 2
+Core Concepts: 2
+Information Retrieval: 2
+Kernel Architecture: 2
+IR Theoretical Frameworks: 2
+Industrial Conflict: 2
+Scheduling: 2
+Kinematic Fundamentals: 2
+Performance Metrics: 2
+Perspectives of IR: 2
+Jacobians and Singularities: 2
+Indexing and Retrieval: 2
+Instructional Design: 2
+Robot Architecture: 2
+Constructivism: 2
+Knowledge Networks: 1
+Network Reliability: 1
+Comparative Linguistics: 1
+Resource Management: 1
+Contextual Analysis: 1
+Kinematics Foundations: 1
+Core Syntax: 1
+Information Flow: 1
+Interrupt Management: 1
+Psychological Triggers: 1
+Employee Representation: 1
+Interoperability: 1
+Dispute Settlement: 1
+Applied Context: 1
+Resource Mapping: 1
+Optimization Techniques: 1
+Selection Rules: 1
+Interrupt Types: 1
+Process Management: 1
+Infringement Standards: 1
+Learning Psychology: 1
+System Recovery: 1
+Simulation: 1
+Grammar and Syntax: 1
+Retrieval Efficiency: 1
+Epistemic Communities: 1
+Trademark Law: 1
+CLI Commands: 1
+Emotional Spectrum: 1
+Metric Analysis: 1
+User Modes: 1
+Psychology of Learning: 1
+Knowledge Graphs: 1
+Psychological Impact: 1
+Labor Actions: 1
+Strategic HRM: 1
+Union Shop Agreements: 1
+Negotiation Strategies: 1
+Vector Space Models: 1
+IR Theory: 1
+Process Optimization: 1
+IRK Optimization: 1
+Rule Conflict Resolution: 1
+Psychological Definition: 1
+Rule Definition: 1
+Behavioral Traits: 1
+Application: 1
+Molecular Symmetry: 1
+Text Normalization: 1
+Infrastructure Management: 1
+Data Validation: 1
+Etymology and Semantics: 1
+Industrial Relations Theory: 1
+Network Security: 1
+Providers: 1
+Signal Timing: 1
+Multi-core Processing: 1
+Kit Components: 1
+Grievance Handling: 1
+Storage Models: 1
+Labor Law and History: 1
+Data Structures: 1
+Session Management: 1
+Theoretical Models: 1
+Semantics: 1
+Compilation Pipeline: 1
+Enforcement: 1
+Context Switching: 1
+SSA Form: 1
+Emotional Intelligence: 1
+Framework Purpose: 1
+Vocabulary and Synonyms: 1
+Feedback Mechanisms: 1
+International Conflict: 1
+Accessibility: 1
+Retrieval Methods: 1
+Distributed Systems: 1
+Kernel Monitoring: 1
+Execution Strategy: 1
+Indexing and Preprocessing: 1
+Cognitive Analysis: 1
+Data Access: 1
+D-H Convention: 1
+Brand Protection: 1
+Employee Relations: 1
+CLI Tools: 1
+Emotional Differentiation: 1
+Spatial Transformations: 1
+Connectivity: 1
+IR Formats: 1
+Physical Principles: 1
+Reasoning Frameworks: 1
+Text Processing: 1
+Curriculum Sequencing: 1
+Scheduling Algorithms: 1
+IRC Infrastructure: 1
+Ranking Algorithms: 1
+API Design: 1
+Systemic Structures: 1
+IR Trade-offs: 1
+Ranking and Scoring: 1
+Kinematics Fundamentals: 1
+Semantic Gradation: 1
+Data Interoperability: 1
+Historical Linguistics: 1
+Cognitive Load: 1
+Data Ingestion: 1
+Behavioral Science: 1
+Server Administration: 1
+Robot Geometry: 1
+State Machines: 1
+Interrupt Handling: 1
+Resilience Engineering: 1
+Functional Group Identification: 1
+Metadata Management: 1
+Data Consistency: 1
+Triggers: 1
+Realism: 1
+Psychology of Irritation: 1
+Knowledge Transfer Barriers: 1
+System Evaluation: 1
+Vocabulary/Synonyms: 1
+Semantic Integration: 1
+Velocity Kinematics: 1
+Backend Pipeline: 1
+Contextual Usage: 1
+Evaluation Strategies: 1
+Trade Unionism: 1
+Coping Mechanisms: 1
+Data Modeling: 1
+RAG and Vectorization: 1
+Organizational Behavior: 1
+Knowledge Acquisition: 1
+Physical Layer: 1
+Adjective Usage: 1
+User Experience: 1
+Data Synchronization: 1
+Robot Joints: 1
+Grievance Redressal: 1
+Emitter Module: 1
+Technical Integration: 1
+Bargaining Strategies: 1
+Data Architecture: 1
+Runtime Monitoring: 1
+Diplomatic Strategies: 1
+Knowledge and Policy: 1
+Definition and Nuance: 1
+Etymology and Meaning: 1
+Pedagogical Design: 1
+Kinematics Mapping: 1
+UX Testing: 1
+Coordinate Transformations: 1
+Trademark Strength: 1
+Modules: 1
+Union Recognition: 1
+Information Theory: 1
+Performance Tuning: 1
+IRK Pipeline: 1
+Parallelization: 1
+Knowledge Architecture: 1
+Forward Kinematics: 1
+Knowledge Modeling: 1
+Design Philosophy: 1
+Structural Design: 1
+Interrupt Controllers: 1
+Industrial Relations Trends: 1
+Psychological Response: 1
+Grammar and Usage: 1
+Cognitive Mechanisms: 1
+
+--- literature ---
+Poetry and Poetic Devices: 1542
+Drama and Dramatic Techniques: 1411
+Prose and Narrative Devices: 1093
+General Literary Principles: 298
+Literary Devices: 44
+Non-African Prose: 39
+Modernist Drama: 37
+African Prose: 37
+African Drama: 34
+Modernist Literature: 30
+Non-African Poetry: 29
+Non-African Drama: 24
+Literary Movements: 22
+Poetic Devices: 22
+Figures of Speech: 18
+Drama: 16
+Literary Appreciation: 15
+Narrative Technique: 14
+Narrative Techniques: 14
+Literary Genres: 12
+Poetry: 10
+20th Century Drama: 9
+African Poetry: 9
+Classical Literature: 8
+Narratology: 8
+Modernist Poetry: 7
+Romanticism: 7
+Poetry Analysis: 6
+Modern Drama: 6
+Gothic Literature: 5
+Dystopian Literature: 5
+Literary Theory: 4
+Epic Poetry: 3
+Modernist Novel: 3
+Poetry and Prosody: 3
+American Literature: 2
+Characterization: 2
+Poetry and Poetics: 2
+Modernist Fiction: 2
+Romanticism and Gothicism: 2
+Literary Techniques: 2
+Literary Archetypes: 2
+World Literature: 2
+Drama and Movements: 1
+Comparative Literature: 1
+Literary History: 1
+Greek Tragedy: 1
+Poetry and Movements: 1
+Drama/Theatre: 1
+Point of View: 1
+Absurdist Theatre: 1
+Political Satire: 1
+Poetry/Prosody: 1
+19th Century Novels: 1
+Classical Literary Theory: 1
+Theatre of the Absurd: 1
+Victorian Literature: 1
+Dystopian Fiction: 1
+20th Century Poetry: 1
+Novel Structures: 1
+20th Century Fiction: 1
+Medieval Literature: 1
+Latin American Literature: 1
+Romantic Poetry: 1
+Contemporary Literature: 1
+Poetry History: 1
+Narrative Structure: 1
+Genre Studies: 1
+Dramatic Literature: 1
+Contemporary Fiction: 1
+Poetry and Theory: 1
+
+--- literature-in-english ---
+others: 557
+
+--- mathematics ---
+others: 1210
+Calculus: 230
+Number and Algebra: 217
+Statistics and Probability: 126
+General: 122
+Algebra: 80
+Probability: 57
+Trigonometry: 41
+Statistics: 35
+Sets: 23
+Geometry and Trigonometry: 17
+Logarithms: 15
+Linear Algebra: 15
+Geometry: 14
+Variation: 14
+Matrices and Determinants: 13
+Sequences and Series: 10
+Number Bases: 10
+Inequalities: 10
+Indices, Logarithms and Surds: 9
+Fractions, Decimals, Approximations and Percentages: 9
+Binary Operations: 5
+Mensuration: 5
+Set Theory: 4
+A bag contains 10 balls of which 3 are red 7 are white. Two balls are drawn at random. Find the probability   of none of the balls is red if the draw is: 2
+Differential Equations: 1
+Polynomials: 1
+Calculus - Limits: 1
+Algebra - Function Transformations: 1
+Series and Sequences: 1
+Calculus/Analysis: 1
+Number Theory: 1
+Functions: 1
+Linear Algebra - Systems of Equations: 1
+
+--- physics ---
+others: 1156
+Modern Physics: 240
+General: 224
+Thermal Physics: 195
+Waves and Optics: 188
+Mechanics: 168
+Electricity and Magnetism: 102
+Thermodynamics: 66
+Optics: 52
+Kinematics: 25
+Heat Transfer: 24
+Electromagnetism: 19
+Sound Waves: 19
+Electrostatics: 16
+Elastic Properties of Solids: 10
+Magnetism and Electromagnetism: 10
+Wave Optics: 10
+Light Waves: 10
+Quantum Physics: 10
+Friction: 9
+Relativity: 9
+Electricity: 8
+Waves: 5
+Equilibrium of Forces: 5
+Gravitation: 5
+Fluids at Rest and in Motion: 5
+Measurements and Units: 5
+Static Electricity: 4
+Fluid Mechanics: 3
+Classical Mechanics: 3
+Circular Motion: 1
+Condensed Matter Physics: 1
+Nuclear Physics: 1
+Electromagnetism / Condensed Matter: 1
+Astrophysics/Gravitation: 1
+Rotational Mechanics: 1

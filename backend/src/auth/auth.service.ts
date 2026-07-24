@@ -15,6 +15,8 @@ import { ConfigService } from '@nestjs/config';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { createHmac, randomInt, createHash } from 'crypto';
+import { authenticator } from 'otplib';
+import * as QRCode from 'qrcode';
 import { z } from 'zod';
 import { NotificationsService } from '../notifications/notifications.service';
 import { User, UserDocument, generateCbtKey } from '../users/schemas/user.schema';
@@ -329,12 +331,58 @@ export class AuthService implements OnModuleInit {
     if (!secret || !/^\d{6}$/.test(otp)) {
       return false;
     }
+    return authenticator.verify({ token: otp, secret });
+  }
 
-    const currentWindow = Math.floor(Date.now() / 30_000).toString();
-    const digest = createHmac('sha1', secret).update(currentWindow).digest('hex');
-    const expectedOtp = (parseInt(digest.slice(-8), 16) % 1_000_000).toString().padStart(6, '0');
+  async generateMfaSecret(userId: string) {
+    const user = await this.userModel.findOne({ userId }).exec();
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
 
-    return expectedOtp === otp;
+    const secret = authenticator.generateSecret();
+    const otpauthUrl = authenticator.keyuri(user.email, 'Aurikex CBT', secret);
+    const qrCodeDataUrl = await QRCode.toDataURL(otpauthUrl);
+
+    user.mfa_secret = secret;
+    await user.save();
+
+    return { qrCode: qrCodeDataUrl, secret };
+  }
+
+  async enableMfa(userId: string, otp: string) {
+    const user = await this.userModel.findOne({ userId }).exec();
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    const mfaSecret = user.get('mfa_secret', null, { getters: true }) as string | undefined;
+    if (!this.isOtpValid(mfaSecret, otp)) {
+      throw new BadRequestException('Invalid OTP code.');
+    }
+
+    user.mfa_enabled = true;
+    await user.save();
+
+    return { message: 'Two-Factor Authentication enabled successfully.' };
+  }
+
+  async disableMfa(userId: string, otp: string) {
+    const user = await this.userModel.findOne({ userId }).exec();
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    const mfaSecret = user.get('mfa_secret', null, { getters: true }) as string | undefined;
+    if (!this.isOtpValid(mfaSecret, otp)) {
+      throw new BadRequestException('Invalid OTP code.');
+    }
+
+    user.mfa_enabled = false;
+    user.mfa_secret = undefined;
+    await user.save();
+
+    return { message: 'Two-Factor Authentication disabled successfully.' };
   }
 
   async resetPassword(email: string, code: string, newPassword: string) {

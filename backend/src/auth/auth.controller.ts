@@ -37,6 +37,12 @@ class VerifyEmailDto {
   code!: string;
 }
 
+class MfaDto {
+  @IsString()
+  @IsNotEmpty()
+  otp!: string;
+}
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -129,5 +135,29 @@ export class AuthController {
     @Body(new ValidationPipe({ whitelist: true, transform: true })) updateProfileDto: UpdateProfileDto,
   ) {
     return this.authService.updateProfile(req.user.sub, updateProfileDto);
+  }
+
+  @Post('mfa/generate')
+  @UseGuards(JwtAuthGuard)
+  generateMfaSecret(@Req() req: Request & { user: JwtPayload }) {
+    return this.authService.generateMfaSecret(req.user.sub);
+  }
+
+  @Post('mfa/enable')
+  @UseGuards(JwtAuthGuard)
+  enableMfa(
+    @Req() req: Request & { user: JwtPayload },
+    @Body(new ValidationPipe({ whitelist: true })) body: MfaDto,
+  ) {
+    return this.authService.enableMfa(req.user.sub, body.otp);
+  }
+
+  @Post('mfa/disable')
+  @UseGuards(JwtAuthGuard)
+  disableMfa(
+    @Req() req: Request & { user: JwtPayload },
+    @Body(new ValidationPipe({ whitelist: true })) body: MfaDto,
+  ) {
+    return this.authService.disableMfa(req.user.sub, body.otp);
   }
 }

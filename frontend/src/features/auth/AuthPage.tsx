@@ -465,7 +465,6 @@ export default function AuthPage() {
               Sign In <ArrowRight className="h-4 w-4" />
             </Button>
 
-            {/* Google Authentication Section - repositioned under password form */}
             <div className="pt-2">
               <div className="relative flex py-2 items-center mb-4">
                 <div className="flex-grow border-t border-slate-800"></div>
@@ -487,6 +486,64 @@ export default function AuthPage() {
                 </div>
               )}
             </div>
+          </form>
+        )}
+
+        {/* OTP Form */}
+        {mode === 'login' && tempToken && (
+          <form 
+            className="space-y-4 animate-slide-up" 
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (otp.length !== 6) {
+                setMessageType('error');
+                setMessage('Please enter a valid 6-digit OTP code.');
+                return;
+              }
+              try {
+                setMessageType('info');
+                setMessage('Verifying OTP code...');
+                const response = await verifyOtp({ tempToken, otp });
+                if (response.accessToken && response.refreshToken) {
+                  localStorage.setItem('accessToken', response.accessToken);
+                  localStorage.setItem('refreshToken', response.refreshToken);
+                  setMessage('Login successful! Redirecting...');
+                  setMessageType('success');
+                  navigate('/dashboard');
+                } else {
+                  throw new Error('Verification failed.');
+                }
+              } catch (err: any) {
+                setMessageType('error');
+                setMessage(err.response?.data?.message || 'Invalid OTP code. Please try again.');
+              }
+            }}
+          >
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Authenticator Code</label>
+              <div className="relative">
+                <ShieldAlert className="absolute left-3.5 top-3.5 h-4 w-4 text-text-muted" />
+                <input
+                  type="text"
+                  required
+                  placeholder="000000"
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                  className="w-full rounded-xl bg-bg-secondary border border-border pl-10 pr-4 py-3 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150 font-mono tracking-[0.5em] text-center"
+                />
+              </div>
+            </div>
+            <Button type="submit" fullWidth>
+              Verify Code <ArrowRight className="h-4 w-4" />
+            </Button>
+            <button
+              type="button"
+              onClick={() => { setTempToken(''); setOtp(''); setMessage(''); }}
+              className="w-full text-xs text-text-secondary hover:text-text-primary transition-colors text-center mt-2"
+            >
+              Cancel and go back
+            </button>
           </form>
         )}
 
