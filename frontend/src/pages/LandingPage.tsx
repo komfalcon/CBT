@@ -105,7 +105,7 @@ export default function LandingPage() {
               CBT
             </div>
             <div className="flex flex-col">
-              <span className="text-[17px] font-display font-bold tracking-tight bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent leading-tight">
+              <span className="text-[17px] font-display font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-300 bg-clip-text text-transparent leading-tight">
                 JAMB UTME Prep
               </span>
               <span className="text-[10px] text-primary font-medium tracking-widest uppercase leading-tight">
@@ -170,7 +170,7 @@ export default function LandingPage() {
               </div>
 
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[68px] font-display font-extrabold tracking-tight leading-[1.05]">
-                <span className="bg-gradient-to-b from-white via-slate-100 to-slate-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-b from-slate-800 via-slate-600 to-slate-500 dark:from-white dark:via-slate-100 dark:to-slate-500 bg-clip-text text-transparent">
                   Ace Your JAMB
                 </span>
                 <br />
@@ -280,7 +280,7 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-[11px] font-semibold text-primary mb-4">
               POWERFUL FEATURES
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
               Engineered for Score Excellence
             </h2>
             <p className="text-[15px] text-text-secondary max-w-2xl mx-auto">
@@ -427,7 +427,7 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-4 py-1.5 text-[11px] font-semibold text-emerald-400 mb-4">
               FULL JAMB SYLLABUS
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
               All 17 JAMB Subjects Covered
             </h2>
             <p className="text-[15px] text-text-secondary max-w-2xl mx-auto">
@@ -469,7 +469,7 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-[11px] font-semibold text-blue-300 mb-4">
               SIMPLE STEPS
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
               How It Works
             </h2>
             <p className="text-[15px] text-text-secondary">
@@ -560,7 +560,7 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-4 py-1.5 text-[11px] font-semibold text-amber-400 mb-4">
               TRANSPARENT PRICING
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
               Plans for Every Student
             </h2>
             <p className="text-[15px] text-text-secondary max-w-2xl mx-auto">

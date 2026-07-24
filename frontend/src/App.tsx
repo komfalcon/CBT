@@ -14,7 +14,12 @@ import TermsOfService from './pages/TermsOfService';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 
-const AdminDashboard = React.lazy(() => import('./pages/AdminDashboard'));
+const AdminLayout = React.lazy(() => import('./components/AdminLayout'));
+const AdminOverview = React.lazy(() => import('./pages/admin/AdminOverview'));
+const AdminCandidates = React.lazy(() => import('./pages/admin/AdminCandidates'));
+const AdminKeys = React.lazy(() => import('./pages/admin/AdminKeys'));
+const AdminBilling = React.lazy(() => import('./pages/admin/AdminBilling'));
+const SecureAccess = React.lazy(() => import('./pages/admin/SecureAccess'));
 
 function App() {
   return (
@@ -33,10 +38,25 @@ function App() {
             element={
               <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#0b0f19] text-slate-400">Loading Control Center...</div>}>
                 <AdminRoute>
-                  <AdminDashboard />
+                  <AdminLayout />
                 </AdminRoute>
               </Suspense>
             }
+          >
+            <Route index element={<Navigate to="overview" replace />} />
+            <Route path="overview" element={<AdminOverview />} />
+            <Route path="candidates" element={<AdminCandidates />} />
+            <Route path="keys" element={<AdminKeys />} />
+            <Route path="billing" element={<AdminBilling />} />
+            <Route path="questions" element={<QuestionBankPage />} />
+          </Route>
+          <Route 
+            path="/sys/auth-checkpoint" 
+            element={
+              <Suspense fallback={<div className="min-h-screen bg-bg-primary" />}>
+                <SecureAccess />
+              </Suspense>
+            } 
           />
           <Route path="/help" element={<HelpCenter />} />
           <Route path="/contact" element={<ContactUs />} />

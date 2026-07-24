@@ -216,7 +216,7 @@ export default function QuestionBankPage() {
   return (
     <main className="mx-auto min-h-screen max-w-6xl space-y-6 bg-bg-primary p-6 text-text-primary md:p-8">
       <header className="space-y-3">
-        <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+        <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
           Question Bank Management
         </h1>
         <p className="text-xs text-text-secondary">

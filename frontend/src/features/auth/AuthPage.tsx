@@ -372,7 +372,7 @@ export default function AuthPage() {
       {/* Floating Auth Card */}
       <Card className="w-full max-w-md rounded-3xl border border-border bg-bg-card/40 backdrop-blur-xl p-8 shadow-2xl relative">
         <div className="text-center space-y-2 mb-8">
-          <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent flex items-center justify-center gap-2">
+          <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent flex items-center justify-center gap-2">
             <Sparkles className="h-6 w-6 text-primary" />
             CBT Portal
           </h1>

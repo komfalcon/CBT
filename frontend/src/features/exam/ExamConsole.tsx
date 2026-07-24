@@ -378,7 +378,7 @@ export default function ExamConsole() {
             <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-bold text-sm text-text-primary">
               CBT
             </div>
-            <span className="text-sm font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent hidden sm:inline">
+            <span className="text-sm font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent hidden sm:inline">
               JAMB UTME Simulation
             </span>
           </div>
