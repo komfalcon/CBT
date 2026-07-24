@@ -828,16 +828,11 @@ export default function StudentDashboard() {
                         className="rounded border-border text-primary focus:ring-primary"
                       />
                       <span className="text-xs text-text-primary flex-1">{t.topic}</span>
-                      <span className="text-[10px] font-mono text-text-muted">{t.count}</span>
                     </label>
                   ))
                 )}
               </div>
-              {isDrillShort && (
-                <p className="text-[10px] text-amber-500 font-medium">
-                  Warning: Selected topics only have {drillSelectedTopicsCount} questions available. The remaining {drillCount - drillSelectedTopicsCount} will be filled with random {drillSubject} questions.
-                </p>
-              )}
+
             </div>
           </div>
 

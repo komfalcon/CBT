@@ -108,23 +108,6 @@ export default function MockSetupPage() {
   };
 
   const mockWarnings: Array<{ subject: string; message: string }> = [];
-  mockSubjects.forEach(sub => {
-    const config = mockSubjectConfig[sub];
-    if (config?.mode === 'specific' && config.topics.length > 0) {
-      const targetCount = sub === 'english' ? 60 : 40;
-      const topicsForSub = availableMockTopics[sub] || [];
-      const selectedCount = topicsForSub
-        .filter(t => config.topics.includes(t.topic))
-        .reduce((acc, t) => acc + t.count, 0);
-      
-      if (selectedCount < targetCount) {
-        mockWarnings.push({
-          subject: sub,
-          message: `Warning: Selected topics only have ${selectedCount} questions. The remaining ${targetCount - selectedCount} will be filled with random ${SUBJECT_LABELS[sub] || sub} questions.`
-        });
-      }
-    }
-  });
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary font-sans overflow-auto relative flex flex-col">
@@ -354,7 +337,6 @@ export default function MockSetupPage() {
                                       <p className={`text-sm font-medium truncate ${isTopicSelected ? 'text-primary' : 'text-text-primary'}`}>
                                         {t.topic}
                                       </p>
-                                      <p className="text-xs text-text-muted mt-0.5">{t.count} questions available</p>
                                     </div>
                                   </label>
                                 );
