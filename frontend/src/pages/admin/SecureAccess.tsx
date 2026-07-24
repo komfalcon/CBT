@@ -62,7 +62,6 @@ export default function SecureAccess() {
             <Input
               label="Admin Email"
               type="email"
-              icon={<Mail className="h-5 w-5 text-text-muted" />}
               placeholder="sysadmin@aurikex.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -72,7 +71,6 @@ export default function SecureAccess() {
             <Input
               label="Admin Password"
               type="password"
-              icon={<Key className="h-5 w-5 text-text-muted" />}
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
