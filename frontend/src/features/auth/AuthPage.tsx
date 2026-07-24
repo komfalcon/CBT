@@ -90,10 +90,13 @@ export default function AuthPage() {
     if (google && clientId) {
       setTimeout(() => {
         try {
-          google.accounts.id.initialize({
-            client_id: clientId,
-            callback: handleGoogleLoginResponse,
-          });
+          if (!(window as any).googleInitialized) {
+            google.accounts.id.initialize({
+              client_id: clientId,
+              callback: handleGoogleLoginResponse,
+            });
+            (window as any).googleInitialized = true;
+          }
           const googleBtn = document.getElementById('google-signin-btn');
           if (googleBtn) {
             google.accounts.id.renderButton(
