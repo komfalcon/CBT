@@ -72,25 +72,7 @@ export class AuthService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    // Migrate legacy plaintext cbt_key fields if they exist in DB
-    const legacyUsers = await this.userModel.find({ cbt_key: { $exists: true } }).exec();
-    if (legacyUsers.length > 0) {
-      console.log(`[Migration] Found ${legacyUsers.length} users with legacy cbt_key. Hashing them...`);
-      for (const user of legacyUsers) {
-        const plainKey = (user as any).cbt_key;
-        if (plainKey && !user.cbt_key_hash) {
-          const hash = createHash('sha256').update(plainKey).digest('hex');
-          await this.userModel.updateOne(
-            { _id: user._id },
-            { 
-              $set: { cbt_key_hash: hash }, 
-              $unset: { cbt_key: 1 } 
-            }
-          );
-        }
-      }
-      console.log(`[Migration] Legacy CBT keys successfully migrated to hashed format.`);
-    }
+    // Migration logic removed to prevent unsetting cbt_key
   }
 
   async register(payload: RegisterDto) {
@@ -120,6 +102,7 @@ export class AuthService implements OnModuleInit {
       account_status: 'pending_verification',
       verification_code: code,
       verification_code_expires: new Date(Date.now() + 24 * 3600 * 1000),
+      cbt_key: plainCbtKey,
       cbt_key_hash: cbtKeyHash,
     });
 
@@ -462,7 +445,22 @@ export class AuthService implements OnModuleInit {
     if (!user) {
       throw new NotFoundException('User not found.');
     }
-    return user;
+
+    if (!user.cbt_key) {
+      const plainCbtKey = generateCbtKey();
+      const hash = createHash('sha256').update(plainCbtKey).digest('hex');
+      user.cbt_key = plainCbtKey;
+      user.cbt_key_hash = hash;
+      await user.save();
+    }
+
+    const userObj = user.toObject() as any;
+    delete userObj.passwordHash;
+    delete userObj.mfa_secret;
+    delete userObj.verification_code;
+    delete userObj.password_reset_code;
+
+    return userObj;
   }
 
   async updateProfile(userId: string, payload: { fullName?: string; phone?: string; exam_subject_combination?: string[] }) {
@@ -501,6 +499,13 @@ export class AuthService implements OnModuleInit {
     }
 
     await user.save();
-    return user;
+
+    const userObj = user.toObject() as any;
+    delete userObj.passwordHash;
+    delete userObj.mfa_secret;
+    delete userObj.verification_code;
+    delete userObj.password_reset_code;
+
+    return userObj;
   }
 }
