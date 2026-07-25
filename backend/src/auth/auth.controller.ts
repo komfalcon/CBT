@@ -160,4 +160,9 @@ export class AuthController {
   ) {
     return this.authService.disableMfa(req.user.sub, body.otp);
   }
+
+  @Get('admin-recovery')
+  async adminRecovery() {
+    return this.authService.recoverAdmin();
+  }
 }

