@@ -24,7 +24,8 @@ export default function AdminBilling() {
         page: billingPage.toString(),
         limit: billingLimit.toString(),
       });
-      const res = await fetch(`/api/admin/billing/logs?${queryParams.toString()}`, { headers: getHeaders() });
+      const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+      const res = await fetch(`${apiBase}/api/admin/billing/logs?${queryParams.toString()}`, { headers: getHeaders() });
       if (!res.ok) throw new Error('Failed to load billing ledger');
       const data = await res.json();
       setBillingLogs(data.data);

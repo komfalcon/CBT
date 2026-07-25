@@ -30,7 +30,8 @@ export default function AdminCandidates() {
         role: userRole,
         status: userStatus,
       });
-      const res = await fetch(`/api/admin/users?${queryParams.toString()}`, { headers: getHeaders() });
+      const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+      const res = await fetch(`${apiBase}/api/admin/users?${queryParams.toString()}`, { headers: getHeaders() });
       if (!res.ok) throw new Error('Failed to load user accounts');
       const data = await res.json();
       setUsers(data.data);
@@ -51,7 +52,8 @@ export default function AdminCandidates() {
 
   const handleUpdateStatus = async (userId: string, newStatus: string) => {
     try {
-      const res = await fetch(`/api/admin/users/${userId}/status`, {
+      const apiBase = import.meta.env.VITE_API_BASE_URL || '';
+      const res = await fetch(`${apiBase}/api/admin/users/${userId}/status`, {
         method: 'PATCH',
         headers: getHeaders(),
         body: JSON.stringify({ status: newStatus }),
