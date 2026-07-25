@@ -74,7 +74,15 @@ export class AuthService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    // Migration logic removed to prevent unsetting cbt_key
+    console.log('Running role fix migration...');
+    const users = await this.userModel.find({}).lean().exec();
+    for (const user of users) {
+      if (user.role && user.role !== user.role.toLowerCase()) {
+        console.log('Fixing role for', user.email);
+        await this.userModel.updateOne({ _id: user._id }, { $set: { role: user.role.toLowerCase() } });
+      }
+    }
+    console.log('Role fix migration complete.');
   }
 
   async register(payload: RegisterDto) {
