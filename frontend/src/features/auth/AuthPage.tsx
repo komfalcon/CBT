@@ -761,25 +761,6 @@ export default function AuthPage() {
           </form>
         )}
 
-        {tempToken && (
-          <form className="mt-4 space-y-4 animate-fade-in" onSubmit={handleVerifyOtp}>
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">MFA Security Code</label>
-              <input
-                type="text"
-                required
-                placeholder="6-digit OTP code"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                className="w-full rounded-xl bg-bg-secondary border border-border pl-4 pr-4 py-3 text-sm text-center font-mono tracking-widest text-text-primary focus:border-primary focus:ring-2 focus:ring-primary/25 outline-none transition-all duration-150"
-              />
-            </div>
-            <Button type="submit" fullWidth>
-              Verify OTP Code
-            </Button>
-          </form>
-        )}
-
         {mode === 'verify-email' && (
           <form className="space-y-4 animate-fade-in" onSubmit={handleVerifyEmail}>
             <Alert variant="info" title="Check Browser Console (F12)">
