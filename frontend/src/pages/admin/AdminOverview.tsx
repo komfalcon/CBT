@@ -18,7 +18,7 @@ export default function AdminOverview() {
     setStatsLoading(true);
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL || '';
-      const res = await fetch(`${apiBase}/api/admin/stats/overview`, { headers: getHeaders() });
+      const res = await fetch(`${apiBase}/admin/stats/overview`, { headers: getHeaders() });
       if (!res.ok) throw new Error('Failed to load overview statistics');
       const data = await res.json();
       setStats(data);

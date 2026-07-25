@@ -30,7 +30,7 @@ export default function AdminKeys() {
         search: 'voucher-', // Voucher emails end in @aurikex.local and start with voucher-
       });
       const apiBase = import.meta.env.VITE_API_BASE_URL || '';
-      const res = await fetch(`${apiBase}/api/admin/users?${queryParams.toString()}`, { headers: getHeaders() });
+      const res = await fetch(`${apiBase}/admin/users?${queryParams.toString()}`, { headers: getHeaders() });
       if (!res.ok) throw new Error('Failed to load voucher keys');
       const data = await res.json();
       setVoucherUsers(data.data);
@@ -56,7 +56,7 @@ export default function AdminKeys() {
     setGeneratedKeys([]);
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL || '';
-      const res = await fetch(`${apiBase}/api/admin/cbt-keys/generate`, {
+      const res = await fetch(`${apiBase}/admin/cbt-keys/generate`, {
         method: 'POST',
         headers: getHeaders(),
         body: JSON.stringify({ count: keyCount }),
