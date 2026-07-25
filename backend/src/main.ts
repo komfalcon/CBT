@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import helmet from 'helmet';
 
 import { ValidationPipe } from '@nestjs/common';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,6 +29,7 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(helmet({ crossOriginOpenerPolicy: false }));
+  app.useGlobalFilters(new AllExceptionsFilter());
   
   app.useGlobalPipes(
     new ValidationPipe({
