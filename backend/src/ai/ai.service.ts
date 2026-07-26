@@ -13,7 +13,7 @@ export class AiService {
   // Use DO proxy key if available, else standard env variable
   private readonly apiKey = process.env.DIGITALOCEAN_INFERENCE_KEY || '';
   // Standard generic chat model available on DigitalOcean Inference
-  private readonly model = 'gemma-4-31B-it';
+  private readonly model = 'llama3.3-70b-instruct';
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,

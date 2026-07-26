@@ -24,34 +24,42 @@ export class AiGeneratorTask {
     this.isGenerating = true;
 
     try {
-      // Pick a random subject to augment to ensure continuous variety
-      const subject = QUESTION_SUBJECTS[Math.floor(Math.random() * QUESTION_SUBJECTS.length)];
+      this.logger.log(`Starting continuous generation for all subjects in parallel...`);
       
-      const topics = SYLLABUS[subject];
-      let topic: string | undefined;
-      if (topics && topics.length > 0) {
-        topic = topics[Math.floor(Math.random() * topics.length)];
-      }
+      const generationPromises = QUESTION_SUBJECTS.map(async (subject) => {
+        try {
+          const topics = SYLLABUS[subject];
+          let topic: string | undefined;
+          if (topics && topics.length > 0) {
+            topic = topics[Math.floor(Math.random() * topics.length)];
+          }
+          
+          this.logger.log(`Generating for ${subject}${topic ? ` -> ${topic}` : ''}`);
+          
+          // Generate 5 questions at a time for this subject
+          const generatedQuestions = await this.aiService.generateQuestionsBatch(subject, 5, topic);
+          
+          if (generatedQuestions && generatedQuestions.length > 0) {
+            const finalizedQuestions = generatedQuestions.map(q => ({
+              ...q,
+              topic: q.topic || topic || 'General',
+            }));
+            
+            await this.questionsService.insertGeneratedQuestions(subject, finalizedQuestions);
+            this.logger.log(`Successfully generated and inserted ${generatedQuestions.length} new questions for ${subject}`);
+          } else {
+            this.logger.warn(`No valid questions were generated for ${subject}`);
+          }
+        } catch (subjectError: any) {
+          this.logger.error(`Failed to generate questions for ${subject}`, subjectError.stack);
+        }
+      });
       
-      this.logger.log(`Starting continuous generation for subject: ${subject}${topic ? ` -> ${topic}` : ''}`);
-      
-      // Generate 5 questions at a time to prevent timeout and ensure high variety
-      const generatedQuestions = await this.aiService.generateQuestionsBatch(subject, 5, topic);
-      
-      if (generatedQuestions && generatedQuestions.length > 0) {
-        // Enforce the generated topic if the AI didn't supply it
-        const finalizedQuestions = generatedQuestions.map(q => ({
-          ...q,
-          topic: q.topic || topic || 'General',
-        }));
-        
-        await this.questionsService.insertGeneratedQuestions(subject, finalizedQuestions);
-        this.logger.log(`Successfully generated and inserted ${generatedQuestions.length} new questions for ${subject}`);
-      } else {
-        this.logger.warn(`No valid questions were generated for ${subject}`);
-      }
+      // Wait for all subject generations to finish
+      await Promise.allSettled(generationPromises);
+      this.logger.log(`Finished parallel continuous generation for all subjects.`);
     } catch (error: any) {
-      this.logger.error('Failed during continuous question generation', error.stack);
+      this.logger.error('Failed during parallel continuous question generation', error.stack);
     } finally {
       this.isGenerating = false;
     }
