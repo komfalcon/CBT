@@ -277,11 +277,10 @@ Focus on variety to prevent duplicates.`
       const rawResponse = await this.callDigitalOceanApi(messages, 4000); // Increased for batch generation
       let jsonStr = rawResponse.trim();
 
-      // Strip markdown code blocks if the model insists on adding them
-      if (jsonStr.startsWith('\`\`\`json')) {
-        jsonStr = jsonStr.replace(/^\`\`\`json\n/, '').replace(/\n\`\`\`$/, '');
-      } else if (jsonStr.startsWith('\`\`\`')) {
-        jsonStr = jsonStr.replace(/^\`\`\`\n/, '').replace(/\n\`\`\`$/, '');
+      // Robustly extract the JSON array from the response
+      const match = jsonStr.match(/\[\s*\{[\s\S]*\}\s*\]/);
+      if (match) {
+        jsonStr = match[0];
       }
 
       const parsed = JSON.parse(jsonStr);
