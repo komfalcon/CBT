@@ -380,6 +380,23 @@ export class AuthService implements OnModuleInit {
     return { qrCode: qrCodeDataUrl, secret };
   }
 
+  async generateSsoToken(userId: string) {
+    const user = await this.userModel.findOne({ userId, account_status: 'active' }).exec();
+    if (!user) {
+      throw new UnauthorizedException('User not found or inactive.');
+    }
+
+    const payload: JwtPayload = {
+      sub: user.userId,
+      email: user.email,
+      role: user.role,
+      tokenType: 'sso',
+    };
+
+    const ssoToken = await this.signToken(payload, '1m');
+    return { ssoToken };
+  }
+
   async enableMfa(userId: string, otp: string) {
     const user = await this.userModel.findOne({ userId }).exec();
     if (!user) {

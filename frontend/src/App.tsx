@@ -11,6 +11,8 @@ import HelpCenter from './pages/HelpCenter';
 import ContactUs from './pages/ContactUs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import ExamHub from './pages/ExamHub';
+import Leaderboard from './pages/Leaderboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 
@@ -29,6 +31,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
+          <Route path="/exam-hub" element={<ProtectedRoute><ExamHub /></ProtectedRoute>} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/mock-setup" element={<ProtectedRoute><MockSetupPage /></ProtectedRoute>} />
           <Route path="/questions" element={<ProtectedRoute><QuestionBankPage /></ProtectedRoute>} />
           <Route path="/exam/:sessionId" element={<ProtectedRoute><ExamConsole /></ProtectedRoute>} />

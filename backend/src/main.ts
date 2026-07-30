@@ -15,6 +15,9 @@ async function bootstrap() {
     'http://127.0.0.1:5174',
     'https://cbt.aurikrex.tech',
     'https://www.cbt.aurikrex.tech',
+    'https://library.aurikrex.tech',
+    'https://www.library.aurikrex.tech',
+    'https://cbt-vl4x.onrender.com'
   ];
   
   app.enableCors({

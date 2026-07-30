@@ -17,6 +17,9 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { AiModule } from './ai/ai.module';
 import { PaymentsModule } from './payments/payments.module';
 import { AdminModule } from './admin/admin.module';
+import { StudyModule } from './study/study.module';
+import { ArenaModule } from './arena/arena.module';
+import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { AppController } from './app.controller';
 import { HealthService } from './health.service';
 
@@ -54,6 +57,9 @@ import { HealthService } from './health.service';
     AiModule,
     PaymentsModule,
     AdminModule,
+    StudyModule,
+    ArenaModule,
+    LeaderboardModule,
   ],
   controllers: [AppController],
   providers: [

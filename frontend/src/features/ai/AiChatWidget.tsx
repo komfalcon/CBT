@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { chatWithTutor, getChatSessions, createChatSession, getChatSession, deleteChatSession } from './api';
-import { Bot, X, Send, User as UserIcon, Loader2, Trash2, MessageSquare, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Bot, X, Send, User as UserIcon, Loader2, Trash2, MessageSquare, Plus, ChevronLeft, ChevronRight, Volume2, Square } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -19,6 +19,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [playingMsgIndex, setPlayingMsgIndex] = useState<number | null>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -41,6 +42,49 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen, showSidebar]);
+
+  // Clean up speech synthesis when component unmounts or closes
+  useEffect(() => {
+    if (!isOpen) {
+      window.speechSynthesis.cancel();
+      setPlayingMsgIndex(null);
+    }
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, [isOpen]);
+
+  const toggleSpeech = (text: string, index: number) => {
+    if (playingMsgIndex === index) {
+      window.speechSynthesis.cancel();
+      setPlayingMsgIndex(null);
+    } else {
+      window.speechSynthesis.cancel(); // Stop any current speech
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Try to find a more natural sounding voice instead of the default robotic one
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(voice => 
+        voice.name.includes('Google') || 
+        voice.name.includes('Samantha') || 
+        voice.name.includes('Siri') ||
+        voice.name.includes('Natural')
+      );
+      
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+      
+      // Adjust pitch and rate slightly for a more natural cadence
+      utterance.pitch = 1.0;
+      utterance.rate = 0.95;
+
+      utterance.onend = () => setPlayingMsgIndex(null);
+      utterance.onerror = () => setPlayingMsgIndex(null);
+      setPlayingMsgIndex(index);
+      window.speechSynthesis.speak(utterance);
+    }
+  };
 
   const loadSessions = async () => {
     try {
@@ -208,11 +252,20 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                         <Bot className="w-4 h-4 text-ai-flag" />
                       </div>
                     )}
-                    <div className={`max-w-[80%] rounded-2xl p-3 text-sm leading-relaxed ${msg.role === 'user' ? 'bg-primary text-text-on-accent rounded-br-none font-medium' : 'bg-bg-secondary border border-border text-text-primary rounded-bl-none'}`}>
+                    <div className={`max-w-[80%] rounded-2xl p-3 text-sm leading-relaxed ${msg.role === 'user' ? 'bg-primary text-text-on-accent rounded-br-none font-medium' : 'bg-bg-secondary border border-border text-text-primary rounded-bl-none relative group'}`}>
                       {msg.role === 'assistant' ? (
-                        <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto">
-                          <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{msg.content}</ReactMarkdown>
-                        </div>
+                        <>
+                          <div className="prose prose-sm dark:prose-invert max-w-none overflow-x-auto pb-4">
+                            <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{msg.content}</ReactMarkdown>
+                          </div>
+                          <button
+                            onClick={() => toggleSpeech(msg.content, idx)}
+                            className="absolute bottom-1 right-2 p-1 text-text-secondary hover:text-primary transition-colors bg-bg-secondary rounded-full"
+                            title={playingMsgIndex === idx ? 'Stop Audio' : 'Play Audio'}
+                          >
+                            {playingMsgIndex === idx ? <Square className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                          </button>
+                        </>
                       ) : (
                         msg.content
                       )}

@@ -243,6 +243,27 @@ export default function StudentDashboard() {
     navigate('/auth?mode=login');
   };
 
+  const handleGoToLibrary = async () => {
+    try {
+      const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
+      const response = await fetch(`${apiBase}/auth/sso-token`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        const { ssoToken } = await response.json();
+        const libraryUrl = import.meta.env.VITE_LIBRARY_URL || 'https://library.aurikrex.tech';
+        window.open(`${libraryUrl}/sso?token=${ssoToken}`, '_blank');
+      } else {
+        addToast({ type: 'error', title: 'SSO Error', message: 'Failed to generate SSO token' });
+      }
+    } catch (err) {
+      addToast({ type: 'error', title: 'SSO Error', message: 'Failed to generate SSO token' });
+    }
+  };
+
   const handleCopyKey = () => {
     if (!student?.cbt_key) return;
     navigator.clipboard.writeText(student.cbt_key);
@@ -323,6 +344,30 @@ export default function StudentDashboard() {
 
           <div className="flex items-center gap-4">
             <ThemeToggle />
+            <Button
+              onClick={() => navigate('/exam-hub')}
+              variant="secondary"
+              size="sm"
+            >
+              <Target className="h-4 w-4" />
+              Exam Hub
+            </Button>
+            <Button
+              onClick={() => navigate('/leaderboard')}
+              variant="secondary"
+              size="sm"
+            >
+              <Award className="h-4 w-4 text-yellow-500" />
+              Leaderboard
+            </Button>
+            <Button
+              onClick={handleGoToLibrary}
+              variant="gradient"
+              size="sm"
+            >
+              <BookOpen className="h-4 w-4" />
+              E-Library
+            </Button>
             <Button
               onClick={handleLogout}
               variant="ghost"

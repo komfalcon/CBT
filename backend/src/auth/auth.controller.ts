@@ -143,6 +143,12 @@ export class AuthController {
     return this.authService.generateMfaSecret(req.user.sub);
   }
 
+  @Get('sso-token')
+  @UseGuards(JwtAuthGuard)
+  getSsoToken(@Req() req: Request & { user: JwtPayload }) {
+    return this.authService.generateSsoToken(req.user.sub);
+  }
+
   @Post('mfa/enable')
   @UseGuards(JwtAuthGuard)
   enableMfa(
