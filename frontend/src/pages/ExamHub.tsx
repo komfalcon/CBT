@@ -274,7 +274,7 @@ export default function ExamHub() {
                 </div>
               </div>
               <div className="flex justify-end gap-2 mt-4">
-                <Button size="sm" variant="outline" onClick={() => setIsAddingSession(false)}>Cancel</Button>
+                <Button size="sm" variant="secondary" onClick={() => setIsAddingSession(false)}>Cancel</Button>
                 <Button size="sm" variant="primary" onClick={handleAddSession}>Save Session</Button>
               </div>
             </div>
