@@ -156,3 +156,118 @@ a:active {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════════════
+   CBT landing-page redesign
+════════════════════════════════════════════════════════════ */
+.landing-page {
+  background:
+    radial-gradient(circle at 80% 4%, rgba(59, 130, 246, 0.14), transparent 26%),
+    radial-gradient(circle at 18% 32%, rgba(201, 168, 76, 0.07), transparent 24%),
+    var(--color-bg-primary);
+}
+
+.landing-page > header {
+  background: color-mix(in srgb, var(--color-bg-primary) 82%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent-primary) 20%, var(--color-border));
+}
+
+.landing-page > header > div,
+.landing-page section > div,
+.landing-page footer > div {
+  max-width: 1240px;
+}
+
+.landing-page section {
+  scroll-margin-top: 5rem;
+}
+
+.landing-page section:first-of-type {
+  min-height: min(820px, 88vh);
+  display: flex;
+  align-items: center;
+  padding-top: clamp(4rem, 9vw, 8rem);
+  padding-bottom: clamp(4rem, 9vw, 8rem);
+  background:
+    linear-gradient(115deg, color-mix(in srgb, var(--color-bg-primary) 86%, transparent) 0%, transparent 58%),
+    radial-gradient(circle at 80% 45%, color-mix(in srgb, var(--color-accent-primary) 14%, transparent), transparent 27%);
+}
+
+.landing-page section:first-of-type h1 {
+  max-width: 720px;
+  font-size: clamp(3.25rem, 7vw, 7rem);
+  line-height: 0.96;
+  letter-spacing: -0.075em;
+}
+
+.landing-page section:first-of-type p {
+  max-width: 600px;
+  font-size: clamp(1rem, 1.8vw, 1.18rem);
+  line-height: 1.75;
+}
+
+.landing-page section:first-of-type img {
+  border-radius: 1.5rem;
+  border-color: color-mix(in srgb, var(--color-accent-primary) 28%, var(--color-border));
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28), 0 0 80px color-mix(in srgb, var(--color-accent-primary) 16%, transparent);
+}
+
+.landing-page section:first-of-type a {
+  min-height: 3.25rem;
+}
+
+.landing-page section:nth-of-type(2) {
+  background: color-mix(in srgb, var(--color-bg-secondary) 48%, transparent);
+}
+
+.landing-page section:nth-of-type(2) > div > div {
+  padding-block: 2rem;
+}
+
+.landing-page section h2 {
+  letter-spacing: -0.06em;
+}
+
+.landing-page section[id='features'] > div > div > div,
+.landing-page section[id='subjects'] > div > div > div,
+.landing-page section[id='how-it-works'] > div > div > div {
+  border-radius: 1.25rem;
+  border-color: color-mix(in srgb, var(--color-accent-primary) 18%, var(--color-border));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--color-bg-secondary) 82%, transparent), color-mix(in srgb, var(--color-bg-primary) 92%, transparent));
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+}
+
+.landing-page section[id='features'] > div > div > div:hover,
+.landing-page section[id='subjects'] > div > div > div:hover,
+.landing-page section[id='how-it-works'] > div > div > div:hover {
+  border-color: color-mix(in srgb, var(--color-accent-primary) 52%, var(--color-border));
+  transform: translateY(-4px);
+}
+
+.landing-page section[id='pricing'] {
+  background:
+    radial-gradient(circle at 50% 20%, color-mix(in srgb, var(--color-accent-primary) 12%, transparent), transparent 34%),
+    color-mix(in srgb, var(--color-bg-secondary) 36%, transparent);
+}
+
+.landing-page footer {
+  background: var(--color-bg-primary);
+}
+
+@media (max-width: 640px) {
+  .landing-page > header > div,
+  .landing-page section > div,
+  .landing-page footer > div {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .landing-page section:first-of-type h1 {
+    font-size: clamp(3rem, 15vw, 4.8rem);
+  }
+
+  .landing-page section:first-of-type a {
+    width: 100%;
+  }
+}

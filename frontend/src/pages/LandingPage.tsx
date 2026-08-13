@@ -92,7 +92,7 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary font-sans selection:bg-primary selection:text-text-primary dark:text-white overflow-hidden relative">
+    <div className="landing-page min-h-screen bg-bg-primary text-text-primary font-sans selection:bg-primary selection:text-text-primary dark:text-white overflow-hidden relative">
 
 
       {/* ══════════════════════════════════════
