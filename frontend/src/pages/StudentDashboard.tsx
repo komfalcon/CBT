@@ -246,21 +246,28 @@ export default function StudentDashboard() {
   const handleGoToLibrary = async () => {
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
-      const response = await fetch(`${apiBase}/auth/sso-token`, {
-        method: 'GET',
+      const response = await fetch(`${apiBase}/v1/auth/handoffs`, {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          audience: 'library',
+          scope: ['profile', 'topic_context', 'return_context'],
+          returnUrl: window.location.origin + '/dashboard',
+          nextPath: '/',
+        }),
       });
       if (response.ok) {
-        const { ssoToken } = await response.json();
+        const { handoff } = await response.json();
         const libraryUrl = import.meta.env.VITE_LIBRARY_URL || 'https://library.aurikrex.tech';
-        window.open(`${libraryUrl}/sso?token=${ssoToken}`, '_blank');
+        window.open(`${libraryUrl}/sso?handoff=${encodeURIComponent(handoff)}`, '_blank', 'noopener,noreferrer');
       } else {
-        addToast({ type: 'error', title: 'SSO Error', message: 'Failed to generate SSO token' });
+        addToast({ type: 'error', title: 'SSO Error', message: 'Failed to generate Library handoff' });
       }
     } catch (err) {
-      addToast({ type: 'error', title: 'SSO Error', message: 'Failed to generate SSO token' });
+      addToast({ type: 'error', title: 'SSO Error', message: 'Failed to generate Library handoff' });
     }
   };
 

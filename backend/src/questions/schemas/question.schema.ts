@@ -78,6 +78,12 @@ export class Question {
   @Prop({ required: true })
   topic!: string;
 
+  @Prop({ index: true })
+  topicId?: string;
+
+  @Prop({ index: true })
+  conceptId?: string;
+
   @Prop()
   subtopic?: string;
 

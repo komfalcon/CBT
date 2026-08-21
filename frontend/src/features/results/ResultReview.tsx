@@ -128,6 +128,33 @@ export default function ResultReview() {
     });
   }, [result]);
 
+  const openConceptInLibrary = async (question: any) => {
+    if (!token || !resultId || !question?.subject || !question?.topic) return;
+    try {
+      const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
+      const topicSlug = String(question.topic).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const response = await fetch(`${apiBase}/v1/auth/handoffs`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          audience: 'library',
+          scope: ['profile', 'topic_context', 'return_context'],
+          subjectId: question.subject,
+          topicId: topicSlug,
+          conceptId: `${question.subject}.${topicSlug}`,
+          returnUrl: `${window.location.origin}/results/${resultId}`,
+          nextPath: `/subject/${encodeURIComponent(question.subject)}/topic/${encodeURIComponent(topicSlug)}`,
+        }),
+      });
+      if (!response.ok) throw new Error('handoff_failed');
+      const { handoff } = await response.json();
+      const libraryUrl = import.meta.env.VITE_LIBRARY_URL || 'https://library.aurikrex.tech';
+      window.open(`${libraryUrl}/sso?handoff=${encodeURIComponent(handoff)}`, '_blank', 'noopener,noreferrer');
+    } catch {
+      setError('Unable to open the concept in Aurikrex Library right now.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center text-text-primary">
@@ -385,6 +412,21 @@ export default function ResultReview() {
                     correctAnswer={q.options.find((o: any) => o.id === q.correct_option)?.text || q.correct_option}
                     studentAnswer={q.options.find((o: any) => o.id === userChoice)?.text || 'Unanswered'}
                   />
+                  {!isUserCorrect && !isSkipped ? (
+                    <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 p-3">
+                      <div className="flex-1 min-w-[12rem]">
+                        <div className="text-xs font-bold text-text-primary">Mistake category: concept review</div>
+                        <div className="text-[11px] text-text-secondary mt-1">Read the concept before attempting a targeted repair.</div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => openConceptInLibrary(q)}
+                        className="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-text-on-accent hover:bg-primary-hover transition-colors"
+                      >
+                        Read the concept in Library →
+                      </button>
+                    </div>
+                  ) : null}
                 </div>
               );
             })
