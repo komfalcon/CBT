@@ -12,6 +12,8 @@ import {
   BookOpen,
   PieChart,
   ListCollapse,
+  Target,
+  ChevronRight,
 } from 'lucide-react';
 import { AiChatWidget } from '../ai/AiChatWidget';
 import { ExplainButton } from '../ai/ExplainButton';
@@ -82,6 +84,13 @@ export default function ResultReview() {
     const totalCorrect = result.subjectScores.reduce((acc, val) => acc + val.correctCount, 0);
     const totalQuestions = result.questionsSnapshot.length;
     return totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+  }, [result]);
+  const reviewSignals = useMemo(() => {
+    if (!result) return { wrong: 0, skipped: 0, focusSubject: 'your weakest subject' };
+    const wrong = result.subjectScores.reduce((acc, val) => acc + val.incorrectCount, 0);
+    const skipped = result.subjectScores.reduce((acc, val) => acc + val.unansweredCount, 0);
+    const weakest = [...result.subjectScores].sort((a, b) => Number(a.score || 0) - Number(b.score || 0))[0];
+    return { wrong, skipped, focusSubject: weakest ? (SUBJECT_LABELS[weakest.subject] || weakest.subject) : 'your weakest subject' };
   }, [result]);
 
   const filteredQuestions = useMemo(() => {
@@ -327,11 +336,20 @@ export default function ResultReview() {
           </div>
         </section>
 
+        <section className="relative overflow-hidden rounded-3xl border border-cyan-300/20 bg-[#0c1a2c] p-6 text-white shadow-2xl shadow-cyan-950/20">
+          <div className="pointer-events-none absolute -right-14 -top-16 h-52 w-52 rounded-full border border-cyan-200/10" />
+          <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+            <div><div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[.2em] text-cyan-300"><Target className="h-3.5 w-3.5" /> Review Vault</div><h2 className="mt-2 text-2xl font-black tracking-tight">Your score is evidence, not a verdict.</h2><p className="mt-2 max-w-2xl text-xs leading-6 text-slate-400">We found {reviewSignals.wrong} wrong answers and {reviewSignals.skipped} skipped items. Repair the pattern, then return under pressure.</p></div>
+            <button type="button" onClick={() => navigate('/mock-setup')} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-cyan-300 px-4 py-3 text-xs font-black text-[#07111f] transition hover:bg-cyan-200"><Target className="h-4 w-4" /> Build a repair mission <ChevronRight className="h-4 w-4" /></button>
+          </div>
+          <div className="relative z-10 mt-6 grid gap-3 sm:grid-cols-3"><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-[10px] font-black uppercase tracking-[.16em] text-slate-500">Concept review</div><div className="mt-2 text-sm font-bold text-white">{reviewSignals.wrong} items to revisit</div></div><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-[10px] font-black uppercase tracking-[.16em] text-slate-500">Timing signal</div><div className="mt-2 text-sm font-bold text-white">{Math.round(result.timeSpentSeconds / result.questionsSnapshot.length)}s per question</div></div><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-[10px] font-black uppercase tracking-[.16em] text-slate-500">First focus</div><div className="mt-2 text-sm font-bold text-white">{reviewSignals.focusSubject}</div></div></div>
+        </section>
+
         {/* Filters Controls block */}
         <section className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between pb-4 border-b border-border">
           <div className="flex items-center gap-2">
             <ListCollapse className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-bold text-text-primary">Correction Map Corrections</h3>
+            <h3 className="text-sm font-bold text-text-primary">Question-by-question evidence</h3>
           </div>
 
           <div className="flex gap-2">
