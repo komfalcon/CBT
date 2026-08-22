@@ -19,12 +19,9 @@ services:
         value: ${FRONTEND_URL}
       - key: API_BASE_URL
         value: ${API_BASE_URL}
-      - key: MONGODB_URI
-        value: ${MONGODB_URI}
-      - key: MONGO_INITDB_ROOT_USERNAME
-        value: ${MONGO_INITDB_ROOT_USERNAME}
-      - key: MONGO_INITDB_ROOT_PASSWORD
-        value: ${MONGO_INITDB_ROOT_PASSWORD}
+      # MONGODB_URI must be configured as an encrypted App-Level
+      # environment variable in DigitalOcean and is intentionally not
+      # self-referenced here. The backend reads it at runtime.
       - key: REDIS_URL
         value: ${REDIS_URL}
       - key: REDIS_PASSWORD

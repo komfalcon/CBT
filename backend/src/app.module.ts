@@ -39,9 +39,26 @@ import { HealthService } from './health.service';
     ScheduleModule.forRoot(),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'),
-      }),
+      useFactory: (configService: ConfigService) => {
+        const uri = configService.get<string>('MONGODB_URI')?.trim();
+
+        if (!uri) {
+          throw new Error(
+            'MONGODB_URI is required. Configure it as an encrypted runtime environment variable.',
+          );
+        }
+
+        if (uri.includes('${')) {
+          throw new Error(
+            'MONGODB_URI contains an unresolved environment reference. Set the actual MongoDB URI in the deployment environment.',
+          );
+        }
+
+        return {
+          uri,
+          serverSelectionTimeoutMS: 10_000,
+        };
+      },
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
