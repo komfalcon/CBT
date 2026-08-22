@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AuthPage from './features/auth/AuthPage';
 import QuestionBankPage from './features/questions/QuestionBankPage';
-import LandingPage from './pages/LandingPage';
+import ExamArenaLanding from './pages/ExamArenaLanding';
 import StudentDashboard from './pages/StudentDashboard';
 import MockSetupPage from './pages/MockSetupPage';
 import ExamConsole from './features/exam/ExamConsole';
@@ -28,7 +28,7 @@ function App() {
     <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-primary selection:text-white flex flex-col">
       <main className="flex-1">
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<ExamArenaLanding />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
           <Route path="/exam-hub" element={<ProtectedRoute><ExamHub /></ProtectedRoute>} />
