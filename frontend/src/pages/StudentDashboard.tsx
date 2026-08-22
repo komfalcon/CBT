@@ -18,6 +18,7 @@ import {
   CheckCircle2,
   History,
   Target,
+  Crosshair,
   ArrowRight,
   CreditCard,
   Sparkles,
@@ -330,6 +331,10 @@ export default function StudentDashboard() {
     .filter(t => drillTopics.includes(t.topic))
     .reduce((acc, t) => acc + t.count, 0);
   const isDrillShort = drillTopics.length > 0 && drillSelectedTopicsCount < drillCount;
+  const readinessScore = resultsList.length > 0
+    ? Math.round(resultsList.reduce((sum, item) => sum + Number(item.totalScore || 0), 0) / resultsList.length / (resultsList.some((item) => item.type === 'mock') ? 4 : 1))
+    : 0;
+  const nextWeakTopic = [...topicStats].sort((a, b) => Number(a.accuracy || 0) - Number(b.accuracy || 0))[0];
 
 
 
@@ -480,6 +485,23 @@ export default function StudentDashboard() {
         </div>
 
         <div className="md:col-span-2 space-y-6">
+          <section className="relative overflow-hidden rounded-3xl border border-cyan-300/20 bg-[#0c1a2c] p-6 text-white shadow-2xl shadow-cyan-950/20">
+            <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full border border-cyan-200/10" />
+            <div className="pointer-events-none absolute -right-5 -top-9 h-34 w-34 rounded-full border border-dashed border-cyan-200/15" />
+            <div className="relative z-10 flex flex-col justify-between gap-6 md:flex-row md:items-center">
+              <div>
+                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[.2em] text-cyan-300"><Crosshair className="h-3.5 w-3.5" /> Candidate Flight Deck</div>
+                <h2 className="mt-2 text-2xl font-black tracking-tight">Your next mark is already visible.</h2>
+                <p className="mt-2 max-w-xl text-xs leading-6 text-slate-400">Use your evidence, not guesswork. Keep the strong subjects stable and repair the weakest topic before your next mock.</p>
+              </div>
+              <div className="flex items-center gap-5">
+                <div className="text-center"><div className="text-[9px] font-black uppercase tracking-[.18em] text-slate-500">Readiness</div><div className="mt-1 text-4xl font-black text-cyan-200">{Math.max(0, Math.min(100, readinessScore))}<span className="text-sm text-slate-500">/100</span></div></div>
+                <Button onClick={() => { setDrillSubject(nextWeakTopic?.subject || combination[0] || 'physics'); setIsDrillModalOpen(true); }} className="bg-cyan-300 text-[#07111f] hover:bg-cyan-200" size="sm"><Zap className="h-4 w-4" /> Start next mission</Button>
+              </div>
+            </div>
+            <div className="relative z-10 mt-5 flex flex-wrap items-center gap-3 text-[11px] text-slate-400"><span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1.5 text-amber-100">Focus: {nextWeakTopic?.topic || 'Complete your first practice session'}</span><span className="rounded-full border border-white/10 bg-white/[.04] px-3 py-1.5">{resultsList.length} sessions recorded</span></div>
+          </section>
+
           {message && (
             <Alert variant="info" className="p-4 flex items-center gap-2">
               {message}
