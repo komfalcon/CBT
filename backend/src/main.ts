@@ -8,7 +8,12 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
+  const configuredOrigins = process.env.ALLOWED_ORIGINS
+    ?.split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  const allowedOrigins = configuredOrigins?.length ? configuredOrigins : [
     'http://localhost:5173',
     'http://localhost:5174',
     'http://127.0.0.1:5173',
@@ -29,6 +34,8 @@ async function bootstrap() {
         callback(new Error('Not allowed by CORS'));
       }
     },
+    methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
   app.use(helmet({ crossOriginOpenerPolicy: false }));
