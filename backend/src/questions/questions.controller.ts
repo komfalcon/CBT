@@ -73,7 +73,7 @@ export class QuestionsController {
       throw new BadRequestException('q is required');
     }
 
-    return this.questionsService.searchQuestions(
+    return this.questionsService.search(
       {
         q,
         subject,

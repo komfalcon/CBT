@@ -389,7 +389,7 @@ export class QuestionsService {
 
     if (esResult) {
       const indexedOrder = new Map(
-        esResult.ids.map((id: any, index: any) => [id: any, index: any]),
+        esResult.ids.map((id: any, index: any) => [id, index]),
       );
       const data = await this.db
         .select()

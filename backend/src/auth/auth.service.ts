@@ -86,7 +86,7 @@ export class AuthService implements OnModuleInit {
       if (user.role && user.role !== user.role.toLowerCase()) {
         console.log('Fixing role for', user.email);
         await this.db.update(schema.users)
-          .set({ role: user.role.toLowerCase() })
+          .set({ role: user.role.toLowerCase() as any })
           .where(eq(schema.users.id, user.id));
       }
     }
@@ -117,7 +117,7 @@ export class AuthService implements OnModuleInit {
       email: normalizedEmail,
       phone: parsed.data.phone || null,
       passwordHash,
-      role: 'student',
+      role: "student" as any,
       account_status: 'pending_verification',
       verification_code: code,
       verification_code_expires: new Date(Date.now() + 24 * 3600 * 1000),
@@ -175,7 +175,7 @@ export class AuthService implements OnModuleInit {
     await this.db.update(schema.users).set({
       passwordHash,
       account_status: 'active',
-      role: 'admin',
+      role: 'admin' as any,
     }).where(eq(schema.users.id, user.id));
     
     // Return decrypted CBT key (getter is invoked on access)
@@ -242,7 +242,7 @@ export class AuthService implements OnModuleInit {
         {
           sub: user.id,
           email: user.email,
-          role: user.role || 'student',
+          role: (user.role || 'student') as any,
           tokenType: 'mfa',
         },
         '5m',
@@ -335,7 +335,7 @@ export class AuthService implements OnModuleInit {
     const basePayload: JwtPayload = {
       sub: user.id,
       email: user.email,
-      role: user.role || 'student',
+      role: (user.role || 'student') as any,
     };
 
     const accessToken = await this.signToken(
@@ -411,7 +411,7 @@ export class AuthService implements OnModuleInit {
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,
-      role: user.role || 'student',
+      role: (user.role || 'student') as any,
       tokenType: 'sso',
     };
 
@@ -518,7 +518,7 @@ export class AuthService implements OnModuleInit {
         email: normalizedEmail,
         passwordHash: dummyPassword,
         profile_photo_url: googleUser.picture || null,
-        role: 'student',
+        role: "student" as any,
         account_status: 'active',
       }).returning();
       user = newUser;

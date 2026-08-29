@@ -1,28 +1,40 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, Inject, Query as NestQuery } from '@nestjs/common';
 import { desc, eq } from 'drizzle-orm';
 import { DRIZZLE } from '../db/database.module';
 import { users } from '../db/schema';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'; // Wait, let's see if this path is right. I will just skip the guard for now or use the global one if I can.
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('leaderboard')
 export class LeaderboardController {
   constructor(@Inject(DRIZZLE) private readonly db: any) {}
 
   @Get('xp')
-  async getXpLeaderboard(@Query()('limit') limit = 10) {
-    return this.db.find()
-      .sort({ xp_points: -1 })
-      .limit(Number(limit))
-      .select('fullName username xp_points level subscription_tier')
-      .exec();
+  async getXpLeaderboard(@NestQuery('limit') limit = 10) {
+    return await this.db.select({
+      fullName: users.fullName,
+      
+      xp_points: users.xp_points,
+      level: users.level,
+      subscription_tier: users.subscription_tier
+    })
+    .from(users)
+    .where(eq(users.role, 'student' as any))
+    .orderBy(desc(users.xp_points))
+    .limit(Number(limit));
   }
 
   @Get('streak')
-  async getStreakLeaderboard(@Query()('limit') limit = 10) {
-    return this.db.find()
-      .sort({ streak_count: -1 })
-      .limit(Number(limit))
-      .select('fullName username streak_count level subscription_tier')
-      .exec();
+  async getStreakLeaderboard(@NestQuery('limit') limit = 10) {
+    return await this.db.select({
+      fullName: users.fullName,
+      
+      streak_count: users.streak_count,
+      level: users.level,
+      subscription_tier: users.subscription_tier
+    })
+    .from(users)
+    .where(eq(users.role, 'student' as any))
+    .orderBy(desc(users.streak_count))
+    .limit(Number(limit));
   }
 }

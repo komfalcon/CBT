@@ -63,7 +63,7 @@ export class AiService {
         .where(eq(schema.users.id, userId));
     }
 
-    if (user.ai_messages_remaining <= 0) {
+    if ((user.ai_messages_remaining || 0) <= 0) {
       throw new BadRequestException('You have reached your daily limit of AI messages.');
     }
 

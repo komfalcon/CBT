@@ -44,7 +44,7 @@ export class QuestionsResolver {
     @Args('page', { type: () => Int, nullable: true }) page = 1,
     @Args('limit', { type: () => Int, nullable: true }) limit = 20,
   ) {
-    const result = await this.questionsService.searchQuestions({
+    const result = await this.questionsService.search({
       q,
       page,
       limit,
@@ -55,7 +55,7 @@ export class QuestionsResolver {
       page: result.page,
       limit: result.limit,
       totalPages: result.totalPages,
-      questionIds: (result.data as Question[]).map((question) => question.questionId),
+      questionIds: (result.data as any[]).map((question) => question.questionId),
     };
   }
 }
