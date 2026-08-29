@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { DatabaseModule } from './db/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
@@ -37,29 +37,7 @@ import { HealthService } from './health.service';
       },
     ]),
     ScheduleModule.forRoot(),
-    MongooseModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const uri = configService.get<string>('MONGODB_URI')?.trim();
-
-        if (!uri) {
-          throw new Error(
-            'MONGODB_URI is required. Configure it as an encrypted runtime environment variable.',
-          );
-        }
-
-        if (uri.includes('${')) {
-          throw new Error(
-            'MONGODB_URI contains an unresolved environment reference. Set the actual MongoDB URI in the deployment environment.',
-          );
-        }
-
-        return {
-          uri,
-          serverSelectionTimeoutMS: 10_000,
-        };
-      },
-    }),
+    DatabaseModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),

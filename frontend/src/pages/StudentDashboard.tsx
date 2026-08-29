@@ -344,55 +344,59 @@ export default function StudentDashboard() {
       <div className="absolute bottom-0 left-0 w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
 
       <header className="border-b border-border bg-bg-primary/80 backdrop-blur-md sticky top-0 z-40">
-        <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-primary to-blue-600 flex items-center justify-center font-bold text-text-on-accent">
+            <div className="h-9 w-9 shrink-0 rounded-xl bg-gradient-to-tr from-primary to-blue-600 flex items-center justify-center font-bold text-text-on-accent">
               CBT
             </div>
-            <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
+            <span className="text-sm md:text-lg font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent truncate hidden sm:block">
               Student Workspace
             </span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4 overflow-x-auto no-scrollbar pb-1">
             <ThemeToggle />
             <Button
               onClick={() => navigate('/exam-hub')}
               variant="secondary"
               size="sm"
+              className="shrink-0"
             >
-              <Target className="h-4 w-4" />
-              Exam Hub
+              <Target className="h-4 w-4 md:mr-2" />
+              <span className="hidden md:inline">Exam Hub</span>
             </Button>
             <Button
               onClick={() => navigate('/leaderboard')}
               variant="secondary"
               size="sm"
+              className="shrink-0"
             >
-              <Award className="h-4 w-4 text-yellow-500" />
-              Leaderboard
+              <Award className="h-4 w-4 text-yellow-500 md:mr-2" />
+              <span className="hidden md:inline">Leaderboard</span>
             </Button>
             <Button
               onClick={handleGoToLibrary}
               variant="gradient"
               size="sm"
+              className="shrink-0"
             >
-              <BookOpen className="h-4 w-4" />
-              E-Library
+              <BookOpen className="h-4 w-4 md:mr-2" />
+              <span className="hidden md:inline">E-Library</span>
             </Button>
             <Button
               onClick={handleLogout}
               variant="ghost"
               size="sm"
+              className="shrink-0"
             >
-              <LogOut className="h-4 w-4" />
-              Logout
+              <LogOut className="h-4 w-4 md:mr-2" />
+              <span className="hidden md:inline">Logout</span>
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-6 py-8 grid gap-8 md:grid-cols-3">
+      <main className="mx-auto max-w-7xl px-4 md:px-6 py-4 md:py-8 grid gap-6 md:gap-8 md:grid-cols-3">
         <div className="space-y-6">
           <Card className="relative overflow-hidden">
             <div className="flex items-center gap-4">

@@ -1,9 +1,9 @@
-import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User, UserDocument } from '../users/schemas/user.schema';
-import { PaymentLog, PaymentLogDocument } from './schemas/payment-log.schema';
+import { Injectable, BadRequestException, InternalServerErrorException, Inject } from '@nestjs/common';
 import axios from 'axios';
+import { eq } from 'drizzle-orm';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { DRIZZLE } from '../db/database.module';
+import * as schema from '../db/schema';
 
 @Injectable()
 export class PaymentsService {
@@ -17,11 +17,10 @@ export class PaymentsService {
   };
 
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    @InjectModel(PaymentLog.name) private readonly paymentLogModel: Model<PaymentLogDocument>,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
   ) {}
 
-  async verifyTransaction(userId: string, reference: string, planCode: string): Promise<UserDocument> {
+  async verifyTransaction(userId: string, reference: string, planCode: string): Promise<any> {
     if (!this.paystackSecretKey) {
       throw new InternalServerErrorException('Paystack secret key is not configured on the server.');
     }
@@ -36,7 +35,13 @@ export class PaymentsService {
     }
 
     // 1. Prevent Replay Attack / Double-spending
-    const existingLog = await this.paymentLogModel.findOne({ reference }).exec();
+    const existingLogList = await this.db
+      .select()
+      .from(schema.payment_logs)
+      .where(eq(schema.payment_logs.reference, reference))
+      .limit(1);
+    const existingLog = existingLogList[0];
+    
     if (existingLog) {
       throw new BadRequestException('This transaction reference has already been verified.');
     }
@@ -72,7 +77,8 @@ export class PaymentsService {
       }
 
       // Update the user's subscription tier in the database
-      const user = await this.userModel.findOne({ userId }).exec();
+      const userList = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
+      const user = userList[0];
       if (!user) {
         throw new BadRequestException('User not found.');
       }
@@ -82,27 +88,31 @@ export class PaymentsService {
         throw new BadRequestException('Transaction owner email mismatch.');
       }
 
-      user.subscription_tier = tier as any;
+      const updateData: any = {
+        subscription_tier: tier,
+      };
       
       // If upgrading to max, reset AI messages to a default value (e.g. 50 or 100)
       if (tier === 'max') {
-        user.ai_messages_remaining = 100;
-        user.ai_messages_last_reset = new Date();
+        updateData.ai_messages_remaining = 100;
+        updateData.ai_messages_last_reset = new Date();
       }
 
       // 3. Log the verified reference
-      await this.paymentLogModel.create({
+      await this.db.insert(schema.payment_logs).values({
         reference,
         userId,
         planCode,
         amount: data.amount,
         email: data.customer?.email?.toLowerCase() || user.email.toLowerCase(),
         verifiedAt: new Date(),
-      });
+      }).returning();
 
-      await user.save();
+      const updatedUserList = await this.db.update(schema.users).set(updateData).where(eq(schema.users.id, userId)).returning();
+      const updatedUser = updatedUserList[0];
+
       console.log(`Successfully upgraded user ${userId} to ${tier} tier.`);
-      return user;
+      return updatedUser;
     } catch (error: any) {
       console.error('Paystack verification error:', error.response?.data || error.message);
       const errMsg = error.response?.data?.message || error.message;

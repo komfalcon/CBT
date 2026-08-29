@@ -212,7 +212,7 @@ export class User {
   @Prop({ default: 0 })
   streak_count!: number;
 
-  @Prop({ type: String, enum: SUBSCRIPTION_TIERS, default: 'free', index: true })
+  @Prop({ type: String, enum: SUBSCRIPTION_TIERS, default: 'max', index: true })
   subscription_tier!: SubscriptionTier;
 
   @Prop({ default: 0 })

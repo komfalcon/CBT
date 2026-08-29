@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createConnection } from 'mongoose';
 import Redis from 'ioredis';
 import * as amqp from 'amqplib';
 import { Client as ElasticsearchClient } from '@elastic/elasticsearch';
+import { DRIZZLE } from './db/database.module';
+import * as schema from './db/schema';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { sql } from 'drizzle-orm';
 
 type ServiceState = 'connected' | 'disconnected';
 
@@ -11,7 +14,7 @@ export interface HealthStatus {
   status: 'ok';
   timestamp: string;
   services: {
-    mongodb: ServiceState;
+    database: ServiceState;
     redis: ServiceState;
     rabbitmq: ServiceState;
     elasticsearch: ServiceState;
@@ -20,11 +23,14 @@ export interface HealthStatus {
 
 @Injectable()
 export class HealthService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>
+  ) {}
 
   async check(): Promise<HealthStatus> {
-    const [mongodb, redis, rabbitmq, elasticsearch] = await Promise.all([
-      this.withTimeout(this.checkMongo()),
+    const [database, redis, rabbitmq, elasticsearch] = await Promise.all([
+      this.withTimeout(this.checkDatabase()),
       this.withTimeout(this.checkRedis()),
       this.withTimeout(this.checkRabbitMq()),
       this.withTimeout(this.checkElasticsearch()),
@@ -34,7 +40,7 @@ export class HealthService {
       status: 'ok',
       timestamp: new Date().toISOString(),
       services: {
-        mongodb,
+        database,
         redis,
         rabbitmq,
         elasticsearch,
@@ -42,28 +48,12 @@ export class HealthService {
     };
   }
 
-  private async checkMongo(): Promise<ServiceState> {
-    const uri = this.configService.get<string>('MONGODB_URI');
-    if (!uri) {
-      return 'disconnected';
-    }
-
-    let connection: Awaited<ReturnType<typeof createConnection>> | undefined;
+  private async checkDatabase(): Promise<ServiceState> {
     try {
-      connection = await createConnection(uri, {
-        serverSelectionTimeoutMS: 2000,
-      }).asPromise();
-      if (!connection.db) {
-        return 'disconnected';
-      }
-      await connection.db.admin().ping();
+      await this.db.run(sql`SELECT 1`);
       return 'connected';
     } catch {
       return 'disconnected';
-    } finally {
-      if (connection) {
-        await connection.close().catch(() => undefined);
-      }
     }
   }
 

@@ -1,10 +1,10 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User, UserDocument, generateCbtKey } from '../users/schemas/user.schema';
-import { ExamSession, ExamSessionDocument } from '../exam/schemas/session.schema';
-import { PaymentLog, PaymentLogDocument } from '../payments/schemas/payment-log.schema';
-import { createHash } from 'crypto';
+import { Injectable, BadRequestException, Inject } from '@nestjs/common';
+import { createHash, randomUUID } from 'crypto';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { eq, and, or, not, like, count, sum, desc, gte, lte, ne } from 'drizzle-orm';
+import { DRIZZLE } from '../db/database.module';
+import * as schema from '../db/schema';
+import { generateCbtKey, encryptFieldValue } from '../users/schemas/user.schema';
 
 @Injectable()
 export class AdminService {
@@ -15,9 +15,7 @@ export class AdminService {
   private readonly CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    @InjectModel(ExamSession.name) private readonly sessionModel: Model<ExamSessionDocument>,
-    @InjectModel(PaymentLog.name) private readonly paymentLogModel: Model<PaymentLogDocument>,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
   ) {}
 
   async getOverviewStats(): Promise<any> {
@@ -33,41 +31,30 @@ export class AdminService {
     const endOfYesterday = new Date(startOfToday.getTime() - 1);
 
     // 1. Total Voucher keys generated (emails ending in @aurikex.local)
-    const totalVouchers = await this.userModel.countDocuments({
-      email: /@aurikex\.local$/i,
-    }).exec();
+    const totalVouchersQuery = await this.db.select({ value: count() }).from(schema.users).where(like(schema.users.email, '%@aurikex.local'));
+    const totalVouchers = totalVouchersQuery[0].value;
 
     // 2. Total Registered Candidates (students with real emails)
-    const totalCandidates = await this.userModel.countDocuments({
-      role: 'student',
-      email: { $not: /@aurikex\.local$/i },
-    }).exec();
+    const totalCandidatesQuery = await this.db.select({ value: count() }).from(schema.users).where(and(eq(schema.users.role, 'student'), not(like(schema.users.email, '%@aurikex.local'))));
+    const totalCandidates = totalCandidatesQuery[0].value;
 
     // 3. Subscriptions breakdown
-    const activeSubscriptions = await this.userModel.countDocuments({
-      subscription_tier: { $ne: 'free' },
-    }).exec();
+    const activeSubscriptionsQuery = await this.db.select({ value: count() }).from(schema.users).where(ne(schema.users.subscription_tier, 'free'));
+    const activeSubscriptions = activeSubscriptionsQuery[0].value;
 
     // 4. Completed mock exams stats
-    const totalCompletedExams = await this.sessionModel.countDocuments({
-      status: 'completed',
-    }).exec();
+    const totalCompletedExamsQuery = await this.db.select({ value: count() }).from(schema.exam_sessions).where(eq(schema.exam_sessions.status, 'completed'));
+    const totalCompletedExams = totalCompletedExamsQuery[0].value;
 
-    const examsToday = await this.sessionModel.countDocuments({
-      status: 'completed',
-      completedAt: { $gte: startOfToday },
-    }).exec();
+    const examsTodayQuery = await this.db.select({ value: count() }).from(schema.exam_sessions).where(and(eq(schema.exam_sessions.status, 'completed'), gte(schema.exam_sessions.completedAt, startOfToday)));
+    const examsToday = examsTodayQuery[0].value;
 
-    const examsYesterday = await this.sessionModel.countDocuments({
-      status: 'completed',
-      completedAt: { $gte: startOfYesterday, $lte: endOfYesterday },
-    }).exec();
+    const examsYesterdayQuery = await this.db.select({ value: count() }).from(schema.exam_sessions).where(and(eq(schema.exam_sessions.status, 'completed'), gte(schema.exam_sessions.completedAt, startOfYesterday), lte(schema.exam_sessions.completedAt, endOfYesterday)));
+    const examsYesterday = examsYesterdayQuery[0].value;
 
     // 5. Total Revenue from PaymentLogs
-    const billingAggregation = await this.paymentLogModel.aggregate([
-      { $group: { _id: null, total: { $sum: '$amount' } } },
-    ]).exec();
-    const totalRevenue = (billingAggregation[0]?.total || 0) / 100; // Divide by 100 to convert from kobo/cents
+    const billingAggregation = await this.db.select({ total: sum(schema.payment_logs.amount) }).from(schema.payment_logs);
+    const totalRevenue = (Number(billingAggregation[0]?.total) || 0) / 100; // Divide by 100 to convert from kobo/cents
 
     const data = {
       candidates: {
@@ -103,33 +90,27 @@ export class AdminService {
     page: number;
     limit: number;
   }) {
-    const query: Record<string, any> = {};
-
-    if (params.role) {
-      query.role = params.role;
-    }
-    if (params.status) {
-      query.account_status = params.status;
-    }
-
+    const conditions = [];
+    if (params.role) conditions.push(eq(schema.users.role, params.role));
+    if (params.status) conditions.push(eq(schema.users.account_status, params.status));
     if (params.search) {
-      const searchRegex = new RegExp(params.search.trim(), 'i');
-      query.$or = [
-        { fullName: searchRegex },
-        { email: searchRegex },
-      ];
+      const searchStr = `%${params.search.trim()}%`;
+      conditions.push(or(like(schema.users.fullName, searchStr), like(schema.users.email, searchStr)));
     }
 
-    const total = await this.userModel.countDocuments(query).exec();
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+    const totalQuery = await this.db.select({ value: count() }).from(schema.users).where(whereClause);
+    const total = totalQuery[0].value;
     const totalPages = Math.ceil(total / params.limit) || 1;
     const skip = (params.page - 1) * params.limit;
 
-    const data = await this.userModel
-      .find(query)
-      .sort({ created_at: -1 })
-      .skip(skip)
+    const data = await this.db.select()
+      .from(schema.users)
+      .where(whereClause)
+      .orderBy(desc(schema.users.createdAt))
       .limit(params.limit)
-      .exec();
+      .offset(skip);
 
     return {
       data,
@@ -146,58 +127,64 @@ export class AdminService {
       throw new BadRequestException('Invalid account status value.');
     }
 
-    const user = await this.userModel.findOneAndUpdate(
-      { userId },
-      { $set: { account_status: status } },
-      { new: true },
-    ).exec();
+    const user = await this.db.update(schema.users)
+      .set({ account_status: status })
+      .where(eq(schema.users.id, userId))
+      .returning();
 
-    if (!user) {
+    if (!user || user.length === 0) {
       throw new BadRequestException('User not found.');
     }
 
-    return user;
+    return user[0];
   }
 
-  async generateBulkKeys(count: number): Promise<string[]> {
-    if (count < 1 || count > 1000) {
+  async generateBulkKeys(countToGenerate: number): Promise<string[]> {
+    if (countToGenerate < 1 || countToGenerate > 1000) {
       throw new BadRequestException('Batch size must be between 1 and 1000.');
     }
 
     const keys: string[] = [];
+    const valuesToInsert = [];
 
     // Create keys inside a loop
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < countToGenerate; i++) {
       const plainKey = generateCbtKey();
       const hash = createHash('sha256').update(plainKey).digest('hex');
 
-      await this.userModel.create({
+      valuesToInsert.push({
+        id: randomUUID(),
         fullName: 'CBT Voucher Account',
         email: `voucher-${plainKey.toLowerCase().replace(/-/g, '')}@aurikex.local`,
         role: 'student',
         account_status: 'active', // So voucher users can log in immediately
-        cbt_key: plainKey, // AES encrypted
+        cbt_key: encryptFieldValue(plainKey), // AES encrypted
         cbt_key_hash: hash,
         passwordHash: 'cbt-voucher-locked-password',
       });
 
       keys.push(plainKey);
     }
+    
+    const chunkSize = 100;
+    for (let i = 0; i < valuesToInsert.length; i += chunkSize) {
+      await this.db.insert(schema.users).values(valuesToInsert.slice(i, i + chunkSize));
+    }
 
     return keys;
   }
 
   async listBillingLogs(params: { page: number; limit: number }) {
-    const total = await this.paymentLogModel.countDocuments().exec();
+    const totalQuery = await this.db.select({ value: count() }).from(schema.payment_logs);
+    const total = totalQuery[0].value;
     const totalPages = Math.ceil(total / params.limit) || 1;
     const skip = (params.page - 1) * params.limit;
 
-    const data = await this.paymentLogModel
-      .find()
-      .sort({ verifiedAt: -1 })
-      .skip(skip)
+    const data = await this.db.select()
+      .from(schema.payment_logs)
+      .orderBy(desc(schema.payment_logs.verifiedAt))
       .limit(params.limit)
-      .exec();
+      .offset(skip);
 
     return {
       data,
@@ -208,3 +195,4 @@ export class AdminService {
     };
   }
 }
+

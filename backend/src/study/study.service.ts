@@ -1,96 +1,136 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { SyllabusTracker } from './schemas/syllabus.schema';
-import { Timetable, StudySession } from './schemas/timetable.schema';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { DRIZZLE } from '../db/database.module';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import * as schema from '../db/schema';
+import { eq, and } from 'drizzle-orm';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class StudyService {
   constructor(
-    @InjectModel(SyllabusTracker.name) private syllabusModel: Model<SyllabusTracker>,
-    @InjectModel(Timetable.name) private timetableModel: Model<Timetable>,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
   ) {}
 
   // ---- Syllabus Methods ----
 
-  async getSyllabusProgress(userId: string, subject: string): Promise<SyllabusTracker> {
-    let tracker = await this.syllabusModel.findOne({ user: userId, subject });
+  async getSyllabusProgress(userId: string, subject: string) {
+    let tracker = await this.db.select().from(schema.syllabus_trackers)
+      .where(and(eq(schema.syllabus_trackers.userId, userId), eq(schema.syllabus_trackers.subject, subject)))
+      .limit(1)
+      .then(res => res[0]);
+
     if (!tracker) {
-      tracker = await this.syllabusModel.create({
-        user: userId,
+      tracker = await this.db.insert(schema.syllabus_trackers).values({
+        id: randomUUID(),
+        userId: userId,
         subject,
         completedTopics: [],
         progress: 0,
-      });
+      }).returning().then(res => res[0]);
     }
     return tracker;
   }
 
-  async getAllSyllabusProgress(userId: string): Promise<SyllabusTracker[]> {
-    return this.syllabusModel.find({ user: userId });
+  async getAllSyllabusProgress(userId: string) {
+    return this.db.select().from(schema.syllabus_trackers).where(eq(schema.syllabus_trackers.userId, userId));
   }
 
-  async updateTopicStatus(userId: string, subject: string, topic: string, completed: boolean): Promise<SyllabusTracker> {
+  async updateTopicStatus(userId: string, subject: string, topic: string, completed: boolean) {
     let tracker = await this.getSyllabusProgress(userId, subject);
 
-    if (completed && !tracker.completedTopics.includes(topic)) {
-      tracker.completedTopics.push(topic);
-    } else if (!completed && tracker.completedTopics.includes(topic)) {
-      tracker.completedTopics = tracker.completedTopics.filter(t => t !== topic);
+    let completedTopics = (tracker.completedTopics as string[]) || [];
+
+    if (completed && !completedTopics.includes(topic)) {
+      completedTopics.push(topic);
+    } else if (!completed && completedTopics.includes(topic)) {
+      completedTopics = completedTopics.filter(t => t !== topic);
     }
 
-    // Optionally calculate progress % if you know total topics per subject
-    // For now we just save the array
-    await tracker.save();
+    tracker = await this.db.update(schema.syllabus_trackers).set({
+      completedTopics
+    }).where(eq(schema.syllabus_trackers.id, tracker.id)).returning().then(res => res[0]);
+
     return tracker;
   }
 
   // ---- Timetable Methods ----
 
-  async getTimetable(userId: string): Promise<Timetable> {
-    let timetable = await this.timetableModel.findOne({ user: userId });
+  async getTimetable(userId: string) {
+    let timetable = await this.db.select().from(schema.timetables)
+      .where(eq(schema.timetables.userId, userId))
+      .limit(1)
+      .then(res => res[0]);
+
     if (!timetable) {
-      timetable = await this.timetableModel.create({
-        user: userId,
+      timetable = await this.db.insert(schema.timetables).values({
+        id: randomUUID(),
+        userId: userId,
         sessions: [],
-      });
+      }).returning().then(res => res[0]);
     }
+    
+    if (!timetable.sessions) {
+      timetable.sessions = [];
+    }
+
     return timetable;
   }
 
-  async addSession(userId: string, sessionData: any): Promise<Timetable> {
+  async addSession(userId: string, sessionData: any) {
     const timetable = await this.getTimetable(userId);
-    timetable.sessions.push({
-      _id: new Types.ObjectId().toHexString(),
+    const sessions = (timetable.sessions as any[]) || [];
+    sessions.push({
+      _id: randomUUID(),
       ...sessionData,
     });
-    await timetable.save();
-    return timetable;
+    return await this.db.update(schema.timetables)
+      .set({ sessions })
+      .where(eq(schema.timetables.id, timetable.id))
+      .returning()
+      .then(res => {
+        const t = res[0];
+        if (!t.sessions) t.sessions = [];
+        return t;
+      });
   }
 
-  async updateSession(userId: string, sessionId: string, updateData: any): Promise<Timetable> {
+  async updateSession(userId: string, sessionId: string, updateData: any) {
     const timetable = await this.getTimetable(userId);
-    const sessionIndex = timetable.sessions.findIndex(s => s._id === sessionId);
+    const sessions = (timetable.sessions as any[]) || [];
+    const sessionIndex = sessions.findIndex(s => s._id === sessionId);
     
     if (sessionIndex === -1) {
       throw new NotFoundException('Session not found');
     }
 
-    timetable.sessions[sessionIndex] = {
-      ...timetable.sessions[sessionIndex],
+    sessions[sessionIndex] = {
+      ...sessions[sessionIndex],
       ...updateData,
     };
 
-    // Mongoose array markModified
-    timetable.markModified('sessions');
-    await timetable.save();
-    return timetable;
+    return await this.db.update(schema.timetables)
+      .set({ sessions })
+      .where(eq(schema.timetables.id, timetable.id))
+      .returning()
+      .then(res => {
+        const t = res[0];
+        if (!t.sessions) t.sessions = [];
+        return t;
+      });
   }
 
-  async deleteSession(userId: string, sessionId: string): Promise<Timetable> {
+  async deleteSession(userId: string, sessionId: string) {
     const timetable = await this.getTimetable(userId);
-    timetable.sessions = timetable.sessions.filter(s => s._id !== sessionId);
-    await timetable.save();
-    return timetable;
+    let sessions = (timetable.sessions as any[]) || [];
+    sessions = sessions.filter(s => s._id !== sessionId);
+    return await this.db.update(schema.timetables)
+      .set({ sessions })
+      .where(eq(schema.timetables.id, timetable.id))
+      .returning()
+      .then(res => {
+        const t = res[0];
+        if (!t.sessions) t.sessions = [];
+        return t;
+      });
   }
 }

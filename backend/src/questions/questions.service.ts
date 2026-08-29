@@ -5,20 +5,34 @@ import {
   Injectable,
   NotFoundException,
   Logger,
-} from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, FilterQuery } from 'mongoose';
-import { z } from 'zod';
-import { NotificationsService } from '../notifications/notifications.service';
-import { UserRole } from '../users/schemas/user.schema';
-import { CreateQuestionDto } from './dto/create-question.dto';
-import { FilterQuestionsDto } from './dto/filter-questions.dto';
-import { UpdateQuestionDto } from './dto/update-question.dto';
-import { Question, QuestionDocument } from './schemas/question.schema';
-import { SearchService } from './search/search.service';
-import { QUESTION_STATUSES, QUESTION_SUBJECTS } from './types/question.types';
+  Inject,
+} from "@nestjs/common";
+import { z } from "zod";
+import { NotificationsService } from "../notifications/notifications.service";
+import { UserRole } from "../users/schemas/user.schema";
+import { CreateQuestionDto } from "./dto/create-question.dto";
+import { FilterQuestionsDto } from "./dto/filter-questions.dto";
+import { UpdateQuestionDto } from "./dto/update-question.dto";
+import { DRIZZLE } from "../db/database.module";
+import * as schema from "../db/schema";
+import { LibSQLDatabase } from "drizzle-orm/libsql";
+import {
+  eq,
+  inArray,
+  and,
+  not,
+  desc,
+  asc,
+  count,
+  sum,
+  or,
+  gt,
+} from "drizzle-orm";
+import { v4 as uuidv4 } from "uuid";
+import { SearchService } from "./search/search.service";
+import { QUESTION_STATUSES, QUESTION_SUBJECTS } from "./types/question.types";
 
-const duplicateStatuses = ['published', 'approved', 'under_review'];
+const duplicateStatuses = ["published", "approved", "under_review"];
 
 const createQuestionSchema = z.object({
   subject: z.string(),
@@ -27,13 +41,13 @@ const createQuestionSchema = z.object({
   options: z
     .array(
       z.object({
-        id: z.enum(['A', 'B', 'C', 'D', 'E']),
+        id: z.enum(["A", "B", "C", "D", "E"]),
         text: z.string().trim().min(1),
         image_url: z.string().optional(),
       }),
     )
     .min(2),
-  correct_option: z.enum(['A', 'B', 'C', 'D', 'E']),
+  correct_option: z.enum(["A", "B", "C", "D", "E"]),
   question_type: z.string(),
   difficulty_level: z.number().int().min(1).max(5),
 });
@@ -48,7 +62,7 @@ const updateQuestionSchema = z
 export function tokenizeQuestionText(value: string): string[] {
   return value
     .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
     .map((token) => token.trim())
     .filter((token) => token.length > 1);
@@ -90,7 +104,8 @@ export function computeTfIdfVector(text: string, corpus: string[]): number[] {
       return 0;
     }
     const tfValue = termCount / totalTerms;
-    const idf = Math.log((docs.length + 1) / ((docFrequency.get(term) ?? 0) + 1)) + 1;
+    const idf =
+      Math.log((docs.length + 1) / ((docFrequency.get(term) ?? 0) + 1)) + 1;
     return Number((tfValue * idf).toFixed(6));
   });
 }
@@ -127,21 +142,27 @@ export class QuestionsService {
   private readonly logger = new Logger(QuestionsService.name);
 
   constructor(
-    @InjectModel(Question.name) private readonly questionModel: Model<QuestionDocument>,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
     private readonly searchService: SearchService,
     private readonly notificationsService: NotificationsService,
   ) {}
 
   private getActorId(user: CurrentUser): string {
-    return user.sub ?? user.userId ?? 'system';
+    return user.sub ?? user.userId ?? "system";
   }
 
   private normalizeTags(tags?: string[]): string[] {
-    return (tags ?? []).map((entry) => entry.trim().toLowerCase()).filter(Boolean);
+    return (tags ?? [])
+      .map((entry) => entry.trim().toLowerCase())
+      .filter(Boolean);
   }
 
   private sanitizeTextSearchInput(input: string): string {
-    return input.replace(/[^a-zA-Z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 300);
+    return input
+      .replace(/[^a-zA-Z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 300);
   }
 
   private async runDuplicateCheck(params: {
@@ -155,20 +176,22 @@ export class QuestionsService {
     warning: boolean;
     embeddingVector: number[];
   }> {
-    const filter: FilterQuery<QuestionDocument> = {
-      subject: params.subject,
-      status: { $in: duplicateStatuses },
-    };
+    const conditions = [
+      eq(schema.questions.subject, params.subject),
+      inArray(schema.questions.status, duplicateStatuses),
+    ];
 
     if (params.excludeQuestionId) {
-      filter.questionId = { $ne: params.excludeQuestionId };
+      conditions.push(not(eq(schema.questions.id, params.excludeQuestionId)));
     }
 
-    const candidates = await this.questionModel
-      .find(filter)
-      .select({ questionId: 1, question_text: 1 })
-      .lean()
-      .exec();
+    const candidates = await this.db
+      .select({
+        id: schema.questions.id,
+        question_text: schema.questions.question_text,
+      })
+      .from(schema.questions)
+      .where(and(...conditions));
 
     const corpus = candidates.map((entry) => entry.question_text);
     const targetVector = computeTfIdfVector(params.questionText, corpus);
@@ -177,11 +200,14 @@ export class QuestionsService {
     let highestQuestionId: string | undefined;
 
     for (const candidate of candidates) {
-      const candidateVector = computeTfIdfVector(candidate.question_text, corpus);
+      const candidateVector = computeTfIdfVector(
+        candidate.question_text,
+        corpus,
+      );
       const similarity = cosineSimilarity(targetVector, candidateVector);
       if (similarity > highestSimilarity) {
         highestSimilarity = similarity;
-        highestQuestionId = candidate.questionId;
+        highestQuestionId = candidate.id;
       }
     }
 
@@ -194,9 +220,9 @@ export class QuestionsService {
     };
   }
 
-  private async indexQuestion(question: QuestionDocument): Promise<void> {
+  private async indexQuestion(question: any): Promise<void> {
     await this.searchService.indexQuestion({
-      questionId: question.questionId,
+      questionId: question.id,
       question_text: question.question_text,
       subject: question.subject,
       topic: question.topic,
@@ -213,16 +239,23 @@ export class QuestionsService {
   async createQuestion(
     payload: CreateQuestionDto,
     user: CurrentUser,
-    options?: { source?: 'manual' | 'import' | 'ai_generated'; importBatchId?: string },
+    options?: {
+      source?: "manual" | "import" | "ai_generated";
+      importBatchId?: string;
+    },
   ) {
     const parsed = createQuestionSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new BadRequestException(parsed.error.issues.map((issue) => issue.message).join(', '));
+      throw new BadRequestException(
+        parsed.error.issues.map((issue) => issue.message).join(", "),
+      );
     }
 
     const optionIds = payload.options.map((option) => option.id);
     if (!optionIds.includes(payload.correct_option)) {
-      throw new BadRequestException('correct_option must match one of options[].id');
+      throw new BadRequestException(
+        "correct_option must match one of options[].id",
+      );
     }
 
     const duplicate = await this.runDuplicateCheck({
@@ -232,27 +265,32 @@ export class QuestionsService {
 
     if (duplicate.blocked) {
       throw new ConflictException({
-        message: 'Similar question exists',
+        message: "Similar question exists",
         similarity: duplicate.similarity,
         existingQuestionId: duplicate.existingQuestionId,
       });
     }
 
-    const question = await this.questionModel.create({
-      ...payload,
-      tags: this.normalizeTags(payload.tags),
-      status: 'draft',
-      created_by: this.getActorId(user),
-      source: options?.source ?? 'manual',
-      import_batch_id: options?.importBatchId,
-      embedding_vector: duplicate.embeddingVector,
-    });
+    const [question] = await this.db
+      .insert(schema.questions)
+      .values({
+        id: uuidv4(),
+        ...payload,
+        options: payload.options,
+        tags: this.normalizeTags(payload.tags),
+        status: "draft",
+        created_by: this.getActorId(user),
+        source: options?.source ?? "manual",
+        import_batch_id: options?.importBatchId,
+        embedding_vector: duplicate.embeddingVector,
+      })
+      .returning();
 
     await this.indexQuestion(question);
 
     if (duplicate.warning) {
       return {
-        warning: 'Similar question exists',
+        warning: "Similar question exists",
         similarity: duplicate.similarity,
         existingQuestionId: duplicate.existingQuestionId,
         data: question,
@@ -263,33 +301,51 @@ export class QuestionsService {
   }
 
   async listQuestions(filters: FilterQuestionsDto) {
-    const query: FilterQuery<QuestionDocument> = {};
+    const conditions = [];
 
-    if (filters.subject) query.subject = filters.subject;
-    if (filters.topic) query.topic = filters.topic;
-    if (filters.subtopic) query.subtopic = filters.subtopic;
-    if (filters.status) query.status = filters.status;
-    if (filters.difficulty_level) query.difficulty_level = filters.difficulty_level;
-    if (filters.year_sourced) query.year_sourced = filters.year_sourced;
-    if (filters.bloom_level) query.bloom_level = filters.bloom_level;
-    if (filters.question_type) query.question_type = filters.question_type;
-    if (filters.tags?.length) query.tags = { $in: filters.tags.map((tag) => tag.toLowerCase()) };
+    if (filters.subject)
+      conditions.push(eq(schema.questions.subject, filters.subject));
+    if (filters.topic)
+      conditions.push(eq(schema.questions.topic, filters.topic));
+    if (filters.subtopic)
+      conditions.push(eq(schema.questions.subtopic, filters.subtopic));
+    if (filters.status)
+      conditions.push(eq(schema.questions.status, filters.status));
+    if (filters.difficulty_level)
+      conditions.push(
+        eq(schema.questions.difficulty_level, filters.difficulty_level),
+      );
+    if (filters.year_sourced)
+      conditions.push(eq(schema.questions.year_sourced, filters.year_sourced));
+    if (filters.bloom_level)
+      conditions.push(eq(schema.questions.bloom_level, filters.bloom_level));
+    if (filters.question_type)
+      conditions.push(
+        eq(schema.questions.question_type, filters.question_type),
+      );
 
     const page = filters.page ?? 1;
     const limit = filters.limit ?? 20;
-    const sortDirection = filters.sortOrder === 'asc' ? 1 : -1;
-    const sortBy = filters.sortBy ?? 'created_at';
+    const sortBy = filters.sortBy ?? "createdAt";
+    const sortOrder = filters.sortOrder === "asc" ? asc : desc;
 
-    const [data, total] = await Promise.all([
-      this.questionModel
-        .find(query)
-        .sort({ [sortBy]: sortDirection })
-        .skip((page - 1) * limit)
+    const dbQuery = conditions.length ? and(...conditions) : undefined;
+
+    const [data, totalRes] = await Promise.all([
+      this.db
+        .select()
+        .from(schema.questions)
+        .where(dbQuery)
+        .orderBy(
+          sortOrder(
+            (schema.questions as any)[sortBy] || schema.questions.createdAt,
+          ),
+        )
         .limit(limit)
-        .lean()
-        .exec(),
-      this.questionModel.countDocuments(query).exec(),
+        .offset((page - 1) * limit),
+      this.db.select({ count: count() }).from(schema.questions).where(dbQuery),
     ]);
+    const total = totalRes[0].count;
 
     return {
       data,
@@ -313,7 +369,7 @@ export class QuestionsService {
   ) {
     const sanitizedQuery = this.sanitizeTextSearchInput(params.q);
     if (!sanitizedQuery) {
-      throw new BadRequestException('Search query is required');
+      throw new BadRequestException("Search query is required");
     }
 
     const filters: Record<string, unknown> = {
@@ -322,19 +378,31 @@ export class QuestionsService {
       status: params.status,
     };
 
-    const esResult = await this.searchService.searchQuestions(sanitizedQuery, filters, {
-      page: params.page,
-      limit: params.limit,
-    });
+    const esResult = await this.searchService.searchQuestions(
+      sanitizedQuery,
+      filters,
+      {
+        page: params.page,
+        limit: params.limit,
+      },
+    );
 
     if (esResult) {
-      const indexedOrder = new Map(esResult.ids.map((id, index) => [id, index]));
-      const data = await this.questionModel.find({ questionId: { $in: esResult.ids } }).lean().exec();
-      data.sort((a, b) => (indexedOrder.get(a.questionId) ?? 0) - (indexedOrder.get(b.questionId) ?? 0));
+      const indexedOrder = new Map(
+        esResult.ids.map((id, index) => [id, index]),
+      );
+      const data = await this.db
+        .select()
+        .from(schema.questions)
+        .where(inArray(schema.questions.id, esResult.ids));
+      data.sort(
+        (a, b) => (indexedOrder.get(a.id) ?? 0) - (indexedOrder.get(b.id) ?? 0),
+      );
 
-      const processedData = (!user?.role || user.role === 'student')
-        ? data.map((q) => this.sanitizeForStudents(q))
-        : data;
+      const processedData =
+        !user?.role || user.role === "student"
+          ? data.map((q) => this.sanitizeForStudents(q))
+          : data;
 
       return {
         data: processedData,
@@ -345,20 +413,31 @@ export class QuestionsService {
       };
     }
 
-    const subjectFilter = params.subject && QUESTION_SUBJECTS.includes(params.subject as never) ? params.subject : undefined;
+    const subjectFilter =
+      params.subject && QUESTION_SUBJECTS.includes(params.subject as never)
+        ? params.subject
+        : undefined;
     const statusFilter =
-      params.status && QUESTION_STATUSES.includes(params.status as never) ? params.status : undefined;
+      params.status && QUESTION_STATUSES.includes(params.status as never)
+        ? params.status
+        : undefined;
     const difficultyFilter =
-      typeof params.difficulty_level === 'number' && params.difficulty_level >= 1 && params.difficulty_level <= 5
+      typeof params.difficulty_level === "number" &&
+      params.difficulty_level >= 1 &&
+      params.difficulty_level <= 5
         ? params.difficulty_level
         : undefined;
 
-    const allQuestions = await this.questionModel.find().lean().exec();
-    const searchTokens = sanitizedQuery.toLowerCase().split(' ').filter(Boolean);
+    const allQuestions = await this.db.select().from(schema.questions);
+    const searchTokens = sanitizedQuery
+      .toLowerCase()
+      .split(" ")
+      .filter(Boolean);
     const filtered = allQuestions.filter((question) => {
       if (subjectFilter && question.subject !== subjectFilter) return false;
       if (statusFilter && question.status !== statusFilter) return false;
-      if (difficultyFilter && question.difficulty_level !== difficultyFilter) return false;
+      if (difficultyFilter && question.difficulty_level !== difficultyFilter)
+        return false;
 
       const text = question.question_text.toLowerCase();
       return searchTokens.every((token) => text.includes(token));
@@ -368,9 +447,10 @@ export class QuestionsService {
     const start = (params.page - 1) * params.limit;
     const data = filtered.slice(start, start + params.limit);
 
-    const processedData = (!user?.role || user.role === 'student')
-      ? data.map((q) => this.sanitizeForStudents(q))
-      : data;
+    const processedData =
+      !user?.role || user.role === "student"
+        ? data.map((q) => this.sanitizeForStudents(q))
+        : data;
 
     return {
       data: processedData,
@@ -381,24 +461,28 @@ export class QuestionsService {
     };
   }
 
-  private sanitizeForStudents(question: QuestionDocument | (Question & { [key: string]: unknown })) {
-    const plain =
-      typeof (question as QuestionDocument).toObject === 'function'
-        ? (question as QuestionDocument).toObject()
-        : question;
-    const { correct_option, explanation, versions, embedding_vector, ...rest } = plain as any;
+  private sanitizeForStudents(question: any) {
+    const plain = question;
+    const { correct_option, explanation, versions, embedding_vector, ...rest } =
+      plain as any;
     return rest;
   }
 
   async getQuestionById(questionId: string, user?: CurrentUser) {
-    const question = await this.questionModel.findOne({ questionId }).exec();
+    const [question] = await this.db
+      .select()
+      .from(schema.questions)
+      .where(eq(schema.questions.id, questionId))
+      .limit(1);
     if (!question) {
-      throw new NotFoundException('Question not found');
+      throw new NotFoundException("Question not found");
     }
 
-    if (!user?.role || user.role === 'student') {
-      if (question.status !== 'published') {
-        throw new ForbiddenException('Only published questions are visible to students/public');
+    if (!user?.role || user.role === "student") {
+      if (question.status !== "published") {
+        throw new ForbiddenException(
+          "Only published questions are visible to students/public",
+        );
       }
       return this.sanitizeForStudents(question);
     }
@@ -406,44 +490,64 @@ export class QuestionsService {
     return question;
   }
 
-  async updateQuestion(questionId: string, payload: UpdateQuestionDto, user: CurrentUser) {
+  async updateQuestion(
+    questionId: string,
+    payload: UpdateQuestionDto,
+    user: CurrentUser,
+  ) {
     const parsed = updateQuestionSchema.safeParse(payload);
     if (!parsed.success) {
-      throw new BadRequestException(parsed.error.issues.map((issue) => issue.message).join(', '));
+      throw new BadRequestException(
+        parsed.error.issues.map((issue) => issue.message).join(", "),
+      );
     }
 
-    const question = await this.questionModel.findOne({ questionId }).exec();
+    const [question] = await this.db
+      .select()
+      .from(schema.questions)
+      .where(eq(schema.questions.id, questionId))
+      .limit(1);
     if (!question) {
-      throw new NotFoundException('Question not found');
+      throw new NotFoundException("Question not found");
     }
 
     const actorRole = user.role;
     if (
-      actorRole === 'examiner' &&
+      actorRole === "examiner" &&
       question.created_by !== this.getActorId(user)
     ) {
-      throw new ForbiddenException('Examiners can only edit their own questions');
+      throw new ForbiddenException(
+        "Examiners can only edit their own questions",
+      );
     }
 
     if (payload.correct_option) {
-      const options = payload.options ?? question.options;
+      const options = payload.options ?? (question.options as any[]);
       if (!options.some((option) => option.id === payload.correct_option)) {
-        throw new BadRequestException('correct_option must match one of options[].id');
+        throw new BadRequestException(
+          "correct_option must match one of options[].id",
+        );
       }
     }
 
-    const versionNumber = question.versions.length + 1;
-    question.versions.push({
-      version_number: versionNumber,
-      question_text: question.question_text,
-      options: question.options,
-      correct_option: question.correct_option,
-      modified_by: this.getActorId(user),
-      modified_at: new Date(),
-      change_reason: payload.change_reason,
-    });
+    const versionNumber = (question.versions as any[]).length + 1;
+    question.versions = [
+      ...((question.versions as any[]) || []),
+      {
+        version_number: versionNumber,
+        question_text: question.question_text,
+        options: question.options,
+        correct_option: question.correct_option,
+        modified_by: this.getActorId(user),
+        modified_at: new Date(),
+        change_reason: payload.change_reason,
+      },
+    ];
 
-    if (payload.question_text && payload.question_text !== question.question_text) {
+    if (
+      payload.question_text &&
+      payload.question_text !== question.question_text
+    ) {
       const duplicate = await this.runDuplicateCheck({
         subject: payload.subject ?? question.subject,
         questionText: payload.question_text,
@@ -452,7 +556,7 @@ export class QuestionsService {
 
       if (duplicate.blocked) {
         throw new ConflictException({
-          message: 'Similar question exists',
+          message: "Similar question exists",
           similarity: duplicate.similarity,
           existingQuestionId: duplicate.existingQuestionId,
         });
@@ -466,57 +570,83 @@ export class QuestionsService {
       tags: payload.tags ? this.normalizeTags(payload.tags) : question.tags,
     });
 
-    await question.save();
+    const [updated] = await this.db
+      .update(schema.questions)
+      .set(question)
+      .where(eq(schema.questions.id, questionId))
+      .returning();
+    Object.assign(question, updated);
     await this.indexQuestion(question);
     return question;
   }
 
   async retireQuestion(questionId: string) {
-    const question = await this.questionModel.findOneAndUpdate(
-      { questionId },
-      { $set: { status: 'retired' } },
-      { new: true },
-    );
+    const [question] = await this.db
+      .update(schema.questions)
+      .set({ status: "retired" })
+      .where(eq(schema.questions.id, questionId))
+      .returning();
 
     if (!question) {
-      throw new NotFoundException('Question not found');
+      throw new NotFoundException("Question not found");
     }
 
     await this.searchService.deleteQuestion(questionId);
-    return { message: 'Question retired successfully' };
+    return { message: "Question retired successfully" };
   }
 
   async saveDiagramSVG(questionId: string, svg: string) {
-    await this.questionModel.updateOne({ questionId }, { $set: { diagram_svg: svg } }).exec();
+    await this.db
+      .update(schema.questions)
+      .set({ diagram_svg: svg })
+      .where(eq(schema.questions.id, questionId));
   }
 
-  async rollbackQuestion(questionId: string, versionNumber: number, user: CurrentUser) {
-    const question = await this.questionModel.findOne({ questionId }).exec();
+  async rollbackQuestion(
+    questionId: string,
+    versionNumber: number,
+    user: CurrentUser,
+  ) {
+    const [question] = await this.db
+      .select()
+      .from(schema.questions)
+      .where(eq(schema.questions.id, questionId))
+      .limit(1);
     if (!question) {
-      throw new NotFoundException('Question not found');
+      throw new NotFoundException("Question not found");
     }
 
-    const targetVersion = question.versions.find((version) => version.version_number === versionNumber);
+    const targetVersion = ((question.versions as any[]) || []).find(
+      (version) => version.version_number === versionNumber,
+    );
     if (!targetVersion) {
-      throw new NotFoundException('Version not found');
+      throw new NotFoundException("Version not found");
     }
 
-    const nextVersionNumber = question.versions.length + 1;
-    question.versions.push({
-      version_number: nextVersionNumber,
-      question_text: question.question_text,
-      options: question.options,
-      correct_option: question.correct_option,
-      modified_by: this.getActorId(user),
-      modified_at: new Date(),
-      change_reason: `Rollback to version ${versionNumber}`,
-    });
+    const nextVersionNumber = (question.versions as any[]).length + 1;
+    question.versions = [
+      ...((question.versions as any[]) || []),
+      {
+        version_number: nextVersionNumber,
+        question_text: question.question_text,
+        options: question.options,
+        correct_option: question.correct_option,
+        modified_by: this.getActorId(user),
+        modified_at: new Date(),
+        change_reason: `Rollback to version ${versionNumber}`,
+      },
+    ];
 
     question.question_text = targetVersion.question_text;
     question.options = targetVersion.options;
     question.correct_option = targetVersion.correct_option;
 
-    await question.save();
+    const [updated] = await this.db
+      .update(schema.questions)
+      .set(question)
+      .where(eq(schema.questions.id, questionId))
+      .returning();
+    Object.assign(question, updated);
     await this.indexQuestion(question);
     return question;
   }
@@ -525,26 +655,41 @@ export class QuestionsService {
     questionId: string,
     fromStatus: (typeof QUESTION_STATUSES)[number],
     toStatus: (typeof QUESTION_STATUSES)[number],
-    patch?: Partial<Question>,
+    patch?: any,
   ) {
-    const question = await this.questionModel.findOne({ questionId }).exec();
+    const [question] = await this.db
+      .select()
+      .from(schema.questions)
+      .where(eq(schema.questions.id, questionId))
+      .limit(1);
     if (!question) {
-      throw new NotFoundException('Question not found');
+      throw new NotFoundException("Question not found");
     }
 
     if (question.status !== fromStatus) {
-      throw new BadRequestException(`Question status must be ${fromStatus} to transition to ${toStatus}`);
+      throw new BadRequestException(
+        `Question status must be ${fromStatus} to transition to ${toStatus}`,
+      );
     }
 
     question.status = toStatus;
     Object.assign(question, patch ?? {});
-    await question.save();
+    const [updated] = await this.db
+      .update(schema.questions)
+      .set(question)
+      .where(eq(schema.questions.id, questionId))
+      .returning();
+    Object.assign(question, updated);
 
-    if (toStatus === 'published' || toStatus === 'approved' || toStatus === 'under_review') {
+    if (
+      toStatus === "published" ||
+      toStatus === "approved" ||
+      toStatus === "under_review"
+    ) {
       await this.indexQuestion(question);
     }
 
-    if (toStatus === 'retired') {
+    if (toStatus === "retired") {
       await this.searchService.deleteQuestion(questionId);
     }
 
@@ -552,52 +697,88 @@ export class QuestionsService {
   }
 
   async submitForReview(questionId: string, user: CurrentUser) {
-    const question = await this.transitionStatus(questionId, 'draft', 'under_review', {
-      reviewed_by: this.getActorId(user),
-    });
+    const question = await this.transitionStatus(
+      questionId,
+      "draft",
+      "under_review",
+      {
+        reviewed_by: this.getActorId(user),
+      },
+    );
 
     await this.notificationsService.queueEmailVerification({
-      email: 'reviewers@localhost',
-      fullName: 'Question Review Team',
-      token: `review:${question.questionId}`,
+      email: "reviewers@localhost",
+      fullName: "Question Review Team",
+      token: `review:${question.id}`,
     });
 
     return question;
   }
 
   async approveQuestion(questionId: string, user: CurrentUser) {
-    return this.transitionStatus(questionId, 'under_review', 'approved', {
+    return this.transitionStatus(questionId, "under_review", "approved", {
       approved_by: this.getActorId(user),
       approved_at: new Date(),
     });
   }
 
   async publishQuestion(questionId: string) {
-    return this.transitionStatus(questionId, 'approved', 'published');
+    return this.transitionStatus(questionId, "approved", "published");
   }
 
   async retirePublishedQuestion(questionId: string) {
-    return this.transitionStatus(questionId, 'published', 'retired');
+    return this.transitionStatus(questionId, "published", "retired");
   }
 
   async getStats() {
-    const [total, bySubjectAgg, byStatusAgg, byDifficultyAgg, totalPublished, recentlyAdded] =
-      await Promise.all([
-        this.questionModel.countDocuments().exec(),
-        this.questionModel.aggregate([{ $group: { _id: '$subject', count: { $sum: 1 } } }]).exec(),
-        this.questionModel.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }]).exec(),
-        this.questionModel
-          .aggregate([{ $group: { _id: '$difficulty_level', count: { $sum: 1 } } }])
-          .exec(),
-        this.questionModel.countDocuments({ status: 'published' }).exec(),
-        this.questionModel
-          .countDocuments({ created_at: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } })
-          .exec(),
-      ]);
+    const [
+      totalRes,
+      totalPublishedRes,
+      recentlyAddedRes,
+      bySubjectAgg,
+      byStatusAgg,
+      byDifficultyAgg,
+    ] = await Promise.all([
+      this.db.select({ count: count() }).from(schema.questions),
+      this.db
+        .select({ count: count() })
+        .from(schema.questions)
+        .where(eq(schema.questions.status, "published")),
+      this.db
+        .select({ count: count() })
+        .from(schema.questions)
+        .where(
+          gt(
+            schema.questions.createdAt,
+            new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+          ),
+        ),
+      this.db
+        .select({ _id: schema.questions.subject, count: count() })
+        .from(schema.questions)
+        .groupBy(schema.questions.subject),
+      this.db
+        .select({ _id: schema.questions.status, count: count() })
+        .from(schema.questions)
+        .groupBy(schema.questions.status),
+      this.db
+        .select({ _id: schema.questions.difficulty_level, count: count() })
+        .from(schema.questions)
+        .groupBy(schema.questions.difficulty_level),
+    ]);
+    const total = totalRes[0].count;
+    const totalPublished = totalPublishedRes[0].count;
+    const recentlyAdded = recentlyAddedRes[0].count;
 
     const bySubject: Record<string, number> = {};
     const byStatus: Record<string, number> = {};
-    const byDifficulty: Record<string, number> = { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 };
+    const byDifficulty: Record<string, number> = {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+    };
 
     bySubjectAgg.forEach((entry) => {
       bySubject[entry._id as string] = entry.count as number;
@@ -622,102 +803,126 @@ export class QuestionsService {
   }
 
   async getPublishedSubjectCounts() {
-    const rows = await this.questionModel
-      .aggregate([
-        { $match: { status: 'published' } },
-        { $group: { _id: '$subject', count: { $sum: 1 } } },
-        { $sort: { _id: 1 } },
-      ])
-      .exec();
+    const rows = await this.db
+      .select({ _id: schema.questions.subject, count: count() })
+      .from(schema.questions)
+      .where(eq(schema.questions.status, "published"))
+      .groupBy(schema.questions.subject)
+      .orderBy(asc(schema.questions.subject));
 
-    return rows.map((row) => ({ subject: row._id as string, count: row.count as number }));
+    return rows.map((row) => ({
+      subject: row._id as string,
+      count: row.count as number,
+    }));
   }
 
   async getTopics(subject: string) {
-    const rows = await this.questionModel
-      .aggregate([
-        { $match: { subject, status: 'published', topic: { $exists: true, $ne: null } } },
-        { $group: { _id: '$topic', count: { $sum: 1 } } },
-        { $sort: { _id: 1 } },
-      ])
-      .exec();
+    const rows = await this.db
+      .select({ _id: schema.questions.topic, count: count() })
+      .from(schema.questions)
+      .where(
+        and(
+          eq(schema.questions.subject, subject),
+          eq(schema.questions.status, "published"),
+        ),
+      )
+      .groupBy(schema.questions.topic)
+      .orderBy(asc(schema.questions.topic));
 
-    return rows.map((row) => ({ topic: row._id as string, count: row.count as number })).filter(row => Boolean(row.topic));
+    return rows
+      .map((row) => ({ topic: row._id as string, count: row.count as number }))
+      .filter((row) => Boolean(row.topic));
   }
 
-  async updateTags(id: string, tags: string[]): Promise<QuestionDocument> {
-    const doc = await this.questionModel.findOneAndUpdate({ questionId: id }, { tags }, { new: true }).exec();
+  async updateTags(id: string, tags: string[]): Promise<any> {
+    const [doc] = await this.db
+      .update(schema.questions)
+      .set({ tags })
+      .where(eq(schema.questions.id, id))
+      .returning();
     if (!doc) {
-      throw new NotFoundException('Question not found');
+      throw new NotFoundException("Question not found");
     }
     return doc;
   }
 
-  async insertGeneratedQuestions(subject: string, rawQuestions: any[]): Promise<QuestionDocument[]> {
+  async insertGeneratedQuestions(
+    subject: string,
+    rawQuestions: any[],
+  ): Promise<any[]> {
     if (!rawQuestions || rawQuestions.length === 0) return [];
 
-    const documentsToInsert = rawQuestions.map(q => {
+    const documentsToInsert = rawQuestions.map((q) => {
       // Ensure we have a unique ID to avoid E11000 dup key errors if any index was left behind
       const uniqueId = `${subject}_ai_${Math.random().toString(36).substring(2, 9)}`;
-      
-      const parsedOptions = (q.options || []).map((opt: any, optIndex: number) => {
-        const id = ['A', 'B', 'C', 'D', 'E'][optIndex];
-        return {
-          id: opt.id || id,
-          text: opt.text || `Option ${id}`
-        };
-      });
+
+      const parsedOptions = (q.options || []).map(
+        (opt: any, optIndex: number) => {
+          const id = ["A", "B", "C", "D", "E"][optIndex];
+          return {
+            id: opt.id || id,
+            text: opt.text || `Option ${id}`,
+          };
+        },
+      );
 
       // Ensure 4 options at minimum
-      while(parsedOptions.length < 4) {
-        const id = ['A', 'B', 'C', 'D', 'E'][parsedOptions.length];
+      while (parsedOptions.length < 4) {
+        const id = ["A", "B", "C", "D", "E"][parsedOptions.length];
         parsedOptions.push({ id, text: `Option ${id}` });
       }
 
       let correctOpt = q.correct_option;
       let isBonus = false;
-      if (!['A', 'B', 'C', 'D', 'E'].includes(correctOpt)) {
-        correctOpt = 'A'; // Fallback to pass validation
+      if (!["A", "B", "C", "D", "E"].includes(correctOpt)) {
+        correctOpt = "A"; // Fallback to pass validation
         isBonus = true; // Mark as bonus since AI hallucinated
       }
 
       return {
         questionId: uniqueId,
         subject: subject,
-        topic: q.topic || 'General',
-        question_text: q.question_text || 'Generated Question',
+        topic: q.topic || "General",
+        question_text: q.question_text || "Generated Question",
         options: parsedOptions,
         correct_option: correctOpt,
         explanation: q.explanation || undefined,
         difficulty_level: q.difficulty ? Number(q.difficulty) : 3,
-        question_type: 'mcq_single',
-        status: 'published',
-        source: 'ai_generated',
-        created_by: 'ai-generator',
-        tags: q.tags || ['ai-generated'],
+        question_type: "mcq_single",
+        status: "published",
+        source: "ai_generated",
+        created_by: "ai-generator",
+        tags: q.tags || ["ai-generated"],
         is_bonus: isBonus,
         has_diagram: !!q.has_diagram,
-        diagram_svg: q.diagram_svg || undefined
+        diagram_svg: q.diagram_svg || undefined,
       };
     });
 
     try {
-      const inserted = await this.questionModel.insertMany(documentsToInsert, { ordered: false });
-      return inserted as unknown as QuestionDocument[];
+      const inserted = await this.db
+        .insert(schema.questions)
+        .values(documentsToInsert as any)
+        .returning();
+      return inserted as any;
     } catch (error: any) {
       // In case of any duplicate key errors (code 11000) from bulk insert, we can filter them out
       if (error.code === 11000 && error.insertedDocs) {
         return error.insertedDocs;
       }
-      this.logger.error('Failed inserting AI generated questions', error.stack);
+      this.logger.error("Failed inserting AI generated questions", error.stack);
       return [];
     }
   }
 
   async getVersions(questionId: string) {
-    const question = await this.questionModel.findOne({ questionId }).select({ versions: 1 }).lean().exec();
+    const [question] = await this.db
+      .select({ versions: schema.questions.versions })
+      .from(schema.questions)
+      .where(eq(schema.questions.id, questionId))
+      .limit(1);
     if (!question) {
-      throw new NotFoundException('Question not found');
+      throw new NotFoundException("Question not found");
     }
     return question.versions ?? [];
   }
@@ -725,35 +930,63 @@ export class QuestionsService {
   async bulkTagUpdate(payload: {
     questionIds: string[];
     tags: string[];
-    action: 'add' | 'remove';
+    action: "add" | "remove";
   }) {
     if (!payload.questionIds.length || !payload.tags.length) {
-      throw new BadRequestException('questionIds and tags are required');
+      throw new BadRequestException("questionIds and tags are required");
     }
 
     const tags = this.normalizeTags(payload.tags);
 
-    if (payload.action === 'add') {
-      await this.questionModel.updateMany(
-        { questionId: { $in: payload.questionIds } },
-        { $addToSet: { tags: { $each: tags } } },
-      );
+    if (payload.action === "add") {
+      // NOTE: For SQLite, appending to JSON array is complex, skip or implement a manual select/update loop
+      const rows = await this.db
+        .select({ id: schema.questions.id, tags: schema.questions.tags })
+        .from(schema.questions)
+        .where(inArray(schema.questions.id, payload.questionIds));
+      for (const row of rows) {
+        const newTags = Array.from(
+          new Set([...((row.tags as string[]) || []), ...tags]),
+        );
+        await this.db
+          .update(schema.questions)
+          .set({ tags: newTags })
+          .where(eq(schema.questions.id, row.id));
+      }
     } else {
-      await this.questionModel.updateMany(
-        { questionId: { $in: payload.questionIds } },
-        { $pullAll: { tags } },
-      );
+      const rows = await this.db
+        .select({ id: schema.questions.id, tags: schema.questions.tags })
+        .from(schema.questions)
+        .where(inArray(schema.questions.id, payload.questionIds));
+      for (const row of rows) {
+        const newTags = ((row.tags as string[]) || []).filter(
+          (t) => !tags.includes(t),
+        );
+        await this.db
+          .update(schema.questions)
+          .set({ tags: newTags })
+          .where(eq(schema.questions.id, row.id));
+      }
     }
 
-    return { message: 'Bulk tag update completed' };
+    return { message: "Bulk tag update completed" };
   }
 
-  async correctQuestionError(questionId: string, newCorrectOption: string, newExplanation?: string): Promise<void> {
+  async correctQuestionError(
+    questionId: string,
+    newCorrectOption: string,
+    newExplanation?: string,
+  ): Promise<void> {
     const updatePayload: any = { correct_option: newCorrectOption };
     if (newExplanation) {
       updatePayload.explanation = newExplanation;
     }
-    await this.questionModel.updateOne({ questionId }, { $set: updatePayload }).exec();
-    this.logger.log(`Question ${questionId} corrected via AI vetting: ${newCorrectOption}`);
+    await this.db
+      .update(schema.questions)
+      .set(updatePayload)
+      .where(eq(schema.questions.id, questionId));
+    this.logger.log(
+      `Question ${questionId} corrected via AI vetting: ${newCorrectOption}`,
+    );
   }
 }

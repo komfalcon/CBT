@@ -1,18 +1,14 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { ExamSession, ExamSessionDocument } from './schemas/session.schema';
-import { ExamResult, ExamResultDocument } from '../results/schemas/result.schema';
-import { Question, QuestionDocument } from '../questions/schemas/question.schema';
-import { User, UserDocument } from '../users/schemas/user.schema';
+import { BadRequestException, Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
+import { DRIZZLE } from '../../db/database.module';
+import * as schema from '../../db/schema';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { eq, and, inArray, notInArray, sql, count, gte } from 'drizzle-orm';
 
 @Injectable()
 export class ExamService {
   constructor(
-    @InjectModel(ExamSession.name) private readonly sessionModel: Model<ExamSessionDocument>,
-    @InjectModel(ExamResult.name) private readonly resultModel: Model<ExamResultDocument>,
-    @InjectModel(Question.name) private readonly questionModel: Model<QuestionDocument>,
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>
   ) { }
 
   async createSession(
@@ -21,16 +17,16 @@ export class ExamService {
     subject?: string,
     subjects?: string[],
     subjectConfigs?: Record<string, { mode: 'random' | 'specific'; topics: string[] }>,
-    count?: number,
+    questionCount?: number,
     difficultyLevel?: string,
     topics?: string[]
-  ): Promise<ExamSessionDocument> {
+  ): Promise<any> {
     let subjectsList: string[] = [];
-    const questionsList: Question[] = [];
+    const questionsList: any[] = [];
     const sessionWarnings: string[] = [];
     let timeRemaining = 7200; // default 2 hours (120 mins) for mock
 
-    const user = await this.userModel.findOne({ userId }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
     if (!user) {
       throw new NotFoundException('User profile not found');
     }
@@ -53,11 +49,14 @@ export class ExamService {
       const startOfToday = new Date();
       startOfToday.setUTCHours(0, 0, 0, 0);
 
-      const mockCount = await this.sessionModel.countDocuments({
-        userId,
-        type: 'mock',
-        startedAt: { $gte: startOfToday }
-      }).exec();
+      const mockCountResult = await this.db.select({ value: count() }).from(schema.exam_sessions)
+        .where(and(
+          eq(schema.exam_sessions.userId, userId),
+          eq(schema.exam_sessions.type, 'mock'),
+          gte(schema.exam_sessions.startedAt, startOfToday)
+        ));
+        
+      const mockCount = mockCountResult[0].value;
 
       if (mockCount >= limit) {
         throw new BadRequestException(`You have reached your daily limit of ${limit} mock exam(s) for the ${tier.toUpperCase()} plan. Please upgrade your plan to take more mock exams.`);
@@ -67,7 +66,7 @@ export class ExamService {
       if (subjects && subjects.length > 0) {
         subjectsList = subjects;
       } else {
-        const combination = user.exam_subject_combination || [];
+        const combination = (user.exam_subject_combination as string[]) || [];
         if (combination.length !== 4 || !combination.includes('english')) {
           throw new BadRequestException('Configure a valid 4-subject combination including English first.');
         }
@@ -97,7 +96,7 @@ export class ExamService {
       if (!subject) {
         throw new BadRequestException('Subject is required for individual drills.');
       }
-      const finalCount = count && [10, 20, 40].includes(count) ? count : 20;
+      const finalCount = questionCount && [10, 20, 40].includes(questionCount) ? questionCount : 20;
       subjectsList = [subject];
       timeRemaining = finalCount * 60; // 1 minute per question
 
@@ -111,23 +110,29 @@ export class ExamService {
       sessionWarnings.push(...warnings);
     }
 
-    const session = await this.sessionModel.create({
+    const [session] = await this.db.insert(schema.exam_sessions).values({
+      id: uuidv4(),
       userId,
       type,
       subjects: subjectsList,
       questions: questionsList,
-      answers: new Map<string, string>(),
+      answers: {},
       timeRemaining,
       status: 'active',
       startedAt: new Date(),
       warnings: sessionWarnings,
-    });
+    }).returning();
 
     return session;
   }
 
-  async getSession(sessionId: string, userId: string): Promise<ExamSessionDocument> {
-    const session = await this.sessionModel.findOne({ sessionId, userId }).exec();
+  async getSession(sessionId: string, userId: string): Promise<any> {
+    const [session] = await this.db.select().from(schema.exam_sessions)
+      .where(and(
+        eq(schema.exam_sessions.id, sessionId), 
+        eq(schema.exam_sessions.userId, userId)
+      )).limit(1);
+      
     if (!session) {
       throw new NotFoundException('Exam session not found.');
     }
@@ -139,37 +144,59 @@ export class ExamService {
     userId: string,
     answers: Record<string, string>,
     timeRemaining: number,
-  ): Promise<ExamSessionDocument> {
-    const session = await this.sessionModel.findOne({ sessionId, userId, status: 'active' }).exec();
+  ): Promise<any> {
+    const [session] = await this.db.select().from(schema.exam_sessions)
+      .where(and(
+        eq(schema.exam_sessions.id, sessionId), 
+        eq(schema.exam_sessions.userId, userId),
+        eq(schema.exam_sessions.status, 'active')
+      )).limit(1);
+      
     if (!session) {
       throw new NotFoundException('Active exam session not found.');
     }
 
     // Update time remaining
-    session.timeRemaining = Math.max(0, timeRemaining);
+    const newTimeRemaining = Math.max(0, timeRemaining);
+    let newAnswers: Record<string, string> = (session.answers as Record<string, string>) || {};
 
-    // Update answers Map
+    // Update answers
     if (answers) {
-      const answersMap = new Map<string, string>();
+      const answersMap: Record<string, string> = {};
       Object.entries(answers).forEach(([qId, val]) => {
         if (val) {
-          answersMap.set(qId, val);
+          answersMap[qId] = val;
         }
       });
-      session.answers = answersMap;
+      newAnswers = answersMap;
     }
 
-    await session.save();
-    return session;
+    const [updatedSession] = await this.db.update(schema.exam_sessions).set({
+      timeRemaining: newTimeRemaining,
+      answers: newAnswers,
+      updatedAt: new Date()
+    }).where(eq(schema.exam_sessions.id, session.id)).returning();
+
+    return updatedSession;
   }
 
-  async submitSession(sessionId: string, userId: string): Promise<ExamResultDocument> {
-    const session = await this.sessionModel.findOne({ sessionId, userId, status: 'active' }).exec();
+  async submitSession(sessionId: string, userId: string): Promise<any> {
+    const [session] = await this.db.select().from(schema.exam_sessions)
+      .where(and(
+        eq(schema.exam_sessions.id, sessionId), 
+        eq(schema.exam_sessions.userId, userId),
+        eq(schema.exam_sessions.status, 'active')
+      )).limit(1);
+      
     if (!session) {
       throw new NotFoundException('Active exam session not found or already submitted.');
     }
+    
+    const sessionQuestions = session.questions as any[];
+    const sessionSubjects = session.subjects as string[];
+    const sessionAnswers = (session.answers as Record<string, string>) || {};
 
-    const durationLimit = session.type === 'mock' ? 7200 : session.questions.length * 60;
+    const durationLimit = session.type === 'mock' ? 7200 : sessionQuestions.length * 60;
     const timeSpentSeconds = Math.max(0, durationLimit - session.timeRemaining);
 
     const subjectScoresList: Array<{
@@ -181,8 +208,8 @@ export class ExamService {
     }> = [];
 
     // Calculate score per subject
-    for (const sub of session.subjects) {
-      const subQuestions = session.questions.filter((q) => q.subject === sub);
+    for (const sub of sessionSubjects) {
+      const subQuestions = sessionQuestions.filter((q: any) => q.subject === sub);
       const totalInSub = subQuestions.length;
 
       let correct = 0;
@@ -190,7 +217,8 @@ export class ExamService {
       let unanswered = 0;
 
       for (const question of subQuestions) {
-        const userChoice = session.answers.get(question.questionId);
+        const qId = question.id || question.questionId;
+        const userChoice = sessionAnswers[qId];
         if (!userChoice) {
           unanswered += 1;
         } else if (userChoice.toUpperCase() === question.correct_option.toUpperCase()) {
@@ -223,97 +251,107 @@ export class ExamService {
     }
 
     // Create Result Snapshot
-    const result = await this.resultModel.create({
-      sessionId: session.sessionId,
+    const [result] = await this.db.insert(schema.exam_results).values({
+      id: uuidv4(),
+      sessionId: session.id,
       userId: session.userId,
       type: session.type,
       subjectScores: subjectScoresList,
       totalScore,
       timeSpentSeconds,
-      answers: session.answers,
-      questionsSnapshot: session.questions,
+      answers: sessionAnswers,
+      questionsSnapshot: sessionQuestions,
       completedAt: new Date(),
-    });
+    }).returning();
 
     // Close session
-    session.status = 'completed';
-    session.completedAt = new Date();
-    await session.save();
+    await this.db.update(schema.exam_sessions).set({
+      status: 'completed',
+      completedAt: new Date(),
+      updatedAt: new Date()
+    }).where(eq(schema.exam_sessions.id, session.id));
 
     // Award progression points to Candidate
     const xpReward = session.type === 'mock' ? 150 : 35;
-    const user = await this.userModel.findOne({ userId }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
+    
     if (user) {
-      user.xp_points = (user.xp_points || 0) + xpReward;
-
-      // Streak tracking
-      user.streak_count = (user.streak_count || 0) + 1;
+      let currentXp = (user.xp_points || 0) + xpReward;
+      let currentLevel = user.level || 1;
+      let currentStreak = (user.streak_count || 0) + 1;
 
       // Simple levelling formula
-      while (user.xp_points >= user.level * 400) {
-        user.level += 1;
+      while (currentXp >= currentLevel * 400) {
+        currentLevel += 1;
       }
-      await user.save();
+      
+      await this.db.update(schema.users).set({
+        xp_points: currentXp,
+        level: currentLevel,
+        streak_count: currentStreak,
+        updatedAt: new Date()
+      }).where(eq(schema.users.id, user.id));
     }
 
     return result;
   }
 
-  sanitizeSession(session: ExamSessionDocument) {
-    const plain = session.toObject();
-    plain.questions = plain.questions.map((q: any) => {
-      const { correct_option, explanation, embedding_vector, versions, ...rest } = q;
-      return rest;
-    });
+  sanitizeSession(session: any) {
+    const plain = { ...session };
+    if (plain.questions && Array.isArray(plain.questions)) {
+      plain.questions = plain.questions.map((q: any) => {
+        const { correct_option, explanation, embedding_vector, versions, ...rest } = q;
+        return rest;
+      });
+    }
     return plain;
   }
 
-  private async getUniqueQuestionsForSubject(subject: string, targetCount: number, difficultyLevel?: string, topics?: string[]): Promise<{ questions: Question[]; warnings: string[] }> {
-    const matchStage: any = { subject, status: 'published' };
+  private async getUniqueQuestionsForSubject(subject: string, targetCount: number, difficultyLevel?: string, topics?: string[]): Promise<{ questions: any[]; warnings: string[] }> {
+    const conditions = [
+      eq(schema.questions.subject, subject),
+      eq(schema.questions.status, 'published')
+    ];
+    
     const warnings: string[] = [];
 
     if (difficultyLevel && difficultyLevel !== 'any') {
-      matchStage.difficulty_level = Number(difficultyLevel);
+      conditions.push(eq(schema.questions.difficulty_level, Number(difficultyLevel)));
     }
 
     if (topics && topics.length > 0) {
-      matchStage.topic = { $in: topics };
+      conditions.push(inArray(schema.questions.topic, topics));
     }
 
-    const uniqueQuestions = await this.questionModel
-      .aggregate<Question>([
-        { $match: matchStage },
-        { $group: { _id: "$question_text", doc: { $first: "$$ROOT" } } },
-        { $replaceRoot: { newRoot: "$doc" } },
-        { $sample: { size: targetCount } }
-      ])
-      .exec();
-
-    let result = uniqueQuestions;
+    let result = await this.db.select().from(schema.questions)
+      .where(and(...conditions))
+      .groupBy(schema.questions.question_text)
+      .orderBy(sql`RANDOM()`)
+      .limit(targetCount);
 
     // Graceful Fallback (Option A)
     if (topics && topics.length > 0 && result.length < targetCount) {
       const remainingCount = targetCount - result.length;
-      const fetchedIds = result.map(q => q.questionId);
+      const fetchedIds = result.map(q => q.id);
 
-      const fallbackMatchStage: any = {
-        subject,
-        status: 'published',
-        questionId: { $nin: fetchedIds }
-      };
+      const fallbackConditions = [
+        eq(schema.questions.subject, subject),
+        eq(schema.questions.status, 'published')
+      ];
 
-      if (difficultyLevel && difficultyLevel !== 'any') {
-        fallbackMatchStage.difficulty_level = Number(difficultyLevel);
+      if (fetchedIds.length > 0) {
+        fallbackConditions.push(notInArray(schema.questions.id, fetchedIds));
       }
 
-      const fallbackQuestions = await this.questionModel
-        .aggregate<Question>([
-          { $match: fallbackMatchStage },
-          { $group: { _id: "$question_text", doc: { $first: "$$ROOT" } } },
-          { $replaceRoot: { newRoot: "$doc" } },
-          { $sample: { size: remainingCount } }
-        ])
-        .exec();
+      if (difficultyLevel && difficultyLevel !== 'any') {
+        fallbackConditions.push(eq(schema.questions.difficulty_level, Number(difficultyLevel)));
+      }
+
+      const fallbackQuestions = await this.db.select().from(schema.questions)
+        .where(and(...fallbackConditions))
+        .groupBy(schema.questions.question_text)
+        .orderBy(sql`RANDOM()`)
+        .limit(remainingCount);
 
       if (fallbackQuestions.length > 0) {
         warnings.push(`${subject} only has ${result.length} questions for the selected topics, filled the remaining ${fallbackQuestions.length} with random ${subject} questions.`);
@@ -327,7 +365,7 @@ export class ExamService {
 
     if (result.length < targetCount) {
       // Repeat questions up to 3 times to fill to targetCount
-      const repeated: Question[] = [];
+      const repeated: any[] = [];
       for (let r = 0; r < 3 && repeated.length < targetCount; r++) {
         // Shuffle each pass to mix up order
         const pass = [...result].sort(() => Math.random() - 0.5);

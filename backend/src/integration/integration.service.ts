@@ -1,12 +1,12 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { Injectable, UnauthorizedException, BadRequestException, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Model } from 'mongoose';
 import { randomUUID } from 'crypto';
-import { Handoff, HandoffDocument } from './handoff.schema';
-import { User, UserDocument } from '../users/schemas/user.schema';
 import { CreateHandoffDto, LearningEventDto } from './handoff.dto';
+import { DRIZZLE } from '../db/database.module';
+import * as schema from '../db/schema';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { eq, and, gt } from 'drizzle-orm';
 
 const LIBRARY_ORIGIN = process.env.LIBRARY_ORIGIN || 'https://library.aurikrex.tech';
 const ALLOWED_RETURN_ORIGINS = [
@@ -17,8 +17,7 @@ const ALLOWED_RETURN_ORIGINS = [
 @Injectable()
 export class IntegrationService {
   constructor(
-    @InjectModel(Handoff.name) private readonly handoffModel: Model<HandoffDocument>,
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
@@ -53,7 +52,10 @@ export class IntegrationService {
   }
 
   async createHandoff(userId: string, dto: CreateHandoffDto) {
-    const user = await this.userModel.findOne({ userId, account_status: 'active' }).lean().exec();
+    const [user] = await this.db.select().from(schema.users).where(
+      and(eq(schema.users.id, userId), eq(schema.users.account_status, 'active'))
+    ).limit(1);
+    
     if (!user) throw new UnauthorizedException('User not found or inactive.');
     if (dto.audience !== 'library') throw new BadRequestException('Only Library handoffs are enabled in this slice.');
 
@@ -64,7 +66,7 @@ export class IntegrationService {
       ? `/subject/${encodeURIComponent(dto.subjectId)}/topic/${encodeURIComponent(dto.topicId)}`
       : '/');
 
-    await this.handoffModel.create({
+    await this.db.insert(schema.handoffs).values({
       jti,
       userId,
       audience: dto.audience,
@@ -105,11 +107,15 @@ export class IntegrationService {
       throw new UnauthorizedException('Unable to complete handoff.');
     }
 
-    const handoff = await this.handoffModel.findOneAndUpdate(
-      { jti: payload.jti, audience: 'library', exchanged: false, expiresAt: { $gt: new Date() } },
-      { $set: { exchanged: true } },
-      { new: true },
-    ).lean().exec();
+    const [handoff] = await this.db.update(schema.handoffs).set({ exchanged: true }).where(
+      and(
+        eq(schema.handoffs.jti, payload.jti),
+        eq(schema.handoffs.audience, 'library'),
+        eq(schema.handoffs.exchanged, false),
+        gt(schema.handoffs.expiresAt, new Date())
+      )
+    ).returning();
+
     if (!handoff) throw new UnauthorizedException('Unable to complete handoff.');
 
     const sessionToken = await this.jwtService.signAsync({
@@ -177,10 +183,21 @@ export class IntegrationService {
 
   async ingestEvent(userId: string, dto: LearningEventDto) {
     const key = `integration:event:${dto.eventId}`;
-    const eventModel = this.handoffModel.db.collection('integration_learning_events');
-    const existing = await eventModel.findOne({ eventId: dto.eventId });
+    
+    const [existing] = await this.db.select().from(schema.integration_learning_events)
+      .where(eq(schema.integration_learning_events.eventId, dto.eventId)).limit(1);
+      
     if (existing) return { accepted: true, duplicate: true, eventId: dto.eventId };
-    await eventModel.insertOne({ ...dto, userId, eventId: dto.eventId, occurredAt: dto.occurredAt || new Date().toISOString(), createdAt: new Date(), idempotencyKey: key });
+    
+    await this.db.insert(schema.integration_learning_events).values({ 
+      eventId: dto.eventId,
+      userId,
+      occurredAt: dto.occurredAt || new Date().toISOString(),
+      createdAt: new Date(),
+      idempotencyKey: key,
+      data: dto
+    });
+    
     return { accepted: true, duplicate: false, eventId: dto.eventId };
   }
 }

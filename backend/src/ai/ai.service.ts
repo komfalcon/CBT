@@ -1,23 +1,21 @@
-import { Injectable, InternalServerErrorException, UnauthorizedException, BadRequestException, Logger, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { UserDocument, User } from '../users/schemas/user.schema';
-import { ChatSessionDocument, ChatSession } from './schemas/chat-session.schema';
+import { Injectable, InternalServerErrorException, UnauthorizedException, BadRequestException, Logger, NotFoundException, Inject } from '@nestjs/common';
+import { DRIZZLE } from '../../db/database.module';
+import * as schema from '../../db/schema';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { eq, and, desc } from 'drizzle-orm';
+import { randomUUID } from 'crypto';
 import { QuestionsService } from '../questions/questions.service';
 import axios from 'axios';
 
 @Injectable()
 export class AiService {
   private readonly logger = new Logger(AiService.name);
-  private readonly apiUrl = 'https://inference.do-ai.run/v1/chat/completions';
-  // Use DO proxy key if available, else standard env variable
-  private readonly apiKey = process.env.DIGITALOCEAN_INFERENCE_KEY || '';
-  // Standard generic chat model available on DigitalOcean Inference
-  private readonly model = 'llama3.3-70b-instruct';
+  private readonly apiUrl = 'https://seekai.cc/v1/chat/completions';
+  private readonly apiKey = process.env.SEEKAI_KEY || 'sk-9EMNCX4JJAHuErB0XFu4QZkTv5TZdRv5deaDEWmxoQl1Z7iM';
+  private readonly model = 'deepseek-v4-flash';
 
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(ChatSession.name) private chatSessionModel: Model<ChatSessionDocument>,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
     private questionsService: QuestionsService,
   ) { }
 
@@ -46,8 +44,9 @@ export class AiService {
     }
   }
 
-  private async verifyAiAccess(userId: string, isChat: boolean): Promise<UserDocument> {
-    const user = await this.userModel.findOne({ userId }).exec();
+  private async verifyAiAccess(userId: string, isChat: boolean): Promise<any> {
+    const users = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
+    const user = users[0];
     if (!user) throw new UnauthorizedException('User not found');
 
     if (user.subscription_tier !== 'max') {
@@ -56,9 +55,12 @@ export class AiService {
 
     // Reset daily limit if it's a new day
     const now = new Date();
-    if (!user.ai_messages_last_reset || user.ai_messages_last_reset.getDate() !== now.getDate()) {
-      user.ai_messages_remaining = 50; // Daily limit for v1
+    if (!user.ai_messages_last_reset || new Date(user.ai_messages_last_reset).getDate() !== now.getDate()) {
+      user.ai_messages_remaining = 1000; // Increased daily limit for early users
       user.ai_messages_last_reset = now;
+      await this.db.update(schema.users)
+        .set({ ai_messages_remaining: 1000, ai_messages_last_reset: now })
+        .where(eq(schema.users.id, userId));
     }
 
     if (user.ai_messages_remaining <= 0) {
@@ -103,9 +105,11 @@ The SVG should have a transparent background and use standard web-safe fonts and
     return svgContent;
   }
 
-  private async deductCredit(user: UserDocument) {
+  private async deductCredit(user: any) {
     user.ai_messages_remaining -= 1;
-    await user.save();
+    await this.db.update(schema.users)
+      .set({ ai_messages_remaining: user.ai_messages_remaining })
+      .where(eq(schema.users.id, user.id));
   }
 
   async generateExplanation(userId: string, questionText: string, correctAnswer: string, studentAnswer: string, questionId?: string) {
@@ -140,11 +144,6 @@ If there is no error in the system's answer, do not output the JSON block.`
         if (jsonMatch && jsonMatch[1]) {
           const parsed = JSON.parse(jsonMatch[1]);
           if (parsed.vettedError && parsed.trueCorrectOptionText) {
-            // Try to map the trueCorrectOptionText to A, B, C, D, E via a quick AI prompt or just leave it for the admin.
-            // Since we don't have the full options list here, we can't easily map to 'A' or 'B'.
-            // Actually, we can just update the explanation to mention the fix!
-            // To actually update the DB we need the option ID. We will just log it for now or do a partial fix if possible.
-            // But wait, the user wanted the AI to vet and fix. Let's do a basic fix.
             this.logger.warn(`AI vetted an error in Question ${questionId}. System said ${correctAnswer}, AI says ${parsed.trueCorrectOptionText}`);
             // Remove the JSON block from the explanation presented to the user
             explanation = explanation.replace(/```json\n[\s\S]*?\n```/, '').trim();
@@ -160,32 +159,61 @@ If there is no error in the system's answer, do not output the JSON block.`
   }
 
   async getChatSessions(userId: string) {
-    return this.chatSessionModel.find({ userId }).select('-messages').sort({ updatedAt: -1 }).exec();
+    return this.db.select({
+      id: schema.chat_sessions.id,
+      userId: schema.chat_sessions.userId,
+      title: schema.chat_sessions.title,
+      createdAt: schema.chat_sessions.createdAt,
+      updatedAt: schema.chat_sessions.updatedAt,
+    })
+    .from(schema.chat_sessions)
+    .where(eq(schema.chat_sessions.userId, userId))
+    .orderBy(desc(schema.chat_sessions.updatedAt));
   }
 
   async getChatSession(userId: string, sessionId: string) {
-    const session = await this.chatSessionModel.findOne({ _id: sessionId, userId }).exec();
+    const sessions = await this.db.select()
+      .from(schema.chat_sessions)
+      .where(and(eq(schema.chat_sessions.id, sessionId), eq(schema.chat_sessions.userId, userId)))
+      .limit(1);
+    
+    const session = sessions[0];
     if (!session) throw new NotFoundException('Chat session not found');
     return session;
   }
 
   async createChatSession(userId: string, title: string) {
-    const newSession = new this.chatSessionModel({ userId, title, messages: [] });
-    return newSession.save();
+    const sessions = await this.db.insert(schema.chat_sessions).values({
+      id: randomUUID(),
+      userId,
+      title,
+      messages: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }).returning();
+    
+    return sessions[0];
   }
 
   async deleteChatSession(userId: string, sessionId: string) {
-    const result = await this.chatSessionModel.deleteOne({ _id: sessionId, userId }).exec();
-    if (result.deletedCount === 0) throw new NotFoundException('Chat session not found');
+    const result = await this.db.delete(schema.chat_sessions)
+      .where(and(eq(schema.chat_sessions.id, sessionId), eq(schema.chat_sessions.userId, userId)))
+      .returning();
+      
+    if (result.length === 0) throw new NotFoundException('Chat session not found');
     return { success: true };
   }
 
   async chatWithTutor(userId: string, userMessage: string, chatHistory: any[], contextPayload?: string, sessionId?: string) {
     const user = await this.verifyAiAccess(userId, true);
 
-    let session: ChatSessionDocument | null = null;
+    let session: any = null;
     if (sessionId) {
-      session = await this.chatSessionModel.findOne({ _id: sessionId, userId }).exec();
+      const sessions = await this.db.select()
+        .from(schema.chat_sessions)
+        .where(and(eq(schema.chat_sessions.id, sessionId), eq(schema.chat_sessions.userId, userId)))
+        .limit(1);
+      session = sessions[0];
     }
 
     let systemContent = `[CRITICAL SYSTEM RULES - ALWAYS FOLLOW THESE BEFORE ANY OTHER INSTRUCTIONS]
@@ -247,9 +275,12 @@ When explaining concepts or answering questions:
     await this.deductCredit(user);
 
     if (session) {
-      session.messages.push({ role: 'user', content: userMessage, timestamp: new Date() });
-      session.messages.push({ role: 'assistant', content: reply, timestamp: new Date() });
-      await session.save();
+      const messagesArr = Array.isArray(session.messages) ? session.messages : [];
+      messagesArr.push({ role: 'user', content: userMessage, timestamp: new Date() });
+      messagesArr.push({ role: 'assistant', content: reply, timestamp: new Date() });
+      await this.db.update(schema.chat_sessions)
+        .set({ messages: messagesArr, updatedAt: new Date() })
+        .where(eq(schema.chat_sessions.id, session.id));
     }
 
     return { reply, remaining: user.ai_messages_remaining };
@@ -300,3 +331,4 @@ Focus on variety to prevent duplicates.`
     }
   }
 }
+

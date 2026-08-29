@@ -6,22 +6,28 @@ import {
   NotFoundException,
   UnauthorizedException,
   OnModuleInit,
+  Inject,
 } from '@nestjs/common';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { createHmac, randomInt, createHash } from 'crypto';
 import { authenticator } from 'otplib';
 import * as QRCode from 'qrcode';
 import { z } from 'zod';
 import { NotificationsService } from '../notifications/notifications.service';
-import { User, UserDocument, generateCbtKey } from '../users/schemas/user.schema';
+import { generateCbtKey } from '../users/schemas/user.schema';
 import { RegisterDto } from './dto/register.dto';
 import { JwtPayload } from './types/jwt-payload.type';
+
+import { DRIZZLE } from '../db/database.module';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import * as schema from '../db/schema';
+import { eq, and } from 'drizzle-orm';
+
+type UserDocument = typeof schema.users.$inferSelect;
 
 export function calculateLockoutDurationMs(failedAttempts: number): number {
   if (failedAttempts < 5) {
@@ -67,7 +73,7 @@ const registerValidationSchema = z.object({
 @Injectable()
 export class AuthService implements OnModuleInit {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly notificationsService: NotificationsService,
@@ -75,11 +81,13 @@ export class AuthService implements OnModuleInit {
 
   async onModuleInit() {
     console.log('Running role fix migration...');
-    const users = await this.userModel.find({}).lean().exec();
-    for (const user of users) {
+    const usersList = await this.db.select().from(schema.users);
+    for (const user of usersList) {
       if (user.role && user.role !== user.role.toLowerCase()) {
         console.log('Fixing role for', user.email);
-        await this.userModel.updateOne({ _id: user._id }, { $set: { role: user.role.toLowerCase() } });
+        await this.db.update(schema.users)
+          .set({ role: user.role.toLowerCase() })
+          .where(eq(schema.users.id, user.id));
       }
     }
     console.log('Role fix migration complete.');
@@ -92,7 +100,7 @@ export class AuthService implements OnModuleInit {
     }
 
     const normalizedEmail = parsed.data.email.toLowerCase();
-    const existing = await this.userModel.findOne({ email: normalizedEmail }).lean().exec();
+    const [existing] = await this.db.select().from(schema.users).where(eq(schema.users.email, normalizedEmail)).limit(1);
     if (existing) {
       throw new ConflictException('A user with this email already exists.');
     }
@@ -103,10 +111,11 @@ export class AuthService implements OnModuleInit {
     const plainCbtKey = generateCbtKey();
     const cbtKeyHash = createHash('sha256').update(plainCbtKey).digest('hex');
 
-    const user = await this.userModel.create({
+    const [user] = await this.db.insert(schema.users).values({
+      id: uuidv4(),
       fullName: parsed.data.fullName,
       email: normalizedEmail,
-      phone: parsed.data.phone,
+      phone: parsed.data.phone || null,
       passwordHash,
       role: 'student',
       account_status: 'pending_verification',
@@ -114,7 +123,7 @@ export class AuthService implements OnModuleInit {
       verification_code_expires: new Date(Date.now() + 24 * 3600 * 1000),
       cbt_key: plainCbtKey,
       cbt_key_hash: cbtKeyHash,
-    });
+    }).returning();
 
     await this.notificationsService.queueEmailVerification({
       email: user.email,
@@ -132,10 +141,9 @@ export class AuthService implements OnModuleInit {
     const normalizedEmail = email.toLowerCase().trim();
     const formattedCode = code.trim();
 
-    const user = await this.userModel.findOne({
-      email: normalizedEmail,
-      verification_code: formattedCode,
-    }).exec();
+    const [user] = await this.db.select().from(schema.users).where(
+      and(eq(schema.users.email, normalizedEmail), eq(schema.users.verification_code, formattedCode))
+    ).limit(1);
 
     if (!user) {
       throw new BadRequestException('Invalid email or verification code.');
@@ -145,27 +153,30 @@ export class AuthService implements OnModuleInit {
       throw new BadRequestException('Verification code has expired. Please register again.');
     }
 
-    user.account_status = 'active';
-    user.verification_code = undefined;
-    user.verification_code_expires = undefined;
-    await user.save();
+    await this.db.update(schema.users).set({
+      account_status: 'active',
+      verification_code: null,
+      verification_code_expires: null,
+    }).where(eq(schema.users.id, user.id));
 
     return { message: 'Email verified successfully.' };
   }
 
   async recoverAdmin() {
     const email = 'falcon@aurikex.tech';
-    const user = await this.userModel.findOne({ email }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.email, email)).limit(1);
     if (!user) {
       return { error: 'Admin user not found' };
     }
     
     // Reset password
     const passwordHash = await bcrypt.hash('Korex1025$1025$', 10);
-    user.passwordHash = passwordHash;
-    user.account_status = 'active';
-    user.role = 'admin';
-    await user.save();
+    
+    await this.db.update(schema.users).set({
+      passwordHash,
+      account_status: 'active',
+      role: 'admin',
+    }).where(eq(schema.users.id, user.id));
     
     // Return decrypted CBT key (getter is invoked on access)
     return {
@@ -177,7 +188,7 @@ export class AuthService implements OnModuleInit {
 
   async validateUserCredentials(email: string, password: string): Promise<UserDocument> {
     const normalizedEmail = email.toLowerCase();
-    const user = await this.userModel.findOne({ email: normalizedEmail }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.email, normalizedEmail)).limit(1);
 
     if (!user) {
       throw new UnauthorizedException('Invalid email or password.');
@@ -189,7 +200,7 @@ export class AuthService implements OnModuleInit {
       );
     }
 
-    const lockoutRemaining = getLockoutRemainingSeconds(user.lockout_until);
+    const lockoutRemaining = getLockoutRemainingSeconds(user.lockout_until || undefined);
     if (lockoutRemaining > 0) {
       throw new ForbiddenException(
         `Account locked. Try again in ${lockoutRemaining} second(s).`,
@@ -198,10 +209,15 @@ export class AuthService implements OnModuleInit {
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
-      user.failed_login_attempts += 1;
-      const lockoutMs = calculateLockoutDurationMs(user.failed_login_attempts);
-      user.lockout_until = lockoutMs > 0 ? new Date(Date.now() + lockoutMs) : undefined;
-      await user.save();
+      const failed_login_attempts = (user.failed_login_attempts || 0) + 1;
+      const lockoutMs = calculateLockoutDurationMs(failed_login_attempts);
+      const lockout_until = lockoutMs > 0 ? new Date(Date.now() + lockoutMs) : null;
+      
+      await this.db.update(schema.users).set({
+        failed_login_attempts,
+        lockout_until,
+      }).where(eq(schema.users.id, user.id));
+      
       throw new UnauthorizedException('Invalid email or password.');
     }
 
@@ -214,17 +230,19 @@ export class AuthService implements OnModuleInit {
   }
 
   async completeLogin(user: UserDocument, ipAddress?: string) {
-    user.failed_login_attempts = 0;
-    user.lockout_until = undefined;
+    let updateData: any = {
+      failed_login_attempts: 0,
+      lockout_until: null,
+    };
 
     if (user.mfa_enabled) {
-      await user.save();
+      await this.db.update(schema.users).set(updateData).where(eq(schema.users.id, user.id));
 
       const tempToken = await this.signToken(
         {
-          sub: user.userId,
+          sub: user.id,
           email: user.email,
-          role: user.role,
+          role: user.role || 'student',
           tokenType: 'mfa',
         },
         '5m',
@@ -234,9 +252,10 @@ export class AuthService implements OnModuleInit {
     }
 
     const tokens = await this.issueAuthTokens(user);
-    user.last_login = new Date();
-    user.last_login_ip = ipAddress;
-    await user.save();
+    updateData.last_login = new Date();
+    updateData.last_login_ip = ipAddress || null;
+    
+    await this.db.update(schema.users).set(updateData).where(eq(schema.users.id, user.id));
 
     return {
       requiresMFA: false,
@@ -250,20 +269,21 @@ export class AuthService implements OnModuleInit {
       throw new BadRequestException('Invalid MFA token.');
     }
 
-    const user = await this.userModel.findOne({ userId: payload.sub }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, payload.sub)).limit(1);
     if (!user || !user.mfa_enabled) {
       throw new UnauthorizedException('MFA is not enabled for this account.');
     }
 
-    const mfaSecret = user.get('mfa_secret', null, { getters: true }) as string | undefined;
-    if (!this.isOtpValid(mfaSecret, otp)) {
+    const mfaSecret = user.mfa_secret;
+    if (!this.isOtpValid(mfaSecret || undefined, otp)) {
       throw new UnauthorizedException('Invalid OTP code.');
     }
 
     const tokens = await this.issueAuthTokens(user);
-    user.last_login = new Date();
-    user.last_login_ip = ipAddress;
-    await user.save();
+    await this.db.update(schema.users).set({
+      last_login: new Date(),
+      last_login_ip: ipAddress || null,
+    }).where(eq(schema.users.id, user.id));
 
     return {
       requiresMFA: false,
@@ -277,9 +297,9 @@ export class AuthService implements OnModuleInit {
       throw new UnauthorizedException('Invalid refresh token.');
     }
 
-    const user = await this.userModel
-      .findOne({ userId: payload.sub, account_status: 'active' })
-      .exec();
+    const [user] = await this.db.select().from(schema.users).where(
+      and(eq(schema.users.id, payload.sub), eq(schema.users.account_status, 'active'))
+    ).limit(1);
 
     if (!user) {
       throw new UnauthorizedException('Refresh token user not found.');
@@ -290,13 +310,14 @@ export class AuthService implements OnModuleInit {
 
   async forgotPassword(email: string) {
     const normalizedEmail = email.toLowerCase();
-    const user = await this.userModel.findOne({ email: normalizedEmail }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.email, normalizedEmail)).limit(1);
 
     if (user) {
       const code = randomInt(100000, 999999).toString();
-      user.password_reset_code = code;
-      user.password_reset_expires = new Date(Date.now() + 3600 * 1000);
-      await user.save();
+      await this.db.update(schema.users).set({
+        password_reset_code: code,
+        password_reset_expires: new Date(Date.now() + 3600 * 1000),
+      }).where(eq(schema.users.id, user.id));
 
       await this.notificationsService.queuePasswordReset({
         email: user.email,
@@ -312,9 +333,9 @@ export class AuthService implements OnModuleInit {
 
   private async issueAuthTokens(user: UserDocument) {
     const basePayload: JwtPayload = {
-      sub: user.userId,
+      sub: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role || 'student',
     };
 
     const accessToken = await this.signToken(
@@ -365,7 +386,7 @@ export class AuthService implements OnModuleInit {
   }
 
   async generateMfaSecret(userId: string) {
-    const user = await this.userModel.findOne({ userId }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
     if (!user) {
       throw new NotFoundException('User not found.');
     }
@@ -374,22 +395,23 @@ export class AuthService implements OnModuleInit {
     const otpauthUrl = authenticator.keyuri(user.email, 'Aurikex CBT', secret);
     const qrCodeDataUrl = await QRCode.toDataURL(otpauthUrl);
 
-    user.mfa_secret = secret;
-    await user.save();
+    await this.db.update(schema.users).set({ mfa_secret: secret }).where(eq(schema.users.id, user.id));
 
     return { qrCode: qrCodeDataUrl, secret };
   }
 
   async generateSsoToken(userId: string) {
-    const user = await this.userModel.findOne({ userId, account_status: 'active' }).exec();
+    const [user] = await this.db.select().from(schema.users).where(
+      and(eq(schema.users.id, userId), eq(schema.users.account_status, 'active'))
+    ).limit(1);
     if (!user) {
       throw new UnauthorizedException('User not found or inactive.');
     }
 
     const payload: JwtPayload = {
-      sub: user.userId,
+      sub: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role || 'student',
       tokenType: 'sso',
     };
 
@@ -398,36 +420,33 @@ export class AuthService implements OnModuleInit {
   }
 
   async enableMfa(userId: string, otp: string) {
-    const user = await this.userModel.findOne({ userId }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
     if (!user) {
       throw new NotFoundException('User not found.');
     }
 
-    const mfaSecret = user.get('mfa_secret', null, { getters: true }) as string | undefined;
-    if (!this.isOtpValid(mfaSecret, otp)) {
+    const mfaSecret = user.mfa_secret;
+    if (!this.isOtpValid(mfaSecret || undefined, otp)) {
       throw new BadRequestException('Invalid OTP code.');
     }
 
-    user.mfa_enabled = true;
-    await user.save();
+    await this.db.update(schema.users).set({ mfa_enabled: true }).where(eq(schema.users.id, user.id));
 
     return { message: 'Two-Factor Authentication enabled successfully.' };
   }
 
   async disableMfa(userId: string, otp: string) {
-    const user = await this.userModel.findOne({ userId }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
     if (!user) {
       throw new NotFoundException('User not found.');
     }
 
-    const mfaSecret = user.get('mfa_secret', null, { getters: true }) as string | undefined;
-    if (!this.isOtpValid(mfaSecret, otp)) {
+    const mfaSecret = user.mfa_secret;
+    if (!this.isOtpValid(mfaSecret || undefined, otp)) {
       throw new BadRequestException('Invalid OTP code.');
     }
 
-    user.mfa_enabled = false;
-    user.mfa_secret = undefined;
-    await user.save();
+    await this.db.update(schema.users).set({ mfa_enabled: false, mfa_secret: null }).where(eq(schema.users.id, user.id));
 
     return { message: 'Two-Factor Authentication disabled successfully.' };
   }
@@ -436,10 +455,9 @@ export class AuthService implements OnModuleInit {
     const normalizedEmail = email.toLowerCase().trim();
     const formattedCode = code.trim();
 
-    const user = await this.userModel.findOne({
-      email: normalizedEmail,
-      password_reset_code: formattedCode,
-    }).exec();
+    const [user] = await this.db.select().from(schema.users).where(
+      and(eq(schema.users.email, normalizedEmail), eq(schema.users.password_reset_code, formattedCode))
+    ).limit(1);
 
     if (!user) {
       throw new BadRequestException('Invalid email or reset code.');
@@ -451,12 +469,13 @@ export class AuthService implements OnModuleInit {
 
     const passwordHash = await bcrypt.hash(newPassword, 10);
 
-    user.passwordHash = passwordHash;
-    user.failed_login_attempts = 0;
-    user.lockout_until = undefined;
-    user.password_reset_code = undefined;
-    user.password_reset_expires = undefined;
-    await user.save();
+    await this.db.update(schema.users).set({
+      passwordHash,
+      failed_login_attempts: 0,
+      lockout_until: null,
+      password_reset_code: null,
+      password_reset_expires: null,
+    }).where(eq(schema.users.id, user.id));
 
     return { message: 'Password has been reset successfully.' };
   }
@@ -488,27 +507,34 @@ export class AuthService implements OnModuleInit {
     }
 
     const normalizedEmail = googleUser.email.toLowerCase();
-    let user = await this.userModel.findOne({ email: normalizedEmail }).exec();
+    let [user] = await this.db.select().from(schema.users).where(eq(schema.users.email, normalizedEmail)).limit(1);
 
     if (!user) {
       const dummyPassword = await bcrypt.hash(uuidv4(), 10);
 
-      user = await this.userModel.create({
+      const [newUser] = await this.db.insert(schema.users).values({
+        id: uuidv4(),
         fullName: googleUser.name,
         email: normalizedEmail,
         passwordHash: dummyPassword,
-        profile_photo_url: googleUser.picture,
+        profile_photo_url: googleUser.picture || null,
         role: 'student',
         account_status: 'active',
-      });
+      }).returning();
+      user = newUser;
     } else {
+      let updateData: any = {};
       if (user.account_status === 'pending_verification') {
+        updateData.account_status = 'active';
         user.account_status = 'active';
       }
       if (googleUser.picture && !user.profile_photo_url) {
+        updateData.profile_photo_url = googleUser.picture;
         user.profile_photo_url = googleUser.picture;
       }
-      await user.save();
+      if (Object.keys(updateData).length > 0) {
+        await this.db.update(schema.users).set(updateData).where(eq(schema.users.id, user.id));
+      }
     }
 
     return this.completeLogin(user, ipAddress);
@@ -521,7 +547,7 @@ export class AuthService implements OnModuleInit {
 
     const formattedKey = cbtKey.trim().toUpperCase();
     const hash = createHash('sha256').update(formattedKey).digest('hex');
-    const user = await this.userModel.findOne({ cbt_key_hash: hash }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.cbt_key_hash, hash)).limit(1);
     if (!user) {
       throw new UnauthorizedException('Invalid CBT Key.');
     }
@@ -536,7 +562,7 @@ export class AuthService implements OnModuleInit {
   }
 
   async getProfile(userId: string) {
-    const user = await this.userModel.findOne({ userId }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
     if (!user) {
       throw new NotFoundException('User not found.');
     }
@@ -544,12 +570,16 @@ export class AuthService implements OnModuleInit {
     if (!user.cbt_key) {
       const plainCbtKey = generateCbtKey();
       const hash = createHash('sha256').update(plainCbtKey).digest('hex');
-      user.cbt_key = plainCbtKey;
-      user.cbt_key_hash = hash;
-      await user.save();
+      
+      await this.db.update(schema.users).set({
+        cbt_key: plainCbtKey,
+        cbt_key_hash: hash,
+      }).where(eq(schema.users.id, user.id));
+      
+      Object.assign(user, { cbt_key: plainCbtKey, cbt_key_hash: hash });
     }
 
-    const userObj = user.toObject() as any;
+    const userObj: any = { ...user };
     delete userObj.passwordHash;
     delete userObj.mfa_secret;
     delete userObj.verification_code;
@@ -559,17 +589,19 @@ export class AuthService implements OnModuleInit {
   }
 
   async updateProfile(userId: string, payload: { fullName?: string; phone?: string; exam_subject_combination?: string[] }) {
-    const user = await this.userModel.findOne({ userId }).exec();
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
     if (!user) {
       throw new NotFoundException('User not found.');
     }
 
+    let updateData: any = {};
+
     if (payload.fullName !== undefined) {
-      user.fullName = payload.fullName;
+      updateData.fullName = payload.fullName;
     }
 
     if (payload.phone !== undefined) {
-      user.phone = payload.phone;
+      updateData.phone = payload.phone;
     }
     if (payload.exam_subject_combination !== undefined) {
       const subjects = payload.exam_subject_combination.map(s => s.toLowerCase());
@@ -591,12 +623,15 @@ export class AuthService implements OnModuleInit {
           }
         }
       }
-      user.exam_subject_combination = subjects;
+      updateData.exam_subject_combination = subjects;
     }
 
-    await user.save();
+    if (Object.keys(updateData).length > 0) {
+      await this.db.update(schema.users).set(updateData).where(eq(schema.users.id, user.id));
+      Object.assign(user, updateData);
+    }
 
-    const userObj = user.toObject() as any;
+    const userObj: any = { ...user };
     delete userObj.passwordHash;
     delete userObj.mfa_secret;
     delete userObj.verification_code;

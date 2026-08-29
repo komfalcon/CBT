@@ -1,9 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectModel } from '@nestjs/mongoose';
 import { Client as ElasticsearchClient } from '@elastic/elasticsearch';
-import { Model } from 'mongoose';
-import { Question, QuestionDocument } from '../schemas/question.schema';
+import { DRIZZLE } from '../../db/database.module';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import * as schema from '../../db/schema';
+import { Question } from '../schemas/question.schema';
 
 const INDEX_NAME = 'jamb_questions';
 
@@ -15,7 +16,7 @@ export class SearchService {
 
   constructor(
     private readonly configService: ConfigService,
-    @InjectModel(Question.name) private readonly questionModel: Model<QuestionDocument>,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
   ) {
     const node = this.configService.get<string>('ELASTICSEARCH_URL');
     if (node) {
@@ -170,9 +171,9 @@ export class SearchService {
   }
 
   async reindexAll(): Promise<{ indexed: number }> {
-    const questions = await this.questionModel.find().lean().exec();
+    const questions = await this.db.select().from(schema.questions);
     const mapped = questions.map((question) => ({
-      questionId: question.questionId,
+      questionId: question.id,
       question_text: question.question_text,
       subject: question.subject,
       topic: question.topic,

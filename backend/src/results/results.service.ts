@@ -1,23 +1,35 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { ExamResult, ExamResultDocument } from './schemas/result.schema';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { DRIZZLE } from '../../db/database.module';
+import * as schema from '../../db/schema';
+import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { eq, and, desc } from 'drizzle-orm';
 
 @Injectable()
 export class ResultsService {
   constructor(
-    @InjectModel(ExamResult.name) private readonly resultModel: Model<ExamResultDocument>,
+    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
   ) {}
 
-  async listResults(userId: string): Promise<ExamResultDocument[]> {
-    return this.resultModel
-      .find({ userId })
-      .sort({ completedAt: -1 })
-      .exec();
+  async listResults(userId: string) {
+    return this.db
+      .select()
+      .from(schema.exam_results)
+      .where(eq(schema.exam_results.userId, userId))
+      .orderBy(desc(schema.exam_results.completedAt));
   }
 
-  async getResult(resultId: string, userId: string): Promise<ExamResultDocument> {
-    const result = await this.resultModel.findOne({ resultId, userId }).exec();
+  async getResult(resultId: string, userId: string) {
+    const [result] = await this.db
+      .select()
+      .from(schema.exam_results)
+      .where(
+        and(
+          eq(schema.exam_results.id, resultId),
+          eq(schema.exam_results.userId, userId),
+        ),
+      )
+      .limit(1);
+
     if (!result) {
       throw new NotFoundException('Exam result not found.');
     }
@@ -25,14 +37,21 @@ export class ResultsService {
   }
 
   async getTopicStats(userId: string) {
-    const results = await this.resultModel.find({ userId }).exec();
+    const results = await this.db
+      .select()
+      .from(schema.exam_results)
+      .where(eq(schema.exam_results.userId, userId));
+      
     const stats: Record<string, { total: number; correct: number; incorrect: number; unanswered: number; subject: string }> = {};
 
     for (const res of results) {
-      for (const q of res.questionsSnapshot) {
+      const questionsSnapshot: any[] = res.questionsSnapshot as any[] || [];
+      const answers: Record<string, string> = res.answers as Record<string, string> || {};
+      
+      for (const q of questionsSnapshot) {
         if (!q.topic || !q.subject) continue;
         
-        const qId = q.questionId;
+        const qId = q.questionId || q.id;
         const topic = q.topic;
         const subject = q.subject;
         const key = `${subject}:::${topic}`;
@@ -43,7 +62,8 @@ export class ResultsService {
         
         stats[key].total++;
         
-        const answer = res.answers.get(qId);
+        // Drizzle schema parses JSON field into object, unlike mongoose Map
+        const answer = answers[qId];
         if (!answer) {
           stats[key].unanswered++;
         } else if (answer.toUpperCase() === q.correct_option.toUpperCase()) {
