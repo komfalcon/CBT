@@ -12,7 +12,7 @@ export class AiService {
   private readonly logger = new Logger(AiService.name);
   private readonly apiUrl = 'https://seekai.cc/v1/chat/completions';
   private readonly apiKey = process.env.SEEKAI_KEY || 'sk-9EMNCX4JJAHuErB0XFu4QZkTv5TZdRv5deaDEWmxoQl1Z7iM';
-  private readonly model = 'deepseek-v4-flash';
+  private readonly model = 'deepseek-v4-pro';
 
   constructor(
     @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
@@ -275,7 +275,17 @@ When explaining concepts or answering questions:
     await this.deductCredit(user);
 
     if (session) {
-      const messagesArr = Array.isArray(session.messages) ? session.messages : [];
+      let parsedMessages = [];
+      try {
+        if (typeof session.messages === 'string') {
+          parsedMessages = JSON.parse(session.messages);
+        } else if (Array.isArray(session.messages)) {
+          parsedMessages = session.messages;
+        }
+      } catch (e) {
+        parsedMessages = [];
+      }
+      const messagesArr = parsedMessages;
       messagesArr.push({ role: 'user', content: userMessage, timestamp: new Date() });
       messagesArr.push({ role: 'assistant', content: reply, timestamp: new Date() });
       await this.db.update(schema.chat_sessions)
