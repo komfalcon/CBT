@@ -4,7 +4,7 @@ import { LibSQLDatabase } from 'drizzle-orm/libsql';
 import { eq, and, or, not, like, count, sum, desc, gte, lte, ne } from 'drizzle-orm';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
-import { generateCbtKey, encryptFieldValue } from '../users/schemas/user.schema';
+import { generateCbtKey, encryptFieldValue } from '../users/utils';
 
 @Injectable()
 export class AdminService {

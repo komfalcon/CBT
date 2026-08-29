@@ -18,7 +18,7 @@ import { authenticator } from 'otplib';
 import * as QRCode from 'qrcode';
 import { z } from 'zod';
 import { NotificationsService } from '../notifications/notifications.service';
-import { generateCbtKey } from '../users/schemas/user.schema';
+import { generateCbtKey } from '../users/utils';
 import { RegisterDto } from './dto/register.dto';
 import { JwtPayload } from './types/jwt-payload.type';
 

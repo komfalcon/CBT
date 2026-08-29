@@ -1,4 +1,4 @@
-import { UserRole } from '../../users/schemas/user.schema';
+import { UserRole } from '../../users/utils';
 
 export type JwtPayload = {
   sub: string;

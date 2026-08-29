@@ -21,7 +21,6 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { UserDocument } from '../users/schemas/user.schema';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { GoogleLoginDto } from './dto/google-login.dto';
 import { CbtKeyLoginDto } from './dto/cbt-key-login.dto';
@@ -64,7 +63,7 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
   login(
-    @Req() req: Request & { user: UserDocument },
+    @Req() req: Request & { user: any },
     @Body() _: LoginDto,
     @Ip() ipAddress?: string,
   ) {

@@ -19,7 +19,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { UserRole } from '../users/schemas/user.schema';
+import { UserRole } from '../users/utils';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { FilterQuestionsDto } from './dto/filter-questions.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';

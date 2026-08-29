@@ -4,7 +4,6 @@ import { Client as ElasticsearchClient } from '@elastic/elasticsearch';
 import { DRIZZLE } from '../../db/database.module';
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
 import * as schema from '../../db/schema';
-import { Question } from '../schemas/question.schema';
 
 const INDEX_NAME = 'jamb_questions';
 
@@ -60,7 +59,7 @@ export class SearchService {
     }
   }
 
-  async indexQuestion(question: Pick<Question, 'questionId'> & Record<string, unknown>): Promise<boolean> {
+  async indexQuestion(question: Pick<any, 'questionId'> & Record<string, unknown>): Promise<boolean> {
     if (!this.client) {
       this.logger.warn('[SEARCH] Elasticsearch unavailable, using MongoDB fallback');
       return false;
@@ -144,7 +143,7 @@ export class SearchService {
     }
   }
 
-  async bulkIndex(questions: Array<Pick<Question, 'questionId'> & Record<string, unknown>>): Promise<boolean> {
+  async bulkIndex(questions: Array<Pick<any, 'questionId'> & Record<string, unknown>>): Promise<boolean> {
     if (!this.client) {
       this.logger.warn('[SEARCH] Elasticsearch unavailable, using MongoDB fallback');
       return false;

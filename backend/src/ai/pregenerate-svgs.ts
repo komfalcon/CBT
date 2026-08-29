@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
-import { getModelToken } from '@nestjs/mongoose';
 import { AiService } from './ai.service';
-import { Logger } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Injectable, Logger, Inject } from '@nestjs/common';
+import { eq, isNull } from 'drizzle-orm';
+import { DRIZZLE } from '../db/database.module';
+import { questions } from '../db/schema';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);

@@ -9,7 +9,7 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import { NotificationsService } from "../notifications/notifications.service";
-import { UserRole } from "../users/schemas/user.schema";
+import { UserRole } from '../users/utils';
 import { CreateQuestionDto } from "./dto/create-question.dto";
 import { FilterQuestionsDto } from "./dto/filter-questions.dto";
 import { UpdateQuestionDto } from "./dto/update-question.dto";
@@ -356,7 +356,7 @@ export class QuestionsService {
     };
   }
 
-  async searchQuestions(
+  async search(
     params: {
       q: string;
       page: number;
@@ -389,7 +389,7 @@ export class QuestionsService {
 
     if (esResult) {
       const indexedOrder = new Map(
-        esResult.ids.map((id, index) => [id, index]),
+        esResult.ids.map((id: any, index: any) => [id: any, index: any]),
       );
       const data = await this.db
         .select()

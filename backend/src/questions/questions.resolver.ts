@@ -1,5 +1,5 @@
-import { Args, Field, Int, ObjectType, Query, Resolver } from '@nestjs/graphql';
-import { Question } from './schemas/question.schema';
+import { Resolver, Query, Args, ObjectType, Field, Int } from '@nestjs/graphql';
+import { questions } from '../db/schema';
 import { QuestionsService } from './questions.service';
 
 @ObjectType()

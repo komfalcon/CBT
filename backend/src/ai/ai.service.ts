@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, UnauthorizedException, BadRequestException, Logger, NotFoundException, Inject } from '@nestjs/common';
-import { DRIZZLE } from '../../db/database.module';
-import * as schema from '../../db/schema';
+import { DRIZZLE } from '../db/database.module';
+import * as schema from '../db/schema';
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
 import { eq, and, desc } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
@@ -106,7 +106,7 @@ The SVG should have a transparent background and use standard web-safe fonts and
   }
 
   private async deductCredit(user: any) {
-    user.ai_messages_remaining -= 1;
+    user.ai_messages_remaining = (user.ai_messages_remaining as number || 0) - 1;
     await this.db.update(schema.users)
       .set({ ai_messages_remaining: user.ai_messages_remaining })
       .where(eq(schema.users.id, user.id));

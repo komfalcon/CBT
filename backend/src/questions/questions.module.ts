@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import { NotificationsModule } from '../notifications/notifications.module';
-import { Question, QuestionSchema } from './schemas/question.schema';
 import { QuestionsController } from './questions.controller';
 import { QuestionsService } from './questions.service';
 import { SearchService } from './search/search.service';
@@ -15,7 +13,6 @@ import { ImportProcessor } from './import/import.processor';
   imports: [
     ConfigModule,
     NotificationsModule,
-    MongooseModule.forFeature([{ name: Question.name, schema: QuestionSchema }]),
   ],
   controllers: [QuestionsController, ImportController],
   providers: [QuestionsService, SearchService, QuestionsResolver, ImportService, ImportProcessor],
