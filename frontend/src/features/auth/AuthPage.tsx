@@ -763,8 +763,8 @@ export default function AuthPage() {
 
         {mode === 'verify-email' && (
           <form className="space-y-4 animate-fade-in" onSubmit={handleVerifyEmail}>
-            <Alert variant="info" title="Check Browser Console (F12)">
-              Copy the 6-digit verification code printed in the browser console logs and enter it below.
+            <Alert variant="info" title="Check your inbox">
+              A 6-digit verification code has been sent to your email address. Please enter it below.
             </Alert>
             <div className="space-y-1">
               <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Email Address</label>
@@ -833,8 +833,8 @@ export default function AuthPage() {
 
         {mode === 'reset-password' && (
           <form className="space-y-4 animate-fade-in" onSubmit={handleResetPassword}>
-            <Alert variant="info" title="Check Browser Console (F12)">
-              Enter the 6-digit reset code printed in the browser console logs below.
+            <Alert variant="info" title="Check your inbox">
+              A 6-digit password reset code has been sent to your email address. Please enter it below.
             </Alert>
             <div className="space-y-1">
               <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Email Address</label>
