@@ -339,7 +339,7 @@ export default function StudentDashboard() {
 
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary font-sans overflow-auto relative">
+    <div className="min-h-screen bg-bg-primary text-text-primary font-sans overflow-x-hidden relative">
       <div className="absolute top-0 right-0 w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
 
@@ -468,7 +468,7 @@ export default function StudentDashboard() {
               Use this key to sign in quickly at cafe terminals or CBT training halls without inputting your password. Keep this key secure.
             </p>
             <div className="flex items-center gap-2 rounded-xl bg-bg-primary border border-border p-3">
-              <span className="font-mono text-sm tracking-wider text-primary select-all flex-1">
+              <span className="font-mono text-sm tracking-wider text-primary select-all flex-1 break-all min-w-0">
                 {student?.cbt_key}
               </span>
               <button
