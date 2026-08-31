@@ -25,6 +25,10 @@ export class AiService {
         headers: { Authorization: `Bearer ${this.apiKey}` }
       });
       if (res.data?.data && res.data.data.length > 0) {
+        const chatModels = res.data.data.filter((m: any) => 
+          m.id.includes('gpt') || m.id.includes('claude') || m.id.includes('deepseek')
+        );
+        if (chatModels.length > 0) return chatModels[0].id;
         return res.data.data[0].id;
       }
     } catch (e) {}
@@ -66,6 +70,10 @@ export class AiService {
         } catch (retryError) {
           throw new InternalServerErrorException('Failed to generate AI response after model rotation.');
         }
+      }
+
+      if (error?.response?.status === 429 || error?.response?.data?.error?.message?.includes('1分钟内最多请求5次') || error?.response?.data?.error?.message?.includes('rate limit')) {
+        throw new InternalServerErrorException('AI Tutor is currently busy. Please wait a minute and try again (Rate Limit Exceeded).');
       }
 
       this.logger.error('Error calling AI API', error?.response?.data || error);
