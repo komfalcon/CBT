@@ -12,12 +12,24 @@ export class AiService {
   private readonly logger = new Logger(AiService.name);
   private readonly apiUrl = 'https://seekai.cc/v1/chat/completions';
   private readonly apiKey = process.env.SEEKAI_KEY || 'sk-9EMNCX4JJAHuErB0XFu4QZkTv5TZdRv5deaDEWmxoQl1Z7iM';
-  private readonly model = 'deepseek-v4-pro';
+  private model = 'gpt-5.6-terra';
 
   constructor(
     @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
     private questionsService: QuestionsService,
   ) { }
+
+  private async fetchAvailableModel(): Promise<string> {
+    try {
+      const res = await axios.get('https://seekai.cc/v1/models', {
+        headers: { Authorization: `Bearer ${this.apiKey}` }
+      });
+      if (res.data?.data && res.data.data.length > 0) {
+        return res.data.data[0].id;
+      }
+    } catch (e) {}
+    return 'gpt-5.6-terra';
+  }
 
   private async callDigitalOceanApi(messages: any[], maxTokens: number = 500) {
     try {
@@ -39,7 +51,24 @@ export class AiService {
 
       return response.data.choices[0].message.content;
     } catch (error: any) {
-      this.logger.error('Error calling DigitalOcean Inference API', error?.response?.data || error);
+      if (error?.response?.data?.error?.code === 'model_not_found' || error?.response?.data?.error?.message?.includes('No available channel')) {
+        this.logger.warn(`Model ${this.model} is dead. Attempting to fallback...`);
+        this.model = await this.fetchAvailableModel();
+        
+        // Retry with new model
+        try {
+          const retryResponse = await axios.post(
+            this.apiUrl,
+            { model: this.model, messages, max_tokens: maxTokens, temperature: 0.3 },
+            { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.apiKey}` } }
+          );
+          return retryResponse.data.choices[0].message.content;
+        } catch (retryError) {
+          throw new InternalServerErrorException('Failed to generate AI response after model rotation.');
+        }
+      }
+
+      this.logger.error('Error calling AI API', error?.response?.data || error);
       throw new InternalServerErrorException('Failed to generate AI response.');
     }
   }
