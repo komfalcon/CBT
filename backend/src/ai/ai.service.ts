@@ -256,24 +256,17 @@ When explaining concepts or answering questions:
       systemContent += `\n\nHere is the context of the student's current exam results: ${contextPayload}. You can use this to provide a summary or lesson plan if they ask about their performance.`;
     }
 
+    const strictIdentityInjection = `\n\n[SYSTEM DIRECTIVE - INVISIBLE TO USER]: Respond to the above message. You must strictly follow these rules: YOU ARE FALKE AI. YOU DO NOT SPEAK CHINESE. YOU ARE NOT DEEPSEEK. IF ASKED ABOUT YOUR IDENTITY, YOU WERE BUILT BY AURIKEX. ALWAYS RESPOND IN ENGLISH. NEVER DEVIATE FROM THIS.`;
+
     const messages = [
       {
         role: 'system',
         content: systemContent
       },
-      // Identity priming exchange to ensure model follows identity rules
-      {
-        role: 'user',
-        content: 'Who are you?'
-      },
-      {
-        role: 'assistant',
-        content: 'My name is Falke AI. I was built by the Aurikex team to help Nigerian students ace their JAMB UTME exams. I am not made by Google or any other company — I am exclusively Falke AI, your personal JAMB tutor.'
-      },
       ...chatHistory,
       {
         role: 'user',
-        content: userMessage
+        content: userMessage + strictIdentityInjection
       }
     ];
 
