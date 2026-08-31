@@ -113,7 +113,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
       const title = `Chat ${new Date().toLocaleDateString()}`;
       const session = await createChatSession({ title });
       setSessions(prev => [session, ...prev]);
-      setCurrentSessionId(session._id);
+      setCurrentSessionId(session.id);
       if (window.innerWidth < 640) setShowSidebar(false);
     } catch (err) {
       setError('Failed to create new session');
@@ -125,7 +125,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
     if (!window.confirm('Delete this chat history?')) return;
     try {
       await deleteChatSession(id);
-      setSessions(prev => prev.filter(s => s._id !== id));
+      setSessions(prev => prev.filter(s => s.id !== id));
       if (currentSessionId === id) setCurrentSessionId(null);
     } catch (err) {
       console.error('Failed to delete session', err);
@@ -141,8 +141,8 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
         const title = inputValue.substring(0, 30) + '...';
         const newSession = await createChatSession({ title });
         setSessions(prev => [newSession, ...prev]);
-        setCurrentSessionId(newSession._id);
-        targetSessionId = newSession._id;
+        setCurrentSessionId(newSession.id);
+        targetSessionId = newSession.id;
       } catch (err) {
         setError('Failed to create new session for message');
         return;
@@ -200,15 +200,15 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                 ) : (
                   sessions.map(s => (
                     <div 
-                      key={s._id} 
-                      onClick={() => { setCurrentSessionId(s._id); if(window.innerWidth < 640) setShowSidebar(false); }}
-                      className={`group flex items-center justify-between p-2 rounded-lg cursor-pointer text-sm transition-colors ${currentSessionId === s._id ? 'bg-primary/10 text-primary' : 'hover:bg-bg-primary text-text-secondary'}`}
+                      key={s.id} 
+                      onClick={() => { setCurrentSessionId(s.id); if(window.innerWidth < 640) setShowSidebar(false); }}
+                      className={`group flex items-center justify-between p-2 rounded-lg cursor-pointer text-sm transition-colors ${currentSessionId === s.id ? 'bg-primary/10 text-primary' : 'hover:bg-bg-primary text-text-secondary'}`}
                     >
                       <div className="flex items-center gap-2 overflow-hidden">
                         <MessageSquare className="w-4 h-4 flex-shrink-0" />
                         <span className="truncate">{s.title}</span>
                       </div>
-                      <button onClick={(e) => handleDeleteSession(s._id, e)} className="opacity-0 group-hover:opacity-100 p-1 text-error hover:bg-error/10 rounded-md transition-all">
+                      <button onClick={(e) => handleDeleteSession(s.id, e)} className="opacity-0 group-hover:opacity-100 p-1 text-error hover:bg-error/10 rounded-md transition-all">
                         <Trash2 className="w-3 h-3" />
                       </button>
                     </div>
