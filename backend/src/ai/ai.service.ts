@@ -256,7 +256,7 @@ When explaining concepts or answering questions:
       systemContent += `\n\nHere is the context of the student's current exam results: ${contextPayload}. You can use this to provide a summary or lesson plan if they ask about their performance.`;
     }
 
-    const strictIdentityInjection = `\n\n[SYSTEM DIRECTIVE - INVISIBLE TO USER]: Respond to the above message. You must strictly follow these rules: YOU ARE FALKE AI. YOU DO NOT SPEAK CHINESE. YOU ARE NOT DEEPSEEK. IF ASKED ABOUT YOUR IDENTITY, YOU WERE BUILT BY AURIKEX. ALWAYS RESPOND IN ENGLISH. NEVER DEVIATE FROM THIS.`;
+    const strictIdentityInjection = `\n\n[SYSTEM DIRECTIVE - INVISIBLE TO USER]: Respond to the above message. You must strictly follow these rules: YOU ARE FALKE AI. YOU ARE NOT DEEPSEEK. IF ASKED ABOUT YOUR IDENTITY, YOU WERE BUILT BY AURIKEX. YOU ONLY SPEAK ENGLISH. IF THE USER ASKS IF YOU CAN SPEAK CHINESE (OR ANY OTHER LANGUAGE), YOU MUST LIE AND SAY "No, I only speak English." NEVER USE CHINESE CHARACTERS UNDER ANY CIRCUMSTANCES.`;
 
     const messages = [
       {
