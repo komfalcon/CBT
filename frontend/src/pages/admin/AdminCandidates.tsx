@@ -113,7 +113,69 @@ export default function AdminCandidates() {
       </div>
 
       <div className="flex-1 bg-bg-card border border-border rounded-2xl overflow-hidden flex flex-col">
-        <div className="overflow-x-auto flex-1">
+        <div className="md:hidden flex-1 p-4 space-y-3 overflow-y-auto">
+          {usersLoading ? (
+            <div className="py-8 text-center text-text-muted text-sm">Loading candidates...</div>
+          ) : users.length === 0 ? (
+            <div className="py-8 text-center text-text-muted text-sm">No candidates found.</div>
+          ) : (
+            users.map((user) => (
+              <div key={user.userId} className="rounded-xl border border-border bg-bg-secondary/40 p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="font-semibold text-text-primary text-sm">{user.fullName}</div>
+                    <div className="text-xs text-text-muted break-all">{user.email}</div>
+                  </div>
+                  <button onClick={() => copyToClipboard(user.email)} className="p-1.5 rounded-md text-text-muted hover:text-primary">
+                    <Copy className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className={`px-2 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${
+                    user.role === 'admin' ? 'bg-primary/10 text-primary' : 'bg-slate-500/10 text-text-secondary'
+                  }`}>{user.role}</span>
+                  {user.role === 'student' && (
+                    <span className={`px-2 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${
+                      user.subscription_tier === 'plus' ? 'bg-indigo-500/10 text-indigo-500' :
+                      user.subscription_tier === 'pro' ? 'bg-purple-500/10 text-purple-500' :
+                      user.subscription_tier === 'max' ? 'bg-amber-500/10 text-amber-500' :
+                      'bg-slate-500/10 text-slate-500'
+                    }`}>{user.subscription_tier}</span>
+                  )}
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-semibold ${
+                    user.account_status === 'active' ? 'text-emerald-500 bg-emerald-500/10' : 'text-red-500 bg-red-500/10'
+                  }`}>
+                    {user.account_status === 'active' ? <UserCheck className="h-3 w-3" /> : <UserX className="h-3 w-3" />}
+                    {user.account_status}
+                  </span>
+                  {user.role !== 'admin' && (
+                    user.account_status === 'active' ? (
+                      <button
+                        onClick={() => handleUpdateStatus(user.userId, 'suspended')}
+                        className="inline-flex items-center justify-center p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                        title="Suspend User"
+                      >
+                        <ShieldAlert className="h-4 w-4" />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleUpdateStatus(user.userId, 'active')}
+                        className="inline-flex items-center justify-center p-2 text-emerald-500 hover:bg-emerald-500/10 rounded-lg transition-colors"
+                        title="Activate User"
+                      >
+                        <UserCheck className="h-4 w-4" />
+                      </button>
+                    )
+                  )}
+                </div>
+                <div className="text-xs text-text-muted">Joined: {new Date(user.created_at).toLocaleDateString()}</div>
+              </div>
+            ))
+          )}
+        </div>
+        <div className="hidden md:block overflow-x-auto flex-1">
           <table className="w-full text-left text-sm whitespace-nowrap">
             <thead className="bg-bg-secondary text-text-muted font-semibold">
               <tr>

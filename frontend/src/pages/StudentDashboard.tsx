@@ -24,6 +24,7 @@ import {
   Sparkles,
   Brain,
   X,
+  Menu,
 } from 'lucide-react';
 import { AiChatWidget } from '../features/ai/AiChatWidget';
 import { Button, Card, Modal, Alert, Badge, SecuritySettings } from '../components';
@@ -101,6 +102,7 @@ export default function StudentDashboard() {
   const [isProcessingPayment, setIsProcessingPayment] = useState<boolean>(false);
   const [paymentError, setPaymentError] = useState<string>('');
   const [paymentSuccess, setPaymentSuccess] = useState<string>('');
+  const [mobileActionsOpen, setMobileActionsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -354,7 +356,7 @@ export default function StudentDashboard() {
             </span>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-4 overflow-x-auto no-scrollbar pb-1">
+          <div className="hidden md:flex items-center gap-2 md:gap-4">
             <ThemeToggle />
             <Button
               onClick={() => navigate('/exam-hub')}
@@ -392,6 +394,36 @@ export default function StudentDashboard() {
               <LogOut className="h-4 w-4 md:mr-2" />
               <span className="hidden md:inline">Logout</span>
             </Button>
+          </div>
+          <div className="relative md:hidden">
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <button
+                type="button"
+                className="rounded-lg border border-border bg-bg-secondary p-2 text-text-secondary hover:text-text-primary"
+                onClick={() => setMobileActionsOpen((prev) => !prev)}
+                aria-label="Toggle quick actions"
+                aria-expanded={mobileActionsOpen}
+              >
+                {mobileActionsOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              </button>
+            </div>
+            {mobileActionsOpen && (
+              <div className="absolute right-0 mt-2 w-52 rounded-xl border border-border bg-bg-card p-2 shadow-xl z-50">
+                <button onClick={() => { setMobileActionsOpen(false); navigate('/exam-hub'); }} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs text-text-secondary hover:bg-bg-secondary hover:text-text-primary">
+                  <Target className="h-4 w-4" /> Exam Hub
+                </button>
+                <button onClick={() => { setMobileActionsOpen(false); navigate('/leaderboard'); }} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs text-text-secondary hover:bg-bg-secondary hover:text-text-primary">
+                  <Award className="h-4 w-4 text-yellow-500" /> Leaderboard
+                </button>
+                <button onClick={() => { setMobileActionsOpen(false); handleGoToLibrary(); }} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs text-text-secondary hover:bg-bg-secondary hover:text-text-primary">
+                  <BookOpen className="h-4 w-4" /> E-Library
+                </button>
+                <button onClick={() => { setMobileActionsOpen(false); handleLogout(); }} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs text-text-secondary hover:bg-bg-secondary hover:text-text-primary">
+                  <LogOut className="h-4 w-4" /> Logout
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </header>

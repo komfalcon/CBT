@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -40,6 +40,7 @@ const loopSteps: Array<{ number: string; title: string; text: string; Icon: Luci
 
 export default function ExamArenaLanding() {
   const orbitDots = useMemo(() => Array.from({ length: 22 }, (_, index) => index), []);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#07111f] text-slate-100 selection:bg-cyan-300 selection:text-[#07111f]">
@@ -64,9 +65,27 @@ export default function ExamArenaLanding() {
           <div className="flex items-center gap-3">
             <Link to="/auth?mode=login" className="hidden text-xs font-bold text-slate-300 transition hover:text-white sm:block">Sign in</Link>
             <Link to="/auth?mode=register" className="rounded-xl bg-cyan-300 px-4 py-2.5 text-xs font-black text-[#07111f] shadow-[0_0_28px_rgba(103,232,249,.22)] transition hover:bg-cyan-200">Enter Arena</Link>
-            <Menu className="h-5 w-5 text-slate-500 md:hidden" />
+            <button
+              type="button"
+              className="rounded-lg p-1 text-slate-400 transition hover:bg-white/5 hover:text-white md:hidden"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              <Menu className="h-5 w-5" />
+            </button>
           </div>
         </div>
+        {mobileMenuOpen && (
+          <div className="border-t border-white/10 bg-[#07111f]/95 px-5 py-4 md:hidden">
+            <nav className="flex flex-col gap-2 text-sm text-slate-300">
+              <a href="#system" className="rounded-lg px-2 py-2 transition hover:bg-white/5 hover:text-white" onClick={() => setMobileMenuOpen(false)}>How it works</a>
+              <a href="#missions" className="rounded-lg px-2 py-2 transition hover:bg-white/5 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Training modes</a>
+              <a href="#arena" className="rounded-lg px-2 py-2 transition hover:bg-white/5 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Arena</a>
+              <Link to="/auth?mode=login" className="rounded-lg px-2 py-2 transition hover:bg-white/5 hover:text-white" onClick={() => setMobileMenuOpen(false)}>Sign in</Link>
+            </nav>
+          </div>
+        )}
       </header>
 
       <main className="relative z-10">

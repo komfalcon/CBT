@@ -42,7 +42,7 @@ export default {
         mono: ['JetBrains Mono', 'monospace'],
       },
       fontSize: {
-        xs: '10px',
+        xs: '11px',
         sm: '12px',
         base: '14px',
         lg: '16px',
