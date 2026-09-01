@@ -76,6 +76,10 @@ export class AiService {
         throw new InternalServerErrorException('AI Tutor is currently busy. Please wait a minute and try again (Rate Limit Exceeded).');
       }
 
+      if (error?.response?.data?.error?.code === 'insufficient_user_quota' || error?.response?.data?.error?.message?.includes('额度不足')) {
+        throw new InternalServerErrorException('Your AI API key has run out of funds. Your current balance is negative ($-1.01). Please top up your SeekAI account or update the SEEKAI_KEY in your Render environment variables.');
+      }
+
       this.logger.error('Error calling AI API', error?.response?.data || error);
       throw new InternalServerErrorException('Failed to generate AI response.');
     }
