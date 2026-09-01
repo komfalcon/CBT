@@ -220,7 +220,7 @@ export default function ResultReview() {
           <div className="rounded-2xl border border-primary/20 bg-bg-secondary/20 p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-blue-500/5 pointer-events-none" />
             <Award className="h-10 w-10 text-primary mb-3" />
-            <div className="text-[10px] uppercase font-bold text-primary-hover tracking-wider">Aggregate Grade</div>
+            <div className="text-xs uppercase font-bold text-primary-hover tracking-wider">Aggregate Grade</div>
             <div className="mt-2 text-5xl font-black text-text-primary">
               {result.type === 'mock' ? (
                 <>
@@ -253,18 +253,18 @@ export default function ResultReview() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <div className="text-[10px] uppercase font-semibold text-text-muted">Duration Taken</div>
+                  <div className="text-xs uppercase font-semibold text-text-muted">Duration Taken</div>
                   <div className="text-xl font-extrabold text-text-primary mt-0.5">{durationFormatted}</div>
                 </div>
                 <div>
-                  <div className="text-[10px] uppercase font-semibold text-text-muted">Average Pace</div>
+                  <div className="text-xs uppercase font-semibold text-text-muted">Average Pace</div>
                   <div className="text-xl font-extrabold text-text-primary mt-0.5">
                     {Math.round(result.timeSpentSeconds / result.questionsSnapshot.length)}s/q
                   </div>
                 </div>
               </div>
             </div>
-            <div className="mt-6 text-[10px] text-text-muted leading-normal">
+            <div className="mt-6 text-xs text-text-muted leading-normal">
               Managing exam time effectively is key. Aim for an average pace of 40 seconds per question in JAMB UTME.
             </div>
           </div>
@@ -281,24 +281,24 @@ export default function ResultReview() {
                   <div className="text-xs font-bold text-emerald-450">
                     {result.subjectScores.reduce((acc, val) => acc + val.correctCount, 0)}
                   </div>
-                  <div className="text-[8px] text-text-muted uppercase mt-0.5">Correct</div>
+                  <div className="text-xs text-text-muted uppercase mt-0.5">Correct</div>
                 </div>
                 <div className="rounded-lg bg-rose-500/5 border border-rose-500/10 p-2">
                   <div className="text-xs font-bold text-rose-450">
                     {result.subjectScores.reduce((acc, val) => acc + val.incorrectCount, 0)}
                   </div>
-                  <div className="text-[8px] text-text-muted uppercase mt-0.5">Wrong</div>
+                  <div className="text-xs text-text-muted uppercase mt-0.5">Wrong</div>
                 </div>
                 <div className="rounded-lg bg-bg-secondary border border-border p-2">
                   <div className="text-xs font-bold text-text-secondary">
                     {result.subjectScores.reduce((acc, val) => acc + val.unansweredCount, 0)}
                   </div>
-                  <div className="text-[8px] text-text-muted uppercase mt-0.5">Skipped</div>
+                  <div className="text-xs text-text-muted uppercase mt-0.5">Skipped</div>
                 </div>
               </div>
             </div>
             <div>
-              <div className="flex justify-between items-center text-[10px] text-text-secondary mb-1">
+              <div className="flex justify-between items-center text-xs text-text-secondary mb-1">
                 <span>Accuracy Rate</span>
                 <span>{accuracyRate}%</span>
               </div>
@@ -323,13 +323,13 @@ export default function ResultReview() {
               >
                 <div>
                   <div className="text-sm font-bold text-text-primary">{SUBJECT_LABELS[scoreCard.subject] || scoreCard.subject}</div>
-                  <span className="text-[10px] text-text-muted mt-1 block">
+                  <span className="text-xs text-text-muted mt-1 block">
                     {scoreCard.correctCount} correct • {scoreCard.incorrectCount} wrong • {scoreCard.unansweredCount} skipped
                   </span>
                 </div>
                 <div className="text-right">
                   <span className="text-xl font-black text-primary">{scoreCard.score}</span>
-                  <span className="text-[10px] text-text-muted block">/ 100</span>
+                  <span className="text-xs text-text-muted block">/ 100</span>
                 </div>
               </div>
             ))}
@@ -339,10 +339,10 @@ export default function ResultReview() {
         <section className="relative overflow-hidden rounded-3xl border border-cyan-300/20 bg-[#0c1a2c] p-6 text-white shadow-2xl shadow-cyan-950/20">
           <div className="pointer-events-none absolute -right-14 -top-16 h-52 w-52 rounded-full border border-cyan-200/10" />
           <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-            <div><div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[.2em] text-cyan-300"><Target className="h-3.5 w-3.5" /> Review Vault</div><h2 className="mt-2 text-2xl font-black tracking-tight">Your score is evidence, not a verdict.</h2><p className="mt-2 max-w-2xl text-xs leading-6 text-slate-400">We found {reviewSignals.wrong} wrong answers and {reviewSignals.skipped} skipped items. Repair the pattern, then return under pressure.</p></div>
+            <div><div className="flex items-center gap-2 text-xs font-black uppercase tracking-[.2em] text-cyan-300"><Target className="h-3.5 w-3.5" /> Review Vault</div><h2 className="mt-2 text-2xl font-black tracking-tight">Your score is evidence, not a verdict.</h2><p className="mt-2 max-w-2xl text-xs leading-6 text-slate-400">We found {reviewSignals.wrong} wrong answers and {reviewSignals.skipped} skipped items. Repair the pattern, then return under pressure.</p></div>
             <button type="button" onClick={() => navigate('/mock-setup')} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-cyan-300 px-4 py-3 text-xs font-black text-[#07111f] transition hover:bg-cyan-200"><Target className="h-4 w-4" /> Build a repair mission <ChevronRight className="h-4 w-4" /></button>
           </div>
-          <div className="relative z-10 mt-6 grid gap-3 sm:grid-cols-3"><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-[10px] font-black uppercase tracking-[.16em] text-slate-500">Concept review</div><div className="mt-2 text-sm font-bold text-white">{reviewSignals.wrong} items to revisit</div></div><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-[10px] font-black uppercase tracking-[.16em] text-slate-500">Timing signal</div><div className="mt-2 text-sm font-bold text-white">{Math.round(result.timeSpentSeconds / result.questionsSnapshot.length)}s per question</div></div><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-[10px] font-black uppercase tracking-[.16em] text-slate-500">First focus</div><div className="mt-2 text-sm font-bold text-white">{reviewSignals.focusSubject}</div></div></div>
+          <div className="relative z-10 mt-6 grid gap-3 sm:grid-cols-3"><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-xs font-black uppercase tracking-[.16em] text-slate-500">Concept review</div><div className="mt-2 text-sm font-bold text-white">{reviewSignals.wrong} items to revisit</div></div><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-xs font-black uppercase tracking-[.16em] text-slate-500">Timing signal</div><div className="mt-2 text-sm font-bold text-white">{Math.round(result.timeSpentSeconds / result.questionsSnapshot.length)}s per question</div></div><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-xs font-black uppercase tracking-[.16em] text-slate-500">First focus</div><div className="mt-2 text-sm font-bold text-white">{reviewSignals.focusSubject}</div></div></div>
         </section>
 
         {/* Filters Controls block */}
@@ -399,7 +399,7 @@ export default function ResultReview() {
                   }`}
                 >
                   {/* Status Tag Badge */}
-                  <div className="flex justify-between items-center text-[10px] font-bold tracking-wider uppercase mb-4">
+                  <div className="flex justify-between items-center text-xs font-bold tracking-wider uppercase mb-4">
                     <span className="text-primary">
                       {SUBJECT_LABELS[q.subject] || q.subject} • {q.topic}
                     </span>
@@ -434,7 +434,7 @@ export default function ResultReview() {
                     <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 p-3">
                       <div className="flex-1 min-w-[12rem]">
                         <div className="text-xs font-bold text-text-primary">Mistake category: concept review</div>
-                        <div className="text-[11px] text-text-secondary mt-1">Read the concept before attempting a targeted repair.</div>
+                        <div className="text-xs text-text-secondary mt-1">Read the concept before attempting a targeted repair.</div>
                       </div>
                       <button
                         type="button"

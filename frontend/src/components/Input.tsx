@@ -17,7 +17,7 @@ export const Input: React.FC<InputProps> = ({
       {label && (
         <label
           htmlFor={id}
-          className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary"
+          className="block text-xs font-bold uppercase tracking-wider text-text-secondary"
         >
           {label}
         </label>
@@ -29,7 +29,7 @@ export const Input: React.FC<InputProps> = ({
         } ${className}`}
         {...props}
       />
-      {error && <span className="text-[10px] font-semibold text-error block">{error}</span>}
+      {error && <span className="text-xs font-semibold text-error block">{error}</span>}
     </div>
   );
 };

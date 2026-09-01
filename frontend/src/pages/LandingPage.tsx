@@ -1,38 +1,34 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  BookOpen, Award, Zap, Shield, ArrowRight, UserCheck, Layers,
-  BarChart3, Brain, Clock, MessageSquare, Check, X, Star,
-  ChevronDown, Globe, Sparkles, Target, TrendingUp, Users,
-  Instagram, Twitter, Linkedin, Youtube, Mail, Phone,
-  CreditCard, Play, Monitor, Menu,
+  AlignLeft, ArrowRight, Award, BarChart3, BookOpen, Brain, BriefcaseBusiness, Calculator,
+  Check, ChevronDown, Clock, CreditCard, Dna, FlaskConical, Globe, Handshake,
+  Instagram, Landmark, Layers, Linkedin, Mail, Map, Menu, MessageSquare, Monitor,
+  NotebookTabs, Phone, Play, Plus, ScrollText, Shield, Sparkles, Sprout, Star,
+  Target, TrendingUp, Twitter, UserCheck, Users, X, Youtube, Zap,
 } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
 
-/* ─────────────────────────────────────────────
-   Intersection Observer hook for scroll reveals
-   ───────────────────────────────────────────── */
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+    const element = ref.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true);
+      },
       { threshold },
     );
-    obs.observe(el);
-    return () => obs.disconnect();
+    observer.observe(element);
+    return () => observer.disconnect();
   }, [threshold]);
 
   return { ref, visible };
 }
 
-/* ─────────────────────────
-   Animated counter component
-   ───────────────────────── */
 function AnimatedCounter({ target, suffix = '', prefix = '' }: { target: number; suffix?: string; prefix?: string }) {
   const [count, setCount] = useState(0);
   const { ref, visible } = useInView();
@@ -40,12 +36,16 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }: { target: number;
   useEffect(() => {
     if (!visible) return;
     let start = 0;
-    const duration = 2000;
+    const duration = 1600;
     const increment = target / (duration / 16);
     const timer = setInterval(() => {
       start += increment;
-      if (start >= target) { setCount(target); clearInterval(timer); }
-      else setCount(Math.floor(start));
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
     }, 16);
     return () => clearInterval(timer);
   }, [visible, target]);
@@ -53,33 +53,180 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }: { target: number;
   return <span ref={ref}>{prefix}{count.toLocaleString()}{suffix}</span>;
 }
 
+function BrandMark({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 text-sm font-bold text-white shadow-[0_10px_24px_rgba(74,91,255,0.28)]">
+        <span className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.22),transparent_55%)]" />
+        <span className="relative tracking-[-0.06em]">CBT</span>
+      </div>
+      {!compact && (
+        <div className="flex flex-col">
+          <span className="font-display text-[15px] font-semibold leading-tight tracking-[-0.02em] text-white">JAMB UTME Prep</span>
+          <span className="mt-1 text-xs font-medium uppercase leading-none tracking-[0.18em] text-blue-300">by Aurikex</span>
+        </div>
+      )}
+    </div>
+  );
+}
 
-/* ──────────────────────
-   Subject data (all 17)
-   ────────────────────── */
+function ExamInterfaceVisual() {
+  const questionNumbers = Array.from({ length: 12 }, (_, index) => index + 1);
+  return (
+    <div className="relative mx-auto w-full max-w-[620px]">
+      <div className="absolute -inset-10 rounded-[40px] bg-[radial-gradient(circle_at_50%_50%,rgba(77,91,255,0.3),transparent_65%)] blur-3xl" />
+      <div className="relative rounded-[28px] border border-white/10 bg-[#11172a] p-2 shadow-[0_32px_90px_rgba(0,0,0,0.48)]">
+        <div className="overflow-hidden rounded-[21px] border border-white/[0.08] bg-[#f8faff]">
+          <div className="flex items-center justify-between bg-[#17213b] px-5 py-3 text-white">
+            <div className="flex items-center gap-3">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-blue-400 to-violet-400 text-xs font-bold">CBT</div>
+              <div>
+                <p className="text-xs font-semibold tracking-wide text-white">JAMB UTME Mock Exam</p>
+                <p className="text-[12px] text-blue-200/70">Use of English · Question 12 of 60</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2">
+              <Clock className="h-3.5 w-3.5 text-blue-300" />
+              <span className="font-mono text-xs font-semibold tracking-wide">01:42:18</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-[1fr_154px] gap-0">
+            <div className="p-6 sm:p-7">
+              <div className="mb-5 flex items-center justify-between">
+                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">Comprehension</span>
+                <span className="text-xs font-medium text-slate-400">1 mark</span>
+              </div>
+              <h3 className="max-w-[360px] text-[17px] font-semibold leading-[1.45] tracking-[-0.02em] text-slate-900">
+                Choose the option that best completes the sentence below.
+              </h3>
+              <p className="mt-5 max-w-[370px] text-[14px] leading-7 text-slate-500">
+                The principal commended the students for their ______ approach to the science project.
+              </p>
+              <div className="mt-6 space-y-2.5">
+                {['methodical', 'methodic', 'methodically', 'methodism'].map((option, index) => (
+                  <div key={option} className={`flex items-center gap-3 rounded-xl border px-3.5 py-3 text-[14px] ${index === 0 ? 'border-blue-300 bg-blue-50 text-blue-800' : 'border-slate-200 bg-white text-slate-600'}`}>
+                    <span className={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold ${index === 0 ? 'border-blue-500 bg-blue-500 text-white' : 'border-slate-300 text-slate-400'}`}>
+                      {String.fromCharCode(65 + index)}
+                    </span>
+                    {option}
+                    {index === 0 && <Check className="ml-auto h-4 w-4 text-blue-600" />}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-7 flex items-center justify-between border-t border-slate-200 pt-5">
+                <button className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-500">Previous</button>
+                <button className="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-[0_8px_20px_rgba(37,99,235,0.25)]">Next question <span className="ml-1">→</span></button>
+              </div>
+            </div>
+            <div className="border-l border-slate-200 bg-slate-50 p-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-700">Questions</span>
+                <span className="text-[12px] text-slate-400">12/60</span>
+              </div>
+              <div className="mt-4 grid grid-cols-4 gap-2">
+                {questionNumbers.map((number) => (
+                  <div key={number} className={`flex h-7 items-center justify-center rounded-md text-[12px] font-semibold ${number === 12 ? 'bg-blue-600 text-white' : number < 10 ? 'bg-emerald-100 text-emerald-700' : 'border border-slate-200 bg-white text-slate-400'}`}>
+                    {number}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 space-y-2 border-t border-slate-200 pt-4 text-[12px] text-slate-500">
+                <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Answered</div>
+                <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-blue-600" /> Current</div>
+                <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-slate-300" /> Unanswered</div>
+              </div>
+              <div className="mt-8 rounded-xl border border-blue-100 bg-blue-50 p-3">
+                <div className="flex items-center gap-2 text-xs font-semibold text-blue-800"><Shield className="h-3.5 w-3.5" /> Exam integrity</div>
+                <p className="mt-1.5 text-[12px] leading-5 text-blue-700/70">Your progress is saved automatically.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute -right-5 top-10 hidden rounded-2xl border border-white/10 bg-[#19223a]/90 px-3.5 py-3 shadow-xl backdrop-blur md:block">
+        <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-emerald-400" /><span className="text-xs font-semibold text-emerald-200">Live exam mode</span></div>
+      </div>
+    </div>
+  );
+}
+
+function AssistantPanel() {
+  return (
+    <div className="relative mx-auto w-full max-w-[540px]">
+      <div className="absolute -inset-12 rounded-full bg-[radial-gradient(circle,rgba(119,86,255,0.22),transparent_65%)] blur-3xl" />
+      <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-[#11172a] p-2 shadow-[0_30px_80px_rgba(0,0,0,0.38)]">
+        <div className="rounded-[19px] border border-white/[0.07] bg-[#171e34] p-5">
+          <div className="flex items-center justify-between border-b border-white/[0.07] pb-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 text-white"><Brain className="h-4 w-4" /></div>
+              <div><p className="text-[14px] font-semibold text-white">Study assistant</p><p className="mt-0.5 text-xs text-slate-400">Curriculum-aligned guidance</p></div>
+            </div>
+            <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-[12px] font-semibold text-emerald-300">Online</span>
+          </div>
+          <div className="space-y-4 py-5">
+            <div className="ml-auto max-w-[82%] rounded-2xl rounded-tr-md bg-blue-600/90 px-4 py-3 text-[14px] leading-6 text-white">Can you explain why the answer is methodical?</div>
+            <div className="max-w-[88%] rounded-2xl rounded-tl-md border border-white/[0.07] bg-white/[0.045] px-4 py-3 text-[14px] leading-6 text-slate-300">
+              <p>“Methodical” describes an approach that is careful, organized, and systematic. It is the adjective that correctly modifies <span className="font-semibold text-blue-200">approach</span>.</p>
+              <div className="mt-3 flex items-center gap-2 text-xs font-medium text-violet-300"><Sparkles className="h-3.5 w-3.5" /> JAMB Use of English · Vocabulary</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-[#0f1527] px-3 py-2.5"><span className="flex-1 text-[14px] text-slate-500">Ask a follow-up question...</span><div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500 text-white"><ArrowIcon /></div></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ArrowIcon() {
+  return <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+
+function AnalyticsPanel() {
+  return (
+    <div className="relative mx-auto w-full max-w-[560px]">
+      <div className="absolute -inset-10 rounded-full bg-[radial-gradient(circle,rgba(25,191,154,0.16),transparent_65%)] blur-3xl" />
+      <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-[#11172a] p-2 shadow-[0_30px_80px_rgba(0,0,0,0.38)]">
+        <div className="rounded-[19px] border border-white/[0.07] bg-[#171e34] p-5">
+          <div className="flex items-center justify-between"><div><p className="text-[14px] font-semibold text-white">Performance overview</p><p className="mt-1 text-xs text-slate-400">Your last 30 days of practice</p></div><div className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-slate-300">Last 30 days <ChevronDown className="ml-1 inline h-3 w-3" /></div></div>
+          <div className="mt-5 grid grid-cols-3 gap-3">
+            {[['Average score', '78%', '+12.4%', 'text-emerald-300'], ['Questions solved', '486', '+86 this week', 'text-blue-300'], ['Time accuracy', '92%', '+4.2%', 'text-violet-300']].map(([label, value, change, color]) => (
+              <div key={label} className="rounded-xl border border-white/[0.07] bg-white/[0.035] p-3"><p className="text-xs text-slate-400">{label}</p><p className="mt-2 text-xl font-semibold tracking-tight text-white">{value}</p><p className={`mt-1 text-[12px] font-medium ${color}`}>{change}</p></div>
+            ))}
+          </div>
+          <div className="mt-4 rounded-xl border border-white/[0.07] bg-white/[0.025] p-4">
+            <div className="flex items-center justify-between"><p className="text-xs font-semibold text-slate-300">Score trend</p><p className="text-[12px] text-emerald-300">+18 points</p></div>
+            <svg viewBox="0 0 500 155" className="mt-4 h-auto w-full" role="img" aria-label="Rising score trend chart"><defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#4f6cff" stopOpacity=".32" /><stop offset="1" stopColor="#4f6cff" stopOpacity="0" /></linearGradient></defs><path d="M0 130H500M0 90H500M0 50H500" stroke="rgba(148,163,184,.12)" strokeDasharray="4 6" /><path d="M0 125 C55 120, 70 112, 110 115 S170 105, 210 93 S255 102, 295 78 S350 90, 390 65 S440 63, 500 22 V155 H0Z" fill="url(#area)" /><path d="M0 125 C55 120, 70 112, 110 115 S170 105, 210 93 S255 102, 295 78 S350 90, 390 65 S440 63, 500 22" fill="none" stroke="#6b7dff" strokeLinecap="round" strokeWidth="3" /><circle cx="500" cy="22" r="5" fill="#9aa6ff" stroke="#171e34" strokeWidth="3" /></svg>
+            <div className="mt-1 flex justify-between text-[12px] text-slate-500"><span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Week 4</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const ALL_SUBJECTS = [
-  { name: 'Use of English', topics: 'Comprehension, Lexis, Oral Forms', icon: '📝', compulsory: true },
-  { name: 'Mathematics', topics: 'Algebra, Calculus, Statistics', icon: '📐', compulsory: false },
-  { name: 'Physics', topics: 'Mechanics, Waves, Electromagnetism', icon: '⚡', compulsory: false },
-  { name: 'Chemistry', topics: 'Organic, Inorganic, Physical', icon: '🧪', compulsory: false },
-  { name: 'Biology', topics: 'Anatomy, Ecology, Genetics', icon: '🧬', compulsory: false },
-  { name: 'Geography', topics: 'Physical, Human, Map Reading', icon: '🌍', compulsory: false },
-  { name: 'Economics', topics: 'Micro, Macro, Development', icon: '📊', compulsory: false },
-  { name: 'Government', topics: 'Constitution, Political Theory', icon: '🏛️', compulsory: false },
-  { name: 'Literature in English', topics: 'Drama, Prose, Poetry', icon: '📖', compulsory: false },
-  { name: 'Commerce', topics: 'Trade, Banking, Insurance', icon: '💼', compulsory: false },
-  { name: 'Accounting', topics: 'Bookkeeping, Financial Statements', icon: '📒', compulsory: false },
-  { name: 'Agricultural Science', topics: 'Agronomy, Livestock, Forestry', icon: '🌾', compulsory: false },
-  { name: 'Civic Education', topics: 'Values, Rights, Governance', icon: '🤝', compulsory: false },
-  { name: 'Christian Religious Knowledge', topics: 'Themes, Epistles, Gospels', icon: '✝️', compulsory: false },
-  { name: 'Islamic Religious Knowledge', topics: 'Quran, Hadith, Fiqh', icon: '☪️', compulsory: false },
-  { name: 'History', topics: 'Pre-Colonial, Colonial, Modern', icon: '📜', compulsory: false },
-  { name: 'Further Mathematics', topics: 'Mechanics, Pure Maths, Stats', icon: '∑', compulsory: false },
+  { name: 'Use of English', topics: 'Comprehension, Lexis, Oral Forms', icon: AlignLeft, compulsory: true },
+  { name: 'Mathematics', topics: 'Algebra, Calculus, Statistics', icon: Calculator },
+  { name: 'Physics', topics: 'Mechanics, Waves, Electromagnetism', icon: Zap },
+  { name: 'Chemistry', topics: 'Organic, Inorganic, Physical', icon: FlaskConical },
+  { name: 'Biology', topics: 'Anatomy, Ecology, Genetics', icon: Dna },
+  { name: 'Geography', topics: 'Physical, Human, Map Reading', icon: Map },
+  { name: 'Economics', topics: 'Micro, Macro, Development', icon: BarChart3 },
+  { name: 'Government', topics: 'Constitution, Political Theory', icon: Landmark },
+  { name: 'Literature in English', topics: 'Drama, Prose, Poetry', icon: BookOpen },
+  { name: 'Commerce', topics: 'Trade, Banking, Insurance', icon: BriefcaseBusiness },
+  { name: 'Accounting', topics: 'Bookkeeping, Financial Statements', icon: NotebookTabs },
+  { name: 'Agricultural Science', topics: 'Agronomy, Livestock, Forestry', icon: Sprout },
+  { name: 'Civic Education', topics: 'Values, Rights, Governance', icon: Handshake },
+  { name: 'Christian Religious Knowledge', topics: 'Themes, Epistles, Gospels', icon: Plus },
+  { name: 'Islamic Religious Knowledge', topics: 'Quran, Hadith, Fiqh', icon: Globe },
+  { name: 'History', topics: 'Pre-Colonial, Colonial, Modern', icon: ScrollText },
+  { name: 'Further Mathematics', topics: 'Mechanics, Pure Maths, Stats', icon: Target },
 ];
 
-/* ──────────
-   MAIN PAGE
-   ────────── */
+const sectionLabel = 'text-xs font-semibold uppercase tracking-[0.18em]';
+const sectionHeading = 'font-display text-4xl font-semibold leading-[1.08] tracking-[-0.055em] text-white sm:text-5xl';
+
 export default function LandingPage() {
   const heroRef = useInView(0.1);
   const featuresRef = useInView();
@@ -88,790 +235,101 @@ export default function LandingPage() {
   const statsRef = useInView();
   const howItWorksRef = useInView();
   const aiRef = useInView();
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="landing-page min-h-screen bg-bg-primary text-text-primary font-sans selection:bg-primary selection:text-text-primary dark:text-white overflow-hidden relative">
-
-
-      {/* ══════════════════════════════════════
-          HEADER
-          ══════════════════════════════════════ */}
-      <header className="border-b border-border/60 bg-bg-primary/70 backdrop-blur-xl sticky top-0 z-50">
-        <div className="mx-auto max-w-7xl px-6 h-[72px] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-display font-bold text-[13px] text-white shadow-lg shadow-indigo-500/30 tracking-tight">
-              CBT
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[17px] font-display font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-300 bg-clip-text text-transparent leading-tight">
-                JAMB UTME Prep
-              </span>
-              <span className="text-[10px] text-primary font-medium tracking-widest uppercase leading-tight">
-                by Aurikex
-              </span>
-            </div>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-text-secondary">
-            <a href="#features" className="hover:text-text-primary dark:text-white transition-colors duration-200">Features</a>
-            <a href="#subjects" className="hover:text-text-primary dark:text-white transition-colors duration-200">Subjects</a>
-            <a href="#how-it-works" className="hover:text-text-primary dark:text-white transition-colors duration-200">How It Works</a>
-            <a href="#pricing" className="hover:text-text-primary dark:text-white transition-colors duration-200">Pricing</a>
+    <div className="landing-page min-h-screen overflow-hidden bg-bg-primary font-body text-text-primary selection:bg-blue-500/30 selection:text-white">
+      <header className="sticky top-0 z-50 border-b border-white/[0.07] bg-[#0a1020]/85 backdrop-blur-xl">
+        <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-6">
+          <Link to="/" aria-label="JAMB UTME Prep home"><BrandMark /></Link>
+          <nav className="hidden items-center gap-8 text-[14px] font-medium text-slate-400 md:flex">
+            <a href="#features" className="transition-colors hover:text-white">Features</a>
+            <a href="#subjects" className="transition-colors hover:text-white">Subjects</a>
+            <a href="#how-it-works" className="transition-colors hover:text-white">How it works</a>
+            <a href="#pricing" className="transition-colors hover:text-white">Pricing</a>
           </nav>
-
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <Link to="/auth?mode=login" className="hidden sm:inline-flex text-[13px] font-medium text-text-secondary hover:text-text-primary dark:text-white transition-colors">
-              Sign In
-            </Link>
-            <Link
-              to="/auth?mode=register"
-              className="rounded-xl bg-gradient-to-r from-primary to-blue-600 px-5 py-2.5 text-[13px] font-bold text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:from-primary-hover hover:to-blue-500 transition-all active:scale-95"
-            >
-              Get Started
-            </Link>
-            {/* Mobile menu toggle */}
-            <button
-              className="md:hidden p-2 text-text-secondary hover:text-text-primary dark:text-white"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+            <Link to="/auth?mode=login" className="hidden text-[14px] font-medium text-slate-300 transition-colors hover:text-white sm:inline-flex">Sign in</Link>
+            <Link to="/auth?mode=register" className="inline-flex items-center rounded-lg bg-white px-4 py-2.5 text-[14px] font-semibold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.08)] transition hover:bg-blue-50 active:scale-[0.98]">Get started</Link>
+            <button className="p-2 text-slate-300 md:hidden" aria-label="Toggle navigation" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>{mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
           </div>
         </div>
-
-        {/* Mobile nav */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-border/60 bg-bg-primary/95 backdrop-blur-xl px-6 py-4 space-y-3 animate-slide-up">
-            <a href="#features" className="block text-[13px] text-text-secondary hover:text-text-primary dark:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Features</a>
-            <a href="#subjects" className="block text-[13px] text-text-secondary hover:text-text-primary dark:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Subjects</a>
-            <a href="#how-it-works" className="block text-[13px] text-text-secondary hover:text-text-primary dark:text-white py-2" onClick={() => setMobileMenuOpen(false)}>How It Works</a>
-            <a href="#pricing" className="block text-[13px] text-text-secondary hover:text-text-primary dark:text-white py-2" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-            <Link to="/auth?mode=login" className="block text-[13px] text-text-secondary hover:text-text-primary dark:text-white py-2">Sign In</Link>
-          </div>
-        )}
+        {mobileMenuOpen && <div className="border-t border-white/[0.07] bg-[#0a1020] px-6 py-4 md:hidden"><div className="grid gap-3 text-sm text-slate-300"><a href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a><a href="#subjects" onClick={() => setMobileMenuOpen(false)}>Subjects</a><a href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>How it works</a><a href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a><Link to="/auth?mode=login">Sign in</Link></div></div>}
       </header>
 
-      {/* ══════════════════════════════════════
-          HERO SECTION
-          ══════════════════════════════════════ */}
-      <section className="relative pt-16 pb-12 md:pt-28 md:pb-20 overflow-hidden">
-
-
-        <div ref={heroRef.ref} className="relative z-10 mx-auto max-w-7xl px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Left — copy */}
-            <div className={`space-y-8 ${heroRef.visible ? 'animate-slide-in-left' : 'opacity-0'}`}>
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-[11px] font-semibold text-primary-hover backdrop-blur-md">
-                <Sparkles className="h-3 w-3 text-primary animate-pulse" />
-                Nigeria's #1 UTME Exam Simulator
+      <main>
+        <section className="relative border-b border-white/[0.06] px-6 pb-24 pt-20 lg:pb-28 lg:pt-28">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_72%_28%,rgba(72,83,255,0.2),transparent_33%),radial-gradient(circle_at_20%_0%,rgba(21,132,255,0.10),transparent_30%)]" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+          <div ref={heroRef.ref} className="relative z-10 mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[0.9fr_1.1fr]">
+            <div className={`${heroRef.visible ? 'animate-slide-in-left' : 'opacity-0'}`}>
+              <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/[0.08] px-3.5 py-2 text-xs font-semibold text-blue-200"><Sparkles className="h-3.5 w-3.5 text-blue-300" /> Nigeria's focused UTME practice platform</div>
+              <h1 className="max-w-2xl font-display text-5xl font-semibold leading-[0.98] tracking-[-0.07em] text-white sm:text-6xl lg:text-[72px]">Practice with purpose. <span className="bg-gradient-to-r from-blue-300 via-indigo-300 to-violet-300 bg-clip-text text-transparent">Score with confidence.</span></h1>
+              <p className="mt-7 max-w-xl text-[17px] leading-8 text-slate-400">A realistic JAMB CBT experience with curated questions, clear explanations, and progress insights that help you make every study session count.</p>
+              <div className="mt-9 flex flex-wrap items-center gap-3">
+                <Link to="/auth?mode=register" className="group inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3.5 text-[15px] font-semibold text-white shadow-[0_14px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:bg-blue-500 active:scale-[0.98]">Start practicing <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" /></Link>
+                <a href="#how-it-works" className="inline-flex items-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.035] px-5 py-3.5 text-[15px] font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.07]"><Play className="h-4 w-4 text-blue-300" /> See how it works</a>
               </div>
-
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[68px] font-display font-extrabold tracking-tight leading-[1.05]">
-                <span className="bg-gradient-to-b from-slate-800 via-slate-600 to-slate-500 dark:from-white dark:via-slate-100 dark:to-slate-500 bg-clip-text text-transparent">
-                  Ace Your JAMB
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-primary-hover via-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                  UTME Exam
-                </span>
-              </h1>
-
-              <p className="max-w-lg text-[15px] sm:text-[17px] text-text-secondary leading-relaxed">
-                Experience the exact JAMB exam environment. Practice with <strong className="text-text-primary dark:text-slate-200">1,000,000+ curated questions</strong> across all 17 subjects, get AI-powered explanations, and track your progress to exam day.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  to="/auth?mode=register"
-                  className="group flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-primary to-blue-600 px-8 py-4 text-[15px] font-bold text-white shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:from-primary-hover hover:to-blue-500 transition-all transform hover:-translate-y-0.5 active:scale-95"
-                >
-                  Start Practicing
-                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Link>
-                <a
-                  href="#how-it-works"
-                  className="group flex items-center justify-center gap-2 rounded-2xl border border-border/80 bg-bg-secondary/40 backdrop-blur-sm px-8 py-4 text-[15px] font-bold text-text-secondary hover:bg-slate-800/60 hover:text-text-primary dark:text-white hover:border-slate-600 transition-all transform hover:-translate-y-0.5"
-                >
-                  <Play className="h-4 w-4" />
-                  See How It Works
-                </a>
-              </div>
-
-              {/* Trust badges */}
-              <div className="flex items-center gap-6 pt-2">
-                <div className="flex items-center gap-2 text-[12px] text-text-muted">
-                  <Shield className="h-4 w-4 text-emerald-500" />
-                  <span>Secure & Private</span>
-                </div>
-                <div className="flex items-center gap-2 text-[12px] text-text-muted">
-                  <Users className="h-4 w-4 text-primary" />
-                  <span>100K+ Students</span>
-                </div>
-                <div className="flex items-center gap-2 text-[12px] text-text-muted">
-                  <Star className="h-4 w-4 text-amber-400" />
-                  <span>4.9 Rating</span>
-                </div>
-              </div>
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] text-slate-500"><span className="flex items-center gap-2"><Shield className="h-4 w-4 text-emerald-400" /> Secure & private</span><span className="flex items-center gap-2"><Users className="h-4 w-4 text-blue-300" /> 100K+ students</span><span className="flex items-center gap-2"><Star className="h-4 w-4 text-amber-300" /> 4.9 average rating</span></div>
             </div>
-
-            {/* Right — hero image with glow effects */}
-            <div className={`relative ${heroRef.visible ? 'animate-slide-in-right' : 'opacity-0'}`} style={{ animationDelay: '0.2s' }}>
-              {/* Glow behind image */}
-              <div className="absolute -inset-8 rounded-3xl bg-gradient-to-r from-primary/20 via-blue-500/10 to-transparent blur-3xl animate-glow-pulse" />
-
-              <div className="relative rounded-2xl overflow-hidden border border-border/50 shadow-2xl shadow-primary/10">
-                <img
-                  src="/images/hero-illustration.png"
-                  alt="JAMB CBT Exam Interface"
-                  className="w-full h-auto animate-float-slow"
-                />
-                {/* Floating UI elements over image */}
-                <div className="absolute top-4 right-4 rounded-xl bg-bg-secondary/80 backdrop-blur-md border border-border/50 px-3 py-2 animate-float" style={{ animationDelay: '1s' }}>
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[11px] font-semibold text-emerald-300">Live Exam Mode</span>
-                  </div>
-                </div>
-                <div className="absolute bottom-4 left-4 rounded-xl bg-bg-secondary/80 backdrop-blur-md border border-border/50 px-3 py-2 animate-float" style={{ animationDelay: '2s' }}>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-3 w-3 text-primary" />
-                    <span className="text-[11px] font-semibold text-text-secondary">02:00:00 Timer</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div className={`${heroRef.visible ? 'animate-slide-in-right' : 'opacity-0'}`} style={{ animationDelay: '0.15s' }}><ExamInterfaceVisual /></div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ══════════════════════════════════════
-          STATS BANNER
-          ══════════════════════════════════════ */}
-      <section className="relative z-10 border-y border-border/60 bg-bg-secondary/30 backdrop-blur-md">
-        <div ref={statsRef.ref} className="mx-auto max-w-7xl px-6 py-12">
-          <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 ${statsRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
+        <section className="border-b border-white/[0.06] bg-[#0d1426]/70 px-6 py-10">
+          <div ref={statsRef.ref} className={`mx-auto grid max-w-7xl grid-cols-2 divide-x divide-white/[0.08] md:grid-cols-4 ${statsRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
             {[
-              { value: 1000000, suffix: '+', label: 'Practice Questions', icon: <BookOpen className="h-5 w-5" /> },
-              { value: 17, suffix: '', label: 'JAMB Subjects', icon: <Layers className="h-5 w-5" /> },
-              { value: 100000, suffix: '+', label: 'Students Enrolled', icon: <Users className="h-5 w-5" /> },
-              { value: 300, suffix: '+', label: 'Avg. Score Boost', icon: <TrendingUp className="h-5 w-5" /> },
-            ].map((stat, idx) => (
-              <div key={idx} className="text-center space-y-2">
-                <div className="flex justify-center text-primary mb-2">{stat.icon}</div>
-                <div className="text-3xl sm:text-4xl font-display font-extrabold text-text-primary dark:text-white tracking-tight">
-                  <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                </div>
-                <div className="text-[12px] text-text-secondary font-medium">{stat.label}</div>
-              </div>
-            ))}
+              { value: 1000000, suffix: '+', label: 'Practice questions', icon: <BookOpen className="h-5 w-5" /> },
+              { value: 17, label: 'JAMB subjects', icon: <Layers className="h-5 w-5" /> },
+              { value: 100000, suffix: '+', label: 'Students enrolled', icon: <Users className="h-5 w-5" /> },
+              { value: 300, suffix: '+', label: 'Average score boost', icon: <TrendingUp className="h-5 w-5" /> },
+            ].map((stat) => <div key={stat.label} className="flex flex-col items-center gap-2 px-4 text-center first:border-l-0"><div className="text-blue-300">{stat.icon}</div><div className="font-display text-3xl font-semibold tracking-[-0.05em] text-white"> <AnimatedCounter target={stat.value} suffix={stat.suffix} /></div><div className="text-[13px] font-medium text-slate-500">{stat.label}</div></div>)}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ══════════════════════════════════════
-          FEATURES GRID
-          ══════════════════════════════════════ */}
-      <section id="features" className="relative py-24 z-10">
-        <div className="mx-auto max-w-7xl px-6">
-          <div ref={featuresRef.ref} className={`text-center max-w-3xl mx-auto mb-20 space-y-4 ${featuresRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-[11px] font-semibold text-primary mb-4">
-              POWERFUL FEATURES
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
-              Engineered for Score Excellence
-            </h2>
-            <p className="text-[15px] text-text-secondary max-w-2xl mx-auto">
-              Every tool you need to dominate the JAMB UTME, built by engineers who understand the Nigerian education system.
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                icon: <Monitor className="h-6 w-6" />,
-                title: 'Realistic Exam Simulator',
-                description: 'A pixel-perfect replica of the JAMB CBT interface. Same layout, same timer, same navigation — zero surprises on exam day.',
-                color: 'indigo',
-                delay: '0s',
-              },
-              {
-                icon: <BookOpen className="h-6 w-6" />,
-                title: 'Step-by-Step Explanations',
-                description: 'Every question includes detailed solutions with LaTeX-formatted math, diagrams, and reasoning pathways. Learn, don\'t just memorize.',
-                color: 'violet',
-                delay: '0.1s',
-              },
-              {
-                icon: <Layers className="h-6 w-6" />,
-                title: 'Smart Duplicate Detection',
-                description: 'Our TF-IDF vector engine ensures every mock exam is unique. No repeated questions — ever. Fresh challenges on every attempt.',
-                color: 'purple',
-                delay: '0.2s',
-              },
-              {
-                icon: <BarChart3 className="h-6 w-6" />,
-                title: 'Performance Analytics',
-                description: 'Detailed breakdowns by subject, topic, and difficulty. See your weak areas, track your improvement, and predict your real score.',
-                color: 'emerald',
-                delay: '0.3s',
-              },
-              {
-                icon: <Shield className="h-6 w-6" />,
-                title: 'CBT Key Access',
-                description: 'Get a unique CBT key for your account. Walk into any cyber cafe, enter your key, and continue right where you left off.',
-                color: 'amber',
-                delay: '0.4s',
-              },
-              {
-                icon: <Brain className="h-6 w-6" />,
-                title: 'AI Study Assistant',
-                description: 'Stuck on a concept? Chat with our AI tutor that explains topics in simple language. Available 24/7 on the Max plan.',
-                color: 'pink',
-                delay: '0.5s',
-              },
-            ].map((feature, idx) => {
-              const colorMap: Record<string, string> = {
-                indigo: 'border-primary/30 hover:border-primary/60 bg-primary/5 text-primary',
-                violet: 'border-primary/30 hover:border-primary/60 bg-primary/5 text-blue-300',
-                purple: 'border-blue-500/30 hover:border-blue-500/60 bg-blue-500/5 text-blue-300',
-                emerald: 'border-emerald-500/30 hover:border-emerald-500/60 bg-emerald-500/5 text-emerald-400',
-                amber: 'border-amber-500/30 hover:border-amber-500/60 bg-amber-500/5 text-amber-400',
-                pink: 'border-pink-500/30 hover:border-pink-500/60 bg-pink-500/5 text-pink-400',
-              };
-              const colors = colorMap[feature.color] || colorMap.indigo;
-              const [borderColor, hoverBorder, bgColor, textColor] = colors.split(' ');
-
-              return (
-                <div
-                  key={idx}
-                  className={`group rounded-2xl border ${borderColor} ${hoverBorder} bg-bg-secondary/20 p-8 transition-all duration-500 hover:bg-bg-secondary/40 hover:-translate-y-1 hover:shadow-xl`}
-                  style={{ animationDelay: feature.delay }}
-                >
-                  <div className={`h-12 w-12 rounded-xl ${bgColor} border ${borderColor} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${textColor}`}>
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-[18px] font-display font-bold text-text-primary dark:text-white mb-3">{feature.title}</h3>
-                  <p className="text-[13px] text-text-secondary leading-relaxed">{feature.description}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════
-          AI ASSISTANT SHOWCASE
-          ══════════════════════════════════════ */}
-      <section className="relative py-24 z-10 border-y border-border/40">
-        <div className="mx-auto max-w-7xl px-6">
-          <div ref={aiRef.ref} className={`grid md:grid-cols-2 gap-16 items-center ${aiRef.visible ? '' : 'opacity-0'}`}>
-            {/* Left — image */}
-            <div className={`relative ${aiRef.visible ? 'animate-slide-in-left' : ''}`}>
-              <div className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-violet-600/20 to-pink-600/20 blur-2xl animate-glow-pulse" />
-              <div className="relative rounded-2xl overflow-hidden border border-border/40 shadow-2xl">
-                <img
-                  src="/images/ai-chat-feature.png"
-                  alt="AI Study Assistant"
-                  className="w-full h-auto"
-                />
-              </div>
-            </div>
-
-            {/* Right — copy */}
-            <div className={`space-y-6 ${aiRef.visible ? 'animate-slide-in-right' : ''}`} style={{ animationDelay: '0.2s' }}>
-              <div className="inline-flex items-center gap-2 rounded-full border border-pink-500/20 bg-pink-500/5 px-4 py-1.5 text-[11px] font-semibold text-pink-400">
-                <Brain className="h-3 w-3" />
-                MAX PLAN EXCLUSIVE
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-text-primary dark:text-white">
-                Your Personal <span className="bg-gradient-to-r from-blue-300 to-pink-400 bg-clip-text text-transparent">AI Study Partner</span>
-              </h2>
-              <p className="text-[15px] text-text-secondary leading-relaxed">
-                Don't just practice — <strong className="text-text-primary dark:text-slate-200">understand</strong>. Our AI tutor engages you in real conversations about JAMB topics. Ask it anything — from photosynthesis to quadratic equations — and get clear, curriculum-aligned explanations instantly.
-              </p>
-              <ul className="space-y-4">
-                {[
-                  'Conversational tutoring in simple English / Pidgin',
-                  'Explains any JAMB topic across all 17 subjects',
-                  'Identifies your weak areas and creates targeted drills',
-                  'Available 24/7 — study at your own pace',
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-[14px] text-text-secondary">
-                    <div className="mt-0.5 h-5 w-5 rounded-full bg-gradient-to-r from-primary to-pink-500 flex items-center justify-center flex-shrink-0">
-                      <Check className="h-3 w-3 text-text-primary dark:text-white" />
-                    </div>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to="/auth?mode=register"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-pink-600 px-6 py-3 text-[14px] font-bold text-text-primary dark:text-white shadow-lg shadow-violet-600/20 hover:shadow-violet-600/40 transition-all active:scale-95"
-              >
-                Try AI Assistant <MessageSquare className="h-4 w-4" />
-              </Link>
+        <section id="features" className="px-6 py-24 lg:py-28">
+          <div className="mx-auto max-w-7xl">
+            <div ref={featuresRef.ref} className={`mx-auto mb-14 max-w-2xl text-center ${featuresRef.visible ? 'animate-slide-up' : 'opacity-0'}`}><div className={`${sectionLabel} text-blue-300`}>Everything you need to improve</div><h2 className={`${sectionHeading} mt-5`}>Built for the way JAMB is actually taken.</h2><p className="mt-5 text-[16px] leading-7 text-slate-400">Focused tools, realistic practice, and feedback that moves you forward — without the noise.</p></div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {[
+                { icon: <Monitor className="h-5 w-5" />, title: 'Realistic exam simulator', text: 'Practice in a faithful CBT environment with the same pace, navigation, timer, and question flow you will meet on exam day.' },
+                { icon: <BookOpen className="h-5 w-5" />, title: 'Step-by-step explanations', text: 'Understand the method behind each answer with clear explanations, diagrams, and curriculum-aligned reasoning.' },
+                { icon: <Layers className="h-5 w-5" />, title: 'Fresh practice every time', text: 'Smart question selection keeps your mocks varied, balanced, and focused on the areas that need more work.' },
+                { icon: <BarChart3 className="h-5 w-5" />, title: 'Performance analytics', text: 'See how you are doing by subject, topic, and difficulty so revision becomes specific instead of stressful.' },
+                { icon: <Shield className="h-5 w-5" />, title: 'CBT key access', text: 'Use a unique access key to resume your preparation from any trusted cyber cafe or shared device.' },
+                { icon: <Brain className="h-5 w-5" />, title: 'AI study assistant', text: 'Ask questions in simple English or Pidgin and get useful, focused support when you need another explanation.' },
+              ].map((feature) => <div key={feature.title} className="group rounded-2xl border border-white/[0.08] bg-white/[0.035] p-6 shadow-[0_18px_45px_rgba(0,0,0,0.12)] transition duration-200 hover:-translate-y-1 hover:border-blue-400/30 hover:bg-white/[0.055]"><div className="mb-6 flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/[0.09] text-blue-300 transition group-hover:bg-blue-400/[0.15]">{feature.icon}</div><h3 className="font-display text-[18px] font-semibold tracking-[-0.03em] text-white">{feature.title}</h3><p className="mt-3 text-[14px] leading-7 text-slate-400">{feature.text}</p></div>)}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ══════════════════════════════════════
-          ALL 17 SUBJECTS
-          ══════════════════════════════════════ */}
-      <section id="subjects" className="relative py-24 z-10">
-        <div className="mx-auto max-w-7xl px-6">
-          <div ref={subjectsRef.ref} className={`text-center max-w-3xl mx-auto mb-16 space-y-4 ${subjectsRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-4 py-1.5 text-[11px] font-semibold text-emerald-400 mb-4">
-              FULL JAMB SYLLABUS
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
-              All 17 JAMB Subjects Covered
-            </h2>
-            <p className="text-[15px] text-text-secondary max-w-2xl mx-auto">
-              From Use of English to Further Mathematics — every official JAMB subject with thousands of updated, curriculum-aligned questions.
-            </p>
-          </div>
+        <section className="border-y border-white/[0.06] bg-[#0d1426]/60 px-6 py-24 lg:py-28">
+          <div ref={aiRef.ref} className={`mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[1.05fr_0.95fr] ${aiRef.visible ? '' : 'opacity-0'}`}><div className={`${aiRef.visible ? 'animate-slide-in-left' : ''}`}><AssistantPanel /></div><div className={`${aiRef.visible ? 'animate-slide-in-right' : ''}`} style={{ animationDelay: '0.15s' }}><div className={`${sectionLabel} text-violet-300`}>A little extra help, right when you need it</div><h2 className={`${sectionHeading} mt-5`}>Turn “I don’t get it” into a next step.</h2><p className="mt-5 max-w-xl text-[16px] leading-8 text-slate-400">The AI study assistant is designed to help you understand difficult topics in the language and level that works for you — not to overwhelm you with more content.</p><ul className="mt-7 space-y-4">{['Conversational tutoring in simple English and Pidgin', 'Explains JAMB topics across all 17 subjects', 'Identifies weak areas and creates targeted drills', 'Available 24/7 on the Max plan'].map((item) => <li key={item} className="flex items-start gap-3 text-[14px] text-slate-300"><span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-300"><Check className="h-3.5 w-3.5" /></span>{item}</li>)}</ul><Link to="/auth?mode=register" className="mt-8 inline-flex items-center gap-2 rounded-lg border border-violet-400/30 bg-violet-400/[0.09] px-4 py-3 text-[14px] font-semibold text-violet-200 transition hover:bg-violet-400/[0.15]">Explore the assistant <MessageSquare className="h-4 w-4" /></Link></div></div>
+        </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {ALL_SUBJECTS.map((sub, idx) => (
-              <div
-                key={idx}
-                className={`group rounded-xl border bg-bg-secondary/20 p-5 hover:bg-bg-secondary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${sub.compulsory
-                  ? 'border-indigo-500/40 hover:border-primary/60 shadow-indigo-500/5'
-                  : 'border-border/60 hover:border-border'
-                  }`}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <span className="text-2xl">{sub.icon}</span>
-                  {sub.compulsory && (
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-full">
-                      Compulsory
-                    </span>
-                  )}
-                </div>
-                <div className="text-[14px] font-bold text-text-primary dark:text-white mb-1 group-hover:text-blue-200 transition-colors">{sub.name}</div>
-                <div className="text-[11px] text-text-muted leading-relaxed">{sub.topics}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        <section id="subjects" className="px-6 py-24 lg:py-28">
+          <div className="mx-auto max-w-7xl"><div ref={subjectsRef.ref} className={`mx-auto mb-14 max-w-2xl text-center ${subjectsRef.visible ? 'animate-slide-up' : 'opacity-0'}`}><div className={`${sectionLabel} text-emerald-300`}>One platform, the full syllabus</div><h2 className={`${sectionHeading} mt-5`}>All 17 JAMB subjects covered.</h2><p className="mt-5 text-[16px] leading-7 text-slate-400">From Use of English to Further Mathematics, practice with updated questions mapped to the subjects that matter.</p></div><div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">{ALL_SUBJECTS.map((subject) => { const Icon = subject.icon; return <div key={subject.name} className={`group rounded-xl border p-4 transition hover:-translate-y-0.5 hover:bg-white/[0.045] ${subject.compulsory ? 'border-blue-400/30 bg-blue-400/[0.07] hover:border-blue-300/50' : 'border-white/[0.08] bg-white/[0.025] hover:border-white/[0.16]'}`}><div className="mb-4 flex items-start justify-between"><span className={`flex h-9 w-9 items-center justify-center rounded-lg ${subject.compulsory ? 'bg-blue-400/15 text-blue-200' : 'bg-white/[0.06] text-slate-400'} transition group-hover:text-blue-200`}><Icon className="h-[18px] w-[18px]" /></span>{subject.compulsory && <span className="rounded-full bg-blue-400/15 px-2 py-1 text-xs font-semibold text-blue-200">Required</span>}</div><p className="text-[14px] font-semibold leading-5 text-white">{subject.name}</p><p className="mt-1.5 text-xs leading-5 text-slate-500">{subject.topics}</p></div>})}</div></div>
+        </section>
 
-      {/* ══════════════════════════════════════
-          HOW IT WORKS
-          ══════════════════════════════════════ */}
-      <section id="how-it-works" className="relative py-24 z-10 border-y border-border/40 bg-bg-secondary/20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div ref={howItWorksRef.ref} className={`text-center max-w-3xl mx-auto mb-20 space-y-4 ${howItWorksRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-[11px] font-semibold text-blue-300 mb-4">
-              SIMPLE STEPS
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
-              How It Works
-            </h2>
-            <p className="text-[15px] text-text-secondary">
-              From registration to your first 300+ score — it takes less than 5 minutes to get started.
-            </p>
-          </div>
+        <section id="how-it-works" className="border-y border-white/[0.06] bg-[#0d1426]/60 px-6 py-24 lg:py-28">
+          <div className="mx-auto max-w-7xl"><div ref={howItWorksRef.ref} className={`mx-auto mb-14 max-w-2xl text-center ${howItWorksRef.visible ? 'animate-slide-up' : 'opacity-0'}`}><div className={`${sectionLabel} text-blue-300`}>Simple, structured progress</div><h2 className={`${sectionHeading} mt-5`}>How it works.</h2><p className="mt-5 text-[16px] leading-7 text-slate-400">From registration to your first 300+ score, you can start with a clear plan in under five minutes.</p></div><div className="grid gap-5 md:grid-cols-4">{[{ step: '01', title: 'Create your account', text: 'Sign up with email, Google, or a CBT Key from a partner center.', icon: <UserCheck className="h-5 w-5" /> }, { step: '02', title: 'Pick your subjects', text: 'Choose your four-subject UTME combination with English included.', icon: <Target className="h-5 w-5" /> }, { step: '03', title: 'Start practicing', text: 'Take mocks or quick drills and get instant, useful feedback.', icon: <Zap className="h-5 w-5" /> }, { step: '04', title: 'Track and improve', text: 'Use your insights to fix weak spots and watch your score climb.', icon: <TrendingUp className="h-5 w-5" /> }].map((item, index) => <div key={item.step} className="relative rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5"><div className="flex items-center justify-between"><div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/[0.08] text-blue-200">{item.icon}</div><span className="font-mono text-xs font-semibold tracking-[0.16em] text-blue-300/80">{item.step}</span></div><h3 className="mt-6 font-display text-[17px] font-semibold tracking-[-0.03em] text-white">{item.title}</h3><p className="mt-2 text-[14px] leading-6 text-slate-400">{item.text}</p>{index < 3 && <div className="absolute -right-4 top-10 hidden h-px w-8 bg-gradient-to-r from-blue-400/40 to-transparent md:block" />}</div>)}</div></div>
+        </section>
 
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { step: '01', title: 'Create Account', description: 'Sign up with email, Google, or get a CBT Key from any partner center near you.', icon: <UserCheck className="h-6 w-6" /> },
-              { step: '02', title: 'Pick Your Subjects', description: 'Choose your 4-subject UTME combination (Use of English is auto-included).', icon: <Target className="h-6 w-6" /> },
-              { step: '03', title: 'Start Practicing', description: 'Take full mock exams or quick drills. Get instant scores with detailed explanations.', icon: <Zap className="h-6 w-6" /> },
-              { step: '04', title: 'Track & Improve', description: 'Monitor your progress with analytics, fix weak spots, and watch your score climb.', icon: <TrendingUp className="h-6 w-6" /> },
-            ].map((item, idx) => (
-              <div key={idx} className="relative text-center space-y-4 group">
-                {/* Connector line */}
-                {idx < 3 && (
-                  <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-px bg-gradient-to-r from-indigo-500/40 to-transparent" />
-                )}
-                <div className="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-blue-500/5 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
-                  {item.icon}
-                  <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gradient-to-r from-primary to-blue-400 flex items-center justify-center text-[10px] font-bold text-text-primary dark:text-white">
-                    {item.step}
-                  </div>
-                </div>
-                <h3 className="text-[16px] font-display font-bold text-text-primary dark:text-white">{item.title}</h3>
-                <p className="text-[12px] text-text-secondary leading-relaxed max-w-[200px] mx-auto">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        <section className="px-6 py-24 lg:py-28"><div className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[0.85fr_1.15fr]"><div><div className={`${sectionLabel} text-emerald-300`}>Make revision more specific</div><h2 className={`${sectionHeading} mt-5`}>Know exactly where you stand.</h2><p className="mt-5 max-w-xl text-[16px] leading-8 text-slate-400">See your performance by subject, topic, and difficulty after every test. The goal is not more data — it is knowing what to do next.</p><ul className="mt-7 space-y-4">{['Per-subject score breakdowns', 'Time-per-question analysis', 'Difficulty-based performance trends', 'Progress tracking over time'].map((item) => <li key={item} className="flex items-center gap-3 text-[14px] text-slate-300"><Check className="h-4 w-4 text-emerald-300" />{item}</li>)}</ul></div><AnalyticsPanel /></div></section>
 
-      {/* ══════════════════════════════════════
-          ANALYTICS PREVIEW
-          ══════════════════════════════════════ */}
-      <section className="relative py-24 z-10">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            {/* Copy */}
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-4 py-1.5 text-[11px] font-semibold text-emerald-400">
-                <BarChart3 className="h-3 w-3" />
-                PERFORMANCE INSIGHTS
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-text-primary dark:text-white">
-                Know Exactly Where <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">You Stand</span>
-              </h2>
-              <p className="text-[15px] text-text-secondary leading-relaxed">
-                Our analytics dashboard breaks down your performance by subject, topic, and difficulty level. See detailed statistics after every test — identify weak spots and focus your revision where it matters most.
-              </p>
-              <ul className="space-y-3">
-                {[
-                  'Per-subject score breakdowns',
-                  'Time-per-question analysis',
-                  'Difficulty-based performance trends',
-                  'Progress tracking over time',
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-[14px] text-text-secondary">
-                    <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <section id="pricing" className="border-t border-white/[0.06] bg-[#0d1426]/60 px-6 py-24 lg:py-28"><div className="mx-auto max-w-7xl"><div ref={pricingRef.ref} className={`mx-auto mb-14 max-w-2xl text-center ${pricingRef.visible ? 'animate-slide-up' : 'opacity-0'}`}><div className={`${sectionLabel} text-amber-300`}>Straightforward plans</div><h2 className={`${sectionHeading} mt-5`}>Choose your pace.</h2><p className="mt-5 text-[16px] leading-7 text-slate-400">Start with a plan that fits your routine. Every option is built around consistent, exam-focused practice.</p></div><div className="mx-auto grid max-w-6xl gap-4 lg:grid-cols-3">
+          {[
+            { name: 'Plus', price: '₦3,500', note: '1 test daily', icon: <Zap className="h-5 w-5" />, tone: 'blue', features: ['Full mock exam (4 subjects)', 'Detailed score reviews', 'Performance statistics', 'Step-by-step explanations', 'CBT Key access'] },
+            { name: 'Pro', price: '₦6,000', note: '2 tests daily', icon: <Award className="h-5 w-5" />, tone: 'violet', popular: true, features: ['Full mock exams (4 subjects)', 'Detailed score reviews', 'Advanced performance statistics', 'Step-by-step explanations', 'CBT Key access', 'Subject-specific drills'] },
+            { name: 'Max', price: '₦14,000', note: '5 tests daily + AI chat', icon: <Brain className="h-5 w-5" />, tone: 'pink', features: ['Full mock exams (4 subjects)', 'Detailed score reviews', 'Advanced performance statistics', 'Step-by-step explanations', 'CBT Key access', 'Subject-specific drills', 'AI conversational tutor', 'Personalized study plans'] },
+          ].map((plan) => <div key={plan.name} className={`relative flex flex-col justify-between rounded-2xl p-6 ${plan.popular ? 'border border-blue-400/50 bg-blue-500/[0.08] shadow-[0_22px_60px_rgba(52,75,210,0.18)]' : 'border border-white/[0.08] bg-white/[0.03]'}`}>{plan.popular && <span className="absolute -top-3 left-6 rounded-full bg-blue-500 px-3 py-1 text-xs font-semibold text-white shadow-[0_8px_18px_rgba(37,99,235,0.25)]">Most popular</span>}<div><div className="flex items-center gap-3"><div className={`flex h-10 w-10 items-center justify-center rounded-xl ${plan.tone === 'pink' ? 'bg-pink-400/10 text-pink-300' : plan.tone === 'violet' ? 'bg-violet-400/10 text-violet-200' : 'bg-blue-400/10 text-blue-200'}`}>{plan.icon}</div><h3 className="font-display text-[19px] font-semibold tracking-[-0.03em] text-white">{plan.name}</h3></div><div className="mt-7 flex items-end gap-2"><span className="font-display text-4xl font-semibold tracking-[-0.06em] text-white">{plan.price}</span><span className="pb-1 text-[14px] text-slate-500">/ month</span></div><p className={`mt-2 text-[14px] font-medium ${plan.tone === 'pink' ? 'text-pink-300' : plan.tone === 'violet' ? 'text-violet-300' : 'text-blue-300'}`}>{plan.note}</p><ul className="mt-7 space-y-3">{plan.features.map((feature) => <li key={feature} className="flex items-start gap-2.5 text-[14px] leading-5 text-slate-300"><Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />{feature}</li>)}</ul></div><Link to="/auth?mode=register" className={`mt-8 inline-flex w-full items-center justify-center rounded-lg px-4 py-3 text-[14px] font-semibold transition active:scale-[0.98] ${plan.popular ? 'bg-blue-600 text-white hover:bg-blue-500' : 'border border-white/[0.12] bg-white/[0.04] text-slate-200 hover:border-blue-400/30 hover:bg-blue-400/[0.08]'}`}>Get {plan.name}</Link></div>)}
+        </div><div className="mx-auto mt-5 max-w-3xl rounded-2xl border border-white/[0.08] bg-white/[0.025] p-6 text-center"><div className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500"><CreditCard className="h-4 w-4 text-slate-400" /> Pay per test</div><h3 className="mt-4 font-display text-2xl font-semibold tracking-[-0.04em] text-white">No subscription? No problem.</h3><p className="mx-auto mt-2 max-w-md text-[14px] leading-6 text-slate-400">Pay only when you practice. Buy individual tests without a monthly commitment.</p><div className="mt-5 flex justify-center gap-3"><div className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-6 py-4"><p className="font-display text-2xl font-semibold tracking-[-0.05em] text-white">₦300</p><p className="mt-1 text-xs text-slate-500">per drill test</p></div><div className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-6 py-4"><p className="font-display text-2xl font-semibold tracking-[-0.05em] text-white">₦500</p><p className="mt-1 text-xs text-slate-500">per mock exam</p></div></div></div></div></section>
 
-            {/* Dashboard image */}
-            <div className="relative">
-              <div className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-emerald-600/15 to-cyan-600/15 blur-2xl animate-glow-pulse" />
-              <div className="relative rounded-2xl overflow-hidden border border-border/40 shadow-2xl">
-                <img
-                  src="/images/stats-dashboard.png"
-                  alt="Performance Analytics Dashboard"
-                  className="w-full h-auto"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        <section className="relative px-6 py-24 lg:py-28"><div className="pointer-events-none absolute inset-x-0 top-1/2 mx-auto h-64 max-w-3xl -translate-y-1/2 rounded-full bg-blue-500/10 blur-3xl" /><div className="relative mx-auto max-w-3xl text-center"><div className={`${sectionLabel} text-blue-300`}>Ready when you are</div><h2 className="mt-5 font-display text-4xl font-semibold leading-[1.05] tracking-[-0.06em] text-white sm:text-5xl">Build the confidence to score <span className="bg-gradient-to-r from-blue-300 to-violet-300 bg-clip-text text-transparent">300+.</span></h2><p className="mx-auto mt-5 max-w-xl text-[16px] leading-7 text-slate-400">Join more than 100,000 Nigerian students using a calmer, more focused way to prepare for UTME.</p><Link to="/auth?mode=register" className="mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3.5 text-[15px] font-semibold text-slate-950 transition hover:bg-blue-50 active:scale-[0.98]">Start practicing for free <ArrowRight className="h-4 w-4" /></Link></div></section>
+      </main>
 
-      {/* ══════════════════════════════════════
-          PRICING SECTION
-          ══════════════════════════════════════ */}
-      <section id="pricing" className="relative py-24 z-10 border-t border-border/40 bg-bg-secondary/20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div ref={pricingRef.ref} className={`text-center max-w-3xl mx-auto mb-16 space-y-4 ${pricingRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-4 py-1.5 text-[11px] font-semibold text-amber-400 mb-4">
-              TRANSPARENT PRICING
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
-              Plans for Every Student
-            </h2>
-            <p className="text-[15px] text-text-secondary max-w-2xl mx-auto">
-              Choose a monthly plan or pay per test. No hidden fees, no surprises — just results.
-            </p>
-          </div>
-
-          {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
-
-            {/* ── PLUS ── */}
-            <div className="rounded-2xl border border-border/60 bg-bg-secondary/30 p-8 flex flex-col justify-between hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 group">
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                    <Zap className="h-5 w-5 text-primary" />
-                  </div>
-                  <h3 className="text-[18px] font-display font-bold text-text-primary dark:text-white">Plus</h3>
-                </div>
-
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-display font-extrabold text-text-primary dark:text-white tracking-tight">₦3,500</span>
-                  <span className="text-[13px] text-text-secondary">/ month</span>
-                </div>
-                <p className="text-[12px] text-primary font-medium mb-6">1 test daily</p>
-
-                <ul className="space-y-3.5 text-[13px] text-text-secondary">
-                  {[
-                    { text: 'Full mock exam (4 subjects)', included: true },
-                    { text: 'Detailed score reviews', included: true },
-                    { text: 'Performance statistics', included: true },
-                    { text: 'Step-by-step explanations', included: true },
-                    { text: 'CBT Key access', included: true },
-                    { text: 'AI conversational tutor', included: false },
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-2.5">
-                      {item.included ? (
-                        <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" />
-                      ) : (
-                        <X className="h-4 w-4 text-text-muted dark:text-slate-600 flex-shrink-0" />
-                      )}
-                      <span className={item.included ? '' : 'text-text-muted'}>{item.text}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <Link
-                to="/auth?mode=register"
-                className="mt-8 block w-full text-center rounded-xl border border-primary/30 bg-primary/5 py-3.5 text-[14px] font-bold text-primary-hover hover:bg-primary-hover/10 hover:border-primary/50 transition-all active:scale-95"
-              >
-                Get Plus
-              </Link>
-            </div>
-
-            {/* ── PRO (Recommended) ── */}
-            <div className="rounded-2xl border-2 border-primary/60 bg-bg-secondary/40 p-8 flex flex-col justify-between relative hover:-translate-y-2 transition-all duration-300 shadow-xl shadow-primary/10">
-              {/* Badge */}
-              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="rounded-full bg-gradient-to-r from-primary to-blue-500 px-4 py-1 text-[10px] font-bold text-text-primary dark:text-white uppercase tracking-wider shadow-lg shadow-primary/30">
-                  ⭐ Most Popular
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center gap-3 mb-6 mt-2">
-                  <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                    <Award className="h-5 w-5 text-blue-300" />
-                  </div>
-                  <h3 className="text-[18px] font-display font-bold text-text-primary dark:text-white">Pro</h3>
-                </div>
-
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-display font-extrabold text-text-primary dark:text-white tracking-tight">₦6,000</span>
-                  <span className="text-[13px] text-text-secondary">/ month</span>
-                </div>
-                <p className="text-[12px] text-blue-300 font-medium mb-6">2 tests daily</p>
-
-                <ul className="space-y-3.5 text-[13px] text-text-secondary">
-                  {[
-                    { text: 'Full mock exams (4 subjects)', included: true },
-                    { text: 'Detailed score reviews', included: true },
-                    { text: 'Advanced performance statistics', included: true },
-                    { text: 'Step-by-step explanations', included: true },
-                    { text: 'CBT Key access', included: true },
-                    { text: 'Subject-specific drills', included: true },
-                    { text: 'AI conversational tutor', included: false },
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-2.5">
-                      {item.included ? (
-                        <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" />
-                      ) : (
-                        <X className="h-4 w-4 text-text-muted dark:text-slate-600 flex-shrink-0" />
-                      )}
-                      <span className={item.included ? '' : 'text-text-muted'}>{item.text}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <Link
-                to="/auth?mode=register"
-                className="mt-8 block w-full text-center rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 py-3.5 text-[14px] font-bold text-text-primary dark:text-white shadow-lg shadow-violet-600/20 hover:from-primary hover:to-blue-500 hover:shadow-violet-600/40 transition-all active:scale-95"
-              >
-                Get Pro
-              </Link>
-            </div>
-
-            {/* ── MAX ── */}
-            <div className="rounded-2xl border border-border/60 bg-bg-secondary/30 p-8 flex flex-col justify-between hover:border-pink-500/30 transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden">
-              {/* Shimmer effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-pink-500/5 to-transparent bg-[length:200%_100%] animate-shimmer pointer-events-none" />
-
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-pink-500/20 to-blue-500/20 border border-pink-500/20 flex items-center justify-center">
-                    <Brain className="h-5 w-5 text-pink-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-[18px] font-display font-bold text-text-primary dark:text-white">Max</h3>
-                    <span className="text-[10px] text-pink-400 font-semibold uppercase tracking-wider">+ AI Tutor</span>
-                  </div>
-                </div>
-
-                <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-display font-extrabold text-text-primary dark:text-white tracking-tight">₦14,000</span>
-                  <span className="text-[13px] text-text-secondary">/ month</span>
-                </div>
-                <p className="text-[12px] text-pink-400 font-medium mb-6">5 tests daily + AI Chat</p>
-
-                <ul className="space-y-3.5 text-[13px] text-text-secondary">
-                  {[
-                    'Full mock exams (4 subjects)',
-                    'Detailed score reviews',
-                    'Advanced performance statistics',
-                    'Step-by-step explanations',
-                    'CBT Key access',
-                    'Subject-specific drills',
-                    'AI conversational tutor ✨',
-                    'Personalized study plans',
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-2.5">
-                      <Check className="h-4 w-4 text-emerald-400 flex-shrink-0" />
-                      <span className={i === 6 ? 'text-pink-300 font-semibold' : ''}>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <Link
-                to="/auth?mode=register"
-                className="relative mt-8 block w-full text-center rounded-xl bg-gradient-to-r from-pink-600 to-violet-600 py-3.5 text-[14px] font-bold text-text-primary dark:text-white shadow-lg shadow-pink-600/20 hover:from-pink-500 hover:to-blue-500 hover:shadow-pink-600/40 transition-all active:scale-95"
-              >
-                Get Max
-              </Link>
-            </div>
-          </div>
-
-          {/* Per-test pricing */}
-          <div className="max-w-2xl mx-auto">
-            <div className="rounded-2xl border border-border/40 bg-bg-secondary/20 p-8 text-center space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full bg-slate-800/50 px-4 py-1.5 text-[11px] font-semibold text-text-secondary">
-                <CreditCard className="h-3 w-3 text-text-secondary" />
-                PAY PER TEST
-              </div>
-              <h3 className="text-[22px] font-display font-bold text-text-primary dark:text-white">
-                No subscription? No problem.
-              </h3>
-              <p className="text-[14px] text-text-secondary max-w-md mx-auto">
-                Pay only when you practice. Buy individual tests without any monthly commitment.
-              </p>
-              <div className="flex justify-center gap-6 pt-2">
-                <div className="rounded-xl border border-border/60 bg-slate-800/30 px-6 py-4 text-center">
-                  <div className="text-2xl font-display font-extrabold text-text-primary dark:text-white">₦300</div>
-                  <div className="text-[11px] text-text-secondary mt-1">per drill test</div>
-                </div>
-                <div className="rounded-xl border border-border/60 bg-slate-800/30 px-6 py-4 text-center">
-                  <div className="text-2xl font-display font-extrabold text-text-primary dark:text-white">₦500</div>
-                  <div className="text-[11px] text-text-secondary mt-1">per mock exam</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════
-          CTA SECTION
-          ══════════════════════════════════════ */}
-      <section className="relative py-24 z-10">
-        <div className="mx-auto max-w-4xl px-6 text-center space-y-8">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold text-text-primary dark:text-white leading-tight">
-            Ready to Score <span className="bg-gradient-to-r from-indigo-400 to-blue-300 bg-clip-text text-transparent">300+</span> in JAMB?
-          </h2>
-          <p className="text-[16px] text-text-secondary max-w-xl mx-auto">
-            Join over 100,000 Nigerian students already using the most advanced UTME preparation platform. Your journey to university starts here.
-          </p>
-          <Link
-            to="/auth?mode=register"
-            className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-primary to-blue-600 px-10 py-5 text-[16px] font-bold text-white shadow-xl shadow-primary/30 hover:from-primary-hover hover:to-blue-500 hover:shadow-indigo-600/50 transition-all transform hover:-translate-y-1 active:scale-95"
-          >
-            Start Practicing Now — It's Free
-            <ArrowRight className="h-5 w-5" />
-          </Link>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════
-          FOOTER
-          ══════════════════════════════════════ */}
-      <footer className="relative z-10 border-t border-border/60 bg-bg-primary pt-16 pb-8">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
-
-            {/* Brand column */}
-            <div className="col-span-2 md:col-span-1 space-y-5">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-display font-bold text-[13px] text-white shadow-lg shadow-primary/20">
-                  CBT
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[15px] font-display font-bold text-text-primary dark:text-white leading-tight">JAMB UTME Prep</span>
-                  <span className="text-[10px] text-text-muted leading-tight">by Aurikex</span>
-                </div>
-              </div>
-              <p className="text-[12px] text-text-muted leading-relaxed">
-                Nigeria's most advanced Computer-Based Test simulator, built to help every student achieve their dream UTME score.
-              </p>
-              {/* Social links */}
-              <div className="flex items-center gap-3">
-                {[
-                  { icon: <Twitter className="h-4 w-4" />, href: 'https://x.com/aurikrex', label: 'Twitter / X' },
-                  { icon: <Instagram className="h-4 w-4" />, href: 'https://www.instagram.com/falcon.omotosho', label: 'Instagram' },
-                  { icon: <Linkedin className="h-4 w-4" />, href: 'https://linkedin.com/in/falcon-omotosho', label: 'LinkedIn' },
-                  { icon: <Youtube className="h-4 w-4" />, href: 'https://www.youtube.com/@aurikrex', label: 'YouTube' },
-                  { icon: <Globe className="h-4 w-4" />, href: 'https://www.tiktok.com/@aurikrexacademy', label: 'TikTok' },
-                ].map((social, i) => (
-                  <a
-                    key={i}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    className="h-9 w-9 rounded-lg border border-border bg-bg-secondary/50 flex items-center justify-center text-text-muted hover:text-text-primary dark:text-white hover:border-indigo-500/40 hover:bg-primary-hover/10 transition-all duration-200"
-                  >
-                    {social.icon}
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Product links */}
-            <div className="space-y-4">
-              <h4 className="text-[13px] font-display font-bold text-text-primary dark:text-white uppercase tracking-wider">Product</h4>
-              <ul className="space-y-3 text-[12px] text-text-muted">
-                <li><a href="#features" className="hover:text-text-primary dark:text-white transition-colors">Features</a></li>
-                <li><a href="#subjects" className="hover:text-text-primary dark:text-white transition-colors">Subjects</a></li>
-                <li><a href="#pricing" className="hover:text-text-primary dark:text-white transition-colors">Pricing</a></li>
-                <li><a href="#how-it-works" className="hover:text-text-primary dark:text-white transition-colors">How It Works</a></li>
-              </ul>
-            </div>
-
-            {/* Support links */}
-            <div className="space-y-4">
-              <h4 className="text-[13px] font-display font-bold text-text-primary dark:text-white uppercase tracking-wider">Support</h4>
-              <ul className="space-y-3 text-[12px] text-text-muted">
-                <li><Link to="/help" className="hover:text-text-primary dark:text-white transition-colors">Help Center</Link></li>
-                <li><Link to="/contact" className="hover:text-text-primary dark:text-white transition-colors">Contact Us</Link></li>
-                <li><Link to="/privacy" className="hover:text-text-primary dark:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="hover:text-text-primary dark:text-white transition-colors">Terms of Service</Link></li>
-              </ul>
-            </div>
-
-            {/* Contact info */}
-            <div className="space-y-4">
-              <h4 className="text-[13px] font-display font-bold text-text-primary dark:text-white uppercase tracking-wider">Contact</h4>
-              <ul className="space-y-3 text-[12px] text-text-muted">
-                <li className="flex items-center gap-2">
-                  <Mail className="h-3.5 w-3.5 text-text-muted dark:text-slate-600" />
-                  <a href="mailto:info@aurikex.tech" className="hover:text-text-primary dark:text-white transition-colors">info@aurikex.tech</a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Phone className="h-3.5 w-3.5 text-text-muted dark:text-slate-600" />
-                  <a href="tel:++2349113683395" className="hover:text-text-primary dark:text-white transition-colors">+234 911 368 3395</a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Globe className="h-3.5 w-3.5 text-text-muted dark:text-slate-600" />
-                  <a href="https://www.aurikex.tech" className="hover:text-text-primary dark:text-white transition-colors" target="_blank" rel="noopener noreferrer">
-                    www.aurikex.tech
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Bottom bar */}
-          <div className="border-t border-border/60 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-[11px] text-text-muted dark:text-slate-600 text-center md:text-left space-y-1">
-              <p>© {new Date().getFullYear()} JAMB CBT Prep. All rights reserved.</p>
-              <p>
-                Founded by <span className="text-text-secondary font-medium">Omotosho Korede Samuel</span> · A product of <span className="text-text-secondary font-medium">Aurikex</span>
-              </p>
-            </div>
-            <div className="flex items-center gap-6 text-[11px] text-text-muted dark:text-slate-600">
-              <Link to="/privacy" className="hover:text-text-primary dark:text-white transition-colors">Privacy</Link>
-              <Link to="/terms" className="hover:text-text-primary dark:text-white transition-colors">Terms</Link>
-              <a href="#" className="hover:text-text-primary dark:text-white transition-colors">Cookies</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <footer className="border-t border-white/[0.07] bg-[#080d19] px-6 pb-8 pt-14"><div className="mx-auto max-w-7xl"><div className="grid gap-10 md:grid-cols-[1.4fr_0.8fr_0.8fr_1fr]"><div><BrandMark /><p className="mt-5 max-w-xs text-[14px] leading-6 text-slate-500">Nigeria's focused Computer-Based Test simulator, built to help every student prepare with clarity.</p><div className="mt-5 flex items-center gap-2">{[{ icon: <Twitter className="h-4 w-4" />, href: 'https://x.com/aurikrex', label: 'Twitter / X' }, { icon: <Instagram className="h-4 w-4" />, href: 'https://www.instagram.com/falcon.omotosho', label: 'Instagram' }, { icon: <Linkedin className="h-4 w-4" />, href: 'https://linkedin.com/in/falcon-omotosho', label: 'LinkedIn' }, { icon: <Youtube className="h-4 w-4" />, href: 'https://www.youtube.com/@aurikrex', label: 'YouTube' }, { icon: <Globe className="h-4 w-4" />, href: 'https://www.tiktok.com/@aurikrexacademy', label: 'TikTok' }].map((social) => <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-slate-500 transition hover:border-blue-400/30 hover:bg-blue-400/[0.08] hover:text-blue-200">{social.icon}</a>)}</div></div><div><h4 className="text-[13px] font-semibold uppercase tracking-[0.16em] text-slate-300">Product</h4><ul className="mt-5 space-y-3 text-[14px] text-slate-500"><li><a href="#features" className="transition hover:text-white">Features</a></li><li><a href="#subjects" className="transition hover:text-white">Subjects</a></li><li><a href="#pricing" className="transition hover:text-white">Pricing</a></li><li><a href="#how-it-works" className="transition hover:text-white">How it works</a></li></ul></div><div><h4 className="text-[13px] font-semibold uppercase tracking-[0.16em] text-slate-300">Support</h4><ul className="mt-5 space-y-3 text-[14px] text-slate-500"><li><Link to="/help" className="transition hover:text-white">Help center</Link></li><li><Link to="/contact" className="transition hover:text-white">Contact us</Link></li><li><Link to="/privacy" className="transition hover:text-white">Privacy policy</Link></li><li><Link to="/terms" className="transition hover:text-white">Terms of service</Link></li></ul></div><div><h4 className="text-[13px] font-semibold uppercase tracking-[0.16em] text-slate-300">Contact</h4><ul className="mt-5 space-y-3 text-[14px] text-slate-500"><li className="flex items-center gap-2"><Mail className="h-4 w-4" /><a href="mailto:info@aurikex.tech" className="transition hover:text-white">info@aurikex.tech</a></li><li className="flex items-center gap-2"><Phone className="h-4 w-4" /><a href="tel:++2349113683395" className="transition hover:text-white">+234 911 368 3395</a></li><li className="flex items-center gap-2"><Globe className="h-4 w-4" /><a href="https://www.aurikex.tech" target="_blank" rel="noopener noreferrer" className="transition hover:text-white">www.aurikex.tech</a></li></ul></div></div><div className="mt-12 flex flex-col gap-3 border-t border-white/[0.07] pt-6 text-xs text-slate-600 md:flex-row md:items-center md:justify-between"><div><p>© {new Date().getFullYear()} JAMB CBT Prep. All rights reserved.</p><p className="mt-1">Founded by <span className="text-slate-400">Omotosho Korede Samuel</span> · A product of <span className="text-slate-400">Aurikex</span></p></div><div className="flex items-center gap-5"><Link to="/privacy" className="transition hover:text-white">Privacy</Link><Link to="/terms" className="transition hover:text-white">Terms</Link><a href="#" className="transition hover:text-white">Cookies</a></div></div></div></footer>
     </div>
   );
 }

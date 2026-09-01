@@ -71,7 +71,7 @@ export default function AdminBilling() {
                   </button>
                 </div>
                 <div className="text-sm font-bold text-text-primary">₦{log.amount.toLocaleString()}</div>
-                <span className={`inline-flex px-2 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${
+                <span className={`inline-flex px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
                   log.planCode === 'PLN_plus' ? 'bg-indigo-500/10 text-indigo-500' :
                   log.planCode === 'PLN_pro' ? 'bg-purple-500/10 text-purple-500' :
                   log.planCode === 'PLN_max' ? 'bg-amber-500/10 text-amber-500' :
@@ -121,7 +121,7 @@ export default function AdminBilling() {
                       ₦{log.amount.toLocaleString()}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                      <span className={`px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
                         log.planCode === 'PLN_plus' ? 'bg-indigo-500/10 text-indigo-500' :
                         log.planCode === 'PLN_pro' ? 'bg-purple-500/10 text-purple-500' :
                         log.planCode === 'PLN_max' ? 'bg-amber-500/10 text-amber-500' :

@@ -131,11 +131,11 @@ export default function AdminCandidates() {
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <span className={`px-2 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${
+                  <span className={`px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
                     user.role === 'admin' ? 'bg-primary/10 text-primary' : 'bg-slate-500/10 text-text-secondary'
                   }`}>{user.role}</span>
                   {user.role === 'student' && (
-                    <span className={`px-2 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${
+                    <span className={`px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
                       user.subscription_tier === 'plus' ? 'bg-indigo-500/10 text-indigo-500' :
                       user.subscription_tier === 'pro' ? 'bg-purple-500/10 text-purple-500' :
                       user.subscription_tier === 'max' ? 'bg-amber-500/10 text-amber-500' :
@@ -211,13 +211,13 @@ export default function AdminCandidates() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                        <span className={`px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
                           user.role === 'admin' ? 'bg-primary/10 text-primary' : 'bg-slate-500/10 text-text-secondary'
                         }`}>
                           {user.role}
                         </span>
                         {user.role === 'student' && (
-                          <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                          <span className={`px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
                             user.subscription_tier === 'plus' ? 'bg-indigo-500/10 text-indigo-500' :
                             user.subscription_tier === 'pro' ? 'bg-purple-500/10 text-purple-500' :
                             user.subscription_tier === 'max' ? 'bg-amber-500/10 text-amber-500' :

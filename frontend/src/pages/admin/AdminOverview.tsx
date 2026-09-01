@@ -53,7 +53,7 @@ export default function AdminOverview() {
               </div>
               <div>
                 <span className="text-2xl font-bold text-text-primary">{stats.candidates.total}</span>
-                <p className="text-[10px] text-text-muted mt-1">Excludes voucher placeholder accounts</p>
+                <p className="text-xs text-text-muted mt-1">Excludes voucher placeholder accounts</p>
               </div>
             </div>
 
@@ -66,7 +66,7 @@ export default function AdminOverview() {
               </div>
               <div>
                 <span className="text-2xl font-bold text-text-primary">{stats.candidates.vouchers}</span>
-                <p className="text-[10px] text-text-muted mt-1">Unassigned active vouchers</p>
+                <p className="text-xs text-text-muted mt-1">Unassigned active vouchers</p>
               </div>
             </div>
 
@@ -79,7 +79,7 @@ export default function AdminOverview() {
               </div>
               <div>
                 <span className="text-2xl font-bold text-text-primary">{stats.exams.total}</span>
-                <div className="flex items-center gap-1 mt-1 text-[10px]">
+                <div className="flex items-center gap-1 mt-1 text-xs">
                   <span className="text-emerald-500 dark:text-emerald-400 font-medium">{stats.exams.today} completed today</span>
                   <span className="text-text-muted">|</span>
                   <span className="text-text-muted">{stats.exams.yesterday} yesterday</span>
@@ -96,7 +96,7 @@ export default function AdminOverview() {
               </div>
               <div>
                 <span className="text-2xl font-bold text-text-primary">₦{stats.revenue.total.toLocaleString()}</span>
-                <div className="flex items-center gap-1 text-[10px] text-text-muted mt-1">
+                <div className="flex items-center gap-1 text-xs text-text-muted mt-1">
                   <TrendingUp className="h-3 w-3 text-amber-500 dark:text-amber-400" />
                   <span>Based on verified Paystack transactions</span>
                 </div>
