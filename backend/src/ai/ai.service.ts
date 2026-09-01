@@ -12,7 +12,7 @@ export class AiService {
   private readonly logger = new Logger(AiService.name);
   private readonly apiUrl = 'https://seekai.cc/v1/chat/completions';
   private readonly apiKey = process.env.SEEKAI_KEY || 'sk-9EMNCX4JJAHuErB0XFu4QZkTv5TZdRv5deaDEWmxoQl1Z7iM';
-  private model = 'gpt-5.6-terra';
+  private model = 'deepseek-v4-pro';
 
   constructor(
     @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
@@ -25,14 +25,22 @@ export class AiService {
         headers: { Authorization: `Bearer ${this.apiKey}` }
       });
       if (res.data?.data && res.data.data.length > 0) {
-        const chatModels = res.data.data.filter((m: any) => 
-          m.id.includes('gpt') || m.id.includes('claude') || m.id.includes('deepseek')
-        );
-        if (chatModels.length > 0) return chatModels[0].id;
-        return res.data.data[0].id;
+        // Exclude expensive/fake models and only select safe, affordable ones
+        const safeModels = res.data.data.filter((m: any) => {
+          const id = m.id.toLowerCase();
+          if (id.includes('gpt') || id.includes('claude') || id.includes('opus') || id.includes('sonnet')) {
+            return false;
+          }
+          return id.includes('deepseek') || id.includes('grok') || id.includes('llama') || id.includes('qwen') || id.includes('mistral') || id.includes('mixtral');
+        });
+        
+        if (safeModels.length > 0) return safeModels[0].id;
+        
+        // If no safe models exist, return a generic fallback instead of a potentially expensive one
+        return 'deepseek-chat';
       }
     } catch (e) {}
-    return 'gpt-5.6-terra';
+    return 'deepseek-v4-pro';
   }
 
   private async callDigitalOceanApi(messages: any[], maxTokens: number = 500) {
