@@ -53,7 +53,39 @@ export default function AdminBilling() {
       </div>
 
       <div className="flex-1 bg-bg-card border border-border rounded-2xl overflow-hidden flex flex-col">
-        <div className="overflow-x-auto flex-1">
+        <div className="md:hidden flex-1 p-4 space-y-3 overflow-y-auto">
+          {billingLoading ? (
+            <div className="py-8 text-center text-text-muted text-sm">Loading ledger...</div>
+          ) : billingLogs.length === 0 ? (
+            <div className="py-8 text-center text-text-muted text-sm">No verified transactions found.</div>
+          ) : (
+            billingLogs.map((log) => (
+              <div key={log.reference} className="rounded-xl border border-border bg-bg-secondary/40 p-4 space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <CreditCard className="h-4 w-4 text-primary flex-shrink-0" />
+                    <span className="font-mono text-xs break-all">{log.reference}</span>
+                  </div>
+                  <button onClick={() => copyToClipboard(log.reference)} className="text-text-muted hover:text-primary transition-colors">
+                    <Copy className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="text-sm font-bold text-text-primary">₦{log.amount.toLocaleString()}</div>
+                <span className={`inline-flex px-2 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${
+                  log.planCode === 'PLN_plus' ? 'bg-indigo-500/10 text-indigo-500' :
+                  log.planCode === 'PLN_pro' ? 'bg-purple-500/10 text-purple-500' :
+                  log.planCode === 'PLN_max' ? 'bg-amber-500/10 text-amber-500' :
+                  'bg-slate-500/10 text-slate-500'
+                }`}>
+                  {log.planCode.replace('PLN_', '')}
+                </span>
+                <div className="text-xs text-text-secondary break-all">{log.email}</div>
+                <div className="text-xs text-text-muted">Verified: {new Date(log.verifiedAt).toLocaleString()}</div>
+              </div>
+            ))
+          )}
+        </div>
+        <div className="hidden md:block overflow-x-auto flex-1">
           <table className="w-full text-left text-sm whitespace-nowrap">
             <thead className="bg-bg-secondary text-text-muted font-semibold">
               <tr>

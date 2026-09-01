@@ -38,6 +38,15 @@ const SUBJECT_LABELS: Record<string, string> = {
   further_mathematics: 'Further Mathematics',
 };
 
+const DESKTOP_BREAKPOINT = 768;
+const CALCULATOR_WIDTH = 288;
+const CALCULATOR_HEIGHT = 360;
+
+const getDefaultCalcPosition = () => ({
+  x: Math.max(12, window.innerWidth - CALCULATOR_WIDTH - 20),
+  y: Math.max(76, Math.min(120, window.innerHeight - CALCULATOR_HEIGHT - 20)),
+});
+
 export default function ExamConsole() {
   const { sessionId } = useParams<{ sessionId: string }>();
   const navigate = useNavigate();
@@ -52,7 +61,7 @@ export default function ExamConsole() {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [timeRemaining, setTimeRemaining] = useState<number>(7200);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= DESKTOP_BREAKPOINT);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   // Modal and Alert states
@@ -68,11 +77,13 @@ export default function ExamConsole() {
   const [showCalculator, setShowCalculator] = useState(false);
   const [calcInput, setCalcInput] = useState('');
   const [calcResult, setCalcResult] = useState('');
-  const [calcPosition, setCalcPosition] = useState({ x: window.innerWidth - 340, y: 100 });
+  const [calcPosition, setCalcPosition] = useState(getDefaultCalcPosition);
   const [isDraggingCalc, setIsDraggingCalc] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  const handleCalcMouseDown = (e: React.MouseEvent) => {
+  const handleCalcPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === 'touch' && window.innerWidth >= DESKTOP_BREAKPOINT) return;
+    e.preventDefault();
     setIsDraggingCalc(true);
     setDragStart({
       x: e.clientX - calcPosition.x,
@@ -80,27 +91,42 @@ export default function ExamConsole() {
     });
   };
 
-  const handleCalcMouseMove = useCallback((e: MouseEvent) => {
+  const handleCalcPointerMove = useCallback((e: PointerEvent) => {
     if (!isDraggingCalc) return;
-    const newX = Math.max(0, Math.min(window.innerWidth - 300, e.clientX - dragStart.x));
-    const newY = Math.max(0, Math.min(window.innerHeight - 360, e.clientY - dragStart.y));
+    const newX = Math.max(8, Math.min(window.innerWidth - CALCULATOR_WIDTH - 8, e.clientX - dragStart.x));
+    const newY = Math.max(72, Math.min(window.innerHeight - CALCULATOR_HEIGHT - 8, e.clientY - dragStart.y));
     setCalcPosition({ x: newX, y: newY });
   }, [isDraggingCalc, dragStart]);
 
-  const handleCalcMouseUp = useCallback(() => {
+  const handleCalcPointerUp = useCallback(() => {
     setIsDraggingCalc(false);
   }, []);
 
   useEffect(() => {
+    const handleResize = () => {
+      const isDesktop = window.innerWidth >= DESKTOP_BREAKPOINT;
+      setIsSidebarOpen(isDesktop);
+      setCalcPosition((prev) => ({
+        x: Math.max(8, Math.min(window.innerWidth - CALCULATOR_WIDTH - 8, prev.x)),
+        y: Math.max(72, Math.min(window.innerHeight - CALCULATOR_HEIGHT - 8, prev.y)),
+      }));
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     if (isDraggingCalc) {
-      window.addEventListener('mousemove', handleCalcMouseMove);
-      window.addEventListener('mouseup', handleCalcMouseUp);
+      window.addEventListener('pointermove', handleCalcPointerMove);
+      window.addEventListener('pointerup', handleCalcPointerUp);
+      window.addEventListener('pointercancel', handleCalcPointerUp);
     }
     return () => {
-      window.removeEventListener('mousemove', handleCalcMouseMove);
-      window.removeEventListener('mouseup', handleCalcMouseUp);
+      window.removeEventListener('pointermove', handleCalcPointerMove);
+      window.removeEventListener('pointerup', handleCalcPointerUp);
+      window.removeEventListener('pointercancel', handleCalcPointerUp);
     };
-  }, [isDraggingCalc, handleCalcMouseMove, handleCalcMouseUp]);
+  }, [isDraggingCalc, handleCalcPointerMove, handleCalcPointerUp]);
 
   const handleCalcBtnClick = (val: string) => {
     if (val === 'C') {
@@ -383,7 +409,7 @@ export default function ExamConsole() {
             </span>
           </div>
           {lastSaved && (
-            <span className="text-[10px] text-text-muted italic hidden md:inline">
+            <span className="text-xs text-text-muted italic hidden md:inline">
               Auto-saved {lastSaved.toLocaleTimeString()}
             </span>
           )}
@@ -484,7 +510,7 @@ export default function ExamConsole() {
                 >
                   <ChevronLeft className="h-4 w-4" /> Previous
                 </button>
-                <span className="text-[10px] text-text-muted font-semibold tracking-wider uppercase hidden sm:inline">
+                <span className="text-xs text-text-muted font-semibold tracking-wider uppercase hidden sm:inline">
                   Keyboard shortcuts active • Press option key directly
                 </span>
                 <button
@@ -511,6 +537,14 @@ export default function ExamConsole() {
         </main>
 
         {/* Right Side: Interactive Index Grid */}
+        {isSidebarOpen && (
+          <button
+            type="button"
+            aria-label="Close subject navigator"
+            className="absolute inset-0 bg-black/35 z-40 md:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
         <aside
           className={`absolute inset-y-0 right-0 md:relative border-l border-border bg-bg-primary md:bg-bg-primary backdrop-blur-xl w-[85%] max-w-sm md:w-80 p-6 flex flex-col z-50 md:z-10 transition-transform duration-300 ${
             isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'
@@ -521,7 +555,7 @@ export default function ExamConsole() {
               <Grid className="h-4 w-4 text-primary" />
               <h3 className="text-xs font-bold text-text-primary uppercase tracking-wider">Subjects Navigator</h3>
             </div>
-            <span className="text-[10px] text-text-secondary font-bold bg-bg-secondary px-2 py-0.5 rounded border border-border">
+            <span className="text-xs text-text-secondary font-bold bg-bg-secondary px-2 py-0.5 rounded border border-border">
               {answeredInActiveSubject} / {currentSubjectQuestions.length} answered
             </span>
           </div>
@@ -535,7 +569,10 @@ export default function ExamConsole() {
                 return (
                   <button
                     key={q.questionId}
-                    onClick={() => setActiveQuestionIndex(idx)}
+                    onClick={() => {
+                      setActiveQuestionIndex(idx);
+                      if (window.innerWidth < DESKTOP_BREAKPOINT) setIsSidebarOpen(false);
+                    }}
                     className={`h-9 w-9 rounded-lg border text-xs font-bold transition-all flex items-center justify-center ${
                       isSelected
                         ? 'border-primary ring-2 ring-primary/20 bg-primary/20 text-text-primary'
@@ -551,7 +588,7 @@ export default function ExamConsole() {
             </div>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-border space-y-2 text-[10px] text-text-muted leading-normal">
+          <div className="mt-4 pt-4 border-t border-border space-y-2 text-xs text-text-muted leading-normal">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded bg-primary/20 border border-primary/30 block" />
               <span>Answered question</span>
@@ -567,7 +604,7 @@ export default function ExamConsole() {
       {/* Floating Panel toggle button */}
       <button
         onClick={() => setIsSidebarOpen((prev) => !prev)}
-        className="fixed bottom-6 right-6 z-30 h-10 w-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center shadow-2xl hover:text-text-primary"
+        className="fixed bottom-6 right-6 z-30 h-10 w-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center shadow-2xl hover:text-text-primary md:hidden"
         title="Toggle Question Grid"
       >
         <Monitor className="h-4 w-4" />
@@ -674,12 +711,12 @@ export default function ExamConsole() {
         >
           {/* Header Drag Bar */}
           <div
-            onMouseDown={handleCalcMouseDown}
-            className="bg-bg-primary px-4 py-2.5 flex items-center justify-between cursor-move border-b border-border"
+            onPointerDown={handleCalcPointerDown}
+            className="bg-bg-primary px-4 py-2.5 flex items-center justify-between cursor-move touch-none border-b border-border"
           >
             <div className="flex items-center gap-2 text-primary">
               <Calculator className="h-4 w-4 text-primary" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Calculator</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">Calculator</span>
             </div>
             <button
               onClick={() => setShowCalculator(false)}
