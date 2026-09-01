@@ -139,7 +139,7 @@ export default function AdminKeys() {
                     <Copy className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                <span className={`inline-flex px-2 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${
+                <span className={`inline-flex px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
                   user.account_status === 'active' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'
                 }`}>
                   {user.account_status === 'active' ? 'Unused' : 'Suspended'}
@@ -174,7 +174,7 @@ export default function AdminKeys() {
                       <span className="font-mono text-xs">{user.email}</span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
+                      <span className={`px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${
                         user.account_status === 'active' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'
                       }`}>
                         {user.account_status === 'active' ? 'Unused' : 'Suspended'}

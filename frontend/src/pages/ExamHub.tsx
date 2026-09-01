@@ -165,7 +165,7 @@ export default function ExamHub() {
                   <span className="text-xs font-bold text-slate-200 capitalize">{subjectKey}</span>
                   <div className="flex items-center gap-2">
                     <Badge variant="primary">{progressPct}% Mastered</Badge>
-                    <span className="text-[10px] text-text-muted">{isExpanded ? '▲' : '▼'}</span>
+                    <span className="text-xs text-text-muted">{isExpanded ? '▲' : '▼'}</span>
                   </div>
                 </div>
                 <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden mb-2">
@@ -174,7 +174,7 @@ export default function ExamHub() {
                 
                 {isExpanded && (
                   <div className="mt-4 space-y-2 border-t border-border pt-4">
-                    <p className="text-[10px] text-text-secondary mb-2">Check off topics as you study. AI will also automatically check these off when you score highly on CBT quizzes.</p>
+                    <p className="text-xs text-text-secondary mb-2">Check off topics as you study. AI will also automatically check these off when you score highly on CBT quizzes.</p>
                     {allTopics.map(topic => {
                       const isCompleted = subjectData.completedTopics.includes(topic);
                       return (
@@ -209,11 +209,11 @@ export default function ExamHub() {
                 <div key={session._id} className="border border-border p-3 rounded-lg flex justify-between items-center bg-bg-secondary">
                   <div>
                     <div className="text-xs font-bold">{session.subject.toUpperCase()}</div>
-                    <div className="text-[10px] text-text-muted mt-0.5">{session.topic}</div>
+                    <div className="text-xs text-text-muted mt-0.5">{session.topic}</div>
                   </div>
                   <div className="text-right flex items-center gap-2">
                     <Clock className="w-3 h-3 text-text-secondary" />
-                    <span className="text-[10px] font-medium text-text-secondary">
+                    <span className="text-xs font-medium text-text-secondary">
                       {new Date(session.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
@@ -230,7 +230,7 @@ export default function ExamHub() {
             <div className="mt-4 p-4 border border-border rounded-lg bg-bg-secondary space-y-3">
               <h4 className="text-xs font-bold mb-2">New Session</h4>
               <div>
-                <label className="text-[10px] text-text-secondary block mb-1">Subject</label>
+                <label className="text-xs text-text-secondary block mb-1">Subject</label>
                 <select 
                   className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"
                   value={newSession.subject} 
@@ -244,7 +244,7 @@ export default function ExamHub() {
                 </select>
               </div>
               <div>
-                <label className="text-[10px] text-text-secondary block mb-1">Topic (optional)</label>
+                <label className="text-xs text-text-secondary block mb-1">Topic (optional)</label>
                 <input 
                   type="text"
                   placeholder="e.g. Motion"
@@ -255,7 +255,7 @@ export default function ExamHub() {
               </div>
               <div className="flex gap-2">
                 <div className="flex-1">
-                  <label className="text-[10px] text-text-secondary block mb-1">Start Time</label>
+                  <label className="text-xs text-text-secondary block mb-1">Start Time</label>
                   <input 
                     type="datetime-local"
                     className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"
@@ -264,7 +264,7 @@ export default function ExamHub() {
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="text-[10px] text-text-secondary block mb-1">End Time</label>
+                  <label className="text-xs text-text-secondary block mb-1">End Time</label>
                   <input 
                     type="datetime-local"
                     className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"

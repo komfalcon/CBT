@@ -114,10 +114,10 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
             </div>
             <div>
               <h3 className="text-sm font-bold text-text-primary">Two-Factor Authentication (2FA)</h3>
-              <p className="text-[11px] text-text-muted mt-0.5">Secure your account with an Authenticator App.</p>
+              <p className="text-xs text-text-muted mt-0.5">Secure your account with an Authenticator App.</p>
             </div>
           </div>
-          <div className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${mfaEnabled ? 'bg-success/10 text-success border border-success/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+          <div className={`px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider ${mfaEnabled ? 'bg-success/10 text-success border border-success/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
             {mfaEnabled ? 'Enabled' : 'Disabled'}
           </div>
         </div>
@@ -149,7 +149,7 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
                 <img src={qrCode} alt="MFA QR Code" className="w-48 h-48" />
               </div>
               <div className="text-center w-full">
-                <p className="text-[10px] font-bold uppercase text-text-muted mb-1">Manual Secret Key</p>
+                <p className="text-xs font-bold uppercase text-text-muted mb-1">Manual Secret Key</p>
                 <div className="bg-bg-primary font-mono text-xs p-2 rounded border border-border text-primary font-bold tracking-widest break-all">
                   {secret}
                 </div>
@@ -162,7 +162,7 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
           )}
 
           <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase text-text-secondary">3. Verify with 6-digit code</label>
+            <label className="text-xs font-bold uppercase text-text-secondary">3. Verify with 6-digit code</label>
             <input
               type="text"
               placeholder="000000"

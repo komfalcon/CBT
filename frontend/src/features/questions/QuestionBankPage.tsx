@@ -256,7 +256,7 @@ export default function QuestionBankPage() {
             </div>
           </form>
           <div className="mt-4 pt-4 border-t border-border flex-1 flex flex-col justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-text-secondary">
+            <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
               Total results: <strong className="text-primary">{listResult.total}</strong>
             </span>
             <ul className="mt-3 max-h-80 space-y-2.5 overflow-y-auto pr-1">
@@ -266,7 +266,7 @@ export default function QuestionBankPage() {
                   className="rounded-xl border border-border bg-bg-secondary/20 p-3 text-xs leading-relaxed transition-all hover:bg-bg-secondary/40"
                 >
                   <p className="font-semibold text-text-primary">{String(question.question_text)}</p>
-                  <p className="text-[10px] text-text-muted mt-1.5 font-medium uppercase tracking-wider">
+                  <p className="text-xs text-text-muted mt-1.5 font-medium uppercase tracking-wider">
                     {String(question.subject)} • {String(question.topic)} • Difficulty {String(question.difficulty_level)}
                   </p>
                 </li>
@@ -297,7 +297,7 @@ export default function QuestionBankPage() {
             </div>
             
             <div className="space-y-1.5">
-              <label className="block text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+              <label className="block text-xs font-bold uppercase tracking-wider text-text-secondary">
                 Question Text
               </label>
               <textarea
@@ -403,7 +403,7 @@ export default function QuestionBankPage() {
             <p>Import ID: <strong className="text-primary font-mono">{importUpload.importId}</strong></p>
             <p>Rows detected: <strong className="text-text-primary">{importUpload.totalRows}</strong></p>
             <p>Detected columns: <strong className="text-text-primary">{(importUpload.columns ?? []).join(', ')}</strong></p>
-            <pre className="mt-2 overflow-auto rounded-xl border border-border bg-bg-secondary/40 p-3 text-[10px] max-h-60 font-mono text-text-secondary leading-relaxed">
+            <pre className="mt-2 overflow-auto rounded-xl border border-border bg-bg-secondary/40 p-3 text-xs max-h-60 font-mono text-text-secondary leading-relaxed">
               {JSON.stringify(importUpload.preview ?? [], null, 2)}
             </pre>
           </div>
@@ -421,7 +421,7 @@ export default function QuestionBankPage() {
               key={entry.subject}
               className="rounded-xl border border-border bg-bg-secondary/20 p-3.5 text-xs text-center flex flex-col justify-center"
             >
-              <span className="text-text-secondary uppercase font-bold tracking-wider text-[9px] mb-1">
+              <span className="text-text-secondary uppercase font-bold tracking-wider text-xs mb-1">
                 {entry.subject}
               </span>
               <span className="text-lg font-bold text-white">{entry.count} Qs</span>
@@ -430,8 +430,8 @@ export default function QuestionBankPage() {
         </div>
         {stats && (
           <div className="mt-4 pt-4 border-t border-border">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Detailed Stats JSON</span>
-            <pre className="mt-2 overflow-auto rounded-xl border border-border bg-bg-secondary/40 p-3 text-[10px] max-h-60 font-mono text-text-secondary leading-relaxed">
+            <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">Detailed Stats JSON</span>
+            <pre className="mt-2 overflow-auto rounded-xl border border-border bg-bg-secondary/40 p-3 text-xs max-h-60 font-mono text-text-secondary leading-relaxed">
               {JSON.stringify(stats, null, 2)}
             </pre>
           </div>

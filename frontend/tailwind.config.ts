@@ -38,12 +38,12 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Playfair Display', 'Georgia', 'serif'],
+        display: ['Sora', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       fontSize: {
-        xs: '11px',
-        sm: '12px',
+        xs: '12px',
+        sm: '13px',
         base: '14px',
         lg: '16px',
         xl: '20px',

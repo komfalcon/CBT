@@ -526,16 +526,16 @@ export default function StudentDashboard() {
             <div className="pointer-events-none absolute -right-5 -top-9 h-34 w-34 rounded-full border border-dashed border-cyan-200/15" />
             <div className="relative z-10 flex flex-col justify-between gap-6 md:flex-row md:items-center">
               <div>
-                <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[.2em] text-cyan-300"><Crosshair className="h-3.5 w-3.5" /> Candidate Flight Deck</div>
+                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[.2em] text-cyan-300"><Crosshair className="h-3.5 w-3.5" /> Candidate Flight Deck</div>
                 <h2 className="mt-2 text-2xl font-black tracking-tight">Your next mark is already visible.</h2>
                 <p className="mt-2 max-w-xl text-xs leading-6 text-slate-400">Use your evidence, not guesswork. Keep the strong subjects stable and repair the weakest topic before your next mock.</p>
               </div>
               <div className="flex items-center gap-5">
-                <div className="text-center"><div className="text-[9px] font-black uppercase tracking-[.18em] text-slate-500">Readiness</div><div className="mt-1 text-4xl font-black text-cyan-200">{Math.max(0, Math.min(100, readinessScore))}<span className="text-sm text-slate-500">/100</span></div></div>
+                <div className="text-center"><div className="text-xs font-black uppercase tracking-[.18em] text-slate-500">Readiness</div><div className="mt-1 text-4xl font-black text-cyan-200">{Math.max(0, Math.min(100, readinessScore))}<span className="text-sm text-slate-500">/100</span></div></div>
                 <Button onClick={() => { setDrillSubject(nextWeakTopic?.subject || combination[0] || 'physics'); setIsDrillModalOpen(true); }} className="bg-cyan-300 text-[#07111f] hover:bg-cyan-200" size="sm"><Zap className="h-4 w-4" /> Start next mission</Button>
               </div>
             </div>
-            <div className="relative z-10 mt-5 flex flex-wrap items-center gap-3 text-[11px] text-slate-400"><span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1.5 text-amber-100">Focus: {nextWeakTopic?.topic || 'Complete your first practice session'}</span><span className="rounded-full border border-white/10 bg-white/[.04] px-3 py-1.5">{resultsList.length} sessions recorded</span></div>
+            <div className="relative z-10 mt-5 flex flex-wrap items-center gap-3 text-xs text-slate-400"><span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1.5 text-amber-100">Focus: {nextWeakTopic?.topic || 'Complete your first practice session'}</span><span className="rounded-full border border-white/10 bg-white/[.04] px-3 py-1.5">{resultsList.length} sessions recorded</span></div>
           </section>
 
           {message && (
@@ -661,7 +661,7 @@ export default function StudentDashboard() {
                 <div className="text-2xl font-black text-text-primary mt-1">
                   {resultsList.length}
                 </div>
-                <span className="text-[10px] text-text-muted">Practice makes perfect</span>
+                <span className="text-xs text-text-muted">Practice makes perfect</span>
               </div>
               <div className="rounded-xl bg-bg-secondary p-4 border border-border text-center">
                 <div className="text-xs text-text-secondary">Average UTME Score</div>
@@ -675,14 +675,14 @@ export default function StudentDashboard() {
                     )
                     : 'N/A'}
                 </div>
-                <span className="text-[10px] text-text-muted">Target score is 300+</span>
+                <span className="text-xs text-text-muted">Target score is 300+</span>
               </div>
               <div className="rounded-xl bg-bg-secondary p-4 border border-border text-center">
                 <div className="text-xs text-text-secondary">Streak Count</div>
                 <div className="text-2xl font-black text-pink-400 mt-1">
                   {student?.streak_count || 0} days
                 </div>
-                <span className="text-[10px] text-text-muted">Consecutive days practice</span>
+                <span className="text-xs text-text-muted">Consecutive days practice</span>
               </div>
             </div>
           </Card>
@@ -703,7 +703,7 @@ export default function StudentDashboard() {
                       <div className="text-xs font-bold text-text-primary uppercase tracking-wider">
                         {res.type === 'mock' ? '4-Subject Mock' : 'Single Subject Drill'}
                       </div>
-                      <div className="text-[10px] text-text-muted mt-1 font-medium">
+                      <div className="text-xs text-text-muted mt-1 font-medium">
                         {new Date(res.completedAt).toLocaleDateString()} at{' '}
                         {new Date(res.completedAt).toLocaleTimeString()}
                       </div>
@@ -713,7 +713,7 @@ export default function StudentDashboard() {
                         <span className="text-sm font-bold text-primary">
                           {res.type === 'mock' ? res.totalScore : `${res.totalScore}%`}
                         </span>
-                        <span className="text-[10px] text-text-muted block font-medium">
+                        <span className="text-xs text-text-muted block font-medium">
                           {res.type === 'mock' ? 'score' : 'accuracy'}
                         </span>
                       </div>
@@ -748,7 +748,7 @@ export default function StudentDashboard() {
                       <div className="text-xs font-bold text-text-primary truncate" title={stat.topic}>
                         {stat.topic}
                       </div>
-                      <div className="text-[10px] text-text-muted mt-0.5">
+                      <div className="text-xs text-text-muted mt-0.5">
                         {SUBJECT_LABELS[stat.subject] || stat.subject}
                       </div>
                     </div>
@@ -757,7 +757,7 @@ export default function StudentDashboard() {
                         <div className="text-xs font-bold text-text-primary">
                           {stat.correct} / {stat.total}
                         </div>
-                        <div className="text-[9px] text-text-muted uppercase">Correct</div>
+                        <div className="text-xs text-text-muted uppercase">Correct</div>
                       </div>
                       <div className="w-12 text-right">
                         <span className={`text-sm font-black ${stat.accuracy >= 70 ? 'text-success' : stat.accuracy >= 40 ? 'text-warning' : 'text-danger'}`}>
@@ -807,7 +807,7 @@ export default function StudentDashboard() {
                     }`}
                 >
                   <span
-                    className={`h-4 w-4 rounded flex items-center justify-center border text-[10px] font-bold ${isSelected ? 'border-primary bg-primary text-text-on-accent' : 'border-border bg-bg-primary'
+                    className={`h-4 w-4 rounded flex items-center justify-center border text-xs font-bold ${isSelected ? 'border-primary bg-primary text-text-on-accent' : 'border-border bg-bg-primary'
                       }`}
                   >
                     {isSelected && '✓'}
@@ -850,7 +850,7 @@ export default function StudentDashboard() {
         <div className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase text-text-secondary">Select Subject</label>
+              <label className="text-xs font-bold uppercase text-text-secondary">Select Subject</label>
               <select
                 value={drillSubject}
                 onChange={(e) => setDrillSubject(e.target.value)}
@@ -865,7 +865,7 @@ export default function StudentDashboard() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase text-text-secondary">Questions Count</label>
+              <label className="text-xs font-bold uppercase text-text-secondary">Questions Count</label>
               <div className="grid grid-cols-3 gap-2">
                 {[10, 20, 40].map((c) => (
                   <button
@@ -884,7 +884,7 @@ export default function StudentDashboard() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase text-text-secondary">Difficulty</label>
+              <label className="text-xs font-bold uppercase text-text-secondary">Difficulty</label>
               <select
                 value={drillDifficulty}
                 onChange={(e) => setDrillDifficulty(e.target.value)}
@@ -901,7 +901,7 @@ export default function StudentDashboard() {
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="text-[10px] font-bold uppercase text-text-secondary">
+                <label className="text-xs font-bold uppercase text-text-secondary">
                   Specific Topics (Optional)
                 </label>
                 {availableTopics.length > 0 && (
@@ -911,7 +911,7 @@ export default function StudentDashboard() {
                       const random = availableTopics[Math.floor(Math.random() * availableTopics.length)];
                       setDrillTopics([random.topic]);
                     }}
-                    className="text-[10px] font-bold text-primary hover:opacity-70 transition-opacity px-2 py-0.5 rounded-lg border border-primary/30 bg-primary/5"
+                    className="text-xs font-bold text-primary hover:opacity-70 transition-opacity px-2 py-0.5 rounded-lg border border-primary/30 bg-primary/5"
                   >
                     🎲 Random Topic
                   </button>
@@ -1017,14 +1017,14 @@ export default function StudentDashboard() {
                 <div className="space-y-1">
                   <div className="flex items-baseline gap-0.5">
                     <span className="text-2xl font-bold text-text-primary">₦3,500</span>
-                    <span className="text-[10px] text-text-muted">/mo</span>
+                    <span className="text-xs text-text-muted">/mo</span>
                   </div>
-                  <span className="inline-block text-[10px] font-bold text-primary bg-primary/5 border border-primary/10 px-2 py-0.5 rounded">
+                  <span className="inline-block text-xs font-bold text-primary bg-primary/5 border border-primary/10 px-2 py-0.5 rounded">
                     1 Mock Exam Daily
                   </span>
                 </div>
 
-                <ul className="space-y-2.5 text-[11px] text-text-secondary pt-2 border-t border-border">
+                <ul className="space-y-2.5 text-xs text-text-secondary pt-2 border-t border-border">
                   <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> 1 full mock exam daily</li>
                   <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> Detailed score reviews</li>
                   <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> CBT Access Key</li>
@@ -1046,7 +1046,7 @@ export default function StudentDashboard() {
 
             {/* Pro Plan Card */}
             <div className="rounded-2xl border border-primary/25 bg-bg-secondary/40 p-6 flex flex-col justify-between relative hover:border-primary/40 transition-all group">
-              <div className="absolute top-3 right-3 text-[9px] font-extrabold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+              <div className="absolute top-3 right-3 text-xs font-extrabold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
                 Popular
               </div>
               <div className="space-y-4">
@@ -1060,14 +1060,14 @@ export default function StudentDashboard() {
                 <div className="space-y-1">
                   <div className="flex items-baseline gap-0.5">
                     <span className="text-2xl font-bold text-text-primary">₦6,000</span>
-                    <span className="text-[10px] text-text-muted">/mo</span>
+                    <span className="text-xs text-text-muted">/mo</span>
                   </div>
-                  <span className="inline-block text-[10px] font-bold text-primary bg-primary/5 border border-primary/10 px-2 py-0.5 rounded">
+                  <span className="inline-block text-xs font-bold text-primary bg-primary/5 border border-primary/10 px-2 py-0.5 rounded">
                     2 Mock Exams Daily
                   </span>
                 </div>
 
-                <ul className="space-y-2.5 text-[11px] text-text-secondary pt-2 border-t border-border">
+                <ul className="space-y-2.5 text-xs text-text-secondary pt-2 border-t border-border">
                   <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> 2 full mock exams daily</li>
                   <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> Subject-specific drills</li>
                   <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> Detailed score reviews</li>
@@ -1096,21 +1096,21 @@ export default function StudentDashboard() {
                   </div>
                   <div>
                     <span className="text-sm font-bold text-text-primary block leading-none">Max Plan</span>
-                    <span className="text-[8px] text-ai-flag font-semibold uppercase tracking-wide">Tutor Edition</span>
+                    <span className="text-xs text-ai-flag font-semibold uppercase tracking-wide">Tutor Edition</span>
                   </div>
                 </div>
 
                 <div className="space-y-1">
                   <div className="flex items-baseline gap-0.5">
                     <span className="text-2xl font-bold text-text-primary">₦14,000</span>
-                    <span className="text-[10px] text-text-muted">/mo</span>
+                    <span className="text-xs text-text-muted">/mo</span>
                   </div>
-                  <span className="inline-block text-[10px] font-bold text-ai-flag bg-ai-flag/5 border border-ai-flag/10 px-2 py-0.5 rounded">
+                  <span className="inline-block text-xs font-bold text-ai-flag bg-ai-flag/5 border border-ai-flag/10 px-2 py-0.5 rounded">
                     5 Mock Exams Daily + AI
                   </span>
                 </div>
 
-                <ul className="space-y-2.5 text-[11px] text-text-secondary pt-2 border-t border-border">
+                <ul className="space-y-2.5 text-xs text-text-secondary pt-2 border-t border-border">
                   <li className="flex items-center gap-2 text-ai-flag font-bold"><Sparkles className="h-3 w-3 text-ai-flag flex-shrink-0" /> AI Conversational Tutor</li>
                   <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> 5 full mock exams daily</li>
                   <li className="flex items-center gap-2"><Check className="h-3 w-3 text-success flex-shrink-0" /> Subject-specific drills</li>

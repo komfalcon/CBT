@@ -145,7 +145,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             Question {index + 1} {totalCount ? `of ${totalCount}` : ''}
           </span>
           {question.difficulty_level !== undefined && (
-            <span className="px-2.5 py-1 rounded-lg bg-bg-secondary border border-border text-[10px] font-semibold">
+            <span className="px-2.5 py-1 rounded-lg bg-bg-secondary border border-border text-xs font-semibold">
               Difficulty {question.difficulty_level}/5
             </span>
           )}

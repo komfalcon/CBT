@@ -131,7 +131,7 @@ export default function SecureAccess() {
           ) : (
             <form onSubmit={handleOtpSubmit} className="flex flex-col gap-5 animate-slide-up">
               <div className="space-y-1">
-                <label className="text-[10px] font-bold uppercase text-text-secondary tracking-wider">Authenticator Code</label>
+                <label className="text-xs font-bold uppercase text-text-secondary tracking-wider">Authenticator Code</label>
                 <input
                   type="text"
                   required

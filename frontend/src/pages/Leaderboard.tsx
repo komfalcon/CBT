@@ -70,7 +70,7 @@ export default function Leaderboard() {
                   </div>
                   <div className="text-right">
                     <div className="font-black text-primary">{u.xp_points}</div>
-                    <div className="text-[10px] text-text-muted">XP</div>
+                    <div className="text-xs text-text-muted">XP</div>
                   </div>
                 </div>
               ))}
@@ -100,7 +100,7 @@ export default function Leaderboard() {
                   </div>
                   <div className="text-right">
                     <div className="font-black text-pink-500">{u.streak_count}</div>
-                    <div className="text-[10px] text-text-muted">Days</div>
+                    <div className="text-xs text-text-muted">Days</div>
                   </div>
                 </div>
               ))}
