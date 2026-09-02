@@ -206,7 +206,7 @@ export default function ExamHub() {
           {timetable?.sessions?.length > 0 ? (
             <div className="space-y-3">
               {timetable.sessions.map((session: any) => (
-                <div key={session._id} className="border border-border p-3 rounded-lg flex justify-between items-center bg-bg-secondary">
+                <div key={session.id || session._id} className="border border-border p-3 rounded-lg flex justify-between items-center bg-bg-secondary">
                   <div>
                     <div className="text-xs font-bold">{session.subject.toUpperCase()}</div>
                     <div className="text-xs text-text-muted mt-0.5">{session.topic}</div>

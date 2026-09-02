@@ -297,7 +297,7 @@ export default function StudentDashboard() {
       });
       session.warnings?.forEach((warning: string) => addToast({ type: 'info', title: 'Notice', message: warning }));
       setIsDrillModalOpen(false);
-      navigate(`/exam/${session.sessionId}`);
+      navigate(`/exam/${session.id || session.sessionId}`);
     } catch (requestError: any) {
       addToast({
         type: 'error',

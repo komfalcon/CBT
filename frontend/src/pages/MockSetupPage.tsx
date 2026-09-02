@@ -94,9 +94,9 @@ export default function MockSetupPage() {
       
       const session = await createExamSession(token, payload);
       if (session.warnings && session.warnings.length > 0) {
-        session.warnings.forEach(w => addToast({ type: 'info', title: 'Notice', message: w }));
+        session.warnings.forEach((w: string) => addToast({ type: 'info', title: 'Notice', message: w }));
       }
-      navigate(`/exam/${session.sessionId}`);
+      navigate(`/exam/${session.id || session.sessionId}`);
     } catch (err: any) {
       addToast({
         type: 'error',
