@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as amqp from 'amqplib';
-import sgMail from '@sendgrid/mail';
+import * as nodemailer from 'nodemailer';
 
 type NotificationPayload = {
   email: string;
@@ -14,6 +14,7 @@ export class NotificationsProcessor implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(NotificationsProcessor.name);
   private connection?: amqp.ChannelModel;
   private channel?: amqp.Channel;
+  private transporter: nodemailer.Transporter | null = null;
 
   constructor(private readonly configService: ConfigService) {}
 
@@ -24,12 +25,24 @@ export class NotificationsProcessor implements OnModuleInit, OnModuleDestroy {
       return;
     }
 
-    const apiKey = this.configService.get<string>('SENDGRID_API_KEY');
-    if (apiKey) {
-      sgMail.setApiKey(apiKey);
-      this.logger.log('SendGrid API Key configured.');
+    const smtpHost = this.configService.get<string>('SMTP_HOST');
+    const smtpPort = this.configService.get<number>('SMTP_PORT', 587);
+    const smtpUser = this.configService.get<string>('SMTP_USER');
+    const smtpPass = this.configService.get<string>('SMTP_PASS');
+
+    if (smtpHost && smtpUser && smtpPass) {
+      this.transporter = nodemailer.createTransport({
+        host: smtpHost,
+        port: Number(smtpPort),
+        secure: Number(smtpPort) === 465, // true for 465, false for other ports
+        auth: {
+          user: smtpUser,
+          pass: smtpPass,
+        },
+      });
+      this.logger.log('Nodemailer SMTP Transporter configured successfully.');
     } else {
-      this.logger.warn('SENDGRID_API_KEY is not configured. Emails will be logged to console.');
+      this.logger.warn('SMTP credentials not fully configured (missing SMTP_HOST, SMTP_USER, or SMTP_PASS). Emails will be logged to console.');
     }
 
     try {
@@ -81,19 +94,22 @@ export class NotificationsProcessor implements OnModuleInit, OnModuleDestroy {
   }
 
   private async sendEmail(to: string, subject: string, text: string, html: string): Promise<void> {
-    const apiKey = this.configService.get<string>('SENDGRID_API_KEY');
-    const fromEmail = this.configService.get<string>('SENDGRID_FROM_EMAIL', 'noreply@jambcbt.ng');
+    const fromEmail = this.configService.get<string>('SMTP_FROM_EMAIL', 'noreply@jambcbt.ng');
 
-    if (apiKey) {
-      const msg = {
-        to,
-        from: fromEmail,
-        subject,
-        text,
-        html,
-      };
-      await sgMail.send(msg);
-      this.logger.log(`Email successfully sent to ${to} via SendGrid.`);
+    if (this.transporter) {
+      try {
+        await this.transporter.sendMail({
+          from: fromEmail,
+          to,
+          subject,
+          text,
+          html,
+        });
+        this.logger.log(`Email successfully sent to ${to} via SMTP.`);
+      } catch (error) {
+        this.logger.error(`Failed to send email to ${to}`, error as Error);
+        throw error;
+      }
     } else {
       this.logger.log(`[DEVELOPMENT EMAIL SENDER - CONSOLE ONLY]\nTo: ${to}\nSubject: ${subject}\nBody: ${text}`);
     }
