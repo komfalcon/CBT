@@ -3,20 +3,25 @@
 @tailwind utilities;
 
 :root {
+  /* Surface and ink: neutral, high-contrast foundations for focused study. */
   --color-bg-primary: #08101f;
   --color-bg-secondary: #0d172b;
   --color-bg-card: #111d34;
   --color-text-primary: #f8fbff;
-  --color-text-secondary: #9aa8c0;
-  --color-text-muted: #66748d;
+  --color-text-secondary: #a9b7cc;
+  --color-text-muted: #74839c;
   --color-border: rgba(156, 172, 201, 0.14);
-  --color-border-hover: rgba(140, 163, 219, 0.32);
-  --color-overlay: rgba(8, 16, 31, 0.86);
+  --color-border-hover: rgba(140, 163, 219, 0.42);
+  --color-overlay: rgba(4, 10, 22, 0.72);
 
-  --color-accent-primary: #4d6bff;
-  --color-accent-primary-hover: #6a82ff;
-  --color-accent-ai-flag: #c9a84c;
-  --color-accent-ai-flag-hover: #e0bc6a;
+  /* Semantics: blue=primary action, cyan=information/progress, gold=Falke AI/premium, rose=streak. */
+  --color-accent-primary: #5b72ff;
+  --color-accent-primary-hover: #788aff;
+  --color-accent-info: #38bdf8;
+  --color-accent-info-hover: #7dd3fc;
+  --color-accent-ai-flag: #d7b35c;
+  --color-accent-ai-flag-hover: #ecd083;
+  --color-accent-streak: #fb7185;
   --color-text-on-accent: #ffffff;
 
   --color-error: #fb7185;
@@ -54,12 +59,15 @@
   --color-text-secondary: #475467;
   --color-text-muted: #526176;
   --color-border: rgba(16, 24, 40, 0.14);
-  --color-border-hover: rgba(52, 84, 220, 0.34);
-  --color-overlay: rgba(247, 248, 250, 0.9);
+  --color-border-hover: rgba(52, 84, 220, 0.38);
+  --color-overlay: rgba(15, 23, 42, 0.46);
   --color-accent-primary: #3454dc;
   --color-accent-primary-hover: #2542bd;
+  --color-accent-info: #0369a1;
+  --color-accent-info-hover: #075985;
   --color-accent-ai-flag: #8a5a00;
   --color-accent-ai-flag-hover: #714900;
+  --color-accent-streak: #be123c;
   --color-text-on-accent: #ffffff;
   --color-error: #b42318;
   --color-success: #087443;
@@ -102,12 +110,17 @@ button, [role='button'], a {
 }
 
 :focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--color-accent-primary) 75%, white);
+  outline: 3px solid var(--color-accent-primary);
   outline-offset: 3px;
 }
 
 button:active:not(:disabled), a:active {
-  transform: translateY(1px);
+  transform: translateY(1px) scale(0.98);
+}
+
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent-primary) 24%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

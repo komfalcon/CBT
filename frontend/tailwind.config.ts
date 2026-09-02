@@ -13,6 +13,8 @@ export default {
         error: 'var(--color-error)',
         success: 'var(--color-success)',
         warning: 'var(--color-warning)',
+        info: 'var(--color-accent-info)',
+        streak: 'var(--color-accent-streak)',
         'ai-flag': {
           DEFAULT: 'var(--color-accent-ai-flag)',
           hover: 'var(--color-accent-ai-flag-hover)',
