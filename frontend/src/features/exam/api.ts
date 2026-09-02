@@ -31,6 +31,7 @@ export type ExamQuestion = {
 };
 
 export type ExamSessionRecord = {
+  id?: string;
   sessionId: string;
   userId: string;
   type: 'mock' | 'drill';
