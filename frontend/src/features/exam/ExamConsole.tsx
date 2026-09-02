@@ -2,20 +2,24 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getExamSession, saveExamAnswers, submitExamSession, ExamQuestion } from './api';
 import {
-  Clock,
+  AlertTriangle,
+  Calculator,
+  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Send,
-  Loader2,
-  Grid,
   ChevronRightSquare,
-  AlertTriangle,
+  Clock,
+  Flag,
+  Grid,
+  Keyboard,
+  Layers3,
+  Loader2,
   Monitor,
-  Calculator,
+  Send,
+  ShieldCheck,
 } from 'lucide-react';
 import 'katex/dist/katex.min.css';
-import Latex from 'react-latex-next';
-import { QuestionCard, Button, Modal, Alert, Badge } from '../../components';
+import { QuestionCard } from '../../components/QuestionCard';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import { getSubjectLabel } from '../../constants/subjects';
 
@@ -44,6 +48,7 @@ export default function ExamConsole() {
   const [timeRemaining, setTimeRemaining] = useState<number>(7200);
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= DESKTOP_BREAKPOINT);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(new Set());
 
   // Modal and Alert states
   const [showSubmitModal, setShowSubmitModal] = useState(false);
@@ -315,6 +320,15 @@ export default function ExamConsole() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [loading, submitting, activeQuestion, handleNextClick, handlePrev]);
 
+  const toggleFlaggedQuestion = useCallback((questionId: string) => {
+    setFlaggedQuestions((previous) => {
+      const next = new Set(previous);
+      if (next.has(questionId)) next.delete(questionId);
+      else next.add(questionId);
+      return next;
+    });
+  }, []);
+
   const handleSubmitClick = () => {
     setSubmitError('');
     setShowSubmitModal(true);
@@ -342,6 +356,8 @@ export default function ExamConsole() {
       .toString()
       .padStart(2, '0')}`;
   };
+
+  const formatSavedTime = (date: Date) => date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
   if (loading) {
     return (
@@ -372,222 +388,230 @@ export default function ExamConsole() {
     (q: ExamQuestion) => !!answers[q.questionId],
   ).length;
 
+  const currentSubjectIndex = session.subjects.indexOf(activeSubject);
+  const isFirstQuestion = currentSubjectIndex === 0 && activeQuestionIndex === 0;
+  const totalAnswered = session.questions.filter((question: ExamQuestion) => !!answers[question.questionId]).length;
+  const totalFlagged = flaggedQuestions.size;
+  const sessionProgress = session.questions.length ? Math.round((totalAnswered / session.questions.length) * 100) : 0;
+
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary font-sans flex flex-col relative overflow-hidden">
-      {/* Decorative Orbs */}
-      <div className="absolute top-0 right-0 w-[50%] h-[50%] rounded-full bg-primary/5 blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[50%] h-[50%] rounded-full bg-violet-900/5 blur-[150px] pointer-events-none" />
+    <div className="exam-shell min-h-screen bg-bg-primary text-text-primary font-sans">
+      <div className="exam-shell-glow exam-shell-glow-top" />
+      <div className="exam-shell-glow exam-shell-glow-bottom" />
 
-      {/* Top Banner Control Hub */}
-      <header className="border-b border-border bg-bg-primary backdrop-blur-md h-16 flex items-center justify-between px-6 z-20 sticky top-0">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <img src="/favicon.svg" alt="" className="h-8 w-8 shrink-0 rounded-lg object-cover" />
-            <span className="text-sm font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent hidden sm:inline">
-              JAMB UTME Simulation
-            </span>
-          </div>
-          {lastSaved && (
-            <span className="text-xs text-text-muted italic hidden md:inline">
-              Auto-saved {lastSaved.toLocaleTimeString()}
-            </span>
-          )}
-        </div>
-
-        {/* Glow Clock Timer */}
-        <div className="flex items-center gap-6">
-          <div
-            className={`flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-mono font-bold shadow-lg ${
-              timeRemaining < 300
-                ? 'border-rose-500/30 bg-rose-550/10 text-rose-450 animate-pulse'
-                : 'border-primary/20 bg-bg-secondary/30 text-primary-hover'
-            }`}
-          >
-            <Clock className={`h-4 w-4 ${timeRemaining < 300 ? 'text-rose-400' : 'text-primary'}`} />
-            {formatTime(timeRemaining)}
+      <header className="exam-header sticky top-0 z-30 border-b border-border/80 bg-bg-primary/92 px-5 backdrop-blur-xl xl:px-8">
+        <div className="mx-auto flex min-h-[76px] max-w-[1640px] items-center justify-between gap-6">
+          <div className="flex min-w-0 items-center gap-4">
+            <div className="exam-brand-mark flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary shadow-[0_0_0_6px_rgba(91,114,255,0.06)]">
+              <ShieldCheck className="h-5 w-5" aria-hidden="true" />
+            </div>
+            <div className="min-w-0">
+              <p className="exam-eyebrow">JAMB CBT / Live session</p>
+              <div className="flex items-center gap-2">
+                <h1 className="truncate text-sm font-black tracking-[-0.02em] text-text-primary sm:text-base">
+                  {session.type === 'mock' ? 'Full Mock Exam' : 'Subject Drill'}
+                </h1>
+                <span className="hidden h-1 w-1 rounded-full bg-text-muted sm:block" />
+                <span className="hidden truncate text-xs font-medium text-text-muted sm:block">Secure testing workspace</span>
+              </div>
+            </div>
           </div>
 
-          <button
-            onClick={() => setShowCalculator((prev) => !prev)}
-            className={`flex items-center gap-2 rounded-lg border px-3.5 py-1.5 text-xs font-bold transition-all active:scale-95 shadow-md ${
-              showCalculator
-                ? 'border-primary bg-primary text-text-primary shadow-primary/10'
-                : 'border-border bg-bg-secondary text-text-secondary hover:text-text-primary hover:bg-bg-secondary'
-            }`}
-            title="Toggle Calculator"
-          >
-            <Calculator className="h-3.5 w-3.5" />
-            Calculator
-          </button>
-
-          <ThemeToggle />
-
-          <button
-            onClick={handleSubmitClick}
-            disabled={submitting}
-            className="flex items-center gap-2 rounded-lg bg-rose-600 px-4 py-2 text-xs font-bold text-text-primary hover:bg-rose-500 active:scale-95 transition-all shadow-lg shadow-rose-600/10 disabled:opacity-50"
-          >
-            {submitting ? (
-              <Loader2 className="h-3 w-3 animate-spin" />
-            ) : (
-              <Send className="h-3 w-3" />
+          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+            {lastSaved && (
+              <div className="hidden items-center gap-2 rounded-xl border border-success/20 bg-success/5 px-3 py-2 text-xs font-semibold text-success lg:flex" title={`Answers last saved at ${formatSavedTime(lastSaved)}`}>
+                <span className="h-1.5 w-1.5 rounded-full bg-success" />
+                Saved {formatSavedTime(lastSaved)}
+              </div>
             )}
-            Submit Exam
-          </button>
+            <div className={`exam-timer flex items-center gap-2 rounded-2xl border px-3 py-2 font-mono text-sm font-black tabular-nums sm:px-4 ${timeRemaining < 300 ? 'exam-timer-danger' : ''}`} aria-label={`Time remaining ${formatTime(timeRemaining)}`}>
+              <Clock className="h-4 w-4" aria-hidden="true" />
+              <span>{formatTime(timeRemaining)}</span>
+              <span className="hidden text-[10px] font-sans font-bold uppercase tracking-[0.14em] opacity-70 sm:inline">remaining</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowCalculator((previous) => !previous)}
+              className={`exam-toolbar-button hidden items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition-[background-color,border-color,color,box-shadow,transform] duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:flex ${showCalculator ? 'border-primary bg-primary/15 text-primary shadow-[0_8px_24px_rgba(91,114,255,0.16)]' : 'border-border bg-bg-secondary/55 text-text-secondary hover:border-primary/40 hover:text-text-primary'}`}
+              title="Toggle calculator"
+              aria-pressed={showCalculator}
+            >
+              <Calculator className="h-3.5 w-3.5" aria-hidden="true" /> Calculator
+            </button>
+            <ThemeToggle className="h-9 w-9 rounded-xl p-2" />
+            <button
+              type="button"
+              onClick={handleSubmitClick}
+              disabled={submitting}
+              className="exam-submit-button inline-flex items-center gap-2 rounded-xl border border-rose-500/60 bg-rose-600 px-3.5 py-2.5 text-xs font-black text-white shadow-[0_10px_24px_rgba(225,29,72,0.22)] transition-[background-color,border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-rose-400 hover:bg-rose-500 hover:shadow-[0_14px_30px_rgba(225,29,72,0.3)] active:scale-95 disabled:pointer-events-none disabled:opacity-50 sm:px-4"
+            >
+              {submitting ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" /> : <Send className="h-3.5 w-3.5" aria-hidden="true" />}
+              <span className="hidden sm:inline">Submit Exam</span>
+              <span className="sm:hidden">Submit</span>
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* Main Console Grid */}
-      <div className="flex-1 flex overflow-hidden z-10 relative">
-        {/* Left Side: Question Pane */}
-        <main className="flex-1 flex flex-col p-6 overflow-y-auto space-y-6">
-          {/* Subjects Tabs switcher */}
-          <div className="flex gap-2 overflow-x-auto pb-1 border-b border-border">
-            {session.subjects.map((sub: string) => {
-              const isActive = sub === activeSubject;
-              const hasUnanswered = session.questions
-                .filter((q: any) => q.subject === sub)
-                .some((q: any) => !answers[q.questionId]);
-              return (
-                <button
-                  key={sub}
-                  onClick={() => {
-                    setActiveSubject(sub);
-                    setActiveQuestionIndex(0);
-                  }}
-                  className={`rounded-xl px-4 py-2.5 text-xs font-bold transition-all flex items-center gap-2 flex-shrink-0 ${
-                    isActive
-                      ? 'bg-primary text-text-primary shadow-lg shadow-primary/10'
-                      : 'bg-bg-secondary border border-border text-text-secondary hover:text-text-primary'
-                  }`}
-                >
-                  {getSubjectLabel(sub)}
-                  {hasUnanswered && (
-                    <span className="h-1.5 w-1.5 rounded-full bg-amber-400" title="Contains unanswered questions" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Question Text details Card */}
-          {activeQuestion ? (
-            <div className="flex-1 flex flex-col justify-between space-y-8 max-w-4xl">
-              <QuestionCard
-                question={activeQuestion}
-                index={activeQuestionIndex}
-                totalCount={currentSubjectQuestions.length}
-                selectedOption={answers[activeQuestion.questionId]}
-                onSelectOption={(optionId) => handleSelectOption(activeQuestion.questionId, optionId)}
-              />
-
-              {/* Navigation Controls footer */}
-              <div className="flex justify-between items-center pt-6 border-t border-border mt-auto">
-                <button
-                  onClick={handlePrev}
-                  className="rounded-xl border border-border bg-bg-secondary hover:bg-bg-secondary px-5 py-3 text-xs font-bold text-text-secondary hover:text-text-primary flex items-center gap-1 transition-all"
-                >
-                  <ChevronLeft className="h-4 w-4" /> Previous
-                </button>
-                <span className="text-xs text-text-muted font-semibold tracking-wider uppercase hidden sm:inline">
-                  Keyboard shortcuts active • Press option key directly
-                </span>
-                <button
-                  onClick={handleNextClick}
-                  className={`rounded-xl px-5 py-3 text-xs font-bold text-text-primary flex items-center gap-1 transition-all ${
-                    isLastQuestion ? 'bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/10' : 'bg-primary hover:bg-primary-hover'
-                  }`}
-                >
-                  {isLastQuestion ? (
-                    <>
-                      Submit <Send className="h-4 w-4" />
-                    </>
-                  ) : (
-                    <>
-                      Next <ChevronRight className="h-4 w-4" />
-                    </>
-                  )}
-                </button>
+      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-76px)] w-full max-w-[1640px]">
+        <main className="min-w-0 flex-1 px-5 py-6 xl:px-8 xl:py-8">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="exam-eyebrow">Your test plan</p>
+              <h2 className="mt-1 font-display text-2xl font-black tracking-[-0.05em] text-text-primary xl:text-3xl">Stay focused. One question at a time.</h2>
+            </div>
+            <div className="flex items-center gap-3 text-right">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-text-muted">Session progress</p>
+                <p className="mt-1 text-sm font-black text-text-primary">{totalAnswered} <span className="font-medium text-text-muted">of {session.questions.length}</span></p>
+              </div>
+              <div className="h-10 w-px bg-border" />
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-text-muted">Flagged</p>
+                <p className="mt-1 text-sm font-black text-amber-500">{totalFlagged}</p>
               </div>
             </div>
-          ) : (
-            <p className="text-text-muted">No questions mapped to this subject.</p>
-          )}
-        </main>
-
-        {/* Right Side: Interactive Index Grid */}
-        {isSidebarOpen && (
-          <button
-            type="button"
-            aria-label="Close subject navigator"
-            className="absolute inset-0 bg-black/35 z-40 md:hidden"
-            onClick={() => setIsSidebarOpen(false)}
-          />
-        )}
-        <aside
-          className={`absolute inset-y-0 right-0 md:relative border-l border-border bg-bg-primary md:bg-bg-primary backdrop-blur-xl w-[85%] max-w-sm md:w-80 p-6 flex flex-col z-50 md:z-10 transition-transform duration-300 ${
-            isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'
-          }`}
-        >
-          <div className="flex items-center justify-between pb-4 border-b border-border mb-4">
-            <div className="flex items-center gap-2">
-              <Grid className="h-4 w-4 text-primary" />
-              <h3 className="text-xs font-bold text-text-primary uppercase tracking-wider">Subjects Navigator</h3>
-            </div>
-            <span className="text-xs text-text-secondary font-bold bg-bg-secondary px-2 py-0.5 rounded border border-border">
-              {answeredInActiveSubject} / {currentSubjectQuestions.length} answered
-            </span>
           </div>
 
-          <div className="flex-1 overflow-y-auto">
-            <div className="grid grid-cols-5 gap-2">
-              {currentSubjectQuestions.map((q: ExamQuestion, idx: number) => {
-                const isSelected = activeQuestionIndex === idx;
-                const isAnswered = !!answers[q.questionId];
-
+          <div className="mb-6 overflow-hidden rounded-2xl border border-border bg-bg-secondary/35 p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.06)]">
+            <div className="flex gap-1 overflow-x-auto">
+              {session.subjects.map((sub: string) => {
+                const isActive = sub === activeSubject;
+                const subjectQuestions = session.questions.filter((question: ExamQuestion) => question.subject === sub);
+                const subjectAnswered = subjectQuestions.filter((question: ExamQuestion) => !!answers[question.questionId]).length;
                 return (
                   <button
-                    key={q.questionId}
+                    key={sub}
+                    type="button"
                     onClick={() => {
-                      setActiveQuestionIndex(idx);
-                      if (window.innerWidth < DESKTOP_BREAKPOINT) setIsSidebarOpen(false);
+                      setActiveSubject(sub);
+                      setActiveQuestionIndex(0);
                     }}
-                    className={`h-9 w-9 rounded-lg border text-xs font-bold transition-all flex items-center justify-center ${
-                      isSelected
-                        ? 'border-primary ring-2 ring-primary/20 bg-primary/20 text-text-primary'
-                        : isAnswered
-                        ? 'border-primary/30 bg-primary/20 text-primary-hover'
-                        : 'border-border bg-bg-primary text-text-muted hover:border-border hover:text-text-secondary'
-                    }`}
+                    className={`group flex min-w-[145px] flex-1 items-center justify-between gap-3 rounded-xl px-4 py-3 text-left transition-[background-color,border-color,box-shadow,color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive ? 'border border-primary/35 bg-primary text-white shadow-[0_10px_24px_rgba(91,114,255,0.22)]' : 'border border-transparent text-text-secondary hover:border-border hover:bg-bg-primary/70 hover:text-text-primary'}`}
+                    aria-current={isActive ? 'page' : undefined}
                   >
-                    {idx + 1}
+                    <span className="min-w-0">
+                      <span className="block truncate text-xs font-black">{getSubjectLabel(sub)}</span>
+                      <span className={`mt-1 block text-[10px] font-semibold ${isActive ? 'text-white/70' : 'text-text-muted'}`}>{subjectAnswered}/{subjectQuestions.length} answered</span>
+                    </span>
+                    <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${subjectAnswered === subjectQuestions.length ? 'bg-success' : isActive ? 'bg-white/80' : 'bg-text-muted/60'}`} />
                   </button>
                 );
               })}
             </div>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-border space-y-2 text-xs text-text-muted leading-normal">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded bg-primary/20 border border-primary/30 block" />
-              <span>Answered question</span>
+          {activeQuestion ? (
+            <div className="exam-content-frame">
+              <div className="mb-3 flex items-center justify-between gap-4 px-1">
+                <div className="flex items-center gap-2 text-xs font-semibold text-text-muted">
+                  <Layers3 className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
+                  <span>{getSubjectLabel(activeSubject)} / Question {activeQuestionIndex + 1}</span>
+                </div>
+                <span className="hidden items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted sm:flex"><Keyboard className="h-3.5 w-3.5" aria-hidden="true" /> A–E to answer</span>
+              </div>
+
+              <QuestionCard
+                question={activeQuestion}
+                index={activeQuestionIndex}
+                totalCount={currentSubjectQuestions.length}
+                selectedOption={answers[activeQuestion.questionId]}
+                onSelectOption={(optionId) => handleSelectOption(activeQuestion.questionId, optionId)}
+                isFlagged={flaggedQuestions.has(activeQuestion.questionId)}
+                onToggleFlag={() => toggleFlaggedQuestion(activeQuestion.questionId)}
+              />
+
+              <div className="mt-6 flex flex-col gap-4 border-t border-border/70 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                <button
+                  type="button"
+                  onClick={handlePrev}
+                  disabled={isFirstQuestion}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-secondary/55 px-4 py-3 text-xs font-black text-text-secondary transition-[background-color,border-color,color,transform] duration-200 hover:border-primary/40 hover:bg-primary/5 hover:text-text-primary active:scale-[0.98] disabled:pointer-events-none disabled:opacity-35"
+                >
+                  <ChevronLeft className="h-4 w-4" aria-hidden="true" /> Previous
+                </button>
+                <div className="order-first flex items-center gap-2 text-center text-[11px] font-semibold text-text-muted sm:order-none">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                  Changes save automatically
+                </div>
+                <button
+                  type="button"
+                  onClick={handleNextClick}
+                  className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-xs font-black text-white shadow-[0_10px_24px_rgba(91,114,255,0.2)] transition-[background-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 active:scale-[0.98] ${isLastQuestion ? 'bg-rose-600 shadow-rose-600/20 hover:bg-rose-500' : 'bg-primary hover:bg-primary-hover'}`}
+                >
+                  {isLastQuestion ? 'Review & submit' : 'Next question'}
+                  {isLastQuestion ? <Send className="h-3.5 w-3.5" aria-hidden="true" /> : <ChevronRight className="h-4 w-4" aria-hidden="true" />}
+                </button>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded bg-bg-primary border border-border block" />
-              <span>Unanswered question</span>
+          ) : (
+            <div className="rounded-3xl border border-dashed border-border bg-bg-secondary/25 p-12 text-center text-sm text-text-muted">No questions mapped to this subject.</div>
+          )}
+        </main>
+
+        {isSidebarOpen && (
+          <button type="button" aria-label="Close subject navigator" className="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-sm md:hidden" onClick={() => setIsSidebarOpen(false)} />
+        )}
+        <aside className={`exam-navigator fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm border-l border-border bg-bg-primary px-5 pb-6 pt-24 shadow-[-20px_0_60px_rgba(0,0,0,0.18)] transition-transform duration-300 md:sticky md:top-[76px] md:z-10 md:h-[calc(100vh-76px)] md:w-[320px] md:max-w-none md:translate-x-0 md:border-l md:bg-bg-primary/65 md:px-6 md:pt-7 md:shadow-none ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}`}>
+          <div className="flex items-start justify-between gap-4 border-b border-border/70 pb-5">
+            <div>
+              <p className="exam-eyebrow">Question map</p>
+              <h3 className="mt-1 text-base font-black tracking-[-0.03em] text-text-primary">Navigator</h3>
             </div>
+            <button type="button" className="rounded-lg p-1.5 text-text-muted hover:bg-bg-secondary hover:text-text-primary md:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close navigator"><ChevronRightSquare className="h-5 w-5" /></button>
+          </div>
+
+          <div className="mt-5 rounded-2xl border border-border bg-bg-secondary/35 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xs font-bold text-text-secondary">{getSubjectLabel(activeSubject)}</span>
+              <span className="text-xs font-black text-primary">{answeredInActiveSubject}/{currentSubjectQuestions.length}</span>
+            </div>
+            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-bg-primary">
+              <div className="h-full rounded-full bg-primary transition-[width] duration-300" style={{ width: `${currentSubjectQuestions.length ? (answeredInActiveSubject / currentSubjectQuestions.length) * 100 : 0}%` }} />
+            </div>
+            <div className="mt-3 flex items-center justify-between text-[10px] font-semibold text-text-muted"><span>Current subject</span><span>{sessionProgress}% session complete</span></div>
+          </div>
+
+          <div className="mt-6 flex-1 overflow-y-auto pr-1">
+            <div className="grid grid-cols-5 gap-2.5">
+              {currentSubjectQuestions.map((question: ExamQuestion, idx: number) => {
+                const isSelected = activeQuestionIndex === idx;
+                const isAnswered = !!answers[question.questionId];
+                const isFlagged = flaggedQuestions.has(question.questionId);
+                return (
+                  <button
+                    key={question.questionId}
+                    type="button"
+                    onClick={() => {
+                      setActiveQuestionIndex(idx);
+                      if (window.innerWidth < DESKTOP_BREAKPOINT) setIsSidebarOpen(false);
+                    }}
+                    className={`relative flex h-11 w-full items-center justify-center rounded-xl border text-xs font-black transition-[background-color,border-color,box-shadow,color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-95 ${isSelected ? 'border-primary bg-primary text-white shadow-[0_8px_18px_rgba(91,114,255,0.26)] ring-2 ring-primary/20' : isFlagged ? 'border-amber-400/60 bg-amber-400/10 text-amber-500 hover:bg-amber-400/15' : isAnswered ? 'border-primary/30 bg-primary/12 text-primary hover:border-primary/60 hover:bg-primary/15' : 'border-border bg-bg-primary/55 text-text-muted hover:border-primary/35 hover:bg-bg-secondary hover:text-text-primary'}`}
+                    aria-label={`Question ${idx + 1}${isAnswered ? ', answered' : ', unanswered'}${isFlagged ? ', flagged for review' : ''}`}
+                    aria-current={isSelected ? 'step' : undefined}
+                  >
+                    {idx + 1}
+                    {isFlagged && !isSelected && <Flag className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full bg-bg-primary text-amber-500" fill="currentColor" aria-hidden="true" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-6 space-y-3 border-t border-border/70 pt-5">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-text-muted">Status key</p>
+            <div className="grid grid-cols-2 gap-x-3 gap-y-2.5 text-[11px] font-semibold text-text-secondary">
+              <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-md border border-primary/40 bg-primary/15" /> Answered</span>
+              <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-md border border-border bg-bg-primary" /> Unanswered</span>
+              <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-md border-2 border-primary bg-primary/15" /> Current</span>
+              <span className="flex items-center gap-2"><Flag className="h-3 w-3 text-amber-500" fill="currentColor" /> Flagged</span>
+            </div>
+            <div className="flex items-center gap-2 rounded-xl bg-primary/5 px-3 py-2.5 text-[11px] leading-5 text-text-muted"><CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-success" /> Your answers are saved as you move.</div>
           </div>
         </aside>
       </div>
 
-      {/* Floating Panel toggle button */}
-      <button
-        onClick={() => setIsSidebarOpen((prev) => !prev)}
-        className="fixed bottom-6 right-6 z-30 h-10 w-10 rounded-full bg-bg-secondary border border-border flex items-center justify-center shadow-2xl hover:text-text-primary md:hidden"
-        title="Toggle Question Grid"
-      >
-        <Monitor className="h-4 w-4" />
-      </button>
+      <button type="button" onClick={() => setIsSidebarOpen((previous) => !previous)} className="fixed bottom-5 right-5 z-30 flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary text-white shadow-[0_14px_30px_rgba(91,114,255,0.28)] md:hidden" title="Toggle question navigator" aria-label="Toggle question navigator"><Monitor className="h-4 w-4" aria-hidden="true" /></button>
 
       {/* Custom Submit Confirmation Modal */}
       {showSubmitModal && (
