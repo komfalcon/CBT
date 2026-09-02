@@ -22,26 +22,7 @@ import Latex from 'react-latex-next';
 import { QuestionCard, Button, Alert, Badge } from '../../components';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
-
-const SUBJECT_LABELS: Record<string, string> = {
-  english: 'Use of English',
-  mathematics: 'Mathematics',
-  physics: 'Physics',
-  chemistry: 'Chemistry',
-  biology: 'Biology',
-  geography: 'Geography',
-  economics: 'Economics',
-  government: 'Government',
-  literature: 'Literature in English',
-  commerce: 'Commerce',
-  accounting: 'Principles of Accounts',
-  agriculture: 'Agricultural Science',
-  civic_education: 'Civic Education',
-  crk: 'CRK',
-  irk: 'IRK',
-  history: 'History',
-  further_mathematics: 'Further Mathematics',
-};
+import { getSubjectLabel } from '../../constants/subjects';
 
 export default function ResultReview() {
   const { resultId } = useParams<{ resultId: string }>();
@@ -90,7 +71,7 @@ export default function ResultReview() {
     const wrong = result.subjectScores.reduce((acc, val) => acc + val.incorrectCount, 0);
     const skipped = result.subjectScores.reduce((acc, val) => acc + val.unansweredCount, 0);
     const weakest = [...result.subjectScores].sort((a, b) => Number(a.score || 0) - Number(b.score || 0))[0];
-    return { wrong, skipped, focusSubject: weakest ? (SUBJECT_LABELS[weakest.subject] || weakest.subject) : 'your weakest subject' };
+    return { wrong, skipped, focusSubject: weakest ? (getSubjectLabel(weakest.subject)) : 'your weakest subject' };
   }, [result]);
 
   const filteredQuestions = useMemo(() => {
@@ -322,7 +303,7 @@ export default function ResultReview() {
                 className="rounded-xl border border-border bg-bg-primary p-4 flex items-center justify-between"
               >
                 <div>
-                  <div className="text-sm font-bold text-text-primary">{SUBJECT_LABELS[scoreCard.subject] || scoreCard.subject}</div>
+                  <div className="text-sm font-bold text-text-primary">{getSubjectLabel(scoreCard.subject)}</div>
                   <span className="text-xs text-text-muted mt-1 block">
                     {scoreCard.correctCount} correct • {scoreCard.incorrectCount} wrong • {scoreCard.unansweredCount} skipped
                   </span>
@@ -361,7 +342,7 @@ export default function ResultReview() {
               <option value="all">All Subjects</option>
               {result.subjectScores.map((sc) => (
                 <option key={sc.subject} value={sc.subject}>
-                  {SUBJECT_LABELS[sc.subject] || sc.subject}
+                  {getSubjectLabel(sc.subject)}
                 </option>
               ))}
             </select>
@@ -401,7 +382,7 @@ export default function ResultReview() {
                   {/* Status Tag Badge */}
                   <div className="flex justify-between items-center text-xs font-bold tracking-wider uppercase mb-4">
                     <span className="text-primary">
-                      {SUBJECT_LABELS[q.subject] || q.subject} • {q.topic}
+                      {getSubjectLabel(q.subject)} • {q.topic}
                     </span>
                     <span
                       className={`px-2 py-0.5 rounded border ${

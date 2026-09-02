@@ -5,23 +5,7 @@ import { Button } from '../components/Button';
 import { useToast } from '../components/ToastProvider';
 import { getSubjectTopics, getQuestionSubjects } from '../features/questions/api';
 import { createExamSession } from '../features/exam/api';
-
-const SUBJECT_LABELS: Record<string, string> = {
-  english: 'English Language',
-  mathematics: 'Mathematics',
-  physics: 'Physics',
-  chemistry: 'Chemistry',
-  biology: 'Biology',
-  economics: 'Economics',
-  government: 'Government',
-  literature: 'Literature in English',
-  crk: 'Christian Religious Knowledge',
-  history: 'History',
-  commerce: 'Commerce',
-  accounting: 'Financial Accounting',
-  geography: 'Geography',
-  agriculture: 'Agricultural Science',
-};
+import { getSubjectLabel, normalizeSubjectKey } from '../constants/subjects';
 
 export default function MockSetupPage() {
   const navigate = useNavigate();
@@ -40,7 +24,10 @@ export default function MockSetupPage() {
   useEffect(() => {
     getQuestionSubjects()
       .then(rows => {
-        setAllSubjects(rows.map((r: any) => r.subject));
+        const normalizedSubjects = rows
+          .map((row: any) => normalizeSubjectKey(row.subject))
+          .filter(Boolean);
+        setAllSubjects([...new Set(normalizedSubjects)]);
         setIsLoadingSubjects(false);
       })
       .catch(err => {
@@ -199,7 +186,7 @@ export default function MockSetupPage() {
                       {isSelected && <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
                     </div>
                     <span className={`font-semibold ${isSelected ? 'text-primary' : 'text-text-primary'}`}>
-                      {SUBJECT_LABELS[sub] || sub}
+                      {getSubjectLabel(sub)}
                     </span>
                   </button>
                 );
@@ -252,7 +239,7 @@ export default function MockSetupPage() {
                         <div className="p-2 bg-bg-primary rounded-lg">
                           <BookOpen className="h-5 w-5 text-primary" />
                         </div>
-                        <h3 className="text-lg font-bold text-text-primary">{SUBJECT_LABELS[subject] || subject}</h3>
+                        <h3 className="text-lg font-bold text-text-primary">{getSubjectLabel(subject)}</h3>
                       </div>
                       
                       <div className="flex bg-bg-primary p-1 rounded-lg border border-border">
@@ -281,7 +268,7 @@ export default function MockSetupPage() {
                         {isLoadingMockTopics ? (
                           <div className="py-8 text-center text-text-muted flex flex-col items-center gap-2">
                             <Layers className="h-8 w-8 animate-pulse text-border" />
-                            Loading topics for {SUBJECT_LABELS[subject] || subject}...
+                            Loading topics for {getSubjectLabel(subject)}...
                           </div>
                         ) : topicsForSubject.length === 0 ? (
                           <div className="py-8 text-center text-text-muted">No specific topics available for this subject.</div>
