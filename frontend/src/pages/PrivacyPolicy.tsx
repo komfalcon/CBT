@@ -1,291 +1,176 @@
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Shield, Lock, Eye, Users } from 'lucide-react';
+import { BrainCircuit, Check, Database, KeyRound, LockKeyhole, ShieldCheck, UserRoundCheck } from 'lucide-react';
+import { SupportHero, SupportPageShell, SupportSection, supportChannels } from '../components';
 
-interface Section {
-    id: string;
-    title: string;
-    icon: React.ReactNode;
-    content: React.ReactNode;
-}
+const sections = [
+  { id: 'scope', label: 'Scope and controller' },
+  { id: 'information', label: 'Information we collect' },
+  { id: 'use', label: 'Why we use it' },
+  { id: 'sharing', label: 'Service providers' },
+  { id: 'storage', label: 'Storage and security' },
+  { id: 'retention', label: 'Retention' },
+  { id: 'rights', label: 'Your privacy rights' },
+  { id: 'children', label: 'Young users' },
+  { id: 'changes', label: 'Changes and contact' },
+];
+
+const listClassName = 'space-y-3 text-[14px] leading-6 text-text-secondary';
 
 export default function PrivacyPolicy() {
-    const sections: Section[] = [
-        {
-            id: 'introduction',
-            title: 'Introduction',
-            icon: <Shield className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        At JAMB CBT Prep by Aurikrex, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
-                    </p>
-                    <p>
-                        Please read this Privacy Policy carefully. If you do not agree with our policies and practices, please do not use our service.
-                    </p>
-                    <p className="text-sm text-text-muted/70">
-                        Last Updated: July 2026
-                    </p>
-                </div>
-            ),
-        },
-        {
-            id: 'collection',
-            title: 'Information We Collect',
-            icon: <Eye className="h-6 w-6" />,
-            content: (
-                <div className="space-y-4">
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Personal Information</h4>
-                        <ul className="list-disc list-inside space-y-1 text-text-muted">
-                            <li>Name and email address</li>
-                            <li>Account credentials and password</li>
-                            <li>Phone number (optional)</li>
-                            <li>Educational background and subject preferences</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Academic Performance Data</h4>
-                        <ul className="list-disc list-inside space-y-1 text-text-muted">
-                            <li>Exam answers and responses</li>
-                            <li>Test scores and performance metrics</li>
-                            <li>Study history and progress tracking</li>
-                            <li>Time spent on questions and sections</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Technical Information</h4>
-                        <ul className="list-disc list-inside space-y-1 text-text-muted">
-                            <li>IP address and device information</li>
-                            <li>Browser type and operating system</li>
-                            <li>Pages visited and time spent</li>
-                            <li>Cookies and tracking technologies</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Payment Information</h4>
-                        <ul className="list-disc list-inside space-y-1 text-text-muted">
-                            <li>Billing name and address</li>
-                            <li>Payment method (processed securely through Paystack)</li>
-                            <li>Transaction history</li>
-                        </ul>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            id: 'usage',
-            title: 'How We Use Your Information',
-            icon: <Users className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>We use the information we collect for various purposes:</p>
-                    <ul className="list-disc list-inside space-y-2">
-                        <li><span className="font-semibold text-white">Service Delivery:</span> To provide, maintain, and improve our platform and services</li>
-                        <li><span className="font-semibold text-white">Personalization:</span> To customize your learning experience and recommendations</li>
-                        <li><span className="font-semibold text-white">Performance Tracking:</span> To monitor your progress and generate performance analytics</li>
-                        <li><span className="font-semibold text-white">Communication:</span> To send you updates, notifications, and support messages</li>
-                        <li><span className="font-semibold text-white">Billing:</span> To process payments and manage subscription plans</li>
-                        <li><span className="font-semibold text-white">Security:</span> To detect and prevent fraud and protect against unauthorized access</li>
-                        <li><span className="font-semibold text-white">Research:</span> To analyze usage patterns and improve our educational content</li>
-                        <li><span className="font-semibold text-white">Legal Compliance:</span> To comply with legal obligations and regulations</li>
-                    </ul>
-                </div>
-            ),
-        },
-        {
-            id: 'sharing',
-            title: 'Information Sharing',
-            icon: <Lock className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        We do not sell, trade, or rent your personal information to third parties. However, we may share information in the following circumstances:
-                    </p>
-                    <div className="space-y-3">
-                        <div>
-                            <h4 className="font-semibold text-white mb-1">Service Providers</h4>
-                            <p>We share information with trusted third-party service providers who assist us in operating our website and conducting our business, such as payment processors (Paystack), email services, and analytics platforms.</p>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold text-white mb-1">Legal Requirements</h4>
-                            <p>We may disclose your information when required by law or when we believe in good faith that disclosure is necessary to comply with a legal obligation, enforce our agreements, or protect the rights and safety of our users.</p>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold text-white mb-1">Business Transfers</h4>
-                            <p>If we are involved in a merger, acquisition, bankruptcy, or sale of assets, your information may be transferred as part of that transaction.</p>
-                        </div>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            id: 'security',
-            title: 'Data Security',
-            icon: <Lock className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        We implement comprehensive security measures to protect your information, including:
-                    </p>
-                    <ul className="list-disc list-inside space-y-2">
-                        <li>SSL/TLS encryption for data in transit</li>
-                        <li>Secure password hashing and storage</li>
-                        <li>Regular security audits and penetration testing</li>
-                        <li>Access controls and role-based permissions</li>
-                        <li>Secure backup and disaster recovery procedures</li>
-                        <li>Two-factor authentication options for accounts</li>
-                    </ul>
-                    <p className="pt-3 text-sm">
-                        While we strive to protect your information, no security system is completely secure. We cannot guarantee absolute security of your data.
-                    </p>
-                </div>
-            ),
-        },
-        {
-            id: 'retention',
-            title: 'Data Retention',
-            icon: <Eye className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        We retain your information for as long as necessary to provide our services and fulfill the purposes described in this policy. Specifically:
-                    </p>
-                    <ul className="list-disc list-inside space-y-2">
-                        <li>Account information is retained while your account is active</li>
-                        <li>Academic performance data is retained indefinitely for your records and progress tracking</li>
-                        <li>Payment information is retained for billing and tax purposes as required by law</li>
-                        <li>Technical logs are typically retained for 90 days for security purposes</li>
-                    </ul>
-                    <p className="pt-3">
-                        You may request deletion of your account and associated data, subject to legal and contractual obligations.
-                    </p>
-                </div>
-            ),
-        },
-        {
-            id: 'rights',
-            title: 'Your Privacy Rights',
-            icon: <Users className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>Depending on your location, you may have the following rights:</p>
-                    <ul className="list-disc list-inside space-y-2">
-                        <li><span className="font-semibold text-white">Right to Access:</span> Request a copy of your personal information</li>
-                        <li><span className="font-semibold text-white">Right to Rectification:</span> Correct inaccurate or incomplete information</li>
-                        <li><span className="font-semibold text-white">Right to Erasure:</span> Request deletion of your data (subject to exceptions)</li>
-                        <li><span className="font-semibold text-white">Right to Restrict Processing:</span> Limit how we use your information</li>
-                        <li><span className="font-semibold text-white">Right to Data Portability:</span> Receive your data in a portable format</li>
-                        <li><span className="font-semibold text-white">Right to Withdraw Consent:</span> Opt-out of data processing</li>
-                    </ul>
-                    <p className="pt-3">
-                        To exercise any of these rights, please contact us at info@aurikrex.tech.
-                    </p>
-                </div>
-            ),
-        },
-        {
-            id: 'cookies',
-            title: 'Cookies and Tracking',
-            icon: <Eye className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        We use cookies and similar tracking technologies to enhance your experience. Cookies are small files stored on your device that help us recognize you and remember your preferences.
-                    </p>
-                    <div className="space-y-3">
-                        <div>
-                            <h4 className="font-semibold text-white mb-1">Types of Cookies</h4>
-                            <ul className="list-disc list-inside space-y-1 ml-2">
-                                <li><span className="font-semibold">Essential:</span> Required for platform functionality</li>
-                                <li><span className="font-semibold">Performance:</span> Help us analyze how you use our service</li>
-                                <li><span className="font-semibold">Functional:</span> Remember your preferences</li>
-                                <li><span className="font-semibold">Marketing:</span> Track usage for advertising purposes</li>
-                            </ul>
-                        </div>
-                        <p>
-                            You can control cookies through your browser settings, though some features may not work properly if cookies are disabled.
-                        </p>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            id: 'contact',
-            title: 'Contact Us',
-            icon: <Shield className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        If you have questions about this Privacy Policy or our privacy practices, please contact us:
-                    </p>
-                    <div className="space-y-2">
-                        <p><span className="font-semibold text-white">Email:</span> info@aurikrex.tech</p>
-                        <p><span className="font-semibold text-white">Phone:</span> +234 911 368 3395</p>
-                        <p><span className="font-semibold text-white">Website:</span> www.aurikrex.tech</p>
-                    </div>
-                    <p className="pt-3 text-sm">
-                        We will respond to your privacy requests within 30 days.
-                    </p>
-                </div>
-            ),
-        },
-    ];
+  return (
+    <SupportPageShell>
+      <SupportHero
+        eyebrow="Privacy notice"
+        title="Privacy that supports your preparation."
+        description="This notice explains the candidate information JAMB UTME Prep by Aurikrex uses, why we use it, and the choices you have when you practise with mock exams, drills, performance insights, CBT keys, and Falke AI."
+        icon={ShieldCheck}
+        meta={
+          <div className="flex items-center gap-3 text-xs text-text-muted">
+            <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 font-semibold text-primary">Effective 2 September 2026</span>
+            <span>Applies to the website and candidate portal</span>
+          </div>
+        }
+      />
 
-    return (
-        <div className="min-h-screen bg-bg-primary text-text-primary">
-            {/* Header */}
-            <header className="border-b border-border/60 sticky top-0 z-40 backdrop-blur-md bg-bg-primary/80">
-                <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-                    <Link to="/" className="flex items-center gap-2 hover:text-primary transition-colors">
-                        <ArrowLeft className="h-5 w-5" />
-                        <span className="font-semibold">Back</span>
-                    </Link>
-                    <h1 className="text-xl font-bold">Privacy Policy</h1>
-                    <div className="w-20" />
-                </div>
-            </header>
+      <main className="mx-auto grid max-w-7xl grid-cols-[230px_minmax(0,1fr)] gap-14 px-8 py-16">
+        <aside className="self-start sticky top-28 rounded-2xl support-surface-soft p-3">
+          <p className="px-3 pb-3 pt-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted">On this page</p>
+          <nav className="space-y-1" aria-label="Privacy policy sections">
+            {sections.map((section, index) => (
+              <a key={section.id} href={`#${section.id}`} className="support-toc-link flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] transition-colors">
+                <span className="font-mono text-[11px] text-primary/80">{String(index + 1).padStart(2, '0')}</span>
+                <span>{section.label}</span>
+              </a>
+            ))}
+          </nav>
+        </aside>
 
-            {/* Main Content */}
-            <main className="mx-auto max-w-4xl px-6 py-16">
-                {/* Hero Section */}
-                <div className="mb-12 space-y-4">
-                    <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
-                        Privacy Policy
-                    </h2>
-                    <p className="text-text-muted">
-                        Your privacy is important to us. This policy explains how we collect, use, and protect your information.
-                    </p>
-                </div>
+        <article className="min-w-0 space-y-14">
+          <SupportSection id="scope" eyebrow="01 — the essentials" title="Scope and who is responsible">
+            <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
+              <p>
+                Aurikrex operates JAMB UTME Prep, a study platform for Nigerian students preparing for the Unified Tertiary Matriculation Examination (UTME). In this notice, <strong className="font-semibold text-text-primary">“Aurikrex,” “we,” “us,”</strong> and <strong className="font-semibold text-text-primary">“our”</strong> mean the team operating this platform. We are responsible for the personal data described below when we decide why and how it is processed.
+              </p>
+              <p className="mt-4">
+                This notice covers the public site, candidate account, mock exams, subject drills, study analytics, CBT-key sign-in, payments, and Falke AI features. It does not govern third-party websites or services that you choose to open, including their own payment or sign-in pages.
+              </p>
+            </div>
+          </SupportSection>
 
-                {/* Sections */}
-                <div className="space-y-8">
-                    {sections.map((section) => (
-                        <div
-                            key={section.id}
-                            id={section.id}
-                            className="scroll-mt-20"
-                        >
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                                    {section.icon}
-                                </div>
-                                <h3 className="text-2xl font-bold text-white">{section.title}</h3>
-                            </div>
-                            <div className="pl-13 border-l-2 border-primary/20">
-                                {section.content}
-                            </div>
-                        </div>
-                    ))}
-                </div>
+          <SupportSection id="information" eyebrow="02 — what we collect" title="Information connected to your account and study activity">
+            <div className="overflow-hidden rounded-2xl support-surface">
+              <table className="support-table w-full border-collapse text-left text-[13px] leading-6">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="w-[31%] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em]">Category</th>
+                    <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em]">What this includes in JAMB UTME Prep</th>
+                  </tr>
+                </thead>
+                <tbody className="text-text-secondary">
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-text-primary">Candidate profile</td>
+                    <td className="px-6 py-4">Your full name, email address, phone number when supplied, account password, profile photo when supplied through Google, and the UTME subject combination or profile details you choose to add.</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-text-primary">Account credentials</td>
+                    <td className="px-6 py-4">A securely hashed password, email-verification and password-reset codes, optional multi-factor authentication setup, sign-in timestamps and IP address, device-security signals, and a unique CBT access key.</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-text-primary">Practice and performance</td>
+                    <td className="px-6 py-4">Mock and drill selections, questions served, answer choices, time remaining or time spent, score, subject and topic breakdowns, progress, streaks, and study-plan or syllabus activity.</td>
+                  </tr>
+                  <tr className="border-b border-border">
+                    <td className="px-6 py-4 font-semibold text-text-primary">Payments</td>
+                    <td className="px-6 py-4">Your email, selected plan or test, payment reference, amount, and verification result. Card, bank, or other payment credentials are collected by Paystack on its checkout page, not stored by Aurikrex.</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 font-semibold text-text-primary">Falke AI interactions</td>
+                    <td className="px-6 py-4">Messages you send to Falke AI, chat-session titles and history, and the question or result context you ask it to explain. Please do not put sensitive personal information into an AI prompt.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-5 text-[13px] leading-6 text-text-muted">We also receive limited technical information needed to keep the service secure and functional, such as browser requests, error reports, and essential browser storage used to keep you signed in and remember your theme preference.</p>
+          </SupportSection>
 
-                {/* Footer Note */}
-                <div className="mt-16 p-6 rounded-xl border border-border bg-bg-secondary/30 space-y-3">
-                    <h4 className="font-semibold text-white">Policy Updates</h4>
-                    <p className="text-text-muted text-sm">
-                        We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will notify you of any significant changes by posting the new policy and updating the "Last Updated" date above.
-                    </p>
-                </div>
-            </main>
-        </div>
-    );
+          <SupportSection id="use" eyebrow="03 — how information is used" title="Why the platform needs this information">
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { icon: UserRoundCheck, title: 'Run your account', text: 'Create and verify your candidate profile, authenticate sign-ins, recover access, and show your profile and subject combination.' },
+                { icon: Database, title: 'Deliver practice', text: 'Build mock-exam and drill sessions, save answers, calculate results, and show progress, topic weaknesses, and study insights.' },
+                { icon: KeyRound, title: 'Protect access', text: 'Issue and validate your CBT key, prevent unauthorised access, investigate suspicious activity, and maintain service reliability.' },
+                { icon: BrainCircuit, title: 'Provide AI study help', text: 'Generate Falke AI explanations and tutoring responses when you use an AI feature that is available to your plan.' },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.title} className="support-surface rounded-2xl p-6">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary"><Icon className="h-5 w-5" /></div>
+                    <h3 className="mt-5 font-display text-[17px] font-semibold tracking-[-0.03em] text-text-primary">{item.title}</h3>
+                    <p className="mt-2 text-[13px] leading-6 text-text-secondary">{item.text}</p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-5 rounded-2xl border border-primary/20 bg-primary/[0.07] p-6 text-[14px] leading-7 text-text-secondary">
+              <p><strong className="text-text-primary">Our legal bases.</strong> We process information needed to provide your account, practice tools, billing, and support because it is necessary to perform our agreement with you. We also process limited data for legitimate interests such as service security, fraud prevention, and improvement. Where consent is required, including for an optional processing activity, we will ask for it and you may withdraw it.</p>
+            </div>
+          </SupportSection>
+
+          <SupportSection id="sharing" eyebrow="04 — third parties" title="When information is shared outside Aurikrex">
+            <div className="overflow-hidden rounded-2xl support-surface">
+              <table className="support-table w-full border-collapse text-left text-[13px] leading-6">
+                <thead><tr className="border-b border-border"><th className="w-[30%] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em]">Recipient</th><th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em]">Purpose and information involved</th></tr></thead>
+                <tbody className="text-text-secondary">
+                  <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Paystack</td><td className="px-6 py-4">Processes checkout for paid plans and pay-per-test purchases. It receives the payment information you enter, your email, the amount, and a transaction reference under its own privacy terms.</td></tr>
+                  <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Google</td><td className="px-6 py-4">If you select Google sign-in, Google supplies the account identity information needed to create or sign in to your profile, such as your name, email, and profile image where available.</td></tr>
+                  <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">SeekAI</td><td className="px-6 py-4">Falke AI sends the prompt, relevant learning context, and chat history needed to generate a response through the AI service provider currently configured for the feature. Do not include financial, health, government-ID, or other highly sensitive information in prompts.</td></tr>
+                  <tr><td className="px-6 py-4 font-semibold text-text-primary">Turso, DigitalOcean, and Cloudflare</td><td className="px-6 py-4">The current platform configuration uses these cloud database, application-hosting, and frontend-delivery providers to store account and learning records and maintain availability. They act only to provide those services for us.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-5 text-[13px] leading-6 text-text-muted">We do not sell candidate personal data. We do not currently use third-party advertising analytics in the CBT application. We may disclose information if required by law, to protect users or the platform, or as part of a legitimate business reorganisation, subject to appropriate safeguards.</p>
+          </SupportSection>
+
+          <SupportSection id="storage" eyebrow="05 — keeping information safe" title="Storage, security, and international processing">
+            <div className="support-surface rounded-2xl p-7">
+              <div className="flex gap-4"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300"><LockKeyhole className="h-5 w-5" /></div><div className="text-[14px] leading-7 text-text-secondary"><p>Account, learning, and payment-verification records are stored in our managed database and cloud infrastructure. Passwords are stored as a one-way cryptographic hash rather than readable password text. We use access controls and technical safeguards designed to limit access to people and providers who need it to run, secure, or support the platform.</p><p className="mt-4">Our providers may process information outside Nigeria. Where this happens, we take reasonable steps to use a provider and transfer arrangement that provides safeguards appropriate to the information and applicable Nigerian data-protection law.</p></div></div>
+            </div>
+          </SupportSection>
+
+          <SupportSection id="retention" eyebrow="06 — how long we keep it" title="Retention is tied to a practical purpose">
+            <div className="support-surface rounded-2xl p-7">
+              <ul className={listClassName}>
+                <li className="flex gap-3"><Check className="mt-1 h-4 w-4 shrink-0 text-emerald-300" /><span><strong className="font-semibold text-text-primary">Active accounts and performance history:</strong> retained while your account is active so your results, progress, and settings remain available.</span></li>
+                <li className="flex gap-3"><Check className="mt-1 h-4 w-4 shrink-0 text-emerald-300" /><span><strong className="font-semibold text-text-primary">Deleted accounts:</strong> after identity confirmation, we aim to delete or de-identify account and learning records within 30 days, unless we need a limited record for a lawful purpose.</span></li>
+                <li className="flex gap-3"><Check className="mt-1 h-4 w-4 shrink-0 text-emerald-300" /><span><strong className="font-semibold text-text-primary">Payments and disputes:</strong> payment references and related records are retained for the period required for financial, tax, fraud-prevention, chargeback, or legal obligations.</span></li>
+                <li className="flex gap-3"><Check className="mt-1 h-4 w-4 shrink-0 text-emerald-300" /><span><strong className="font-semibold text-text-primary">Falke AI chat:</strong> retained with the relevant chat session until you delete the session or request account deletion, subject to the limits above.</span></li>
+              </ul>
+            </div>
+          </SupportSection>
+
+          <SupportSection id="rights" eyebrow="07 — your choices" title="Your rights under Nigerian data-protection law">
+            <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
+              <p>Nigeria’s principal data-protection framework is the Nigeria Data Protection Act 2023 (NDPA). This notice is designed to support the NDPA and, where still relevant, the earlier Nigeria Data Protection Regulation (NDPR). Subject to applicable law and verification of your identity, you may ask us to:</p>
+              <div className="mt-5 grid grid-cols-2 gap-x-8 gap-y-3 text-[13px] leading-6">
+                {['Know how your data is used and obtain access to it.', 'Correct inaccurate or incomplete account information.', 'Request deletion where information is no longer necessary.', 'Object to or restrict certain processing.', 'Receive a portable copy of data you provided to us.', 'Withdraw consent for a consent-based activity.', 'Ask not to be subject to a solely automated decision where the law gives that protection.', 'Complain to us and, if unresolved, to the Nigeria Data Protection Commission (NDPC).'].map((right) => <p key={right} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />{right}</p>)}
+              </div>
+              <p className="mt-6 border-t border-border pt-5">To make a request, email <a className="font-semibold text-primary hover:text-primary-hover" href={`mailto:${supportChannels.email}?subject=Privacy%20request`}>{supportChannels.email}</a> with the subject <strong className="font-semibold text-text-primary">“Privacy request”</strong>. Tell us which account email and right your request concerns. We may ask for information reasonably necessary to verify that the request is yours. You may also contact the NDPC through its official channels if you believe your rights have not been respected.</p>
+            </div>
+          </SupportSection>
+
+          <SupportSection id="children" eyebrow="08 — students under 18" title="Young users and parent or guardian involvement">
+            <div className="support-surface-soft rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
+              <p>JAMB UTME Prep is intended for students aged 13 and above. If you are under 18, please use the platform with the knowledge and involvement of a parent or guardian where required by law. We do not knowingly create accounts for children under 13. If you believe a child under 13 has provided personal data, contact us so that we can investigate and take appropriate action.</p>
+            </div>
+          </SupportSection>
+
+          <SupportSection id="changes" eyebrow="09 — staying current" title="Updates and how to reach us">
+            <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
+              <p>We may update this notice when our features, providers, or legal obligations change. For a material change, we will provide a reasonable notice in the platform or by email where appropriate, and we will update the effective date at the top of this page.</p>
+              <p className="mt-4">For a privacy question, deletion request, or concern about this notice, contact Aurikrex at <a className="font-semibold text-primary hover:text-primary-hover" href={`mailto:${supportChannels.email}`}>{supportChannels.email}</a> or call <a className="font-semibold text-primary hover:text-primary-hover" href={`tel:${supportChannels.phoneLink}`}>{supportChannels.phoneDisplay}</a>.</p>
+            </div>
+          </SupportSection>
+        </article>
+      </main>
+    </SupportPageShell>
+  );
 }
