@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as amqp from 'amqplib';
-import * as nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 type NotificationPayload = {
   email: string;
@@ -14,7 +14,7 @@ export class NotificationsProcessor implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(NotificationsProcessor.name);
   private connection?: amqp.ChannelModel;
   private channel?: amqp.Channel;
-  private transporter: nodemailer.Transporter | null = null;
+  private resend?: Resend;
 
   constructor(private readonly configService: ConfigService) {}
 
@@ -25,24 +25,12 @@ export class NotificationsProcessor implements OnModuleInit, OnModuleDestroy {
       return;
     }
 
-    const smtpHost = this.configService.get<string>('SMTP_HOST');
-    const smtpPort = this.configService.get<number>('SMTP_PORT', 587);
-    const smtpUser = this.configService.get<string>('SMTP_USER');
-    const smtpPass = this.configService.get<string>('SMTP_PASS');
-
-    if (smtpHost && smtpUser && smtpPass) {
-      this.transporter = nodemailer.createTransport({
-        host: smtpHost,
-        port: Number(smtpPort),
-        secure: Number(smtpPort) === 465, // true for 465, false for other ports
-        auth: {
-          user: smtpUser,
-          pass: smtpPass,
-        },
-      });
-      this.logger.log('Nodemailer SMTP Transporter configured successfully.');
+    const apiKey = this.configService.get<string>('RESEND_API_KEY');
+    if (apiKey) {
+      this.resend = new Resend(apiKey);
+      this.logger.log('Resend API Key configured.');
     } else {
-      this.logger.warn('SMTP credentials not fully configured (missing SMTP_HOST, SMTP_USER, or SMTP_PASS). Emails will be logged to console.');
+      this.logger.warn('RESEND_API_KEY is not configured. Emails will be logged to console.');
     }
 
     try {
@@ -94,18 +82,18 @@ export class NotificationsProcessor implements OnModuleInit, OnModuleDestroy {
   }
 
   private async sendEmail(to: string, subject: string, text: string, html: string): Promise<void> {
-    const fromEmail = this.configService.get<string>('SMTP_FROM_EMAIL', 'noreply@jambcbt.ng');
+    const fromEmail = this.configService.get<string>('RESEND_FROM_EMAIL', 'noreply@aurikrex.tech');
 
-    if (this.transporter) {
+    if (this.resend) {
       try {
-        await this.transporter.sendMail({
+        await this.resend.emails.send({
           from: fromEmail,
           to,
           subject,
           text,
           html,
         });
-        this.logger.log(`Email successfully sent to ${to} via SMTP.`);
+        this.logger.log(`Email successfully sent to ${to} via Resend.`);
       } catch (error) {
         this.logger.error(`Failed to send email to ${to}`, error as Error);
         throw error;
