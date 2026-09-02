@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 async function run() {
   try {
-    require('dotenv').config({ path: 'c:/Users/DELL/AURIKEX/CBT/backend/.env' });
+    require('dotenv').config({ path: 'c:/Users/DELL/AURIKREX/CBT/backend/.env' });
     const uri = process.env.MONGODB_URI;
     console.log('Connecting to DB...');
     await mongoose.connect(uri);
@@ -12,7 +12,7 @@ async function run() {
     const db = mongoose.connection.db;
     const users = db.collection('users');
 
-    const email = 'falcon@aurikex.tech';
+    const email = 'falcon@aurikrex.tech';
     const plainPassword = 'Korex1025$1025$';
     const passwordHash = await bcrypt.hash(plainPassword, 10);
 

@@ -94,7 +94,7 @@ export default function SecureAccess() {
               <Input
                 label="Admin Email"
                 type="email"
-                placeholder="sysadmin@aurikex.com"
+                placeholder="sysadmin@aurikrex.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required

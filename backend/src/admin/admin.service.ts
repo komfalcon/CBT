@@ -30,12 +30,12 @@ export class AdminService {
     const startOfYesterday = new Date(startOfToday.getTime() - 24 * 3600 * 1000);
     const endOfYesterday = new Date(startOfToday.getTime() - 1);
 
-    // 1. Total Voucher keys generated (emails ending in @aurikex.local)
-    const totalVouchersQuery = await this.db.select({ value: count() }).from(schema.users).where(like(schema.users.email, '%@aurikex.local'));
+    // 1. Total Voucher keys generated (emails ending in @aurikrex.local)
+    const totalVouchersQuery = await this.db.select({ value: count() }).from(schema.users).where(like(schema.users.email, '%@aurikrex.local'));
     const totalVouchers = totalVouchersQuery[0].value;
 
     // 2. Total Registered Candidates (students with real emails)
-    const totalCandidatesQuery = await this.db.select({ value: count() }).from(schema.users).where(and(eq(schema.users.role, 'student'), not(like(schema.users.email, '%@aurikex.local'))));
+    const totalCandidatesQuery = await this.db.select({ value: count() }).from(schema.users).where(and(eq(schema.users.role, 'student'), not(like(schema.users.email, '%@aurikrex.local'))));
     const totalCandidates = totalCandidatesQuery[0].value;
 
     // 3. Subscriptions breakdown
@@ -155,7 +155,7 @@ export class AdminService {
       valuesToInsert.push({
         id: randomUUID(),
         fullName: 'CBT Voucher Account',
-        email: `voucher-${plainKey.toLowerCase().replace(/-/g, '')}@aurikex.local`,
+        email: `voucher-${plainKey.toLowerCase().replace(/-/g, '')}@aurikrex.local`,
         role: 'student',
         account_status: 'active', // So voucher users can log in immediately
         cbt_key: encryptFieldValue(plainKey), // AES encrypted

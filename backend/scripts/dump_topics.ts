@@ -22,7 +22,7 @@ async function run() {
     }
     output += res._id.topic + ': ' + res.count + '\n';
   }
-  fs.writeFileSync('c:/Users/DELL/AURIKEX/CBT/scratch_topics.txt', output);
+  fs.writeFileSync('c:/Users/DELL/AURIKREX/CBT/scratch_topics.txt', output);
   console.log('Done');
   process.exit(0);
 }

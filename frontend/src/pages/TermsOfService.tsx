@@ -17,7 +17,7 @@ export default function TermsOfService() {
             content: (
                 <div className="space-y-3 text-text-muted">
                     <p>
-                        These Terms of Service ("Terms") govern your access to and use of the JAMB CBT Prep platform ("Service"), including our website, mobile applications, and related services provided by Aurikex ("Company," "we," "us," or "our").
+                        These Terms of Service ("Terms") govern your access to and use of the JAMB CBT Prep platform ("Service"), including our website, mobile applications, and related services provided by Aurikrex ("Company," "we," "us," or "our").
                     </p>
                     <p>
                         By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to any part of these Terms, you may not use the Service.
@@ -82,7 +82,7 @@ export default function TermsOfService() {
             content: (
                 <div className="space-y-3 text-text-muted">
                     <p>
-                        All content on the Service, including questions, answers, explanations, graphics, logos, and software, is the exclusive property of Aurikex or its licensors and is protected by copyright and other intellectual property laws.
+                        All content on the Service, including questions, answers, explanations, graphics, logos, and software, is the exclusive property of Aurikrex or its licensors and is protected by copyright and other intellectual property laws.
                     </p>
                     <div className="space-y-3">
                         <div>
@@ -100,7 +100,7 @@ export default function TermsOfService() {
                         </div>
                         <div>
                             <h4 className="font-semibold text-white mb-1">User Content</h4>
-                            <p>By submitting content (feedback, forum posts), you grant Aurikex a worldwide, non-exclusive license to use that content for service improvement.</p>
+                            <p>By submitting content (feedback, forum posts), you grant Aurikrex a worldwide, non-exclusive license to use that content for service improvement.</p>
                         </div>
                     </div>
                 </div>
@@ -184,7 +184,7 @@ export default function TermsOfService() {
                     <div>
                         <h4 className="font-semibold text-white mb-2">Limitation of Liability</h4>
                         <p>
-                            To the fullest extent permitted by law, Aurikex is not liable for indirect, incidental, special, consequential, or punitive damages arising from your use of the Service.
+                            To the fullest extent permitted by law, Aurikrex is not liable for indirect, incidental, special, consequential, or punitive damages arising from your use of the Service.
                         </p>
                     </div>
                 </div>
@@ -197,7 +197,7 @@ export default function TermsOfService() {
             content: (
                 <div className="space-y-3 text-text-muted">
                     <p>
-                        You agree to indemnify and hold harmless Aurikex, its officers, directors, employees, and agents from any claims, damages, losses, or expenses (including attorney's fees) arising from:
+                        You agree to indemnify and hold harmless Aurikrex, its officers, directors, employees, and agents from any claims, damages, losses, or expenses (including attorney's fees) arising from:
                     </p>
                     <ul className="list-disc list-inside space-y-1">
                         <li>Your use of the Service</li>
@@ -237,7 +237,7 @@ export default function TermsOfService() {
             content: (
                 <div className="space-y-3 text-text-muted">
                     <p>
-                        Either you or Aurikex may terminate your use of the Service at any time. Upon termination:
+                        Either you or Aurikrex may terminate your use of the Service at any time. Upon termination:
                     </p>
                     <ul className="list-disc list-inside space-y-1">
                         <li>Your right to use the Service immediately ceases</li>
@@ -273,9 +273,9 @@ export default function TermsOfService() {
                         For questions about these Terms of Service, please contact us:
                     </p>
                     <div className="space-y-2">
-                        <p><span className="font-semibold text-white">Email:</span> info@aurikex.tech</p>
+                        <p><span className="font-semibold text-white">Email:</span> info@aurikrex.tech</p>
                         <p><span className="font-semibold text-white">Phone:</span> +234 911 368 3395</p>
-                        <p><span className="font-semibold text-white">Website:</span> www.aurikex.tech</p>
+                        <p><span className="font-semibold text-white">Website:</span> www.aurikrex.tech</p>
                     </div>
                 </div>
             ),

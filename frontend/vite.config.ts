@@ -8,7 +8,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Aurikex CBT Portal',
+        name: 'Aurikrex CBT Portal',
         short_name: 'CBT Portal',
         description: 'JAMB UTME CBT Practice Portal',
         theme_color: '#0f172a',

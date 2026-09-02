@@ -417,3 +417,74 @@ button:active:not(:disabled), a:active {
 
 [data-theme='light'] .auth-page .auth-form-panel button.text-slate-200 { color: #344054 !important; }
 [data-theme='light'] .auth-page .auth-form-panel button:hover { border-color: #3454dc; }
+/* Mobile responsiveness pass: these rules intentionally stop at the existing sm breakpoint. */
+@media (max-width: 639px) {
+  .landing-page .site-header > div:first-child {
+    gap: 0.75rem;
+  }
+
+  .landing-page .site-header > div:first-child > a,
+  .landing-page .site-header > div:first-child > a > div {
+    min-width: 0;
+  }
+
+  .landing-page .site-header .brand-name,
+  .landing-page .site-header .brand-kicker {
+    white-space: nowrap;
+  }
+
+  .landing-page .site-header > div:first-child > div {
+    gap: 0.5rem;
+  }
+
+  .landing-page .site-header button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .landing-page .feature-card,
+  .landing-page .subject-card,
+  .landing-page .process-card,
+  .landing-page .pricing-card,
+  .landing-page .payg-panel,
+  .landing-page .payg-item,
+  .landing-page .landing-preview {
+    min-width: 0;
+  }
+
+  .landing-page .payg-item {
+    flex: 1 1 120px;
+  }
+
+  [data-theme='light'] .landing-page .mobile-nav {
+    border-color: #dfe4ec !important;
+    background: #ffffff !important;
+  }
+
+  [data-theme='light'] .landing-page .mobile-nav,
+  [data-theme='light'] .landing-page .mobile-nav a,
+  [data-theme='light'] .landing-page .mobile-nav button {
+    color: #344054 !important;
+  }
+
+  [data-theme='light'] .landing-page .mobile-nav a:hover,
+  [data-theme='light'] .landing-page .mobile-nav button:hover {
+    background: #f2f5ff !important;
+    color: #2542bd !important;
+  }
+
+  .auth-page button,
+  .auth-page input,
+  .auth-page select,
+  .auth-page textarea {
+    min-height: 44px;
+  }
+
+  .auth-page .auth-tabs {
+    min-width: 0;
+  }
+
+  .auth-page .auth-form-panel {
+    max-height: calc(100vh - 32px);
+  }
+}

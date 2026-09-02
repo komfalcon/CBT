@@ -23,7 +23,7 @@ const ThemeContext = createContext<ThemeProviderState>(initialState);
 export function ThemeProvider({
   children,
   defaultTheme = 'dark',
-  storageKey = 'aurikex-ui-theme',
+  storageKey = 'aurikrex-ui-theme',
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
