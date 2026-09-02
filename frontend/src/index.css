@@ -948,3 +948,12 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
     display: none;
   }
 }
+
+/* The full-simulation card uses theme-specific surfaces so its secondary copy stays WCAG AA-readable. */
+.mock-exam-card {
+  background: linear-gradient(145deg, #273ea6 0%, #111d34 68%);
+}
+
+[data-theme='light'] .mock-exam-card {
+  background: linear-gradient(145deg, #dbe5ff 0%, #ffffff 72%);
+}

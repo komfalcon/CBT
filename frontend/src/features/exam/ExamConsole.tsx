@@ -17,26 +17,7 @@ import 'katex/dist/katex.min.css';
 import Latex from 'react-latex-next';
 import { QuestionCard, Button, Modal, Alert, Badge } from '../../components';
 import { ThemeToggle } from '../../components/ThemeToggle';
-
-const SUBJECT_LABELS: Record<string, string> = {
-  english: 'Use of English',
-  mathematics: 'Mathematics',
-  physics: 'Physics',
-  chemistry: 'Chemistry',
-  biology: 'Biology',
-  geography: 'Geography',
-  economics: 'Economics',
-  government: 'Government',
-  literature: 'Literature in English',
-  commerce: 'Commerce',
-  accounting: 'Principles of Accounts',
-  agriculture: 'Agricultural Science',
-  civic_education: 'Civic Education',
-  crk: 'CRK',
-  irk: 'IRK',
-  history: 'History',
-  further_mathematics: 'Further Mathematics',
-};
+import { getSubjectLabel } from '../../constants/subjects';
 
 const DESKTOP_BREAKPOINT = 768;
 const CALCULATOR_WIDTH = 288;
@@ -480,7 +461,7 @@ export default function ExamConsole() {
                       : 'bg-bg-secondary border border-border text-text-secondary hover:text-text-primary'
                   }`}
                 >
-                  {SUBJECT_LABELS[sub] || sub}
+                  {getSubjectLabel(sub)}
                   {hasUnanswered && (
                     <span className="h-1.5 w-1.5 rounded-full bg-amber-400" title="Contains unanswered questions" />
                   )}

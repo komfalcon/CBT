@@ -38,28 +38,7 @@ import {
 import { AiChatWidget } from '../features/ai/AiChatWidget';
 import { Alert, Badge, Button, Card, Modal, SecuritySettings, useToast } from '../components';
 import { ThemeToggle } from '../components/ThemeToggle';
-
-const SUBJECT_LABELS: Record<string, string> = {
-  english: 'Use of English',
-  mathematics: 'Mathematics',
-  physics: 'Physics',
-  chemistry: 'Chemistry',
-  biology: 'Biology',
-  geography: 'Geography',
-  economics: 'Economics',
-  government: 'Government',
-  literature: 'Literature in English',
-  commerce: 'Commerce',
-  accounting: 'Principles of Accounts',
-  agriculture: 'Agricultural Science',
-  civic_education: 'Civic Education',
-  crk: 'Christian Religious Knowledge',
-  irk: 'Islamic Religious Knowledge',
-  history: 'History',
-  further_mathematics: 'Further Mathematics',
-};
-
-const AVAILABLE_SUBJECTS = Object.keys(SUBJECT_LABELS).filter((subject) => subject !== 'english');
+import { AVAILABLE_SUBJECTS, getSubjectLabel } from '../constants/subjects';
 
 const classNames = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ');
 
@@ -574,7 +553,7 @@ export default function StudentDashboard() {
               <section className="space-y-4">
                 <SectionKicker label="Practice" detail="Choose the type of preparation that fits your next study block" />
                 <div className="grid gap-4 lg:grid-cols-2">
-                  <Card hoverable className="relative overflow-hidden border-primary/30 bg-[linear-gradient(145deg,rgba(91,114,255,0.17),rgba(17,29,52,1)_62%)] p-6 shadow-[0_14px_30px_rgba(0,0,0,0.16)]">
+                  <Card hoverable className="mock-exam-card relative overflow-hidden border-primary/30 p-6 shadow-[0_14px_30px_rgba(0,0,0,0.16)]">
                     <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-primary/20 blur-2xl" />
                     <div className="relative flex h-full flex-col">
                       <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/35 bg-primary/15 text-primary"><Play className="h-5 w-5" /></div>
@@ -611,7 +590,7 @@ export default function StudentDashboard() {
                       {combination.map((subject: string) => (
                         <div key={subject} className="flex items-center gap-3 rounded-xl border border-border bg-bg-secondary/65 px-3 py-3">
                           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-xs sm:text-[10px] font-black text-primary">{subject.slice(0, 3).toUpperCase()}</div>
-                          <p className="min-w-0 truncate text-xs font-semibold text-text-primary" title={SUBJECT_LABELS[subject] || subject}>{SUBJECT_LABELS[subject] || subject}</p>
+                          <p className="min-w-0 truncate text-xs font-semibold text-text-primary" title={getSubjectLabel(subject)}>{getSubjectLabel(subject)}</p>
                         </div>
                       ))}
                     </div>
@@ -659,7 +638,7 @@ export default function StudentDashboard() {
                       <div className="mt-6 space-y-4">
                         {subjectBreakdown.map((subject) => (
                           <div key={subject.subject}>
-                            <div className="mb-1.5 flex items-center justify-between gap-3 text-xs"><span className="truncate font-semibold text-text-primary">{SUBJECT_LABELS[subject.subject] || subject.subject}</span><span className={classNames('font-bold tabular-nums', subject.accuracy >= 70 ? 'text-success' : subject.accuracy >= 40 ? 'text-warning' : 'text-error')}>{subject.accuracy}%</span></div>
+                            <div className="mb-1.5 flex items-center justify-between gap-3 text-xs"><span className="truncate font-semibold text-text-primary">{getSubjectLabel(subject.subject)}</span><span className={classNames('font-bold tabular-nums', subject.accuracy >= 70 ? 'text-success' : subject.accuracy >= 40 ? 'text-warning' : 'text-error')}>{subject.accuracy}%</span></div>
                             <div className="h-2 overflow-hidden rounded-full bg-bg-secondary"><div className={classNames('h-full rounded-full transition-[width] duration-500', subject.accuracy >= 70 ? 'bg-success' : subject.accuracy >= 40 ? 'bg-warning' : 'bg-error')} style={{ width: `${subject.accuracy}%` }} /></div>
                             <p className="mt-1 text-xs sm:text-[11px] text-text-muted">{subject.correct} of {subject.total} correct</p>
                           </div>
@@ -705,7 +684,7 @@ export default function StudentDashboard() {
               return (
                 <button key={subject} type="button" onClick={() => handleToggleSubject(subject)} className={classNames('flex items-center gap-3 rounded-xl border p-3 text-left text-sm transition-[background-color,border-color,color,transform] duration-200 active:scale-[0.99]', isSelected ? 'border-primary bg-primary/10 text-text-primary' : 'border-border bg-bg-secondary text-text-secondary hover:border-border-hover hover:text-text-primary')} aria-pressed={isSelected}>
                   <span className={classNames('flex h-4 w-4 items-center justify-center rounded border text-xs sm:text-[10px] font-black', isSelected ? 'border-primary bg-primary text-text-on-accent' : 'border-border bg-bg-primary')}>{isSelected && '✓'}</span>
-                  <span className="font-medium">{SUBJECT_LABELS[subject]}</span>
+                  <span className="font-medium">{getSubjectLabel(subject)}</span>
                 </button>
               );
             })}
@@ -720,7 +699,7 @@ export default function StudentDashboard() {
       <Modal isOpen={isDrillModalOpen} onClose={() => setIsDrillModalOpen(false)} title="Configure a subject drill" maxWidth="sm">
         <div className="space-y-6">
           <div className="space-y-4">
-            <div className="space-y-1.5"><label htmlFor="drill-subject" className="text-xs font-bold uppercase tracking-wide text-text-secondary">Subject</label><select id="drill-subject" value={drillSubject} onChange={(event) => setDrillSubject(event.target.value)} className="w-full rounded-xl border border-border bg-bg-secondary p-3 text-sm text-text-primary transition-colors"><option value="" disabled>Select a subject</option>{combination.map((subject: string) => <option key={subject} value={subject}>{SUBJECT_LABELS[subject] || subject}</option>)}</select></div>
+            <div className="space-y-1.5"><label htmlFor="drill-subject" className="text-xs font-bold uppercase tracking-wide text-text-secondary">Subject</label><select id="drill-subject" value={drillSubject} onChange={(event) => setDrillSubject(event.target.value)} className="w-full rounded-xl border border-border bg-bg-secondary p-3 text-sm text-text-primary transition-colors"><option value="" disabled>Select a subject</option>{combination.map((subject: string) => <option key={subject} value={subject}>{getSubjectLabel(subject)}</option>)}</select></div>
             <div className="space-y-1.5"><span className="text-xs font-bold uppercase tracking-wide text-text-secondary">Question count</span><div className="grid grid-cols-3 gap-2">{[10, 20, 40].map((count) => <button key={count} type="button" onClick={() => setDrillCount(count)} className={classNames('rounded-xl border p-3 text-xs font-bold transition-[background-color,border-color,color,transform] duration-200 active:scale-[0.98]', drillCount === count ? 'border-primary bg-primary/10 text-text-primary' : 'border-border bg-bg-secondary text-text-secondary hover:border-border-hover hover:text-text-primary')} aria-pressed={drillCount === count}>{count} questions</button>)}</div></div>
             <div className="space-y-1.5"><label htmlFor="drill-difficulty" className="text-xs font-bold uppercase tracking-wide text-text-secondary">Difficulty</label><select id="drill-difficulty" value={drillDifficulty} onChange={(event) => setDrillDifficulty(event.target.value)} className="w-full rounded-xl border border-border bg-bg-secondary p-3 text-sm text-text-primary transition-colors"><option value="any">Any difficulty</option><option value="1">Easy</option><option value="2">Easy–medium</option><option value="3">Medium</option><option value="4">Medium–hard</option><option value="5">Hard</option></select></div>
             <div className="space-y-2"><div className="flex items-center justify-between gap-3"><span className="text-xs font-bold uppercase tracking-wide text-text-secondary">Topics <span className="font-normal normal-case">(optional)</span></span>{availableTopics.length > 0 && <button type="button" onClick={() => { const random = availableTopics[Math.floor(Math.random() * availableTopics.length)]; setDrillTopics([random.topic]); }} className="inline-flex items-center gap-1 rounded-lg border border-primary/25 bg-primary/10 px-2 py-1 text-xs sm:text-[11px] font-bold text-primary transition-colors hover:bg-primary/15"><Sparkles className="h-3 w-3" />Choose one for me</button>}</div><div className="max-h-36 space-y-1 overflow-y-auto rounded-xl border border-border bg-bg-secondary p-2">{isLoadingTopics ? <div className="p-2 text-xs text-text-muted">Loading topics…</div> : availableTopics.length === 0 ? <div className="p-2 text-xs text-text-muted">No specific topics are available for this subject.</div> : availableTopics.map((topic) => <label key={topic.topic} className="flex cursor-pointer items-center gap-2 rounded-lg p-2 text-xs text-text-primary transition-colors hover:bg-bg-primary"><input type="checkbox" checked={drillTopics.includes(topic.topic)} onChange={(event) => setDrillTopics((previous) => event.target.checked ? [...previous, topic.topic] : previous.filter((item) => item !== topic.topic))} className="rounded border-border text-primary focus:ring-primary" /><span className="flex-1">{topic.topic}</span><span className="text-text-muted">{topic.count}</span></label>)}</div>{isDrillShort && <p className="text-xs text-warning">Selected topics have fewer than {drillCount} available questions; the drill may contain fewer questions.</p>}</div>
