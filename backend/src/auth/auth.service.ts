@@ -18,7 +18,7 @@ import { authenticator } from 'otplib';
 import * as QRCode from 'qrcode';
 import { z } from 'zod';
 import { NotificationsService } from '../notifications/notifications.service';
-import { generateCbtKey } from '../users/utils';
+import { generateCbtKey, decryptFieldValue } from '../users/utils';
 import { RegisterDto } from './dto/register.dto';
 import { JwtPayload } from './types/jwt-payload.type';
 
@@ -182,7 +182,7 @@ export class AuthService implements OnModuleInit {
     return {
       message: 'Admin recovered',
       email: user.email,
-      cbt_key: user.cbt_key,
+      cbt_key: decryptFieldValue(user.cbt_key),
     };
   }
 
@@ -580,6 +580,9 @@ export class AuthService implements OnModuleInit {
     }
 
     const userObj: any = { ...user };
+    if (userObj.cbt_key) {
+      userObj.cbt_key = decryptFieldValue(userObj.cbt_key);
+    }
     delete userObj.passwordHash;
     delete userObj.mfa_secret;
     delete userObj.verification_code;
