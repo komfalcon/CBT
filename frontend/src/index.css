@@ -957,3 +957,216 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 [data-theme='light'] .mock-exam-card {
   background: linear-gradient(145deg, #dbe5ff 0%, #ffffff 72%);
 }
+
+/* Exam console: a focused testing instrument rather than a generic form layout. */
+.exam-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 74% 0%, color-mix(in srgb, var(--color-accent-primary) 9%, transparent), transparent 31%),
+    radial-gradient(circle at 14% 76%, color-mix(in srgb, var(--color-accent-info) 4%, transparent), transparent 27%),
+    var(--color-bg-primary);
+}
+
+.exam-shell-glow {
+  position: absolute;
+  z-index: -1;
+  width: 34rem;
+  height: 34rem;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(100px);
+  opacity: 0.24;
+}
+
+.exam-shell-glow-top {
+  top: -24rem;
+  right: 12%;
+  background: #4f46e5;
+}
+
+.exam-shell-glow-bottom {
+  bottom: -28rem;
+  left: 11%;
+  background: #0284c7;
+}
+
+.exam-header {
+  background: color-mix(in srgb, var(--color-bg-primary) 91%, transparent);
+}
+
+.exam-eyebrow {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.17em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.exam-timer {
+  border-color: color-mix(in srgb, var(--color-accent-primary) 32%, var(--color-border));
+  background: color-mix(in srgb, var(--color-accent-primary) 9%, var(--color-bg-secondary));
+  color: var(--color-accent-primary-hover);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-accent-primary) 10%, transparent);
+}
+
+.exam-timer-danger {
+  border-color: color-mix(in srgb, var(--color-error) 45%, var(--color-border));
+  background: color-mix(in srgb, var(--color-error) 10%, var(--color-bg-secondary));
+  color: var(--color-error);
+  animation: exam-timer-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes exam-timer-pulse {
+  0%, 100% { box-shadow: 0 8px 24px color-mix(in srgb, var(--color-error) 8%, transparent); }
+  50% { box-shadow: 0 8px 28px color-mix(in srgb, var(--color-error) 22%, transparent); }
+}
+
+.exam-content-frame {
+  border: 1px solid color-mix(in srgb, var(--color-border) 90%, transparent);
+  border-radius: 28px;
+  background: color-mix(in srgb, var(--color-bg-card) 80%, transparent);
+  box-shadow: 0 24px 80px rgba(2, 7, 19, 0.1);
+  padding: 6px;
+}
+
+.exam-question-card {
+  position: relative;
+  display: flex;
+  min-height: clamp(560px, calc(100vh - 340px), 760px);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-border) 92%, transparent);
+  border-radius: 23px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--color-accent-primary) 5%, transparent), transparent 34%),
+    var(--color-bg-card);
+  padding: clamp(24px, 3.2vw, 42px);
+  box-shadow: 0 16px 54px rgba(2, 7, 19, 0.11), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.exam-question-card::before {
+  position: absolute;
+  top: 0;
+  left: 12%;
+  width: 76%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-accent-primary) 70%, transparent), transparent);
+  content: '';
+}
+
+.exam-question-card .exam-question-rhythm {
+  border-color: color-mix(in srgb, var(--color-accent-primary) 25%, var(--color-border));
+  background: color-mix(in srgb, var(--color-accent-primary) 5%, transparent);
+}
+
+.exam-markdown {
+  min-width: 0;
+}
+
+.exam-markdown-paragraph {
+  margin: 0;
+}
+
+.exam-markdown-paragraph + .exam-markdown-paragraph {
+  margin-top: 0.9rem;
+}
+
+.exam-markdown strong {
+  color: var(--color-text-primary);
+  font-weight: 800;
+}
+
+.exam-markdown em {
+  color: var(--color-accent-primary);
+}
+
+.exam-markdown-list {
+  margin: 0.85rem 0 0;
+  padding-left: 1.4rem;
+}
+
+.exam-markdown-list li + li {
+  margin-top: 0.35rem;
+}
+
+.exam-markdown-quote {
+  margin: 1rem 0;
+  border-left: 3px solid color-mix(in srgb, var(--color-accent-primary) 55%, transparent);
+  padding-left: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.exam-markdown .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.45rem 0;
+}
+
+.exam-markdown .katex {
+  color: currentColor;
+}
+
+.exam-navigator {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--color-accent-primary) 4%, transparent), transparent 22%),
+    color-mix(in srgb, var(--color-bg-primary) 76%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exam-timer-danger {
+    animation: none;
+  }
+}
+
+[data-theme='light'] .exam-shell {
+  background:
+    radial-gradient(circle at 74% 0%, rgba(52, 84, 220, 0.09), transparent 31%),
+    radial-gradient(circle at 14% 76%, rgba(3, 105, 161, 0.045), transparent 27%),
+    var(--color-bg-primary);
+}
+
+[data-theme='light'] .exam-shell-glow {
+  opacity: 0.11;
+}
+
+[data-theme='light'] .exam-content-frame {
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 24px 70px rgba(16, 24, 40, 0.08);
+}
+
+[data-theme='light'] .exam-question-card {
+  background:
+    linear-gradient(135deg, rgba(52, 84, 220, 0.045), transparent 34%),
+    #ffffff;
+  box-shadow: 0 16px 48px rgba(16, 24, 40, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+[data-theme='light'] .exam-navigator {
+  background:
+    linear-gradient(180deg, rgba(52, 84, 220, 0.045), transparent 22%),
+    rgba(247, 248, 250, 0.84);
+}
+
+@media (max-width: 767px) {
+  .exam-shell {
+    overflow: visible;
+  }
+
+  .exam-header {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .exam-question-card {
+    min-height: 0;
+    padding: 20px;
+  }
+
+  .exam-content-frame {
+    border-radius: 22px;
+  }
+}
