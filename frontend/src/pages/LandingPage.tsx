@@ -56,10 +56,7 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }: { target: number;
 function BrandMark({ compact = false }: { compact?: boolean }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 text-sm font-bold text-white shadow-[0_10px_24px_rgba(74,91,255,0.28)]">
-        <span className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.22),transparent_55%)]" />
-        <span className="relative tracking-[-0.06em]">CBT</span>
-      </div>
+      <img src="/favicon.svg" alt="" className="h-10 w-10 shrink-0 rounded-xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
       {!compact && (
         <div className="flex flex-col">
           <span className="brand-name font-display text-[15px] font-semibold leading-tight tracking-[-0.02em] text-white">JAMB UTME Prep</span>
@@ -79,7 +76,7 @@ function ExamInterfaceVisual() {
         <div className="overflow-hidden rounded-[21px] border border-white/[0.08] bg-[#f8faff]">
           <div className="flex flex-wrap items-center justify-between gap-2 bg-[#17213b] px-4 py-3 text-white sm:flex-nowrap sm:px-5">
             <div className="flex items-center gap-3">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-blue-400 to-violet-400 text-xs font-bold">CBT</div>
+              <img src="/favicon.svg" alt="" className="h-7 w-7 shrink-0 rounded-lg object-cover" />
               <div>
                 <p className="text-xs font-semibold tracking-wide text-white">JAMB UTME Mock Exam</p>
                 <p className="text-[12px] text-blue-200/70">Use of English · Question 12 of 60</p>

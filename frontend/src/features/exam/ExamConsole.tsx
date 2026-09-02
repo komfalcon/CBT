@@ -401,9 +401,7 @@ export default function ExamConsole() {
       <header className="border-b border-border bg-bg-primary backdrop-blur-md h-16 flex items-center justify-between px-6 z-20 sticky top-0">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center font-bold text-sm text-text-primary">
-              CBT
-            </div>
+            <img src="/favicon.svg" alt="" className="h-8 w-8 shrink-0 rounded-lg object-cover" />
             <span className="text-sm font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent hidden sm:inline">
               JAMB UTME Simulation
             </span>
