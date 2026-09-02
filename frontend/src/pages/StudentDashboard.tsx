@@ -480,8 +480,8 @@ export default function StudentDashboard() {
             </Alert>
           )}
 
-          <div className="grid items-start gap-8 xl:grid-cols-[340px,minmax(0,1fr)]">
-            <aside className="space-y-4 xl:sticky xl:top-24">
+          <div className="grid min-w-0 items-start gap-8 xl:grid-cols-[340px,minmax(0,1fr)]">
+            <aside className="min-w-0 space-y-4 xl:sticky xl:top-24">
               <SectionKicker label="Account" detail="Your profile and secure access" />
               <Card className="overflow-hidden border-border bg-bg-card p-0 shadow-[0_16px_36px_rgba(0,0,0,0.16)]">
                 <div className="border-b border-border bg-[linear-gradient(145deg,rgba(91,114,255,0.16),rgba(17,29,52,0)_70%)] p-5">
