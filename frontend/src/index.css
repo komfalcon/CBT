@@ -506,3 +506,125 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
     max-height: calc(100vh - 32px);
   }
 }
+
+/* Support, legal, and contact pages share the landing page's composed desktop visual language. */
+.support-page {
+  background:
+    radial-gradient(circle at 83% 2%, rgba(73, 92, 255, 0.14), transparent 29%),
+    radial-gradient(circle at 12% 14%, rgba(29, 139, 255, 0.06), transparent 24%),
+    var(--color-bg-primary);
+}
+
+.support-header {
+  background: rgba(8, 16, 31, 0.86);
+}
+
+.support-hero-mark::after {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(147, 197, 253, 0.16);
+  border-radius: 24px;
+}
+
+.support-surface {
+  border: 1px solid var(--color-border);
+  background: rgba(17, 29, 52, 0.72);
+  box-shadow: 0 18px 46px rgba(2, 7, 19, 0.14);
+}
+
+.support-surface-soft {
+  border: 1px solid var(--color-border);
+  background: rgba(13, 23, 43, 0.56);
+}
+
+.support-toc-link {
+  border: 1px solid transparent;
+  color: var(--color-text-secondary);
+}
+
+.support-toc-link:hover,
+.support-toc-link[data-active='true'] {
+  border-color: color-mix(in srgb, var(--color-accent-primary) 28%, transparent);
+  background: color-mix(in srgb, var(--color-accent-primary) 10%, transparent);
+  color: var(--color-text-primary);
+}
+
+.support-table th {
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--color-text-secondary);
+}
+
+.support-table td,
+.support-table th {
+  border-color: var(--color-border);
+}
+
+.support-faq-trigger:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.support-faq-trigger[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--color-accent-primary) 7%, transparent);
+}
+
+.support-input {
+  border-color: var(--color-border);
+  background: rgba(8, 16, 31, 0.56);
+  color: var(--color-text-primary);
+}
+
+.support-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.support-input:focus {
+  border-color: color-mix(in srgb, var(--color-accent-primary) 70%, transparent);
+  background: rgba(8, 16, 31, 0.75);
+}
+
+[data-theme='light'] .support-page {
+  background:
+    radial-gradient(circle at 83% 2%, rgba(76, 98, 232, 0.11), transparent 29%),
+    radial-gradient(circle at 12% 14%, rgba(42, 131, 233, 0.05), transparent 24%),
+    var(--color-bg-primary);
+}
+
+[data-theme='light'] .support-header {
+  background: rgba(247, 248, 250, 0.88);
+}
+
+[data-theme='light'] .support-surface {
+  border-color: #d9e0ea;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgba(16, 24, 40, 0.06);
+}
+
+[data-theme='light'] .support-surface-soft {
+  border-color: #dfe4ec;
+  background: #f5f7fb;
+}
+
+[data-theme='light'] .support-hero-mark {
+  border-color: #b9c8fa;
+  background: #eef2ff;
+}
+
+[data-theme='light'] .support-faq-trigger:hover {
+  background: #f7f9fe;
+}
+
+[data-theme='light'] .support-faq-trigger[aria-expanded='true'] {
+  background: #f1f4ff;
+}
+
+[data-theme='light'] .support-input {
+  border-color: #d4dce8;
+  background: #ffffff;
+  color: #101828;
+}
+
+[data-theme='light'] .support-input:focus {
+  border-color: #6e85e5;
+  background: #ffffff;
+}

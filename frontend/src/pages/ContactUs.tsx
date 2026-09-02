@@ -1,234 +1,99 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Phone, Globe, MapPin, Send, ArrowLeft, MessageSquare, Clock } from 'lucide-react';
-import { useToast } from '../components';
+import { CheckCircle2, Clock3, FileWarning, Globe2, Mail, MessageSquareText, Phone, Send, ShieldCheck } from 'lucide-react';
+import { SupportHero, SupportPageShell, supportChannels } from '../components';
+
+const subjectOptions = [
+  { value: '', label: 'Choose a topic' },
+  { value: 'Account access', label: 'Account access or verification' },
+  { value: 'CBT key', label: 'CBT key' },
+  { value: 'Billing', label: 'Billing, cancellation, or refund' },
+  { value: 'Mock exam or drill', label: 'Mock exam or drill' },
+  { value: 'Falke AI', label: 'Falke AI' },
+  { value: 'Technical issue', label: 'Technical issue' },
+  { value: 'Other', label: 'Something else' },
+];
 
 export default function ContactUs() {
-    const { addToast } = useToast();
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
-    });
-    const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [submitted, setSubmitted] = useState(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+    if (submitted) setSubmitted(false);
+  };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const selectedSubject = subjectOptions.find((option) => option.value === formData.subject)?.label || 'Support request';
+    const body = [
+      `Name: ${formData.name}`,
+      `Account email: ${formData.email}`,
+      `Topic: ${selectedSubject}`,
+      '',
+      'Message:',
+      formData.message,
+      '',
+      'Please do not include your password, CBT key, card number, or verification code.',
+    ].join('\n');
 
-        if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-            addToast({
-                type: 'warning',
-                title: 'Missing Fields',
-                message: 'Please fill in all fields before submitting.',
-            });
-            return;
-        }
+    window.location.href = `mailto:${supportChannels.email}?subject=${encodeURIComponent(`JAMB UTME Prep — ${selectedSubject}`)}&body=${encodeURIComponent(body)}`;
+    setSubmitted(true);
+  };
 
-        try {
-            setLoading(true);
-            const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  return (
+    <SupportPageShell>
+      <SupportHero
+        eyebrow="Contact Aurikrex"
+        title="Support when your study flow is interrupted."
+        description="Tell us what happened with your account, CBT key, payment, mock exam, or Falke AI. The form below prepares a complete email to our support inbox, so your message reaches the right team with useful context."
+        icon={MessageSquareText}
+      />
 
-            const response = await fetch(`${apiBase}/contact/send`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            });
+      <main className="mx-auto max-w-7xl px-8 py-16">
+        <section className="grid grid-cols-[0.82fr_1.18fr] gap-8">
+          <aside className="space-y-4">
+            <div className="support-surface rounded-2xl p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Support channels</p>
+              <h2 className="mt-4 font-display text-[25px] font-semibold tracking-[-0.045em] text-text-primary">Reach us directly.</h2>
+              <div className="mt-7 space-y-3">
+                <a href={`mailto:${supportChannels.email}`} className="group flex items-center gap-4 rounded-xl border border-border bg-bg-primary/35 p-4 transition hover:border-primary/35 hover:bg-primary/[0.06]">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary"><Mail className="h-5 w-5" /></span>
+                  <span><span className="block text-xs text-text-muted">Email support</span><span className="mt-1 block text-[14px] font-semibold text-text-primary group-hover:text-primary">{supportChannels.email}</span></span>
+                </a>
+                <a href={`tel:${supportChannels.phoneLink}`} className="group flex items-center gap-4 rounded-xl border border-border bg-bg-primary/35 p-4 transition hover:border-primary/35 hover:bg-primary/[0.06]">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary"><Phone className="h-5 w-5" /></span>
+                  <span><span className="block text-xs text-text-muted">Call support</span><span className="mt-1 block text-[14px] font-semibold text-text-primary group-hover:text-primary">{supportChannels.phoneDisplay}</span></span>
+                </a>
+                <a href="https://www.aurikrex.tech" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 rounded-xl border border-border bg-bg-primary/35 p-4 transition hover:border-primary/35 hover:bg-primary/[0.06]">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary"><Globe2 className="h-5 w-5" /></span>
+                  <span><span className="block text-xs text-text-muted">Aurikrex website</span><span className="mt-1 block text-[14px] font-semibold text-text-primary group-hover:text-primary">www.aurikrex.tech</span></span>
+                </a>
+              </div>
+            </div>
 
-            if (!response.ok) {
-                throw new Error('Failed to send message');
-            }
+            <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.06] p-6"><Clock3 className="h-5 w-5 text-emerald-300" /><h2 className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em] text-text-primary">A faster answer starts with context.</h2><p className="mt-2 text-[13px] leading-6 text-text-secondary">Include the email linked to your account, the page you were using, the approximate time, your browser or device, and a safe screenshot where relevant.</p></div>
+            <div className="rounded-2xl border border-warning/20 bg-warning/[0.06] p-6"><ShieldCheck className="h-5 w-5 text-warning" /><h2 className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em] text-text-primary">Keep credentials private.</h2><p className="mt-2 text-[13px] leading-6 text-text-secondary">Support will never ask for your password, CBT key, payment card number, CVV, or one-time verification code. Do not send any of them.</p></div>
+          </aside>
 
-            addToast({
-                type: 'success',
-                title: 'Message Sent',
-                message: 'Thank you! We\'ll get back to you within 24 hours.',
-            });
+          <section className="support-surface rounded-[24px] p-8">
+            <div className="flex items-start justify-between gap-8 border-b border-border pb-6"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Message support</p><h2 className="mt-3 font-display text-[30px] font-semibold tracking-[-0.05em] text-text-primary">Describe what you need.</h2><p className="mt-3 max-w-xl text-[13px] leading-6 text-text-secondary">Submitting this form opens your email app with a pre-filled message addressed to {supportChannels.email}. Review it and press send in your email app to contact us.</p></div><Send className="mt-1 h-6 w-6 shrink-0 text-primary" /></div>
 
-            setFormData({ name: '', email: '', subject: '', message: '' });
-        } catch (error: any) {
-            addToast({
-                type: 'error',
-                title: 'Error',
-                message: error.message || 'Failed to send message. Please try again.',
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
+            <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-2 gap-5">
+                <label className="block"><span className="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary">Your name</span><input className="support-input h-12 w-full rounded-xl border px-4 text-[14px] outline-none transition" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Chinedu Okafor" autoComplete="name" required /></label>
+                <label className="block"><span className="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary">Account email</span><input className="support-input h-12 w-full rounded-xl border px-4 text-[14px] outline-none transition" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="name@email.com" autoComplete="email" required /></label>
+              </div>
+              <label className="block"><span className="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary">What can we help with?</span><select className="support-input h-12 w-full rounded-xl border px-4 text-[14px] outline-none transition" name="subject" value={formData.subject} onChange={handleChange} required>{subjectOptions.map((option) => <option key={option.value} value={option.value} disabled={!option.value}>{option.label}</option>)}</select></label>
+              <label className="block"><span className="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary">Your message</span><textarea className="support-input min-h-40 w-full resize-y rounded-xl border px-4 py-3 text-[14px] leading-6 outline-none transition" name="message" value={formData.message} onChange={handleChange} placeholder="Tell us what you were trying to do, what happened, and any exact error message you saw." required /></label>
 
-    return (
-        <div className="min-h-screen bg-bg-primary text-text-primary">
-            {/* Header */}
-            <header className="border-b border-border/60 sticky top-0 z-40 backdrop-blur-md bg-bg-primary/80">
-                <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-                    <Link to="/" className="flex items-center gap-2 hover:text-primary transition-colors">
-                        <ArrowLeft className="h-5 w-5" />
-                        <span className="font-semibold">Back</span>
-                    </Link>
-                    <h1 className="text-xl font-bold">Contact Us</h1>
-                    <div className="w-20" />
-                </div>
-            </header>
+              {submitted && <div className="flex items-start gap-3 rounded-xl border border-emerald-400/20 bg-emerald-400/[0.07] p-4 text-[13px] leading-6 text-text-secondary"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" /><p>Your email app should now be open with the prepared support request. If it did not open, email us directly at <a className="font-semibold text-primary hover:text-primary-hover" href={`mailto:${supportChannels.email}`}>{supportChannels.email}</a>.</p></div>}
 
-            {/* Main Content */}
-            <main className="mx-auto max-w-5xl px-6 py-16">
-                {/* Hero Section */}
-                <div className="mb-16 text-center space-y-4">
-                    <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
-                        Get In Touch
-                    </h2>
-                    <p className="text-text-muted max-w-2xl mx-auto">
-                        Have questions or feedback? We'd love to hear from you. Reach out and we'll respond as quickly as we can.
-                    </p>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-8 mb-16">
-                    {/* Contact Info Cards */}
-                    <div className="md:col-span-1 space-y-4">
-                        {/* Email */}
-                        <div className="p-6 rounded-xl border border-border bg-bg-secondary/30 hover:border-primary/40 transition-all space-y-3">
-                            <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                                <Mail className="h-5 w-5 text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-white mb-1">Email</h3>
-                                <a href="mailto:info@aurikrex.tech" className="text-text-muted hover:text-primary transition-colors break-all">
-                                    info@aurikrex.tech
-                                </a>
-                                <p className="text-xs text-text-muted mt-2">Response time: Within 24 hours</p>
-                            </div>
-                        </div>
-
-                        {/* Phone */}
-                        <div className="p-6 rounded-xl border border-border bg-bg-secondary/30 hover:border-primary/40 transition-all space-y-3">
-                            <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                                <Phone className="h-5 w-5 text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-white mb-1">Phone</h3>
-                                <a href="tel:+2349113683395" className="text-text-muted hover:text-primary transition-colors">
-                                    +234 911 368 3395
-                                </a>
-                                <p className="text-xs text-text-muted mt-2">Available Mon-Fri, 9AM-5PM WAT</p>
-                            </div>
-                        </div>
-
-                        {/* Website */}
-                        <div className="p-6 rounded-xl border border-border bg-bg-secondary/30 hover:border-primary/40 transition-all space-y-3">
-                            <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                                <Globe className="h-5 w-5 text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-white mb-1">Website</h3>
-                                <a
-                                    href="https://www.aurikrex.tech"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-text-muted hover:text-primary transition-colors"
-                                >
-                                    www.aurikrex.tech
-                                </a>
-                                <p className="text-xs text-text-muted mt-2">Visit our main site</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Contact Form */}
-                    <form onSubmit={handleSubmit} className="md:col-span-2 space-y-4">
-                        <div className="grid sm:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-white mb-2">Name</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    placeholder="Your name"
-                                    className="w-full px-4 py-2.5 rounded-lg border border-border bg-bg-secondary/50 text-white placeholder-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-white mb-2">Email</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    placeholder="your.email@example.com"
-                                    className="w-full px-4 py-2.5 rounded-lg border border-border bg-bg-secondary/50 text-white placeholder-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-white mb-2">Subject</label>
-                            <select
-                                name="subject"
-                                value={formData.subject}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2.5 rounded-lg border border-border bg-bg-secondary/50 text-white focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
-                            >
-                                <option value="">Select a subject</option>
-                                <option value="general">General Inquiry</option>
-                                <option value="technical">Technical Support</option>
-                                <option value="billing">Billing Question</option>
-                                <option value="feedback">Feedback</option>
-                                <option value="partnership">Partnership Opportunity</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-white mb-2">Message</label>
-                            <textarea
-                                name="message"
-                                value={formData.message}
-                                onChange={handleChange}
-                                placeholder="Tell us more about your inquiry..."
-                                rows={6}
-                                className="w-full px-4 py-2.5 rounded-lg border border-border bg-bg-secondary/50 text-white placeholder-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
-                            />
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full px-6 py-3 rounded-lg bg-gradient-to-r from-primary to-blue-400 hover:shadow-lg hover:shadow-primary/20 text-white font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                            <Send className="h-4 w-4" />
-                            {loading ? 'Sending...' : 'Send Message'}
-                        </button>
-                    </form>
-                </div>
-
-                {/* Additional Info */}
-                <div className="grid md:grid-cols-2 gap-6">
-                    <div className="p-6 rounded-xl border border-border bg-bg-secondary/30 space-y-3">
-                        <div className="flex items-center gap-3">
-                            <Clock className="h-5 w-5 text-primary" />
-                            <h3 className="font-semibold text-white">Response Time</h3>
-                        </div>
-                        <p className="text-text-muted text-sm">
-                            We typically respond to all inquiries within 24 hours. During peak hours, it may take up to 48 hours.
-                        </p>
-                    </div>
-
-                    <div className="p-6 rounded-xl border border-border bg-bg-secondary/30 space-y-3">
-                        <div className="flex items-center gap-3">
-                            <MessageSquare className="h-5 w-5 text-primary" />
-                            <h3 className="font-semibold text-white">Quick Support</h3>
-                        </div>
-                        <p className="text-text-muted text-sm">
-                            For urgent technical issues, use the help icon in your dashboard or check our Help Center for instant answers.
-                        </p>
-                    </div>
-                </div>
-            </main>
-        </div>
-    );
+              <div className="flex items-center justify-between gap-6 border-t border-border pt-6"><p className="flex max-w-sm items-start gap-2 text-xs leading-5 text-text-muted"><FileWarning className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warning" />Do not include passwords, CBT keys, card details, or verification codes.</p><button type="submit" className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-primary px-5 text-[14px] font-semibold text-text-on-accent shadow-[0_10px_24px_rgba(77,107,255,0.22)] transition hover:-translate-y-0.5 hover:bg-primary-hover"><Send className="h-4 w-4" />Prepare support email</button></div>
+            </form>
+          </section>
+        </section>
+      </main>
+    </SupportPageShell>
+  );
 }

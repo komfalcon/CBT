@@ -1,358 +1,125 @@
-import { Link } from 'react-router-dom';
-import { ArrowLeft, AlertCircle, CheckCircle, Lock, Gavel } from 'lucide-react';
+import { AlertTriangle, BadgeCheck, Ban, BookOpenCheck, CreditCard, KeyRound, Scale, ScrollText, ShieldAlert } from 'lucide-react';
+import { SupportHero, SupportPageShell, SupportSection, supportChannels } from '../components';
 
-interface Section {
-    id: string;
-    title: string;
-    icon: React.ReactNode;
-    content: React.ReactNode;
-}
+const sections = [
+  { id: 'agreement', label: 'Agreement and eligibility' },
+  { id: 'account', label: 'Account and CBT key' },
+  { id: 'plans', label: 'Plans, billing and cancellation' },
+  { id: 'refunds', label: 'Refunds' },
+  { id: 'acceptable-use', label: 'Acceptable use and integrity' },
+  { id: 'content', label: 'Content and intellectual property' },
+  { id: 'availability', label: 'Disclaimers and liability' },
+  { id: 'termination', label: 'Suspension and termination' },
+  { id: 'legal', label: 'Governing law and contact' },
+];
 
 export default function TermsOfService() {
-    const sections: Section[] = [
-        {
-            id: 'agreement',
-            title: 'Agreement to Terms',
-            icon: <Gavel className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        These Terms of Service ("Terms") govern your access to and use of the JAMB CBT Prep platform ("Service"), including our website, mobile applications, and related services provided by Aurikrex ("Company," "we," "us," or "our").
-                    </p>
-                    <p>
-                        By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to any part of these Terms, you may not use the Service.
-                    </p>
-                    <p className="text-sm text-text-muted/70">
-                        Last Updated: July 2026
-                    </p>
-                </div>
-            ),
-        },
-        {
-            id: 'access',
-            title: 'User Accounts and Access',
-            icon: <Lock className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Account Eligibility</h4>
-                        <p>You must be at least 13 years old to create an account. By creating an account, you represent and warrant that all information provided is accurate and truthful.</p>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Account Responsibility</h4>
-                        <ul className="list-disc list-inside space-y-1">
-                            <li>You are responsible for maintaining the confidentiality of your account credentials</li>
-                            <li>You are liable for all activities conducted through your account</li>
-                            <li>You must notify us immediately of any unauthorized access</li>
-                            <li>You agree not to share your account with others</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Account Termination</h4>
-                        <p>We reserve the right to suspend or terminate your account if you violate these Terms or engage in abusive behavior.</p>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            id: 'usage',
-            title: 'Acceptable Use Policy',
-            icon: <CheckCircle className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>You agree not to use the Service for:</p>
-                    <ul className="list-disc list-inside space-y-2">
-                        <li>Any unlawful purpose or in violation of applicable laws</li>
-                        <li>Cheating, sharing answers, or using automated tools during exams</li>
-                        <li>Attempting to access unauthorized areas or other users' accounts</li>
-                        <li>Uploading malware, viruses, or harmful code</li>
-                        <li>Engaging in harassment, abuse, or threatening behavior</li>
-                        <li>Distributing copyrighted content without authorization</li>
-                        <li>Manipulating scores or submitting false exam results</li>
-                        <li>Commercial purposes without prior written permission</li>
-                        <li>Any activity that disrupts or overloads the Service</li>
-                    </ul>
-                </div>
-            ),
-        },
-        {
-            id: 'intellectual',
-            title: 'Intellectual Property Rights',
-            icon: <Lock className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        All content on the Service, including questions, answers, explanations, graphics, logos, and software, is the exclusive property of Aurikrex or its licensors and is protected by copyright and other intellectual property laws.
-                    </p>
-                    <div className="space-y-3">
-                        <div>
-                            <h4 className="font-semibold text-white mb-1">Your License</h4>
-                            <p>We grant you a limited, non-exclusive, non-transferable license to access and use the Service for personal, educational purposes only.</p>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold text-white mb-1">Restrictions</h4>
-                            <ul className="list-disc list-inside space-y-1">
-                                <li>You may not reproduce, distribute, or transmit any content</li>
-                                <li>You may not create derivative works</li>
-                                <li>You may not reverse engineer or decompile the platform</li>
-                                <li>You may not remove any copyright or proprietary notices</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold text-white mb-1">User Content</h4>
-                            <p>By submitting content (feedback, forum posts), you grant Aurikrex a worldwide, non-exclusive license to use that content for service improvement.</p>
-                        </div>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            id: 'subscriptions',
-            title: 'Subscriptions and Billing',
-            icon: <CheckCircle className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Subscription Plans</h4>
-                        <p>We offer various subscription tiers with different features and pricing. Free access includes limited features; premium access requires payment.</p>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Billing</h4>
-                        <ul className="list-disc list-inside space-y-1">
-                            <li>Subscription fees are billed monthly or annually depending on your plan</li>
-                            <li>Billing occurs on the same date each billing cycle</li>
-                            <li>We use Paystack for secure payment processing</li>
-                            <li>You are responsible for maintaining valid payment information</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Cancellation</h4>
-                        <ul className="list-disc list-inside space-y-1">
-                            <li>You may cancel your subscription anytime from your account settings</li>
-                            <li>Cancellation takes effect at the end of your current billing period</li>
-                            <li>No refunds are provided for partial billing periods</li>
-                            <li>You retain access until your subscription expires</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Price Changes</h4>
-                        <p>We may change subscription prices with 30 days' notice. Continued use after the notice period constitutes acceptance of new pricing.</p>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            id: 'exam-integrity',
-            title: 'Exam Integrity and Academic Honesty',
-            icon: <AlertCircle className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        We are committed to maintaining academic integrity. You agree to:
-                    </p>
-                    <ul className="list-disc list-inside space-y-2">
-                        <li>Take exams honestly without external assistance or resources</li>
-                        <li>Not share your account or exam access with others</li>
-                        <li>Not use automated tools, bots, or cheating software</li>
-                        <li>Not record or distribute exam questions</li>
-                        <li>Not attempt to manipulate scores or submit false results</li>
-                    </ul>
-                    <p className="pt-3">
-                        Violations of these rules may result in account suspension, score invalidation, and legal action.
-                    </p>
-                </div>
-            ),
-        },
-        {
-            id: 'warranty',
-            title: 'Disclaimers and Limitations',
-            icon: <AlertCircle className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">As-Is Service</h4>
-                        <p>
-                            The Service is provided "AS IS" without warranties of any kind. We do not warrant that the Service will be uninterrupted, error-free, or meet your specific requirements.
-                        </p>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">No Guarantees</h4>
-                        <p>
-                            We do not guarantee that using our Service will improve your JAMB UTME scores. Results depend on individual effort, study habits, and prior knowledge.
-                        </p>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Limitation of Liability</h4>
-                        <p>
-                            To the fullest extent permitted by law, Aurikrex is not liable for indirect, incidental, special, consequential, or punitive damages arising from your use of the Service.
-                        </p>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            id: 'liability',
-            title: 'Indemnification',
-            icon: <Gavel className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        You agree to indemnify and hold harmless Aurikrex, its officers, directors, employees, and agents from any claims, damages, losses, or expenses (including attorney's fees) arising from:
-                    </p>
-                    <ul className="list-disc list-inside space-y-1">
-                        <li>Your use of the Service</li>
-                        <li>Your violation of these Terms</li>
-                        <li>Your violation of any applicable laws or regulations</li>
-                        <li>Your infringement of third-party rights</li>
-                        <li>Any user-generated content you submit</li>
-                    </ul>
-                </div>
-            ),
-        },
-        {
-            id: 'modifications',
-            title: 'Modifications to Terms and Service',
-            icon: <CheckCircle className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Changes to Terms</h4>
-                        <p>
-                            We reserve the right to modify these Terms at any time. Changes become effective immediately upon posting. Your continued use of the Service constitutes acceptance of modified Terms.
-                        </p>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-white mb-2">Service Changes</h4>
-                        <p>
-                            We may modify, suspend, or discontinue the Service with or without notice. We are not liable for any such changes.
-                        </p>
-                    </div>
-                </div>
-            ),
-        },
-        {
-            id: 'termination',
-            title: 'Termination',
-            icon: <AlertCircle className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        Either you or Aurikrex may terminate your use of the Service at any time. Upon termination:
-                    </p>
-                    <ul className="list-disc list-inside space-y-1">
-                        <li>Your right to use the Service immediately ceases</li>
-                        <li>You remain liable for any unpaid fees</li>
-                        <li>We may delete your account and data after a grace period</li>
-                        <li>Provisions that survive termination will continue to apply</li>
-                    </ul>
-                </div>
-            ),
-        },
-        {
-            id: 'jurisdiction',
-            title: 'Governing Law and Jurisdiction',
-            icon: <Gavel className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        These Terms are governed by the laws of Nigeria. Any legal action or proceeding shall be exclusively conducted in the courts of Nigeria.
-                    </p>
-                    <p>
-                        You agree to submit to the personal and exclusive jurisdiction of such courts and waive any objections to jurisdiction or venue.
-                    </p>
-                </div>
-            ),
-        },
-        {
-            id: 'contact',
-            title: 'Contact Information',
-            icon: <CheckCircle className="h-6 w-6" />,
-            content: (
-                <div className="space-y-3 text-text-muted">
-                    <p>
-                        For questions about these Terms of Service, please contact us:
-                    </p>
-                    <div className="space-y-2">
-                        <p><span className="font-semibold text-white">Email:</span> info@aurikrex.tech</p>
-                        <p><span className="font-semibold text-white">Phone:</span> +234 911 368 3395</p>
-                        <p><span className="font-semibold text-white">Website:</span> www.aurikrex.tech</p>
-                    </div>
-                </div>
-            ),
-        },
-    ];
+  return (
+    <SupportPageShell>
+      <SupportHero
+        eyebrow="Terms of service"
+        title="Clear rules for focused preparation."
+        description="These terms set out how candidates may use JAMB UTME Prep by Aurikrex, including accounts, CBT keys, paid plans, exam integrity, and the question bank."
+        icon={ScrollText}
+        meta={
+          <div className="flex items-center gap-3 text-xs text-text-muted">
+            <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 font-semibold text-primary">Effective 2 September 2026</span>
+            <span>Read with the Privacy Policy before creating an account.</span>
+          </div>
+        }
+      />
 
-    return (
-        <div className="min-h-screen bg-bg-primary text-text-primary">
-            {/* Header */}
-            <header className="border-b border-border/60 sticky top-0 z-40 backdrop-blur-md bg-bg-primary/80">
-                <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-                    <Link to="/" className="flex items-center gap-2 hover:text-primary transition-colors">
-                        <ArrowLeft className="h-5 w-5" />
-                        <span className="font-semibold">Back</span>
-                    </Link>
-                    <h1 className="text-xl font-bold">Terms of Service</h1>
-                    <div className="w-20" />
-                </div>
-            </header>
+      <main className="mx-auto grid max-w-7xl grid-cols-[230px_minmax(0,1fr)] gap-14 px-8 py-16">
+        <aside className="self-start sticky top-28 rounded-2xl support-surface-soft p-3">
+          <p className="px-3 pb-3 pt-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted">On this page</p>
+          <nav className="space-y-1" aria-label="Terms of service sections">
+            {sections.map((section, index) => (
+              <a key={section.id} href={`#${section.id}`} className="support-toc-link flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] transition-colors">
+                <span className="font-mono text-[11px] text-primary/80">{String(index + 1).padStart(2, '0')}</span>
+                <span>{section.label}</span>
+              </a>
+            ))}
+          </nav>
+        </aside>
 
-            {/* Main Content */}
-            <main className="mx-auto max-w-4xl px-6 py-16">
-                {/* Hero Section */}
-                <div className="mb-12 space-y-4">
-                    <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
-                        Terms of Service
-                    </h2>
-                    <p className="text-text-muted">
-                        Please read these terms carefully before using JAMB CBT Prep. By accessing our service, you agree to be bound by these terms.
-                    </p>
-                </div>
+        <article className="min-w-0 space-y-14">
+          <SupportSection id="agreement" eyebrow="01 — agreement" title="Using JAMB UTME Prep means accepting these terms">
+            <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
+              <p>These Terms of Service govern your use of the JAMB UTME Prep website, candidate portal, question bank, mock exams, subject drills, performance tools, CBT-key sign-in, and Falke AI features (the <strong className="font-semibold text-text-primary">“Service”</strong>). The Service is operated by Aurikrex. By creating an account, purchasing a plan or test, or otherwise using the Service, you agree to these Terms and our Privacy Policy.</p>
+              <p className="mt-4">You must be at least 13 years old to create an account. If you are under 18, you confirm that a parent or guardian has authorised your use where required. You must provide accurate, current account information and use the Service only for personal, non-commercial UTME preparation.</p>
+            </div>
+          </SupportSection>
 
-                {/* Table of Contents */}
-                <div className="mb-12 p-6 rounded-xl border border-border bg-bg-secondary/30">
-                    <h3 className="font-semibold text-white mb-4">Table of Contents</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {sections.map((section) => (
-                            <a
-                                key={section.id}
-                                href={`#${section.id}`}
-                                className="text-primary hover:text-primary-hover transition-colors text-sm"
-                            >
-                                → {section.title}
-                            </a>
-                        ))}
-                    </div>
-                </div>
+          <SupportSection id="account" eyebrow="02 — access" title="Your account and CBT key are personal to you">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="support-surface rounded-2xl p-6"><div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary"><BadgeCheck className="h-5 w-5" /></div><h3 className="mt-5 font-display text-[17px] font-semibold tracking-[-0.03em] text-text-primary">Keep details accurate</h3><p className="mt-2 text-[13px] leading-6 text-text-secondary">Use an email address you can access. It is used to verify your account and help you recover it. Keep your password and any optional multi-factor authentication code confidential.</p></div>
+              <div className="support-surface rounded-2xl p-6"><div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary"><KeyRound className="h-5 w-5" /></div><h3 className="mt-5 font-display text-[17px] font-semibold tracking-[-0.03em] text-text-primary">Protect your CBT key</h3><p className="mt-2 text-[13px] leading-6 text-text-secondary">Your CBT key is an alternative sign-in credential for trusted shared devices or cyber-café sessions. Treat it like a password. Do not show, sell, transfer, publish, or share it with anyone.</p></div>
+            </div>
+            <div className="mt-5 rounded-2xl border border-warning/20 bg-warning/[0.07] p-5 text-[13px] leading-6 text-text-secondary"><div className="flex items-start gap-3"><ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-warning" /><p>You are responsible for activity performed through your account or CBT key. Tell us promptly if you believe either has been compromised. We may reset a key or secure an account to protect you and other candidates.</p></div></div>
+          </SupportSection>
 
-                {/* Sections */}
-                <div className="space-y-8">
-                    {sections.map((section) => (
-                        <div
-                            key={section.id}
-                            id={section.id}
-                            className="scroll-mt-20"
-                        >
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                                    {section.icon}
-                                </div>
-                                <h3 className="text-2xl font-bold text-white">{section.title}</h3>
-                            </div>
-                            <div className="pl-13 border-l-2 border-primary/20">
-                                {section.content}
-                            </div>
-                        </div>
-                    ))}
-                </div>
+          <SupportSection id="plans" eyebrow="03 — payment terms" title="Plans, checkout, billing, and cancellation">
+            <div className="overflow-hidden rounded-2xl support-surface">
+              <table className="support-table w-full border-collapse text-left text-[13px] leading-6">
+                <thead><tr className="border-b border-border"><th className="w-[22%] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em]">Option</th><th className="w-[41%] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em]">Core access</th><th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em]">Billing and cancellation</th></tr></thead>
+                <tbody className="text-text-secondary">
+                  <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Plus</td><td className="px-6 py-4">One full mock exam per day, detailed score review, and CBT-key access.</td><td className="px-6 py-4">A monthly paid plan at the price shown during Paystack checkout. Cancel before the next billing date to stop renewal; access continues to the end of the paid period.</td></tr>
+                  <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Pro</td><td className="px-6 py-4">Two full mock exams per day, detailed score review, and subject-specific drills.</td><td className="px-6 py-4">A monthly paid plan at the price shown during Paystack checkout. Cancellation stops the next renewal and does not reduce access already paid for.</td></tr>
+                  <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Max</td><td className="px-6 py-4">Up to five full mock exams per day, advanced performance review, subject drills, and Falke AI access subject to applicable daily AI limits.</td><td className="px-6 py-4">A monthly paid plan at the price shown during Paystack checkout. Cancel before the next billing date to stop renewal; any applicable daily feature limits continue until the current period ends.</td></tr>
+                  <tr><td className="px-6 py-4 font-semibold text-text-primary">Pay per test</td><td className="px-6 py-4">A single drill or mock attempt identified at checkout, with the associated result and review where stated.</td><td className="px-6 py-4">A one-time payment, not a recurring subscription. It is personal, non-transferable, and may not be exchanged for a plan unless we agree otherwise in writing.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-5 grid grid-cols-2 gap-4 text-[13px] leading-6 text-text-secondary">
+              <div className="rounded-2xl support-surface-soft p-5"><CreditCard className="h-5 w-5 text-primary" /><h3 className="mt-3 font-semibold text-text-primary">Checkout and pricing</h3><p className="mt-2">Payments are processed by Paystack. The checkout page presents the amount, currency, plan or test, and any payment terms before you authorise payment. You must use a payment method you are permitted to use.</p></div>
+              <div className="rounded-2xl support-surface-soft p-5"><AlertTriangle className="h-5 w-5 text-warning" /><h3 className="mt-3 font-semibold text-text-primary">Cancellation support</h3><p className="mt-2">If no self-service cancellation control is available in your account, email us from the address linked to the subscription before your next billing date. We will confirm the cancellation status and effective date.</p></div>
+            </div>
+            <p className="mt-5 text-[13px] leading-6 text-text-muted">We may change a future plan price or features by giving reasonable prior notice. A change will not alter a plan or test you have already paid for during its current paid period, except where required for security, law, or a material service error.</p>
+          </SupportSection>
 
-                {/* Footer Note */}
-                <div className="mt-16 p-6 rounded-xl border border-border bg-bg-secondary/30 space-y-3">
-                    <h4 className="font-semibold text-white">Agreement Acknowledgment</h4>
-                    <p className="text-text-muted text-sm">
-                        By clicking "I Agree" during account creation or by continuing to use the Service, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service and our Privacy Policy.
-                    </p>
-                </div>
-            </main>
-        </div>
-    );
+          <SupportSection id="refunds" eyebrow="04 — refund policy" title="When a refund may be considered">
+            <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
+              <p>Except where required by applicable law, fees for completed subscription periods and used pay-per-test access are non-refundable. We may consider a refund when Paystack confirms a duplicate charge, an unauthorised charge is reported promptly and verified, or a paid feature remains unavailable because of a confirmed Aurikrex technical error that we cannot resolve within a reasonable time.</p>
+              <p className="mt-4">To request a review, email <a className="font-semibold text-primary hover:text-primary-hover" href={`mailto:${supportChannels.email}?subject=Billing%20or%20refund%20request`}>{supportChannels.email}</a> within 7 days of the charge. Include the account email, Paystack reference, date, amount, and a short description. A payment dispute or chargeback should not be opened for a resolved support issue; however, this does not limit rights you have under applicable law.</p>
+            </div>
+          </SupportSection>
+
+          <SupportSection id="acceptable-use" eyebrow="05 — preparation with integrity" title="What responsible use looks like">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.06] p-6"><BookOpenCheck className="h-5 w-5 text-emerald-300" /><h3 className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em] text-text-primary">Use the platform to learn</h3><p className="mt-2 text-[13px] leading-6 text-text-secondary">Take mocks and drills as your own practice, use result reviews to improve, and use Falke AI for explanations and study guidance. JAMB UTME Prep is a preparation tool, not an official JAMB examination service.</p></div>
+              <div className="rounded-2xl border border-error/20 bg-error/[0.06] p-6"><Ban className="h-5 w-5 text-error" /><h3 className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em] text-text-primary">Do not misuse access or content</h3><p className="mt-2 text-[13px] leading-6 text-text-secondary">Do not share CBT keys or accounts, copy or distribute question-bank material, use bots or scripts, manipulate scores or timers, probe the service, interfere with other users, submit harmful content, or use the Service for cheating in any examination.</p></div>
+            </div>
+            <p className="mt-5 rounded-2xl support-surface-soft p-5 text-[13px] leading-6 text-text-secondary">You must comply with Nigerian law and applicable school or examination rules. You may not represent mock scores, progress, or AI output as an official JAMB result. Falke AI can make mistakes; you should use it as study support and check important answers against your course materials and the platform’s reviewed explanations.</p>
+          </SupportSection>
+
+          <SupportSection id="content" eyebrow="06 — content ownership" title="The question bank and platform belong to Aurikrex">
+            <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
+              <p>The Service, including the interface, software, question bank, answers, explanations, diagrams, branding, text, graphics, data structure, and study materials, is owned by Aurikrex or its licensors and protected by applicable intellectual-property law. We grant you a limited, personal, revocable, non-exclusive, non-transferable licence to access it solely for your own study.</p>
+              <p className="mt-4">You may not reproduce, scrape, record, resell, publish, redistribute, create a competing database from, reverse engineer, or remove proprietary notices from the Service or its content. Feedback you send us may be used to improve the Service without compensation to you, but we will not claim ownership of your personal data.</p>
+            </div>
+          </SupportSection>
+
+          <SupportSection id="availability" eyebrow="07 — service limits" title="Availability, AI output, and limitation of liability">
+            <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
+              <p>We work to keep JAMB UTME Prep available and accurate, but the Service is provided on an <strong className="font-semibold text-text-primary">“as available”</strong> basis. We do not guarantee uninterrupted access, a particular UTME score, admission outcome, the accuracy of every question or explanation, or that Falke AI output will always be correct or complete. Use good academic judgement and verify material that is important to your preparation.</p>
+              <p className="mt-4">To the fullest extent allowed by law, Aurikrex is not liable for indirect, incidental, special, consequential, exemplary, or punitive losses arising from use of the Service. Our aggregate liability for a claim relating to a paid Service will not exceed the amount you paid us for that Service in the three months before the event giving rise to the claim. Nothing in these Terms excludes liability that cannot lawfully be excluded or limited.</p>
+            </div>
+          </SupportSection>
+
+          <SupportSection id="termination" eyebrow="08 — ending access" title="Suspension and termination">
+            <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
+              <p>You may stop using the Service at any time. To request account deletion, follow the process in our Privacy Policy. We may suspend, restrict, reset a CBT key, or terminate access if we reasonably believe that you have violated these Terms, compromised account security, engaged in cheating or content theft, made a fraudulent payment claim, or created risk to the Service or other users.</p>
+              <p className="mt-4">Where practical, we will explain the reason and give you a chance to resolve a correctable issue. We may act immediately when security, integrity, law, or other users are at risk. Ending access does not remove obligations that by their nature should continue, including payment obligations already due, intellectual-property restrictions, liability limits, and dispute provisions.</p>
+            </div>
+          </SupportSection>
+
+          <SupportSection id="legal" eyebrow="09 — legal information" title="Nigerian law, changes, and contact">
+            <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
+              <div className="flex gap-4"><Scale className="mt-1 h-5 w-5 shrink-0 text-primary" /><div><p>These Terms are governed by the laws of the Federal Republic of Nigeria. Any dispute will be subject to the jurisdiction of the Nigerian courts, unless applicable law requires another forum or process.</p><p className="mt-4">We may update these Terms to reflect feature, legal, security, or business changes. Material changes will be posted here with a new effective date and, where appropriate, communicated in the Service or by email. Continuing to use the Service after the effective date means you accept the updated Terms.</p><p className="mt-4">Questions about these Terms, a plan, cancellation, or a refund request can be sent to <a className="font-semibold text-primary hover:text-primary-hover" href={`mailto:${supportChannels.email}`}>{supportChannels.email}</a> or raised by phone at <a className="font-semibold text-primary hover:text-primary-hover" href={`tel:${supportChannels.phoneLink}`}>{supportChannels.phoneDisplay}</a>.</p></div></div>
+            </div>
+          </SupportSection>
+        </article>
+      </main>
+    </SupportPageShell>
+  );
 }
