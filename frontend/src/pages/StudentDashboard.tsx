@@ -348,9 +348,7 @@ export default function StudentDashboard() {
       <header className="border-b border-border bg-bg-primary/80 backdrop-blur-md sticky top-0 z-40">
         <div className="mx-auto max-w-7xl px-4 md:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-9 w-9 shrink-0 rounded-xl bg-gradient-to-tr from-primary to-blue-600 flex items-center justify-center font-bold text-text-on-accent">
-              CBT
-            </div>
+            <img src="/favicon.svg" alt="" className="h-9 w-9 shrink-0 rounded-xl object-cover" />
             <span className="text-sm md:text-lg font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 bg-clip-text text-transparent truncate hidden sm:block">
               Student Workspace
             </span>
