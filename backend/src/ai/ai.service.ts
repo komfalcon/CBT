@@ -19,7 +19,7 @@ export class AiService {
     private questionsService: QuestionsService,
   ) { }
 
-  private async fetchAvailableModel(): Promise<string> {
+  private async fetchAvailableModels(): Promise<string[]> {
     try {
       const res = await axios.get('https://seekai.cc/v1/models', {
         headers: { Authorization: `Bearer ${this.apiKey}` }
@@ -28,19 +28,21 @@ export class AiService {
         // Exclude expensive/fake models and only select safe, affordable ones
         const safeModels = res.data.data.filter((m: any) => {
           const id = m.id.toLowerCase();
-          if (id.includes('gpt') || id.includes('claude') || id.includes('opus') || id.includes('sonnet')) {
-            return false;
-          }
+          if (id.includes('gpt') || id.includes('claude') || id.includes('opus') || id.includes('sonnet')) return false;
           return id.includes('deepseek') || id.includes('grok') || id.includes('llama') || id.includes('qwen') || id.includes('mistral') || id.includes('mixtral');
         });
         
-        if (safeModels.length > 0) return safeModels[0].id;
-        
-        // If no safe models exist, return a generic fallback instead of a potentially expensive one
-        return 'deepseek-chat';
+        // Return sorted to prioritize deepseek models
+        if (safeModels.length > 0) {
+           return safeModels.map((m: any) => m.id).sort((a: string, b: string) => {
+             if (a.includes('deepseek') && !b.includes('deepseek')) return -1;
+             if (!a.includes('deepseek') && b.includes('deepseek')) return 1;
+             return 0;
+           });
+        }
       }
     } catch (e) {}
-    return 'deepseek-v4-pro';
+    return ['deepseek-chat', 'deepseek-v4-flash', 'grok-4.6'];
   }
 
   private async callDigitalOceanApi(messages: any[], maxTokens: number = 500) {
@@ -68,24 +70,37 @@ export class AiService {
       if (error?.response?.data?.error?.code === 'model_not_found' || 
           error?.response?.data?.error?.message?.includes('No available channel') ||
           isRateLimit) {
-        this.logger.warn(`Model ${this.model} is dead or rate-limited. Attempting to fallback...`);
-        this.model = await this.fetchAvailableModel();
+        this.logger.warn(`Model ${this.model} is dead or rate-limited. Finding fallbacks...`);
+        const fallbackModels = await this.fetchAvailableModels();
         
-        // Retry with new model
-        try {
-          const retryResponse = await axios.post(
-            this.apiUrl,
-            { model: this.model, messages, max_tokens: maxTokens, temperature: 0.3 },
-            { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.apiKey}` } }
-          );
-          return retryResponse.data.choices[0].message.content;
-        } catch (retryError: any) {
-          const isRetryRateLimit = retryError?.response?.status === 429 || retryError?.response?.data?.error?.message?.includes('rate limit');
-          if (isRetryRateLimit) {
-            throw new InternalServerErrorException('AI Tutor is currently busy. Please wait a minute and try again (Rate Limit Exceeded).');
+        let lastError: any = error;
+        for (const fallbackModel of fallbackModels) {
+          if (fallbackModel === this.model) continue; // Skip the one that just failed
+          
+          try {
+            this.logger.log(`Attempting fallback with model: ${fallbackModel}`);
+            const retryResponse = await axios.post(
+              this.apiUrl,
+              { model: fallbackModel, messages, max_tokens: maxTokens, temperature: 0.3 },
+              { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.apiKey}` } }
+            );
+            
+            // It worked! Save this as the new default model to avoid failing next time
+            this.model = fallbackModel;
+            return retryResponse.data.choices[0].message.content;
+          } catch (retryError: any) {
+            this.logger.warn(`Fallback model ${fallbackModel} failed: ${retryError.message}`);
+            lastError = retryError;
+            // Continue loop to try the next model
           }
-          throw new InternalServerErrorException('Failed to generate AI response after model rotation.');
         }
+        
+        // If we get here, all fallbacks failed
+        const isRetryRateLimit = lastError?.response?.status === 429 || lastError?.response?.data?.error?.message?.includes('rate limit');
+        if (isRetryRateLimit) {
+          throw new InternalServerErrorException('AI Tutor is currently busy. Please wait a minute and try again (Rate Limit Exceeded).');
+        }
+        throw new InternalServerErrorException('Failed to generate AI response after model rotation.');
       }
 
       if (error?.response?.data?.error?.code === 'insufficient_user_quota' || error?.response?.data?.error?.message?.includes('3')) {
