@@ -51,7 +51,7 @@ export default function ContactUs() {
       />
 
       <main className="mx-auto max-w-7xl px-8 py-16">
-        <section className="grid grid-cols-[0.82fr_1.18fr] gap-8">
+        <section className="support-contact-layout grid grid-cols-[0.82fr_1.18fr] gap-8">
           <aside className="space-y-4">
             <div className="support-surface rounded-2xl p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Support channels</p>
@@ -80,7 +80,7 @@ export default function ContactUs() {
             <div className="flex items-start justify-between gap-8 border-b border-border pb-6"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Message support</p><h2 className="mt-3 font-display text-[30px] font-semibold tracking-[-0.05em] text-text-primary">Describe what you need.</h2><p className="mt-3 max-w-xl text-[13px] leading-6 text-text-secondary">Submitting this form opens your email app with a pre-filled message addressed to {supportChannels.email}. Review it and press send in your email app to contact us.</p></div><Send className="mt-1 h-6 w-6 shrink-0 text-primary" /></div>
 
             <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-2 gap-5">
+              <div className="support-contact-fields grid grid-cols-2 gap-5">
                 <label className="block"><span className="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary">Your name</span><input className="support-input h-12 w-full rounded-xl border px-4 text-[14px] outline-none transition" type="text" name="name" value={formData.name} onChange={handleChange} placeholder="e.g. Chinedu Okafor" autoComplete="name" required /></label>
                 <label className="block"><span className="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-text-secondary">Account email</span><input className="support-input h-12 w-full rounded-xl border px-4 text-[14px] outline-none transition" type="email" name="email" value={formData.email} onChange={handleChange} placeholder="name@email.com" autoComplete="email" required /></label>
               </div>

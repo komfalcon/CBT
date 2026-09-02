@@ -148,9 +148,9 @@ export default function HelpCenter() {
         icon={CircleHelp}
       />
 
-      <main className="mx-auto max-w-7xl px-8 py-16">
+      <main className="support-help-main mx-auto max-w-7xl px-8 py-16">
         <section className="support-surface rounded-[24px] p-7">
-          <div className="flex items-end justify-between gap-8">
+          <div className="support-help-search-header flex items-end justify-between gap-8">
             <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Search support</p><h2 className="mt-3 font-display text-2xl font-semibold tracking-[-0.045em] text-text-primary">Start with the question you have.</h2></div>
             <p className="max-w-sm text-right text-[13px] leading-6 text-text-muted">Search by feature, plan, issue, or a word from an on-screen error.</p>
           </div>
@@ -167,7 +167,7 @@ export default function HelpCenter() {
           </div>
         </section>
 
-        <section className="mt-8 grid grid-cols-4 gap-4" aria-label="Help categories">
+        <section className="support-help-categories mt-8 grid grid-cols-4 gap-4" aria-label="Help categories">
           {categories.map((category) => {
             const Icon = category.icon;
             const active = selectedCategory === category.id;
@@ -176,7 +176,7 @@ export default function HelpCenter() {
                 key={category.id}
                 type="button"
                 onClick={() => selectCategory(category.id)}
-                className={`rounded-2xl border p-5 text-left transition ${active ? 'border-primary/50 bg-primary/[0.10] shadow-[0_14px_32px_rgba(48,75,200,0.14)]' : 'support-surface hover:-translate-y-0.5 hover:border-border-hover'}`}
+                className={`support-help-category rounded-2xl border p-5 text-left transition ${active ? 'border-primary/50 bg-primary/[0.10] shadow-[0_14px_32px_rgba(48,75,200,0.14)]' : 'support-surface hover:-translate-y-0.5 hover:border-border-hover'}`}
                 aria-pressed={active}
               >
                 <div className={`flex h-10 w-10 items-center justify-center rounded-xl border ${active ? 'border-primary/30 bg-primary/15 text-primary' : 'border-border bg-bg-primary/45 text-text-secondary'}`}><Icon className="h-5 w-5" /></div>
@@ -187,7 +187,7 @@ export default function HelpCenter() {
           })}
         </section>
 
-        <section className="mt-16 grid grid-cols-[minmax(0,1fr)_284px] gap-10">
+        <section className="support-help-content mt-16 grid grid-cols-[minmax(0,1fr)_284px] gap-10">
           <div>
             <div className="flex items-end justify-between border-b border-border pb-5">
               <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Common questions</p><h2 className="mt-3 font-display text-[30px] font-semibold tracking-[-0.045em] text-text-primary">{selectedCategory === 'all' ? 'Everything you need to know' : categories.find((category) => category.id === selectedCategory)?.label}</h2></div>
@@ -207,7 +207,7 @@ export default function HelpCenter() {
                       aria-expanded={expanded}
                       aria-controls={`${item.id}-answer`}
                     >
-                      <span><span className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">{category?.label}</span><span className="font-display text-[16px] font-semibold leading-6 tracking-[-0.025em] text-text-primary">{item.question}</span></span>
+                      <span><span className="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-primary">{category?.label}</span><span className="font-display text-[16px] font-semibold leading-6 tracking-[-0.025em] text-text-primary">{item.question}</span></span>
                       <ChevronDown className={`mt-1 h-5 w-5 shrink-0 text-primary transition-transform ${expanded ? 'rotate-180' : ''}`} />
                     </button>
                     {expanded && <div id={`${item.id}-answer`} className="border-t border-border px-6 py-5 text-[14px] leading-7 text-text-secondary">{item.answer}</div>}
