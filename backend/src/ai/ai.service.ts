@@ -247,6 +247,15 @@ If there is no error in the system's answer, do not output the JSON block.`
     
     const session = sessions[0];
     if (!session) throw new NotFoundException('Chat session not found');
+    
+    if (typeof session.messages === 'string') {
+      try {
+        session.messages = JSON.parse(session.messages);
+      } catch(e) {
+        session.messages = [];
+      }
+    }
+    
     return session;
   }
 

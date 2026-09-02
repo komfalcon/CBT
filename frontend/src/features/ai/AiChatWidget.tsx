@@ -62,6 +62,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const isNewSessionRef = useRef(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -90,6 +91,10 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
 
   useEffect(() => {
     if (currentSessionId) {
+      if (isNewSessionRef.current) {
+        isNewSessionRef.current = false;
+        return;
+      }
       loadSessionMessages(currentSessionId);
     } else {
       setMessages([]);
@@ -152,7 +157,9 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
       const title = `Chat ${new Date().toLocaleDateString()}`;
       const session = await createChatSession({ title });
       setSessions((previous) => [session, ...previous]);
+      isNewSessionRef.current = true;
       setCurrentSessionId(session.id);
+      setMessages([]);
       setShowSidebar(false);
       window.setTimeout(() => inputRef.current?.focus(), 0);
     } catch {
@@ -188,6 +195,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
         const title = `${userMessage.substring(0, 30)}${userMessage.length > 30 ? '…' : ''}`;
         const newSession = await createChatSession({ title });
         setSessions((previous) => [newSession, ...previous]);
+        isNewSessionRef.current = true;
         setCurrentSessionId(newSession.id);
         targetSessionId = newSession.id;
       } catch {
