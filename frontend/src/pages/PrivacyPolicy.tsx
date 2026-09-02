@@ -1,5 +1,5 @@
 import { BrainCircuit, Check, Database, KeyRound, LockKeyhole, ShieldCheck, UserRoundCheck } from 'lucide-react';
-import { SupportHero, SupportPageShell, SupportSection, supportChannels } from '../components';
+import { SupportContents, SupportHero, SupportPageShell, SupportSection, supportChannels } from '../components';
 
 const sections = [
   { id: 'scope', label: 'Scope and controller' },
@@ -31,9 +31,10 @@ export default function PrivacyPolicy() {
         }
       />
 
-      <main className="mx-auto grid max-w-7xl grid-cols-[230px_minmax(0,1fr)] gap-14 px-8 py-16">
+      <main className="support-legal-layout mx-auto grid max-w-7xl grid-cols-[230px_minmax(0,1fr)] gap-14 px-8 py-16">
+        <div className="support-mobile-toc-wrap"><SupportContents sections={sections} /></div>
         <aside className="self-start sticky top-28 rounded-2xl support-surface-soft p-3">
-          <p className="px-3 pb-3 pt-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted">On this page</p>
+          <p className="px-3 pb-3 pt-1 text-xs font-semibold uppercase tracking-[0.16em] text-text-muted">On this page</p>
           <nav className="space-y-1" aria-label="Privacy policy sections">
             {sections.map((section, index) => (
               <a key={section.id} href={`#${section.id}`} className="support-toc-link flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] transition-colors">
