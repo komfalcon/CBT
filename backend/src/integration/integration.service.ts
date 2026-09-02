@@ -80,7 +80,6 @@ export class IntegrationService {
     const handoff = await this.signHandoff({
       sub: userId,
       userId,
-      aud: 'library',
       scope: dto.scope.length ? dto.scope : ['profile', 'topic_context', 'return_context'],
       jti,
       state,
@@ -122,7 +121,6 @@ export class IntegrationService {
       sub: handoff.userId,
       userId: handoff.userId,
       tokenType: 'integration_session',
-      aud: 'library',
       scope: handoff.scope,
       state: handoff.state,
     }, {
