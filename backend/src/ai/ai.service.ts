@@ -63,8 +63,12 @@ export class AiService {
 
       return response.data.choices[0].message.content;
     } catch (error: any) {
-      if (error?.response?.data?.error?.code === 'model_not_found' || error?.response?.data?.error?.message?.includes('No available channel')) {
-        this.logger.warn(`Model ${this.model} is dead. Attempting to fallback...`);
+      const isRateLimit = error?.response?.status === 429 || error?.response?.data?.error?.message?.includes('rate limit') || error?.response?.data?.error?.message?.includes('1');
+
+      if (error?.response?.data?.error?.code === 'model_not_found' || 
+          error?.response?.data?.error?.message?.includes('No available channel') ||
+          isRateLimit) {
+        this.logger.warn(`Model ${this.model} is dead or rate-limited. Attempting to fallback...`);
         this.model = await this.fetchAvailableModel();
         
         // Retry with new model
@@ -75,16 +79,16 @@ export class AiService {
             { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.apiKey}` } }
           );
           return retryResponse.data.choices[0].message.content;
-        } catch (retryError) {
+        } catch (retryError: any) {
+          const isRetryRateLimit = retryError?.response?.status === 429 || retryError?.response?.data?.error?.message?.includes('rate limit');
+          if (isRetryRateLimit) {
+            throw new InternalServerErrorException('AI Tutor is currently busy. Please wait a minute and try again (Rate Limit Exceeded).');
+          }
           throw new InternalServerErrorException('Failed to generate AI response after model rotation.');
         }
       }
 
-      if (error?.response?.status === 429 || error?.response?.data?.error?.message?.includes('1分钟内最多请求5次') || error?.response?.data?.error?.message?.includes('rate limit')) {
-        throw new InternalServerErrorException('AI Tutor is currently busy. Please wait a minute and try again (Rate Limit Exceeded).');
-      }
-
-      if (error?.response?.data?.error?.code === 'insufficient_user_quota' || error?.response?.data?.error?.message?.includes('额度不足')) {
+      if (error?.response?.data?.error?.code === 'insufficient_user_quota' || error?.response?.data?.error?.message?.includes('3')) {
         throw new InternalServerErrorException('Your AI API key has run out of funds. Your current balance is negative ($-1.01). Please top up your SeekAI account or update the SEEKAI_KEY in your Render environment variables.');
       }
 

@@ -1,17 +1,28 @@
-import { connect, disconnect } from 'mongoose';
+import { createClient } from '@libsql/client';
 import * as dotenv from 'dotenv';
-import { User, UserSchema } from '../src/users/schemas/user.schema';
-import * as mongoose from 'mongoose';
+import { createHash } from 'crypto';
 
 dotenv.config();
 
 async function upgrade() {
-  await connect(process.env.MONGODB_URI as string);
-  const UserModel = mongoose.model<User>('User', UserSchema);
-  const user = await UserModel.findOneAndUpdate({ cbt_key: 'CBT-UBUQX4' }, { $set: { subscription_tier: 'max', ai_messages_remaining: 50 } }, { new: true });
-  console.log('Upgraded:', user?.email, user?.cbt_key, user?.subscription_tier);
-  await disconnect();
+  const client = createClient({
+    url: process.env.TURSO_DATABASE_URL as string,
+    authToken: process.env.TURSO_AUTH_TOKEN as string,
+  });
+
+  const cbtKey = process.argv[2] || 'CBT-NM9AEA';
+  const formattedKey = cbtKey.trim().toUpperCase();
+  const hash = createHash('sha256').update(formattedKey).digest('hex');
+
+  const res = await client.execute({
+    sql: 'UPDATE users SET subscription_tier = ?, ai_messages_remaining = ? WHERE cbt_key_hash = ? RETURNING email, cbt_key, subscription_tier',
+    args: ['max', 50, hash]
+  });
+
+  if (res.rows.length > 0) {
+    console.log('Upgraded:', res.rows[0].email, cbtKey, res.rows[0].subscription_tier);
+  } else {
+    console.log('User with CBT Key', cbtKey, 'not found.');
+  }
 }
-upgrade();
-
-
+upgrade().catch(console.error);
