@@ -244,12 +244,12 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                 </button>
               </div>
               <div className="flex-1 overflow-y-auto p-2">
-                <p className="px-2 pb-2 pt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted">Recent chats</p>
+                <p className="px-2 pb-2 pt-1 text-xs sm:text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted">Recent chats</p>
                 {sessions.length === 0 ? (
                   <div className="mx-2 mt-3 rounded-xl border border-dashed border-border px-3 py-5 text-center">
                     <History className="mx-auto h-4 w-4 text-text-muted" />
                     <p className="mt-2 text-xs font-semibold text-text-secondary">No chat history yet</p>
-                    <p className="mt-1 text-[11px] leading-4 text-text-muted">Your tutoring conversations will be saved here.</p>
+                    <p className="mt-1 text-xs sm:text-[11px] leading-4 text-text-muted">Your tutoring conversations will be saved here.</p>
                   </div>
                 ) : (
                   <div className="space-y-1">
@@ -291,10 +291,10 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                   <FalkeMark />
                   <div className="min-w-0">
                     <h2 id="falke-title" className="font-display text-sm font-bold text-text-primary">Falke AI</h2>
-                    <p className="mt-0.5 text-[11px] text-text-secondary">Your private UTME study partner</p>
+                    <p className="mt-0.5 text-xs sm:text-[11px] text-text-secondary">Your private UTME study partner</p>
                   </div>
                 </div>
-                <button type="button" onClick={closePanel} className="rounded-xl p-2 text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary" aria-label="Close Falke AI" title="Close">
+                <button type="button" onClick={closePanel} className="min-h-11 min-w-11 rounded-xl p-2 text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary" aria-label="Close Falke AI" title="Close">
                   <X className="h-5 w-5" />
                 </button>
               </header>
@@ -339,7 +339,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                 </div>
               </div>
 
-              <footer className="border-t border-border bg-bg-card p-4">
+              <footer className="border-t border-border bg-bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
                 <div className="mx-auto max-w-2xl">
                   <div className="flex items-end gap-2 rounded-2xl border border-border bg-bg-secondary p-2 shadow-inner transition-colors focus-within:border-ai-flag/45 focus-within:ring-2 focus-within:ring-ai-flag/15">
                     <textarea
@@ -350,12 +350,12 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                       placeholder="Ask Falke AI about a topic, question, or study plan"
                       disabled={isLoading}
                       rows={1}
-                      className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-5 text-text-primary outline-none placeholder:text-text-muted disabled:cursor-not-allowed disabled:opacity-50"
+                      className="max-h-28 min-h-11 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-5 text-text-primary outline-none placeholder:text-text-muted disabled:cursor-not-allowed disabled:opacity-50"
                       aria-label="Message Falke AI"
                     />
-                    <button type="button" onClick={handleSend} disabled={!inputValue.trim() || isLoading} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-ai-flag/50 bg-ai-flag text-[#3f2c0c] shadow-[0_6px_14px_rgba(215,179,92,0.22)] transition-[transform,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:bg-ai-flag-hover hover:shadow-[0_8px_18px_rgba(215,179,92,0.3)] active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none" aria-label="Send message" title="Send message"><Send className="h-4 w-4" /></button>
+                    <button type="button" onClick={handleSend} disabled={!inputValue.trim() || isLoading} className="flex h-11 w-11 min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl border border-ai-flag/50 bg-ai-flag text-[#3f2c0c] shadow-[0_6px_14px_rgba(215,179,92,0.22)] transition-[transform,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:bg-ai-flag-hover hover:shadow-[0_8px_18px_rgba(215,179,92,0.3)] active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none" aria-label="Send message" title="Send message"><Send className="h-4 w-4" /></button>
                   </div>
-                  <p className="mt-2 text-center text-[10px] text-text-muted">Falke AI can make mistakes. Check important answers with your study materials.</p>
+                  <p className="mt-2 text-center text-xs sm:text-[10px] text-text-muted">Falke AI can make mistakes. Check important answers with your study materials.</p>
                 </div>
               </footer>
             </div>
@@ -372,7 +372,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
           aria-label="Open Falke AI tutor"
         >
           <FalkeMark />
-          <span className="hidden text-left sm:block"><span className="block text-xs font-bold text-text-primary">Ask Falke AI</span><span className="mt-0.5 block text-[10px] text-text-secondary">Study support</span></span>
+          <span className="hidden text-left sm:block"><span className="block text-xs font-bold text-text-primary">Ask Falke AI</span><span className="mt-0.5 block text-xs sm:text-[10px] text-text-secondary">Study support</span></span>
         </button>
       )}
     </>

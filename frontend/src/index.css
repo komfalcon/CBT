@@ -167,6 +167,11 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 
 @media (max-width: 640px) {
   body { font-size: 14px; }
+
+  /* Mobile-only interaction baseline for the Student Workspace. Desktop sizing remains unchanged. */
+  .student-workspace button:not(:disabled) {
+    min-height: 44px;
+  }
 }
 
 /* Light theme: a deliberate neutral canvas with dark ink and vivid brand accents. */
