@@ -1,5 +1,5 @@
 const fs = require('fs');
-let code = fs.readFileSync('C:/Users/DELL/AURIKEX/CBT/backend/src/questions/questions.service.ts', 'utf8');
+let code = fs.readFileSync('C:/Users/DELL/AURIKREX/CBT/backend/src/questions/questions.service.ts', 'utf8');
 
 code = code.replace(
   /import \{[\s\S]*?\} from '@nestjs\/common';\r?\nimport \{ InjectModel \} from '@nestjs\/mongoose';\r?\nimport \{ Model, FilterQuery \} from 'mongoose';/m,
@@ -70,4 +70,4 @@ code = code.replace(/question\.options\.some/g, '(question.options as any[]).som
 code = code.replace(/question\.versions\.length/g, '(question.versions as any[]).length');
 code = code.replace(/question\.versions\.find/g, '(question.versions as any[]).find');
 
-fs.writeFileSync('C:/Users/DELL/AURIKEX/CBT/backend/src/questions/questions.service.ts', code);
+fs.writeFileSync('C:/Users/DELL/AURIKREX/CBT/backend/src/questions/questions.service.ts', code);

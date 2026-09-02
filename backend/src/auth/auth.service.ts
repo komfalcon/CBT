@@ -163,7 +163,7 @@ export class AuthService implements OnModuleInit {
   }
 
   async recoverAdmin() {
-    const email = 'falcon@aurikex.tech';
+    const email = 'falcon@aurikrex.tech';
     const [user] = await this.db.select().from(schema.users).where(eq(schema.users.email, email)).limit(1);
     if (!user) {
       return { error: 'Admin user not found' };
@@ -392,7 +392,7 @@ export class AuthService implements OnModuleInit {
     }
 
     const secret = authenticator.generateSecret();
-    const otpauthUrl = authenticator.keyuri(user.email, 'Aurikex CBT', secret);
+    const otpauthUrl = authenticator.keyuri(user.email, 'Aurikrex CBT', secret);
     const qrCodeDataUrl = await QRCode.toDataURL(otpauthUrl);
 
     await this.db.update(schema.users).set({ mfa_secret: secret }).where(eq(schema.users.id, user.id));

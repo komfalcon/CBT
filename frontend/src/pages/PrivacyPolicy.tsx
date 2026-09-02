@@ -17,7 +17,7 @@ export default function PrivacyPolicy() {
             content: (
                 <div className="space-y-3 text-text-muted">
                     <p>
-                        At JAMB CBT Prep by Aurikex, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
+                        At JAMB CBT Prep by Aurikrex, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
                     </p>
                     <p>
                         Please read this Privacy Policy carefully. If you do not agree with our policies and practices, please do not use our service.
@@ -178,7 +178,7 @@ export default function PrivacyPolicy() {
                         <li><span className="font-semibold text-white">Right to Withdraw Consent:</span> Opt-out of data processing</li>
                     </ul>
                     <p className="pt-3">
-                        To exercise any of these rights, please contact us at info@aurikex.tech.
+                        To exercise any of these rights, please contact us at info@aurikrex.tech.
                     </p>
                 </div>
             ),
@@ -219,9 +219,9 @@ export default function PrivacyPolicy() {
                         If you have questions about this Privacy Policy or our privacy practices, please contact us:
                     </p>
                     <div className="space-y-2">
-                        <p><span className="font-semibold text-white">Email:</span> info@aurikex.tech</p>
+                        <p><span className="font-semibold text-white">Email:</span> info@aurikrex.tech</p>
                         <p><span className="font-semibold text-white">Phone:</span> +234 911 368 3395</p>
-                        <p><span className="font-semibold text-white">Website:</span> www.aurikex.tech</p>
+                        <p><span className="font-semibold text-white">Website:</span> www.aurikrex.tech</p>
                     </div>
                     <p className="pt-3 text-sm">
                         We will respond to your privacy requests within 30 days.

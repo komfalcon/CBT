@@ -1,5 +1,5 @@
 const fs = require('fs');
-let code = fs.readFileSync('C:/Users/DELL/AURIKEX/CBT/backend/src/questions/questions.service.ts', 'utf8');
+let code = fs.readFileSync('C:/Users/DELL/AURIKREX/CBT/backend/src/questions/questions.service.ts', 'utf8');
 
 // Replace constructor
 code = code.replace(
@@ -226,5 +226,5 @@ code = code.replace(/a\.questionId/g, 'a.id');
 code = code.replace(/b\.questionId/g, 'b.id');
 code = code.replace(/doc\.questionId/g, 'doc.id');
 
-fs.writeFileSync('C:/Users/DELL/AURIKEX/CBT/backend/src/questions/questions.service.ts', code);
+fs.writeFileSync('C:/Users/DELL/AURIKREX/CBT/backend/src/questions/questions.service.ts', code);
 console.log('Script written correctly');

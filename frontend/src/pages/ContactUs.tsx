@@ -98,8 +98,8 @@ export default function ContactUs() {
                             </div>
                             <div>
                                 <h3 className="font-semibold text-white mb-1">Email</h3>
-                                <a href="mailto:info@aurikex.tech" className="text-text-muted hover:text-primary transition-colors break-all">
-                                    info@aurikex.tech
+                                <a href="mailto:info@aurikrex.tech" className="text-text-muted hover:text-primary transition-colors break-all">
+                                    info@aurikrex.tech
                                 </a>
                                 <p className="text-xs text-text-muted mt-2">Response time: Within 24 hours</p>
                             </div>
@@ -127,12 +127,12 @@ export default function ContactUs() {
                             <div>
                                 <h3 className="font-semibold text-white mb-1">Website</h3>
                                 <a
-                                    href="https://www.aurikex.tech"
+                                    href="https://www.aurikrex.tech"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-text-muted hover:text-primary transition-colors"
                                 >
-                                    www.aurikex.tech
+                                    www.aurikrex.tech
                                 </a>
                                 <p className="text-xs text-text-muted mt-2">Visit our main site</p>
                             </div>

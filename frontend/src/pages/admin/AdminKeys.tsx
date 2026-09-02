@@ -27,7 +27,7 @@ export default function AdminKeys() {
         page: keyPage.toString(),
         limit: keyLimit.toString(),
         role: 'student',
-        search: 'voucher-', // Voucher emails end in @aurikex.local and start with voucher-
+        search: 'voucher-', // Voucher emails end in @aurikrex.local and start with voucher-
       });
       const apiBase = import.meta.env.VITE_API_BASE_URL || '';
       const res = await fetch(`${apiBase}/admin/users?${queryParams.toString()}`, { headers: getHeaders() });

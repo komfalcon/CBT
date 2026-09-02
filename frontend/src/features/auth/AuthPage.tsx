@@ -370,15 +370,15 @@ export default function AuthPage() {
       <div className="pointer-events-none absolute bottom-[8%] right-[10%] h-72 w-72 rounded-full bg-violet-500/10 blur-[120px]" />
       <div className="absolute right-6 top-6 z-50"><ThemeToggle /></div>
 
-      <div className="auth-layout relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center justify-center p-6 lg:p-10">
-        <div className="auth-shell grid w-full max-w-5xl overflow-hidden rounded-[28px] border border-white/[0.10] bg-[#0d172b]/90 shadow-[0_32px_90px_rgba(0,0,0,0.38)] backdrop-blur-xl lg:grid-cols-[0.82fr_1.18fr]">
+      <div className="auth-layout relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center justify-center p-4 sm:p-6 lg:p-10">
+        <div className="auth-shell grid min-w-0 w-full max-w-5xl overflow-hidden rounded-[28px] border border-white/[0.10] bg-[#0d172b]/90 shadow-[0_32px_90px_rgba(0,0,0,0.38)] backdrop-blur-xl lg:grid-cols-[0.82fr_1.18fr]">
           <aside className="auth-brand-panel relative hidden overflow-hidden border-r border-white/[0.08] bg-[linear-gradient(150deg,rgba(40,67,137,0.32),rgba(16,24,46,0.7)_55%,rgba(79,54,156,0.2))] p-10 lg:flex lg:flex-col lg:justify-between">
             <div className="pointer-events-none absolute -right-20 top-20 h-64 w-64 rounded-full border border-blue-300/10" />
             <div className="pointer-events-none absolute -right-8 top-32 h-40 w-40 rounded-full border border-violet-300/10" />
             <div>
               <div className="flex items-center gap-3">
                 <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 text-sm font-bold text-white shadow-[0_10px_24px_rgba(74,91,255,0.28)]"><span className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.22),transparent_55%)]" /><span className="relative tracking-[-0.06em]">CBT</span></div>
-                <div><p className="font-display text-[15px] font-semibold tracking-[-0.02em] text-white">JAMB UTME Prep</p><p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-blue-300">by Aurikex</p></div>
+                <div><p className="font-display text-[15px] font-semibold tracking-[-0.02em] text-white">JAMB UTME Prep</p><p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-blue-300">by Aurikrex</p></div>
               </div>
               <div className="mt-20 max-w-sm">
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-200">Your next score starts here</div>
@@ -392,18 +392,18 @@ export default function AuthPage() {
             </div>
           </aside>
 
-          <section className="auth-form-panel max-h-[calc(100vh-48px)] overflow-y-auto p-6 sm:p-9 lg:p-10">
-            <div className="mx-auto w-full max-w-md">
+          <section className="auth-form-panel min-w-0 max-h-[calc(100vh-48px)] overflow-y-auto p-4 sm:p-9 lg:p-10">
+            <div className="mx-auto min-w-0 w-full max-w-md">
               <div className="mb-8 flex items-start justify-between gap-6">
                 <div><div className="auth-form-brand mb-4 flex items-center gap-2 lg:hidden"><div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 text-xs font-bold text-white">CBT</div><span className="font-display text-[15px] font-semibold text-white">JAMB UTME Prep</span></div><div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Candidate portal</div><h1 className="auth-title mt-3 font-display text-3xl font-semibold tracking-[-0.055em] text-white">{mode === 'login' && 'Welcome back.'}{mode === 'register' && 'Create your profile.'}{mode === 'cbt-key-login' && 'Use your CBT key.'}{mode === 'verify-email' && 'Verify your email.'}{mode === 'forgot-password' && 'Reset your password.'}{mode === 'reset-password' && 'Set a new password.'}</h1><p className="auth-subtitle mt-2 text-[14px] leading-6 text-slate-400">{mode === 'login' && 'Sign in to continue practicing.'}{mode === 'register' && 'Create a candidate profile and start practicing.'}{mode === 'cbt-key-login' && 'Quick access for shared devices and cafe sessions.'}{mode === 'verify-email' && 'Confirm your email to activate your account.'}{mode === 'forgot-password' && 'Enter your email to receive a reset code.'}{mode === 'reset-password' && 'Enter your new account password below.'}</p></div>
-                <span className="auth-secure-badge mt-1 hidden rounded-full border border-emerald-400/20 bg-emerald-400/[0.08] px-2.5 py-1 text-xs font-semibold text-emerald-300 sm:inline-flex">Secure access</span>
+                <span className="auth-secure-badge mt-1 hidden shrink-0 whitespace-nowrap rounded-full border border-emerald-400/20 bg-emerald-400/[0.08] px-2.5 py-1 text-xs font-semibold text-emerald-300 sm:inline-flex">Secure access</span>
               </div>
 
               {(mode === 'login' || mode === 'register' || mode === 'cbt-key-login') && (
                 <div className="auth-tabs mb-7 grid grid-cols-3 gap-1 rounded-xl border border-white/[0.08] bg-black/20 p-1">
-                  <button onClick={() => setMode('login')} className={mode === 'login' ? 'rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Sign in</button>
-                  <button onClick={() => setMode('register')} className={mode === 'register' ? 'rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Sign up</button>
-                  <button onClick={() => setMode('cbt-key-login')} className={mode === 'cbt-key-login' ? 'rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>CBT key</button>
+                  <button onClick={() => setMode('login')} className={mode === 'login' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Sign in</button>
+                  <button onClick={() => setMode('register')} className={mode === 'register' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Sign up</button>
+                  <button onClick={() => setMode('cbt-key-login')} className={mode === 'cbt-key-login' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>CBT key</button>
                 </div>
               )}
 
