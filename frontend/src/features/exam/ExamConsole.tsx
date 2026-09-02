@@ -44,7 +44,7 @@ export default function ExamConsole() {
   const [timeRemaining, setTimeRemaining] = useState<number>(7200);
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= DESKTOP_BREAKPOINT);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
-
+  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(new Set());
   // Modal and Alert states
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [submitError, setSubmitError] = useState('');
