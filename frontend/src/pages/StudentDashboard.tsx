@@ -67,7 +67,7 @@ function SectionKicker({ label, detail }: { label: string; detail?: string }) {
   return (
     <div className="flex items-end justify-between gap-4">
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-text-muted">{label}</p>
+        <p className="text-xs sm:text-[11px] font-bold uppercase tracking-[0.16em] text-text-muted">{label}</p>
         {detail && <p className="mt-1 text-xs text-text-secondary">{detail}</p>}
       </div>
     </div>
@@ -392,16 +392,16 @@ export default function StudentDashboard() {
     : 'ST';
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-bg-primary font-sans text-text-primary">
+    <div className="student-workspace relative min-h-screen overflow-x-hidden bg-bg-primary font-sans text-text-primary">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(ellipse_at_70%_-10%,rgba(91,114,255,0.16),transparent_58%)]" />
       <div className="relative z-10">
-        <header className="sticky top-0 z-40 border-b border-border bg-bg-primary/88 backdrop-blur-xl">
+        <header className="relative sticky top-0 z-40 border-b border-border bg-bg-primary/88 backdrop-blur-xl">
           <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between px-6 xl:px-8">
             <div className="flex items-center gap-3">
               <img src="/favicon.svg" alt="Aurikrex" className="h-9 w-9 rounded-xl object-cover shadow-lg shadow-primary/15" />
               <div className="leading-tight">
                 <p className="font-display text-sm font-bold tracking-tight text-text-primary">Student Workspace</p>
-                <p className="mt-0.5 text-[11px] font-medium text-text-muted">Focused UTME preparation</p>
+                <p className="mt-0.5 text-xs sm:text-[11px] font-medium text-text-muted">Focused UTME preparation</p>
               </div>
             </div>
 
@@ -416,17 +416,17 @@ export default function StudentDashboard() {
                 <BookOpen className="h-4 w-4" /> E-Library
               </Button>
               <div className="mx-1 h-5 w-px bg-border" />
-              <ThemeToggle />
+              <ThemeToggle className="min-h-11 min-w-11 lg:min-h-0 lg:min-w-0" />
               <Button onClick={handleLogout} variant="ghost" size="sm" aria-label="Log out">
                 <LogOut className="h-4 w-4" /> Log out
               </Button>
             </nav>
 
             <div className="relative flex items-center gap-2 lg:hidden">
-              <ThemeToggle />
+              <ThemeToggle className="min-h-11 min-w-11 lg:min-h-0 lg:min-w-0" />
               <button
                 type="button"
-                className="rounded-xl border border-border bg-bg-secondary p-2 text-text-secondary transition-colors hover:border-border-hover hover:text-text-primary"
+                className="min-h-11 min-w-11 rounded-xl border border-border bg-bg-secondary p-2 text-text-secondary transition-colors hover:border-border-hover hover:text-text-primary"
                 onClick={() => setMobileActionsOpen((open) => !open)}
                 aria-label="Toggle workspace actions"
                 aria-expanded={mobileActionsOpen}
@@ -434,19 +434,22 @@ export default function StudentDashboard() {
                 {mobileActionsOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </button>
               {mobileActionsOpen && (
-                <div className="absolute right-0 top-11 z-50 w-52 rounded-2xl border border-border bg-bg-card p-2 shadow-2xl shadow-black/30">
-                  <button onClick={() => { setMobileActionsOpen(false); navigate('/exam-hub'); }} className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs font-medium text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
-                    <Target className="h-4 w-4" /> Exam Hub
-                  </button>
-                  <button onClick={() => { setMobileActionsOpen(false); navigate('/leaderboard'); }} className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs font-medium text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
-                    <Award className="h-4 w-4" /> Leaderboard
-                  </button>
-                  <button onClick={() => { setMobileActionsOpen(false); handleGoToLibrary(); }} className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs font-medium text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
-                    <BookOpen className="h-4 w-4" /> E-Library
-                  </button>
-                  <button onClick={() => { setMobileActionsOpen(false); handleLogout(); }} className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-xs font-medium text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
-                    <LogOut className="h-4 w-4" /> Log out
-                  </button>
+                <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-[min(calc(100vw-2rem),18rem)] rounded-2xl border border-border bg-bg-card p-2 shadow-2xl shadow-black/30 lg:hidden">
+                  <p className="px-3 pb-2 pt-1 text-xs font-bold uppercase tracking-[0.14em] text-text-muted">Workspace navigation</p>
+                  <nav className="grid gap-1" aria-label="Mobile workspace navigation">
+                    <button onClick={() => { setMobileActionsOpen(false); navigate('/exam-hub'); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
+                      <Target className="h-4 w-4" /> Exam Hub
+                    </button>
+                    <button onClick={() => { setMobileActionsOpen(false); navigate('/leaderboard'); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
+                      <Award className="h-4 w-4" /> Leaderboard
+                    </button>
+                    <button onClick={() => { setMobileActionsOpen(false); handleGoToLibrary(); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
+                      <BookOpen className="h-4 w-4" /> E-Library
+                    </button>
+                    <button onClick={() => { setMobileActionsOpen(false); handleLogout(); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
+                      <LogOut className="h-4 w-4" /> Log out
+                    </button>
+                  </nav>
                 </div>
               )}
             </div>
@@ -482,11 +485,11 @@ export default function StudentDashboard() {
               <SectionKicker label="Account" detail="Your profile and secure access" />
               <Card className="overflow-hidden border-border bg-bg-card p-0 shadow-[0_16px_36px_rgba(0,0,0,0.16)]">
                 <div className="border-b border-border bg-[linear-gradient(145deg,rgba(91,114,255,0.16),rgba(17,29,52,0)_70%)] p-5">
-                  <div className="flex items-start gap-3">
+                  <div className="flex flex-col items-start gap-4 xl:flex-row xl:gap-3">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-base font-black text-text-on-accent shadow-[0_10px_25px_rgba(91,114,255,0.3)]">{initials}</div>
                     <div className="min-w-0 flex-1">
-                      <h2 className="truncate font-display text-base font-bold text-text-primary">{student?.fullName}</h2>
-                      <p className="mt-1 truncate text-xs text-text-secondary">{student?.email}</p>
+                      <h2 className="break-words font-display text-base font-bold leading-5 text-text-primary">{student?.fullName}</h2>
+                      <p className="mt-1 break-all text-xs leading-5 text-text-secondary">{student?.email}</p>
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         <Badge variant="info">Candidate</Badge>
                         <Badge variant={student?.subscription_tier === 'max' ? 'ai-flag' : student?.subscription_tier === 'pro' ? 'success' : student?.subscription_tier === 'plus' ? 'primary' : 'draft'}>
@@ -496,17 +499,17 @@ export default function StudentDashboard() {
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 divide-x divide-border px-2 py-4 text-center">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Level</p>
+                <div className="grid grid-cols-1 divide-y divide-border px-2 py-3 text-center xl:grid-cols-3 xl:divide-x xl:divide-y-0 xl:py-4">
+                  <div className="py-2 xl:py-0">
+                    <p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Level</p>
                     <p className="mt-1 text-sm font-black text-text-primary">{student?.level || 1}</p>
                   </div>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Points</p>
+                  <div className="py-2 xl:py-0">
+                    <p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Points</p>
                     <p className="mt-1 text-sm font-black text-text-primary">{student?.xp_points || 0}</p>
                   </div>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Streak</p>
+                  <div className="py-2 xl:py-0">
+                    <p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Streak</p>
                     <p className="mt-1 flex items-center justify-center gap-1 text-sm font-black text-streak"><Flame className="h-3.5 w-3.5" />{student?.streak_count || 0}</p>
                   </div>
                 </div>
@@ -531,14 +534,14 @@ export default function StudentDashboard() {
                 </div>
                 <div className="mt-4 flex items-center gap-2 rounded-xl border border-border bg-bg-primary px-3 py-2.5">
                   <span className="min-w-0 flex-1 truncate font-mono text-xs tracking-[0.18em] text-text-primary" aria-label={showAccessKey ? 'CBT access key shown' : 'CBT access key hidden'}>{showAccessKey ? student?.cbt_key || '—' : maskedKey}</span>
-                  <button type="button" onClick={() => setShowAccessKey((shown) => !shown)} className="rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary" aria-label={showAccessKey ? 'Hide CBT access key' : 'Reveal CBT access key'} title={showAccessKey ? 'Hide key' : 'Reveal key'}>
+                  <button type="button" onClick={() => setShowAccessKey((shown) => !shown)} className="min-h-11 min-w-11 rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary" aria-label={showAccessKey ? 'Hide CBT access key' : 'Reveal CBT access key'} title={showAccessKey ? 'Hide key' : 'Reveal key'}>
                     {showAccessKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
-                  <button type="button" onClick={handleCopyKey} className="rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary" aria-label={copied ? 'CBT access key copied' : 'Copy CBT access key'} title="Copy key">
+                  <button type="button" onClick={handleCopyKey} className="min-h-11 min-w-11 rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary" aria-label={copied ? 'CBT access key copied' : 'Copy CBT access key'} title="Copy key">
                     {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
                   </button>
                 </div>
-                <p className="mt-2 min-h-4 text-[11px] text-success" aria-live="polite">{copied ? 'Access key copied securely.' : ''}</p>
+                <p className="mt-2 min-h-4 text-xs sm:text-[11px] text-success" aria-live="polite">{copied ? 'Access key copied securely.' : ''}</p>
               </Card>
 
               <SecuritySettings token={token} mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory(token)} />
@@ -550,7 +553,7 @@ export default function StudentDashboard() {
                 <div className="pointer-events-none absolute bottom-0 right-12 h-28 w-28 rounded-full border border-info/20" />
                 <div className="relative flex flex-col justify-between gap-7 lg:flex-row lg:items-center">
                   <div className="max-w-xl">
-                    <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-info"><TrendingUp className="h-4 w-4" />Preparation outlook</div>
+                    <div className="flex items-center gap-2 text-xs sm:text-[11px] font-bold uppercase tracking-[0.16em] text-info"><TrendingUp className="h-4 w-4" />Preparation outlook</div>
                     <h2 className="mt-3 font-display text-2xl font-bold tracking-tight text-white">Build readiness one focused session at a time.</h2>
                     <p className="mt-2 text-sm leading-6 text-slate-300">{nextWeakTopic ? `Your next opportunity is ${nextWeakTopic.topic}. A short, targeted drill can turn a weak area into a confident one.` : 'Complete a practice session to reveal a personalized readiness signal and your next area of focus.'}</p>
                     <div className="mt-5 flex flex-wrap gap-2">
@@ -560,7 +563,7 @@ export default function StudentDashboard() {
                   </div>
                   <div className="flex items-center gap-5 rounded-2xl border border-white/10 bg-slate-950/30 p-4 backdrop-blur-sm">
                     <div className="text-right">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">Readiness</p>
+                      <p className="text-xs sm:text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">Readiness</p>
                       <p className="mt-1 font-display text-3xl font-black text-white">{readinessScore}<span className="text-base font-semibold text-slate-400">/100</span></p>
                     </div>
                     <Button onClick={() => openDrill()} disabled={!isCombinationValid} className="whitespace-nowrap"><Zap className="h-4 w-4" />Start a drill</Button>
@@ -578,7 +581,7 @@ export default function StudentDashboard() {
                       <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-primary">Full simulation</p>
                       <h3 className="mt-2 font-display text-xl font-bold text-text-primary">Mock exam</h3>
                       <p className="mt-2 max-w-md text-sm leading-6 text-text-secondary">A realistic 180-question exam with the timing and structure of the UTME experience.</p>
-                      <div className="mt-6"><Button onClick={() => navigate('/mock-setup')} disabled={!isCombinationValid}><Play className="h-4 w-4" />Start mock exam</Button></div>
+                      <div className="mt-6"><Button onClick={() => navigate('/mock-setup')} disabled={!isCombinationValid} className="w-full lg:w-auto"><Play className="h-4 w-4" />Start mock exam</Button></div>
                     </div>
                   </Card>
                   <Card hoverable className="border-border bg-bg-card p-6 shadow-[0_14px_30px_rgba(0,0,0,0.12)]">
@@ -587,7 +590,7 @@ export default function StudentDashboard() {
                       <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-info">Targeted practice</p>
                       <h3 className="mt-2 font-display text-xl font-bold text-text-primary">Subject drill</h3>
                       <p className="mt-2 max-w-md text-sm leading-6 text-text-secondary">Choose a subject, topic, question count, and difficulty to practice with immediate feedback.</p>
-                      <div className="mt-6"><Button onClick={() => openDrill()} disabled={!isCombinationValid} variant="secondary"><Target className="h-4 w-4" />Configure drill</Button></div>
+                      <div className="mt-6"><Button onClick={() => openDrill()} disabled={!isCombinationValid} variant="secondary" className="w-full lg:w-auto"><Target className="h-4 w-4" />Configure drill</Button></div>
                     </div>
                   </Card>
                 </div>
@@ -607,7 +610,7 @@ export default function StudentDashboard() {
                     <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
                       {combination.map((subject: string) => (
                         <div key={subject} className="flex items-center gap-3 rounded-xl border border-border bg-bg-secondary/65 px-3 py-3">
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-[10px] font-black text-primary">{subject.slice(0, 3).toUpperCase()}</div>
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-xs sm:text-[10px] font-black text-primary">{subject.slice(0, 3).toUpperCase()}</div>
                           <p className="min-w-0 truncate text-xs font-semibold text-text-primary" title={SUBJECT_LABELS[subject] || subject}>{SUBJECT_LABELS[subject] || subject}</p>
                         </div>
                       ))}
@@ -624,15 +627,15 @@ export default function StudentDashboard() {
                   <Card className="border-border p-6 shadow-[0_14px_30px_rgba(0,0,0,0.12)]">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl border border-info/25 bg-info/10 text-info"><LineChart className="h-4 w-4" /></div><div><h2 className="text-sm font-bold text-text-primary">Performance overview</h2><p className="mt-0.5 text-xs text-text-secondary">Your session trend and readiness signal</p></div></div>
-                      <span className="rounded-full bg-info/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-info">{resultsList.length ? 'Live data' : 'Baseline'}</span>
+                      <span className="rounded-full bg-info/10 px-2.5 py-1 text-xs sm:text-[10px] font-bold uppercase tracking-[0.12em] text-info">{resultsList.length ? 'Live data' : 'Baseline'}</span>
                     </div>
-                    <div className="mt-6 grid items-center gap-5 sm:grid-cols-[112px,1fr]">
+                    <div className="mt-6 grid min-w-0 items-center gap-5 sm:grid-cols-[112px,minmax(0,1fr)]">
                       <div className="relative mx-auto flex h-28 w-28 items-center justify-center rounded-full" style={{ background: `conic-gradient(var(--color-accent-info) ${readinessScore * 3.6}deg, rgba(148, 163, 184, 0.16) 0deg)` }} aria-label={`Readiness score: ${readinessScore} out of 100`} role="img">
-                        <div className="flex h-[92px] w-[92px] flex-col items-center justify-center rounded-full bg-bg-card"><span className="font-display text-2xl font-black text-text-primary">{readinessScore}</span><span className="text-[10px] font-bold uppercase tracking-wide text-text-muted">ready</span></div>
+                        <div className="flex h-[92px] w-[92px] flex-col items-center justify-center rounded-full bg-bg-card"><span className="font-display text-2xl font-black text-text-primary">{readinessScore}</span><span className="text-xs sm:text-[10px] font-bold uppercase tracking-wide text-text-muted">ready</span></div>
                       </div>
                       <div className="min-w-0">
-                        <div className="mb-3 flex items-center justify-between"><p className="text-xs font-semibold text-text-primary">Session trend</p><p className="text-[11px] text-text-muted">Last {trendValues.length} sessions</p></div>
-                        <div className="h-20 rounded-xl border border-border bg-bg-secondary/55 px-2 py-2">
+                        <div className="mb-3 flex items-center justify-between"><p className="text-xs font-semibold text-text-primary">Session trend</p><p className="text-xs sm:text-[11px] text-text-muted">Last {trendValues.length} sessions</p></div>
+                        <div className="h-20 min-w-0 overflow-hidden rounded-xl border border-border bg-bg-secondary/55 px-2 py-2">
                           <svg viewBox="0 0 190 72" className="h-full w-full" preserveAspectRatio="none" aria-label="Practice score trend" role="img">
                             <line x1="8" x2="178" y1="64" y2="64" stroke="currentColor" className="text-text-muted" strokeOpacity="0.22" strokeWidth="1" />
                             <line x1="8" x2="178" y1="36" y2="36" stroke="currentColor" className="text-text-muted" strokeOpacity="0.12" strokeWidth="1" strokeDasharray="3 4" />
@@ -642,10 +645,10 @@ export default function StudentDashboard() {
                         </div>
                       </div>
                     </div>
-                    <div className="mt-6 grid grid-cols-3 divide-x divide-border rounded-xl border border-border bg-bg-secondary/45 py-3 text-center">
-                      <div><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Sessions</p><p className="mt-1 text-lg font-black text-text-primary">{resultsList.length}</p></div>
-                      <div><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Mock average</p><p className="mt-1 text-lg font-black text-primary">{averageMockScore ?? '—'}</p></div>
-                      <div><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Streak</p><p className="mt-1 text-lg font-black text-streak">{student?.streak_count || 0}d</p></div>
+                    <div className="mt-6 grid grid-cols-1 divide-y divide-border rounded-xl border border-border bg-bg-secondary/45 py-1 text-center xl:grid-cols-3 xl:divide-x xl:divide-y-0 xl:py-3">
+                      <div className="py-2 xl:py-0"><p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Sessions</p><p className="mt-1 text-lg font-black text-text-primary">{resultsList.length}</p></div>
+                      <div className="py-2 xl:py-0"><p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Mock average</p><p className="mt-1 text-lg font-black text-primary">{averageMockScore ?? '—'}</p></div>
+                      <div className="py-2 xl:py-0"><p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Streak</p><p className="mt-1 text-lg font-black text-streak">{student?.streak_count || 0}d</p></div>
                     </div>
                     {!resultsList.length && <p className="mt-4 text-center text-xs leading-5 text-text-secondary">Your first completed session will turn this baseline into a personalized trend.</p>}
                   </Card>
@@ -658,7 +661,7 @@ export default function StudentDashboard() {
                           <div key={subject.subject}>
                             <div className="mb-1.5 flex items-center justify-between gap-3 text-xs"><span className="truncate font-semibold text-text-primary">{SUBJECT_LABELS[subject.subject] || subject.subject}</span><span className={classNames('font-bold tabular-nums', subject.accuracy >= 70 ? 'text-success' : subject.accuracy >= 40 ? 'text-warning' : 'text-error')}>{subject.accuracy}%</span></div>
                             <div className="h-2 overflow-hidden rounded-full bg-bg-secondary"><div className={classNames('h-full rounded-full transition-[width] duration-500', subject.accuracy >= 70 ? 'bg-success' : subject.accuracy >= 40 ? 'bg-warning' : 'bg-error')} style={{ width: `${subject.accuracy}%` }} /></div>
-                            <p className="mt-1 text-[11px] text-text-muted">{subject.correct} of {subject.total} correct</p>
+                            <p className="mt-1 text-xs sm:text-[11px] text-text-muted">{subject.correct} of {subject.total} correct</p>
                           </div>
                         ))}
                       </div>
@@ -678,7 +681,7 @@ export default function StudentDashboard() {
                       {resultsList.slice(0, 5).map((result) => (
                         <div key={result.resultId} className="flex flex-col gap-3 px-4 py-3.5 transition-colors hover:bg-bg-secondary sm:flex-row sm:items-center sm:justify-between">
                           <div className="flex min-w-0 items-center gap-3"><div className={classNames('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border', result.type === 'mock' ? 'border-primary/25 bg-primary/10 text-primary' : 'border-info/25 bg-info/10 text-info')}><Play className="h-4 w-4" /></div><div className="min-w-0"><p className="truncate text-sm font-bold text-text-primary">{result.type === 'mock' ? 'Mock exam' : 'Subject drill'}</p><p className="mt-0.5 text-xs text-text-secondary">{new Date(result.completedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })} · {new Date(result.completedAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</p></div></div>
-                          <div className="flex items-center justify-between gap-4 sm:justify-end"><div className="text-left sm:text-right"><p className="text-sm font-black text-text-primary">{result.type === 'mock' ? result.totalScore : `${result.totalScore}%`}</p><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">{result.type === 'mock' ? 'score' : 'accuracy'}</p></div><Button onClick={() => navigate(`/results/${result.resultId}`)} variant="secondary" size="sm">Review</Button></div>
+                          <div className="flex items-center justify-between gap-4 sm:justify-end"><div className="text-left sm:text-right"><p className="text-sm font-black text-text-primary">{result.type === 'mock' ? result.totalScore : `${result.totalScore}%`}</p><p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">{result.type === 'mock' ? 'score' : 'accuracy'}</p></div><Button onClick={() => navigate(`/results/${result.resultId}`)} variant="secondary" size="sm">Review</Button></div>
                         </div>
                       ))}
                     </div>
@@ -701,7 +704,7 @@ export default function StudentDashboard() {
               const isSelected = selectedSubjects.includes(subject);
               return (
                 <button key={subject} type="button" onClick={() => handleToggleSubject(subject)} className={classNames('flex items-center gap-3 rounded-xl border p-3 text-left text-sm transition-[background-color,border-color,color,transform] duration-200 active:scale-[0.99]', isSelected ? 'border-primary bg-primary/10 text-text-primary' : 'border-border bg-bg-secondary text-text-secondary hover:border-border-hover hover:text-text-primary')} aria-pressed={isSelected}>
-                  <span className={classNames('flex h-4 w-4 items-center justify-center rounded border text-[10px] font-black', isSelected ? 'border-primary bg-primary text-text-on-accent' : 'border-border bg-bg-primary')}>{isSelected && '✓'}</span>
+                  <span className={classNames('flex h-4 w-4 items-center justify-center rounded border text-xs sm:text-[10px] font-black', isSelected ? 'border-primary bg-primary text-text-on-accent' : 'border-border bg-bg-primary')}>{isSelected && '✓'}</span>
                   <span className="font-medium">{SUBJECT_LABELS[subject]}</span>
                 </button>
               );
@@ -720,7 +723,7 @@ export default function StudentDashboard() {
             <div className="space-y-1.5"><label htmlFor="drill-subject" className="text-xs font-bold uppercase tracking-wide text-text-secondary">Subject</label><select id="drill-subject" value={drillSubject} onChange={(event) => setDrillSubject(event.target.value)} className="w-full rounded-xl border border-border bg-bg-secondary p-3 text-sm text-text-primary transition-colors"><option value="" disabled>Select a subject</option>{combination.map((subject: string) => <option key={subject} value={subject}>{SUBJECT_LABELS[subject] || subject}</option>)}</select></div>
             <div className="space-y-1.5"><span className="text-xs font-bold uppercase tracking-wide text-text-secondary">Question count</span><div className="grid grid-cols-3 gap-2">{[10, 20, 40].map((count) => <button key={count} type="button" onClick={() => setDrillCount(count)} className={classNames('rounded-xl border p-3 text-xs font-bold transition-[background-color,border-color,color,transform] duration-200 active:scale-[0.98]', drillCount === count ? 'border-primary bg-primary/10 text-text-primary' : 'border-border bg-bg-secondary text-text-secondary hover:border-border-hover hover:text-text-primary')} aria-pressed={drillCount === count}>{count} questions</button>)}</div></div>
             <div className="space-y-1.5"><label htmlFor="drill-difficulty" className="text-xs font-bold uppercase tracking-wide text-text-secondary">Difficulty</label><select id="drill-difficulty" value={drillDifficulty} onChange={(event) => setDrillDifficulty(event.target.value)} className="w-full rounded-xl border border-border bg-bg-secondary p-3 text-sm text-text-primary transition-colors"><option value="any">Any difficulty</option><option value="1">Easy</option><option value="2">Easy–medium</option><option value="3">Medium</option><option value="4">Medium–hard</option><option value="5">Hard</option></select></div>
-            <div className="space-y-2"><div className="flex items-center justify-between gap-3"><span className="text-xs font-bold uppercase tracking-wide text-text-secondary">Topics <span className="font-normal normal-case">(optional)</span></span>{availableTopics.length > 0 && <button type="button" onClick={() => { const random = availableTopics[Math.floor(Math.random() * availableTopics.length)]; setDrillTopics([random.topic]); }} className="inline-flex items-center gap-1 rounded-lg border border-primary/25 bg-primary/10 px-2 py-1 text-[11px] font-bold text-primary transition-colors hover:bg-primary/15"><Sparkles className="h-3 w-3" />Choose one for me</button>}</div><div className="max-h-36 space-y-1 overflow-y-auto rounded-xl border border-border bg-bg-secondary p-2">{isLoadingTopics ? <div className="p-2 text-xs text-text-muted">Loading topics…</div> : availableTopics.length === 0 ? <div className="p-2 text-xs text-text-muted">No specific topics are available for this subject.</div> : availableTopics.map((topic) => <label key={topic.topic} className="flex cursor-pointer items-center gap-2 rounded-lg p-2 text-xs text-text-primary transition-colors hover:bg-bg-primary"><input type="checkbox" checked={drillTopics.includes(topic.topic)} onChange={(event) => setDrillTopics((previous) => event.target.checked ? [...previous, topic.topic] : previous.filter((item) => item !== topic.topic))} className="rounded border-border text-primary focus:ring-primary" /><span className="flex-1">{topic.topic}</span><span className="text-text-muted">{topic.count}</span></label>)}</div>{isDrillShort && <p className="text-xs text-warning">Selected topics have fewer than {drillCount} available questions; the drill may contain fewer questions.</p>}</div>
+            <div className="space-y-2"><div className="flex items-center justify-between gap-3"><span className="text-xs font-bold uppercase tracking-wide text-text-secondary">Topics <span className="font-normal normal-case">(optional)</span></span>{availableTopics.length > 0 && <button type="button" onClick={() => { const random = availableTopics[Math.floor(Math.random() * availableTopics.length)]; setDrillTopics([random.topic]); }} className="inline-flex items-center gap-1 rounded-lg border border-primary/25 bg-primary/10 px-2 py-1 text-xs sm:text-[11px] font-bold text-primary transition-colors hover:bg-primary/15"><Sparkles className="h-3 w-3" />Choose one for me</button>}</div><div className="max-h-36 space-y-1 overflow-y-auto rounded-xl border border-border bg-bg-secondary p-2">{isLoadingTopics ? <div className="p-2 text-xs text-text-muted">Loading topics…</div> : availableTopics.length === 0 ? <div className="p-2 text-xs text-text-muted">No specific topics are available for this subject.</div> : availableTopics.map((topic) => <label key={topic.topic} className="flex cursor-pointer items-center gap-2 rounded-lg p-2 text-xs text-text-primary transition-colors hover:bg-bg-primary"><input type="checkbox" checked={drillTopics.includes(topic.topic)} onChange={(event) => setDrillTopics((previous) => event.target.checked ? [...previous, topic.topic] : previous.filter((item) => item !== topic.topic))} className="rounded border-border text-primary focus:ring-primary" /><span className="flex-1">{topic.topic}</span><span className="text-text-muted">{topic.count}</span></label>)}</div>{isDrillShort && <p className="text-xs text-warning">Selected topics have fewer than {drillCount} available questions; the drill may contain fewer questions.</p>}</div>
           </div>
           <div className="flex justify-end gap-2 border-t border-border pt-4"><Button onClick={() => setIsDrillModalOpen(false)} variant="secondary" size="sm">Cancel</Button><Button onClick={handleStartDrill} disabled={!drillSubject} size="sm"><Zap className="h-4 w-4" />Start drill</Button></div>
         </div>
@@ -739,7 +742,7 @@ export default function StudentDashboard() {
           ].map((plan) => {
             const Icon = plan.icon;
             return <div key={plan.name} className={classNames('relative flex flex-col rounded-2xl border bg-bg-secondary/50 p-5 shadow-sm transition-transform duration-200 hover:-translate-y-1', plan.featured ? 'border-primary/55 shadow-[0_12px_28px_rgba(91,114,255,0.12)]' : 'border-border')}>
-              {plan.featured && <span className="absolute right-4 top-4 rounded-full bg-primary/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-primary">Popular</span>}
+              {plan.featured && <span className="absolute right-4 top-4 rounded-full bg-primary/10 px-2 py-1 text-xs sm:text-[10px] font-bold uppercase tracking-wide text-primary">Popular</span>}
               <div className={classNames('flex h-9 w-9 items-center justify-center rounded-xl border', plan.tone === 'ai-flag' ? 'border-ai-flag/30 bg-ai-flag/10 text-ai-flag' : plan.tone === 'info' ? 'border-info/30 bg-info/10 text-info' : 'border-primary/30 bg-primary/10 text-primary')}><Icon className="h-4 w-4" /></div>
               <p className="mt-4 text-base font-bold text-text-primary">{plan.name}</p><p className="mt-1 text-xs text-text-secondary">{plan.summary}</p><p className="mt-5 font-display text-2xl font-black text-text-primary">{plan.price}<span className="ml-1 font-body text-xs font-medium text-text-muted">/month</span></p>
               <ul className="mt-5 space-y-2 border-t border-border pt-4 text-xs leading-5 text-text-secondary">{plan.features.map((feature) => <li key={feature} className="flex items-start gap-2"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-success" />{feature}</li>)}</ul>
