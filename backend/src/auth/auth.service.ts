@@ -182,7 +182,7 @@ export class AuthService implements OnModuleInit {
     return {
       message: 'Admin recovered',
       email: user.email,
-      cbt_key: decryptFieldValue(user.cbt_key),
+      cbt_key: decryptFieldValue(user.cbt_key || undefined),
     };
   }
 
