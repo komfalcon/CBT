@@ -172,7 +172,9 @@ export default function ExamConsole() {
           return;
         }
         setSession(data);
-        setAnswers(data.answers || {});
+        // A console instance must never carry review state across sessions.
+        setFlaggedQuestions(new Set());
+        setAnswers(data.answers ?? {});
         setTimeRemaining(data.timeRemaining);
         if (data.subjects && data.subjects.length > 0) {
           setActiveSubject(data.subjects[0]);
