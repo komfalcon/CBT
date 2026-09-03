@@ -26,10 +26,11 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
       const res = await explainQuestion({ questionId, questionText, correctAnswer, studentAnswer });
       setExplanation(res.explanation);
     } catch (err: any) {
+      console.error(err);
       if (err.response?.status === 401 || err.response?.status === 403) {
         setError('AI Explanations require an active Plus, Pro, or Max plan.');
       } else {
-        setError('Failed to generate explanation. Please try again.');
+        setError(err.response?.data?.message || 'Failed to generate explanation. Please try again.');
       }
     } finally {
       setIsLoading(false);
