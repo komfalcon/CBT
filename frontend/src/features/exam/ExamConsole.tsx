@@ -223,7 +223,7 @@ export default function ExamConsole() {
     try {
       setSubmitting(true);
       const result = await submitExamSession(token, sessionId);
-      navigate(`/results/${result.resultId}`);
+      navigate(`/results/${result.resultId || result.id}`);
     } catch (err) {
       console.error(err);
       navigate('/dashboard');
@@ -342,7 +342,7 @@ export default function ExamConsole() {
       setSubmitting(true);
       setSubmitError('');
       const result = await submitExamSession(token, sessionId);
-      navigate(`/results/${result.resultId}`);
+      navigate(`/results/${result.resultId || result.id}`);
     } catch (err: any) {
       setSubmitError(err.response?.data?.message || 'Submission failed.');
       setSubmitting(false);

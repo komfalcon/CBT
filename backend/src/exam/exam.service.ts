@@ -293,7 +293,7 @@ export class ExamService {
       }).where(eq(schema.users.id, user.id));
     }
 
-    return result;
+    return { ...result, resultId: result.id };
   }
 
   sanitizeSession(session: any) {
