@@ -143,16 +143,16 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
   return (
     <article className="exam-question-card">
-      <div className="flex items-start justify-between gap-5 border-b border-border/70 pb-5">
+      <div className="exam-question-header flex items-start justify-between gap-5 border-b border-border/70 pb-5">
         <div>
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.17em] text-primary">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-xs font-black uppercase tracking-[0.17em] text-primary">
               <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_0_4px_rgba(91,114,255,0.12)]" />
               Question {String(index + 1).padStart(2, '0')}
             </span>
             {totalCount && <span className="text-xs font-semibold text-text-muted">of {totalCount}</span>}
             {question.difficulty_level !== undefined && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1.5 text-[11px] font-bold text-amber-500">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1.5 text-xs font-bold text-amber-500">
                 <Sparkles className="h-3 w-3" aria-hidden="true" />
                 Level {question.difficulty_level}
               </span>
@@ -165,7 +165,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             type="button"
             onClick={onToggleFlag}
             aria-pressed={isFlagged}
-            className={`inline-flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition-[background-color,border-color,color,transform] duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isFlagged ? 'border-amber-400/45 bg-amber-400/15 text-amber-500' : 'border-border bg-bg-secondary/55 text-text-secondary hover:border-amber-400/35 hover:text-amber-500'}`}
+            className={`inline-flex min-h-11 md:min-h-0 shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition-[background-color,border-color,color,transform] duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isFlagged ? 'border-amber-400/45 bg-amber-400/15 text-amber-500' : 'border-border bg-bg-secondary/55 text-text-secondary hover:border-amber-400/35 hover:text-amber-500'}`}
           >
             <Flag className="h-3.5 w-3.5" fill={isFlagged ? 'currentColor' : 'none'} aria-hidden="true" />
             {isFlagged ? 'Flagged' : 'Flag for review'}
