@@ -165,7 +165,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             type="button"
             onClick={onToggleFlag}
             aria-pressed={isFlagged}
-            className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition-[background-color,border-color,color,transform] duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isFlagged ? 'border-amber-400/45 bg-amber-400/15 text-amber-500' : 'border-border bg-bg-secondary/55 text-text-secondary hover:border-amber-400/35 hover:text-amber-500'}`}
+            className={`inline-flex min-h-11 md:min-h-0 shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition-[background-color,border-color,color,transform] duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isFlagged ? 'border-amber-400/45 bg-amber-400/15 text-amber-500' : 'border-border bg-bg-secondary/55 text-text-secondary hover:border-amber-400/35 hover:text-amber-500'}`}
           >
             <Flag className="h-3.5 w-3.5" fill={isFlagged ? 'currentColor' : 'none'} aria-hidden="true" />
             {isFlagged ? 'Flagged' : 'Flag for review'}

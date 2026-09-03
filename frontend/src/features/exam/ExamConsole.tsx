@@ -424,7 +424,7 @@ export default function ExamConsole() {
                 Saved {formatSavedTime(lastSaved)}
               </div>
             )}
-            <div className={`exam-timer flex min-h-11 items-center gap-2 rounded-2xl border px-3 py-2 font-mono text-sm font-black tabular-nums sm:px-4 ${timeRemaining < 300 ? 'exam-timer-danger' : ''}`} aria-label={`Time remaining ${formatTime(timeRemaining)}`}>
+            <div className={`exam-timer flex min-h-11 md:min-h-0 items-center gap-2 rounded-2xl border px-3 py-2 font-mono text-sm font-black tabular-nums sm:px-4 ${timeRemaining < 300 ? 'exam-timer-danger' : ''}`} aria-label={`Time remaining ${formatTime(timeRemaining)}`}>
               <Clock className="h-4 w-4" aria-hidden="true" />
               <span>{formatTime(timeRemaining)}</span>
               <span className="hidden text-xs font-sans font-bold uppercase tracking-[0.14em] opacity-70 sm:inline">remaining</span>
@@ -487,7 +487,7 @@ export default function ExamConsole() {
                       setActiveSubject(sub);
                       setActiveQuestionIndex(0);
                     }}
-                    className={`group flex min-h-12 min-w-[145px] flex-1 items-center justify-between gap-3 rounded-xl px-4 py-3 text-left transition-[background-color,border-color,box-shadow,color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive ? 'border border-primary/35 bg-primary text-white shadow-[0_10px_24px_rgba(91,114,255,0.22)]' : 'border border-transparent text-text-secondary hover:border-border hover:bg-bg-primary/70 hover:text-text-primary'}`}
+                    className={`group flex min-h-12 md:min-h-0 min-w-[145px] flex-1 items-center justify-between gap-3 rounded-xl px-4 py-3 text-left transition-[background-color,border-color,box-shadow,color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive ? 'border border-primary/35 bg-primary text-white shadow-[0_10px_24px_rgba(91,114,255,0.22)]' : 'border border-transparent text-text-secondary hover:border-border hover:bg-bg-primary/70 hover:text-text-primary'}`}
                     aria-current={isActive ? 'page' : undefined}
                   >
                     <span className="min-w-0">
