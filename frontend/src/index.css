@@ -1154,6 +1154,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 @media (max-width: 767px) {
   .exam-shell {
     overflow: visible;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .exam-header {
@@ -1161,9 +1162,91 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
     padding-right: 12px;
   }
 
+  .exam-header > div {
+    min-height: 64px;
+    gap: 8px;
+  }
+
+  .exam-header .exam-brand-mark,
+  .exam-header .exam-eyebrow,
+  .exam-header .exam-toolbar-button {
+    display: none;
+  }
+
+  .exam-header h1 {
+    font-size: 12px;
+  }
+
+  .exam-header > div > div:last-child {
+    gap: 4px;
+  }
+
+  .exam-header .exam-timer {
+    min-height: 44px;
+    padding-left: 9px;
+    padding-right: 9px;
+    font-size: 12px;
+  }
+
+  .exam-header .exam-timer svg {
+    height: 14px;
+    width: 14px;
+  }
+
+  .exam-header .exam-submit-button {
+    min-height: 44px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .exam-header .exam-submit-button svg {
+    display: none;
+  }
+
+  .exam-header > div > div:last-child > button:not(.exam-submit-button) {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .exam-question-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .exam-question-header button {
+    align-self: flex-start;
+  }
+
   .exam-question-card {
     min-height: 0;
-    padding: 20px;
+    padding: 16px;
+  }
+
+  .exam-question-card > .mt-7 {
+    font-size: 1.08rem;
+    line-height: 1.55;
+  }
+
+  .exam-question-card [role='radiogroup'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .exam-question-card [role='radio'] {
+    min-height: 78px;
+  }
+
+  .exam-navigator {
+    max-height: 100dvh;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  }
+
+  .exam-navigator .overflow-y-auto {
+    min-height: 0;
+  }
+
+  .exam-shell main {
+    padding: 16px 12px calc(92px + env(safe-area-inset-bottom));
   }
 
   .exam-content-frame {
