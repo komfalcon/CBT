@@ -424,10 +424,10 @@ export default function ExamConsole() {
                 Saved {formatSavedTime(lastSaved)}
               </div>
             )}
-            <div className={`exam-timer flex items-center gap-2 rounded-2xl border px-3 py-2 font-mono text-sm font-black tabular-nums sm:px-4 ${timeRemaining < 300 ? 'exam-timer-danger' : ''}`} aria-label={`Time remaining ${formatTime(timeRemaining)}`}>
+            <div className={`exam-timer flex min-h-11 items-center gap-2 rounded-2xl border px-3 py-2 font-mono text-sm font-black tabular-nums sm:px-4 ${timeRemaining < 300 ? 'exam-timer-danger' : ''}`} aria-label={`Time remaining ${formatTime(timeRemaining)}`}>
               <Clock className="h-4 w-4" aria-hidden="true" />
               <span>{formatTime(timeRemaining)}</span>
-              <span className="hidden text-[10px] font-sans font-bold uppercase tracking-[0.14em] opacity-70 sm:inline">remaining</span>
+              <span className="hidden text-xs font-sans font-bold uppercase tracking-[0.14em] opacity-70 sm:inline">remaining</span>
             </div>
             <button
               type="button"
@@ -462,12 +462,12 @@ export default function ExamConsole() {
             </div>
             <div className="flex items-center gap-3 text-right">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-text-muted">Session progress</p>
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-text-muted">Session progress</p>
                 <p className="mt-1 text-sm font-black text-text-primary">{totalAnswered} <span className="font-medium text-text-muted">of {session.questions.length}</span></p>
               </div>
               <div className="h-10 w-px bg-border" />
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-text-muted">Flagged</p>
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-text-muted">Flagged</p>
                 <p className="mt-1 text-sm font-black text-amber-500">{totalFlagged}</p>
               </div>
             </div>
@@ -487,12 +487,12 @@ export default function ExamConsole() {
                       setActiveSubject(sub);
                       setActiveQuestionIndex(0);
                     }}
-                    className={`group flex min-w-[145px] flex-1 items-center justify-between gap-3 rounded-xl px-4 py-3 text-left transition-[background-color,border-color,box-shadow,color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive ? 'border border-primary/35 bg-primary text-white shadow-[0_10px_24px_rgba(91,114,255,0.22)]' : 'border border-transparent text-text-secondary hover:border-border hover:bg-bg-primary/70 hover:text-text-primary'}`}
+                    className={`group flex min-h-12 min-w-[145px] flex-1 items-center justify-between gap-3 rounded-xl px-4 py-3 text-left transition-[background-color,border-color,box-shadow,color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive ? 'border border-primary/35 bg-primary text-white shadow-[0_10px_24px_rgba(91,114,255,0.22)]' : 'border border-transparent text-text-secondary hover:border-border hover:bg-bg-primary/70 hover:text-text-primary'}`}
                     aria-current={isActive ? 'page' : undefined}
                   >
                     <span className="min-w-0">
                       <span className="block truncate text-xs font-black">{getSubjectLabel(sub)}</span>
-                      <span className={`mt-1 block text-[10px] font-semibold ${isActive ? 'text-white/70' : 'text-text-muted'}`}>{subjectAnswered}/{subjectQuestions.length} answered</span>
+                      <span className={`mt-1 block text-xs font-semibold ${isActive ? 'text-white/70' : 'text-text-muted'}`}>{subjectAnswered}/{subjectQuestions.length} answered</span>
                     </span>
                     <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${subjectAnswered === subjectQuestions.length ? 'bg-success' : isActive ? 'bg-white/80' : 'bg-text-muted/60'}`} />
                   </button>
@@ -508,7 +508,7 @@ export default function ExamConsole() {
                   <Layers3 className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
                   <span>{getSubjectLabel(activeSubject)} / Question {activeQuestionIndex + 1}</span>
                 </div>
-                <span className="hidden items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted sm:flex"><Keyboard className="h-3.5 w-3.5" aria-hidden="true" /> A–E to answer</span>
+                <span className="hidden items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-text-muted sm:flex"><Keyboard className="h-3.5 w-3.5" aria-hidden="true" /> A–E to answer</span>
               </div>
 
               <QuestionCard
@@ -530,7 +530,7 @@ export default function ExamConsole() {
                 >
                   <ChevronLeft className="h-4 w-4" aria-hidden="true" /> Previous
                 </button>
-                <div className="order-first flex items-center gap-2 text-center text-[11px] font-semibold text-text-muted sm:order-none">
+                <div className="order-first flex items-center gap-2 text-center text-xs font-semibold text-text-muted sm:order-none">
                   <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                   Changes save automatically
                 </div>
@@ -569,7 +569,7 @@ export default function ExamConsole() {
             <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-bg-primary">
               <div className="h-full rounded-full bg-primary transition-[width] duration-300" style={{ width: `${currentSubjectQuestions.length ? (answeredInActiveSubject / currentSubjectQuestions.length) * 100 : 0}%` }} />
             </div>
-            <div className="mt-3 flex items-center justify-between text-[10px] font-semibold text-text-muted"><span>Current subject</span><span>{sessionProgress}% session complete</span></div>
+            <div className="mt-3 flex items-center justify-between text-xs font-semibold text-text-muted"><span>Current subject</span><span>{sessionProgress}% session complete</span></div>
           </div>
 
           <div className="mt-6 flex-1 overflow-y-auto pr-1">
@@ -599,19 +599,19 @@ export default function ExamConsole() {
           </div>
 
           <div className="mt-6 space-y-3 border-t border-border/70 pt-5">
-            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-text-muted">Status key</p>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-2.5 text-[11px] font-semibold text-text-secondary">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-text-muted">Status key</p>
+            <div className="grid grid-cols-2 gap-x-3 gap-y-2.5 text-xs font-semibold text-text-secondary">
               <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-md border border-primary/40 bg-primary/15" /> Answered</span>
               <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-md border border-border bg-bg-primary" /> Unanswered</span>
               <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-md border-2 border-primary bg-primary/15" /> Current</span>
               <span className="flex items-center gap-2"><Flag className="h-3 w-3 text-amber-500" fill="currentColor" /> Flagged</span>
             </div>
-            <div className="flex items-center gap-2 rounded-xl bg-primary/5 px-3 py-2.5 text-[11px] leading-5 text-text-muted"><CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-success" /> Your answers are saved as you move.</div>
+            <div className="flex items-center gap-2 rounded-xl bg-primary/5 px-3 py-2.5 text-xs leading-5 text-text-muted"><CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-success" /> Your answers are saved as you move.</div>
           </div>
         </aside>
       </div>
 
-      <button type="button" onClick={() => setIsSidebarOpen((previous) => !previous)} className="fixed bottom-5 right-5 z-30 flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary text-white shadow-[0_14px_30px_rgba(91,114,255,0.28)] md:hidden" title="Toggle question navigator" aria-label="Toggle question navigator"><Monitor className="h-4 w-4" aria-hidden="true" /></button>
+      <button type="button" onClick={() => setIsSidebarOpen((previous) => !previous)} className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-30 flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-primary/30 bg-primary px-3.5 text-xs font-black text-white shadow-[0_14px_30px_rgba(91,114,255,0.28)] md:hidden" title="Toggle question navigator" aria-label="Toggle question navigator"><Monitor className="h-4 w-4" aria-hidden="true" /><span>Questions</span></button>
 
       {/* Custom Submit Confirmation Modal */}
       {showSubmitModal && (
