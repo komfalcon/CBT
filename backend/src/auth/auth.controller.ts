@@ -44,7 +44,7 @@ function readCookie(req: Request, name: string): string | undefined {
 }
 
 function cookieOptions(maxAge: number, httpOnly = true) {
-  return { httpOnly, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' as const, path: '/', maxAge };
+  return { httpOnly, secure: true, sameSite: 'none' as const, path: '/', maxAge };
 }
 
 function setAuthCookies(res: Response, tokens: { accessToken?: string; refreshToken?: string; tempToken?: string; requiresMFA?: boolean }) {
