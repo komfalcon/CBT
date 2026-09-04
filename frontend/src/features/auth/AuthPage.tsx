@@ -117,6 +117,10 @@ export default function AuthPage() {
       setMessage('Signing in with Google...');
       const response = await googleLogin({ credential: googleRes.credential });
       
+      if (typeof response === 'string') {
+        throw new Error('Received HTML response instead of JSON. Your VITE_API_BASE_URL is likely misconfigured on Render.');
+      }
+
       if (response.requiresMFA && response.tempToken) {
         setTempToken(response.tempToken);
         setMode('login'); // Will show OTP form
@@ -134,7 +138,7 @@ export default function AuthPage() {
     } catch (err: any) {
       console.error(err);
       setMessageType('error');
-      setMessage('Google authentication failed. Use Email or CBT Key.');
+      setMessage(err.message || 'Google authentication failed. Use Email or CBT Key.');
     }
   };
 
