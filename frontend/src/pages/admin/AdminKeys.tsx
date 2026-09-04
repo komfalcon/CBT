@@ -13,10 +13,10 @@ export default function AdminKeys() {
   const [generatedKeys, setGeneratedKeys] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const { addToast } = useToast();
-  const token = localStorage.getItem('accessToken') || '';
+  const token = '';
 
   const getHeaders = () => ({
-    'Authorization': `Bearer ${token}`,
+
     'Content-Type': 'application/json',
   });
 
@@ -82,7 +82,7 @@ export default function AdminKeys() {
     <div className="flex flex-col gap-6 animate-fade-in h-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-xl font-bold text-text-primary">Activation Keys</h2>
-        
+
         <form onSubmit={handleGenerateKeys} className="flex items-center gap-3 bg-bg-card p-2 rounded-xl border border-border w-full sm:w-auto">
           <div className="flex items-center gap-2 px-2 border-r border-border">
             <Key className="h-4 w-4 text-text-muted" />
@@ -189,7 +189,7 @@ export default function AdminKeys() {
             </tbody>
           </table>
         </div>
-        
+
         {/* Pagination */}
         <div className="px-6 py-4 border-t border-border flex items-center justify-between bg-bg-card">
           <span className="text-xs text-text-muted">

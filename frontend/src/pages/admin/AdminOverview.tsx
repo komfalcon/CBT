@@ -7,10 +7,10 @@ export default function AdminOverview() {
   const [stats, setStats] = useState<OverviewStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(false);
   const { addToast } = useToast();
-  const token = localStorage.getItem('accessToken') || '';
+  const token = '';
 
   const getHeaders = () => ({
-    'Authorization': `Bearer ${token}`,
+
     'Content-Type': 'application/json',
   });
 

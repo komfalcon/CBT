@@ -10,10 +10,10 @@ export default function AdminBilling() {
   const [billingTotal, setBillingTotal] = useState(0);
   const [billingLoading, setBillingLoading] = useState(false);
   const { addToast } = useToast();
-  const token = localStorage.getItem('accessToken') || '';
+  const token = '';
 
   const getHeaders = () => ({
-    'Authorization': `Bearer ${token}`,
+
     'Content-Type': 'application/json',
   });
 
@@ -140,7 +140,7 @@ export default function AdminBilling() {
             </tbody>
           </table>
         </div>
-        
+
         {/* Pagination */}
         <div className="px-6 py-4 border-t border-border flex items-center justify-between bg-bg-card">
           <span className="text-xs text-text-muted">

@@ -19,18 +19,14 @@ export default function SecureAccess() {
     try {
       setLoading(true);
       setMessage('Verifying secure credentials...');
-      
+
       const response = await login({ email, password });
-      
-      if (response.requiresMFA && response.tempToken) {
-        setTempToken(response.tempToken);
+
+      if (response.requiresMFA) {
+        setTempToken('cookie');
         setMessage('MFA required. Enter your 6-digit code.');
-      } else if (response.accessToken) {
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken || '');
-        navigate('/admin/overview', { replace: true });
       } else {
-        setMessage('Access Denied. Invalid token.');
+        navigate('/admin/overview', { replace: true });
       }
     } catch (error: any) {
       setMessage(error.response?.data?.message || 'Access Denied. Invalid credentials.');
@@ -45,19 +41,12 @@ export default function SecureAccess() {
       setMessage('Please enter a valid 6-digit OTP code.');
       return;
     }
-    
+
     try {
       setLoading(true);
       setMessage('Verifying OTP code...');
-      const response = await verifyOtp({ tempToken, otp });
-      
-      if (response.accessToken) {
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken || '');
-        navigate('/admin/overview', { replace: true });
-      } else {
-        setMessage('Access Denied. Invalid token.');
-      }
+      await verifyOtp({ otp });
+      navigate('/admin/overview', { replace: true });
     } catch (error: any) {
       setMessage(error.response?.data?.message || 'Access Denied. Invalid OTP.');
     } finally {
@@ -99,7 +88,7 @@ export default function SecureAccess() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              
+
               <Input
                 label="Admin Password"
                 type="password"
@@ -171,7 +160,7 @@ export default function SecureAccess() {
             </form>
           )}
         </div>
-        
+
         <p className="text-center text-xs text-text-muted mt-8 font-mono opacity-50 hover:opacity-100 transition-opacity">
           IP LOGGED • ENCRYPTED SESSION
         </p>

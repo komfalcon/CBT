@@ -28,19 +28,19 @@ export default function ExamHub() {
   const fetchHubData = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('accessToken');
+      const token = '';
       if (!token) {
         navigate('/auth?mode=login');
         return;
       }
 
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
-      
+
       const syllabusRes = await fetch(`${apiBase}/study/syllabus`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include'
       });
       const timetableRes = await fetch(`${apiBase}/study/timetable`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include'
       });
 
       if (syllabusRes.ok) {
@@ -64,13 +64,13 @@ export default function ExamHub() {
 
   const handleToggleTopic = async (subject: string, topic: string, currentCompleted: boolean) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = '';
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const res = await fetch(`${apiBase}/study/syllabus/${subject}/topic`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           topic,
@@ -88,13 +88,13 @@ export default function ExamHub() {
 
   const handleAddSession = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = '';
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const res = await fetch(`${apiBase}/study/timetable/session`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           subject: newSession.subject,
@@ -158,7 +158,7 @@ export default function ExamHub() {
 
             return (
               <div key={subjectKey} className="border border-border p-4 rounded-xl bg-bg-secondary/50">
-                <div 
+                <div
                   className="flex justify-between items-center mb-2 cursor-pointer"
                   onClick={() => setExpandedSubject(isExpanded ? null : subjectKey)}
                 >
@@ -171,7 +171,7 @@ export default function ExamHub() {
                 <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden mb-2">
                   <div className="bg-primary h-full transition-all" style={{ width: `${progressPct}%` }} />
                 </div>
-                
+
                 {isExpanded && (
                   <div className="mt-4 space-y-2 border-t border-border pt-4">
                     <p className="text-xs text-text-secondary mb-2">Check off topics as you study. AI will also automatically check these off when you score highly on CBT quizzes.</p>
@@ -179,8 +179,8 @@ export default function ExamHub() {
                       const isCompleted = subjectData.completedTopics.includes(topic);
                       return (
                         <div key={topic} className="flex items-center gap-2">
-                          <input 
-                            type="checkbox" 
+                          <input
+                            type="checkbox"
                             checked={isCompleted}
                             onChange={() => handleToggleTopic(subjectKey, topic, isCompleted)}
                             className="cursor-pointer h-3 w-3 accent-primary"
@@ -231,9 +231,9 @@ export default function ExamHub() {
               <h4 className="text-xs font-bold mb-2">New Session</h4>
               <div>
                 <label className="text-xs text-text-secondary block mb-1">Subject</label>
-                <select 
+                <select
                   className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"
-                  value={newSession.subject} 
+                  value={newSession.subject}
                   onChange={(e) => setNewSession({...newSession, subject: e.target.value})}
                 >
                   <option value="math">Mathematics</option>
@@ -245,7 +245,7 @@ export default function ExamHub() {
               </div>
               <div>
                 <label className="text-xs text-text-secondary block mb-1">Topic (optional)</label>
-                <input 
+                <input
                   type="text"
                   placeholder="e.g. Motion"
                   className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"
@@ -256,7 +256,7 @@ export default function ExamHub() {
               <div className="flex gap-2">
                 <div className="flex-1">
                   <label className="text-xs text-text-secondary block mb-1">Start Time</label>
-                  <input 
+                  <input
                     type="datetime-local"
                     className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"
                     value={newSession.startTime}
@@ -265,7 +265,7 @@ export default function ExamHub() {
                 </div>
                 <div className="flex-1">
                   <label className="text-xs text-text-secondary block mb-1">End Time</label>
-                  <input 
+                  <input
                     type="datetime-local"
                     className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"
                     value={newSession.endTime}

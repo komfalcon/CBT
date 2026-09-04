@@ -8,7 +8,7 @@ const subjectOptions = [
   { value: 'CBT key', label: 'CBT key' },
   { value: 'Billing', label: 'Billing, cancellation, or refund' },
   { value: 'Mock exam or drill', label: 'Mock exam or drill' },
-  { value: 'Falke AI', label: 'Falke AI' },
+  { value: 'FalkeAI', label: 'FalkeAI' },
   { value: 'Technical issue', label: 'Technical issue' },
   { value: 'Other', label: 'Something else' },
 ];
@@ -37,7 +37,7 @@ export default function ContactUs() {
       'Please do not include your password, CBT key, card number, or verification code.',
     ].join('\n');
 
-    window.location.href = `mailto:${supportChannels.email}?subject=${encodeURIComponent(`JAMB UTME Prep — ${selectedSubject}`)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:${supportChannels.email}?subject=${encodeURIComponent(`Aurikrex Exam Arena — ${selectedSubject}`)}&body=${encodeURIComponent(body)}`;
     setSubmitted(true);
   };
 
@@ -46,7 +46,7 @@ export default function ContactUs() {
       <SupportHero
         eyebrow="Contact Aurikrex"
         title="Support when your study flow is interrupted."
-        description="Tell us what happened with your account, CBT key, payment, mock exam, or Falke AI. The form below prepares a complete email to our support inbox, so your message reaches the right team with useful context."
+        description="Tell us what happened with your account, CBT key, payment, mock exam, or FalkeAI. The form below prepares a complete email to our support inbox, so your message reaches the right team with useful context."
         icon={MessageSquareText}
       />
 

@@ -21,7 +21,7 @@ export default function PrivacyPolicy() {
       <SupportHero
         eyebrow="Privacy notice"
         title="Privacy that supports your preparation."
-        description="This notice explains the candidate information JAMB UTME Prep by Aurikrex uses, why we use it, and the choices you have when you practise with mock exams, drills, performance insights, CBT keys, and Falke AI."
+        description="This notice explains the candidate information Aurikrex Exam Arena by Aurikrex uses, why we use it, and the choices you have when you practise with mock exams, drills, performance insights, CBT keys, and FalkeAI."
         icon={ShieldCheck}
         meta={
           <div className="flex items-center gap-3 text-xs text-text-muted">
@@ -49,10 +49,10 @@ export default function PrivacyPolicy() {
           <SupportSection id="scope" eyebrow="01 — the essentials" title="Scope and who is responsible">
             <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
               <p>
-                Aurikrex operates JAMB UTME Prep, a study platform for Nigerian students preparing for the Unified Tertiary Matriculation Examination (UTME). In this notice, <strong className="font-semibold text-text-primary">“Aurikrex,” “we,” “us,”</strong> and <strong className="font-semibold text-text-primary">“our”</strong> mean the team operating this platform. We are responsible for the personal data described below when we decide why and how it is processed.
+                Aurikrex operates Aurikrex Exam Arena, a study platform for Nigerian students preparing for the Unified Tertiary Matriculation Examination (UTME). In this notice, <strong className="font-semibold text-text-primary">“Aurikrex,” “we,” “us,”</strong> and <strong className="font-semibold text-text-primary">“our”</strong> mean the team operating this platform. We are responsible for the personal data described below when we decide why and how it is processed.
               </p>
               <p className="mt-4">
-                This notice covers the public site, candidate account, mock exams, subject drills, study analytics, CBT-key sign-in, payments, and Falke AI features. It does not govern third-party websites or services that you choose to open, including their own payment or sign-in pages.
+                This notice covers the public site, candidate account, mock exams, subject drills, study analytics, CBT-key sign-in, payments, and FalkeAI features. It does not govern third-party websites or services that you choose to open, including their own payment or sign-in pages.
               </p>
             </div>
           </SupportSection>
@@ -63,7 +63,7 @@ export default function PrivacyPolicy() {
                 <thead>
                   <tr className="border-b border-border">
                     <th className="w-[31%] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em]">Category</th>
-                    <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em]">What this includes in JAMB UTME Prep</th>
+                    <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.14em]">What this includes in Aurikrex Exam Arena</th>
                   </tr>
                 </thead>
                 <tbody className="text-text-secondary">
@@ -84,8 +84,8 @@ export default function PrivacyPolicy() {
                     <td className="px-6 py-4">Your email, selected plan or test, payment reference, amount, and verification result. Card, bank, or other payment credentials are collected by Paystack on its checkout page, not stored by Aurikrex.</td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-4 font-semibold text-text-primary">Falke AI interactions</td>
-                    <td className="px-6 py-4">Messages you send to Falke AI, chat-session titles and history, and the question or result context you ask it to explain. Please do not put sensitive personal information into an AI prompt.</td>
+                    <td className="px-6 py-4 font-semibold text-text-primary">FalkeAI interactions</td>
+                    <td className="px-6 py-4">Messages you send to FalkeAI, chat-session titles and history, and the question or result context you ask it to explain. Please do not put sensitive personal information into an AI prompt.</td>
                   </tr>
                 </tbody>
               </table>
@@ -99,7 +99,7 @@ export default function PrivacyPolicy() {
                 { icon: UserRoundCheck, title: 'Run your account', text: 'Create and verify your candidate profile, authenticate sign-ins, recover access, and show your profile and subject combination.' },
                 { icon: Database, title: 'Deliver practice', text: 'Build mock-exam and drill sessions, save answers, calculate results, and show progress, topic weaknesses, and study insights.' },
                 { icon: KeyRound, title: 'Protect access', text: 'Issue and validate your CBT key, prevent unauthorised access, investigate suspicious activity, and maintain service reliability.' },
-                { icon: BrainCircuit, title: 'Provide AI study help', text: 'Generate Falke AI explanations and tutoring responses when you use an AI feature that is available to your plan.' },
+                { icon: BrainCircuit, title: 'Provide AI study help', text: 'Generate FalkeAI explanations and tutoring responses when you use an AI feature that is available to your plan.' },
               ].map((item) => {
                 const Icon = item.icon;
                 return (
@@ -123,7 +123,7 @@ export default function PrivacyPolicy() {
                 <tbody className="text-text-secondary">
                   <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Paystack</td><td className="px-6 py-4">Processes checkout for paid plans and pay-per-test purchases. It receives the payment information you enter, your email, the amount, and a transaction reference under its own privacy terms.</td></tr>
                   <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Google</td><td className="px-6 py-4">If you select Google sign-in, Google supplies the account identity information needed to create or sign in to your profile, such as your name, email, and profile image where available.</td></tr>
-                  <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">SeekAI</td><td className="px-6 py-4">Falke AI sends the prompt, relevant learning context, and chat history needed to generate a response through the AI service provider currently configured for the feature. Do not include financial, health, government-ID, or other highly sensitive information in prompts.</td></tr>
+                  <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">SeekAI</td><td className="px-6 py-4">FalkeAI sends the prompt, relevant learning context, and chat history needed to generate a response through the AI service provider currently configured for the feature. Do not include financial, health, government-ID, or other highly sensitive information in prompts.</td></tr>
                   <tr><td className="px-6 py-4 font-semibold text-text-primary">Turso, DigitalOcean, and Cloudflare</td><td className="px-6 py-4">The current platform configuration uses these cloud database, application-hosting, and frontend-delivery providers to store account and learning records and maintain availability. They act only to provide those services for us.</td></tr>
                 </tbody>
               </table>
@@ -143,7 +143,7 @@ export default function PrivacyPolicy() {
                 <li className="flex gap-3"><Check className="mt-1 h-4 w-4 shrink-0 text-emerald-300" /><span><strong className="font-semibold text-text-primary">Active accounts and performance history:</strong> retained while your account is active so your results, progress, and settings remain available.</span></li>
                 <li className="flex gap-3"><Check className="mt-1 h-4 w-4 shrink-0 text-emerald-300" /><span><strong className="font-semibold text-text-primary">Deleted accounts:</strong> after identity confirmation, we aim to delete or de-identify account and learning records within 30 days, unless we need a limited record for a lawful purpose.</span></li>
                 <li className="flex gap-3"><Check className="mt-1 h-4 w-4 shrink-0 text-emerald-300" /><span><strong className="font-semibold text-text-primary">Payments and disputes:</strong> payment references and related records are retained for the period required for financial, tax, fraud-prevention, chargeback, or legal obligations.</span></li>
-                <li className="flex gap-3"><Check className="mt-1 h-4 w-4 shrink-0 text-emerald-300" /><span><strong className="font-semibold text-text-primary">Falke AI chat:</strong> retained with the relevant chat session until you delete the session or request account deletion, subject to the limits above.</span></li>
+                <li className="flex gap-3"><Check className="mt-1 h-4 w-4 shrink-0 text-emerald-300" /><span><strong className="font-semibold text-text-primary">FalkeAI chat:</strong> retained with the relevant chat session until you delete the session or request account deletion, subject to the limits above.</span></li>
               </ul>
             </div>
           </SupportSection>
@@ -160,7 +160,7 @@ export default function PrivacyPolicy() {
 
           <SupportSection id="children" eyebrow="08 — students under 18" title="Young users and parent or guardian involvement">
             <div className="support-surface-soft rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
-              <p>JAMB UTME Prep is intended for students aged 13 and above. If you are under 18, please use the platform with the knowledge and involvement of a parent or guardian where required by law. We do not knowingly create accounts for children under 13. If you believe a child under 13 has provided personal data, contact us so that we can investigate and take appropriate action.</p>
+              <p>Aurikrex Exam Arena is intended for students aged 13 and above. If you are under 18, please use the platform with the knowledge and involvement of a parent or guardian where required by law. We do not knowingly create accounts for children under 13. If you believe a child under 13 has provided personal data, contact us so that we can investigate and take appropriate action.</p>
             </div>
           </SupportSection>
 

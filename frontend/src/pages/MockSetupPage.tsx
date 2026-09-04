@@ -10,10 +10,10 @@ import { getSubjectLabel, normalizeSubjectKey } from '../constants/subjects';
 export default function MockSetupPage() {
   const navigate = useNavigate();
   const { addToast } = useToast();
-  
+
   const [allSubjects, setAllSubjects] = useState<string[]>([]);
   const [isLoadingSubjects, setIsLoadingSubjects] = useState<boolean>(true);
-  
+
   const [mockSubjects, setMockSubjects] = useState<string[]>([]);
   const [mockDifficulty, setMockDifficulty] = useState<string>('any');
   const [mockSubjectConfig, setMockSubjectConfig] = useState<Record<string, { mode: 'random' | 'specific'; topics: string[] }>>({});
@@ -42,10 +42,10 @@ export default function MockSetupPage() {
       setMockSubjectConfig({});
       return;
     }
-    
+
     setIsLoadingMockTopics(true);
     const newTopicsMap: Record<string, Array<{ topic: string, count: number }>> = {};
-    
+
     Promise.all(
       mockSubjects.map(subject =>
         getSubjectTopics(subject)
@@ -69,16 +69,16 @@ export default function MockSetupPage() {
   const handleStartMock = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('accessToken') || '';
-      
+      const token = '';
+
       const payload: any = { type: 'mock', difficultyLevel: mockDifficulty };
       if (mockSubjects.length > 0) payload.subjects = mockSubjects;
-      
+
       const subjectConfigs = Object.entries(mockSubjectConfig).filter(([_, config]) => config.mode === 'specific' && config.topics.length > 0);
       if (subjectConfigs.length > 0) {
         payload.subjectConfigs = Object.fromEntries(subjectConfigs);
       }
-      
+
       const session = await createExamSession(token, payload);
       if (session.warnings && session.warnings.length > 0) {
         session.warnings.forEach((w: string) => addToast({ type: 'info', title: 'Notice', message: w }));
@@ -99,11 +99,11 @@ export default function MockSetupPage() {
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary font-sans overflow-auto relative flex flex-col">
       <div className="absolute top-0 right-0 w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
-      
+
       <header className="border-b border-border bg-bg-primary/80 backdrop-blur-md sticky top-0 z-40">
         <div className="mx-auto max-w-5xl px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={() => navigate('/dashboard')}
               className="p-2 hover:bg-bg-secondary rounded-xl transition-colors text-text-secondary hover:text-text-primary"
             >
@@ -131,7 +131,7 @@ export default function MockSetupPage() {
       </header>
 
       <main className="flex-1 mx-auto max-w-5xl w-full px-6 py-8 space-y-8">
-        
+
         {/* Step 1: Subjects */}
         <section className="space-y-4">
           <div className="flex items-center justify-between">
@@ -144,7 +144,7 @@ export default function MockSetupPage() {
             </div>
           </div>
           <p className="text-sm text-text-muted">Choose exactly 4 subjects for your UTME simulation. Or leave entirely empty for a fully randomized Full Mock.</p>
-          
+
           {mockSubjects.length > 0 && mockSubjects.length < 4 && (
             <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-amber-500 text-sm font-medium">
               You must select 4 subjects if you want a customized mock.
@@ -177,8 +177,8 @@ export default function MockSetupPage() {
                       }
                     }}
                     className={`flex items-center gap-3 p-4 rounded-xl border text-left transition-all ${
-                      isSelected 
-                        ? 'border-primary bg-primary/10 ring-1 ring-primary/20' 
+                      isSelected
+                        ? 'border-primary bg-primary/10 ring-1 ring-primary/20'
                         : 'border-border bg-bg-secondary hover:border-text-muted/30'
                     } ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                   >
@@ -224,13 +224,13 @@ export default function MockSetupPage() {
               <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary text-sm">3</span>
               Fine-tune Topics <span className="text-text-muted text-sm font-normal">(Optional)</span>
             </h2>
-            
+
             <div className="space-y-6">
               {mockSubjects.map(subject => {
                 const config = mockSubjectConfig[subject] || { mode: 'random', topics: [] };
                 const topicsForSubject = availableMockTopics[subject] || [];
                 const warning = mockWarnings.find(w => w.subject === subject);
-                
+
                 return (
                   <div key={subject} className="border border-border rounded-2xl bg-bg-secondary overflow-hidden shadow-sm">
                     {/* Card Header */}
@@ -241,7 +241,7 @@ export default function MockSetupPage() {
                         </div>
                         <h3 className="text-lg font-bold text-text-primary">{getSubjectLabel(subject)}</h3>
                       </div>
-                      
+
                       <div className="flex bg-bg-primary p-1 rounded-lg border border-border">
                         <button
                           onClick={() => setMockSubjectConfig(prev => ({ ...prev, [subject]: { ...prev[subject], mode: 'random', topics: [] } }))}
@@ -261,7 +261,7 @@ export default function MockSetupPage() {
                         </button>
                       </div>
                     </div>
-                    
+
                     {/* Specific Mode Body */}
                     {config.mode === 'specific' && (
                       <div className="p-5 bg-bg-secondary/50">
@@ -289,16 +289,16 @@ export default function MockSetupPage() {
                                 🎲 Pick Random Topic
                               </button>
                             </div>
-                            
+
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                               {topicsForSubject.map(t => {
                                 const isTopicSelected = config.topics.includes(t.topic);
                                 return (
-                                  <label 
-                                    key={t.topic} 
+                                  <label
+                                    key={t.topic}
                                     className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
-                                      isTopicSelected 
-                                        ? 'border-primary/50 bg-primary/5' 
+                                      isTopicSelected
+                                        ? 'border-primary/50 bg-primary/5'
                                         : 'border-border/50 bg-bg-primary hover:border-border'
                                     }`}
                                   >
@@ -329,7 +329,7 @@ export default function MockSetupPage() {
                                 );
                               })}
                             </div>
-                            
+
                             {warning && (
                               <div className="mt-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-3">
                                 <div className="text-amber-500 mt-0.5">⚠️</div>

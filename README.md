@@ -1,4 +1,4 @@
-# JAMB CBT
+# Aurikrex Exam Arena
 
 Production-grade Computer-Based Test platform scaffold for Nigerian JAMB UTME.
 

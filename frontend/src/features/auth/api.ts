@@ -2,14 +2,10 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL ?? '/api'}/auth`,
+  withCredentials: true,
 });
 
-export type LoginResponse = {
-  requiresMFA: boolean;
-  tempToken?: string;
-  accessToken?: string;
-  refreshToken?: string;
-};
+export type LoginResponse = { requiresMFA: boolean };
 
 export async function register(payload: {
   fullName: string;
@@ -32,20 +28,18 @@ export async function login(payload: { email: string; password: string }) {
   return data;
 }
 
-export async function verifyOtp(payload: { tempToken: string; otp: string }) {
+export async function verifyOtp(payload: { otp: string }) {
   const { data } = await api.post<LoginResponse>('/verify-otp', payload);
   return data;
 }
 
-export async function refreshToken(refreshToken: string) {
-  const { data } = await api.post<{ accessToken: string; refreshToken: string }>('/refresh', {
-    refreshToken,
-  });
+export async function refreshToken() {
+  const { data } = await api.post<{ refreshed: boolean }>('/refresh', {});
   return data;
 }
 
 export async function forgotPassword(email: string) {
-  const { data } = await api.post<{ message: string; token?: string }>('/forgot-password', { email });
+  const { data } = await api.post<{ message: string }>('/forgot-password', { email });
   return data;
 }
 
@@ -64,19 +58,19 @@ export async function loginWithCbtKey(payload: { cbtKey: string }) {
   return data;
 }
 
-export async function getMe(token: string) {
-  const { data } = await api.get<Record<string, any>>('/me', {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export async function getMe() {
+  const { data } = await api.get<Record<string, any>>('/me');
   return data;
 }
 
 export async function updateMe(
-  token: string,
   payload: { fullName?: string; phone?: string; exam_subject_combination?: string[] },
 ) {
-  const { data } = await api.patch<Record<string, any>>('/me', payload, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const { data } = await api.patch<Record<string, any>>('/me', payload);
+  return data;
+}
+
+export async function logout() {
+  const { data } = await api.post<{ message: string }>('/logout', {});
   return data;
 }
