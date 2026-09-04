@@ -14,14 +14,14 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
   constructor(
     @Inject(DRIZZLE) private readonly db: any,
     configService: ConfigService,
-    
+
   ) {
     const publicKey = Buffer.from(configService.get<string>('JWT_PUBLIC_KEY', ''), 'base64').toString(
       'utf8',
     );
 
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: (req: any) => req?.headers?.cookie?.split(';').map((part: string) => part.trim()).find((part: string) => part.startsWith('cbt_refresh_token='))?.slice(18) || ExtractJwt.fromAuthHeaderAsBearerToken()(req),
       ignoreExpiration: false,
       algorithms: ['RS256'],
       secretOrKey: publicKey,

@@ -13,10 +13,10 @@ export default function AdminCandidates() {
   const [userStatus, setUserStatus] = useState('');
   const [usersLoading, setUsersLoading] = useState(false);
   const { addToast } = useToast();
-  const token = localStorage.getItem('accessToken') || '';
+  const token = '';
 
   const getHeaders = () => ({
-    'Authorization': `Bearer ${token}`,
+
     'Content-Type': 'application/json',
   });
 
@@ -60,7 +60,7 @@ export default function AdminCandidates() {
       });
       if (!res.ok) throw new Error('Failed to update user account status');
       addToast({ type: 'success', title: 'Success', message: 'User status updated successfully.' });
-      
+
       setUsers(prev => prev.map(u => u.userId === userId ? { ...u, account_status: newStatus } : u));
     } catch (e: any) {
       addToast({ type: 'error', title: 'Error', message: e.message || 'Error updating status' });
@@ -76,7 +76,7 @@ export default function AdminCandidates() {
     <div className="flex flex-col gap-6 animate-fade-in h-full">
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
         <h2 className="text-xl font-bold text-text-primary">Candidates</h2>
-        
+
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
@@ -230,8 +230,8 @@ export default function AdminCandidates() {
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-semibold ${
-                        user.account_status === 'active' 
-                          ? 'text-emerald-500 bg-emerald-500/10' 
+                        user.account_status === 'active'
+                          ? 'text-emerald-500 bg-emerald-500/10'
                           : 'text-red-500 bg-red-500/10'
                       }`}>
                         {user.account_status === 'active' ? <UserCheck className="h-3 w-3" /> : <UserX className="h-3 w-3" />}
@@ -268,7 +268,7 @@ export default function AdminCandidates() {
             </tbody>
           </table>
         </div>
-        
+
         {/* Pagination */}
         <div className="px-6 py-4 border-t border-border flex items-center justify-between bg-bg-card">
           <span className="text-xs text-text-muted">

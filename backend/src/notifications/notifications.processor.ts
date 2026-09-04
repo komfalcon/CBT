@@ -45,7 +45,7 @@ export class NotificationsProcessor implements OnModuleInit, OnModuleDestroy {
           const payload = JSON.parse(msg.content.toString()) as NotificationPayload;
           await this.sendEmail(
             payload.email,
-            'Verify your email address - JAMB CBT',
+            'Verify your email address - Aurikrex Exam Arena',
             `Hello ${payload.fullName},\n\nYour verification code is: ${payload.token}\n\nThis code will expire in 24 hours.`,
             `<strong>Hello ${payload.fullName}</strong>,<br><br>Your verification code is: <strong>${payload.token}</strong><br><br>This code will expire in 24 hours.`,
           );
@@ -64,7 +64,7 @@ export class NotificationsProcessor implements OnModuleInit, OnModuleDestroy {
           const payload = JSON.parse(msg.content.toString()) as NotificationPayload;
           await this.sendEmail(
             payload.email,
-            'Reset your password - JAMB CBT',
+            'Reset your password - Aurikrex Exam Arena',
             `Hello ${payload.fullName},\n\nYour password reset code is: ${payload.token}\n\nThis code will expire in 1 hour.`,
             `<strong>Hello ${payload.fullName}</strong>,<br><br>Your password reset code is: <strong>${payload.token}</strong><br><br>This code will expire in 1 hour.`,
           );

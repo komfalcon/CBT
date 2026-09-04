@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import AuthPage from './features/auth/AuthPage';
 import QuestionBankPage from './features/questions/QuestionBankPage';
 import ExamArenaLanding from './pages/ExamArenaLanding';
@@ -24,9 +25,40 @@ const AdminKeys = React.lazy(() => import('./pages/admin/AdminKeys'));
 const AdminBilling = React.lazy(() => import('./pages/admin/AdminBilling'));
 const SecureAccess = React.lazy(() => import('./pages/admin/SecureAccess'));
 
+const routeMetadata: Record<string, { title: string; description: string }> = {
+  '/': { title: 'Aurikrex Exam Arena — JAMB UTME Practice', description: 'Realistic JAMB UTME mocks, focused drills, explanations, and progress insights.' },
+  '/arena': { title: 'Exam Arena — Aurikrex Exam Arena', description: 'Prepare with focused practice sessions and realistic exam simulations.' },
+  '/auth': { title: 'Sign in — Aurikrex Exam Arena', description: 'Sign in or create your Aurikrex Exam Arena candidate profile.' },
+  '/help': { title: 'Help Center — Aurikrex Exam Arena', description: 'Find answers and support for your Aurikrex Exam Arena account and exams.' },
+  '/contact': { title: 'Contact — Aurikrex Exam Arena', description: 'Contact the Aurikrex Exam Arena support team.' },
+  '/privacy': { title: 'Privacy Policy — Aurikrex Exam Arena', description: 'Read how Aurikrex Exam Arena handles personal data and privacy.' },
+  '/terms': { title: 'Terms of Service — Aurikrex Exam Arena', description: 'Review the terms, subscriptions, refunds, and acceptable use rules.' },
+};
+
+function RouteMetadata() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const metadata = routeMetadata[pathname] || { title: 'Aurikrex Exam Arena', description: 'JAMB UTME preparation and exam practice from Aurikrex Exam Arena.' };
+    document.title = metadata.title;
+    const setMeta = (selector: string, attribute: string, value: string) => {
+      let element = document.head.querySelector<HTMLMetaElement>(selector);
+      if (!element) { element = document.createElement('meta'); document.head.appendChild(element); }
+      element.setAttribute(attribute, value);
+    };
+    setMeta('meta[name="description"]', 'content', metadata.description);
+    setMeta('meta[property="og:title"]', 'content', metadata.title);
+    setMeta('meta[property="og:description"]', 'content', metadata.description);
+    let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
+    canonical.href = `${window.location.origin}${pathname}`;
+  }, [pathname]);
+  return null;
+}
+
 function App() {
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-primary selection:text-white flex flex-col">
+      <RouteMetadata />
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -56,13 +88,13 @@ function App() {
             <Route path="billing" element={<AdminBilling />} />
             <Route path="questions" element={<QuestionBankPage />} />
           </Route>
-          <Route 
-            path="/sys/auth-checkpoint" 
+          <Route
+            path="/sys/auth-checkpoint"
             element={
               <Suspense fallback={<div className="min-h-screen bg-bg-primary" />}>
                 <SecureAccess />
               </Suspense>
-            } 
+            }
           />
           <Route path="/help" element={<HelpCenter />} />
           <Route path="/contact" element={<ContactUs />} />

@@ -14,7 +14,7 @@
   --color-border-hover: rgba(140, 163, 219, 0.42);
   --color-overlay: rgba(4, 10, 22, 0.72);
 
-  /* Semantics: blue=primary action, cyan=information/progress, gold=Falke AI/premium, rose=streak. */
+  /* Semantics: blue=primary action, cyan=information/progress, gold=FalkeAI/premium, rose=streak. */
   --color-accent-primary: #5b72ff;
   --color-accent-primary-hover: #788aff;
   --color-accent-info: #38bdf8;

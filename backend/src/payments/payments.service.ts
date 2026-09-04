@@ -41,12 +41,10 @@ export class PaymentsService {
       .where(eq(schema.payment_logs.reference, reference))
       .limit(1);
     const existingLog = existingLogList[0];
-    
+
     if (existingLog) {
       throw new BadRequestException('This transaction reference has already been verified.');
     }
-
-    console.log(`Verifying transaction: reference=${reference}, planCode=${planCode}, tier=${tier}`);
 
     try {
       const response = await axios.get(`https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`, {
@@ -91,7 +89,7 @@ export class PaymentsService {
       const updateData: any = {
         subscription_tier: tier,
       };
-      
+
       // If upgrading to max, reset AI messages to a default value (e.g. 50 or 100)
       if (tier === 'max') {
         updateData.ai_messages_remaining = 100;
@@ -114,9 +112,9 @@ export class PaymentsService {
       console.log(`Successfully upgraded user ${userId} to ${tier} tier.`);
       return updatedUser;
     } catch (error: any) {
-      console.error('Paystack verification error:', error.response?.data || error.message);
-      const errMsg = error.response?.data?.message || error.message;
-      throw new InternalServerErrorException(`Payment verification failed: ${errMsg}`);
+      if (error instanceof BadRequestException || error instanceof InternalServerErrorException) throw error;
+      const errMsg = error.response?.data?.message || error.message || 'Payment verification failed.';
+      throw new BadRequestException(errMsg);
     }
   }
 }

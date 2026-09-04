@@ -41,10 +41,10 @@ export function SupportPageShell({ children }: SupportPageShellProps) {
     <div className="support-page min-h-screen overflow-x-hidden bg-bg-primary font-body text-text-primary selection:bg-primary/30">
       <header className="support-header sticky top-0 z-50 border-b border-border/80 backdrop-blur-xl">
         <div className="support-header-inner mx-auto flex h-[76px] max-w-7xl items-center justify-between px-8">
-          <Link to="/" className="support-brand flex min-w-0 items-center gap-3" aria-label="JAMB UTME Prep home">
+          <Link to="/" className="support-brand flex min-w-0 items-center gap-3" aria-label="Aurikrex Exam Arena home">
             <img src="/favicon.svg" alt="" className="h-10 w-10 shrink-0 rounded-xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
             <span className="min-w-0 leading-tight">
-              <span className="block truncate font-display text-[15px] font-semibold tracking-[-0.02em] text-text-primary">JAMB UTME Prep</span>
+              <span className="block truncate font-display text-[15px] font-semibold tracking-[-0.02em] text-text-primary">Aurikrex Exam Arena</span>
               <span className="mt-1 block text-[10px] font-semibold uppercase tracking-[0.18em] text-blue-300">by Aurikrex</span>
             </span>
           </Link>
@@ -70,7 +70,7 @@ export function SupportPageShell({ children }: SupportPageShellProps) {
 
       <footer className="border-t border-border/80 bg-bg-secondary/35 px-8 py-8">
         <div className="support-footer-inner mx-auto flex max-w-7xl items-center justify-between gap-8">
-          <p className="text-xs leading-5 text-text-muted">© {new Date().getFullYear()} JAMB UTME Prep by Aurikrex. Study support for focused UTME preparation.</p>
+          <p className="text-xs leading-5 text-text-muted">© {new Date().getFullYear()} Aurikrex Exam Arena by Aurikrex. Study support for focused UTME preparation.</p>
           <div className="support-footer-links flex items-center gap-5 text-xs font-medium text-text-secondary">
             <a href={`mailto:${SUPPORT_EMAIL}`} className="inline-flex items-center gap-1.5 transition hover:text-primary"><Mail className="h-3.5 w-3.5" />{SUPPORT_EMAIL}</a>
             <a href={`tel:${SUPPORT_PHONE_LINK}`} className="inline-flex items-center gap-1.5 transition hover:text-primary"><Phone className="h-3.5 w-3.5" />{SUPPORT_PHONE_DISPLAY}</a>

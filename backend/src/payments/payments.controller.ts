@@ -2,6 +2,7 @@ import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { PaymentsService } from './payments.service';
+import { VerifyPaymentDto } from './dto/verify-payment.dto';
 
 @Controller('payments')
 @UseGuards(JwtAuthGuard)
@@ -11,7 +12,7 @@ export class PaymentsController {
   @Post('verify')
   async verifyPayment(
     @CurrentUser() user: any,
-    @Body() body: { reference: string; planCode: string },
+    @Body() body: VerifyPaymentDto,
   ) {
     const updatedUser = await this.paymentsService.verifyTransaction(user.sub, body.reference, body.planCode);
     return {

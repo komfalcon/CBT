@@ -7,11 +7,13 @@ import {
   Patch,
   Post,
   Req,
+  Res,
   UseGuards,
   ValidationPipe,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -26,6 +28,29 @@ import { GoogleLoginDto } from './dto/google-login.dto';
 import { CbtKeyLoginDto } from './dto/cbt-key-login.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtPayload } from './types/jwt-payload.type';
+
+
+
+
+
+const ACCESS_COOKIE = 'cbt_access_token';
+const REFRESH_COOKIE = 'cbt_refresh_token';
+const MFA_COOKIE = 'cbt_mfa_token';
+
+function readCookie(req: Request, name: string): string | undefined {
+  const header = req.headers.cookie || '';
+  const match = header.split(';').map((part) => part.trim()).find((part) => part.startsWith(`${name}=`));
+  return match ? decodeURIComponent(match.slice(name.length + 1)) : undefined;
+}
+
+function cookieOptions(maxAge: number, httpOnly = true) {
+  return { httpOnly, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' as const, path: '/', maxAge };
+}
+
+function setAuthCookies(res: Response, tokens: { accessToken?: string; refreshToken?: string; tempToken?: string; requiresMFA?: boolean }) {
+  if (tokens.accessToken) res.cookie(ACCESS_COOKIE, tokens.accessToken, cookieOptions(15 * 60 * 1000));
+  if (tokens.refreshToken) res.cookie(REFRESH_COOKIE, tokens.refreshToken, cookieOptions(7 * 24 * 60 * 60 * 1000));
+}
 
 class VerifyEmailDto {
   @IsEmail()
@@ -62,29 +87,35 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
-  login(
-    @Req() req: Request & { user: any },
-    @Body() _: LoginDto,
-    @Ip() ipAddress?: string,
-  ) {
-    return this.authService.completeLogin(req.user, ipAddress);
+  async login(@Req() req: Request & { user: any }, @Res({ passthrough: true }) res: Response, @Body() _: LoginDto, @Ip() ipAddress?: string) {
+    const result = await this.authService.completeLogin(req.user, ipAddress);
+    if (result.requiresMFA && result.tempToken) {
+      res.cookie(MFA_COOKIE, result.tempToken, cookieOptions(5 * 60 * 1000));
+      return { requiresMFA: true };
+    }
+    setAuthCookies(res, result);
+    return { requiresMFA: false };
   }
 
   @Post('verify-otp')
   @HttpCode(200)
-  verifyOtp(
-    @Body(new ValidationPipe({ whitelist: true, transform: true })) verifyOtpDto: VerifyOtpDto,
-    @Ip() ipAddress?: string,
-  ) {
-    return this.authService.verifyOtp(verifyOtpDto.tempToken, verifyOtpDto.otp, ipAddress);
+  async verifyOtp(@Req() req: Request, @Res({ passthrough: true }) res: Response, @Body(new ValidationPipe({ whitelist: true, transform: true })) verifyOtpDto: VerifyOtpDto, @Ip() ipAddress?: string) {
+    const tempToken = readCookie(req, MFA_COOKIE);
+    if (!tempToken) throw new UnauthorizedException('MFA session has expired. Please sign in again.');
+    const result = await this.authService.verifyOtp(tempToken, verifyOtpDto.otp, ipAddress);
+    res.clearCookie(MFA_COOKIE, { path: '/' });
+    setAuthCookies(res, result);
+    return { requiresMFA: false };
   }
 
   @Post('refresh')
   @HttpCode(200)
-  refreshToken(
-    @Body(new ValidationPipe({ whitelist: true, transform: true })) refreshTokenDto: RefreshTokenDto,
-  ) {
-    return this.authService.refreshTokens(refreshTokenDto.refreshToken);
+  async refreshToken(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    const refreshToken = readCookie(req, REFRESH_COOKIE);
+    if (!refreshToken) throw new UnauthorizedException('Refresh session has expired. Please sign in again.');
+    const result = await this.authService.refreshTokens(refreshToken);
+    setAuthCookies(res, result);
+    return { refreshed: true };
   }
 
   @Post('forgot-password')
@@ -105,20 +136,30 @@ export class AuthController {
 
   @Post('google')
   @HttpCode(200)
-  loginGoogle(
-    @Body(new ValidationPipe({ whitelist: true, transform: true })) googleLoginDto: GoogleLoginDto,
-    @Ip() ipAddress?: string,
-  ) {
-    return this.authService.loginWithGoogle(googleLoginDto.credential, ipAddress);
+  async loginGoogle(@Res({ passthrough: true }) res: Response, @Body(new ValidationPipe({ whitelist: true, transform: true })) googleLoginDto: GoogleLoginDto, @Ip() ipAddress?: string) {
+    const result = await this.authService.loginWithGoogle(googleLoginDto.credential, ipAddress);
+    if (result.requiresMFA && result.tempToken) {
+      res.cookie(MFA_COOKIE, result.tempToken, cookieOptions(5 * 60 * 1000));
+      return { requiresMFA: true };
+    }
+    setAuthCookies(res, result);
+    return { requiresMFA: false };
   }
 
   @Post('login/cbt-key')
   @HttpCode(200)
-  loginCbtKey(
-    @Body(new ValidationPipe({ whitelist: true, transform: true })) cbtKeyLoginDto: CbtKeyLoginDto,
-    @Ip() ipAddress?: string,
-  ) {
-    return this.authService.loginWithCbtKey(cbtKeyLoginDto.cbtKey, ipAddress);
+  async loginCbtKey(@Res({ passthrough: true }) res: Response, @Body(new ValidationPipe({ whitelist: true, transform: true })) cbtKeyLoginDto: CbtKeyLoginDto, @Ip() ipAddress?: string) {
+    const result = await this.authService.loginWithCbtKey(cbtKeyLoginDto.cbtKey, ipAddress);
+    setAuthCookies(res, result);
+    return { requiresMFA: false };
+  }
+
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie(ACCESS_COOKIE, { path: '/' });
+    res.clearCookie(REFRESH_COOKIE, { path: '/' });
+    res.clearCookie(MFA_COOKIE, { path: '/' });
+    return { message: 'Signed out.' };
   }
 
   @Get('me')
@@ -166,8 +207,4 @@ export class AuthController {
     return this.authService.disableMfa(req.user.sub, body.otp);
   }
 
-  @Get('admin-recovery')
-  async adminRecovery() {
-    return this.authService.recoverAdmin();
-  }
 }

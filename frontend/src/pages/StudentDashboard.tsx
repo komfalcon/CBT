@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getMe, updateMe } from '../features/auth/api';
+import { getMe, updateMe, logout } from '../features/auth/api';
 import { getResultsHistory, GradedResultRecord, getTopicStats, TopicStatRecord } from '../features/results/api';
 import { getSubjectTopics } from '../features/questions/api';
 import { createExamSession } from '../features/exam/api';
@@ -86,7 +86,7 @@ function EmptyPanel({
 export default function StudentDashboard() {
   const navigate = useNavigate();
   const { addToast } = useToast();
-  const [token, setToken] = useState('');
+  const token = '';
   const [student, setStudent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -181,29 +181,23 @@ export default function StudentDashboard() {
   }, []);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('accessToken');
-    if (!savedToken) {
-      navigate('/auth?mode=login');
-      return;
-    }
-    setToken(savedToken);
-    fetchProfileAndHistory(savedToken);
-  }, [navigate]);
+    fetchProfileAndHistory();
+  }, []);
 
-  const fetchProfileAndHistory = async (authToken: string) => {
+  const fetchProfileAndHistory = async () => {
     setLoading(true);
     try {
-      const profile = await getMe(authToken);
+      const profile = await getMe();
       setStudent(profile);
       setSelectedSubjects(profile.exam_subject_combination || ['english']);
-      const [history, stats] = await Promise.all([getResultsHistory(authToken), getTopicStats(authToken)]);
+      const [history, stats] = await Promise.all([getResultsHistory(), getTopicStats()]);
       setResultsList(history);
       setTopicStats(stats);
     } catch (requestError: any) {
       console.error(requestError);
       if (requestError?.response?.status === 401) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+
+
         navigate('/auth?mode=login');
       } else {
         setError('We could not load your study workspace. Refresh the page to try again.');
@@ -220,10 +214,8 @@ export default function StudentDashboard() {
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const response = await fetch(`${apiBase}/payments/verify`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ reference, planCode }),
       });
       const data = await response.json();
@@ -252,7 +244,7 @@ export default function StudentDashboard() {
       return;
     }
     const handler = paystackPop.setup({
-      key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_live_068536d7f4bbe687175bcda53e3f5d116fea99dc',
+      key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
       email: student.email,
       currency: 'NGN',
       plan: planCode,
@@ -292,7 +284,8 @@ export default function StudentDashboard() {
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const response = await fetch(`${apiBase}/v1/auth/handoffs`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           audience: 'library',
           scope: ['profile', 'topic_context', 'return_context'],
@@ -336,7 +329,7 @@ export default function StudentDashboard() {
     }
     try {
       setLoading(true);
-      const updatedProfile = await updateMe(token, { exam_subject_combination: updatedCombination });
+      const updatedProfile = await updateMe({ exam_subject_combination: updatedCombination });
       setStudent(updatedProfile);
       setMessage('Your subject combination has been saved.');
       setIsEditModalOpen(false);
@@ -348,9 +341,8 @@ export default function StudentDashboard() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+  const handleLogout = async () => {
+    await logout();
     navigate('/auth?mode=login');
   };
 
@@ -523,7 +515,7 @@ export default function StudentDashboard() {
                 <p className="mt-2 min-h-4 text-xs sm:text-[11px] text-success" aria-live="polite">{copied ? 'Access key copied securely.' : ''}</p>
               </Card>
 
-              <SecuritySettings token={token} mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory(token)} />
+              <SecuritySettings token={token} mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory()} />
             </aside>
 
             <div className="min-w-0 space-y-8">
@@ -713,11 +705,11 @@ export default function StudentDashboard() {
       </Modal>
 
       <Modal isOpen={showUpgradeModal} onClose={() => setShowUpgradeModal(false)} title="Choose a study plan" maxWidth="4xl">
-        <div className="space-y-6"><p className="mx-auto max-w-xl text-center text-sm leading-6 text-text-secondary">Unlock more mocks, detailed reviews, targeted drills, and Falke AI tutoring as your preparation needs grow.</p>{paymentError && <Alert variant="error" className="flex items-center gap-2">{paymentError}</Alert>}<div className="grid gap-4 md:grid-cols-3">
+        <div className="space-y-6"><p className="mx-auto max-w-xl text-center text-sm leading-6 text-text-secondary">Unlock more mocks, detailed reviews, targeted drills, and FalkeAI tutoring as your preparation needs grow.</p>{paymentError && <Alert variant="error" className="flex items-center gap-2">{paymentError}</Alert>}<div className="grid gap-4 md:grid-cols-3">
           {[
             { name: 'Plus', price: '₦3,500', plan: 'PLN_3pu5sd2pl33k7qw', summary: 'Core mock practice', features: ['1 full mock each day', 'Detailed score reviews', 'CBT access key'], icon: Zap, tone: 'primary' },
             { name: 'Pro', price: '₦6,000', plan: 'PLN_yzw49g99ybur0c1', summary: 'More depth and flexibility', features: ['2 full mocks each day', 'Subject-specific drills', 'Detailed score reviews'], icon: Award, tone: 'info', featured: true },
-            { name: 'Max', price: '₦10,000', plan: 'PLN_kbpykg9tm67n6yv', summary: 'Complete preparation suite', features: ['Unlimited mock exams', 'Advanced performance review', 'Falke AI tutor access'], icon: Brain, tone: 'ai-flag' },
+            { name: 'Max', price: '₦10,000', plan: 'PLN_kbpykg9tm67n6yv', summary: 'Complete preparation suite', features: ['Unlimited mock exams', 'Advanced performance review', 'FalkeAI tutor access'], icon: Brain, tone: 'ai-flag' },
           ].map((plan) => {
             const Icon = plan.icon;
             return <div key={plan.name} className={classNames('relative flex flex-col rounded-2xl border bg-bg-secondary/50 p-5 shadow-sm transition-transform duration-200 hover:-translate-y-1', plan.featured ? 'border-primary/55 shadow-[0_12px_28px_rgba(91,114,255,0.12)]' : 'border-border')}>

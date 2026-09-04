@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
+import { randomBytes } from 'crypto';
 
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   const configuredOrigins = process.env.ALLOWED_ORIGINS
     ?.split(',')
     .map((origin) => origin.trim())
@@ -24,7 +25,7 @@ async function bootstrap() {
     'https://www.library.aurikrex.tech',
     'https://cbt-vl4x.onrender.com'
   ];
-  
+
   app.enableCors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
@@ -35,12 +36,29 @@ async function bootstrap() {
       }
     },
     methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
     credentials: true,
   });
   app.use(helmet({ crossOriginOpenerPolicy: false }));
+
+  // Bind state-changing browser requests to the same-site session. Auth bootstrap routes are public;
+  // all other unsafe methods require either a matching double-submit token or an allowed Origin.
+  app.use((req: any, res: any, next: any) => {
+    const cookieHeader = String(req.headers.cookie || '');
+    const csrfCookie = cookieHeader.split(';').map((part: string) => part.trim()).find((part: string) => part.startsWith('csrf_token='))?.slice('csrf_token='.length);
+    const csrfToken = csrfCookie || randomBytes(24).toString('hex');
+    if (!csrfCookie) res.setHeader('Set-Cookie', `csrf_token=${csrfToken}; Path=/; SameSite=Lax${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`);
+    const unsafe = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method);
+    const publicPath = /^\/auth\/(login|register|google|login\/cbt-key|forgot-password|reset-password|verify-email)$/.test(req.path || '');
+    if (unsafe && !publicPath) {
+      const origin = req.headers.origin;
+      const originAllowed = !origin || allowedOrigins.includes(origin);
+      if (req.headers['x-csrf-token'] !== csrfToken && !originAllowed) return res.status(403).json({ message: 'CSRF validation failed.' });
+    }
+    next();
+  });
   app.useGlobalFilters(new AllExceptionsFilter());
-  
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

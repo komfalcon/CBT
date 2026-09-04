@@ -4,11 +4,10 @@ const baseURL = `${import.meta.env.VITE_API_BASE_URL ?? '/api'}/results`;
 
 const resultsApi = axios.create({
   baseURL,
+  withCredentials: true,
 });
 
-function withAuth(token: string) {
-  return { headers: { Authorization: `Bearer ${token}` } };
-}
+function withAuth(_token?: string): { headers?: Record<string, string> } { return {}; }
 
 export type GradedSubjectScore = {
   subject: string;
@@ -31,13 +30,13 @@ export type GradedResultRecord = {
   completedAt: string;
 };
 
-export async function getResultsHistory(token: string) {
-  const { data } = await resultsApi.get<GradedResultRecord[]>('/', withAuth(token));
+export async function getResultsHistory(_token?: string) {
+  const { data } = await resultsApi.get<GradedResultRecord[]>('/', withAuth(_token));
   return data;
 }
 
-export async function getResultDetail(token: string, resultId: string) {
-  const { data } = await resultsApi.get<GradedResultRecord>(`/${resultId}`, withAuth(token));
+export async function getResultDetail(_token: string | undefined, resultId: string) {
+  const { data } = await resultsApi.get<GradedResultRecord>(`/${resultId}`, withAuth(_token));
   return data;
 }
 
@@ -51,7 +50,7 @@ export type TopicStatRecord = {
   accuracy: number;
 };
 
-export async function getTopicStats(token: string) {
-  const { data } = await resultsApi.get<TopicStatRecord[]>('/topic-stats', withAuth(token));
+export async function getTopicStats(_token?: string) {
+  const { data } = await resultsApi.get<TopicStatRecord[]>('/topic-stats', withAuth(_token));
   return data;
 }

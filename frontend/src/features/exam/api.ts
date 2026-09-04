@@ -5,11 +5,10 @@ const baseURL = `${import.meta.env.VITE_API_BASE_URL ?? '/api'}/exam`;
 
 const examApi = axios.create({
   baseURL,
+  withCredentials: true,
 });
 
-function withAuth(token: string) {
-  return { headers: { Authorization: `Bearer ${token}` } };
-}
+function withAuth(_token?: string) { return undefined; }
 
 export type ExamQuestionOption = {
   id: 'A' | 'B' | 'C' | 'D' | 'E';

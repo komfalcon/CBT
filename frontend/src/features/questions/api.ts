@@ -4,6 +4,7 @@ const baseURL = `${import.meta.env.VITE_API_BASE_URL ?? '/api'}`;
 
 const questionApi = axios.create({
   baseURL: `${baseURL}/questions`,
+  withCredentials: true,
 });
 
 export type QuestionOption = {
@@ -32,9 +33,7 @@ export type PaginatedQuestions = {
   totalPages: number;
 };
 
-function withAuth(token?: string) {
-  return token ? { headers: { Authorization: `Bearer ${token}` } } : undefined;
-}
+function withAuth(_token?: string): { headers?: Record<string, string> } { return {}; }
 
 export async function getQuestions(token: string, params?: Record<string, string | number | undefined>) {
   const { data } = await questionApi.get<PaginatedQuestions>('/', {

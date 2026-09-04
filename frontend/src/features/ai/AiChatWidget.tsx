@@ -216,9 +216,9 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
       loadSessions();
     } catch (requestError: any) {
       if (requestError.response?.status === 401 || requestError.response?.status === 403) {
-        setError('Falke AI is available with the Max plan. Upgrade your plan to start a tutoring chat.');
+        setError('FalkeAI is available with the Max plan. Upgrade your plan to start a tutoring chat.');
       } else {
-        setError(requestError.response?.data?.message || 'Falke AI could not respond. Please try again.');
+        setError(requestError.response?.data?.message || 'FalkeAI could not respond. Please try again.');
       }
       setMessages((previous) => previous.slice(0, -1));
       setInputValue(userMessage);
@@ -245,7 +245,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
             aria-labelledby="falke-title"
             onMouseDown={(event) => event.stopPropagation()}
           >
-            <aside className={`${showSidebar ? 'w-[248px] border-r' : 'w-0 border-r-0'} hidden shrink-0 flex-col overflow-hidden border-border bg-bg-secondary transition-[width,border-color] duration-300 ease-out md:flex`} aria-label="Falke AI chat history">
+            <aside className={`${showSidebar ? 'w-[248px] border-r' : 'w-0 border-r-0'} hidden shrink-0 flex-col overflow-hidden border-border bg-bg-secondary transition-[width,border-color] duration-300 ease-out md:flex`} aria-label="FalkeAI chat history">
               <div className="border-b border-border p-3">
                 <button onClick={handleNewSession} className="flex w-full items-center justify-center gap-2 rounded-xl border border-ai-flag/30 bg-ai-flag/10 px-3 py-2.5 text-xs font-bold text-ai-flag transition-[background-color,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-ai-flag/50 hover:bg-ai-flag/15 active:scale-[0.98]">
                   <Plus className="h-4 w-4" /> New chat
@@ -298,11 +298,11 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                   </button>
                   <FalkeMark />
                   <div className="min-w-0">
-                    <h2 id="falke-title" className="font-display text-sm font-bold text-text-primary">Falke AI</h2>
+                    <h2 id="falke-title" className="font-display text-sm font-bold text-text-primary">FalkeAI</h2>
                     <p className="mt-0.5 text-xs sm:text-[11px] text-text-secondary">Your private UTME study partner</p>
                   </div>
                 </div>
-                <button type="button" onClick={closePanel} className="min-h-11 min-w-11 rounded-xl p-2 text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary" aria-label="Close Falke AI" title="Close">
+                <button type="button" onClick={closePanel} className="min-h-11 min-w-11 rounded-xl p-2 text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary" aria-label="Close FalkeAI" title="Close">
                   <X className="h-5 w-5" />
                 </button>
               </header>
@@ -355,15 +355,15 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                       value={inputValue}
                       onChange={(event) => setInputValue(event.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder="Ask Falke AI about a topic, question, or study plan"
+                      placeholder="Ask FalkeAI about a topic, question, or study plan"
                       disabled={isLoading}
                       rows={1}
                       className="max-h-28 min-h-11 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-5 text-text-primary outline-none placeholder:text-text-muted disabled:cursor-not-allowed disabled:opacity-50"
-                      aria-label="Message Falke AI"
+                      aria-label="Message FalkeAI"
                     />
                     <button type="button" onClick={handleSend} disabled={!inputValue.trim() || isLoading} className="flex h-11 w-11 min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl border border-ai-flag/50 bg-ai-flag text-[#3f2c0c] shadow-[0_6px_14px_rgba(215,179,92,0.22)] transition-[transform,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:bg-ai-flag-hover hover:shadow-[0_8px_18px_rgba(215,179,92,0.3)] active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none" aria-label="Send message" title="Send message"><Send className="h-4 w-4" /></button>
                   </div>
-                  <p className="mt-2 text-center text-xs sm:text-[10px] text-text-muted">Falke AI can make mistakes. Check important answers with your study materials.</p>
+                  <p className="mt-2 text-center text-xs sm:text-[10px] text-text-muted">FalkeAI can make mistakes. Check important answers with your study materials.</p>
                 </div>
               </footer>
             </div>
@@ -377,10 +377,10 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
           type="button"
           onClick={() => setIsOpen(true)}
           className="group fixed bottom-6 right-6 z-[60] flex items-center gap-3 rounded-2xl border border-ai-flag/30 bg-bg-card px-3 py-3 shadow-[0_16px_34px_rgba(0,0,0,0.32)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-ai-flag/55 hover:shadow-[0_20px_42px_rgba(215,179,92,0.2)] active:scale-[0.98]"
-          aria-label="Open Falke AI tutor"
+          aria-label="Open FalkeAI tutor"
         >
           <FalkeMark />
-          <span className="hidden text-left sm:block"><span className="block text-xs font-bold text-text-primary">Ask Falke AI</span><span className="mt-0.5 block text-xs sm:text-[10px] text-text-secondary">Study support</span></span>
+          <span className="hidden text-left sm:block"><span className="block text-xs font-bold text-text-primary">Ask FalkeAI</span><span className="mt-0.5 block text-xs sm:text-[10px] text-text-secondary">Study support</span></span>
         </button>
       )}
     </>
