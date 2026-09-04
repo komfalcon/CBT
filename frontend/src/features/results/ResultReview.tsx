@@ -34,7 +34,7 @@ export default function ResultReview() {
   const [filterSubject, setFilterSubject] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<'all' | 'correct' | 'incorrect' | 'unanswered'>('all');
 
-  const token = useMemo(() => localStorage.getItem('accessToken') || '', []);
+  const token = '';
 
   useEffect(() => {
     if (!resultId) return;
@@ -125,7 +125,8 @@ export default function ResultReview() {
       const topicSlug = String(question.topic).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       const response = await fetch(`${apiBase}/v1/auth/handoffs`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           audience: 'library',
           scope: ['profile', 'topic_context', 'return_context'],

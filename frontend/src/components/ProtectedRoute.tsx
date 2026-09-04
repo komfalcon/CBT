@@ -1,13 +1,19 @@
+import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { getMe } from '../features/auth/api';
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
+export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const [state, setState] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
 
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const token = localStorage.getItem('accessToken');
-  if (!token || token.trim() === '') {
-    return <Navigate to="/auth?mode=login" replace />;
+  useEffect(() => {
+    let mounted = true;
+    getMe().then(() => mounted && setState('authenticated')).catch(() => mounted && setState('unauthenticated'));
+    return () => { mounted = false; };
+  }, []);
+
+  if (state === 'loading') {
+    return <div className="min-h-screen bg-bg-primary flex items-center justify-center text-text-secondary">Checking your session…</div>;
   }
+  if (state === 'unauthenticated') return <Navigate to="/auth?mode=login" replace />;
   return <>{children}</>;
 }

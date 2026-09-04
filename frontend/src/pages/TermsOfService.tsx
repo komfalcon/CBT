@@ -19,7 +19,7 @@ export default function TermsOfService() {
       <SupportHero
         eyebrow="Terms of service"
         title="Clear rules for focused preparation."
-        description="These terms set out how candidates may use JAMB UTME Prep by Aurikrex, including accounts, CBT keys, paid plans, exam integrity, and the question bank."
+        description="These terms set out how candidates may use Aurikrex Exam Arena by Aurikrex, including accounts, CBT keys, paid plans, exam integrity, and the question bank."
         icon={ScrollText}
         meta={
           <div className="flex items-center gap-3 text-xs text-text-muted">
@@ -44,9 +44,9 @@ export default function TermsOfService() {
         </aside>
 
         <article className="min-w-0 space-y-14">
-          <SupportSection id="agreement" eyebrow="01 — agreement" title="Using JAMB UTME Prep means accepting these terms">
+          <SupportSection id="agreement" eyebrow="01 — agreement" title="Using Aurikrex Exam Arena means accepting these terms">
             <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
-              <p>These Terms of Service govern your use of the JAMB UTME Prep website, candidate portal, question bank, mock exams, subject drills, performance tools, CBT-key sign-in, and Falke AI features (the <strong className="font-semibold text-text-primary">“Service”</strong>). The Service is operated by Aurikrex. By creating an account, purchasing a plan or test, or otherwise using the Service, you agree to these Terms and our Privacy Policy.</p>
+              <p>These Terms of Service govern your use of the Aurikrex Exam Arena website, candidate portal, question bank, mock exams, subject drills, performance tools, CBT-key sign-in, and FalkeAI features (the <strong className="font-semibold text-text-primary">“Service”</strong>). The Service is operated by Aurikrex. By creating an account, purchasing a plan or test, or otherwise using the Service, you agree to these Terms and our Privacy Policy.</p>
               <p className="mt-4">You must be at least 13 years old to create an account. If you are under 18, you confirm that a parent or guardian has authorised your use where required. You must provide accurate, current account information and use the Service only for personal, non-commercial UTME preparation.</p>
             </div>
           </SupportSection>
@@ -66,7 +66,7 @@ export default function TermsOfService() {
                 <tbody className="text-text-secondary">
                   <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Plus</td><td className="px-6 py-4">One full mock exam per day, detailed score review, and CBT-key access.</td><td className="px-6 py-4">A monthly paid plan at the price shown during Paystack checkout. Cancel before the next billing date to stop renewal; access continues to the end of the paid period.</td></tr>
                   <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Pro</td><td className="px-6 py-4">Two full mock exams per day, detailed score review, and subject-specific drills.</td><td className="px-6 py-4">A monthly paid plan at the price shown during Paystack checkout. Cancellation stops the next renewal and does not reduce access already paid for.</td></tr>
-                  <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Max</td><td className="px-6 py-4">Up to five full mock exams per day, advanced performance review, subject drills, and Falke AI access subject to applicable daily AI limits.</td><td className="px-6 py-4">A monthly paid plan at the price shown during Paystack checkout. Cancel before the next billing date to stop renewal; any applicable daily feature limits continue until the current period ends.</td></tr>
+                  <tr className="border-b border-border"><td className="px-6 py-4 font-semibold text-text-primary">Max</td><td className="px-6 py-4">Up to five full mock exams per day, advanced performance review, subject drills, and FalkeAI access subject to applicable daily AI limits.</td><td className="px-6 py-4">A monthly paid plan at the price shown during Paystack checkout. Cancel before the next billing date to stop renewal; any applicable daily feature limits continue until the current period ends.</td></tr>
                   <tr><td className="px-6 py-4 font-semibold text-text-primary">Pay per test</td><td className="px-6 py-4">A single drill or mock attempt identified at checkout, with the associated result and review where stated.</td><td className="px-6 py-4">A one-time payment, not a recurring subscription. It is personal, non-transferable, and may not be exchanged for a plan unless we agree otherwise in writing.</td></tr>
                 </tbody>
               </table>
@@ -87,10 +87,10 @@ export default function TermsOfService() {
 
           <SupportSection id="acceptable-use" eyebrow="05 — preparation with integrity" title="What responsible use looks like">
             <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.06] p-6"><BookOpenCheck className="h-5 w-5 text-emerald-300" /><h3 className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em] text-text-primary">Use the platform to learn</h3><p className="mt-2 text-[13px] leading-6 text-text-secondary">Take mocks and drills as your own practice, use result reviews to improve, and use Falke AI for explanations and study guidance. JAMB UTME Prep is a preparation tool, not an official JAMB examination service.</p></div>
+              <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.06] p-6"><BookOpenCheck className="h-5 w-5 text-emerald-300" /><h3 className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em] text-text-primary">Use the platform to learn</h3><p className="mt-2 text-[13px] leading-6 text-text-secondary">Take mocks and drills as your own practice, use result reviews to improve, and use FalkeAI for explanations and study guidance. Aurikrex Exam Arena is a preparation tool, not an official JAMB examination service.</p></div>
               <div className="rounded-2xl border border-error/20 bg-error/[0.06] p-6"><Ban className="h-5 w-5 text-error" /><h3 className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em] text-text-primary">Do not misuse access or content</h3><p className="mt-2 text-[13px] leading-6 text-text-secondary">Do not share CBT keys or accounts, copy or distribute question-bank material, use bots or scripts, manipulate scores or timers, probe the service, interfere with other users, submit harmful content, or use the Service for cheating in any examination.</p></div>
             </div>
-            <p className="mt-5 rounded-2xl support-surface-soft p-5 text-[13px] leading-6 text-text-secondary">You must comply with Nigerian law and applicable school or examination rules. You may not represent mock scores, progress, or AI output as an official JAMB result. Falke AI can make mistakes; you should use it as study support and check important answers against your course materials and the platform’s reviewed explanations.</p>
+            <p className="mt-5 rounded-2xl support-surface-soft p-5 text-[13px] leading-6 text-text-secondary">You must comply with Nigerian law and applicable school or examination rules. You may not represent mock scores, progress, or AI output as an official JAMB result. FalkeAI can make mistakes; you should use it as study support and check important answers against your course materials and the platform’s reviewed explanations.</p>
           </SupportSection>
 
           <SupportSection id="content" eyebrow="06 — content ownership" title="The question bank and platform belong to Aurikrex">
@@ -102,7 +102,7 @@ export default function TermsOfService() {
 
           <SupportSection id="availability" eyebrow="07 — service limits" title="Availability, AI output, and limitation of liability">
             <div className="support-surface rounded-2xl p-7 text-[14px] leading-7 text-text-secondary">
-              <p>We work to keep JAMB UTME Prep available and accurate, but the Service is provided on an <strong className="font-semibold text-text-primary">“as available”</strong> basis. We do not guarantee uninterrupted access, a particular UTME score, admission outcome, the accuracy of every question or explanation, or that Falke AI output will always be correct or complete. Use good academic judgement and verify material that is important to your preparation.</p>
+              <p>We work to keep Aurikrex Exam Arena available and accurate, but the Service is provided on an <strong className="font-semibold text-text-primary">“as available”</strong> basis. We do not guarantee uninterrupted access, a particular UTME score, admission outcome, the accuracy of every question or explanation, or that FalkeAI output will always be correct or complete. Use good academic judgement and verify material that is important to your preparation.</p>
               <p className="mt-4">To the fullest extent allowed by law, Aurikrex is not liable for indirect, incidental, special, consequential, exemplary, or punitive losses arising from use of the Service. Our aggregate liability for a claim relating to a paid Service will not exceed the amount you paid us for that Service in the three months before the event giving rise to the claim. Nothing in these Terms excludes liability that cannot lawfully be excluded or limited.</p>
             </div>
           </SupportSection>

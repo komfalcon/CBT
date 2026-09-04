@@ -2,6 +2,8 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { ExamService } from './exam.service';
+import { CreateSessionDto } from './dto/create-session.dto';
+import { SaveAnswersDto } from './dto/save-answers.dto';
 
 @Controller('exam')
 @UseGuards(JwtAuthGuard)
@@ -11,15 +13,7 @@ export class ExamController {
   @Post('sessions')
   async createSession(
     @CurrentUser() user: any,
-    @Body() body: {
-      type: 'mock' | 'drill'
-      subject?: string
-      subjects?: string[]
-      subjectConfigs?: Record<string, { mode: 'random' | 'specific'; topics: string[] }>
-      count?: number
-      difficultyLevel?: string
-      topics?: string[]
-    },
+    @Body() body: CreateSessionDto,
   ) {
     const session = await this.examService.createSession(
       user.sub,
@@ -50,7 +44,7 @@ export class ExamController {
   async saveAnswers(
     @CurrentUser() user: any,
     @Param('sessionId') sessionId: string,
-    @Body() body: { answers: Record<string, string>; timeRemaining: number },
+    @Body() body: SaveAnswersDto,
   ) {
     const session = await this.examService.saveAnswers(
       sessionId,

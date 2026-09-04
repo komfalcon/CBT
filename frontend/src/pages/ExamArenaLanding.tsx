@@ -51,7 +51,7 @@ export default function ExamArenaLanding() {
       <header className="relative z-20 border-b border-white/10 bg-[#07111f]/80 backdrop-blur-xl">
         <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8">
           <Link to="/" className="flex items-center gap-3" aria-label="Aurikrex Exam Arena home">
-            <span className="grid h-10 w-10 place-items-center rounded-2xl border border-cyan-300/35 bg-cyan-300/10 text-xs font-black tracking-widest text-cyan-200">AX</span>
+            <img src="/favicon.svg" alt="" className="h-10 w-10 shrink-0 rounded-2xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
             <span>
               <span className="block text-sm font-black tracking-[.16em] text-white">EXAM ARENA</span>
               <span className="block text-xs font-bold uppercase tracking-[.28em] text-cyan-300/70">by Aurikrex</span>
@@ -98,7 +98,7 @@ export default function ExamArenaLanding() {
               <Link to="/auth?mode=register" className="group inline-flex items-center justify-center gap-3 rounded-2xl bg-cyan-300 px-6 py-4 text-sm font-black text-[#07111f] transition hover:-translate-y-0.5 hover:bg-cyan-200">Build my readiness map <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></Link>
               <a href="#system" className="inline-flex items-center justify-center gap-3 rounded-2xl border border-white/15 bg-white/[.04] px-6 py-4 text-sm font-bold text-slate-200 transition hover:bg-white/[.08]">See the system <ChevronRight className="h-4 w-4" /></a>
             </div>
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-slate-500"><span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-emerald-300" /> Secure by design</span><span className="inline-flex items-center gap-2"><Target className="h-4 w-4 text-cyan-300" /> 17 JAMB subjects</span><span className="inline-flex items-center gap-2"><BrainCircuit className="h-4 w-4 text-violet-300" /> Falke AI coach</span></div>
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-slate-500"><span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-emerald-300" /> Secure by design</span><span className="inline-flex items-center gap-2"><Target className="h-4 w-4 text-cyan-300" /> 17 JAMB subjects</span><span className="inline-flex items-center gap-2"><BrainCircuit className="h-4 w-4 text-violet-300" /> FalkeAI coach</span></div>
           </div>
 
           <div className="relative mx-auto w-full max-w-[520px]" aria-label="Exam Arena readiness map preview">

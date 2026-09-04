@@ -162,29 +162,6 @@ export class AuthService implements OnModuleInit {
     return { message: 'Email verified successfully.' };
   }
 
-  async recoverAdmin() {
-    const email = 'falcon@aurikrex.tech';
-    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.email, email)).limit(1);
-    if (!user) {
-      return { error: 'Admin user not found' };
-    }
-    
-    // Reset password
-    const passwordHash = await bcrypt.hash('Korex1025$1025$', 10);
-    
-    await this.db.update(schema.users).set({
-      passwordHash,
-      account_status: 'active',
-      role: 'admin' as any,
-    }).where(eq(schema.users.id, user.id));
-    
-    // Return decrypted CBT key (getter is invoked on access)
-    return {
-      message: 'Admin recovered',
-      email: user.email,
-      cbt_key: decryptFieldValue(user.cbt_key || undefined),
-    };
-  }
 
   async validateUserCredentials(email: string, password: string): Promise<UserDocument> {
     const normalizedEmail = email.toLowerCase();
@@ -212,12 +189,12 @@ export class AuthService implements OnModuleInit {
       const failed_login_attempts = (user.failed_login_attempts || 0) + 1;
       const lockoutMs = calculateLockoutDurationMs(failed_login_attempts);
       const lockout_until = lockoutMs > 0 ? new Date(Date.now() + lockoutMs) : null;
-      
+
       await this.db.update(schema.users).set({
         failed_login_attempts,
         lockout_until,
       }).where(eq(schema.users.id, user.id));
-      
+
       throw new UnauthorizedException('Invalid email or password.');
     }
 
@@ -254,7 +231,7 @@ export class AuthService implements OnModuleInit {
     const tokens = await this.issueAuthTokens(user);
     updateData.last_login = new Date();
     updateData.last_login_ip = ipAddress || null;
-    
+
     await this.db.update(schema.users).set(updateData).where(eq(schema.users.id, user.id));
 
     return {
@@ -570,12 +547,12 @@ export class AuthService implements OnModuleInit {
     if (!user.cbt_key) {
       const plainCbtKey = generateCbtKey();
       const hash = createHash('sha256').update(plainCbtKey).digest('hex');
-      
+
       await this.db.update(schema.users).set({
         cbt_key: plainCbtKey,
         cbt_key_hash: hash,
       }).where(eq(schema.users.id, user.id));
-      
+
       Object.assign(user, { cbt_key: plainCbtKey, cbt_key_hash: hash });
     }
 

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Key, 
-  CreditCard, 
+import {
+  LayoutDashboard,
+  Users,
+  Key,
+  CreditCard,
   Database,
   LogOut,
   Menu,
@@ -17,7 +17,7 @@ export default function AdminLayout() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('accessToken');
+
     navigate('/auth?mode=login', { replace: true });
   };
 
@@ -33,14 +33,14 @@ export default function AdminLayout() {
     <div className="flex h-screen bg-bg-primary overflow-hidden">
       {/* Mobile sidebar overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden animate-fade-in"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside 
+      <aside
         className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-bg-card border-r border-border transform transition-transform duration-300 ease-in-out flex flex-col ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
@@ -67,8 +67,8 @@ export default function AdminLayout() {
                 onClick={() => setIsSidebarOpen(false)}
                 className={({ isActive }) => `
                   flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all
-                  ${isActive 
-                    ? 'bg-primary/10 text-primary' 
+                  ${isActive
+                    ? 'bg-primary/10 text-primary'
                     : 'text-text-secondary hover:bg-bg-secondary hover:text-text-primary'
                   }
                 `}

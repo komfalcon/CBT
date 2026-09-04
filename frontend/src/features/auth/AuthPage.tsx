@@ -11,7 +11,7 @@ import {
   loginWithCbtKey,
 } from './api';
 import { Lock, Mail, User, Phone, Key, ArrowRight, ShieldAlert, CheckCircle2, AlertCircle } from 'lucide-react';
-import { Button, Alert, Modal } from '../../components';
+import { Button, Alert } from '../../components';
 import { ThemeToggle } from '../../components/ThemeToggle';
 
 type AuthMode = 'login' | 'register' | 'verify-email' | 'forgot-password' | 'reset-password' | 'cbt-key-login';
@@ -19,11 +19,11 @@ type AuthMode = 'login' | 'register' | 'verify-email' | 'forgot-password' | 'res
 export default function AuthPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   const [mode, setMode] = useState<AuthMode>('login');
   const [message, setMessage] = useState<string>('');
   const [messageType, setMessageType] = useState<'info' | 'error' | 'success'>('info');
-  
+
   // Tokens & States
   const [tempToken, setTempToken] = useState<string>('');
   const [otp, setOtp] = useState<string>('');
@@ -38,16 +38,12 @@ export default function AuthPage() {
   const [loginState, setLoginState] = useState({ email: '', password: '' });
   const [registerState, setRegisterState] = useState({ fullName: '', email: '', phone: '', password: '', confirmPassword: '' });
 
-  // Sandbox Google Mock state
-  const [isGoogleMockOpen, setIsGoogleMockOpen] = useState<boolean>(false);
-  const [mockGoogleEmail, setMockGoogleEmail] = useState<string>('guest@google.com');
-  const [mockGoogleName, setMockGoogleName] = useState<string>('Guest Candidate');
 
   // Verify Reset Password token from URL query params
   useEffect(() => {
     const tokenParam = searchParams.get('token');
     const modeParam = searchParams.get('mode');
-    
+
     if (tokenParam) {
       setResetToken(tokenParam);
       setMode('reset-password');
@@ -86,7 +82,7 @@ export default function AuthPage() {
   const initializeGoogleAuth = () => {
     const google = (window as any).google;
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
-    
+
     if (google && clientId) {
       setTimeout(() => {
         try {
@@ -121,19 +117,17 @@ export default function AuthPage() {
         throw new Error('Received HTML response instead of JSON. Your VITE_API_BASE_URL is likely misconfigured on Render.');
       }
 
-      if (response.requiresMFA && response.tempToken) {
-        setTempToken(response.tempToken);
+      if (response.requiresMFA) {
+        setTempToken('cookie');
         setMode('login'); // Will show OTP form
         setMessage('MFA required. Enter your 6-digit OTP code.');
-      } else if (response.accessToken && response.refreshToken) {
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken);
+      } else if (!response.requiresMFA) {
         setMessage('Google login successful!');
         setMessageType('success');
         navigate('/dashboard');
       } else {
         setMessageType('error');
-        setMessage('Google sign-in failed: no tokens returned. Please try again.');
+        setMessage('Google sign-in failed. Please try again.');
       }
     } catch (err: any) {
       console.error(err);
@@ -142,36 +136,6 @@ export default function AuthPage() {
     }
   };
 
-  const handleGoogleMockLogin = async () => {
-    try {
-      setMessageType('info');
-      setMessage('Simulating sandbox sign-in...');
-      
-      const dummyPassword = 'MockPassword123!';
-      try {
-        await register({
-          fullName: mockGoogleName,
-          email: mockGoogleEmail,
-          password: dummyPassword,
-          role: 'student',
-        });
-      } catch (e) {
-        // Ignore if already registered
-      }
-
-      const response = await login({ email: mockGoogleEmail, password: dummyPassword });
-      localStorage.setItem('accessToken', response.accessToken || '');
-      localStorage.setItem('refreshToken', response.refreshToken || '');
-      setMessage('Sandbox sign-in successful!');
-      setMessageType('success');
-      setIsGoogleMockOpen(false);
-      navigate('/dashboard');
-    } catch (err) {
-      console.error(err);
-      setMessageType('error');
-      setMessage('Sandbox login failed.');
-    }
-  };
 
   const handleRegister = async (event: FormEvent) => {
     event.preventDefault();
@@ -204,13 +168,10 @@ export default function AuthPage() {
         phone: registerState.phone,
         password: registerState.password,
       });
-      
+
       if (response.token) {
-        console.log('--- Development Email Verification Code ---');
-        console.log('%c' + response.token, 'font-size: 20px; color: #6366f1; font-weight: bold; background: #1e1b4b; padding: 4px 8px; rounded: 4px;');
-        console.log('Copy this 6-digit code to verify your email.');
       }
-      
+
       setVerifyEmailAddress(registerState.email);
       setMessage(response.message || 'Registration successful! Enter the 6-digit code below.');
       setMessageType('success');
@@ -227,14 +188,12 @@ export default function AuthPage() {
       setMessageType('info');
       setMessage('Verifying credentials...');
       const response = await login(loginState);
-      
-      if (response.requiresMFA && response.tempToken) {
-        setTempToken(response.tempToken);
+
+      if (response.requiresMFA) {
+        setTempToken('cookie');
         setMessage('MFA required. Enter your 6-digit OTP code.');
       } else {
-        localStorage.setItem('accessToken', response.accessToken || '');
-        localStorage.setItem('refreshToken', response.refreshToken || '');
-        setMessage('Login successful. Redirecting...');
+                        setMessage('Login successful. Redirecting...');
         setMessageType('success');
         navigate('/dashboard');
       }
@@ -253,9 +212,7 @@ export default function AuthPage() {
       setMessage('Validating CBT Access Key...');
       const response = await loginWithCbtKey({ cbtKey });
 
-      localStorage.setItem('accessToken', response.accessToken || '');
-      localStorage.setItem('refreshToken', response.refreshToken || '');
-      setMessage('CBT Key Login successful. Redirecting...');
+                  setMessage('CBT Key Login successful. Redirecting...');
       setMessageType('success');
       navigate('/dashboard');
     } catch (error: any) {
@@ -271,11 +228,9 @@ export default function AuthPage() {
     try {
       setMessageType('info');
       setMessage('Checking OTP...');
-      const response = await verifyOtp({ tempToken, otp });
-      
-      localStorage.setItem('accessToken', response.accessToken || '');
-      localStorage.setItem('refreshToken', response.refreshToken || '');
-      setMessage('MFA authentication complete!');
+      const response = await verifyOtp({ otp });
+
+                  setMessage('MFA authentication complete!');
       setMessageType('success');
       setTempToken('');
       setOtp('');
@@ -307,12 +262,6 @@ export default function AuthPage() {
       setMessageType('info');
       setMessage('Sending reset code...');
       const response = await forgotPassword(forgotEmail);
-      
-      if (response.token) {
-        console.log('--- Development Password Reset Code ---');
-        console.log('%c' + response.token, 'font-size: 20px; color: #a855f7; font-weight: bold; background: #3b0764; padding: 4px 8px; rounded: 4px;');
-        console.log('Copy this 6-digit code to reset your password.');
-      }
 
       setMessage(response.message || 'If registered, a 6-digit reset code has been sent.');
       setMessageType('success');
@@ -346,7 +295,7 @@ export default function AuthPage() {
     }
   };
 
-  const isGoogleAvailable = !!import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const isGoogleAvailable = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
 
   // Password Requirement Checks
   const pass = registerState.password;
@@ -358,11 +307,11 @@ export default function AuthPage() {
   };
 
   const strengthCount = Object.values(reqs).filter(Boolean).length;
-  const strengthText = 
+  const strengthText =
     strengthCount === 0 ? '' :
     strengthCount <= 2 ? 'Weak' :
     strengthCount === 3 ? 'Medium' : 'Strong';
-  const strengthColor = 
+  const strengthColor =
     strengthCount === 0 ? 'bg-slate-800' :
     strengthCount <= 2 ? 'bg-rose-500' :
     strengthCount === 3 ? 'bg-amber-500' : 'bg-emerald-500';
@@ -382,7 +331,7 @@ export default function AuthPage() {
             <div>
               <div className="flex items-center gap-3">
                 <img src="/favicon.svg" alt="" className="h-10 w-10 shrink-0 rounded-xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
-                <div><p className="font-display text-[15px] font-semibold tracking-[-0.02em] text-white">JAMB UTME Prep</p><p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-blue-300">by Aurikrex</p></div>
+                <div><p className="font-display text-[15px] font-semibold tracking-[-0.02em] text-white">Aurikrex Exam Arena</p><p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-blue-300">by Aurikrex</p></div>
               </div>
               <div className="mt-20 max-w-sm">
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-200">Your next score starts here</div>
@@ -399,7 +348,7 @@ export default function AuthPage() {
           <section className="auth-form-panel min-w-0 max-h-[calc(100vh-48px)] overflow-y-auto p-4 sm:p-9 lg:p-10">
             <div className="mx-auto min-w-0 w-full max-w-md">
               <div className="mb-8 flex items-start justify-between gap-6">
-                <div><div className="auth-form-brand mb-4 flex items-center gap-2 lg:hidden"><img src="/favicon.svg" alt="" className="h-9 w-9 shrink-0 rounded-xl object-cover" /><span className="font-display text-[15px] font-semibold text-white">JAMB UTME Prep</span></div><div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Candidate portal</div><h1 className="auth-title mt-3 font-display text-3xl font-semibold tracking-[-0.055em] text-white">{mode === 'login' && 'Welcome back.'}{mode === 'register' && 'Create your profile.'}{mode === 'cbt-key-login' && 'Use your CBT key.'}{mode === 'verify-email' && 'Verify your email.'}{mode === 'forgot-password' && 'Reset your password.'}{mode === 'reset-password' && 'Set a new password.'}</h1><p className="auth-subtitle mt-2 text-[14px] leading-6 text-slate-400">{mode === 'login' && 'Sign in to continue practicing.'}{mode === 'register' && 'Create a candidate profile and start practicing.'}{mode === 'cbt-key-login' && 'Quick access for shared devices and cafe sessions.'}{mode === 'verify-email' && 'Confirm your email to activate your account.'}{mode === 'forgot-password' && 'Enter your email to receive a reset code.'}{mode === 'reset-password' && 'Enter your new account password below.'}</p></div>
+                <div><div className="auth-form-brand mb-4 flex items-center gap-2 lg:hidden"><img src="/favicon.svg" alt="" className="h-9 w-9 shrink-0 rounded-xl object-cover" /><span className="font-display text-[15px] font-semibold text-white">Aurikrex Exam Arena</span></div><div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Candidate portal</div><h1 className="auth-title mt-3 font-display text-3xl font-semibold tracking-[-0.055em] text-white">{mode === 'login' && 'Welcome back.'}{mode === 'register' && 'Create your profile.'}{mode === 'cbt-key-login' && 'Use your CBT key.'}{mode === 'verify-email' && 'Verify your email.'}{mode === 'forgot-password' && 'Reset your password.'}{mode === 'reset-password' && 'Set a new password.'}</h1><p className="auth-subtitle mt-2 text-[14px] leading-6 text-slate-400">{mode === 'login' && 'Sign in to continue practicing.'}{mode === 'register' && 'Create a candidate profile and start practicing.'}{mode === 'cbt-key-login' && 'Quick access for shared devices and cafe sessions.'}{mode === 'verify-email' && 'Confirm your email to activate your account.'}{mode === 'forgot-password' && 'Enter your email to receive a reset code.'}{mode === 'reset-password' && 'Enter your new account password below.'}</p></div>
                 <span className="auth-secure-badge mt-1 hidden shrink-0 whitespace-nowrap rounded-full border border-emerald-400/20 bg-emerald-400/[0.08] px-2.5 py-1 text-xs font-semibold text-emerald-300 sm:inline-flex">Secure access</span>
               </div>
 
@@ -416,12 +365,12 @@ export default function AuthPage() {
                   <div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Email</label><div className="relative"><Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="email" required placeholder="name@domain.com" value={loginState.email} onChange={(e) => setLoginState((prev) => ({ ...prev, email: e.target.value }))} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:bg-white/[0.07] focus:ring-4 focus:ring-blue-500/10" /></div></div>
                   <div className="space-y-2"><div className="flex items-center justify-between"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Password</label><button type="button" onClick={() => setMode('forgot-password')} className="text-xs font-medium text-blue-300 transition hover:text-blue-200">Forgot password?</button></div><div className="relative"><Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="password" required placeholder="••••••••" value={loginState.password} onChange={(e) => setLoginState((prev) => ({ ...prev, password: e.target.value }))} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:bg-white/[0.07] focus:ring-4 focus:ring-blue-500/10" /></div></div>
                   <Button type="submit" fullWidth>Sign in <ArrowRight className="h-4 w-4" /></Button>
-                  <div className="pt-2"><div className="relative flex items-center gap-3 py-2"><div className="h-px flex-1 bg-white/[0.08]" /><span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-600">Or continue with</span><div className="h-px flex-1 bg-white/[0.08]" /></div>{isGoogleAvailable ? <div className="mt-3 flex w-full justify-center" id="google-signin-btn"></div> : <div className="mt-3 flex justify-center"><button type="button" onClick={() => setIsGoogleMockOpen(true)} className="flex items-center justify-center gap-2 rounded-lg border border-white/[0.10] bg-white/[0.04] px-5 py-3 text-[14px] font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"><span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign in with Google</button></div>}</div>
+                  <div className="pt-2"><div className="relative flex items-center gap-3 py-2"><div className="h-px flex-1 bg-white/[0.08]" /><span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-600">Or continue with</span><div className="h-px flex-1 bg-white/[0.08]" /></div>{isGoogleAvailable ? <div className="mt-3 flex w-full justify-center" id="google-signin-btn"></div> : <div className="mt-3 flex justify-center"><button type="button" onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')} className="flex items-center justify-center gap-2 rounded-lg border border-white/[0.10] bg-white/[0.04] px-5 py-3 text-[14px] font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"><span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign in with Google</button></div>}</div>
                 </form>
               )}
 
               {mode === 'login' && tempToken && (
-                <form className="space-y-5 animate-slide-up" onSubmit={async (e) => { e.preventDefault(); if (otp.length !== 6) { setMessageType('error'); setMessage('Please enter a valid 6-digit OTP code.'); return; } try { setMessageType('info'); setMessage('Verifying OTP code...'); const response = await verifyOtp({ tempToken, otp }); if (response.accessToken && response.refreshToken) { localStorage.setItem('accessToken', response.accessToken); localStorage.setItem('refreshToken', response.refreshToken); setMessage('Login successful! Redirecting...'); setMessageType('success'); navigate('/dashboard'); } else throw new Error('Verification failed.'); } catch (err: any) { setMessageType('error'); setMessage(err.response?.data?.message || 'Invalid OTP code. Please try again.'); } }}>
+                <form className="space-y-5 animate-slide-up" onSubmit={handleVerifyOtp}>
                   <div className="auth-callout rounded-xl border border-blue-400/15 bg-blue-400/[0.07] p-4 text-[14px] leading-6 text-blue-100/75"><div className="flex items-center gap-2 font-semibold text-blue-200"><ShieldAlert className="h-4 w-4" /> Two-step verification</div><p className="mt-1.5">Enter the 6-digit code from your authenticator to continue.</p></div>
                   <div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Authenticator code</label><div className="relative"><ShieldAlert className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="text" required placeholder="000000" maxLength={6} value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-center font-mono text-[14px] tracking-[0.5em] text-white outline-none transition focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div></div>
                   <Button type="submit" fullWidth>Verify code <ArrowRight className="h-4 w-4" /></Button><button type="button" onClick={() => { setTempToken(''); setOtp(''); setMessage(''); }} className="w-full text-center text-[14px] text-slate-500 transition hover:text-white">Cancel and go back</button>
@@ -434,11 +383,11 @@ export default function AuthPage() {
                   <div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Password</label><div className="relative"><Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="password" required placeholder="Create password" value={registerState.password} onChange={(e) => setRegisterState((prev) => ({ ...prev, password: e.target.value }))} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:bg-white/[0.07] focus:ring-4 focus:ring-blue-500/10" /></div>{pass.length > 0 && <div className="auth-password-box space-y-2 rounded-xl border border-white/[0.07] bg-white/[0.025] p-3 animate-slide-up"><div className="flex items-center justify-between"><span className="text-xs font-medium text-slate-500">Password strength</span><span className="text-xs font-semibold text-slate-300">{strengthText}</span></div><div className="h-1.5 overflow-hidden rounded-full bg-white/[0.08]"><div className={'h-full ' + strengthColor + ' transition-all duration-500'} style={{ width: ((strengthCount / 4) * 100) + '%' }} /></div><div className="grid grid-cols-2 gap-2 pt-1 text-xs">{[[reqs.length, 'Min 8 characters'], [reqs.upper, '1 uppercase letter'], [reqs.number, '1 number'], [reqs.special, '1 special character']].map(([valid, label]) => <div key={label as string} className={'flex items-center gap-1.5 ' + (valid ? 'text-emerald-300' : 'text-slate-500')}>{valid ? <CheckCircle2 className="h-3.5 w-3.5" /> : <AlertCircle className="h-3.5 w-3.5" />}<span>{label as string}</span></div>)}</div></div>}</div>
                   <div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Confirm password</label><div className="relative"><Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="password" required placeholder="Repeat password" value={registerState.confirmPassword} onChange={(e) => setRegisterState((prev) => ({ ...prev, confirmPassword: e.target.value }))} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:bg-white/[0.07] focus:ring-4 focus:ring-blue-500/10" /></div>{registerState.confirmPassword.length > 0 && registerState.password !== registerState.confirmPassword && <p className="text-xs text-rose-300">Passwords do not match.</p>}</div>
                   <Button type="submit" fullWidth>Register candidate <ArrowRight className="h-4 w-4" /></Button>
-                  <div className="pt-2"><div className="relative flex items-center gap-3 py-2"><div className="h-px flex-1 bg-white/[0.08]" /><span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-600">Or continue with</span><div className="h-px flex-1 bg-white/[0.08]" /></div>{isGoogleAvailable ? <div className="mt-3 flex w-full justify-center" id="google-signin-btn"></div> : <div className="mt-3 flex justify-center"><Button type="button" variant="secondary" size="sm" onClick={() => setIsGoogleMockOpen(true)}><span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign up with Google</Button></div>}</div>
+                  <div className="pt-2"><div className="relative flex items-center gap-3 py-2"><div className="h-px flex-1 bg-white/[0.08]" /><span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-600">Or continue with</span><div className="h-px flex-1 bg-white/[0.08]" /></div>{isGoogleAvailable ? <div className="mt-3 flex w-full justify-center" id="google-signin-btn"></div> : <div className="mt-3 flex justify-center"><Button type="button" variant="secondary" size="sm" onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')}><span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign up with Google</Button></div>}</div>
                 </form>
               )}
 
-              {mode === 'cbt-key-login' && <form className="space-y-5" onSubmit={handleCbtKeyLogin}><Alert variant="info" title="Quick cafe roaming access">Type your 8-digit unique access key allotted during registration to login directly without typing your password.</Alert><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">CBT access key</label><div className="relative"><Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="text" required placeholder="CBT-XXXXXX" value={cbtKey} onChange={(e) => setCbtKey(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 font-mono text-[14px] tracking-wide text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div></div><Button type="submit" fullWidth>Quick login <ArrowRight className="h-4 w-4" /></Button><div className="pt-2"><div className="relative flex items-center gap-3 py-2"><div className="h-px flex-1 bg-white/[0.08]" /><span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-600">Or continue with</span><div className="h-px flex-1 bg-white/[0.08]" /></div>{isGoogleAvailable ? <div className="mt-3 flex w-full justify-center" id="google-signin-btn"></div> : <div className="mt-3 flex justify-center"><Button type="button" variant="secondary" size="sm" onClick={() => setIsGoogleMockOpen(true)}><span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign in with Google</Button></div>}</div></form>}
+              {mode === 'cbt-key-login' && <form className="space-y-5" onSubmit={handleCbtKeyLogin}><Alert variant="info" title="Quick cafe roaming access">Type your 8-digit unique access key allotted during registration to login directly without typing your password.</Alert><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">CBT access key</label><div className="relative"><Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="text" required placeholder="CBT-XXXXXX" value={cbtKey} onChange={(e) => setCbtKey(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 font-mono text-[14px] tracking-wide text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div></div><Button type="submit" fullWidth>Quick login <ArrowRight className="h-4 w-4" /></Button><div className="pt-2"><div className="relative flex items-center gap-3 py-2"><div className="h-px flex-1 bg-white/[0.08]" /><span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-600">Or continue with</span><div className="h-px flex-1 bg-white/[0.08]" /></div>{isGoogleAvailable ? <div className="mt-3 flex w-full justify-center" id="google-signin-btn"></div> : <div className="mt-3 flex justify-center"><Button type="button" variant="secondary" size="sm" onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')}><span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign in with Google</Button></div>}</div></form>}
 
               {mode === 'verify-email' && <form className="space-y-5 animate-fade-in" onSubmit={handleVerifyEmail}><Alert variant="info" title="Check your inbox">A 6-digit verification code has been sent to your email address. Please enter it below.</Alert><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Email address</label><input type="email" required placeholder="candidate@domain.com" value={verifyEmailAddress} onChange={(e) => setVerifyEmailAddress(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] px-4 py-3.5 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">6-digit verification code</label><input type="text" required maxLength={6} placeholder="123456" value={verificationToken} onChange={(e) => setVerificationToken(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] px-4 py-3.5 text-center font-mono text-[14px] tracking-widest text-blue-200 outline-none transition focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div><Button type="submit" fullWidth>Complete verification</Button><button type="button" onClick={() => setMode('login')} className="w-full text-center text-[14px] text-slate-500 transition hover:text-white">Back to sign in</button></form>}
 
@@ -453,9 +402,7 @@ export default function AuthPage() {
         </div>
       </div>
 
-      <Modal isOpen={isGoogleMockOpen} onClose={() => setIsGoogleMockOpen(false)} title="Google sandbox mock auth" maxWidth="sm">
-        <div className="space-y-6"><Alert variant="warning">No Client ID configuration was detected in the environment. Use this local sandbox form to simulate returning valid authenticated details from Google OAuth.</Alert><div className="space-y-4"><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Profile name</label><input type="text" required placeholder="Jane Doe" value={mockGoogleName} onChange={(e) => setMockGoogleName(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] px-4 py-3 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Profile email</label><input type="email" required placeholder="jane.doe@gmail.com" value={mockGoogleEmail} onChange={(e) => setMockGoogleEmail(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] px-4 py-3 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div></div><div className="flex justify-end gap-2 border-t border-white/[0.08] pt-4"><Button type="button" variant="secondary" size="sm" onClick={() => setIsGoogleMockOpen(false)}>Cancel</Button><Button type="button" size="sm" onClick={handleGoogleMockLogin}>Simulate login</Button></div></div>
-      </Modal>
+
     </div>
   );
 }

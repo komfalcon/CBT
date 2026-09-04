@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getExamSession, saveExamAnswers, submitExamSession, ExamQuestion } from './api';
 import {
@@ -27,6 +27,23 @@ const DESKTOP_BREAKPOINT = 768;
 const CALCULATOR_WIDTH = 288;
 const CALCULATOR_HEIGHT = 360;
 
+
+function safeEvaluate(expression: string): number {
+  const tokens = expression.match(/(?:\d+(?:\.\d*)?|\.\d+|[+\-*/%()])/g) || [];
+  if (tokens.join('') !== expression.replace(/\s+/g, '')) throw new Error('Invalid expression');
+  let index = 0;
+  const parsePrimary = (): number => {
+    const token = tokens[index++];
+    if (token === '(') { const value = parseAdditive(); if (tokens[index++] !== ')') throw new Error('Unbalanced expression'); return value; }
+    if (token === '-') return -parsePrimary();
+    if (!token || !/^\d*\.?\d+$/.test(token)) throw new Error('Expected number');
+    return Number(token);
+  };
+  const parseMultiplicative = (): number => { let value = parsePrimary(); while (['*','/','%'].includes(tokens[index])) { const op=tokens[index++]; const rhs=parsePrimary(); if ((op==='/'||op==='%') && rhs===0) throw new Error('Division by zero'); value=op==='*'?value*rhs:op==='/'?value/rhs:value%rhs; } return value; };
+  const parseAdditive = (): number => { let value=parseMultiplicative(); while (['+','-'].includes(tokens[index])) { const op=tokens[index++]; const rhs=parseMultiplicative(); value=op==='+'?value+rhs:value-rhs; } return value; };
+  const value=parseAdditive(); if (index !== tokens.length || !Number.isFinite(value)) throw new Error('Invalid expression'); return value;
+}
+
 const getDefaultCalcPosition = () => ({
   x: Math.max(12, window.innerWidth - CALCULATOR_WIDTH - 20),
   y: Math.max(76, Math.min(120, window.innerHeight - CALCULATOR_HEIGHT - 20)),
@@ -48,6 +65,9 @@ export default function ExamConsole() {
   const [timeRemaining, setTimeRemaining] = useState<number>(7200);
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= DESKTOP_BREAKPOINT);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const saveInFlight = useRef(false);
+  const latestExamState = useRef({ answers, timeRemaining });
+  latestExamState.current = { answers, timeRemaining };
   const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(new Set());
 
   // Modal and Alert states
@@ -128,7 +148,7 @@ export default function ExamConsole() {
           return;
         }
         // eslint-disable-next-line no-eval
-        const res = eval(expression);
+        const res = safeEvaluate(expression);
         if (isNaN(res) || !isFinite(res)) {
           setCalcResult('Error');
         } else {
@@ -155,7 +175,7 @@ export default function ExamConsole() {
     }
   };
 
-  const token = useMemo(() => localStorage.getItem('accessToken') || '', []);
+  const token = '';
 
   // Fetch session details on mount
   useEffect(() => {
@@ -230,20 +250,23 @@ export default function ExamConsole() {
     }
   };
 
-  // periodic Auto-Save Heartbeat (every 10 seconds)
+  // Serialize autosaves so slow requests cannot overlap or overwrite newer state.
   useEffect(() => {
     if (loading || submitting || !sessionId || !session) return;
-    const interval = setInterval(async () => {
+    const saveLatest = async () => {
+      if (saveInFlight.current) return;
+      saveInFlight.current = true;
+      const snapshot = latestExamState.current;
       try {
-        await saveExamAnswers(token, sessionId, answers, timeRemaining);
+        await saveExamAnswers(token, sessionId, snapshot.answers, snapshot.timeRemaining);
         setLastSaved(new Date());
       } catch (err) {
-        console.warn('Auto-save heartbeat failed:', err);
-      }
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, [loading, submitting, sessionId, token, answers, timeRemaining, session]);
+        console.warn('Auto-save failed:', err);
+      } finally { saveInFlight.current = false; }
+    };
+    const interval = window.setInterval(saveLatest, 10000);
+    return () => window.clearInterval(interval);
+  }, [loading, submitting, sessionId, token, session]);
 
   const handleSelectOption = (questionId: string, optionId: string) => {
     setAnswers((prev) => {
@@ -408,7 +431,7 @@ export default function ExamConsole() {
               <ShieldCheck className="h-5 w-5" aria-hidden="true" />
             </div>
             <div className="min-w-0">
-              <p className="exam-eyebrow">JAMB CBT / Live session</p>
+              <p className="exam-eyebrow">JAMB UTME / Live session</p>
               <div className="flex items-center gap-2">
                 <h1 className="truncate text-sm font-black tracking-[-0.02em] text-text-primary sm:text-base">
                   {session.type === 'mock' ? 'Full Mock Exam' : 'Subject Drill'}
@@ -628,7 +651,7 @@ export default function ExamConsole() {
                 <p className="text-xs text-text-secondary">Confirmation Required</p>
               </div>
             </div>
-            
+
             <p className="text-sm text-text-secondary leading-normal">
               Are you sure you want to submit your exam? You cannot change your choices after submitting.
             </p>
@@ -638,7 +661,7 @@ export default function ExamConsole() {
                 {submitError}
               </div>
             )}
-            
+
             <div className="flex justify-end gap-3 pt-2">
               <button
                 onClick={() => {
@@ -682,11 +705,11 @@ export default function ExamConsole() {
                 <h3 className="text-base font-bold text-text-primary">{alertConfig.title}</h3>
               </div>
             </div>
-            
+
             <p className="text-sm text-text-secondary leading-normal">
               {alertConfig.message}
             </p>
-            
+
             <div className="flex justify-end pt-2">
               <button
                 onClick={() => {

@@ -12,13 +12,13 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
   const { addToast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [isDisabling, setIsDisabling] = useState(false);
-  
+
   // Setup states
   const [qrCode, setQrCode] = useState('');
   const [secret, setSecret] = useState('');
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const handleEnableStart = async () => {
     setIsLoading(true);
     setIsOpen(true);
@@ -26,11 +26,11 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const res = await fetch(`${apiBase}/auth/mfa/generate`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: 'include'
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to generate MFA secret');
-      
+
       setQrCode(data.qrCode);
       setSecret(data.secret);
     } catch (err: any) {
@@ -46,21 +46,19 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
       addToast({ type: 'error', title: 'Error', message: 'Please enter a valid 6-digit code' });
       return;
     }
-    
+
     setIsLoading(true);
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const res = await fetch(`${apiBase}/auth/mfa/enable`, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ otp })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to enable MFA');
-      
+
       addToast({ type: 'success', title: 'Success', message: 'Two-Factor Authentication successfully enabled!' });
       setIsOpen(false);
       setOtp('');
@@ -77,21 +75,19 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
       addToast({ type: 'error', title: 'Error', message: 'Please enter a valid 6-digit code' });
       return;
     }
-    
+
     setIsLoading(true);
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const res = await fetch(`${apiBase}/auth/mfa/disable`, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ otp })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to disable MFA');
-      
+
       addToast({ type: 'success', title: 'Success', message: 'Two-Factor Authentication disabled.' });
       setIsDisabling(false);
       setOtp('');
@@ -142,7 +138,7 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
             1. Install an authenticator app like Google Authenticator or Authy on your mobile device.<br/>
             2. Scan the QR code below or enter the secret key manually.
           </div>
-          
+
           {qrCode ? (
             <div className="flex flex-col items-center justify-center space-y-4 bg-bg-secondary p-4 rounded-xl border border-border">
               <div className="bg-white p-2 rounded-lg">

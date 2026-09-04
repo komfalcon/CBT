@@ -22,7 +22,7 @@ interface FaqItem {
 const categories: Category[] = [
   { id: 'all', label: 'All topics', summary: 'Browse every answer', icon: CircleHelp },
   { id: 'account', label: 'Account & Billing', summary: 'Sign-in, plans, payments, and refunds', icon: CreditCard },
-  { id: 'simulator', label: 'Using the CBT Simulator', summary: 'Mocks, drills, scores, and Falke AI', icon: MonitorSmartphone },
+  { id: 'simulator', label: 'Using the CBT Simulator', summary: 'Mocks, drills, scores, and FalkeAI', icon: MonitorSmartphone },
   { id: 'keys', label: 'CBT Keys', summary: 'Safe quick access on shared devices', icon: KeyRound },
   { id: 'technical', label: 'Technical Issues', summary: 'Browser, connection, and checkout help', icon: Laptop },
 ];
@@ -38,7 +38,7 @@ const faqs: FaqItem[] = [
     id: 'google-sign-in',
     category: 'account',
     question: 'Can I sign in with Google?',
-    answer: 'Yes. When the Google sign-in option is available, you can use it to create or sign in to a candidate profile with your Google account. Use the same email address you want connected to your JAMB UTME Prep profile. If you normally sign in with a password, you can continue using email and password instead.',
+    answer: 'Yes. When the Google sign-in option is available, you can use it to create or sign in to a candidate profile with your Google account. Use the same email address you want connected to your Aurikrex Exam Arena profile. If you normally sign in with a password, you can continue using email and password instead.',
   },
   {
     id: 'subjects',
@@ -50,7 +50,7 @@ const faqs: FaqItem[] = [
     id: 'plans-and-payments',
     category: 'account',
     question: 'Which plan should I choose and how do I pay?',
-    answer: 'Plus includes one full mock each day. Pro includes two full mocks each day plus subject drills. Max includes up to five full mocks each day, advanced performance review, drills, and Falke AI access subject to daily AI limits. Select a plan from the study workspace and complete the secure Paystack checkout with your card. The plan and amount are confirmed after payment verification.',
+    answer: 'Plus includes one full mock each day. Pro includes two full mocks each day plus subject drills. Max includes up to five full mocks each day, advanced performance review, drills, and FalkeAI access subject to daily AI limits. Select a plan from the study workspace and complete the secure Paystack checkout with your card. The plan and amount are confirmed after payment verification.',
   },
   {
     id: 'cancel-refund',
@@ -85,8 +85,8 @@ const faqs: FaqItem[] = [
   {
     id: 'falke-ai',
     category: 'simulator',
-    question: 'What can Falke AI help me with?',
-    answer: 'Falke AI is the in-app study tutor available to eligible Max-plan candidates. Ask it to explain a question, unpack a difficult topic, or help you create a next study step using your current learning context. It can make mistakes, so use its guidance alongside the question explanations and your study materials. Do not include sensitive personal information in chat prompts.',
+    question: 'What can FalkeAI help me with?',
+    answer: 'FalkeAI is the in-app study tutor available to eligible Max-plan candidates. Ask it to explain a question, unpack a difficult topic, or help you create a next study step using your current learning context. It can make mistakes, so use its guidance alongside the question explanations and your study materials. Do not include sensitive personal information in chat prompts.',
   },
   {
     id: 'cbt-key-purpose',
@@ -144,7 +144,7 @@ export default function HelpCenter() {
       <SupportHero
         eyebrow="Help centre"
         title="Find your next study step."
-        description="Straight answers for candidate accounts, paid access, timed mocks, subject drills, CBT keys, technical troubleshooting, and Falke AI."
+        description="Straight answers for candidate accounts, paid access, timed mocks, subject drills, CBT keys, technical troubleshooting, and FalkeAI."
         icon={CircleHelp}
       />
 
@@ -160,7 +160,7 @@ export default function HelpCenter() {
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Try “CBT key”, “mock timer”, “refund”, or “Falke AI”"
+              placeholder="Try “CBT key”, “mock timer”, “refund”, or “FalkeAI”"
               className="support-input h-14 w-full rounded-xl border pl-12 pr-4 text-[14px] outline-none transition"
               aria-label="Search help articles"
             />
@@ -225,7 +225,7 @@ export default function HelpCenter() {
           </div>
 
           <aside className="self-start space-y-4">
-            <div className="rounded-2xl border border-violet-400/20 bg-violet-400/[0.07] p-6"><BrainCircuit className="h-6 w-6 text-violet-300" /><h2 className="mt-5 font-display text-[18px] font-semibold tracking-[-0.03em] text-text-primary">Using Falke AI?</h2><p className="mt-2 text-[13px] leading-6 text-text-secondary">Use it to understand a topic or an answer, not as a substitute for your own practice. Always review important responses.</p></div>
+            <div className="rounded-2xl border border-violet-400/20 bg-violet-400/[0.07] p-6"><BrainCircuit className="h-6 w-6 text-violet-300" /><h2 className="mt-5 font-display text-[18px] font-semibold tracking-[-0.03em] text-text-primary">Using FalkeAI?</h2><p className="mt-2 text-[13px] leading-6 text-text-secondary">Use it to understand a topic or an answer, not as a substitute for your own practice. Always review important responses.</p></div>
             <div className="support-surface rounded-2xl p-6"><Mail className="h-6 w-6 text-primary" /><h2 className="mt-5 font-display text-[18px] font-semibold tracking-[-0.03em] text-text-primary">Still need help?</h2><p className="mt-2 text-[13px] leading-6 text-text-secondary">Contact us with the email on your account, the feature you were using, and a screenshot if it is safe to share.</p><Link to="/contact" className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-lg bg-primary px-4 text-[13px] font-semibold text-text-on-accent transition hover:bg-primary-hover"><Send className="h-4 w-4" />Contact support</Link><a className="mt-4 block text-[13px] font-semibold text-primary hover:text-primary-hover" href={`mailto:${supportChannels.email}`}>{supportChannels.email}</a></div>
           </aside>
         </section>
