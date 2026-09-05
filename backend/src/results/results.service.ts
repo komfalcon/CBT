@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
-import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, desc } from 'drizzle-orm';
 
 @Injectable()
 export class ResultsService {
   constructor(
-    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
   ) {}
 
   async listResults(userId: string) {

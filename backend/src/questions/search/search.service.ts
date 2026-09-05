@@ -2,7 +2,7 @@ import { Injectable, Logger, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client as ElasticsearchClient } from '@elastic/elasticsearch';
 import { DRIZZLE } from '../../db/database.module';
-import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
 
 const INDEX_NAME = 'jamb_questions';
@@ -15,7 +15,7 @@ export class SearchService {
 
   constructor(
     private readonly configService: ConfigService,
-    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
   ) {
     const node = this.configService.get<string>('ELASTICSEARCH_URL');
     if (node) {

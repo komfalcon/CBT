@@ -5,7 +5,7 @@ import * as amqp from 'amqplib';
 import { Client as ElasticsearchClient } from '@elastic/elasticsearch';
 import { DRIZZLE } from './db/database.module';
 import * as schema from './db/schema';
-import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { sql } from 'drizzle-orm';
 
 type ServiceState = 'connected' | 'disconnected';
@@ -25,7 +25,7 @@ export interface HealthStatus {
 export class HealthService {
   constructor(
     private readonly configService: ConfigService,
-    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>
   ) {}
 
   async check(): Promise<HealthStatus> {

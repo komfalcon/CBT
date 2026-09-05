@@ -2,13 +2,13 @@ import { BadRequestException, Injectable, NotFoundException, Inject } from '@nes
 import { v4 as uuidv4 } from 'uuid';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
-import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, inArray, notInArray, sql, count, gte } from 'drizzle-orm';
 
 @Injectable()
 export class ExamService {
   constructor(
-    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>
   ) { }
 
   async createSession(

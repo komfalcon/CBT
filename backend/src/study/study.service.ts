@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { DRIZZLE } from '../db/database.module';
-import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../db/schema';
 import { eq, and } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
@@ -8,7 +8,7 @@ import { randomUUID } from 'crypto';
 @Injectable()
 export class StudyService {
   constructor(
-    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
   ) {}
 
   // ---- Syllabus Methods ----

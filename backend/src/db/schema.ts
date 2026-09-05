@@ -1,8 +1,8 @@
 import { sql } from 'drizzle-orm';
-import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
+import { pgTable, text, integer, real, boolean, timestamp, jsonb } from 'drizzle-orm/pg-core';
 
-export const users = sqliteTable('users', {
-  id: text('id').primaryKey(), // uuid
+export const users = pgTable('users', {
+  id: text('id').primaryKey(),
   cbt_key: text('cbt_key').unique(),
   cbt_key_hash: text('cbt_key_hash').unique(),
   jamb_reg_no: text('jamb_reg_no').unique(),
@@ -12,35 +12,35 @@ export const users = sqliteTable('users', {
   passwordHash: text('password_hash').notNull(),
   role: text('role').default('student'),
   mfa_secret: text('mfa_secret'),
-  mfa_enabled: integer('mfa_enabled', { mode: 'boolean' }).default(false),
+  mfa_enabled: boolean('mfa_enabled').default(false),
   profile_photo_url: text('profile_photo_url'),
   verification_code: text('verification_code'),
-  verification_code_expires: integer('verification_code_expires', { mode: 'timestamp' }),
+  verification_code_expires: timestamp('verification_code_expires'),
   password_reset_code: text('password_reset_code'),
-  password_reset_expires: integer('password_reset_expires', { mode: 'timestamp' }),
+  password_reset_expires: timestamp('password_reset_expires'),
   state: text('state'),
   lga: text('lga'),
   school: text('school'),
-  exam_subject_combination: text('exam_subject_combination', { mode: 'json' }), // string[]
-  accessibility_preferences: text('accessibility_preferences', { mode: 'json' }), // Record
+  exam_subject_combination: jsonb('exam_subject_combination'),
+  accessibility_preferences: jsonb('accessibility_preferences'),
   account_status: text('account_status').default('pending_verification'),
   failed_login_attempts: integer('failed_login_attempts').default(0),
-  lockout_until: integer('lockout_until', { mode: 'timestamp' }),
-  device_fingerprints: text('device_fingerprints', { mode: 'json' }), // string[]
-  last_login: integer('last_login', { mode: 'timestamp' }),
+  lockout_until: timestamp('lockout_until'),
+  device_fingerprints: jsonb('device_fingerprints'),
+  last_login: timestamp('last_login'),
   last_login_ip: text('last_login_ip'),
   xp_points: integer('xp_points').default(0),
   level: integer('level').default(1),
   streak_count: integer('streak_count').default(0),
   subscription_tier: text('subscription_tier').default('max'),
   ai_messages_remaining: integer('ai_messages_remaining').default(0),
-  ai_messages_last_reset: integer('ai_messages_last_reset', { mode: 'timestamp' }),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  ai_messages_last_reset: timestamp('ai_messages_last_reset'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const questions = sqliteTable('questions', {
-  id: text('id').primaryKey(), // Maps to questionId or _id as UUID
+export const questions = pgTable('questions', {
+  id: text('id').primaryKey(),
   subject: text('subject').notNull(),
   topic: text('topic').notNull(),
   topicId: text('topic_id'),
@@ -48,7 +48,7 @@ export const questions = sqliteTable('questions', {
   subtopic: text('subtopic'),
   year_sourced: integer('year_sourced'),
   question_text: text('question_text').notNull(),
-  options: text('options', { mode: 'json' }).notNull(), // QuestionOption[]
+  options: jsonb('options').notNull(),
   correct_option: text('correct_option').notNull(),
   explanation: text('explanation'),
   question_type: text('question_type').notNull(),
@@ -58,119 +58,119 @@ export const questions = sqliteTable('questions', {
   irt_guessing: real('irt_guessing').default(0.25),
   bloom_level: text('bloom_level'),
   estimated_solve_time_seconds: integer('estimated_solve_time_seconds').default(60),
-  media: text('media', { mode: 'json' }), // QuestionMedia[]
+  media: jsonb('media'),
   language: text('language').default('en'),
   status: text('status').default('draft'),
   created_by: text('created_by').notNull(),
   reviewed_by: text('reviewed_by'),
   approved_by: text('approved_by'),
-  approved_at: integer('approved_at', { mode: 'timestamp' }),
-  is_bonus: integer('is_bonus', { mode: 'boolean' }).default(false),
-  versions: text('versions', { mode: 'json' }), // QuestionVersion[]
+  approved_at: timestamp('approved_at'),
+  is_bonus: boolean('is_bonus').default(false),
+  versions: jsonb('versions'),
   use_count: integer('use_count').default(0),
   avg_response_time_ms: integer('avg_response_time_ms').default(0),
   correct_count: integer('correct_count').default(0),
   attempt_count: integer('attempt_count').default(0),
-  tags: text('tags', { mode: 'json' }), // string[]
-  embedding_vector: text('embedding_vector', { mode: 'json' }), // number[]
-  has_diagram: integer('has_diagram', { mode: 'boolean' }).default(false),
+  tags: jsonb('tags'),
+  embedding_vector: jsonb('embedding_vector'),
+  has_diagram: boolean('has_diagram').default(false),
   diagram_svg: text('diagram_svg'),
   latex: text('latex'),
   import_batch_id: text('import_batch_id'),
   source: text('source').default('manual'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const exam_sessions = sqliteTable('exam_sessions', {
+export const exam_sessions = pgTable('exam_sessions', {
   id: text('id').primaryKey(),
   userId: text('user_id').notNull(),
-  type: text('type').notNull(), // 'mock' | 'drill'
-  subjects: text('subjects', { mode: 'json' }).notNull(), // string[]
-  questions: text('questions', { mode: 'json' }).notNull(), // Record<string, any>[]
-  answers: text('answers', { mode: 'json' }), // Record<string, string>
+  type: text('type').notNull(),
+  subjects: jsonb('subjects').notNull(),
+  questions: jsonb('questions').notNull(),
+  answers: jsonb('answers'),
   timeRemaining: integer('time_remaining').notNull(),
   status: text('status').default('active'),
-  startedAt: integer('started_at', { mode: 'timestamp' }).notNull(),
-  completedAt: integer('completed_at', { mode: 'timestamp' }),
-  warnings: text('warnings', { mode: 'json' }), // string[]
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  startedAt: timestamp('started_at').notNull(),
+  completedAt: timestamp('completed_at'),
+  warnings: jsonb('warnings'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const exam_results = sqliteTable('exam_results', {
-  id: text('id').primaryKey(), // resultId
+export const exam_results = pgTable('exam_results', {
+  id: text('id').primaryKey(),
   sessionId: text('session_id').notNull(),
   userId: text('user_id').notNull(),
-  type: text('type').notNull(), // 'mock' | 'drill'
-  subjectScores: text('subject_scores', { mode: 'json' }).notNull(), // SubjectScore[]
+  type: text('type').notNull(),
+  subjectScores: jsonb('subject_scores').notNull(),
   totalScore: real('total_score').notNull(),
   timeSpentSeconds: integer('time_spent_seconds').notNull(),
-  answers: text('answers', { mode: 'json' }), // Record<string, string>
-  questionsSnapshot: text('questions_snapshot', { mode: 'json' }).notNull(), // Record<string, any>[]
-  completedAt: integer('completed_at', { mode: 'timestamp' }).notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  answers: jsonb('answers'),
+  questionsSnapshot: jsonb('questions_snapshot').notNull(),
+  completedAt: timestamp('completed_at').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const syllabus_trackers = sqliteTable('syllabus_trackers', {
+export const syllabus_trackers = pgTable('syllabus_trackers', {
   id: text('id').primaryKey(),
   userId: text('user_id').notNull(),
   subject: text('subject').notNull(),
-  completedTopics: text('completed_topics', { mode: 'json' }), // string[]
+  completedTopics: jsonb('completed_topics'),
   progress: real('progress').default(0),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const timetables = sqliteTable('timetables', {
+export const timetables = pgTable('timetables', {
   id: text('id').primaryKey(),
   userId: text('user_id').notNull(),
-  sessions: text('sessions', { mode: 'json' }), // StudySession[]
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  sessions: jsonb('sessions'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const payment_logs = sqliteTable('payment_logs', {
-  reference: text('reference').primaryKey(), // Used as unique primary key
+export const payment_logs = pgTable('payment_logs', {
+  reference: text('reference').primaryKey(),
   userId: text('user_id').notNull(),
   planCode: text('plan_code').notNull(),
   amount: real('amount').notNull(),
   email: text('email').notNull(),
-  verifiedAt: integer('verified_at', { mode: 'timestamp' }),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  verifiedAt: timestamp('verified_at'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const chat_sessions = sqliteTable('chat_sessions', {
+export const chat_sessions = pgTable('chat_sessions', {
   id: text('id').primaryKey(),
   userId: text('user_id').notNull(),
   title: text('title').notNull(),
-  messages: text('messages', { mode: 'json' }), // ChatMessage[]
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  messages: jsonb('messages'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const handoffs = sqliteTable('handoffs', {
-  jti: text('jti').primaryKey(), // using jti as PK since it's unique
+export const handoffs = pgTable('handoffs', {
+  jti: text('jti').primaryKey(),
   userId: text('user_id').notNull(),
   audience: text('audience').notNull(),
-  scope: text('scope', { mode: 'json' }).notNull(), // string[]
+  scope: jsonb('scope').notNull(),
   returnUrl: text('return_url').notNull(),
   nextPath: text('next_path').notNull(),
-  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
-  exchanged: integer('exchanged', { mode: 'boolean' }).default(false),
+  expiresAt: timestamp('expires_at').notNull(),
+  exchanged: boolean('exchanged').default(false),
   state: text('state').notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
-export const integration_learning_events = sqliteTable('integration_learning_events', {
+export const integration_learning_events = pgTable('integration_learning_events', {
   eventId: text('event_id').primaryKey(),
   userId: text('user_id').notNull(),
-  occurredAt: text('occurred_at'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(strftime('%s', 'now'))`),
+  occurredAt: timestamp('occurred_at'),
+  createdAt: timestamp('created_at').defaultNow(),
   idempotencyKey: text('idempotency_key').notNull(),
   type: text('type'),
-  data: text('data', { mode: 'json' }),
+  data: jsonb('data'),
 });

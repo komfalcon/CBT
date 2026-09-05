@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException, Inject } from '@nestjs/common';
 import { createHash, randomUUID } from 'crypto';
-import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, or, not, like, count, sum, desc, gte, lte, ne } from 'drizzle-orm';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
@@ -15,7 +15,7 @@ export class AdminService {
   private readonly CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
   constructor(
-    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
   ) {}
 
   async getOverviewStats(): Promise<any> {

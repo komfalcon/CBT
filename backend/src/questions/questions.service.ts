@@ -15,7 +15,7 @@ import { FilterQuestionsDto } from "./dto/filter-questions.dto";
 import { UpdateQuestionDto } from "./dto/update-question.dto";
 import { DRIZZLE } from "../db/database.module";
 import * as schema from "../db/schema";
-import { LibSQLDatabase } from "drizzle-orm/libsql";
+import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import {
   eq,
   inArray,
@@ -142,7 +142,7 @@ export class QuestionsService {
   private readonly logger = new Logger(QuestionsService.name);
 
   constructor(
-    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
     private readonly searchService: SearchService,
     private readonly notificationsService: NotificationsService,
   ) {}

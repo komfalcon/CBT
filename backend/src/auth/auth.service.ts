@@ -23,7 +23,7 @@ import { RegisterDto } from './dto/register.dto';
 import { JwtPayload } from './types/jwt-payload.type';
 
 import { DRIZZLE } from '../db/database.module';
-import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../db/schema';
 import { eq, and } from 'drizzle-orm';
 
@@ -73,7 +73,7 @@ const registerValidationSchema = z.object({
 @Injectable()
 export class AuthService implements OnModuleInit {
   constructor(
-    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly notificationsService: NotificationsService,

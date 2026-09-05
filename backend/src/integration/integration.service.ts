@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto';
 import { CreateHandoffDto, LearningEventDto } from './handoff.dto';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
-import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, gt } from 'drizzle-orm';
 
 const LIBRARY_ORIGIN = process.env.LIBRARY_ORIGIN || 'https://library.aurikrex.tech';
@@ -17,7 +17,7 @@ const ALLOWED_RETURN_ORIGINS = [
 @Injectable()
 export class IntegrationService {
   constructor(
-    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}

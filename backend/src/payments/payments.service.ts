@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, InternalServerErrorException, Inject } from '@nestjs/common';
 import axios from 'axios';
 import { eq } from 'drizzle-orm';
-import { LibSQLDatabase } from 'drizzle-orm/libsql';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
 
@@ -17,7 +17,7 @@ export class PaymentsService {
   };
 
   constructor(
-    @Inject(DRIZZLE) private readonly db: LibSQLDatabase<typeof schema>,
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
   ) {}
 
   async verifyTransaction(userId: string, reference: string, planCode: string): Promise<any> {
