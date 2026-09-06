@@ -38,9 +38,15 @@ export const TikzRenderer: React.FC<{ code: string }> = ({ code }) => {
 const addLatexDelimiters = (text: string): string => {
   if (!text) return text;
   
+  let result = text;
+
+  // Convert plain ASCII math (like sqrt(x) or √x) to valid KaTeX blocks
+  result = result.replace(/\bsqrt\((.*?)\)/g, '$$\\sqrt{$1}$$');
+  result = result.replace(/√(\d+|\w+)/g, '$$\\sqrt{$1}$$');
+
   // Convert standard \( ... \) and \[ ... \] LaTeX blocks to KaTeX expected $ ... $ blocks
   // Crucial: remark-math requires no spaces immediately after $ and before $, so we use \s* to trim them.
-  let result = text.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$$1$$');
+  result = result.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$$1$$');
   result = result.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, '$$$$$1$$$$');
 
   // Do not bail if we see $, because the text might have a mix of $ and raw \frac
