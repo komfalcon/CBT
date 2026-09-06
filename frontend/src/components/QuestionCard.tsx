@@ -44,6 +44,16 @@ const addLatexDelimiters = (text: string): string => {
   result = result.replace(/\bsqrt\((.*?)\)/g, '$$\\sqrt{$1}$$');
   result = result.replace(/√(\d+|\w+)/g, '$$\\sqrt{$1}$$');
 
+  // Convert common Unicode math symbols directly into KaTeX equivalents
+  const unicodeMap: Record<string, string> = {
+    'α': '$\\alpha$', 'β': '$\\beta$', 'γ': '$\\gamma$', 'Δ': '$\\Delta$',
+    'δ': '$\\delta$', 'θ': '$\\theta$', 'λ': '$\\lambda$', 'μ': '$\\mu$',
+    'π': '$\\pi$', 'σ': '$\\sigma$', 'Ω': '$\\Omega$'
+  };
+  Object.entries(unicodeMap).forEach(([uni, latex]) => {
+    result = result.replace(new RegExp(uni, 'g'), latex);
+  });
+
   // Convert standard \( ... \) and \[ ... \] LaTeX blocks to KaTeX expected $ ... $ blocks
   // Crucial: remark-math requires no spaces immediately after $ and before $, so we use \s* to trim them.
   result = result.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$$1$$');
