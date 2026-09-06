@@ -44,6 +44,12 @@ const addLatexDelimiters = (text: string): string => {
   result = result.replace(/\right/g, '\\right');
   result = result.replace(/\nu(?=[\s_])/g, '\\nu');
   result = result.replace(/\tau(?=[\s_])/g, '\\tau');
+  result = result.replace(/\to\b/g, '\\to '); // \t + o
+  result = result.replace(/\tan\b/g, '\\tan '); // \t + an
+
+  // Fix unsupported or badly nested LaTeX macros
+  result = result.replace(/\\textsuperscript\{([^}]*)\}/g, '^{$1}');
+  result = result.replace(/\\text\{\s*\\\(\s*(.*?)\s*\\\)\s*\}/g, '$1'); // Unwrap \text{\(\Omega\)} to \Omega
 
   // Convert plain ASCII math (like sqrt(x) or √x) to valid KaTeX blocks
   result = result.replace(/\bsqrt\((.*?)\)/g, '$$\\sqrt{$1}$$');
