@@ -82,7 +82,7 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
               remarkPlugins={[remarkMath]}
               rehypePlugins={[rehypeKatex]}
             >
-              {explanation.replace(/\\\(([\s\S]*?)\\\)/g, '$$$1$$').replace(/\\\[([\s\S]*?)\\\]/g, '$$$$$1$$$$')}
+              {explanation.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$$1$$').replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, '$$$$$1$$$$')}
             </ReactMarkdown>
           </div>
         </div>

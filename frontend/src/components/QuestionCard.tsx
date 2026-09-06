@@ -39,8 +39,9 @@ const addLatexDelimiters = (text: string): string => {
   if (!text) return text;
   
   // Convert standard \( ... \) and \[ ... \] LaTeX blocks to KaTeX expected $ ... $ blocks
-  let result = text.replace(/\\\(([\s\S]*?)\\\)/g, '$$$1$$');
-  result = result.replace(/\\\[([\s\S]*?)\\\]/g, '$$$$$1$$$$');
+  // Crucial: remark-math requires no spaces immediately after $ and before $, so we use \s* to trim them.
+  let result = text.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$$1$$');
+  result = result.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, '$$$$$1$$$$');
 
   // Do not bail if we see $, because the text might have a mix of $ and raw \frac
   // We just let the next regex handle raw commands carefully.
