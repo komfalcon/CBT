@@ -40,6 +40,11 @@ const addLatexDelimiters = (text: string): string => {
   
   let result = text;
 
+  // Repair corrupted escape sequences from bad DB scraping (e.g. \right evaluated as \r + ight)
+  result = result.replace(/\right/g, '\\right');
+  result = result.replace(/\nu(?=[\s_])/g, '\\nu');
+  result = result.replace(/\tau(?=[\s_])/g, '\\tau');
+
   // Convert plain ASCII math (like sqrt(x) or √x) to valid KaTeX blocks
   result = result.replace(/\bsqrt\((.*?)\)/g, '$$\\sqrt{$1}$$');
   result = result.replace(/√(\d+|\w+)/g, '$$\\sqrt{$1}$$');
