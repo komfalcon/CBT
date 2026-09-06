@@ -1,14 +1,18 @@
-﻿import { createClient } from '@libsql/client';
-import { config } from 'dotenv';
-config({ path: 'C:/Users/DELL/AURIKEX/CBT/backend/.env' });
+﻿import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import dotenv from "dotenv";
+dotenv.config({ path: ".env" });
 
-const client = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN
-});
+const sql = postgres(process.env.DATABASE_URL, { ssl: "require" });
+const db = drizzle(sql);
 
 async function run() {
-  const rs = await client.execute('SELECT * FROM chat_sessions ORDER BY created_at DESC LIMIT 3');
-  console.log(JSON.stringify(rs.rows, null, 2));
+    const res = await sql`SELECT question_text FROM questions WHERE question_text LIKE '%Carnot engine%' LIMIT 1`;
+    console.log("Q1:", res[0].question_text);
+    
+    const res2 = await sql`SELECT question_text FROM questions WHERE question_text LIKE '%radioactive nucleus%' LIMIT 1`;
+    console.log("Q2:", res2[0].question_text);
+    
+    process.exit(0);
 }
 run();

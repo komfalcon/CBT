@@ -103,12 +103,13 @@ export class AiService {
         throw new InternalServerErrorException('Failed to generate AI response after model rotation.');
       }
 
-      if (error?.response?.data?.error?.code === 'insufficient_user_quota' || error?.response?.data?.error?.message?.includes('3')) {
-        throw new InternalServerErrorException('Your AI API key has run out of funds. Your current balance is negative ($-1.01). Please top up your SeekAI account or update the SEEKAI_KEY in your Render environment variables.');
+      if (error?.response?.data?.error?.code === 'insufficient_user_quota' || error?.response?.data?.error?.message?.includes('insufficient_quota') || error?.response?.data?.error?.message?.includes('Out of funds')) {
+        throw new InternalServerErrorException('Your AI API key has run out of funds. Please top up your SeekAI account or update the SEEKAI_KEY in your Render environment variables.');
       }
 
       this.logger.error('Error calling AI API', error?.response?.data || error);
-      throw new InternalServerErrorException('Failed to generate AI response.');
+      const upstreamError = error?.response?.data?.error?.message || 'The upstream AI provider is currently experiencing issues.';
+      throw new InternalServerErrorException(`Failed to generate AI response: ${upstreamError}`);
     }
   }
 
