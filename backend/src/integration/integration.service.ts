@@ -193,7 +193,7 @@ export class IntegrationService {
     await this.db.insert(schema.integration_learning_events).values({ 
       eventId: dto.eventId,
       userId,
-      occurredAt: dto.occurredAt || new Date().toISOString(),
+      occurredAt: dto.occurredAt ? new Date(dto.occurredAt) : new Date(),
       createdAt: new Date(),
       idempotencyKey: key,
       data: dto

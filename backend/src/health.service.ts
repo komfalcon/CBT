@@ -50,7 +50,7 @@ export class HealthService {
 
   private async checkDatabase(): Promise<ServiceState> {
     try {
-      await this.db.run(sql`SELECT 1`);
+      await this.db.execute(sql`SELECT 1`);
       return 'connected';
     } catch {
       return 'disconnected';
