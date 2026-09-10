@@ -47,6 +47,10 @@ const addLatexDelimiters = (text: string): string => {
   result = result.replace(/\to\b/g, '\\to '); // \t + o
   result = result.replace(/\tan\b/g, '\\tan '); // \t + an
 
+  // Repair \b (ASCII backspace, char 8) corrupting \begin and \end
+  result = result.replace(/\begin(?=\s*\{)/g, '\\begin');
+  result = result.replace(/\bend(?=\s*\{)/g, '\\end');
+
   // Fix unsupported or badly nested LaTeX macros
   result = result.replace(/\\textsuperscript\{([^}]*)\}/g, '^{$1}');
   result = result.replace(/\\text\{\s*\\\(\s*(.*?)\s*\\\)\s*\}/g, '$1'); // Unwrap \text{\(\Omega\)} to \Omega
@@ -70,18 +74,34 @@ const addLatexDelimiters = (text: string): string => {
   result = result.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$$1$$');
   result = result.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, '$$$$$1$$$$');
 
-  // Do not bail if we see $, because the text might have a mix of $ and raw \frac
-  // We just let the next regex handle raw commands carefully.
+  // Normalize any run of 3+ dollar signs down to 2 (avoids broken $$$...$$$$ delimiters)
+  result = result.replace(/\${3,}/g, '$$');
 
-  result = result.replace(
-    /\\begin\s*\{([^}]+)\}[\s\S]*?\\end\s*\{\1\}/g,
-    (match) => `$$${match}$$`,
-  );
+  // SAFELY wrap bare \begin{env}...\end{env} blocks that are NOT already inside $$ delimiters.
+  // Strategy: split on existing $$...$$, process only the non-math parts, then reassemble.
+  const mathBlockRegex = /(\$\$[\s\S]*?\$\$)/g;
+  const parts = result.split(mathBlockRegex);
+  result = parts.map((part, i) => {
+    // Even indices are plain text; odd indices are already-wrapped $$ math blocks — leave them alone
+    if (i % 2 !== 0) return part;
 
-  result = result.replace(
-    /(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)|(?<!\$)(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|cot|sec|csc|log|ln|exp|det|max|min|binom|hat|vec|bar|dot|ddot|tilde|overline|underline|overbrace|underbrace|left|right|mathbf|mathbb|mathrm|text|bold|it)(?:\{[^}]*\}|\[[^\]]*\])*(?:[_^](?:\{[^}]*\}|[^\s{]))*)/g,
-    (match, existingMath) => existingMath ?? `$${match}$`,
-  );
+    // Wrap any bare \begin{env}...\end{env} that appear in plain text
+    return part.replace(
+      /\\begin\s*\{([^}]+)\}[\s\S]*?\\end\s*\{\1\}/g,
+      (match) => `\n\n$$\n${match}\n$$\n\n`,
+    );
+  }).join('');
+
+  // Wrap naked LaTeX commands that are not already inside $..$ or $$..$$ blocks
+  const parts2 = result.split(mathBlockRegex);
+  result = parts2.map((part, i) => {
+    if (i % 2 !== 0) return part;
+    // Also skip inline $ blocks
+    return part.replace(
+      /(?<!\$)(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|cot|sec|csc|log|ln|exp|det|max|min|binom|hat|vec|bar|dot|ddot|tilde|overline|underline|overbrace|underbrace|left|right|mathbf|mathbb|mathrm|text|bold|it)(?:\{[^}]*\}|\[[^\]]*\])*(?:[_^](?:\{[^}]*\}|[^\s{]))*)/g,
+      (match) => `$${match}$`,
+    );
+  }).join('');
 
   return result;
 };
