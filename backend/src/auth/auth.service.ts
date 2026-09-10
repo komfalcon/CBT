@@ -8,7 +8,7 @@ import {
   OnModuleInit,
   Inject,
 } from '@nestjs/common';
-import axios from 'axios';
+import { OAuth2Client } from 'google-auth-library';
 import { v4 as uuidv4 } from 'uuid';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -72,6 +72,8 @@ const registerValidationSchema = z.object({
 
 @Injectable()
 export class AuthService implements OnModuleInit {
+  private readonly googleClient = new OAuth2Client();
+
   constructor(
     @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
     private readonly jwtService: JwtService,
@@ -462,22 +464,26 @@ export class AuthService implements OnModuleInit {
       throw new BadRequestException('Credential is required.');
     }
 
+    const googleClientId = this.configService.get<string>('GOOGLE_CLIENT_ID');
+    if (!googleClientId) {
+      throw new UnauthorizedException('Google sign-in is not configured.');
+    }
+
     let googleUser: { email: string; name: string; picture?: string };
     try {
-      const { data } = await axios.get<{
-        email: string;
-        name: string;
-        picture?: string;
-        email_verified: string | boolean;
-      }>(`https://oauth2.googleapis.com/tokeninfo?id_token=${credential}`);
+      const ticket = await this.googleClient.verifyIdToken({
+        idToken: credential,
+        audience: googleClientId,
+      });
+      const payload = ticket.getPayload();
 
-      if (!data.email) {
+      if (!payload?.email || payload.email_verified !== true) {
         throw new UnauthorizedException('Invalid Google token.');
       }
       googleUser = {
-        email: data.email,
-        name: data.name || data.email.split('@')[0],
-        picture: data.picture,
+        email: payload.email,
+        name: payload.name || [payload.given_name, payload.family_name].filter(Boolean).join(' ') || payload.email.split('@')[0],
+        picture: payload.picture,
       };
     } catch (error) {
       throw new UnauthorizedException('Failed to verify Google token.');
