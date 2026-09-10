@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { X } from 'lucide-react';
 
 interface ModalProps {
@@ -38,8 +39,10 @@ export const Modal: React.FC<ModalProps> = ({
     '4xl': 'max-w-4xl',
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay backdrop-blur-sm animate-in fade-in duration-150">
+  // Use a portal to render the modal at the document body level, escaping
+  // any parent overflow:hidden or z-index stacking contexts (e.g. Cards).
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-overlay backdrop-blur-sm animate-in fade-in duration-150">
       {/* Click outside to close */}
       <div className="absolute inset-0" onClick={onClose} />
 
@@ -62,6 +65,8 @@ export const Modal: React.FC<ModalProps> = ({
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[85vh]">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
+
