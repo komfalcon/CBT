@@ -9,3 +9,5 @@ export * from './Toast';
 export * from './ToastProvider';
 export * from './SecuritySettings';
 export * from './SupportPageShell';
+
+export * from './PwaInstallPrompt';
