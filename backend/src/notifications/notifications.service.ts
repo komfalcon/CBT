@@ -53,7 +53,7 @@ export class NotificationsService {
    */
   async sendPushNotification(title: string, message: string, userIds?: string[]): Promise<boolean> {
     const appId = this.configService.get<string>('ONESIGNAL_APP_ID') || 'b7622f37-8ca3-4304-922c-69438cc14d67';
-    const apiKey = this.configService.get<string>('ONESIGNAL_REST_API_KEY') || 'os_v2_app_w5rc6n4munbqjermnfbyzqknm543pnx3nzeepqvnd2pl4nkqooz2otx7rgjtmd62epkwwfd2xxmrr6w25y52tnpdmswszkjsxvbtxly';
+    const apiKey = this.configService.get<string>('ONESIGNAL_REST_API_KEY');
 
     if (!appId || !apiKey) {
       this.logger.warn('OneSignal credentials missing; cannot send push notification.');
