@@ -329,7 +329,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "The diagram below illustrates the supply and demand curves for wheat. In the diagram below, if the initial equilibrium price is $P_0$ and quantity is $Q_0$, what happens to the equilibrium price and quantity when there is an increase in demand? Assume the supply curve remains unchanged.",
+      "question_text": "The diagram below illustrates the supply and demand curves for wheat. In the diagram below, if the initial equilibrium price is $P_0$ and quantity is $Q_0$, what happens to the equilibrium price and quantity when there is an increase in demand? infer the supply curve remains unchanged.",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><path d='M20,180 L300,180' stroke='black'/><path d='M20,20 L20,180' stroke='black'/><path d='M50,170 L70,150 Q100,100 150,80 Q200,60 250,70 L280,90' stroke='black' fill='none'/><path d='M50,80 L70,90 Q100,120 150,140 Q200,160 250,150 L280,130' stroke='black' fill='none'/><text x='160' y='190'>Quantity</text><text x='10' y='100' transform='rotate(-90, 10, 100)'>Price</text><text x='70' y='60'>S</text><text x='260' y='100'>D</text></svg>",
@@ -809,7 +809,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "The diagram below illustrates the supply and demand curves for a particular agricultural product. In the diagram below, if the initial equilibrium price is $P_1$ and quantity is $Q_1$, what will be the new equilibrium price and quantity if there's an increase in demand? Assume the supply curve remains unchanged.",
+      "question_text": "The diagram below illustrates the supply and demand curves for a particular agricultural product. In the diagram below, if the initial equilibrium price is $P_1$ and quantity is $Q_1$, what will be the new equilibrium price and quantity if there's an increase in demand? infer the supply curve remains unchanged.",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><path d='M20,180 L300,180' stroke='black'/><path d='M20,20 L20,180' stroke='black'/><path d='M50,170 L70,150' stroke='black'/><path d='M70,150 L100,130' stroke='black'/><path d='M100,130 L150,110' stroke='black'/><path d='M150,110 L200,90' stroke='black'/><path d='M200,90 L250,70' stroke='black'/><path d='M250,70 L300,50' stroke='black'/><text x='160' y='190'>Quantity</text><text x='10' y='100' transform='rotate(-90, 10, 100)'>Price</text><path d='M50,150 L100,120 L150,100 L200,80 L250,60 L300,40' stroke='black'/><text x='220' y='110'>S</text><text x='180' y='70'>D1</text><text x='200' y='30'>D2</text></svg>",
@@ -16355,7 +16355,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "To find the total cost of producing 100 tons of maize, we need to calculate the total variable cost (TVC) and add it to the total fixed cost (TFC). The given equation for TVC is \\[ TVC = 50Q + 0.5Q^2 \\]. Substituting \\(Q = 100\\), we get \\[ TVC = 50(100) + 0.5(100)^2 = 5000 + 5000 = 10000 \\]. The total fixed cost is $1,000. Therefore, the total cost \\(TC = TFC + TVC = 1000 + 10000 = 11000\\). However, this is not among the options. Let's recheck the calculation: \\[ TC = 1000 + (50 \\times 100 + 0.5 \\times 100^2) = 1000 + (5000 + 5000) = 1000 + 10000 = 11000 \\]. It seems there was a misunderstanding in the options provided. The closest answer or a recalculation isn't available directly, but let's directly compute: For $Q = 100$, $TVC = 50*100 + 0.5*100^2 = 5000 + 5000 = 10000$. Hence, $TC = 1000 + 10000 = 11000$. None of the given choices match this. Let's assume a simpler interpretation was expected: If we made a calculation error or misinterpreted the given options, the closest or a likely step could involve directly using given choices to infer or accepting a miscalculation. The actual calculation yields $11,000.",
+      "explanation": "To find the total cost of producing 100 tons of maize, we need to calculate the total variable cost (TVC) and add it to the total fixed cost (TFC). The given equation for TVC is \\[ TVC = 50Q + 0.5Q^2 \\]. Substituting \\(Q = 100\\), we get \\[ TVC = 50(100) + 0.5(100)^2 = 5000 + 5000 = 10000 \\]. The total fixed cost is $1,000. Therefore, the total cost \\(TC = TFC + TVC = 1000 + 10000 = 11000\\). However, this is not among the options. Let's recheck the calculation: \\[ TC = 1000 + (50 \\times 100 + 0.5 \\times 100^2) = 1000 + (5000 + 5000) = 1000 + 10000 = 11000 \\]. It seems there was a misunderstanding in the options provided. The closest answer or a recalculation isn't available directly, but let's directly compute: For $Q = 100$, $TVC = 50*100 + 0.5*100^2 = 5000 + 5000 = 10000$. Hence, $TC = 1000 + 10000 = 11000$. None of the given choices match this. Let's infer a simpler interpretation was expected: If we made a calculation error or misinterpreted the given options, the closest or a likely step could involve directly using given choices to infer or accepting a miscalculation. The actual calculation yields $11,000.",
       "difficulty": 4
     },
     {
@@ -26403,7 +26403,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "To find the area covered per hour, we first need to determine the width of the planter. Assuming the planter has a width equivalent to the spacing between rows (though typically a planter covers multiple rows, the exact width isn't given, so we'll proceed with a basic interpretation). If we consider the spacing between seeds is 20 cm and assuming a single row, the effective width is 0.2 meters. The speed of the tractor is 4 km/h or 4000 meters/hour. Thus, the area covered per hour is \\[ \\text{Area} = 4000 \\times 0.2 = 800 \\, \\text{m}^2 = 0.08 \\, \\text{ha} \\]. However, planters typically cover more than one row; if we assume a 4-row planter with 0.8 meters effective width (4 rows x 20 cm spacing), the area covered is \\[ 4000 \\times 0.8 = 3200 \\, \\text{m}^2 = 0.32 \\, \\text{ha} \\]. The closest answer, assuming a multi-row planter, isn't directly available; however, the provided options and a straightforward interpretation suggest selecting the closest plausible answer based on typical planter widths.",
+      "explanation": "To find the area covered per hour, we first need to determine the width of the planter. Assuming the planter has a width equivalent to the spacing between rows (though typically a planter covers multiple rows, the exact width isn't given, so we'll proceed with a basic interpretation). If we consider the spacing between seeds is 20 cm and assuming a single row, the effective width is 0.2 meters. The speed of the tractor is 4 km/h or 4000 meters/hour. Thus, the area covered per hour is \\[ \\text{Area} = 4000 \\times 0.2 = 800 \\, \\text{m}^2 = 0.08 \\, \\text{ha} \\]. However, planters typically cover more than one row; if we infer a 4-row planter with 0.8 meters effective width (4 rows x 20 cm spacing), the area covered is \\[ 4000 \\times 0.8 = 3200 \\, \\text{m}^2 = 0.32 \\, \\text{ha} \\]. The closest answer, assuming a multi-row planter, isn't directly available; however, the provided options and a straightforward interpretation suggest selecting the closest plausible answer based on typical planter widths.",
       "difficulty": 4
     },
     {
@@ -27043,7 +27043,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First, convert the speed to meters per hour: 6 km/h = 6000 m/h. The width covered by the planter is related to the spacing between the rows, which isn't directly given. Assuming a row spacing typical for many crops is around 75 cm (0.75 m), the planting rate can be calculated as: Planting Rate = (Speed \\( \\times \\) Width) / 10,000 = (6000 m/h \\( \\times \\) 0.75 m) / 10,000 = 0.45 ha/h per row. For a multi-row planter, if we assume it's a 4-row planter, the total width = 4 \\( \\times \\) 0.75 m = 3 m. Thus, Planting Rate = (6000 \\( \\times \\) 3) / 10,000 = 1.8 ha/h. The closest answer is 1.5 ha/h, suggesting an approximation or different assumption about the planter's width.",
+      "explanation": "First, convert the speed to meters per hour: 6 km/h = 6000 m/h. The width covered by the planter is related to the spacing between the rows, which isn't directly given. Assuming a row spacing typical for many crops is around 75 cm (0.75 m), the planting rate can be calculated as: Planting Rate = (Speed \\( \\times \\) Width) / 10,000 = (6000 m/h \\( \\times \\) 0.75 m) / 10,000 = 0.45 ha/h per row. For a multi-row planter, if we infer it's a 4-row planter, the total width = 4 \\( \\times \\) 0.75 m = 3 m. Thus, Planting Rate = (6000 \\( \\times \\) 3) / 10,000 = 1.8 ha/h. The closest answer is 1.5 ha/h, suggesting an approximation or different assumption about the planter's width.",
       "difficulty": 5
     },
     {
@@ -27363,7 +27363,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "First, we need to determine the width of the planter. Assuming it's a single row planter, the width is equivalent to the row spacing, which is 25 cm or 0.25 m. The speed is given as 6 km/h. Using the formula for theoretical field capacity: \\( \\text{Field Capacity} = \\frac{6 \\times 0.25}{10} = 0.15 \\) hectares per hour for a single row. However, if we consider a multi-row planter or adjust our understanding to match the given options, we might be expected to directly apply given or assumed values. Let's directly calculate for a plausible scenario: If the planter has 4 rows, the effective width is \\( 4 \\times 0.25 = 1 \\) meter. Thus, \\( \\text{Field Capacity} = \\frac{6 \\times 1}{10} = 0.6 \\) hectares per hour. The closest answer or a reasonable interpretation might directly relate to the provided choices, indicating a potential simplification or specific assumption about the planter's configuration.",
+      "explanation": "First, we need to determine the width of the planter. Assuming it's a single row planter, the width is equivalent to the row spacing, which is 25 cm or 0.25 m. The speed is given as 6 km/h. Using the formula for theoretical field capacity: \\( \\text{Field Capacity} = \\frac{6 \\times 0.25}{10} = 0.15 \\) hectares per hour for a single row. However, if we consider a multi-row planter or adjust our understanding to match the given options, we might be expected to directly apply given or inferd values. Let's directly calculate for a plausible scenario: If the planter has 4 rows, the effective width is \\( 4 \\times 0.25 = 1 \\) meter. Thus, \\( \\text{Field Capacity} = \\frac{6 \\times 1}{10} = 0.6 \\) hectares per hour. The closest answer or a reasonable interpretation might directly relate to the provided choices, indicating a potential simplification or specific assumption about the planter's configuration.",
       "difficulty": 4
     },
     {
@@ -27683,7 +27683,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First, we need to calculate the width covered by the planter. Assuming it is a single row planter, the width is equivalent to the row spacing, which is 20 cm or 0.2 m. The speed of the tractor is 7 km/h. Using the formula for theoretical field capacity: $\\text{Field Capacity} = \\frac{7 \\times 0.2}{10} = 0.14$ ha/h per row. For a multi-row planter, if we assume a 4-row planter, the total width covered would be $4 \\times 0.2 = 0.8$ m. Thus, $\\text{Field Capacity} = \\frac{7 \\times 0.8}{10} = 0.56$ ha/h. However, if we directly apply the given options and assume a reasonable width for a planter (e.g., 2 meters for a multi-row planter), $\\text{Field Capacity} = \\frac{7 \\times 2}{10} = 1.4$ ha/h.",
+      "explanation": "First, we need to calculate the width covered by the planter. Assuming it is a single row planter, the width is equivalent to the row spacing, which is 20 cm or 0.2 m. The speed of the tractor is 7 km/h. Using the formula for theoretical field capacity: $\\text{Field Capacity} = \\frac{7 \\times 0.2}{10} = 0.14$ ha/h per row. For a multi-row planter, if we infer a 4-row planter, the total width covered would be $4 \\times 0.2 = 0.8$ m. Thus, $\\text{Field Capacity} = \\frac{7 \\times 0.8}{10} = 0.56$ ha/h. However, if we directly apply the given options and infer a reasonable width for a planter (e.g., 2 meters for a multi-row planter), $\\text{Field Capacity} = \\frac{7 \\times 2}{10} = 1.4$ ha/h.",
       "difficulty": 4
     },
     {
@@ -29091,7 +29091,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First, we need to determine the width of the planter. Assuming it is a single row planter, the width is the spacing between rows, which is not directly given. However, if we assume a row spacing of 1 meter (a common spacing for many crops), the calculation for theoretical field capacity is: \\[ \\text{Theoretical Field Capacity} = \\frac{5 \\, \\text{km/h} \\times 1 \\, \\text{m}}{10} = 0.5 \\, \\text{hectares/hour} \\]. Thus, the correct answer is 0.50 hectares/hour.",
+      "explanation": "First, we need to determine the width of the planter. Assuming it is a single row planter, the width is the spacing between rows, which is not directly given. However, if we infer a row spacing of 1 meter (a common spacing for many crops), the calculation for theoretical field capacity is: \\[ \\text{Theoretical Field Capacity} = \\frac{5 \\, \\text{km/h} \\times 1 \\, \\text{m}}{10} = 0.5 \\, \\text{hectares/hour} \\]. Thus, the correct answer is 0.50 hectares/hour.",
       "difficulty": 4
     },
     {
@@ -30051,7 +30051,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First, we need to determine the width of the planter. Assuming it is a single-row planter, the width is equivalent to the row spacing, which is 50 cm or 0.5 meters. The speed of the tractor is given as 8 km/h, which needs to be converted to meters per hour: $8 \\times 1000 = 8000$ meters per hour. The theoretical field capacity is calculated using the formula: $Field \\ capacity = \\frac{Speed \\times Width}{10} = \\frac{8 \\times 0.5}{10} = 0.4$ ha/h. However, this simple calculation assumes a direct conversion. The correct formula considering the units properly is $\\frac{8 \\ km/h \\times 0.5 \\ m}{10} = 0.4$ ha/h. Thus, the correct answer is 0.4 ha/h.",
+      "explanation": "First, we need to determine the width of the planter. Assuming it is a single-row planter, the width is equivalent to the row spacing, which is 50 cm or 0.5 meters. The speed of the tractor is given as 8 km/h, which needs to be converted to meters per hour: $8 \\times 1000 = 8000$ meters per hour. The theoretical field capacity is calculated using the formula: $Field \\ capacity = \\frac{Speed \\times Width}{10} = \\frac{8 \\times 0.5}{10} = 0.4$ ha/h. However, this simple calculation infers a direct conversion. The correct formula considering the units properly is $\\frac{8 \\ km/h \\times 0.5 \\ m}{10} = 0.4$ ha/h. Thus, the correct answer is 0.4 ha/h.",
       "difficulty": 4
     },
     {
@@ -30219,7 +30219,7 @@
       "year": 2022,
       "topic": "Agricultural Engineering and Technology",
       "subtopic": "Farm Mechanization, Tools and Structures",
-      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 20 cm. If the tractor travels at a speed of 5 km/h, what is the theoretical field capacity of the planter in hectares per hour? Assume the planter has 4 rows.",
+      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 20 cm. If the tractor travels at a speed of 5 km/h, what is the theoretical field capacity of the planter in hectares per hour? infer the planter has 4 rows.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -31011,7 +31011,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Theoretical field capacity is calculated using the formula: $TFC = \\frac{S \\times W}{10}$, where $S$ is the speed in km/h and $W$ is the width of operation in meters. First, convert the seed spacing to the width of operation. Assuming a single row planter, $W = \\frac{1}{0.25} = 4$ meters (since 1 meter = 100 cm, 25 cm = 0.25 meters, and the width covered per row is considered as 1 meter for simplicity in some calculations, but here it directly relates to row spacing). However, the correct interpretation involves understanding that the width is related to the number of rows the planter can sow. For a single row planter, if we consider the row spacing as 1 meter (a common spacing), then $W = 1$ meter. The correct formula considering the given data directly for a single row is $TFC = Speed \\times Row Spacing$. So, $TFC = 7 \\times \\frac{1000}{10000} \\times 1 = 0.7$ ha/h for a single row. For multiple rows, the width would be the number of rows times the row spacing. The question seems to simplify to calculating for a given spacing and speed. Let's directly use the given data: For a row spacing of 1 m (a typical value for many crops), $TFC = 7 \\times 1 \\times \\frac{1000}{10000} = 0.7$ ha/h. If we adjust our understanding to the given options and assume a multi-row planter or different interpretation, none directly match simple calculations without more specifics on the planter's configuration.",
+      "explanation": "Theoretical field capacity is calculated using the formula: $TFC = \\frac{S \\times W}{10}$, where $S$ is the speed in km/h and $W$ is the width of operation in meters. First, convert the seed spacing to the width of operation. Assuming a single row planter, $W = \\frac{1}{0.25} = 4$ meters (since 1 meter = 100 cm, 25 cm = 0.25 meters, and the width covered per row is considered as 1 meter for simplicity in some calculations, but here it directly relates to row spacing). However, the correct interpretation involves understanding that the width is related to the number of rows the planter can sow. For a single row planter, if we consider the row spacing as 1 meter (a common spacing), then $W = 1$ meter. The correct formula considering the given data directly for a single row is $TFC = Speed \\times Row Spacing$. So, $TFC = 7 \\times \\frac{1000}{10000} \\times 1 = 0.7$ ha/h for a single row. For multiple rows, the width would be the number of rows times the row spacing. The question seems to simplify to calculating for a given spacing and speed. Let's directly use the given data: For a row spacing of 1 m (a typical value for many crops), $TFC = 7 \\times 1 \\times \\frac{1000}{10000} = 0.7$ ha/h. If we adjust our understanding to the given options and infer a multi-row planter or different interpretation, none directly match simple calculations without more specifics on the planter's configuration.",
       "difficulty": 4
     },
     {
@@ -31331,7 +31331,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "To calculate the theoretical field capacity, we first need to determine the width of the planter. Assuming it is a single-row planter, the width can be considered as the row spacing, which is 20 cm or 0.2 meters. The speed of the tractor is given as 5 km/h. The formula for theoretical field capacity is $Field Capacity = \\frac{Speed (km/h) \\times Width (m)}{10}$. Substituting the given values, we get $Field Capacity = \\frac{5 \\times 0.2}{10} = 0.1$ ha/h. However, this is not among the options. If we assume a multi-row planter, for example, a 4-row planter, the effective width would be $4 \\times 0.2 = 0.8$ meters. Then, $Field Capacity = \\frac{5 \\times 0.8}{10} = 0.4$ ha/h. The closest answer is 0.5 ha/h, suggesting a possible approximation or slightly different assumptions about the planter's configuration.",
+      "explanation": "To calculate the theoretical field capacity, we first need to determine the width of the planter. Assuming it is a single-row planter, the width can be considered as the row spacing, which is 20 cm or 0.2 meters. The speed of the tractor is given as 5 km/h. The formula for theoretical field capacity is $Field Capacity = \\frac{Speed (km/h) \\times Width (m)}{10}$. Substituting the given values, we get $Field Capacity = \\frac{5 \\times 0.2}{10} = 0.1$ ha/h. However, this is not among the options. If we infer a multi-row planter, for example, a 4-row planter, the effective width would be $4 \\times 0.2 = 0.8$ meters. Then, $Field Capacity = \\frac{5 \\times 0.8}{10} = 0.4$ ha/h. The closest answer is 0.5 ha/h, suggesting a possible approximation or slightly different assumptions about the planter's configuration.",
       "difficulty": 4
     },
     {
@@ -31971,7 +31971,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "First, we need to determine the width of the planter. Assuming it is a single row planter, the width is equivalent to the row spacing, which is 30 cm or 0.3 meters. The speed is given as 5 km/h. Using the formula for theoretical field capacity: $\\text{Field Capacity} = \\frac{5 \\times 0.3}{10} = 0.15$ ha/h for a single row. However, if we consider a multi-row planter or adjust our understanding to match the given options, we might be expected to assume a different width or additional context not provided. For a straightforward calculation with given data, none of the options directly match, suggesting a potential misinterpretation or need for additional context like the number of rows planted simultaneously.",
+      "explanation": "First, we need to determine the width of the planter. Assuming it is a single row planter, the width is equivalent to the row spacing, which is 30 cm or 0.3 meters. The speed is given as 5 km/h. Using the formula for theoretical field capacity: $\\text{Field Capacity} = \\frac{5 \\times 0.3}{10} = 0.15$ ha/h for a single row. However, if we consider a multi-row planter or adjust our understanding to match the given options, we might be expected to infer a different width or additional context not provided. For a straightforward calculation with given data, none of the options directly match, suggesting a potential misinterpretation or need for additional context like the number of rows planted simultaneously.",
       "difficulty": 4
     },
     {
@@ -32451,7 +32451,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First, we need to establish the row spacing, which isn't directly given. Assuming a standard row spacing of 75 cm for many crops, the seeding rate can be calculated as follows: $\\text{Seeding rate} = \\frac{10000}{50 \\times 75} = \\frac{10000}{3750} = 266,667$ seeds per hectare, approximately. However, the closest answer and a common assumption for row spacing might directly lead to an answer like 400,000 if specific row spacing is assumed or if simplifications are made. The exact calculation depends on row spacing. For a row spacing of 50 cm, it directly gives $\\frac{10000}{0.5 \\times 0.5} = 400,000$ plants/ha, matching an option directly.",
+      "explanation": "First, we need to establish the row spacing, which isn't directly given. Assuming a standard row spacing of 75 cm for many crops, the seeding rate can be calculated as follows: $\\text{Seeding rate} = \\frac{10000}{50 \\times 75} = \\frac{10000}{3750} = 266,667$ seeds per hectare, approximately. However, the closest answer and a common assumption for row spacing might directly lead to an answer like 400,000 if specific row spacing is inferd or if simplifications are made. The exact calculation depends on row spacing. For a row spacing of 50 cm, it directly gives $\\frac{10000}{0.5 \\times 0.5} = 400,000$ plants/ha, matching an option directly.",
       "difficulty": 4
     },
     {
@@ -32611,7 +32611,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First, we need to determine the width of the planter. Assuming it's a single row planter, the width is the spacing between rows, which we'll assume to be 40 cm or 0.4 m for simplicity. The speed is 5 km/h or 1.39 m/s (since $5 \\times \\frac{1000}{3600} = 1.39$). The theoretical field capacity is given by $\\frac{Speed \\times Width}{10} = \\frac{5 \\times 0.4}{10} = 0.2$ ha/h for a single row. For a multi-row planter, the capacity would be higher. Assuming a 5-row planter, the capacity would be $5 \\times 0.2 = 1.0$ ha/h.",
+      "explanation": "First, we need to determine the width of the planter. Assuming it's a single row planter, the width is the spacing between rows, which we'll infer to be 40 cm or 0.4 m for simplicity. The speed is 5 km/h or 1.39 m/s (since $5 \\times \\frac{1000}{3600} = 1.39$). The theoretical field capacity is given by $\\frac{Speed \\times Width}{10} = \\frac{5 \\times 0.4}{10} = 0.2$ ha/h for a single row. For a multi-row planter, the capacity would be higher. Assuming a 5-row planter, the capacity would be $5 \\times 0.2 = 1.0$ ha/h.",
       "difficulty": 4
     },
     {
@@ -32747,7 +32747,7 @@
       "year": 2018,
       "topic": "Agricultural Engineering and Technology",
       "subtopic": "Farm Mechanization, Tools and Structures",
-      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 25 cm. If the tractor travels at a speed of 4 km/h, what is the theoretical field capacity of the planter in hectares per hour? Assume the planter has 4 rows.",
+      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 25 cm. If the tractor travels at a speed of 4 km/h, what is the theoretical field capacity of the planter in hectares per hour? infer the planter has 4 rows.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -33227,7 +33227,7 @@
       "year": 2018,
       "topic": "Agricultural Engineering and Technology",
       "subtopic": "Farm Mechanization, Tools and Structures",
-      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 30 cm. If the tractor travels at a speed of 5 km/h, what is the theoretical field capacity of the planter in hectares per hour? Assume the planter has 4 rows.",
+      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 30 cm. If the tractor travels at a speed of 5 km/h, what is the theoretical field capacity of the planter in hectares per hour? infer the planter has 4 rows.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -33571,7 +33571,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "First, convert the speed to meters per hour: $4 \\text{ km/h} = 4000 \\text{ m/h}$. The area covered per hour is $4000 \\text{ m} \\times \\text{row spacing}$. Assuming a row spacing of 1 m (a common spacing for many crops), the area covered per hour is $4000 \\text{ m}^2$. The seeding rate per hectare is calculated as $\\frac{10000}{0.5} = 20000$ seeds per hectare per row. For a single row, this is 20,000 seeds/ha. If we assume the planter is for multiple rows (e.g., 4 rows), the total seeding rate would be $4 \\times 20,000 = 80,000$ seeds/ha.",
+      "explanation": "First, convert the speed to meters per hour: $4 \\text{ km/h} = 4000 \\text{ m/h}$. The area covered per hour is $4000 \\text{ m} \\times \\text{row spacing}$. Assuming a row spacing of 1 m (a common spacing for many crops), the area covered per hour is $4000 \\text{ m}^2$. The seeding rate per hectare is calculated as $\\frac{10000}{0.5} = 20000$ seeds per hectare per row. For a single row, this is 20,000 seeds/ha. If we infer the planter is for multiple rows (e.g., 4 rows), the total seeding rate would be $4 \\times 20,000 = 80,000$ seeds/ha.",
       "difficulty": 4
     },
     {
@@ -33707,7 +33707,7 @@
       "year": 2018,
       "topic": "Agricultural Engineering and Technology",
       "subtopic": "Farm Mechanization, Tools and Structures",
-      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 40 cm. If the tractor travels at a speed of 5 km/h, what is the theoretical field capacity of the planter in hectares per hour? Assume the planter has 4 rows.",
+      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 40 cm. If the tractor travels at a speed of 5 km/h, what is the theoretical field capacity of the planter in hectares per hour? infer the planter has 4 rows.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -34027,7 +34027,7 @@
       "year": 2018,
       "topic": "Agricultural Engineering and Technology",
       "subtopic": "Farm Mechanization, Tools and Structures",
-      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 45 cm. If the tractor travels at a speed of 4.5 km/h, what is the theoretical field capacity of the planter in hectares per hour? Assume the planter has 4 rows.",
+      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 45 cm. If the tractor travels at a speed of 4.5 km/h, what is the theoretical field capacity of the planter in hectares per hour? infer the planter has 4 rows.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -34371,7 +34371,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "First, we need to calculate the width. Assuming a single row planter, the width is the spacing between rows, which we'll assume is 35 cm or 0.35 m for simplicity. The speed is 5.5 km/h or 5.5 \\times \\frac{1000}{3600} m/s = 1.53 m/s. However, for field capacity, we use the formula $FC = \\frac{Speed \\times Width}{10}$, where speed is in km/h and width is in meters. So, $FC = \\frac{5.5 \\times 0.35}{10} = 0.1925$ ha/h. It seems there was an oversight in the initial calculation; the correct answer isn't directly available. Let's reassess: if we consider the effective width as 1 meter (for a multi-row planter), $FC = \\frac{5.5 \\times 1}{10} = 0.55$ ha/h.",
+      "explanation": "First, we need to calculate the width. Assuming a single row planter, the width is the spacing between rows, which we'll infer is 35 cm or 0.35 m for simplicity. The speed is 5.5 km/h or 5.5 \\times \\frac{1000}{3600} m/s = 1.53 m/s. However, for field capacity, we use the formula $FC = \\frac{Speed \\times Width}{10}$, where speed is in km/h and width is in meters. So, $FC = \\frac{5.5 \\times 0.35}{10} = 0.1925$ ha/h. It seems there was an oversight in the initial calculation; the correct answer isn't directly available. Let's reassess: if we consider the effective width as 1 meter (for a multi-row planter), $FC = \\frac{5.5 \\times 1}{10} = 0.55$ ha/h.",
       "difficulty": 4
     },
     {
@@ -34531,7 +34531,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Theoretical field capacity ($FC$) is given by $FC = \\frac{S \\times W}{10000}$, where $S$ is the speed in km/h and $W$ is the width of operation in meters. Assuming a 4-row planter with 30 cm spacing, $W = 4 \\times 0.3 = 1.2$ meters. Thus, $FC = \\frac{3 \\times 1.2}{10} = 0.36$ hectares per hour is incorrect due to a miscalculation. Correcting, if we assume $W = 1.2$ m and $S = 3$ km/h, $FC = \\frac{3 \\times 1.2}{10} = 0.36$. It seems there was a mistake in the given options or calculation. Let's correct this: For a 4-row planter, $W = 1.2$ m. So, $FC = 3 \\times 1.2 / 10 = 0.36$. None of the given options match this calculation directly, suggesting a need to revisit assumptions or check the given choices again.",
+      "explanation": "Theoretical field capacity ($FC$) is given by $FC = \\frac{S \\times W}{10000}$, where $S$ is the speed in km/h and $W$ is the width of operation in meters. Assuming a 4-row planter with 30 cm spacing, $W = 4 \\times 0.3 = 1.2$ meters. Thus, $FC = \\frac{3 \\times 1.2}{10} = 0.36$ hectares per hour is incorrect due to a miscalculation. Correcting, if we infer $W = 1.2$ m and $S = 3$ km/h, $FC = \\frac{3 \\times 1.2}{10} = 0.36$. It seems there was a mistake in the given options or calculation. Let's correct this: For a 4-row planter, $W = 1.2$ m. So, $FC = 3 \\times 1.2 / 10 = 0.36$. None of the given options match this calculation directly, suggesting a need to revisit assumptions or check the given choices again.",
       "difficulty": 4
     },
     {
@@ -34691,7 +34691,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First, convert the speed to meters per hour: $6 \\, \\text{km/h} = 6000 \\, \\text{m/h}$. The width $W$ covered by the planter is assumed to be related to the spacing and number of rows. For simplicity, if we consider a single row planter, $W = 0.5 \\, \\text{m}$. Thus, the theoretical field capacity $FC = \\frac{S \\times W}{10000} = \\frac{6000 \\times 0.5}{10000} = 0.3 \\, \\text{ha/h}$ per row. For a multi-row planter (e.g., 2 rows), $FC = 0.6 \\, \\text{ha/h}$. Assuming a 2-row planter or similar configuration, the closest answer reflecting a plausible multi-row scenario is 0.8 ha/h.",
+      "explanation": "First, convert the speed to meters per hour: $6 \\, \\text{km/h} = 6000 \\, \\text{m/h}$. The width $W$ covered by the planter is inferd to be related to the spacing and number of rows. For simplicity, if we consider a single row planter, $W = 0.5 \\, \\text{m}$. Thus, the theoretical field capacity $FC = \\frac{S \\times W}{10000} = \\frac{6000 \\times 0.5}{10000} = 0.3 \\, \\text{ha/h}$ per row. For a multi-row planter (e.g., 2 rows), $FC = 0.6 \\, \\text{ha/h}$. Assuming a 2-row planter or similar configuration, the closest answer reflecting a plausible multi-row scenario is 0.8 ha/h.",
       "difficulty": 4
     },
     {
@@ -35811,7 +35811,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "First, we need to determine the width of the planter. Assuming it's a single row planter, the width is equivalent to the row spacing, which is 50 cm or 0.5 meters. The speed is given as 6 km/h, which is 6000 meters per hour. The theoretical field capacity is calculated using the formula: $\\text{Field Capacity} = \\frac{\\text{Speed (m/h)} \\times \\text{Width (m)}}{10,000}$. Substituting the given values, we get $\\text{Field Capacity} = \\frac{6000 \\times 0.5}{10,000} = 0.3$ ha/h. However, this answer is not available. Let's assume it's a 4-row planter, so the width is $4 \\times 0.5 = 2$ meters. Then, $\\text{Field Capacity} = \\frac{6000 \\times 2}{10,000} = 1.2$ ha/h. Thus, the correct answer is C, 1.2 ha/h.",
+      "explanation": "First, we need to determine the width of the planter. Assuming it's a single row planter, the width is equivalent to the row spacing, which is 50 cm or 0.5 meters. The speed is given as 6 km/h, which is 6000 meters per hour. The theoretical field capacity is calculated using the formula: $\\text{Field Capacity} = \\frac{\\text{Speed (m/h)} \\times \\text{Width (m)}}{10,000}$. Substituting the given values, we get $\\text{Field Capacity} = \\frac{6000 \\times 0.5}{10,000} = 0.3$ ha/h. However, this answer is not available. Let's infer it's a 4-row planter, so the width is $4 \\times 0.5 = 2$ meters. Then, $\\text{Field Capacity} = \\frac{6000 \\times 2}{10,000} = 1.2$ ha/h. Thus, the correct answer is C, 1.2 ha/h.",
       "difficulty": 4
     },
     {
@@ -36107,7 +36107,7 @@
       "year": 2021,
       "topic": "Agricultural Engineering and Technology",
       "subtopic": "Farm Mechanization, Tools and Structures",
-      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 25 cm. If the tractor travels at a speed of 5 km/h, what is the theoretical field capacity of the planter in hectares per hour? Assume the planter has 4 rows.",
+      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 25 cm. If the tractor travels at a speed of 5 km/h, what is the theoretical field capacity of the planter in hectares per hour? infer the planter has 4 rows.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -36907,7 +36907,7 @@
       "year": 2018,
       "topic": "Agricultural Engineering and Technology",
       "subtopic": "Farm Mechanization, Tools and Structures",
-      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 50 cm. If the tractor travels at a speed of 6 km/h, what is the theoretical number of seeds sown per hectare? (Assume 1 hectare = 10000 $m^2$)",
+      "question_text": "A tractor-drawn planter is used to sow seeds at a spacing of 50 cm. If the tractor travels at a speed of 6 km/h, what is the theoretical number of seeds sown per hectare? (infer 1 hectare = 10000 $m^2$)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -36931,7 +36931,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "To find the number of seeds sown per hectare, first, we need to calculate the area covered per seed. Given that the seed spacing is 50 cm (or 0.5 m), and assuming the row spacing is also 50 cm (since it's not given, we'll assume it's the same for simplicity), the area per seed is $0.5 \\times 0.5 = 0.25 m^2$. The number of seeds per hectare is $\\frac{10000}{0.25} = 40000$. Thus, the theoretical number of seeds sown per hectare is 40000.",
+      "explanation": "To find the number of seeds sown per hectare, first, we need to calculate the area covered per seed. Given that the seed spacing is 50 cm (or 0.5 m), and assuming the row spacing is also 50 cm (since it's not given, we'll infer it's the same for simplicity), the area per seed is $0.5 \\times 0.5 = 0.25 m^2$. The number of seeds per hectare is $\\frac{10000}{0.25} = 40000$. Thus, the theoretical number of seeds sown per hectare is 40000.",
       "difficulty": 4
     },
     {
@@ -38443,7 +38443,7 @@
       "year": 2019,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A farmer applies a fertilizer with an NPK ratio of 15:15:15. If the application rate is 250 kg/ha, how much phosphorus (P) is applied per hectare? Assume the fertilizer is 100% NPK.",
+      "question_text": "A farmer applies a fertilizer with an NPK ratio of 15:15:15. If the application rate is 250 kg/ha, how much phosphorus (P) is applied per hectare? infer the fertilizer is 100% NPK.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -43371,7 +43371,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is considering investing in a new storage facility that costs ₦2,000,000. The facility is expected to reduce post-harvest losses by 20%. If the farmer's current annual revenue is ₦5,000,000, what is the expected annual increase in revenue due to the investment? Assume the reduction in post-harvest losses directly translates to increased revenue.",
+      "question_text": "A farmer is considering investing in a new storage facility that costs ₦2,000,000. The facility is expected to reduce post-harvest losses by 20%. If the farmer's current annual revenue is ₦5,000,000, what is the expected annual increase in revenue due to the investment? infer the reduction in post-harvest losses directly translates to increased revenue.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -48971,7 +48971,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating the cost-benefit analysis of investing in a new irrigation system. The initial cost is ₦2,000,000, and it is expected to increase crop yield by 20% and reduce water wastage by 30%. If the farmer's current annual revenue is ₦5,000,000, what is the expected increase in revenue due to the investment? Assume the cost of the irrigation system is depreciated evenly over 5 years.",
+      "question_text": "A farmer is evaluating the cost-benefit analysis of investing in a new irrigation system. The initial cost is ₦2,000,000, and it is expected to increase crop yield by 20% and reduce water wastage by 30%. If the farmer's current annual revenue is ₦5,000,000, what is the expected increase in revenue due to the investment? infer the cost of the irrigation system is depreciated evenly over 5 years.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -51715,7 +51715,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "To calculate the NPV, we use the given formula: \\[ NPV = -C + \\sum_{t=1}^{n} \\frac{R_t}{(1 + r)^t} \\]. Here, \\( C = 800,000 \\), \\( R_t = 150,000 \\), \\( r = 0.08 \\), and \\( n = 8 \\). Substituting these values, we get \\[ NPV = -800,000 + \\sum_{t=1}^{8} \\frac{150,000}{(1 + 0.08)^t} \\]. Calculating the sum: \\[ NPV = -800,000 + 150,000 \\times \\frac{1 - (1 + 0.08)^{-8}}{0.08} \\]. Using the formula for the sum of a geometric series, we find \\[ NPV = -800,000 + 150,000 \\times 5.7466 \\]. Thus, \\[ NPV = -800,000 + 861,990 = 61,990 \\]. The closest answer is ₦249,878 is not correct based on our calculation, but let's assume it's the correct choice for the sake of this example.",
+      "explanation": "To calculate the NPV, we use the given formula: \\[ NPV = -C + \\sum_{t=1}^{n} \\frac{R_t}{(1 + r)^t} \\]. Here, \\( C = 800,000 \\), \\( R_t = 150,000 \\), \\( r = 0.08 \\), and \\( n = 8 \\). Substituting these values, we get \\[ NPV = -800,000 + \\sum_{t=1}^{8} \\frac{150,000}{(1 + 0.08)^t} \\]. Calculating the sum: \\[ NPV = -800,000 + 150,000 \\times \\frac{1 - (1 + 0.08)^{-8}}{0.08} \\]. Using the formula for the sum of a geometric series, we find \\[ NPV = -800,000 + 150,000 \\times 5.7466 \\]. Thus, \\[ NPV = -800,000 + 861,990 = 61,990 \\]. The closest answer is ₦249,878 is not correct based on our calculation, but let's infer it's the correct choice for the sake of this example.",
       "difficulty": 4
     },
     {
@@ -52035,7 +52035,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "To calculate the NPV, we use the given formula: \\[ NPV = -1200000 + \\sum_{t=1}^{6} \\frac{250000}{(1 + 0.10)^t} \\]. First, calculate the discount factor for each year: Year 1: \\( \\frac{1}{(1 + 0.10)^1} = 0.9091 \\), Year 2: \\( \\frac{1}{(1 + 0.10)^2} = 0.8264 \\), and so on until Year 6. Then, multiply each by ₦250,000 and sum them. \\[ NPV = -1200000 + 250000(0.9091 + 0.8264 + 0.7513 + 0.6830 + 0.6209 + 0.5645) \\]. \\[ NPV = -1200000 + 250000(4.3552) \\]. \\[ NPV = -1200000 + 1088800 = -₦111200 \\]. The closest answer is ₦288,225 is not correct based on the exact calculation here, but let's assume it's related to a different interpretation or rounding.",
+      "explanation": "To calculate the NPV, we use the given formula: \\[ NPV = -1200000 + \\sum_{t=1}^{6} \\frac{250000}{(1 + 0.10)^t} \\]. First, calculate the discount factor for each year: Year 1: \\( \\frac{1}{(1 + 0.10)^1} = 0.9091 \\), Year 2: \\( \\frac{1}{(1 + 0.10)^2} = 0.8264 \\), and so on until Year 6. Then, multiply each by ₦250,000 and sum them. \\[ NPV = -1200000 + 250000(0.9091 + 0.8264 + 0.7513 + 0.6830 + 0.6209 + 0.5645) \\]. \\[ NPV = -1200000 + 250000(4.3552) \\]. \\[ NPV = -1200000 + 1088800 = -₦111200 \\]. The closest answer is ₦288,225 is not correct based on the exact calculation here, but let's infer it's related to a different interpretation or rounding.",
       "difficulty": 4
     },
     {
@@ -68515,7 +68515,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "To break even, the increase in profit must at least cover the cost of the technology (₦300,000). The current profit is ₦1,000,000. The required increase is \\(\\frac{300,000}{1,000,000} \\times 100\\% = 30\\%\\). However, the technology promises a 20% increase in yield, which translates to a potential increase in profit. Let's denote the percentage increase in profit as \\(x\\). The equation to break even is \\(1,000,000 \\times \\frac{x}{100} = 300,000\\), solving for \\(x\\) gives \\(x = 30\\%\\). Since the 20% increase in yield is expected to translate into profit, the minimum profit increase required for break-even considering the yield increase is still 30% because the actual profit increase from a 20% yield increase isn't directly given. Thus, the closest answer that makes the investment viable is 30% if we assume the yield increase directly correlates with profit increase.",
+      "explanation": "To break even, the increase in profit must at least cover the cost of the technology (₦300,000). The current profit is ₦1,000,000. The required increase is \\(\\frac{300,000}{1,000,000} \\times 100\\% = 30\\%\\). However, the technology promises a 20% increase in yield, which translates to a potential increase in profit. Let's denote the percentage increase in profit as \\(x\\). The equation to break even is \\(1,000,000 \\times \\frac{x}{100} = 300,000\\), solving for \\(x\\) gives \\(x = 30\\%\\). Since the 20% increase in yield is expected to translate into profit, the minimum profit increase required for break-even considering the yield increase is still 30% because the actual profit increase from a 20% yield increase isn't directly given. Thus, the closest answer that makes the investment viable is 30% if we infer the yield increase directly correlates with profit increase.",
       "difficulty": 4
     },
     {
@@ -81611,7 +81611,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating the cost-effectiveness of two different irrigation systems for his farm. System A costs $\\$8,000$ to install and has an annual operating cost of $\\$1,200$. System B costs $\\$12,000$ to install and has an annual operating cost of $\\$800$. If the farmer plans to use the irrigation system for 8 years, which system is more cost-effective? Assume an annual discount rate of 10%.",
+      "question_text": "A farmer is evaluating the cost-effectiveness of two different irrigation systems for his farm. System A costs $\\$8,000$ to install and has an annual operating cost of $\\$1,200$. System B costs $\\$12,000$ to install and has an annual operating cost of $\\$800$. If the farmer plans to use the irrigation system for 8 years, which system is more cost-effective? infer an annual discount rate of 10%.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -82091,7 +82091,7 @@
       "year": 2022,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating two different investment options for his farm: Option A, which costs $\\$8,000$ and is expected to yield an annual return of 12%, and Option B, which costs $\\$10,000$ and is expected to yield an annual return of 15%. Using the formula for Net Present Value (NPV) \\[ NPV = -C + \\frac{R}{r} \\], where $C$ is the initial cost, $R$ is the annual return, and $r$ is the discount rate (assumed to be 10% or 0.10), which option has the higher NPV?",
+      "question_text": "A farmer is evaluating two different investment options for his farm: Option A, which costs $\\$8,000$ and is expected to yield an annual return of 12%, and Option B, which costs $\\$10,000$ and is expected to yield an annual return of 15%. Using the formula for Net Present Value (NPV) \\[ NPV = -C + \\frac{R}{r} \\], where $C$ is the initial cost, $R$ is the annual return, and $r$ is the discount rate (inferd to be 10% or 0.10), which option has the higher NPV?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -84171,7 +84171,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is considering two investment options for his farm. Option A requires an initial investment of \\$6,000 and is expected to yield an annual return of 12% for 5 years. Option B requires an initial investment of \\$7,000 and is expected to yield an annual return of 15% for 4 years. Using the formula for Net Present Value (NPV) \\[ NPV = -C + \\sum_{t=1}^{n} \\frac{R_t}{(1 + r)^t} \\], where $C$ is the initial cost, $R_t$ is the return at time $t$, $r$ is the discount rate (assumed to be 10%), and $n$ is the number of years, which option has the higher NPV?",
+      "question_text": "A farmer is considering two investment options for his farm. Option A requires an initial investment of \\$6,000 and is expected to yield an annual return of 12% for 5 years. Option B requires an initial investment of \\$7,000 and is expected to yield an annual return of 15% for 4 years. Using the formula for Net Present Value (NPV) \\[ NPV = -C + \\sum_{t=1}^{n} \\frac{R_t}{(1 + r)^t} \\], where $C$ is the initial cost, $R_t$ is the return at time $t$, $r$ is the discount rate (inferd to be 10%), and $n$ is the number of years, which option has the higher NPV?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -102251,7 +102251,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is considering diversifying his crop production to include cassava. The initial investment for cassava production is ₦800,000. If the expected annual return is ₦1,200,000 and the farmer's cost of capital is 15%, what is the net present value (NPV) of this investment over 3 years? Assume the annual returns are received at the end of each year.",
+      "question_text": "A farmer is considering diversifying his crop production to include cassava. The initial investment for cassava production is ₦800,000. If the expected annual return is ₦1,200,000 and the farmer's cost of capital is 15%, what is the net present value (NPV) of this investment over 3 years? infer the annual returns are received at the end of each year.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -118595,7 +118595,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "To determine which fertilizer maximizes profit, we need to calculate the increase in yield and the resulting revenue for each fertilizer, then compare this to the cost of the fertilizers. For Fertilizer A, a 15% increase on 2,000 kg/ha gives \\( 2000 \\times 0.15 = 300 \\) kg/ha additional yield. At ₦200 per kg, this equals ₦60,000. For Fertilizer B, a 20% increase gives \\( 2000 \\times 0.20 = 400 \\) kg/ha, worth ₦80,000. The additional revenue for Fertilizer B (₦80,000) is greater than for Fertilizer A (₦60,000), and although it costs more (₦1,000 vs ₦800 per bag), the increased revenue justifies the choice of Fertilizer B if we assume the cost is for the same application rate. Thus, Fertilizer B is the better choice.",
+      "explanation": "To determine which fertilizer maximizes profit, we need to calculate the increase in yield and the resulting revenue for each fertilizer, then compare this to the cost of the fertilizers. For Fertilizer A, a 15% increase on 2,000 kg/ha gives \\( 2000 \\times 0.15 = 300 \\) kg/ha additional yield. At ₦200 per kg, this equals ₦60,000. For Fertilizer B, a 20% increase gives \\( 2000 \\times 0.20 = 400 \\) kg/ha, worth ₦80,000. The additional revenue for Fertilizer B (₦80,000) is greater than for Fertilizer A (₦60,000), and although it costs more (₦1,000 vs ₦800 per bag), the increased revenue justifies the choice of Fertilizer B if we infer the cost is for the same application rate. Thus, Fertilizer B is the better choice.",
       "difficulty": 4
     },
     {
@@ -128811,7 +128811,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating the cost-benefit of investing in a new maize storage facility. The initial investment is ₦800,000, and it is expected to increase the selling price of maize by 15% per annum for the next 3 years. If the farmer currently sells 10 tons of maize per year at ₦150,000 per ton, what is the total additional revenue generated over 3 years due to the investment? Assume the quantity sold remains constant.",
+      "question_text": "A farmer is evaluating the cost-benefit of investing in a new maize storage facility. The initial investment is ₦800,000, and it is expected to increase the selling price of maize by 15% per annum for the next 3 years. If the farmer currently sells 10 tons of maize per year at ₦150,000 per ton, what is the total additional revenue generated over 3 years due to the investment? infer the quantity sold remains constant.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -141451,7 +141451,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is considering investing in a new storage facility that costs ₦500,000. The facility is expected to reduce storage losses by 20% and increase the selling price of his produce by 15%. If the farmer's current annual revenue is ₦2,000,000, what is the expected increase in revenue due to the investment? Assume the current storage loss is 10%.",
+      "question_text": "A farmer is considering investing in a new storage facility that costs ₦500,000. The facility is expected to reduce storage losses by 20% and increase the selling price of his produce by 15%. If the farmer's current annual revenue is ₦2,000,000, what is the expected increase in revenue due to the investment? infer the current storage loss is 10%.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -144971,7 +144971,7 @@
       "year": 2020,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A farmer applies a fertilizer with an NPK ratio of 15:15:15 at a rate of 300 kg/ha. If the fertilizer is fully utilized, how much nitrogen (in kg) is applied per hectare? Assume the fertilizer is 100% available to the crop.",
+      "question_text": "A farmer applies a fertilizer with an NPK ratio of 15:15:15 at a rate of 300 kg/ha. If the fertilizer is fully utilized, how much nitrogen (in kg) is applied per hectare? infer the fertilizer is 100% available to the crop.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -151563,7 +151563,7 @@
       "year": 2019,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A fertilizer with an NPK ratio of 10:20:10 is applied at a rate of 200 kg/ha. How much potassium (K) is applied per hectare? Assume the fertilizer is 100% NPK.",
+      "question_text": "A fertilizer with an NPK ratio of 10:20:10 is applied at a rate of 200 kg/ha. How much potassium (K) is applied per hectare? infer the fertilizer is 100% NPK.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -165316,7 +165316,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "To determine which strategy is more profitable, we need to calculate the total revenue from each strategy. For Strategy A, the farmer can sell up to 6000 kilograms at ₦500 per kilogram, giving a total revenue of $6000 \\times 500 = ₦3,000,000$. For Strategy B, the farmer sells 5000 kilograms at ₦350 per kilogram, giving a total revenue of $5000 \\times 350 = ₦1,750,000$. Although Strategy A has the potential to generate more revenue, the farmer is limited by the demand when selling directly to consumers. If we assume the farmer can sell all 6000 kilograms under Strategy A, it yields ₦3,000,000. However, Strategy B guarantees a sale of 5000 kilograms. Thus, we compare the revenues: ₦3,000,000 for Strategy A if all yams are sold, and ₦1,750,000 for Strategy B. Since ₦3,000,000 is greater than ₦1,750,000, Strategy A is potentially more profitable if the farmer can sell all 6000 kilograms. However, the question does not guarantee the sale of all 6000 kilograms under Strategy A. If the farmer can sell all 6000 kilograms, Strategy A is more profitable. But if there's uncertainty in selling all under Strategy A, we must consider the certainty of selling 5000 kilograms under Strategy B. The correct answer, B, assumes that the guaranteed sale and potentially lower marketing costs or risks make Strategy B more appealing or that there's an implicit understanding that not all 6000 kg can be sold under Strategy A.",
+      "explanation": "To determine which strategy is more profitable, we need to calculate the total revenue from each strategy. For Strategy A, the farmer can sell up to 6000 kilograms at ₦500 per kilogram, giving a total revenue of $6000 \\times 500 = ₦3,000,000$. For Strategy B, the farmer sells 5000 kilograms at ₦350 per kilogram, giving a total revenue of $5000 \\times 350 = ₦1,750,000$. Although Strategy A has the potential to generate more revenue, the farmer is limited by the demand when selling directly to consumers. If we infer the farmer can sell all 6000 kilograms under Strategy A, it yields ₦3,000,000. However, Strategy B guarantees a sale of 5000 kilograms. Thus, we compare the revenues: ₦3,000,000 for Strategy A if all yams are sold, and ₦1,750,000 for Strategy B. Since ₦3,000,000 is greater than ₦1,750,000, Strategy A is potentially more profitable if the farmer can sell all 6000 kilograms. However, the question does not guarantee the sale of all 6000 kilograms under Strategy A. If the farmer can sell all 6000 kilograms, Strategy A is more profitable. But if there's uncertainty in selling all under Strategy A, we must consider the certainty of selling 5000 kilograms under Strategy B. The correct answer, B, infers that the guaranteed sale and potentially lower marketing costs or risks make Strategy B more appealing or that there's an implicit understanding that not all 6000 kg can be sold under Strategy A.",
       "difficulty": 3
     },
     {
@@ -165956,7 +165956,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "To determine the new annual profit, first calculate the increased profit due to the 25% yield increase: \\[ 800,000 \\times 1.25 = 1,000,000 \\]. Then, consider the water cost savings. Assuming the water cost is a significant portion of the expenses, a 30% reduction in water costs will further increase profit. If we assume water costs are 20% of the current profit (₦160,000), a 30% saving is ₦48,000. Thus, the new profit is \\[ 1,000,000 + 48,000 + \\text{other potential savings} = 1,048,000 \\]. Rounding this to the nearest answer choice gives ₦1,200,000 (considering potential additional savings or simplifications). Thus, the best answer is A.",
+      "explanation": "To determine the new annual profit, first calculate the increased profit due to the 25% yield increase: \\[ 800,000 \\times 1.25 = 1,000,000 \\]. Then, consider the water cost savings. Assuming the water cost is a significant portion of the expenses, a 30% reduction in water costs will further increase profit. If we infer water costs are 20% of the current profit (₦160,000), a 30% saving is ₦48,000. Thus, the new profit is \\[ 1,000,000 + 48,000 + \\text{other potential savings} = 1,048,000 \\]. Rounding this to the nearest answer choice gives ₦1,200,000 (considering potential additional savings or simplifications). Thus, the best answer is A.",
       "difficulty": 4
     },
     {
@@ -167404,7 +167404,7 @@
       "year": 2019,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A farmer applies a fertilizer with an NPK ratio of 10:20:10. If the application rate is 250 kg/ha, how much phosphorus (P) is applied per hectare? Assume the fertilizer is 100% NPK.",
+      "question_text": "A farmer applies a fertilizer with an NPK ratio of 10:20:10. If the application rate is 250 kg/ha, how much phosphorus (P) is applied per hectare? infer the fertilizer is 100% NPK.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -168012,7 +168012,7 @@
       "year": 2020,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A farmer applies a fertilizer with an NPK ratio of 15:15:15. If the application rate is 200 kg/ha, how much nitrogen (in kg) is applied per hectare? Assume the fertilizer is fully composed of N, P\\(_2\\)O\\(_5\\), and K\\(_2\\)O.",
+      "question_text": "A farmer applies a fertilizer with an NPK ratio of 15:15:15. If the application rate is 200 kg/ha, how much nitrogen (in kg) is applied per hectare? infer the fertilizer is fully composed of N, P\\(_2\\)O\\(_5\\), and K\\(_2\\)O.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -169964,7 +169964,7 @@
       "year": 2021,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A farmer applies a fertilizer with an NPK ratio of 10:20:10. If the application rate is 300 kg/ha, how much phosphorus (P) is applied per hectare? Assume the fertilizer is 100% NPK.",
+      "question_text": "A farmer applies a fertilizer with an NPK ratio of 10:20:10. If the application rate is 300 kg/ha, how much phosphorus (P) is applied per hectare? infer the fertilizer is 100% NPK.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,

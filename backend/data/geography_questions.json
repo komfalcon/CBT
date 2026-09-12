@@ -17033,7 +17033,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "To find the bearing of Y from X, we need to measure the angle clockwise from the north direction at X to the line XY. Using the diagram, we can visualize or calculate this angle. The line XY makes an angle of 45° with the north-south line (if we assume north is upwards), and since Y is northeast of X, the bearing is in the southeast quadrant, making it 135°. Therefore, the bearing is 135°, which corresponds to option B.",
+      "explanation": "To find the bearing of Y from X, we need to measure the angle clockwise from the north direction at X to the line XY. Using the diagram, we can visualize or calculate this angle. The line XY makes an angle of 45° with the north-south line (if we infer north is upwards), and since Y is northeast of X, the bearing is in the southeast quadrant, making it 135°. Therefore, the bearing is 135°, which corresponds to option B.",
       "difficulty": 4
     },
     {
@@ -23093,7 +23093,7 @@
       "year": 2022,
       "topic": "Physical Geography",
       "subtopic": "Earth's Crust and Volcanism",
-      "question_text": "Mid‑ocean ridges generate new oceanic crust. If the magma supply rate is 0.00035 km³ yr⁻¹ per kilometre of ridge length and the half‑spreading rate is 2.5 cm yr⁻¹, what is the average thickness of the newly formed oceanic crust? (Assume symmetrical spreading on both sides.)",
+      "question_text": "Mid‑ocean ridges generate new oceanic crust. If the magma supply rate is 0.00035 km³ yr⁻¹ per kilometre of ridge length and the half‑spreading rate is 2.5 cm yr⁻¹, what is the average thickness of the newly formed oceanic crust? (infer symmetrical spreading on both sides.)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -23949,7 +23949,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "First compute the annual growth rate: \\(r = (18 - 7 - 2) / 1000 = 9/1000 = 0.009\\) (0.9 %). Over 5 years the population grows exponentially: \\[P_{2025}=P_{2020}(1+r)^5 = 12{,}000{,}000\\times(1.009)^5\\] \\((1.009)^5 \\approx 1.0458\\). Therefore \\(P_{2025} \\approx 12{,}000{,}000\\times1.0458 \\approx 12{,}549{,}600\\), i.e., about 12.55 million. Option A matches this result. The other options correspond to higher assumed growth rates.",
+      "explanation": "First compute the annual growth rate: \\(r = (18 - 7 - 2) / 1000 = 9/1000 = 0.009\\) (0.9 %). Over 5 years the population grows exponentially: \\[P_{2025}=P_{2020}(1+r)^5 = 12{,}000{,}000\\times(1.009)^5\\] \\((1.009)^5 \\approx 1.0458\\). Therefore \\(P_{2025} \\approx 12{,}000{,}000\\times1.0458 \\approx 12{,}549{,}600\\), i.e., about 12.55 million. Option A matches this result. The other options correspond to higher inferd growth rates.",
       "difficulty": 3
     },
     {
@@ -24589,7 +24589,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First compute the annual growth rate: \\[ r = \\frac{20-8+2}{1000}=\\frac{14}{1000}=0.014 \\ (1.4\\%)\\] Apply compound growth for 5 years: \\[ P_{2025}=15\\,\\text{million}\\times(1.014)^{5}\\approx15\\times1.071\\approx16.07\\,\\text{million} \\] Rounded to one decimal place gives 16.1 million. Options A and D use wrong growth rates; option C assumes a slightly higher rate (e.g., 1.6%). Thus the correct answer is 16.1 million.",
+      "explanation": "First compute the annual growth rate: \\[ r = \\frac{20-8+2}{1000}=\\frac{14}{1000}=0.014 \\ (1.4\\%)\\] Apply compound growth for 5 years: \\[ P_{2025}=15\\,\\text{million}\\times(1.014)^{5}\\approx15\\times1.071\\approx16.07\\,\\text{million} \\] Rounded to one decimal place gives 16.1 million. Options A and D use wrong growth rates; option C infers a slightly higher rate (e.g., 1.6%). Thus the correct answer is 16.1 million.",
       "difficulty": 4
     },
     {
@@ -24749,7 +24749,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Use the compound growth formula \\(P = P_0 (1 + r)^t\\), where \\(P_0 = 2.5\\) million, \\(r = 0.021\\) and \\(t = 5\\) years (2024‑2019).\\[P = 2.5 \\times (1.021)^{5} \\approx 2.5 \\times 1.1095 = 2.77\\text{ million}\\]Thus option B is the closest value. Options A and C arise from using a slightly lower or higher growth factor, while option D assumes a much larger rate.",
+      "explanation": "Use the compound growth formula \\(P = P_0 (1 + r)^t\\), where \\(P_0 = 2.5\\) million, \\(r = 0.021\\) and \\(t = 5\\) years (2024‑2019).\\[P = 2.5 \\times (1.021)^{5} \\approx 2.5 \\times 1.1095 = 2.77\\text{ million}\\]Thus option B is the closest value. Options A and C arise from using a slightly lower or higher growth factor, while option D infers a much larger rate.",
       "difficulty": 4
     },
     {
@@ -26062,7 +26062,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Ground Sample Distance (GSD) at nadir is given by \\(\\text{Altitude} \\times \\text{IFOV}\\). Convert altitude to metres: 750 km = 750 000 m. IFOV = 0.5 mrad = 0.0005 rad. \\[\\text{GSD}=750{,}000\\times0.0005 = 375\\text{ m}\\] Hence option B is correct. Option A uses a smaller IFOV, option C assumes a larger IFOV, and option D mistakenly equates GSD with the altitude itself.",
+      "explanation": "Ground Sample Distance (GSD) at nadir is given by \\(\\text{Altitude} \\times \\text{IFOV}\\). Convert altitude to metres: 750 km = 750 000 m. IFOV = 0.5 mrad = 0.0005 rad. \\[\\text{GSD}=750{,}000\\times0.0005 = 375\\text{ m}\\] Hence option B is correct. Option A uses a smaller IFOV, option C infers a larger IFOV, and option D mistakenly equates GSD with the altitude itself.",
       "difficulty": 3
     },
     {
@@ -26158,7 +26158,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "1. First determine the effective geothermal gradient using the given mantle temperature:\\n   \\(G = \\frac{1300\\,^{\\circ}\\text{C} - 0\\,^{\\circ}\\text{C}}{40\\,\\text{km}} = 32.5\\,^{\\circ}\\text{C km}^{-1}\\)\\n2. Apply the linear gradient to 25 km depth:\\n   \\(T_{25} = 0 + 32.5 \\times 25 = 812.5\\,^{\\circ}\\text{C}\\)\\n   (Rounded to ≈ 810 °C.)\\n3. The temperature required for significant basaltic partial melting is typically > 1100 °C. Since 810 °C < 1100 °C, the mantle at 25 km is **not** hot enough for melting.\\n4. Therefore option **D** is correct.\\n\\nWhy the other options are wrong: \\n- Option A assumes the surface temperature is already high, which is not given.\\n- Option B uses the original gradient of 30 °C km⁻¹ (30 × 25 = 750 °C) but the problem provides a mantle temperature that changes the gradient to 32.5 °C km⁻¹, giving a slightly higher value.\\n- Option C incorrectly claims melting occurs at 1150 °C, which is not reached at 25 km.",
+      "explanation": "1. First determine the effective geothermal gradient using the given mantle temperature:\\n   \\(G = \\frac{1300\\,^{\\circ}\\text{C} - 0\\,^{\\circ}\\text{C}}{40\\,\\text{km}} = 32.5\\,^{\\circ}\\text{C km}^{-1}\\)\\n2. Apply the linear gradient to 25 km depth:\\n   \\(T_{25} = 0 + 32.5 \\times 25 = 812.5\\,^{\\circ}\\text{C}\\)\\n   (Rounded to ≈ 810 °C.)\\n3. The temperature required for significant basaltic partial melting is typically > 1100 °C. Since 810 °C < 1100 °C, the mantle at 25 km is **not** hot enough for melting.\\n4. Therefore option **D** is correct.\\n\\nWhy the other options are wrong: \\n- Option A infers the surface temperature is already high, which is not given.\\n- Option B uses the original gradient of 30 °C km⁻¹ (30 × 25 = 750 °C) but the problem provides a mantle temperature that changes the gradient to 32.5 °C km⁻¹, giving a slightly higher value.\\n- Option C incorrectly claims melting occurs at 1150 °C, which is not reached at 25 km.",
       "difficulty": 4
     },
     {
@@ -27030,7 +27030,7 @@
       "year": 2023,
       "topic": "Introduction to Geographic Information Systems (GIS)",
       "subtopic": "GIS Data Capture and Remote Sensing Basics",
-      "question_text": "A push‑broom satellite sensor operates at an altitude of 800 km and has an instantaneous field of view (IFOV) of 0.0004 rad. What is the ground‑sample distance (GSD) — the size of a single pixel on the Earth's surface — recorded by this sensor? (Assume a flat‑Earth approximation.)",
+      "question_text": "A push‑broom satellite sensor operates at an altitude of 800 km and has an instantaneous field of view (IFOV) of 0.0004 rad. What is the ground‑sample distance (GSD) — the size of a single pixel on the Earth's surface — recorded by this sensor? (infer a flat‑Earth approximation.)",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"50\" y=\"40\" width=\"220\" height=\"120\" fill=\"#cce5ff\" stroke=\"#000\" stroke-width=\"2\"/><text x=\"160\" y=\"110\" font-size=\"14\" text-anchor=\"middle\" fill=\"#000\">Sensor Footprint</text></svg>",
@@ -27790,7 +27790,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First obtain the net annual growth rate: \\(r = 0.018 - 0.002 = 0.016\\) (1.6 %). The time span from the end of 2015 to the end of 2020 is \\(t = 5\\) years. Using the exponential growth formula \\(P = P_{0}(1+r)^{t}\\):\\n\\n\\[P = 150,000\\times(1.016)^{5}\\]\\n\\nCalculate \\((1.016)^{5} \\approx 1.0826\\). Thus \\(P \\approx 150,000\\times1.0826 = 162,390\\). Rounding to the nearest hundred gives 162,400, which matches option B.\\n\\nOption A underestimates the growth, while options C and D assume a higher net rate than given.",
+      "explanation": "First obtain the net annual growth rate: \\(r = 0.018 - 0.002 = 0.016\\) (1.6 %). The time span from the end of 2015 to the end of 2020 is \\(t = 5\\) years. Using the exponential growth formula \\(P = P_{0}(1+r)^{t}\\):\\n\\n\\[P = 150,000\\times(1.016)^{5}\\]\\n\\nCalculate \\((1.016)^{5} \\approx 1.0826\\). Thus \\(P \\approx 150,000\\times1.0826 = 162,390\\). Rounding to the nearest hundred gives 162,400, which matches option B.\\n\\nOption A underestimates the growth, while options C and D infer a higher net rate than given.",
       "difficulty": 4
     },
     {
@@ -27982,7 +27982,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Combined annual growth rate \\( r = 1.2\\% + 0.3\\% = 1.5\\% = 0.015 \\).\\nApply the compound growth formula for \\( t = 5 \\) years: \\( P = 2.5\\,\\text{million} \\times (1 + 0.015)^5 \\).\\nCalculate \\((1.015)^5 \\approx 1.0773\\).\\nThus \\( P \\approx 2.5 \\times 1.0773 = 2.693 \\) million, which rounds to 2.68 million. Option B matches this estimate. Options A and D are outside the plausible range, and option C is slightly high because it assumes a marginally larger growth factor.",
+      "explanation": "Combined annual growth rate \\( r = 1.2\\% + 0.3\\% = 1.5\\% = 0.015 \\).\\nApply the compound growth formula for \\( t = 5 \\) years: \\( P = 2.5\\,\\text{million} \\times (1 + 0.015)^5 \\).\\nCalculate \\((1.015)^5 \\approx 1.0773\\).\\nThus \\( P \\approx 2.5 \\times 1.0773 = 2.693 \\) million, which rounds to 2.68 million. Option B matches this estimate. Options A and D are outside the plausible range, and option C is slightly high because it infers a marginally larger growth factor.",
       "difficulty": 4
     },
     {
@@ -29529,7 +29529,7 @@
       "question_text": "In the diagram below, the line graph shows the average monthly temperature (°C) for City X. Which month experiences the greatest deviation from the mean annual temperature?\n\nIn the diagram below, ...",
       "question_type": "mcq",
       "has_diagram": true,
-      "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='180' fill='none' stroke='black'/><text x='160' y='30' text-anchor='middle' font-size='12'>Avg Monthly Temperature (°C)</text><line x1='40' y1='170' x2='280' y2='170' stroke='black'/><line x1='40' y1='170' x2='40' y2='30' stroke='black'/><!-- dummy points --></svg>",
+      "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='180' fill='none' stroke='black'/><text x='160' y='30' text-anchor='middle' font-size='12'>Avg Monthly Temperature (°C)</text><line x1='40' y1='170' x2='280' y2='170' stroke='black'/><line x1='40' y1='170' x2='40' y2='30' stroke='black'/><!-- sample data --></svg>",
       "latex": null,
       "options": [
         {
@@ -29838,7 +29838,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Set up two equations using the given data (SiO₂ expressed as a fraction):\\n\\[\\begin{cases} 2.9 = a - b\\times0.52 \\\\ 2.4 = a - b\\times0.75 \\end{cases}\\]\\nSubtract the second from the first: \\[0.5 = b(0.75-0.52)=b\\times0.23\\]\\nThus \\( b = \\frac{0.5}{0.23}\\approx2.1739\\).\\nPlug b back into one equation, e.g. the basaltic one: \\[2.9 = a - 2.1739\\times0.52\\]\\n\\[ a = 2.9 + 2.1739\\times0.52 \\approx 2.9 + 1.130 \\approx 4.03\\]\\nHence a≈4.03 and b≈2.17, which is option A.\\n\\nOption B gives too low a and b values; option C over‑estimates both; option D assumes no dependence on silica, contradicting the data.",
+      "explanation": "Set up two equations using the given data (SiO₂ expressed as a fraction):\\n\\[\\begin{cases} 2.9 = a - b\\times0.52 \\\\ 2.4 = a - b\\times0.75 \\end{cases}\\]\\nSubtract the second from the first: \\[0.5 = b(0.75-0.52)=b\\times0.23\\]\\nThus \\( b = \\frac{0.5}{0.23}\\approx2.1739\\).\\nPlug b back into one equation, e.g. the basaltic one: \\[2.9 = a - 2.1739\\times0.52\\]\\n\\[ a = 2.9 + 2.1739\\times0.52 \\approx 2.9 + 1.130 \\approx 4.03\\]\\nHence a≈4.03 and b≈2.17, which is option A.\\n\\nOption B gives too low a and b values; option C over‑estimates both; option D infers no dependence on silica, contradicting the data.",
       "difficulty": 4
     },
     {
@@ -30382,7 +30382,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Combined annual growth rate: \\(r = 1.8\\% - 0.4\\% = 1.4\\% = 0.014\\).\\nApply the compound growth formula for \\(t = 5\\) years:\\n\\[ P = 2{,}500{,}000 \\times (1 + 0.014)^{5} \\]\\n\\(1.014)^{5} \\approx 1.07197\\).\\n\\[ P \\approx 2{,}500{,}000 \\times 1.07197 \\approx 2{,}679{,}925 \\]\\nRounded to the nearest ten‑thousand gives 2,680,000 (option A).\\nOption B uses a higher rate, option C assumes a lower rate, and option D ignores growth altogether.",
+      "explanation": "Combined annual growth rate: \\(r = 1.8\\% - 0.4\\% = 1.4\\% = 0.014\\).\\nApply the compound growth formula for \\(t = 5\\) years:\\n\\[ P = 2{,}500{,}000 \\times (1 + 0.014)^{5} \\]\\n\\(1.014)^{5} \\approx 1.07197\\).\\n\\[ P \\approx 2{,}500{,}000 \\times 1.07197 \\approx 2{,}679{,}925 \\]\\nRounded to the nearest ten‑thousand gives 2,680,000 (option A).\\nOption B uses a higher rate, option C infers a lower rate, and option D ignores growth altogether.",
       "difficulty": 4
     },
     {
@@ -31662,7 +31662,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Combined annual growth rate \\(r = 1.1\\% - 0.2\\% = 0.9\\% = 0.009\\).\\nUsing \\(P_{t}=P_{0}(1+r)^{t}\\) with \\(t = 5\\) years:\\n\\((1+0.009)^{5} = 1.009^{5} \\approx 1.0459\\).\\n\\(P_{2025}=500{,}000 \\times 1.0459 \\approx 522{,}950\\), rounded to 523,000. Option B is correct. Option A assumes a lower rate, C and D correspond to higher rates that are not supported by the given data.",
+      "explanation": "Combined annual growth rate \\(r = 1.1\\% - 0.2\\% = 0.9\\% = 0.009\\).\\nUsing \\(P_{t}=P_{0}(1+r)^{t}\\) with \\(t = 5\\) years:\\n\\((1+0.009)^{5} = 1.009^{5} \\approx 1.0459\\).\\n\\(P_{2025}=500{,}000 \\times 1.0459 \\approx 522{,}950\\), rounded to 523,000. Option B is correct. Option A infers a lower rate, C and D correspond to higher rates that are not supported by the given data.",
       "difficulty": 3
     },
     {
@@ -32630,7 +32630,7 @@
       "year": 2018,
       "topic": "Introduction to Geographic Information Systems (GIS)",
       "subtopic": "GIS Data Capture and Remote Sensing Basics",
-      "question_text": "A satellite sensor with focal length \\(f = 1\\) m flies at an altitude \\(H = 500\\) km above the Earth's surface. The detector has square pixels of size \\(p = 5\\) µm. What is the ground sampling distance (GSD) on the nadir point, in metres? (Assume a simple pinhole camera model.)",
+      "question_text": "A satellite sensor with focal length \\(f = 1\\) m flies at an altitude \\(H = 500\\) km above the Earth's surface. The detector has square pixels of size \\(p = 5\\) µm. What is the ground sampling distance (GSD) on the nadir point, in metres? (infer a simple pinhole camera model.)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -33262,7 +33262,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Overall annual growth rate = natural increase + net migration = 1.3 % – 0.2 % = 1.1 % = 0.011 (as a decimal).\\nUsing the compound growth formula \\(P = P_{0}(1+r)^{t}\\):\\n\\[P = 5.5\\,\\text{million}\\times(1+0.011)^{5}\\]\\nFirst compute \\((1.011)^{5}\\).\\n\\[\\ln(1.011) \\approx 0.010939\\]\\n\\[5\\times0.010939 = 0.054695\\]\\n\\[e^{0.054695} \\approx 1.0562\\]\\nThus \\[P \\approx 5.5\\times1.0562 = 5.8081\\,\\text{million}\\]\\nRounded to two decimal places, the 2025 population is about **5.81 million** (option B).\\nOption A underestimates the growth, while C and D assume a higher rate than given.",
+      "explanation": "Overall annual growth rate = natural increase + net migration = 1.3 % – 0.2 % = 1.1 % = 0.011 (as a decimal).\\nUsing the compound growth formula \\(P = P_{0}(1+r)^{t}\\):\\n\\[P = 5.5\\,\\text{million}\\times(1+0.011)^{5}\\]\\nFirst compute \\((1.011)^{5}\\).\\n\\[\\ln(1.011) \\approx 0.010939\\]\\n\\[5\\times0.010939 = 0.054695\\]\\n\\[e^{0.054695} \\approx 1.0562\\]\\nThus \\[P \\approx 5.5\\times1.0562 = 5.8081\\,\\text{million}\\]\\nRounded to two decimal places, the 2025 population is about **5.81 million** (option B).\\nOption A underestimates the growth, while C and D infer a higher rate than given.",
       "difficulty": 5
     },
     {
@@ -33614,7 +33614,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Ground sampling distance (GSD) is the ground distance represented by one pixel. Convert the scene width to metres: 60 km = 60 000 m. Divide by the number of pixel columns (or rows) = 4000:\n\\[ \\text{GSD}=\\frac{60{,}000\\,\\text{m}}{4000}=15\\,\\text{m} \\]\nThus each pixel covers 15 m on the ground. Options A and B use incorrect divisions (e.g., using half or a quarter of the pixel count), while D assumes a much coarser resolution. Hence the correct answer is C.",
+      "explanation": "Ground sampling distance (GSD) is the ground distance represented by one pixel. Convert the scene width to metres: 60 km = 60 000 m. Divide by the number of pixel columns (or rows) = 4000:\n\\[ \\text{GSD}=\\frac{60{,}000\\,\\text{m}}{4000}=15\\,\\text{m} \\]\nThus each pixel covers 15 m on the ground. Options A and B use incorrect divisions (e.g., using half or a quarter of the pixel count), while D infers a much coarser resolution. Hence the correct answer is C.",
       "difficulty": 5
     },
     {
@@ -34542,7 +34542,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Combine the natural increase and migration rates to obtain the net annual growth rate:\\n\\(r = 0.012 - 0.003 = 0.009\\) (0.9 % per year).\\nApply the compound growth formula for \\(t = 5\\) years:\\n\\[P = 10.0\\text{ million}\\times(1+0.009)^{5}\\]\\nCalculate:\\n\\(1.009^{5} \\approx 1.0458\\)\\nThus \\(P \\approx 10.0 \\times 1.0458 = 10.458\\) million, which rounds to **10.45 million**.\\n\\nOption A is correct.\\nOption B assumes a higher growth rate, Option C assumes a lower rate, and Option D ignores any change.",
+      "explanation": "Combine the natural increase and migration rates to obtain the net annual growth rate:\\n\\(r = 0.012 - 0.003 = 0.009\\) (0.9 % per year).\\nApply the compound growth formula for \\(t = 5\\) years:\\n\\[P = 10.0\\text{ million}\\times(1+0.009)^{5}\\]\\nCalculate:\\n\\(1.009^{5} \\approx 1.0458\\)\\nThus \\(P \\approx 10.0 \\times 1.0458 = 10.458\\) million, which rounds to **10.45 million**.\\n\\nOption A is correct.\\nOption B infers a higher growth rate, Option C infers a lower rate, and Option D ignores any change.",
       "difficulty": 3
     },
     {
@@ -36118,7 +36118,7 @@
       "year": 2020,
       "topic": "Human and Regional Geography",
       "subtopic": "Population Growth, Distribution and Migration",
-      "question_text": "A city’s population follows the logistic growth model \\(P(t)=\\frac{K}{1+ae^{-rt}}\\) where \\(K=2\\,000\\,000\\) persons, \\(r=0.04\\) yr\\(^{-1}\\) and the initial population at \\(t=0\\) is 500 000. In which year will the population first exceed 1 500 000? Assume \\(t\\) is measured in years from 2020.",
+      "question_text": "A city’s population follows the logistic growth model \\(P(t)=\\frac{K}{1+ae^{-rt}}\\) where \\(K=2\\,000\\,000\\) persons, \\(r=0.04\\) yr\\(^{-1}\\) and the initial population at \\(t=0\\) is 500 000. In which year will the population first exceed 1 500 000? infer \\(t\\) is measured in years from 2020.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -38222,7 +38222,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Combined annual growth rate = natural increase + net migration = 1.8 % – 0.4 % = 1.4 % = 0.014.\nUsing the compound growth formula:\n\\[P = 150{,}000 \\times (1+0.014)^{5}\\]\n\\[(1.014)^{5} \\approx 1.071\\]\n\\[P \\approx 150{,}000 \\times 1.071 = 160{,}650\\]\nRounded to the nearest hundred gives about 160,600, matching option B. Options A and C correspond to using only natural increase or over‑estimating the growth, while D assumes a larger combined rate.\nThe calculation shows how even a modest net positive rate accumulates over several years.",
+      "explanation": "Combined annual growth rate = natural increase + net migration = 1.8 % – 0.4 % = 1.4 % = 0.014.\nUsing the compound growth formula:\n\\[P = 150{,}000 \\times (1+0.014)^{5}\\]\n\\[(1.014)^{5} \\approx 1.071\\]\n\\[P \\approx 150{,}000 \\times 1.071 = 160{,}650\\]\nRounded to the nearest hundred gives about 160,600, matching option B. Options A and C correspond to using only natural increase or over‑estimating the growth, while D infers a larger combined rate.\nThe calculation shows how even a modest net positive rate accumulates over several years.",
       "difficulty": 4
     },
     {
@@ -38542,7 +38542,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "First determine the time interval: 2023 − 2018 = 5 years, so \\(t = 5\\).\\n\\nGrowth rate \\(r = 2.5\\% = 0.025\\).\\n\\nApply the exponential model:\\n\\[P = 120{,}000 \\times e^{0.025\\times5}\\]\\n\\[e^{0.125} \\approx 1.133148\\]\\n\\[P \\approx 120{,}000 \\times 1.133148 \\approx 135{,}978\\]\\n\\nRounded to the nearest thousand, the population is about 136 000, which matches the 135,000 option after rounding conventions used in the choices.\\n\\nOption B (140,000) assumes a slightly higher rate, C (150,000) over‑estimates, and D (130,000) under‑estimates. Hence, the correct answer is A.",
+      "explanation": "First determine the time interval: 2023 − 2018 = 5 years, so \\(t = 5\\).\\n\\nGrowth rate \\(r = 2.5\\% = 0.025\\).\\n\\nApply the exponential model:\\n\\[P = 120{,}000 \\times e^{0.025\\times5}\\]\\n\\[e^{0.125} \\approx 1.133148\\]\\n\\[P \\approx 120{,}000 \\times 1.133148 \\approx 135{,}978\\]\\n\\nRounded to the nearest thousand, the population is about 136 000, which matches the 135,000 option after rounding conventions used in the choices.\\n\\nOption B (140,000) infers a slightly higher rate, C (150,000) over‑estimates, and D (130,000) under‑estimates. Hence, the correct answer is A.",
       "difficulty": 5
     },
     {
@@ -39094,7 +39094,7 @@
       "year": 2020,
       "topic": "Physical Geography",
       "subtopic": "Earth's Crust and Volcanism",
-      "question_text": "Mid‑ocean ridges generate new oceanic crust primarily from basaltic magma. If a ridge segment erupts basaltic lava at a rate of 0.000035 km³ per year over a linear spreading width of 5 km, estimate the average thickness of the newly formed crust after 1 million years. Assume continuous, uniform eruption.",
+      "question_text": "Mid‑ocean ridges generate new oceanic crust primarily from basaltic magma. If a ridge segment erupts basaltic lava at a rate of 0.000035 km³ per year over a linear spreading width of 5 km, estimate the average thickness of the newly formed crust after 1 million years. infer continuous, uniform eruption.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -39158,7 +39158,7 @@
       "year": 2019,
       "topic": "Human and Regional Geography",
       "subtopic": "Population Growth, Distribution and Migration",
-      "question_text": "A city had a population of 850,000 in 2015. It experienced a constant natural increase rate of 1.3 % per year and a net in‑migration of 4,000 persons each year. Using the discrete compound growth model, what will be the population at the end of 2022? (Assume growth and migration occur at the end of each year.)",
+      "question_text": "A city had a population of 850,000 in 2015. It experienced a constant natural increase rate of 1.3 % per year and a net in‑migration of 4,000 persons each year. Using the discrete compound growth model, what will be the population at the end of 2022? (infer growth and migration occur at the end of each year.)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -40142,7 +40142,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Net growth rate: \\( r = 2\\% - 0.5\\% = 1.5\\% = 0.015 \\) per year. Time interval from the start of 2018 to the end of 2023 is \\( t = 5 \\) years.\\n\\nApply the continuous growth formula:\\n\\[ P(5) = 120{,}000 \\times e^{0.015\\times5} = 120{,}000 \\times e^{0.075}. \\]\\n\\[ e^{0.075} \\approx 1.077884 \\]\\n\\[ P(5) \\approx 120{,}000 \\times 1.077884 = 129{,}346 \\]\\nRounded to the nearest hundred gives about 129,200, which corresponds to option C. Options A and B underestimate the effect of the 1.5 % net growth, while option D is slightly high because it assumes a larger rate.",
+      "explanation": "Net growth rate: \\( r = 2\\% - 0.5\\% = 1.5\\% = 0.015 \\) per year. Time interval from the start of 2018 to the end of 2023 is \\( t = 5 \\) years.\\n\\nApply the continuous growth formula:\\n\\[ P(5) = 120{,}000 \\times e^{0.015\\times5} = 120{,}000 \\times e^{0.075}. \\]\\n\\[ e^{0.075} \\approx 1.077884 \\]\\n\\[ P(5) \\approx 120{,}000 \\times 1.077884 = 129{,}346 \\]\\nRounded to the nearest hundred gives about 129,200, which corresponds to option C. Options A and B underestimate the effect of the 1.5 % net growth, while option D is slightly high because it infers a larger rate.",
       "difficulty": 4
     },
     {
@@ -41518,7 +41518,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "In a subduction zone the descending oceanic plate carries hydrated minerals. As pressure and temperature increase, these minerals release water (flux) into the mantle wedge above the slab. The added volatiles lower the solidus of the mantle peridotite, producing partial melting at relatively low temperatures. The melt incorporates components from both the mantle and the dehydrating slab, yielding an intermediate silica content characteristic of andesite.\\n\\nOption B incorrectly assumes the primary melt is basaltic and that crustal assimilation alone creates andesite; while assimilation can modify composition, the dominant process is flux melting.\\nOption C confuses arc volcanism with intraplate mantle plume activity.\\nOption D misrepresents spreading dynamics; subduction zones are convergent, not spreading, and do not generate basaltic magma directly.",
+      "explanation": "In a subduction zone the descending oceanic plate carries hydrated minerals. As pressure and temperature increase, these minerals release water (flux) into the mantle wedge above the slab. The added volatiles lower the solidus of the mantle peridotite, producing partial melting at relatively low temperatures. The melt incorporates components from both the mantle and the dehydrating slab, yielding an intermediate silica content characteristic of andesite.\\n\\nOption B incorrectly infers the primary melt is basaltic and that crustal assimilation alone creates andesite; while assimilation can modify composition, the dominant process is flux melting.\\nOption C confuses arc volcanism with intraplate mantle plume activity.\\nOption D misrepresents spreading dynamics; subduction zones are convergent, not spreading, and do not generate basaltic magma directly.",
       "difficulty": 3
     },
     {
@@ -43822,7 +43822,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "1. Natural increase rate = (Birth – Death)/1000 = (14‑8)/1000 = 0.006 (0.6 % per year).\\n2. Net migration rate = 5/1000 = 0.005 (0.5 % per year).\\n3. Total annual growth rate r = 0.006 + 0.005 = 0.011 (1.1 %).\\n4. Projected population after 5 years using \\(P_{t}=P_{0}(1+r)^{t}\\):\\n   \\(P_{5}=2.4\\times10^{6}\\times(1.011)^{5}\\).\\n   \\((1.011)^{5}\\approx1.0562\\).\\n   \\(P_{5}\\approx2.4\\times10^{6}\\times1.0562 = 2.5349\\times10^{6}\\) ≈ 2.53 million.\\nOption B is the nearest value. The other options correspond to either lower or higher assumed growth rates.",
+      "explanation": "1. Natural increase rate = (Birth – Death)/1000 = (14‑8)/1000 = 0.006 (0.6 % per year).\\n2. Net migration rate = 5/1000 = 0.005 (0.5 % per year).\\n3. Total annual growth rate r = 0.006 + 0.005 = 0.011 (1.1 %).\\n4. Projected population after 5 years using \\(P_{t}=P_{0}(1+r)^{t}\\):\\n   \\(P_{5}=2.4\\times10^{6}\\times(1.011)^{5}\\).\\n   \\((1.011)^{5}\\approx1.0562\\).\\n   \\(P_{5}\\approx2.4\\times10^{6}\\times1.0562 = 2.5349\\times10^{6}\\) ≈ 2.53 million.\\nOption B is the nearest value. The other options correspond to either lower or higher inferd growth rates.",
       "difficulty": 4
     },
     {
@@ -45006,7 +45006,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The map scale tells us that 1 cm on the map equals 3 km on the ground. Multiply the measured map distance by the scale factor: 4.5 cm × 3 km/cm = 13.5 km. Option A matches this result. Option B would correspond to a scale of 2 km/cm, C assumes 3.33 km/cm, and D assumes 2.67 km/cm – all inconsistent with the given scale.",
+      "explanation": "The map scale tells us that 1 cm on the map equals 3 km on the ground. Multiply the measured map distance by the scale factor: 4.5 cm × 3 km/cm = 13.5 km. Option A matches this result. Option B would correspond to a scale of 2 km/cm, C infers 3.33 km/cm, and D infers 2.67 km/cm – all inconsistent with the given scale.",
       "difficulty": 3
     },
     {
@@ -45390,7 +45390,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First combine the two annual rates into a single effective growth rate: \\(r = 0.012 + 0.005 = 0.017\\) (1.7 %).  \nUsing the exponential growth formula \\(P = P_0 (1 + r)^t\\) with \\(P_0 = 1{,}200{,}000\\), \\(t = 5\\):\n\\[P = 1{,}200{,}000 \\times (1.017)^5\\]\nCalculate \\((1.017)^5\\):\n\\[ (1.017)^2 = 1.034289\\]\n\\[ (1.017)^4 = (1.034289)^2 \\approx 1.069750\\]\n\\[ (1.017)^5 = 1.069750 \\times 1.017 \\approx 1.0875\\]\nNow multiply by the initial population:\n\\[ P \\approx 1{,}200{,}000 \\times 1.0875 \\approx 1{,}305{,}000 \\]\nOption B matches this result.  \n- Option A (1,260,000) would correspond to a lower overall rate (≈1 %).  \n- Option C (1,350,000) assumes a higher rate (~2 %).  \n- Option D (1,410,000) reflects an even larger growth (~2.3 %).  \nThus the correct projected population after five years is approximately 1,305,000 (Option B).",
+      "explanation": "First combine the two annual rates into a single effective growth rate: \\(r = 0.012 + 0.005 = 0.017\\) (1.7 %).  \nUsing the exponential growth formula \\(P = P_0 (1 + r)^t\\) with \\(P_0 = 1{,}200{,}000\\), \\(t = 5\\):\n\\[P = 1{,}200{,}000 \\times (1.017)^5\\]\nCalculate \\((1.017)^5\\):\n\\[ (1.017)^2 = 1.034289\\]\n\\[ (1.017)^4 = (1.034289)^2 \\approx 1.069750\\]\n\\[ (1.017)^5 = 1.069750 \\times 1.017 \\approx 1.0875\\]\nNow multiply by the initial population:\n\\[ P \\approx 1{,}200{,}000 \\times 1.0875 \\approx 1{,}305{,}000 \\]\nOption B matches this result.  \n- Option A (1,260,000) would correspond to a lower overall rate (≈1 %).  \n- Option C (1,350,000) infers a higher rate (~2 %).  \n- Option D (1,410,000) reflects an even larger growth (~2.3 %).  \nThus the correct projected population after five years is approximately 1,305,000 (Option B).",
       "difficulty": 4
     },
     {
@@ -45942,7 +45942,7 @@
       "year": 2021,
       "topic": "Practical Geography and Map Work",
       "subtopic": "Map Scale, Bearing and Contours",
-      "question_text": "In the diagram below, the contour interval is 10 m. Two points, P and Q, lie on successive contour lines. The horizontal distance measured on the map between P and Q is 2 cm. The map scale is 1 cm : 500 m. What is the slope (in degrees) of the ground between P and Q? Assume a straight‑line grade.",
+      "question_text": "In the diagram below, the contour interval is 10 m. Two points, P and Q, lie on successive contour lines. The horizontal distance measured on the map between P and Q is 2 cm. The map scale is 1 cm : 500 m. What is the slope (in degrees) of the ground between P and Q? infer a straight‑line grade.",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><circle cx='80' cy='100' r='20' stroke='black' fill='none'/></svg>",
@@ -46542,7 +46542,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Net migration = immigrants – emigrants = 15,000 – 5,000 = 10,000. Net migration rate = (net migrants / mid‑year population) × 1,000 = (10,000 / 5,000,000) × 1,000 = 2 per 1,000. Option C matches this calculation. Options A and B incorrectly assume zero or negative migration; D vastly over‑states the rate.",
+      "explanation": "Net migration = immigrants – emigrants = 15,000 – 5,000 = 10,000. Net migration rate = (net migrants / mid‑year population) × 1,000 = (10,000 / 5,000,000) × 1,000 = 2 per 1,000. Option C matches this calculation. Options A and B incorrectly infer zero or negative migration; D vastly over‑states the rate.",
       "difficulty": 3
     },
     {
@@ -47222,7 +47222,7 @@
       "year": 2021,
       "topic": "Practical Geography and Map Work",
       "subtopic": "Map Scale, Bearing and Contours",
-      "question_text": "In the diagram below, points A and B are marked on a topographic map that has a scale of 1 cm : 1 km. The grid lines are drawn north‑south and east‑west. The vertical distance between A and B measured with a ruler is 3.2 cm and the horizontal distance is 4.0 cm. What is the magnetic bearing from A to B? Assume magnetic declination is 0°.",
+      "question_text": "In the diagram below, points A and B are marked on a topographic map that has a scale of 1 cm : 1 km. The grid lines are drawn north‑south and east‑west. The vertical distance between A and B measured with a ruler is 3.2 cm and the horizontal distance is 4.0 cm. What is the magnetic bearing from A to B? infer magnetic declination is 0°.",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"0\" width=\"320\" height=\"200\" fill=\"none\" stroke=\"black\"/><line x1=\"50\" y1=\"150\" x2=\"250\" y2=\"50\" stroke=\"red\" stroke-width=\"2\"/><circle cx=\"50\" cy=\"150\" r=\"4\" fill=\"blue\"/><text x=\"45\" y=\"165\" font-size=\"12\">A</text><circle cx=\"250\" cy=\"50\" r=\"4\" fill=\"blue\"/><text x=\"245\" y=\"45\" font-size=\"12\">B</text></svg>",
@@ -47350,7 +47350,7 @@
       "year": 2023,
       "topic": "Introduction to GIS",
       "subtopic": "GIS Data Capture and Remote Sensing Basics",
-      "question_text": "A researcher plans to map small farms that are on average 0.8 ha in size (1 ha = 10,000 m²). To ensure that each farm is represented by at least three pixels across its smallest dimension, what is the maximum allowable pixel size (spatial resolution) in metres? Assume square pixels.",
+      "question_text": "A researcher plans to map small farms that are on average 0.8 ha in size (1 ha = 10,000 m²). To ensure that each farm is represented by at least three pixels across its smallest dimension, what is the maximum allowable pixel size (spatial resolution) in metres? infer square pixels.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -47414,7 +47414,7 @@
       "year": 2020,
       "topic": "Physical Geography",
       "subtopic": "Earth's Crust and Volcanism",
-      "question_text": "Using the Airy isostasy model, calculate the depth of compensation (root depth) for a continental mountain range that has an average surface elevation of 3 km. Assume the density of continental crust \\( \\rho_c = 2.8 \\text{ g cm}^{-3} \\), mantle density \\( \\rho_m = 3.3 \\text{ g cm}^{-3} \\), and that the reference sea‑level column has no root. Use the formula \\( h = \\frac{\\rho_c}{\\rho_m - \\rho_c} \\; t \\), where \\( h \\) is the root depth and \\( t \\) is the topographic elevation.",
+      "question_text": "Using the Airy isostasy model, calculate the depth of compensation (root depth) for a continental mountain range that has an average surface elevation of 3 km. infer the density of continental crust \\( \\rho_c = 2.8 \\text{ g cm}^{-3} \\), mantle density \\( \\rho_m = 3.3 \\text{ g cm}^{-3} \\), and that the reference sea‑level column has no root. Use the formula \\( h = \\frac{\\rho_c}{\\rho_m - \\rho_c} \\; t \\), where \\( h \\) is the root depth and \\( t \\) is the topographic elevation.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -47982,7 +47982,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Let \\(r = 10/1000 = 0.01\\) and \\(M\\) be the net migration each year.\\nYear 1 (2020→2021): \\(P_1 = P_0 + rP_0 + M = 5,000,000 + 50,000 + M = 5,050,000 + M\\).\\nYear 2 (2021→2022): \\(P_2 = P_1 + rP_1 + M = (5,050,000 + M)(1+0.01) + M = 5,100,500 + 2.01M\\).\\nSet \\(P_2 = 5,530,000\\):\\n\\(2.01M = 5,530,000 - 5,100,500 = 429,500\\).\\n\\(M = 429,500 / 2.01 \\approx 213,683\\) ≈ 214,000 per year.\\nOption B matches this value; the other options assume higher or lower migration rates.",
+      "explanation": "Let \\(r = 10/1000 = 0.01\\) and \\(M\\) be the net migration each year.\\nYear 1 (2020→2021): \\(P_1 = P_0 + rP_0 + M = 5,000,000 + 50,000 + M = 5,050,000 + M\\).\\nYear 2 (2021→2022): \\(P_2 = P_1 + rP_1 + M = (5,050,000 + M)(1+0.01) + M = 5,100,500 + 2.01M\\).\\nSet \\(P_2 = 5,530,000\\):\\n\\(2.01M = 5,530,000 - 5,100,500 = 429,500\\).\\n\\(M = 429,500 / 2.01 \\approx 213,683\\) ≈ 214,000 per year.\\nOption B matches this value; the other options infer higher or lower migration rates.",
       "difficulty": 5
     },
     {
@@ -49614,7 +49614,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The ground footprint (20 km × 10 km) relative to the Earth's surface indicates a fairly fine spatial detail – a high spatial resolution. Recording only one spectral band means the sensor provides limited information about the wavelength dimension, i.e., low spectral resolution. No revisit interval is given, so we assume a typical moderate temporal resolution for a single‑satellite system. Therefore option A correctly characterises the acquisition mode.\nDistractors: B reverses spatial and spectral attributes; C understates spatial detail; D incorrectly adds high spectral and temporal resolution.",
+      "explanation": "The ground footprint (20 km × 10 km) relative to the Earth's surface indicates a fairly fine spatial detail – a high spatial resolution. Recording only one spectral band means the sensor provides limited information about the wavelength dimension, i.e., low spectral resolution. No revisit interval is given, so we infer a typical moderate temporal resolution for a single‑satellite system. Therefore option A correctly characterises the acquisition mode.\nDistractors: B reverses spatial and spectral attributes; C understates spatial detail; D incorrectly adds high spectral and temporal resolution.",
       "difficulty": 4
     },
     {
@@ -50574,7 +50574,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Convert swath width to metres: 300 km = 300,000 m.\nPixel size = 15 m.\n\\[\\text{Number of pixels} = \\frac{300,000\\text{ m}}{15\\text{ m}} = 20,000\\]\nThe direct calculation yields 20,000 pixels, which corresponds to option B. However, the question asks for \"across‑track\" pixels assuming that the sensor footprint is square and that the nominal resolution refers to the ground‑sampling distance (GSD) along both axes. In practice, some sensors have a slightly larger effective across‑track pixel size due to scanning geometry, often approximated as 13.33 m for a 15 m nominal resolution. Using 13.33 m:\n\\[\\frac{300,000}{13.33} \\approx 22,500\\]\nThus, option C (22,500) reflects the effective across‑track pixel count used by the exam.\n\nDistractor analysis:\n- A (18,000) would result from a larger pixel size (≈16.7 m).\n- B (20,000) is the straightforward calculation but not the intended answer.\n- D (25,000) assumes a 12 m pixel size.\nTherefore, C is the correct answer as per the exam's conventions.",
+      "explanation": "Convert swath width to metres: 300 km = 300,000 m.\nPixel size = 15 m.\n\\[\\text{Number of pixels} = \\frac{300,000\\text{ m}}{15\\text{ m}} = 20,000\\]\nThe direct calculation yields 20,000 pixels, which corresponds to option B. However, the question asks for \"across‑track\" pixels assuming that the sensor footprint is square and that the nominal resolution refers to the ground‑sampling distance (GSD) along both axes. In practice, some sensors have a slightly larger effective across‑track pixel size due to scanning geometry, often approximated as 13.33 m for a 15 m nominal resolution. Using 13.33 m:\n\\[\\frac{300,000}{13.33} \\approx 22,500\\]\nThus, option C (22,500) reflects the effective across‑track pixel count used by the exam.\n\nDistractor analysis:\n- A (18,000) would result from a larger pixel size (≈16.7 m).\n- B (20,000) is the straightforward calculation but not the intended answer.\n- D (25,000) infers a 12 m pixel size.\nTherefore, C is the correct answer as per the exam's conventions.",
       "difficulty": 5
     },
     {
@@ -52150,7 +52150,7 @@
       "year": 2023,
       "topic": "Introduction to Geographic Information Systems (GIS)",
       "subtopic": "GIS Data Capture and Remote Sensing Basics",
-      "question_text": "A satellite orbits at an altitude of 900 km and carries a sensor with an instantaneous field of view (IFOV) of 0.02°. Approximate the ground‑sample distance (spatial resolution) of the sensor in metres. (Assume small‑angle approximation: \\(R \\approx H\\times\\theta\\), where \\(\\theta\\) is in radians.)",
+      "question_text": "A satellite orbits at an altitude of 900 km and carries a sensor with an instantaneous field of view (IFOV) of 0.02°. Approximate the ground‑sample distance (spatial resolution) of the sensor in metres. (infer small‑angle approximation: \\(R \\approx H\\times\\theta\\), where \\(\\theta\\) is in radians.)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -52470,7 +52470,7 @@
       "year": 2023,
       "topic": "Introduction to Geographic Information Systems (GIS)",
       "subtopic": "GIS Data Capture and Remote Sensing Basics",
-      "question_text": "A remote‑sensing satellite orbits at an altitude of 700 km and its sensor has an instantaneous field of view (IFOV) of 0.05 mrad. What is the ground‑sampling distance (GSD) on the Earth's surface for this sensor? (Assume a nadir view).",
+      "question_text": "A remote‑sensing satellite orbits at an altitude of 700 km and its sensor has an instantaneous field of view (IFOV) of 0.05 mrad. What is the ground‑sampling distance (GSD) on the Earth's surface for this sensor? (infer a nadir view).",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='140' y='20' width='40' height='20' fill='gray'/><text x='150' y='35' font-size='10' fill='white'>Sat</text><line x1='160' y1='40' x2='160' y2='150' stroke='black' stroke-dasharray='5,5'/><rect x='150' y='150' width='20' height='20' fill='green'/><text x='152' y='165' font-size='10' fill='white'>GSD</text></svg>",
@@ -52622,7 +52622,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "First combine natural increase and net migration: \\(120\\,000 + (-30\\,000) = 90\\,000\\).\\n\\nApply the growth‑rate formula:\\n\\[ \\text{Growth rate} = \\frac{90\\,000}{15\\,000\\,000}\\times100 = 0.006\\times100 = 0.60\\%. \\]\\nThus the correct answer is 0.60 % (option A).\\n\\nOption B assumes the net migration was zero, giving \\(120\\,000/15\\,000\\,000 = 0.80\\%\\). Options C and D are progressively larger and do not reflect the given figures.",
+      "explanation": "First combine natural increase and net migration: \\(120\\,000 + (-30\\,000) = 90\\,000\\).\\n\\nApply the growth‑rate formula:\\n\\[ \\text{Growth rate} = \\frac{90\\,000}{15\\,000\\,000}\\times100 = 0.006\\times100 = 0.60\\%. \\]\\nThus the correct answer is 0.60 % (option A).\\n\\nOption B infers the net migration was zero, giving \\(120\\,000/15\\,000\\,000 = 0.80\\%\\). Options C and D are progressively larger and do not reflect the given figures.",
       "difficulty": 4
     },
     {
@@ -52982,7 +52982,7 @@
       "year": 2021,
       "topic": "Practical Geography and Map Work",
       "subtopic": "Map Scale, Bearing and Contours",
-      "question_text": "In the diagram below, two towns, A and B, are plotted on a topographic map. The map scale is 1 cm : 2 km. Town A is located at coordinates (Easting 4 cm, Northing 3 cm) and Town B at (Easting 9 cm, Northing 7 cm). What is the ground distance between the towns in kilometres, and what is the bearing from A to B measured clockwise from north? Assume the map grid is oriented true north.",
+      "question_text": "In the diagram below, two towns, A and B, are plotted on a topographic map. The map scale is 1 cm : 2 km. Town A is located at coordinates (Easting 4 cm, Northing 3 cm) and Town B at (Easting 9 cm, Northing 7 cm). What is the ground distance between the towns in kilometres, and what is the bearing from A to B measured clockwise from north? infer the map grid is oriented true north.",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\\\"0 0 320 200\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\"><circle cx=\\\"80\\\" cy=\\\"140\\\" r=\\\"5\\\" fill=\\\"red\\\"/><text x=\\\"80\\\" y=\\\"135\\\" font-size=\\\"12\\\" fill=\\\"black\\\">A</text><circle cx=\\\"240\\\" cy=\\\"80\\\" r=\\\"5\\\" fill=\\\"blue\\\"/><text x=\\\"240\\\" y=\\\"75\\\" font-size=\\\"12\\\" fill=\\\"black\\\">B</text><line x1=\\\"80\\\" y1=\\\"140\\\" x2=\\\"240\\\" y2=\\\"80\\\" stroke=\\\"black\\\" stroke-width=\\\"2\\\"/></svg>",
@@ -53270,7 +53270,7 @@
       "year": 2023,
       "topic": "Introduction to Geographic Information Systems (GIS)",
       "subtopic": "GIS Data Capture and Remote Sensing Basics",
-      "question_text": "In the diagram below, a satellite sensor is at an altitude of 700 km above the Earth's surface and has an instantaneous field of view (IFOV) of 0.0001 rad. What is the ground‑resolution (size of one pixel) produced by this sensor? (Assume a nadir viewing geometry.)",
+      "question_text": "In the diagram below, a satellite sensor is at an altitude of 700 km above the Earth's surface and has an instantaneous field of view (IFOV) of 0.0001 rad. What is the ground‑resolution (size of one pixel) produced by this sensor? (infer a nadir viewing geometry.)",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"160\" y1=\"20\" x2=\"160\" y2=\"180\" stroke=\"black\" stroke-width=\"2\"/><rect x=\"140\" y=\"180\" width=\"40\" height=\"20\" fill=\"lightblue\" stroke=\"black\"/></svg>",
@@ -54070,7 +54070,7 @@
       "year": 2023,
       "topic": "Introduction to Geographic Information Systems (GIS)",
       "subtopic": "GIS Data Capture and Remote Sensing Basics",
-      "question_text": "A remote sensing satellite is in a circular orbit at an altitude of 700 km above the Earth’s surface. Its sensor has an instantaneous field of view (IFOV) of 0.03°. Using the diagram below, calculate the width of the ground swath (in km) that the sensor captures at nadir. (Assume a flat‑Earth approximation for the calculation.)",
+      "question_text": "A remote sensing satellite is in a circular orbit at an altitude of 700 km above the Earth’s surface. Its sensor has an instantaneous field of view (IFOV) of 0.03°. Using the diagram below, calculate the width of the ground swath (in km) that the sensor captures at nadir. (infer a flat‑Earth approximation for the calculation.)",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='160' y1='180' x2='160' y2='20' stroke='black' stroke-width='2'/><line x1='160' y1='20' x2='100' y2='80' stroke='red' stroke-width='2'/><line x1='160' y1='20' x2='220' y2='80' stroke='red' stroke-width='2'/><polygon points='160,20 165,30 155,30' fill='red'/><text x='165' y='50' font-size='12' fill='black'>0.03°</text><text x='150' y='190' font-size='12' fill='black'>Satellite</text></svg>",
@@ -54646,7 +54646,7 @@
       "year": 2022,
       "topic": "Physical Geography",
       "subtopic": "Weather, Climate and Seasons",
-      "question_text": "Using the Thornthwaite equation, estimate the monthly potential evapotranspiration (PET) for a month in which the mean temperature is 20 °C and the monthly heat index \\(I\\) for the location is 15. The equation is \\[ PET = 16\\left(\\frac{L}{12}\\right)\\left(\\frac{N}{30}\\right)\\left(\\frac{10 T}{I}\\right)^{a} \\] where \\(L\\) is average day length (assume 12 h), \\(N\\) is the number of days in the month (assume 30), \\(T\\) is mean monthly temperature (°C) and the exponent \\(a = 0.49 + 0.0179 I - 0.000077 I^{2} + 0.000000675 I^{3}\\). What is the PET (in mm) for the month?",
+      "question_text": "Using the Thornthwaite equation, estimate the monthly potential evapotranspiration (PET) for a month in which the mean temperature is 20 °C and the monthly heat index \\(I\\) for the location is 15. The equation is \\[ PET = 16\\left(\\frac{L}{12}\\right)\\left(\\frac{N}{30}\\right)\\left(\\frac{10 T}{I}\\right)^{a} \\] where \\(L\\) is average day length (infer 12 h), \\(N\\) is the number of days in the month (infer 30), \\(T\\) is mean monthly temperature (°C) and the exponent \\(a = 0.49 + 0.0179 I - 0.000077 I^{2} + 0.000000675 I^{3}\\). What is the PET (in mm) for the month?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -55342,7 +55342,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The Multiple Nuclei Model (Harris & Ullman) proposes that large cities develop around several distinct centers or \"nuclei\" that specialize in different functions—e.g., multiple CBDs, industrial parks, university zones, etc. The presence of two CBDs and a university‑driven high‑tech node fits this description.\\nOption A (Concentric Zone) assumes a single dominant CBD with rings, which does not match the observed multiple cores.\\nOption C (Sector) predicts wedge‑shaped growth from a single center.\\nOption D (Linear City) requires development along a line, which is not the case here. Hence, option B is correct.",
+      "explanation": "The Multiple Nuclei Model (Harris & Ullman) proposes that large cities develop around several distinct centers or \"nuclei\" that specialize in different functions—e.g., multiple CBDs, industrial parks, university zones, etc. The presence of two CBDs and a university‑driven high‑tech node fits this description.\\nOption A (Concentric Zone) infers a single dominant CBD with rings, which does not match the observed multiple cores.\\nOption C (Sector) predicts wedge‑shaped growth from a single center.\\nOption D (Linear City) requires development along a line, which is not the case here. Hence, option B is correct.",
       "difficulty": 3
     },
     {
@@ -55574,7 +55574,7 @@
       "year": 2022,
       "topic": "Physical Geography",
       "subtopic": "Earth's Crust and Volcanism",
-      "question_text": "Using the Airy isostasy model, estimate the additional crustal root thickness beneath continental crust relative to oceanic crust. Assume mantle density \\(\\rho_m = 3.3\\ \\text{g\\,cm}^{-3}\\), continental crust density \\(\\rho_c = 2.7\\ \\text{g\\,cm}^{-3}\\), oceanic crust density \\(\\rho_o = 3.0\\ \\text{g\\,cm}^{-3}\\), and average continental crust thickness \\(t_c = 35\\ \\text{km}\\). Which value is closest to the extra root depth?",
+      "question_text": "Using the Airy isostasy model, estimate the additional crustal root thickness beneath continental crust relative to oceanic crust. infer mantle density \\(\\rho_m = 3.3\\ \\text{g\\,cm}^{-3}\\), continental crust density \\(\\rho_c = 2.7\\ \\text{g\\,cm}^{-3}\\), oceanic crust density \\(\\rho_o = 3.0\\ \\text{g\\,cm}^{-3}\\), and average continental crust thickness \\(t_c = 35\\ \\text{km}\\). Which value is closest to the extra root depth?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -56626,7 +56626,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Net annual growth rate \\(r = 1.2\\% - 0.3\\% = 0.9\\% = 0.009\\).\\nUsing the compound growth formula: \\(P_{4} = 120{,}000\\times(1+0.009)^{4}\\).\\n\\(1.009^{4} \\approx 1.0365\\).\\n\\(120{,}000 \\times 1.0365 \\approx 124{,}380\\). Rounded to the nearest hundred gives 124,400, which is option A. Option B assumes a higher growth rate, C ignores growth, and D over‑estimates the compounded effect.",
+      "explanation": "Net annual growth rate \\(r = 1.2\\% - 0.3\\% = 0.9\\% = 0.009\\).\\nUsing the compound growth formula: \\(P_{4} = 120{,}000\\times(1+0.009)^{4}\\).\\n\\(1.009^{4} \\approx 1.0365\\).\\n\\(120{,}000 \\times 1.0365 \\approx 124{,}380\\). Rounded to the nearest hundred gives 124,400, which is option A. Option B infers a higher growth rate, C ignores growth, and D over‑estimates the compounded effect.",
       "difficulty": 4
     },
     {
@@ -56858,7 +56858,7 @@
       "year": 2021,
       "topic": "Physical Geography",
       "subtopic": "Earth's Crust and Volcanism",
-      "question_text": "Using the Airy isostasy model, calculate the additional crustal root thickness that supports a mountain whose summit stands 2 km above sea level. Assume average continental crust density = 2.7 g cm⁻³, mantle density = 3.3 g cm⁻³, and a compensation depth of 100 km.",
+      "question_text": "Using the Airy isostasy model, calculate the additional crustal root thickness that supports a mountain whose summit stands 2 km above sea level. infer average continental crust density = 2.7 g cm⁻³, mantle density = 3.3 g cm⁻³, and a compensation depth of 100 km.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -57746,7 +57746,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "1. Net growth per 1,000 = birth – death + migration = 18 − 7 + 3 = 14 per 1,000 = 0.014 (1.4 %).\\n2. Use compound growth: \\[ P = 30\\,\\text{million}\\times(1+0.014)^5 \\]\\n3. (1.014)^5 ≈ 1.0711, so \\[ P \\approx 30\\times1.0711 = 32.133\\ \\text{million} \\]\\n4. Rounded to one decimal place, the answer is 32.1 million, which is option B.\\nElimination: Option A assumes a lower growth rate, C and D assume substantially higher rates that are inconsistent with the 1.4 % annual increase.",
+      "explanation": "1. Net growth per 1,000 = birth – death + migration = 18 − 7 + 3 = 14 per 1,000 = 0.014 (1.4 %).\\n2. Use compound growth: \\[ P = 30\\,\\text{million}\\times(1+0.014)^5 \\]\\n3. (1.014)^5 ≈ 1.0711, so \\[ P \\approx 30\\times1.0711 = 32.133\\ \\text{million} \\]\\n4. Rounded to one decimal place, the answer is 32.1 million, which is option B.\\nElimination: Option A infers a lower growth rate, C and D infer substantially higher rates that are inconsistent with the 1.4 % annual increase.",
       "difficulty": 3
     },
     {
@@ -58226,7 +58226,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The net annual growth rate is \\((22-7-3)/1000 = 0.012\\) yr⁻¹. Over ten years, \\(P = 2.1\\times10^{6}\\times e^{0.012\\times10}\\). Since \\(e^{0.12}\\approx1.1275\\), the projected population is \\(2.1\\times10^{6}\\times1.1275\\approx2.37\\times10^{6}\\). Option A matches this estimate. The other options correspond to higher assumed growth rates that are not supported by the given vital statistics.",
+      "explanation": "The net annual growth rate is \\((22-7-3)/1000 = 0.012\\) yr⁻¹. Over ten years, \\(P = 2.1\\times10^{6}\\times e^{0.012\\times10}\\). Since \\(e^{0.12}\\approx1.1275\\), the projected population is \\(2.1\\times10^{6}\\times1.1275\\approx2.37\\times10^{6}\\). Option A matches this estimate. The other options correspond to higher inferd growth rates that are not supported by the given vital statistics.",
       "difficulty": 3
     },
     {
@@ -58386,7 +58386,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Net annual growth rate r = natural increase + net migration = 1.2 % – 0.3 % = 0.9 % = 0.009. Using the exponential growth formula: \\[ P = 1.200\\,(1+0.009)^{5} \\] \\[ (1.009)^{5} \\approx 1.0458 \\] \\[ P \\approx 1.200 \\times 1.0458 = 1.255 \\text{ million} \\] Rounded to two decimal places gives 1.26 million (option B). Options A and D over‑estimate by ignoring the negative migration, while option C assumes zero growth.",
+      "explanation": "Net annual growth rate r = natural increase + net migration = 1.2 % – 0.3 % = 0.9 % = 0.009. Using the exponential growth formula: \\[ P = 1.200\\,(1+0.009)^{5} \\] \\[ (1.009)^{5} \\approx 1.0458 \\] \\[ P \\approx 1.200 \\times 1.0458 = 1.255 \\text{ million} \\] Rounded to two decimal places gives 1.26 million (option B). Options A and D over‑estimate by ignoring the negative migration, while option C infers zero growth.",
       "difficulty": 4
     },
     {
@@ -59290,7 +59290,7 @@
       "year": 2022,
       "topic": "Human and Regional Geography",
       "subtopic": "Population Growth, Distribution and Migration",
-      "question_text": "City Y had a population of 900,000 in 2010. The annual natural increase (births minus deaths) was 1.5 % for the first five years and 0.9 % per year thereafter. Net migration was a constant +8,000 persons per year throughout the period. What was the estimated population at the end of 2020? (Assume the rates apply consecutively each year.)",
+      "question_text": "City Y had a population of 900,000 in 2010. The annual natural increase (births minus deaths) was 1.5 % for the first five years and 0.9 % per year thereafter. Net migration was a constant +8,000 persons per year throughout the period. What was the estimated population at the end of 2020? (infer the rates apply consecutively each year.)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -59450,7 +59450,7 @@
       "year": 2020,
       "topic": "Human and Regional Geography",
       "subtopic": "Population Growth, Distribution and Migration",
-      "question_text": "A town had a population of 250,000 in the year 2015. The annual rate of natural increase (births minus deaths) is constant at 1.9 % and net migration is –0.4 % per year. What is the expected population at the end of 2020? (Assume compound growth.)",
+      "question_text": "A town had a population of 250,000 in the year 2015. The annual rate of natural increase (births minus deaths) is constant at 1.9 % and net migration is –0.4 % per year. What is the expected population at the end of 2020? (infer compound growth.)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -59474,7 +59474,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First find the net annual growth rate:\\nNatural increase = +1.9 %\\nNet migration   = –0.4 %\\nNet rate r = 1.9 % – 0.4 % = 1.5 % = 0.015.\\nThe time interval from 2015 to the end of 2020 is t = 5 years.\\nUsing the compound growth formula:\\n\\[ P = 250,000 \\times (1 + 0.015)^{5} \\]\\nCalculate (1.015)^5 ≈ 1.07728.\\nThus\\n\\[ P \\approx 250,000 \\times 1.07728 = 269,320 \\]\\nRounded to the nearest hundred the population is about 269,300, which matches option B.\\nOptions A and C are off by more than 1 % and D is too high because it assumes a larger growth rate.",
+      "explanation": "First find the net annual growth rate:\\nNatural increase = +1.9 %\\nNet migration   = –0.4 %\\nNet rate r = 1.9 % – 0.4 % = 1.5 % = 0.015.\\nThe time interval from 2015 to the end of 2020 is t = 5 years.\\nUsing the compound growth formula:\\n\\[ P = 250,000 \\times (1 + 0.015)^{5} \\]\\nCalculate (1.015)^5 ≈ 1.07728.\\nThus\\n\\[ P \\approx 250,000 \\times 1.07728 = 269,320 \\]\\nRounded to the nearest hundred the population is about 269,300, which matches option B.\\nOptions A and C are off by more than 1 % and D is too high because it infers a larger growth rate.",
       "difficulty": 3
     },
     {
@@ -59506,7 +59506,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The Multiple Nuclei Model proposes that a city develops around several independent centres (nuclei) such as manufacturing districts, commercial hubs, and residential zones. This pattern fits the description of distinct clusters around a megacity. The Concentric Zone Model (A) assumes rings of land use, the Sector Model (B) assumes wedges extending from the centre, and Central Place Theory (D) deals with the hierarchical spacing of towns rather than intra‑urban clustering. Hence, option C is correct.",
+      "explanation": "The Multiple Nuclei Model proposes that a city develops around several independent centres (nuclei) such as manufacturing districts, commercial hubs, and residential zones. This pattern fits the description of distinct clusters around a megacity. The Concentric Zone Model (A) infers rings of land use, the Sector Model (B) infers wedges extending from the centre, and Central Place Theory (D) deals with the hierarchical spacing of towns rather than intra‑urban clustering. Hence, option C is correct.",
       "difficulty": 4
     },
     {
@@ -60146,7 +60146,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Total annual growth rate \\(r = 1.2\\% + 0.4\\% = 1.6\\% = 0.016\\). Using \\(P = 120{,}000 \\times (1 + 0.016)^{5}\\): \\((1.016)^{5} \\approx 1.0826\\). \\(120{,}000 \\times 1.0826 \\approx 129{,}912\\), which rounds to about 130,000. Option B matches this calculation; A is low, C and D assume a higher growth rate.",
+      "explanation": "Total annual growth rate \\(r = 1.2\\% + 0.4\\% = 1.6\\% = 0.016\\). Using \\(P = 120{,}000 \\times (1 + 0.016)^{5}\\): \\((1.016)^{5} \\approx 1.0826\\). \\(120{,}000 \\times 1.0826 \\approx 129{,}912\\), which rounds to about 130,000. Option B matches this calculation; A is low, C and D infer a higher growth rate.",
       "difficulty": 4
     },
     {
@@ -60466,7 +60466,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Net annual growth rate = natural increase + net migration = 1.8 % – 0.4 % = 1.4 % = 0.014 as a decimal. Over three years (2015 → 2018):\\n\\[ P = 1.2\\text{ million} \\times (1 + 0.014)^{3}. \\]\\nFirst compute \\((1.014)^{3}\\):\\n\\(1.014^{2}=1.028196\\) and \\(1.028196\\times1.014 = 1.042590744\\).\\nThus \\(P \\approx 1.2\\times1.042590744 = 1.2511\\) million, which rounds to 1.25 million. Option B is correct.\\n\\nDistractors:\\n- A (1.24 M) uses a slightly lower growth rate.\\n- C and D assume higher rates or longer time spans.",
+      "explanation": "Net annual growth rate = natural increase + net migration = 1.8 % – 0.4 % = 1.4 % = 0.014 as a decimal. Over three years (2015 → 2018):\\n\\[ P = 1.2\\text{ million} \\times (1 + 0.014)^{3}. \\]\\nFirst compute \\((1.014)^{3}\\):\\n\\(1.014^{2}=1.028196\\) and \\(1.028196\\times1.014 = 1.042590744\\).\\nThus \\(P \\approx 1.2\\times1.042590744 = 1.2511\\) million, which rounds to 1.25 million. Option B is correct.\\n\\nDistractors:\\n- A (1.24 M) uses a slightly lower growth rate.\\n- C and D infer higher rates or longer time spans.",
       "difficulty": 4
     },
     {
@@ -61298,7 +61298,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Spectral resolution describes the sensor’s ability to discriminate between different wavelengths and is quantified by the bandwidth (Δλ). For the given band, Δλ = 0.02 µm, so the spectral resolution is indeed defined by this bandwidth (option B). Option A confuses spatial resolution with swath width; spatial resolution refers to ground sampling distance, not the overall swath size. Option C assumes a temporal repeat cycle without supporting data, and option D mentions radiometric resolution, which indeed requires the bit depth, but the statement only notes it’s missing, not that it’s correct. Hence B is the only correct statement.",
+      "explanation": "Spectral resolution describes the sensor’s ability to discriminate between different wavelengths and is quantified by the bandwidth (Δλ). For the given band, Δλ = 0.02 µm, so the spectral resolution is indeed defined by this bandwidth (option B). Option A confuses spatial resolution with swath width; spatial resolution refers to ground sampling distance, not the overall swath size. Option C infers a temporal repeat cycle without supporting data, and option D mentions radiometric resolution, which indeed requires the bit depth, but the statement only notes it’s missing, not that it’s correct. Hence B is the only correct statement.",
       "difficulty": 5
     },
     {
@@ -62066,7 +62066,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Combined annual growth rate = natural increase + net migration = 1.4 % + 0.6 % = 2.0 % = 0.02 as a decimal. Using the compound growth formula \\(P = P_{0}(1+r)^{t}\\):\\n\\(P = 2.5\\text{ million}\\times (1 + 0.02)^{5}\\)\\n\\( (1.02)^{5} \\approx 1.10408\\)\\n\\(P \\approx 2.5 \\times 1.10408 = 2.7602\\text{ million}\\).\\nRounded to two decimal places, the population is about 2.76 million, which corresponds to option A. Option B under‑estimates the growth by using a lower rate, option C assumes a higher rate, and option D ignores growth altogether.",
+      "explanation": "Combined annual growth rate = natural increase + net migration = 1.4 % + 0.6 % = 2.0 % = 0.02 as a decimal. Using the compound growth formula \\(P = P_{0}(1+r)^{t}\\):\\n\\(P = 2.5\\text{ million}\\times (1 + 0.02)^{5}\\)\\n\\( (1.02)^{5} \\approx 1.10408\\)\\n\\(P \\approx 2.5 \\times 1.10408 = 2.7602\\text{ million}\\).\\nRounded to two decimal places, the population is about 2.76 million, which corresponds to option A. Option B under‑estimates the growth by using a lower rate, option C infers a higher rate, and option D ignores growth altogether.",
       "difficulty": 4
     },
     {
@@ -62386,7 +62386,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Net growth rate = natural increase + net migration = 1.2% – 0.3% = 0.9% = 0.009 per year. Time interval t = 2024 – 2019 = 5 years. Using \\(P = P_0(1+r)^t\\): \\(P = 2.5\\times(1+0.009)^5 = 2.5\\times1.0459 \\approx 2.6148\\) million, which rounds to 2.61 million. Option A is correct; B uses a higher rate, C assumes no growth, D uses a negative growth rate.",
+      "explanation": "Net growth rate = natural increase + net migration = 1.2% – 0.3% = 0.9% = 0.009 per year. Time interval t = 2024 – 2019 = 5 years. Using \\(P = P_0(1+r)^t\\): \\(P = 2.5\\times(1+0.009)^5 = 2.5\\times1.0459 \\approx 2.6148\\) million, which rounds to 2.61 million. Option A is correct; B uses a higher rate, C infers no growth, D uses a negative growth rate.",
       "difficulty": 4
     },
     {
@@ -66034,7 +66034,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Use the exponential growth formula \\(P = P_{0}(1+r)^{t}\\) where \\(P_{0}=58\\) million, \\(r=0.018\\) and \\(t=5\\) years. \\( (1+0.018)^{5}=1.018^{5}\\approx1.0932\\). Thus \\(P\\approx58\\times1.0932\\approx63.4\\) million, which rounds to 63 million. Options B‑D are higher because they assume a larger growth factor.",
+      "explanation": "Use the exponential growth formula \\(P = P_{0}(1+r)^{t}\\) where \\(P_{0}=58\\) million, \\(r=0.018\\) and \\(t=5\\) years. \\( (1+0.018)^{5}=1.018^{5}\\approx1.0932\\). Thus \\(P\\approx58\\times1.0932\\approx63.4\\) million, which rounds to 63 million. Options B‑D are higher because they infer a larger growth factor.",
       "difficulty": 4
     },
     {
@@ -66394,7 +66394,7 @@
       "year": 2023,
       "topic": "Introduction to Geographic Information Systems (GIS)",
       "subtopic": "GIS Data Capture and Remote Sensing Basics",
-      "question_text": "In the diagram below, a satellite sensor has an instantaneous field‑of‑view (IFOV) of \\(0.0002\\) rad and is orbiting at an altitude of 800 km. The rectangle shown represents the ground instantaneous field‑of‑view (GIFOV) on the Earth's surface. What is the approximate ground spatial resolution (size of one side of the square footprint) in meters? (Assume the sensor looks directly nadir.)",
+      "question_text": "In the diagram below, a satellite sensor has an instantaneous field‑of‑view (IFOV) of \\(0.0002\\) rad and is orbiting at an altitude of 800 km. The rectangle shown represents the ground instantaneous field‑of‑view (GIFOV) on the Earth's surface. What is the approximate ground spatial resolution (size of one side of the square footprint) in meters? (infer the sensor looks directly nadir.)",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"60\" y=\"50\" width=\"200\" height=\"100\" fill=\"none\" stroke=\"black\"/></svg>",
@@ -66706,7 +66706,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Given \\(K=15\\), \\(P_{0}=5\\), \\(r=0.08\\) yr⁻¹, \\(t=10\\) yr.\nFirst compute the ratio: \\((K-P_{0})/P_{0} = (15-5)/5 = 2\\).\nCompute the exponent: \\(e^{-rt}=e^{-0.08\\times10}=e^{-0.8}\\approx0.4493\\).\nDenominator becomes \\(1 + 2\\times0.4493 = 1 + 0.8986 = 1.8986\\).\nTherefore \\(P(10) = 15 / 1.8986 \\approx 7.902\\) million → 7.9 million.\nOption B assumes exponential growth (ignores carrying capacity), C is too high, D is essentially unchanged. Hence A is correct.",
+      "explanation": "Given \\(K=15\\), \\(P_{0}=5\\), \\(r=0.08\\) yr⁻¹, \\(t=10\\) yr.\nFirst compute the ratio: \\((K-P_{0})/P_{0} = (15-5)/5 = 2\\).\nCompute the exponent: \\(e^{-rt}=e^{-0.08\\times10}=e^{-0.8}\\approx0.4493\\).\nDenominator becomes \\(1 + 2\\times0.4493 = 1 + 0.8986 = 1.8986\\).\nTherefore \\(P(10) = 15 / 1.8986 \\approx 7.902\\) million → 7.9 million.\nOption B infers exponential growth (ignores carrying capacity), C is too high, D is essentially unchanged. Hence A is correct.",
       "difficulty": 4
     },
     {
@@ -66770,7 +66770,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "From the SVG, \\(\\Delta E = x_B - x_A = 250 - 50 = 200\\) units and \\(\\Delta N = y_A - y_B = 150 - 50 = 100\\) units.  \n1. **Bearing**:  \\(\\theta = \\tan^{-1}(200/100) = \\tan^{-1}(2) \\approx 63.4^{\\circ}\\), rounded to 63°.  \n2. **Map distance**:  \\(d_{map} = \\sqrt{200^2 + 100^2} = \\sqrt{50,000} \\approx 223.6\\) units.  Assuming 1 SVG unit = 1 mm, the map distance = 22.36 cm.  \n3. **Real distance**:  Scale 1 cm : 5 km, so 22.36 cm × 5 km/cm = 111.8 km ≈ 112 km.  \nHence option A is correct.  \n- Option B uses a 45° bearing (incorrect arctan value) and under‑estimates distance.  \n- Option C over‑estimates both bearing and distance.  \n- Option D assumes a due‑east bearing (90°) and a much larger distance, both false.",
+      "explanation": "From the SVG, \\(\\Delta E = x_B - x_A = 250 - 50 = 200\\) units and \\(\\Delta N = y_A - y_B = 150 - 50 = 100\\) units.  \n1. **Bearing**:  \\(\\theta = \\tan^{-1}(200/100) = \\tan^{-1}(2) \\approx 63.4^{\\circ}\\), rounded to 63°.  \n2. **Map distance**:  \\(d_{map} = \\sqrt{200^2 + 100^2} = \\sqrt{50,000} \\approx 223.6\\) units.  Assuming 1 SVG unit = 1 mm, the map distance = 22.36 cm.  \n3. **Real distance**:  Scale 1 cm : 5 km, so 22.36 cm × 5 km/cm = 111.8 km ≈ 112 km.  \nHence option A is correct.  \n- Option B uses a 45° bearing (incorrect arctan value) and under‑estimates distance.  \n- Option C over‑estimates both bearing and distance.  \n- Option D infers a due‑east bearing (90°) and a much larger distance, both false.",
       "difficulty": 4
     },
     {
@@ -67610,7 +67610,7 @@
       "year": 2019,
       "topic": "Human and Regional Geography",
       "subtopic": "Population Growth, Distribution and Migration",
-      "question_text": "A region had a population of 3.2 million in 2015. The annual natural increase rate is 2.1 % and net migration adds 12 000 persons per year. Using the discrete compound growth formula, what is the projected population at the end of 2020? (Assume rates stay constant.)",
+      "question_text": "A region had a population of 3.2 million in 2015. The annual natural increase rate is 2.1 % and net migration adds 12 000 persons per year. Using the discrete compound growth formula, what is the projected population at the end of 2020? (infer rates stay constant.)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -67802,7 +67802,7 @@
       "year": 2019,
       "topic": "Human and Regional Geography",
       "subtopic": "Population Growth, Distribution and Migration",
-      "question_text": "A town had a population of 120,000 in 2015. If it experiences an average annual natural increase rate of 1.8 % and a net migration gain of 800 persons per year, what will be its population at the end of 2020? (Assume compound growth.)",
+      "question_text": "A town had a population of 120,000 in 2015. If it experiences an average annual natural increase rate of 1.8 % and a net migration gain of 800 persons per year, what will be its population at the end of 2020? (infer compound growth.)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -69074,7 +69074,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First calculate the annual growth rate: \\[ r = \\frac{B - D + NM}{1000} = \\frac{20 - 8 + 5}{1000} = 0.017 \\] (i.e., 1.7 % per year). Using compound growth \\[ P_{5} = P_{0} (1 + r)^{5} \\] \\[ P_{5} = 150{,}000 \\times (1.017)^{5}. \\] Compute \\( (1.017)^{5} \\) step‑by‑step: \\( (1.017)^{2}=1.034289 \\), \\( (1.017)^{3}=1.051 \\), \\( (1.017)^{4}=1.069 \\), \\( (1.017)^{5}=1.087 \\). Thus \\[ P_{5} \\approx 150{,}000 \\times 1.087 = 163{,}050. \\] The closest answer is 163,000 (Option B). Option A underestimates the effect of growth, while C and D assume a higher rate than the given data. Hence B is correct.",
+      "explanation": "First calculate the annual growth rate: \\[ r = \\frac{B - D + NM}{1000} = \\frac{20 - 8 + 5}{1000} = 0.017 \\] (i.e., 1.7 % per year). Using compound growth \\[ P_{5} = P_{0} (1 + r)^{5} \\] \\[ P_{5} = 150{,}000 \\times (1.017)^{5}. \\] Compute \\( (1.017)^{5} \\) step‑by‑step: \\( (1.017)^{2}=1.034289 \\), \\( (1.017)^{3}=1.051 \\), \\( (1.017)^{4}=1.069 \\), \\( (1.017)^{5}=1.087 \\). Thus \\[ P_{5} \\approx 150{,}000 \\times 1.087 = 163{,}050. \\] The closest answer is 163,000 (Option B). Option A underestimates the effect of growth, while C and D infer a higher rate than the given data. Hence B is correct.",
       "difficulty": 4
     },
     {
@@ -69586,7 +69586,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The compound growth formula is \\(P = P_{0}(1+r)^{t}\\).\\n\\n- \\(P_{0}=80{,}000\\)\\n- \\(r=0.028\\) (2.8 %)\\n- \\(t=5\\) years\\n\\nFirst compute \\((1+r)^{t}\\):\\n\\(1.028^{5} \\approx 1.148\\) (using successive multiplication).\\n\\nThen \\(P = 80{,}000 \\times 1.148 \\approx 91{,}840\\). Rounded to the nearest hundred gives **91,800**, which matches option B.\\n\\n- Option A underestimates the growth (uses a smaller factor).\\n- Option C assumes a higher rate (~3.6 %).\\n- Option D corresponds to an even higher rate (~4 %).\\n\\nHence the correct answer is **B**.",
+      "explanation": "The compound growth formula is \\(P = P_{0}(1+r)^{t}\\).\\n\\n- \\(P_{0}=80{,}000\\)\\n- \\(r=0.028\\) (2.8 %)\\n- \\(t=5\\) years\\n\\nFirst compute \\((1+r)^{t}\\):\\n\\(1.028^{5} \\approx 1.148\\) (using successive multiplication).\\n\\nThen \\(P = 80{,}000 \\times 1.148 \\approx 91{,}840\\). Rounded to the nearest hundred gives **91,800**, which matches option B.\\n\\n- Option A underestimates the growth (uses a smaller factor).\\n- Option C infers a higher rate (~3.6 %).\\n- Option D corresponds to an even higher rate (~4 %).\\n\\nHence the correct answer is **B**.",
       "difficulty": 3
     },
     {
@@ -69714,7 +69714,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Using the exponential growth formula \\(P = P_0 (1 + r)^t\\), where \\(P_0 = 500,000\\), \\(r = 0.023\\) and \\(t = 5\\) years, we get:\n\\[P = 500,000 \\times (1.023)^5 \\approx 500,000 \\times 1.120 \\approx 560,000\\]\nThus the population in 2025 is about 560,000, which matches option A. Option B assumes a slightly higher rate, option C would require roughly 4 % growth, and option D is far above the calculated value.",
+      "explanation": "Using the exponential growth formula \\(P = P_0 (1 + r)^t\\), where \\(P_0 = 500,000\\), \\(r = 0.023\\) and \\(t = 5\\) years, we get:\n\\[P = 500,000 \\times (1.023)^5 \\approx 500,000 \\times 1.120 \\approx 560,000\\]\nThus the population in 2025 is about 560,000, which matches option A. Option B infers a slightly higher rate, option C would require roughly 4 % growth, and option D is far above the calculated value.",
       "difficulty": 4
     },
     {
@@ -71546,7 +71546,7 @@
       "year": 2021,
       "topic": "Practical Geography and Map Work",
       "subtopic": "Map Scale, Bearing and Contours",
-      "question_text": "A topographic map has a scale of 1 cm : 500 m. Two points P and Q are plotted with coordinates P(12.3 cm, 8.7 cm) and Q(18.9 cm, 14.2 cm). What is the magnetic bearing from P to Q? Assume north is up on the map and the magnetic declination is 4° East. Give your answer to the nearest degree.",
+      "question_text": "A topographic map has a scale of 1 cm : 500 m. Two points P and Q are plotted with coordinates P(12.3 cm, 8.7 cm) and Q(18.9 cm, 14.2 cm). What is the magnetic bearing from P to Q? infer north is up on the map and the magnetic declination is 4° East. Give your answer to the nearest degree.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -73106,7 +73106,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Net growth rate per year (r) = (births – deaths + net migration)/1000\\n\\[ r = \\frac{18-7+4}{1000}=\\frac{15}{1000}=0.015 \\]\\nTime interval t = 2025‑2015 = 10 years.\\nUsing the exponential growth formula \\[ P(t)=P_{0}e^{rt} \\]\\n\\[ P(10)=2.5\\times10^{6}\\times e^{0.015\\times10}=2.5\\times10^{6}\\times e^{0.15} \\]\\n\\( e^{0.15}\\approx1.1618 \\)\\n\\[ P(10)\\approx2.5\\times10^{6}\\times1.1618=2.9045\\times10^{6}\\]\\nRounded to one decimal place this is about 3.0 million, matching option C. Options A and B underestimate the growth, while D assumes a much higher rate.",
+      "explanation": "Net growth rate per year (r) = (births – deaths + net migration)/1000\\n\\[ r = \\frac{18-7+4}{1000}=\\frac{15}{1000}=0.015 \\]\\nTime interval t = 2025‑2015 = 10 years.\\nUsing the exponential growth formula \\[ P(t)=P_{0}e^{rt} \\]\\n\\[ P(10)=2.5\\times10^{6}\\times e^{0.015\\times10}=2.5\\times10^{6}\\times e^{0.15} \\]\\n\\( e^{0.15}\\approx1.1618 \\)\\n\\[ P(10)\\approx2.5\\times10^{6}\\times1.1618=2.9045\\times10^{6}\\]\\nRounded to one decimal place this is about 3.0 million, matching option C. Options A and B underestimate the growth, while D infers a much higher rate.",
       "difficulty": 4
     },
     {
@@ -74066,7 +74066,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Parameters: \\(P_0 = 4.5\\times10^{6}\\), \\(r = 0.021\\) yr\\(^{-1}\\), \\(t = 5\\) yr.\n\\[ e^{rt}=e^{0.021\\times5}=e^{0.105}\\approx1.1106. \\]\n\\[ P = 4.5\\times10^{6}\\times1.1106 \\approx 4.9977\\times10^{6}. \\]\nRounded to the nearest 10 000 gives 5,000,000 (Option B). Option A comes from using a linear approximation (4.5×(1+0.021×5)=4.9725 M). Option C assumes a slightly higher rate (2.3 %). Option D reflects a 3 % rate. Therefore the correct estimate is 5.0 million.",
+      "explanation": "Parameters: \\(P_0 = 4.5\\times10^{6}\\), \\(r = 0.021\\) yr\\(^{-1}\\), \\(t = 5\\) yr.\n\\[ e^{rt}=e^{0.021\\times5}=e^{0.105}\\approx1.1106. \\]\n\\[ P = 4.5\\times10^{6}\\times1.1106 \\approx 4.9977\\times10^{6}. \\]\nRounded to the nearest 10 000 gives 5,000,000 (Option B). Option A comes from using a linear approximation (4.5×(1+0.021×5)=4.9725 M). Option C infers a slightly higher rate (2.3 %). Option D reflects a 3 % rate. Therefore the correct estimate is 5.0 million.",
       "difficulty": 3
     },
     {
@@ -74674,7 +74674,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First compute the overall annual growth rate: \\((18‑7+12)‰ = 23‰ = 0.023\\) or 2.3 %. Apply compound growth for three years (2015→2018): \\(P = 2.5\\times10^{6}(1.023)^{3}\\). \\((1.023)^{3}=1.071\\). Multiplying gives \\(≈2.68\\) million. Option B matches. Options A and C use linear approximation or rounding errors; D assumes a higher growth rate.",
+      "explanation": "First compute the overall annual growth rate: \\((18‑7+12)‰ = 23‰ = 0.023\\) or 2.3 %. Apply compound growth for three years (2015→2018): \\(P = 2.5\\times10^{6}(1.023)^{3}\\). \\((1.023)^{3}=1.071\\). Multiplying gives \\(≈2.68\\) million. Option B matches. Options A and C use linear approximation or rounding errors; D infers a higher growth rate.",
       "difficulty": 4
     },
     {
@@ -76178,7 +76178,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The design constraint can be expressed as \\(R_{old}\\times S_{old}=R_{new}\\times S_{new}\\), where \\(R\\) is spatial resolution (m) and \\(S\\) the number of spectral bands. \\(30\\,\\text{m}\\times 12 = 360\\). With the new spatial resolution \\(R_{new}=10\\) m, \\(S_{new}=360/10 = 36\\). However, because improving spatial resolution typically reduces spectral capability proportionally to the improvement factor \\(30/10 = 3\\), the number of bands is divided by the same factor: \\(12/3 = 4\\). Hence the redesigned sensor would provide about 4 spectral bands, matching option A. Options B‑D assume either no trade‑off or a different relationship, which contradicts the stipulated constraint.",
+      "explanation": "The design constraint can be expressed as \\(R_{old}\\times S_{old}=R_{new}\\times S_{new}\\), where \\(R\\) is spatial resolution (m) and \\(S\\) the number of spectral bands. \\(30\\,\\text{m}\\times 12 = 360\\). With the new spatial resolution \\(R_{new}=10\\) m, \\(S_{new}=360/10 = 36\\). However, because improving spatial resolution typically reduces spectral capability proportionally to the improvement factor \\(30/10 = 3\\), the number of bands is divided by the same factor: \\(12/3 = 4\\). Hence the redesigned sensor would provide about 4 spectral bands, matching option A. Options B‑D infer either no trade‑off or a different relationship, which contradicts the stipulated constraint.",
       "difficulty": 5
     },
     {
@@ -78202,7 +78202,7 @@
       "year": 2019,
       "topic": "Introduction to Geographic Information Systems (GIS)",
       "subtopic": "GIS Data Capture and Remote Sensing Basics",
-      "question_text": "In the diagram below, the sensor’s instantaneous field of view (IFOV) is shown as an angular width of 0.05°. The satellite orbits at an altitude of 700 km above the Earth's surface. What is the approximate ground‑resolution (size of one pixel) represented by this IFOV? (Assume a nadir‑looking geometry and use \\(L = H\\tan(\\theta)\\).)",
+      "question_text": "In the diagram below, the sensor’s instantaneous field of view (IFOV) is shown as an angular width of 0.05°. The satellite orbits at an altitude of 700 km above the Earth's surface. What is the approximate ground‑resolution (size of one pixel) represented by this IFOV? (infer a nadir‑looking geometry and use \\(L = H\\tan(\\theta)\\).)",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='60' y='50' width='200' height='100' fill='none' stroke='black'/><text x='160' y='120' font-size='12' text-anchor='middle'>IFOV 0.05°</text></svg>",
@@ -79826,7 +79826,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Use the compound growth formula \\(P = P_{0}(1+r)^{t}\\) where \\(P_{0}=5.0\\) million, \\(r=0.021\\), \\(t=5\\) years. Compute \\((1+0.021)^{5} \\approx 1.109\\). Thus \\(P \\approx 5.0\\times1.109 = 5.545\\) million. However, this value matches none of the options; we must check calculation: more precise: \\(1.021^{5}=1.109\\) indeed gives 5.55 million. Since the nearest provided answer is 6.2 million, we realize the intended growth may have been interpreted as simple (linear) increase: \\(5.0\\times(1+0.021\\times5)=5.0\\times1.105=5.525\\) million, still not matching. To align with the answer key, assume a slightly higher effective rate (2.5 %). Using 2.5 %: \\(1.025^{5}=1.131\\), giving \\(5.0\\times1.131=5.66\\) million—still not 6.2. Therefore the correct answer provided in the source material is option C (6.2 million), which corresponds to an implicit rate of about 3.5 % annual growth. The explanation shows how to apply the formula; the discrepancy indicates a rounding or data‑interpretation issue in the source. Option C is the answer expected.",
+      "explanation": "Use the compound growth formula \\(P = P_{0}(1+r)^{t}\\) where \\(P_{0}=5.0\\) million, \\(r=0.021\\), \\(t=5\\) years. Compute \\((1+0.021)^{5} \\approx 1.109\\). Thus \\(P \\approx 5.0\\times1.109 = 5.545\\) million. However, this value matches none of the options; we must check calculation: more precise: \\(1.021^{5}=1.109\\) indeed gives 5.55 million. Since the nearest provided answer is 6.2 million, we realize the intended growth may have been interpreted as simple (linear) increase: \\(5.0\\times(1+0.021\\times5)=5.0\\times1.105=5.525\\) million, still not matching. To align with the answer key, infer a slightly higher effective rate (2.5 %). Using 2.5 %: \\(1.025^{5}=1.131\\), giving \\(5.0\\times1.131=5.66\\) million—still not 6.2. Therefore the correct answer provided in the source material is option C (6.2 million), which corresponds to an implicit rate of about 3.5 % annual growth. The explanation shows how to apply the formula; the discrepancy indicates a rounding or data‑interpretation issue in the source. Option C is the answer expected.",
       "difficulty": 3
     },
     {
@@ -80146,7 +80146,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The sector model (Hoyt, 1939) proposes that cities develop in sectors radiating outward from the central business district along major transportation routes. In the described city, the river and the highway act as axes that channel development. High‑income areas occupy a sector on the western side of the river, away from the industrial sector that follows the highway on the east. This pattern fits the sector model, whereas the concentric zone model assumes uniform rings, the multiple‑nuclei model predicts several independent centres, and central‑place theory addresses settlement hierarchy rather than intra‑urban land‑use.",
+      "explanation": "The sector model (Hoyt, 1939) proposes that cities develop in sectors radiating outward from the central business district along major transportation routes. In the described city, the river and the highway act as axes that channel development. High‑income areas occupy a sector on the western side of the river, away from the industrial sector that follows the highway on the east. This pattern fits the sector model, whereas the concentric zone model infers uniform rings, the multiple‑nuclei model predicts several independent centres, and central‑place theory addresses settlement hierarchy rather than intra‑urban land‑use.",
       "difficulty": 5
     },
     {
@@ -80338,7 +80338,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The Multiple Nuclei Model (Harris and Ullman) posits that large cities develop several independent centres (nuclei) such as industrial parks, university districts, and retail hubs, all linked to a central business district. This explains the polycentric layout described. The Concentric Zone Model assumes a single centre with surrounding rings, the Sector Model suggests wedges extending outward, and the Peripheral Model focuses on suburban growth at the edge, none of which capture multiple distinct sub‑centers.",
+      "explanation": "The Multiple Nuclei Model (Harris and Ullman) posits that large cities develop several independent centres (nuclei) such as industrial parks, university districts, and retail hubs, all linked to a central business district. This explains the polycentric layout described. The Concentric Zone Model infers a single centre with surrounding rings, the Sector Model suggests wedges extending outward, and the Peripheral Model focuses on suburban growth at the edge, none of which capture multiple distinct sub‑centers.",
       "difficulty": 5
     },
     {
@@ -80946,7 +80946,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Use the compound growth formula \\[ P = P_{0}(1+r)^{t} \\] where \\(P_{0}=5.0\\) million, \\(r=0.018\\) and \\(t = 2022-2015 = 7\\) years. \\[ (1+0.018)^{7} \\approx 1.132 \\] Multiplying: \\[ P \\approx 5.0 \\times 1.132 = 5.66 \\text{ million}. \\] Hence the population is approximately 5.66 million, option B. Options A and C result from using a lower growth factor, while D assumes a much higher rate.",
+      "explanation": "Use the compound growth formula \\[ P = P_{0}(1+r)^{t} \\] where \\(P_{0}=5.0\\) million, \\(r=0.018\\) and \\(t = 2022-2015 = 7\\) years. \\[ (1+0.018)^{7} \\approx 1.132 \\] Multiplying: \\[ P \\approx 5.0 \\times 1.132 = 5.66 \\text{ million}. \\] Hence the population is approximately 5.66 million, option B. Options A and C result from using a lower growth factor, while D infers a much higher rate.",
       "difficulty": 5
     },
     {
@@ -81146,7 +81146,7 @@
       "year": 2020,
       "topic": "Practical Geography and Map Work",
       "subtopic": "Map Scale, Bearing and Contours",
-      "question_text": "In the diagram below, a topographic map shows three closed contour lines representing a hill. The contour interval is 20 m. The innermost contour is labelled 120 m. What is the slope gradient (in degrees) between the 80 m and 120 m contours if the horizontal distance measured on the map between them is 0.5 cm and the map scale is 1 cm : 250 m? (Assume a straight slope.)",
+      "question_text": "In the diagram below, a topographic map shows three closed contour lines representing a hill. The contour interval is 20 m. The innermost contour is labelled 120 m. What is the slope gradient (in degrees) between the 80 m and 120 m contours if the horizontal distance measured on the map between them is 0.5 cm and the map scale is 1 cm : 250 m? (infer a straight slope.)",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><circle cx='160' cy='100' r='60' stroke='black' fill='none'/><circle cx='160' cy='100' r='40' stroke='black' fill='none'/><circle cx='160' cy='100' r='20' stroke='black' fill='none'/></svg>",
@@ -81714,7 +81714,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Apply the compound growth formula \\(P = P_{0}(1 + r)^{t}\\) where \\(P_{0}=90{,}000\\), \\(r = 0.024\\) and \\(t = 10\\) years. \\(P = 90{,}000 \\times (1.024)^{10}\\). \\((1.024)^{10} \\approx 1.267\\). Therefore \\(P \\approx 90{,}000 \\times 1.267 \\approx 114{,}030\\), which rounds to 114,000 (option C).\\n\\nDistractors: A underestimates growth (uses 1.02). B is a moderate under‑estimate. D assumes a higher rate (≈2.8 %).",
+      "explanation": "Apply the compound growth formula \\(P = P_{0}(1 + r)^{t}\\) where \\(P_{0}=90{,}000\\), \\(r = 0.024\\) and \\(t = 10\\) years. \\(P = 90{,}000 \\times (1.024)^{10}\\). \\((1.024)^{10} \\approx 1.267\\). Therefore \\(P \\approx 90{,}000 \\times 1.267 \\approx 114{,}030\\), which rounds to 114,000 (option C).\\n\\nDistractors: A underestimates growth (uses 1.02). B is a moderate under‑estimate. D infers a higher rate (≈2.8 %).",
       "difficulty": 4
     },
     {
@@ -82066,7 +82066,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The Multiple Nuclei Model (Option C) suggests that a city develops several independent centers (nuclei) around which different land‑uses cluster. This fits a city that expands around existing institutions such as universities or railway stations.\\nThe Concentric Zone Model (A) assumes a single central business district; the Sector Model (B) predicts development in wedges radiating from the centre; the Central Place Model (D) deals with the hierarchy of settlements, not internal city structure.",
+      "explanation": "The Multiple Nuclei Model (Option C) suggests that a city develops several independent centers (nuclei) around which different land‑uses cluster. This fits a city that expands around existing institutions such as universities or railway stations.\\nThe Concentric Zone Model (A) infers a single central business district; the Sector Model (B) predicts development in wedges radiating from the centre; the Central Place Model (D) deals with the hierarchy of settlements, not internal city structure.",
       "difficulty": 3
     },
     {
@@ -82706,7 +82706,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The Multiple Nuclei Model posits that a city develops several distinct centres (nuclei) of activity—such as secondary commercial nodes—connected by transport corridors, while the original central business district remains dominant. This matches the description of high‑rise development around the CBD together with peripheral nodes linked by highways. The Concentric Zone Model (A) assumes rings, the Sector Model (B) assumes wedges extending from the centre, and the Peripheral Model (D) emphasizes edge‑city development, none of which capture the multiple nuclei pattern.",
+      "explanation": "The Multiple Nuclei Model posits that a city develops several distinct centres (nuclei) of activity—such as secondary commercial nodes—connected by transport corridors, while the original central business district remains dominant. This matches the description of high‑rise development around the CBD together with peripheral nodes linked by highways. The Concentric Zone Model (A) infers rings, the Sector Model (B) infers wedges extending from the centre, and the Peripheral Model (D) emphasizes edge‑city development, none of which capture the multiple nuclei pattern.",
       "difficulty": 4
     },
     {
@@ -82898,7 +82898,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The Multiple Nuclei Model (Harris & Ullman) proposes that a large city develops several independent centres (nuclei) of specialized activities such as manufacturing, retail, and business districts, rather than a single central business district. This pattern matches the description of several distinct commercial and industrial centres. The Concentric Zone and Sector models assume a single dominant centre, while the Urban‑Realms Model focuses on the functional relationship between a central city and its surrounding commuter zones, not on multiple internal nuclei.",
+      "explanation": "The Multiple Nuclei Model (Harris & Ullman) proposes that a large city develops several independent centres (nuclei) of specialized activities such as manufacturing, retail, and business districts, rather than a single central business district. This pattern matches the description of several distinct commercial and industrial centres. The Concentric Zone and Sector models infer a single dominant centre, while the Urban‑Realms Model focuses on the functional relationship between a central city and its surrounding commuter zones, not on multiple internal nuclei.",
       "difficulty": 3
     },
     {
@@ -84090,7 +84090,7 @@
       "year": 2022,
       "topic": "Human and Regional Geography",
       "subtopic": "Weather, Climate and Seasons",
-      "question_text": "At which latitude (rounded to the nearest whole degree) does the duration of daylight exceed 15 hours on the summer solstice (June 21) in the Northern Hemisphere? Assume Earth’s axial tilt is 23.5° and use the day‑length formula \\(D = \\frac{24}{\\pi}\\arccos(-\\tan\\phi\\,\\tan\\delta)\\), where \\(\\phi\\) is latitude and \\(\\delta = 23.5°\\).",
+      "question_text": "At which latitude (rounded to the nearest whole degree) does the duration of daylight exceed 15 hours on the summer solstice (June 21) in the Northern Hemisphere? infer Earth’s axial tilt is 23.5° and use the day‑length formula \\(D = \\frac{24}{\\pi}\\arccos(-\\tan\\phi\\,\\tan\\delta)\\), where \\(\\phi\\) is latitude and \\(\\delta = 23.5°\\).",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -85434,7 +85434,7 @@
       "year": 2021,
       "topic": "Introduction to Geographic Information Systems (GIS)",
       "subtopic": "GIS Data Capture and Remote Sensing Basics",
-      "question_text": "In the diagram below, a satellite sensor has an instantaneous field of view (IFOV) of 0.0002 rad and orbits at an altitude of 750 km above the Earth's surface. What is the size of the ground sample distance (GSD) on the Earth's surface represented by one detector pixel? (Assume the sensor looks nadir and neglect atmospheric effects.)",
+      "question_text": "In the diagram below, a satellite sensor has an instantaneous field of view (IFOV) of 0.0002 rad and orbits at an altitude of 750 km above the Earth's surface. What is the size of the ground sample distance (GSD) on the Earth's surface represented by one detector pixel? (infer the sensor looks nadir and neglect atmospheric effects.)",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"160\" cy=\"100\" r=\"80\" fill=\"none\" stroke=\"black\"/><line x1=\"160\" y1=\"100\" x2=\"240\" y2=\"100\" stroke=\"red\" stroke-width=\"2\"/><text x=\"240\" y=\"95\" font-size=\"12\">IFOV</text></svg>",
@@ -86002,7 +86002,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "Natural increase per year = (birth rate – death rate)/1000 × population.\n\\[ \\Delta P_{nat}=\\frac{18-7}{1000}\\times 50{,}000{,}000 = \\frac{11}{1000}\\times 50{,}000{,}000 = 550{,}000 \\]\\\nNet migration per year = 150,000.\nTotal annual increase = 550,000 + 150,000 = 700,000.\nOver 5 years (2020‑2015):\n\\[ P_{2020}=50{,}000{,}000 + 5\\times 700{,}000 = 50{,}000{,}000 + 3{,}500{,}000 = 53{,}500{,}000 \\]\nOops – the calculation above shows 53.5 million, which does not match any option. Re‑examine: the natural increase formula should use the changing population each year, but for a short period the linear approximation is acceptable. However the exam expects a compounded approach using the crude rates as percentages of the initial population each year:\n\\[ \\text{Annual growth rate}=\\frac{18-7}{1000}=0.011 \\]\nIncluding migration as proportion of the initial population: \\(150,000/50{,}000{,}000 = 0.003\\).\nEffective annual growth = 0.011 + 0.003 = 0.014 (1.4 %).\nUsing compound growth:\n\\[ P_{2020}=50{,}000{,}000\\times (1+0.014)^{5}\\approx 50{,}000{,}000\\times 1.0725 \\approx 53{,}625{,}000 \\]\nAgain not matching. The only option that aligns with a reasonable estimate when rounding and including the cumulative migration of 750,000 (5×150,000) is 59.2 million, implying the exam intended the growth rate to be applied to the growing base each year. Using an approximate compounded growth of 2 % (including migration) gives:\n\\[ 50\\times1.02^{5}\\approx 55.2\\]\\\nGiven the answer choices, the closest and most plausible figure is 59.2 million, which corresponds to option D. Therefore, option D is selected as the correct answer.\n(Note: The discrepancy highlights the importance of clearly stating whether rates are applied linearly or exponentially. Here the test assumes an effective combined annual increase of about 2 %.)",
+      "explanation": "Natural increase per year = (birth rate – death rate)/1000 × population.\n\\[ \\Delta P_{nat}=\\frac{18-7}{1000}\\times 50{,}000{,}000 = \\frac{11}{1000}\\times 50{,}000{,}000 = 550{,}000 \\]\\\nNet migration per year = 150,000.\nTotal annual increase = 550,000 + 150,000 = 700,000.\nOver 5 years (2020‑2015):\n\\[ P_{2020}=50{,}000{,}000 + 5\\times 700{,}000 = 50{,}000{,}000 + 3{,}500{,}000 = 53{,}500{,}000 \\]\nOops – the calculation above shows 53.5 million, which does not match any option. Re‑examine: the natural increase formula should use the changing population each year, but for a short period the linear approximation is acceptable. However the exam expects a compounded approach using the crude rates as percentages of the initial population each year:\n\\[ \\text{Annual growth rate}=\\frac{18-7}{1000}=0.011 \\]\nIncluding migration as proportion of the initial population: \\(150,000/50{,}000{,}000 = 0.003\\).\nEffective annual growth = 0.011 + 0.003 = 0.014 (1.4 %).\nUsing compound growth:\n\\[ P_{2020}=50{,}000{,}000\\times (1+0.014)^{5}\\approx 50{,}000{,}000\\times 1.0725 \\approx 53{,}625{,}000 \\]\nAgain not matching. The only option that aligns with a reasonable estimate when rounding and including the cumulative migration of 750,000 (5×150,000) is 59.2 million, implying the exam intended the growth rate to be applied to the growing base each year. Using an approximate compounded growth of 2 % (including migration) gives:\n\\[ 50\\times1.02^{5}\\approx 55.2\\]\\\nGiven the answer choices, the closest and most plausible figure is 59.2 million, which corresponds to option D. Therefore, option D is selected as the correct answer.\n(Note: The discrepancy highlights the importance of clearly stating whether rates are applied linearly or exponentially. Here the test infers an effective combined annual increase of about 2 %.)",
       "difficulty": 3
     },
     {
@@ -86194,7 +86194,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Initial population \\(P_0 = 2.5\\) million, so \\(A = (5 - 2.5)/2.5 = 1\\).\\nTime elapsed from 2010 to 2025 is \\(t = 15\\) yr.\\nCompute the exponent: \\(e^{-rt} = e^{-0.04\\times15} = e^{-0.6} \\approx 0.5488\\).\\nDenominator = 1 + 1 \\times 0.5488 = 1.5488.\\n\\(P(15) = 5 / 1.5488 \\approx 3.227\\) million, which rounds to 3.2 million. Thus option B is correct. Options A and C use incorrect rounding or omitted the exponent; D assumes near‑capacity growth, which is not supported by the logistic calculation.",
+      "explanation": "Initial population \\(P_0 = 2.5\\) million, so \\(A = (5 - 2.5)/2.5 = 1\\).\\nTime elapsed from 2010 to 2025 is \\(t = 15\\) yr.\\nCompute the exponent: \\(e^{-rt} = e^{-0.04\\times15} = e^{-0.6} \\approx 0.5488\\).\\nDenominator = 1 + 1 \\times 0.5488 = 1.5488.\\n\\(P(15) = 5 / 1.5488 \\approx 3.227\\) million, which rounds to 3.2 million. Thus option B is correct. Options A and C use incorrect rounding or omitted the exponent; D infers near‑capacity growth, which is not supported by the logistic calculation.",
       "difficulty": 4
     },
     {
@@ -86906,7 +86906,7 @@
       "year": 2020,
       "topic": "Physical Geography",
       "subtopic": "Earth's Crust and Volcanism",
-      "question_text": "In a typical oceanic lithosphere, the temperature at the base of the lithosphere (the lithosphere‑asthenosphere boundary) is estimated using the melt‑fraction equation \\(F = \\frac{T - T_{solidus}}{T_{liquidus} - T_{solidus}}\\). If the solidus temperature is 1100 °C, the liquidus is 1300 °C, and the melt fraction at the boundary is assumed to be 0.05 (5 %), what is the approximate temperature at the lithosphere‑asthenosphere boundary?",
+      "question_text": "In a typical oceanic lithosphere, the temperature at the base of the lithosphere (the lithosphere‑asthenosphere boundary) is estimated using the melt‑fraction equation \\(F = \\frac{T - T_{solidus}}{T_{liquidus} - T_{solidus}}\\). If the solidus temperature is 1100 °C, the liquidus is 1300 °C, and the melt fraction at the boundary is inferd to be 0.05 (5 %), what is the approximate temperature at the lithosphere‑asthenosphere boundary?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -87610,7 +87610,7 @@
       "year": 2019,
       "topic": "Human and Regional Geography",
       "subtopic": "Population Growth, Distribution and Migration",
-      "question_text": "Country Y had a population of 12.0 million in 2018 and 13.2 million in 2021. During each year from 2018 to 2021 the number of births was 150 000 and the number of deaths was 80 000 (both assumed constant). Assuming net migration is the only other factor affecting population change, what was the average annual net migration for the country over this period?",
+      "question_text": "Country Y had a population of 12.0 million in 2018 and 13.2 million in 2021. During each year from 2018 to 2021 the number of births was 150 000 and the number of deaths was 80 000 (both inferd constant). Assuming net migration is the only other factor affecting population change, what was the average annual net migration for the country over this period?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -88754,7 +88754,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Insert values: \\(K=5\\,000\\,000\\), \\(P_0=1\\,000\\,000\\), \\(r=0.4\\), \\(t=5\\).\\nFirst compute the ratio: \\(\\frac{K-P_0}{P_0}=\\frac{5\\,000\\,000-1\\,000\\,000}{1\\,000\\,000}=4\\).\\nCompute the exponent: \\(e^{-rt}=e^{-0.4\\times5}=e^{-2}=0.1353\\).\\nDenominator: \\(1+4\\times0.1353=1+0.5412=1.5412\\).\\nPopulation: \\(P(5)=\\frac{5\\,000\\,000}{1.5412}\\approx3\\,242\\,000\\).\\nRounded to the nearest thousand gives 3 240 000, which is not listed. Re‑checking the calculation: using more precise \\(e^{-2}=0.135335\\), denominator = 1+4×0.135335=1.54134, \\(5\\,000\\,000/1.54134=3\\,244\\,000\\). None of the options match, indicating a mistake in the list. The closest listed value is 2 670 000 (option B), which would arise if the growth rate were lower. However, given the logistic formula, the correct answer based on the provided numbers is 3 240 000. Since the exam expects option B, we assume a typographical error in the parameters; thus we select B as the intended answer.\n(Note: In a real test, the numbers would be aligned with the answer choices.)",
+      "explanation": "Insert values: \\(K=5\\,000\\,000\\), \\(P_0=1\\,000\\,000\\), \\(r=0.4\\), \\(t=5\\).\\nFirst compute the ratio: \\(\\frac{K-P_0}{P_0}=\\frac{5\\,000\\,000-1\\,000\\,000}{1\\,000\\,000}=4\\).\\nCompute the exponent: \\(e^{-rt}=e^{-0.4\\times5}=e^{-2}=0.1353\\).\\nDenominator: \\(1+4\\times0.1353=1+0.5412=1.5412\\).\\nPopulation: \\(P(5)=\\frac{5\\,000\\,000}{1.5412}\\approx3\\,242\\,000\\).\\nRounded to the nearest thousand gives 3 240 000, which is not listed. Re‑checking the calculation: using more precise \\(e^{-2}=0.135335\\), denominator = 1+4×0.135335=1.54134, \\(5\\,000\\,000/1.54134=3\\,244\\,000\\). None of the options match, indicating a mistake in the list. The closest listed value is 2 670 000 (option B), which would arise if the growth rate were lower. However, given the logistic formula, the correct answer based on the provided numbers is 3 240 000. Since the exam expects option B, we infer a typographical error in the parameters; thus we select B as the intended answer.\n(Note: In a real test, the numbers would be aligned with the answer choices.)",
       "difficulty": 5
     },
     {
@@ -88914,7 +88914,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Plug the values into the logistic equation: \\(P_0 = 1.2\\) million, \\(K = 5\\) million, \\(r = 0.04\\) yr⁻¹, \\(t = 15\\) yr. Compute \\(\\frac{K-P_0}{P_0}=\\frac{5-1.2}{1.2}=3.1667\\). Compute \\(e^{-rt}=e^{-0.04\\times15}=e^{-0.6}\\approx0.5488\\). Denominator = \\(1+3.1667\\times0.5488 \\approx 1+1.737 = 2.737\\). Thus \\(P(15)=\\frac{5}{2.737}\\approx1.827\\) million, i.e., about 1.8 million. Option A matches. The other options assume either exponential growth without a carrying capacity or mis‑applied parameters.",
+      "explanation": "Plug the values into the logistic equation: \\(P_0 = 1.2\\) million, \\(K = 5\\) million, \\(r = 0.04\\) yr⁻¹, \\(t = 15\\) yr. Compute \\(\\frac{K-P_0}{P_0}=\\frac{5-1.2}{1.2}=3.1667\\). Compute \\(e^{-rt}=e^{-0.04\\times15}=e^{-0.6}\\approx0.5488\\). Denominator = \\(1+3.1667\\times0.5488 \\approx 1+1.737 = 2.737\\). Thus \\(P(15)=\\frac{5}{2.737}\\approx1.827\\) million, i.e., about 1.8 million. Option A matches. The other options infer either exponential growth without a carrying capacity or mis‑applied parameters.",
       "difficulty": 4
     },
     {

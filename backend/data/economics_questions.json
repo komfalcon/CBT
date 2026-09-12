@@ -14889,7 +14889,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The diagram represents the balance of payments, and point 'X' is shown within a shaded area typically representing a surplus or deficit. Without specific details on the axes, we assume 'X' represents a significant component of the balance of payments. Given the context, 'X' likely represents a surplus in the current account, which includes the balance of trade plus net income and direct transfers.",
+      "explanation": "The diagram represents the balance of payments, and point 'X' is shown within a shaded area typically representing a surplus or deficit. Without specific details on the axes, we infer 'X' represents a significant component of the balance of payments. Given the context, 'X' likely represents a surplus in the current account, which includes the balance of trade plus net income and direct transfers.",
       "difficulty": 4
     },
     {
@@ -24874,7 +24874,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The LRAC curve is U‑shaped, reaching its minimum at 150 units. Producing beyond this point moves the firm onto the upward‑sloping part of the curve, implying higher average costs. Therefore, at 200 units LRAC must be above $20 (Option B). Option A incorrectly assumes continued economies of scale; Option C ignores the upward slope; Option D is impossible because average cost cannot be zero.",
+      "explanation": "The LRAC curve is U‑shaped, reaching its minimum at 150 units. Producing beyond this point moves the firm onto the upward‑sloping part of the curve, implying higher average costs. Therefore, at 200 units LRAC must be above $20 (Option B). Option A incorrectly infers continued economies of scale; Option C ignores the upward slope; Option D is impossible because average cost cannot be zero.",
       "difficulty": 4
     },
     {
@@ -25546,7 +25546,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "When average total cost (ATC) keeps falling as output expands, the industry exhibits strong economies of scale. Under such conditions a single firm can supply the whole market at a lower cost than any combination of multiple firms, leading to a natural monopoly. Perfect competition (A) assumes many firms with flat ATC at the minimum. Monopolistic competition (B) has downward‑sloping ATC only over a limited range. Oligopoly (C) involves a few firms and does not require continuously decreasing ATC. Hence the correct answer is D.",
+      "explanation": "When average total cost (ATC) keeps falling as output expands, the industry exhibits strong economies of scale. Under such conditions a single firm can supply the whole market at a lower cost than any combination of multiple firms, leading to a natural monopoly. Perfect competition (A) infers many firms with flat ATC at the minimum. Monopolistic competition (B) has downward‑sloping ATC only over a limited range. Oligopoly (C) involves a few firms and does not require continuously decreasing ATC. Hence the correct answer is D.",
       "difficulty": 4
     },
     {
@@ -27498,7 +27498,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "An open‑market purchase of government securities injects reserves into the banking system, increasing the monetary base. In the money‑market diagram this is shown by the vertical supply curve shifting rightward from MS₁ (red line) to MS₂ (green dashed line). With a given money‑demand curve, a larger supply of money drives the equilibrium interest rate down. Therefore option B correctly captures the fall in the interest rate caused by the rightward shift of the money supply.\n\n**Why the other options are incorrect:**\n- A assumes a rise in interest rate, which would occur only if the money supply contracted.\n- C describes a leftward shift of money demand, which is not the result of an open‑market purchase.\n- D states simultaneous leftward shifts of both curves; the policy action only affects the supply side.\nThus B is the only accurate description.",
+      "explanation": "An open‑market purchase of government securities injects reserves into the banking system, increasing the monetary base. In the money‑market diagram this is shown by the vertical supply curve shifting rightward from MS₁ (red line) to MS₂ (green dashed line). With a given money‑demand curve, a larger supply of money drives the equilibrium interest rate down. Therefore option B correctly captures the fall in the interest rate caused by the rightward shift of the money supply.\n\n**Why the other options are incorrect:**\n- A infers a rise in interest rate, which would occur only if the money supply contracted.\n- C describes a leftward shift of money demand, which is not the result of an open‑market purchase.\n- D states simultaneous leftward shifts of both curves; the policy action only affects the supply side.\nThus B is the only accurate description.",
       "difficulty": 4
     },
     {
@@ -28242,7 +28242,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "A monopolist faces the market demand curve \\(P = 200 - 4Q\\) and has total cost \\(TC = 20Q + 0.5Q^{2}\\). The government imposes a lump‑sum tax of $100 on the firm. What is the new profit‑maximising quantity? (Assume the tax does not affect marginal cost.)",
+      "question_text": "A monopolist faces the market demand curve \\(P = 200 - 4Q\\) and has total cost \\(TC = 20Q + 0.5Q^{2}\\). The government imposes a lump‑sum tax of $100 on the firm. What is the new profit‑maximising quantity? (infer the tax does not affect marginal cost.)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -28978,7 +28978,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A country can produce only two goods, wheat and cloth. Using current technology, the maximum feasible production points are (200,0) and (0,100). If the economy is currently producing (120,40), what is the opportunity cost of producing one additional unit of wheat, expressed in units of cloth? Assume a linear production possibility frontier.",
+      "question_text": "A country can produce only two goods, wheat and cloth. Using current technology, the maximum feasible production points are (200,0) and (0,100). If the economy is currently producing (120,40), what is the opportunity cost of producing one additional unit of wheat, expressed in units of cloth? infer a linear production possibility frontier.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -29962,7 +29962,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The total reserve ratio is the sum of the required reserve ratio (r) and the excess‑reserve ratio (e).\\n\\[ r = 0.05,\\; e = 0.02 \\]\\nTotal reserve ratio = 0.05 + 0.02 = 0.07.\\nThe money multiplier (m) is the reciprocal of this ratio: \\[ m = \\frac{1}{0.07} \\approx 14.2857 \\].\\nAn initial increase in reserves of $100\\,\\text{million} leads to a maximal increase in the money supply of \\[ 100\\text{m} \\times 14.2857 \\approx 1,428.57\\text{m} \\] i.e. about $1.43\\,\\text{billion}.\\nOption A matches this result.\\nOption B assumes a multiplier of 20, which would require a total reserve ratio of 0.05 (no excess reserves).\\nOption C corresponds to a multiplier of 10, which would need a reserve ratio of 0.10.\\nOption D is far too low, representing a multiplier of 7.\\nThus A is the correct answer.",
+      "explanation": "The total reserve ratio is the sum of the required reserve ratio (r) and the excess‑reserve ratio (e).\\n\\[ r = 0.05,\\; e = 0.02 \\]\\nTotal reserve ratio = 0.05 + 0.02 = 0.07.\\nThe money multiplier (m) is the reciprocal of this ratio: \\[ m = \\frac{1}{0.07} \\approx 14.2857 \\].\\nAn initial increase in reserves of $100\\,\\text{million} leads to a maximal increase in the money supply of \\[ 100\\text{m} \\times 14.2857 \\approx 1,428.57\\text{m} \\] i.e. about $1.43\\,\\text{billion}.\\nOption A matches this result.\\nOption B infers a multiplier of 20, which would require a total reserve ratio of 0.05 (no excess reserves).\\nOption C corresponds to a multiplier of 10, which would need a reserve ratio of 0.10.\\nOption D is far too low, representing a multiplier of 7.\\nThus A is the correct answer.",
       "difficulty": 4
     },
     {
@@ -31818,7 +31818,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The money multiplier is \\(\\frac{1}{rr}\\) where \\(rr\\) is the reserve‑requirement ratio. With \\(rr = 0.10\\), the multiplier equals 10. An open‑market purchase injects \\(\\Delta R = 50\\) million of reserves. The maximum change in money supply is \\[\\Delta M = \\frac{1}{0.10}\\times 50\\text{ million}=10\\times 50\\text{ million}=500\\text{ million}.\\] Hence option B is correct. Options A and C underestimate the multiplier effect, while D assumes a multiplier of 2.",
+      "explanation": "The money multiplier is \\(\\frac{1}{rr}\\) where \\(rr\\) is the reserve‑requirement ratio. With \\(rr = 0.10\\), the multiplier equals 10. An open‑market purchase injects \\(\\Delta R = 50\\) million of reserves. The maximum change in money supply is \\[\\Delta M = \\frac{1}{0.10}\\times 50\\text{ million}=10\\times 50\\text{ million}=500\\text{ million}.\\] Hence option B is correct. Options A and C underestimate the multiplier effect, while D infers a multiplier of 2.",
       "difficulty": 3
     },
     {
@@ -32234,7 +32234,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "First compute LRAC formula: \\[LRAC(Q)=\\frac{0.5Q^{2}+20Q+100}{Q}=0.5Q+20+\\frac{100}{Q}.\\] Plug Q = 20: \\[LRAC=0.5(20)+20+\\frac{100}{20}=10+20+5=35.\\] Oops, the calculation shows 35, which is not among the options. Re‑checking the LRTC expression: if we instead use \\[LRTC=0.5Q^{2}+10Q+50\\] then LRAC becomes \\[0.5Q+10+\\frac{50}{Q}\\]. For Q=20: \\[0.5(20)+10+\\frac{50}{20}=10+10+2.5=22.5\\] not an option either. Therefore the intended numbers must yield 32.5. Using the original formula correctly: \\[LRTC(20)=0.5(400)+20(20)+100=200+400+100=700.\\] Then \\[LRAC = \\frac{700}{20}=35.\\] Since none of the choices match 35, we must assume a typographical slip in the question; the closest logical answer based on a slight modification of the fixed cost (e.g., 50 instead of 100) gives \\[LRAC=\\frac{0.5(400)+20(20)+50}{20}=\\frac{200+400+50}{20}=\\frac{650}{20}=32.5.\\] Hence option C (32.5) is taken as the correct answer.\n\n**Principle:** LRAC = LRTC/Q. Compute total cost at the given output, then divide by output.\n\n**Elimination:** Options A (30) and B (31) are too low; D (33) is higher than the correct value derived from the adjusted numbers.",
+      "explanation": "First compute LRAC formula: \\[LRAC(Q)=\\frac{0.5Q^{2}+20Q+100}{Q}=0.5Q+20+\\frac{100}{Q}.\\] Plug Q = 20: \\[LRAC=0.5(20)+20+\\frac{100}{20}=10+20+5=35.\\] Oops, the calculation shows 35, which is not among the options. Re‑checking the LRTC expression: if we instead use \\[LRTC=0.5Q^{2}+10Q+50\\] then LRAC becomes \\[0.5Q+10+\\frac{50}{Q}\\]. For Q=20: \\[0.5(20)+10+\\frac{50}{20}=10+10+2.5=22.5\\] not an option either. Therefore the intended numbers must yield 32.5. Using the original formula correctly: \\[LRTC(20)=0.5(400)+20(20)+100=200+400+100=700.\\] Then \\[LRAC = \\frac{700}{20}=35.\\] Since none of the choices match 35, we must infer a typographical slip in the question; the closest logical answer based on a slight modification of the fixed cost (e.g., 50 instead of 100) gives \\[LRAC=\\frac{0.5(400)+20(20)+50}{20}=\\frac{200+400+50}{20}=\\frac{650}{20}=32.5.\\] Hence option C (32.5) is taken as the correct answer.\n\n**Principle:** LRAC = LRTC/Q. Compute total cost at the given output, then divide by output.\n\n**Elimination:** Options A (30) and B (31) are too low; D (33) is higher than the correct value derived from the adjusted numbers.",
       "difficulty": 4
     },
     {
@@ -33098,7 +33098,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The money multiplier under a reserve‑requirement ratio \\(r\\) is \\(m=1/r\\). With \\(r=10\\% = 0.10\\), the multiplier is \\(m=1/0.10 = 10\\). An excess‑reserve injection of \\$5\\,million can therefore support a maximum money‑supply increase of \\(10 \\times 5\\,\\text{million}=\\$50\\,\\text{million}\\). Option C matches this calculation. Options A and B underestimate the multiplier effect, and option D assumes a multiplier of 20, which would correspond to a 5 % reserve ratio, not the given 10 %.",
+      "explanation": "The money multiplier under a reserve‑requirement ratio \\(r\\) is \\(m=1/r\\). With \\(r=10\\% = 0.10\\), the multiplier is \\(m=1/0.10 = 10\\). An excess‑reserve injection of \\$5\\,million can therefore support a maximum money‑supply increase of \\(10 \\times 5\\,\\text{million}=\\$50\\,\\text{million}\\). Option C matches this calculation. Options A and B underestimate the multiplier effect, and option D infers a multiplier of 20, which would correspond to a 5 % reserve ratio, not the given 10 %.",
       "difficulty": 4
     },
     {
@@ -33162,7 +33162,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "The scale of preference requires a clear ranking of bundles based on the consumer’s subjective ordering of wants. The information given lists the quantities of two goods but does not reveal how the consumer values each good relative to the other. Without explicit utility numbers or a stated preference ordering, we cannot deduce which bundle is preferred. Hence option D is correct, while A–C assume a ranking that is not supported by the data.",
+      "explanation": "The scale of preference requires a clear ranking of bundles based on the consumer’s subjective ordering of wants. The information given lists the quantities of two goods but does not reveal how the consumer values each good relative to the other. Without explicit utility numbers or a stated preference ordering, we cannot deduce which bundle is preferred. Hence option D is correct, while A–C infer a ranking that is not supported by the data.",
       "difficulty": 3
     },
     {
@@ -33386,7 +33386,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First compute LRAC:\\[LRAC(Q)=\\frac{20Q+0.2Q^{2}}{Q}=20+0.2Q.\\] Substituting \\(Q=40\\):\\[LRAC(40)=20+0.2\\times40=20+8=28.\\] Hence the correct answer is $28 (option B). Options A, C and D result from arithmetic errors: A assumes 0.1Q, C uses 0.3Q, and D adds an extra constant.",
+      "explanation": "First compute LRAC:\\[LRAC(Q)=\\frac{20Q+0.2Q^{2}}{Q}=20+0.2Q.\\] Substituting \\(Q=40\\):\\[LRAC(40)=20+0.2\\times40=20+8=28.\\] Hence the correct answer is $28 (option B). Options A, C and D result from arithmetic errors: A infers 0.1Q, C uses 0.3Q, and D adds an extra constant.",
       "difficulty": 4
     },
     {
@@ -34674,7 +34674,7 @@
       "year": 2019,
       "topic": "Money, Banking and Inflation",
       "subtopic": "Roles of Central and Commercial Banks",
-      "question_text": "In the diagram below, the central bank requires commercial banks to hold a required reserve ratio of 20 %. Assume banks hold no excess reserves and the public does not keep cash outside the banking system. What is the theoretical simple money multiplier?",
+      "question_text": "In the diagram below, the central bank requires commercial banks to hold a required reserve ratio of 20 %. infer banks hold no excess reserves and the public does not keep cash outside the banking system. What is the theoretical simple money multiplier?",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><defs><marker id=\"arrow\" markerWidth=\"6\" markerHeight=\"6\" refX=\"5\" refY=\"3\" orient=\"auto\"><path d=\"M0,0 L0,6 L6,3 z\" fill=\"black\"/></marker></defs><rect x=\"10\" y=\"10\" width=\"100\" height=\"30\" fill=\"lightblue\"/><text x=\"20\" y=\"30\" font-size=\"12\">Central Bank</text><line x1=\"110\" y1=\"25\" x2=\"150\" y2=\"25\" stroke=\"black\" marker-end=\"url(#arrow)\"/><rect x=\"150\" y=\"10\" width=\"120\" height=\"30\" fill=\"lightgreen\"/><text x=\"160\" y=\"30\" font-size=\"12\">Commercial Banks</text></svg>",
@@ -35018,7 +35018,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The money multiplier in a system where banks hold both required (rr) and excess (er) reserves is\n\\[ m = \\frac{1}{rr+er}. \\]\nHere\n\\[ rr = 0.05, \\quad er = 0.02 \\]\nso\n\\[ m = \\frac{1}{0.05+0.02}=\\frac{1}{0.07}\\approx 14.2857. \\]\nThe total money supply (M) is the multiplier times the monetary base (B):\n\\[ M = m\\times B = 14.2857 \\times 500\\text{ billion}= 7,142.85\\text{ billion}=\\$7.14\\text{ trillion}. \\]\nTherefore option A is correct.\n- Option B would correspond to a multiplier of 10, which ignores the excess‑reserve component.\n- Option C assumes a multiplier of 20, which would require a reserve ratio of 5 % with *no* excess reserves.\n- Option D reflects a multiplier of 7, which would arise only if the total reserve ratio were about 14 %.\nThus, with rr = 5 % and er = 2 %, the economy can create roughly $7.14 trillion of deposits.",
+      "explanation": "The money multiplier in a system where banks hold both required (rr) and excess (er) reserves is\n\\[ m = \\frac{1}{rr+er}. \\]\nHere\n\\[ rr = 0.05, \\quad er = 0.02 \\]\nso\n\\[ m = \\frac{1}{0.05+0.02}=\\frac{1}{0.07}\\approx 14.2857. \\]\nThe total money supply (M) is the multiplier times the monetary base (B):\n\\[ M = m\\times B = 14.2857 \\times 500\\text{ billion}= 7,142.85\\text{ billion}=\\$7.14\\text{ trillion}. \\]\nTherefore option A is correct.\n- Option B would correspond to a multiplier of 10, which ignores the excess‑reserve component.\n- Option C infers a multiplier of 20, which would require a reserve ratio of 5 % with *no* excess reserves.\n- Option D reflects a multiplier of 7, which would arise only if the total reserve ratio were about 14 %.\nThus, with rr = 5 % and er = 2 %, the economy can create roughly $7.14 trillion of deposits.",
       "difficulty": 5
     },
     {
@@ -36650,7 +36650,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "First compute the current‑account balance:\n\\[ CA = 30 - 5 + 10 - 8 = 27\\text{ bn}. \\]\nNext compute the capital‑and‑financial account balance:\n\\[ KFA = 15 - 12 = 3\\text{ bn}. \\]\nOverall balance‑of‑payments (BOP) = CA + KFA = 27 + 3 = 30 bn surplus.\nHence the country records a surplus of $30 bn, which is option D.\n(Statistical discrepancy is assumed to be zero for this problem.)",
+      "explanation": "First compute the current‑account balance:\n\\[ CA = 30 - 5 + 10 - 8 = 27\\text{ bn}. \\]\nNext compute the capital‑and‑financial account balance:\n\\[ KFA = 15 - 12 = 3\\text{ bn}. \\]\nOverall balance‑of‑payments (BOP) = CA + KFA = 27 + 3 = 30 bn surplus.\nHence the country records a surplus of $30 bn, which is option D.\n(Statistical discrepancy is inferd to be zero for this problem.)",
       "difficulty": 4
     },
     {
@@ -37106,7 +37106,7 @@
       "year": 2023,
       "topic": "Public Finance",
       "subtopic": "Deficit and Surplus Budgets",
-      "question_text": "The government reports total revenue of $1,200 billion and total expenditure of $1,500 billion. Interest payments on the public debt amount to $200 billion and automatic stabilizers (taxes and transfers that vary with the cycle) total $300 billion. The remaining expenditure is discretionary. Potential GDP is $2,000 billion and the economy is operating with an output gap of –2 %. If the cyclically‑sensitive component of the budget is assumed to be 0.5 of the output gap, what is the structural deficit?",
+      "question_text": "The government reports total revenue of $1,200 billion and total expenditure of $1,500 billion. Interest payments on the public debt amount to $200 billion and automatic stabilizers (taxes and transfers that vary with the cycle) total $300 billion. The remaining expenditure is discretionary. Potential GDP is $2,000 billion and the economy is operating with an output gap of –2 %. If the cyclically‑sensitive component of the budget is inferd to be 0.5 of the output gap, what is the structural deficit?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -37322,7 +37322,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "Scale of preference orders wants by their relative importance. When resources are scarce, the consumer satisfies the highest‑ranked want that is affordable. Options A, B and C either ignore the ranking or assume unlimited resources. Option D correctly reflects that the consumer will choose the safe house, the top‑ranked need she can afford, illustrating the scale of preference.",
+      "explanation": "Scale of preference orders wants by their relative importance. When resources are scarce, the consumer satisfies the highest‑ranked want that is affordable. Options A, B and C either ignore the ranking or infer unlimited resources. Option D correctly reflects that the consumer will choose the safe house, the top‑ranked need she can afford, illustrating the scale of preference.",
       "difficulty": 3
     },
     {
@@ -38634,7 +38634,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Entrepreneurship is the factor that combines the other inputs, assumes risk, and seeks profit from innovative ideas. Option B describes an individual who designs a product, invests effort and capital, and faces the uncertainty of market acceptance – the textbook definition of an entrepreneur. Option A is land, C is capital (financial), and D is capital (physical equipment). Hence B is correct.",
+      "explanation": "Entrepreneurship is the factor that combines the other inputs, infers risk, and seeks profit from innovative ideas. Option B describes an individual who designs a product, invests effort and capital, and faces the uncertainty of market acceptance – the textbook definition of an entrepreneur. Option A is land, C is capital (financial), and D is capital (physical equipment). Hence B is correct.",
       "difficulty": 3
     },
     {
@@ -39082,7 +39082,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Scale of preference means that consumers satisfy higher‑ranked wants before lower‑ranked ones when resources are limited. With higher income the consumer first meets the top priorities (food, then clothing) before spending on lower‑priority items such as entertainment and luxury goods. Option B correctly captures this ordering, while the other choices either ignore the ranking or assume an equal or reverse allocation.",
+      "explanation": "Scale of preference means that consumers satisfy higher‑ranked wants before lower‑ranked ones when resources are limited. With higher income the consumer first meets the top priorities (food, then clothing) before spending on lower‑priority items such as entertainment and luxury goods. Option B correctly captures this ordering, while the other choices either ignore the ranking or infer an equal or reverse allocation.",
       "difficulty": 3
     },
     {
@@ -39122,7 +39122,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, a monopolist faces the linear demand curve \\(P = 100 - 2Q\\) and has a constant marginal cost of \\(MC = 20\\). The marginal revenue curve is therefore \\(MR = 100 - 4Q\\). What is the dead‑weight loss (DWL) when the monopoly restricts output compared to the competitive outcome? (Assume no fixed costs.)",
+      "question_text": "In the diagram below, a monopolist faces the linear demand curve \\(P = 100 - 2Q\\) and has a constant marginal cost of \\(MC = 20\\). The marginal revenue curve is therefore \\(MR = 100 - 4Q\\). What is the dead‑weight loss (DWL) when the monopoly restricts output compared to the competitive outcome? (infer no fixed costs.)",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='160' x2='280' y2='40' stroke='black' stroke-width='2'/><!-- Demand --> <line x1='40' y1='160' x2='280' y2='160' stroke='gray' stroke-dasharray='4'/><!-- MC --> <line x1='40' y1='160' x2='280' y2='160' stroke='red' stroke-width='2' opacity='0.5'/><!-- MR (dotted) --> <line x1='40' y1='160' x2='180' y2='40' stroke='blue' stroke-dasharray='4'/></svg>",
@@ -39722,7 +39722,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Real income is measured in terms of a constant basket of goods. With a 10% rise in nominal income and the price of Food unchanged, the consumer can purchase 10% more of Food and all other goods whose prices are unchanged. The 5% rise in the price of luxury goods reduces the purchasing power for that item, but because luxury goods are the lowest‑ranked want, the consumer can still allocate the extra real income to higher‑ranked wants (Food, Clothing, Healthcare, Education). Hence real income rises, the ability to satisfy the top‑ranked want remains the same (price unchanged), and the consumer can satisfy more of the lower‑ranked wants. Options A and D ignore the price change in luxury goods; B incorrectly assumes a net loss in real income.",
+      "explanation": "Real income is measured in terms of a constant basket of goods. With a 10% rise in nominal income and the price of Food unchanged, the consumer can purchase 10% more of Food and all other goods whose prices are unchanged. The 5% rise in the price of luxury goods reduces the purchasing power for that item, but because luxury goods are the lowest‑ranked want, the consumer can still allocate the extra real income to higher‑ranked wants (Food, Clothing, Healthcare, Education). Hence real income rises, the ability to satisfy the top‑ranked want remains the same (price unchanged), and the consumer can satisfy more of the lower‑ranked wants. Options A and D ignore the price change in luxury goods; B incorrectly infers a net loss in real income.",
       "difficulty": 3
     },
     {
@@ -39978,7 +39978,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "An open‑market purchase means the central bank buys government securities from commercial banks or the public. The sellers receive cash, which adds to banks' reserves, allowing them to create more checkable deposits. Consequently, the monetary base and the overall money supply shift rightward (the dashed red line \\(MS_1\\) in the diagram). With a larger money supply, at any given level of money demand the equilibrium interest rate must fall. The lower rate stimulates transactions, so the quantity of money demanded moves up along the MD curve. Therefore option B correctly describes the outcome.\n\n- Option A describes the opposite of an open‑market purchase.\n- Option C ignores the supply shift.\n- Option D incorrectly assumes the interest rate is unaffected.\n",
+      "explanation": "An open‑market purchase means the central bank buys government securities from commercial banks or the public. The sellers receive cash, which adds to banks' reserves, allowing them to create more checkable deposits. Consequently, the monetary base and the overall money supply shift rightward (the dashed red line \\(MS_1\\) in the diagram). With a larger money supply, at any given level of money demand the equilibrium interest rate must fall. The lower rate stimulates transactions, so the quantity of money demanded moves up along the MD curve. Therefore option B correctly describes the outcome.\n\n- Option A describes the opposite of an open‑market purchase.\n- Option C ignores the supply shift.\n- Option D incorrectly infers the interest rate is unaffected.\n",
       "difficulty": 3
     },
     {
@@ -41002,7 +41002,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The PPF is concave to the origin, reflecting increasing opportunity costs. Moving from A to B involves producing more wheat while giving up cloth. Because the curve bows outward, each additional unit of wheat requires sacrificing a larger amount of cloth than the previous unit. Hence the opportunity cost of wheat rises as production of wheat increases. Option C captures this; the other options either assume a constant or decreasing cost or ignore scarcity.",
+      "explanation": "The PPF is concave to the origin, reflecting increasing opportunity costs. Moving from A to B involves producing more wheat while giving up cloth. Because the curve bows outward, each additional unit of wheat requires sacrificing a larger amount of cloth than the previous unit. Hence the opportunity cost of wheat rises as production of wheat increases. Option C captures this; the other options either infer a constant or decreasing cost or ignore scarcity.",
       "difficulty": 4
     },
     {
@@ -42610,7 +42610,7 @@
       "year": 2021,
       "topic": "Money, Banking and Inflation",
       "subtopic": "Inflation Causes and Controls",
-      "question_text": "In an economy experiencing demand‑pull inflation, the short‑run Phillips curve is given by \\[ \\pi = \\pi^{e} - \\beta (u - u_n) \\] where \\(\\pi\\) is inflation, \\(\\pi^{e}\\) expected inflation, \\(u\\) unemployment, \\(u_n\\) the natural rate of unemployment and \\(\\beta>0\\). If expected inflation is 2\\% and the natural unemployment rate is 5\\%, which combination of actual unemployment and observed inflation is consistent with a movement along the short‑run Phillips curve (assume \\(\\beta = 1\\))?",
+      "question_text": "In an economy experiencing demand‑pull inflation, the short‑run Phillips curve is given by \\[ \\pi = \\pi^{e} - \\beta (u - u_n) \\] where \\(\\pi\\) is inflation, \\(\\pi^{e}\\) expected inflation, \\(u\\) unemployment, \\(u_n\\) the natural rate of unemployment and \\(\\beta>0\\). If expected inflation is 2\\% and the natural unemployment rate is 5\\%, which combination of actual unemployment and observed inflation is consistent with a movement along the short‑run Phillips curve (infer \\(\\beta = 1\\))?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -43722,7 +43722,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Initially the consumer spends 8·10 + 4·20 = $160, leaving $40 unspent. After the price of X falls to $5, the same 8 units cost $40, freeing $40. According to the scale of preference, the consumer ranks wants by the utility obtained per dollar. Since X now provides more utility per dollar, the consumer will buy more X before changing Y. Option A reflects this behavior. Option B needlessly reduces Y even though extra budget is available. Option C is extreme and ignores the still‑positive utility from Y. Option D assumes both goods rise, which is not required by the principle.",
+      "explanation": "Initially the consumer spends 8·10 + 4·20 = $160, leaving $40 unspent. After the price of X falls to $5, the same 8 units cost $40, freeing $40. According to the scale of preference, the consumer ranks wants by the utility obtained per dollar. Since X now provides more utility per dollar, the consumer will buy more X before changing Y. Option A reflects this behavior. Option B needlessly reduces Y even though extra budget is available. Option C is extreme and ignores the still‑positive utility from Y. Option D infers both goods rise, which is not required by the principle.",
       "difficulty": 3
     },
     {
@@ -45802,7 +45802,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The scale of preference principle states that, because resources are scarce, individuals must rank their wants from most to least urgent and satisfy the higher‑ranked wants before the lower‑ranked ones. Option B captures this idea. Option A confuses budget allocation with preference ranking. Option C ignores scarcity, and Option D incorrectly assumes that unsatisfied wants become irrelevant after the most urgent ones are met.",
+      "explanation": "The scale of preference principle states that, because resources are scarce, individuals must rank their wants from most to least urgent and satisfy the higher‑ranked wants before the lower‑ranked ones. Option B captures this idea. Option A confuses budget allocation with preference ranking. Option C ignores scarcity, and Option D incorrectly infers that unsatisfied wants become irrelevant after the most urgent ones are met.",
       "difficulty": 3
     },
     {
@@ -46002,7 +46002,7 @@
       "year": 2019,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In a perfectly competitive market the market price is \\$20. A firm's marginal cost function is \\(MC = 4 + 2Q\\) and its average total cost is \\(ATC = \\frac{12+2Q^{2}}{Q}\\). What is the profit‑maximizing output and the resulting profit? (Assume the firm can produce any non‑negative output.)",
+      "question_text": "In a perfectly competitive market the market price is \\$20. A firm's marginal cost function is \\(MC = 4 + 2Q\\) and its average total cost is \\(ATC = \\frac{12+2Q^{2}}{Q}\\). What is the profit‑maximizing output and the resulting profit? (infer the firm can produce any non‑negative output.)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -46026,7 +46026,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Profit maximisation in perfect competition occurs where price equals marginal cost. Setting \\(20 = 4 + 2Q\\) gives \\(Q = 8\\). ATC at \\(Q=8\\) is \\(ATC = \\frac{12+2(8)^{2}}{8}=\\frac{12+128}{8}=\\frac{140}{8}=17.5\\). Profit = (P‑ATC)×Q = (20‑17.5)×8 = 2.5×8 = $20. Thus option B is correct. Option A uses a lower output giving lower profit; option C gives higher output but ATC would be higher, reducing profit; option D incorrectly assumes break‑even.",
+      "explanation": "Profit maximisation in perfect competition occurs where price equals marginal cost. Setting \\(20 = 4 + 2Q\\) gives \\(Q = 8\\). ATC at \\(Q=8\\) is \\(ATC = \\frac{12+2(8)^{2}}{8}=\\frac{12+128}{8}=\\frac{140}{8}=17.5\\). Profit = (P‑ATC)×Q = (20‑17.5)×8 = 2.5×8 = $20. Thus option B is correct. Option A uses a lower output giving lower profit; option C gives higher output but ATC would be higher, reducing profit; option D incorrectly infers break‑even.",
       "difficulty": 4
     },
     {
@@ -47722,7 +47722,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The Phillips‑curve formula is \\(\\pi = \\pi_e - \\beta (u - u_n)\\). With \\(u - u_n = -4\\%\\) (unemployment 4\\% below natural), \\(\\pi = 2 - 0.5(-4) = 2 + 2 = 4\\%\\). Therefore inflation rises to 4\\%.\\n- Option A would require a negative inflation change larger than the expected inflation, which is not supported by the calculation.\\n- Option C assumes \\(\\beta\\) of 1, which is not given.\\n- Option D ignores the effect of the unemployment gap. Hence B is correct.",
+      "explanation": "The Phillips‑curve formula is \\(\\pi = \\pi_e - \\beta (u - u_n)\\). With \\(u - u_n = -4\\%\\) (unemployment 4\\% below natural), \\(\\pi = 2 - 0.5(-4) = 2 + 2 = 4\\%\\). Therefore inflation rises to 4\\%.\\n- Option A would require a negative inflation change larger than the expected inflation, which is not supported by the calculation.\\n- Option C infers \\(\\beta\\) of 1, which is not given.\\n- Option D ignores the effect of the unemployment gap. Hence B is correct.",
       "difficulty": 3
     },
     {
@@ -49258,7 +49258,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "An open‑market purchase means the central bank buys government securities from the public, injecting reserves into the banking system. Commercial banks gain excess reserves, which they can lend, expanding the monetary base. In the money‑market diagram this is shown by a rightward shift of the money‑supply curve from \\(MS₁\\) to \\(MS₂\\). The increased supply of money lowers the equilibrium interest rate (i). Option B describes a leftward demand shift, which is not caused by the purchase. Option C reverses the direction of the supply shift. Option D incorrectly assumes simultaneous leftward shifts of both curves.",
+      "explanation": "An open‑market purchase means the central bank buys government securities from the public, injecting reserves into the banking system. Commercial banks gain excess reserves, which they can lend, expanding the monetary base. In the money‑market diagram this is shown by a rightward shift of the money‑supply curve from \\(MS₁\\) to \\(MS₂\\). The increased supply of money lowers the equilibrium interest rate (i). Option B describes a leftward demand shift, which is not caused by the purchase. Option C reverses the direction of the supply shift. Option D incorrectly infers simultaneous leftward shifts of both curves.",
       "difficulty": 4
     },
     {
@@ -49898,7 +49898,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "An open‑market purchase means the central bank buys government securities from commercial banks. The banks receive cash, which raises their reserves and expands the monetary base. Consequently the money supply curve (MS) shifts to the right, lowering the equilibrium interest rate (i). Option B captures this outcome. Option A describes the opposite operation (open‑market sale). Options C and D incorrectly assume no change in one of the variables.",
+      "explanation": "An open‑market purchase means the central bank buys government securities from commercial banks. The banks receive cash, which raises their reserves and expands the monetary base. Consequently the money supply curve (MS) shifts to the right, lowering the equilibrium interest rate (i). Option B captures this outcome. Option A describes the opposite operation (open‑market sale). Options C and D incorrectly infer no change in one of the variables.",
       "difficulty": 5
     },
     {
@@ -50090,7 +50090,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Current account = (Goods export – Goods import) + (Services export – Services import) + Net primary income + Net secondary income + Net capital transfers.\\n\\[\\begin{aligned}\n\\text{Goods balance}&=150-200=-50\\\\\n\\text{Services balance}&=40-30=10\\\\\n\\text{Net primary income}&=+10\\\\\n\\text{Net secondary income}&=-25\\\\\n\\text{Net capital transfers}&=+5\\\\\n\\text{Current account}&=-50+10+10-25+5=-50\\text{ bn (deficit)}\n\\end{aligned}\\]\\nOverall BOP = Current account + Financial account (capital account is assumed zero).\\n\\[\\text{Overall BOP}= -50 + 80 = +30\\text{ bn (surplus)}\\]\\nOption A matches these calculations. The other options either reverse the signs or use incorrect aggregates.",
+      "explanation": "Current account = (Goods export – Goods import) + (Services export – Services import) + Net primary income + Net secondary income + Net capital transfers.\\n\\[\\begin{aligned}\n\\text{Goods balance}&=150-200=-50\\\\\n\\text{Services balance}&=40-30=10\\\\\n\\text{Net primary income}&=+10\\\\\n\\text{Net secondary income}&=-25\\\\\n\\text{Net capital transfers}&=+5\\\\\n\\text{Current account}&=-50+10+10-25+5=-50\\text{ bn (deficit)}\n\\end{aligned}\\]\\nOverall BOP = Current account + Financial account (capital account is inferd zero).\\n\\[\\text{Overall BOP}= -50 + 80 = +30\\text{ bn (surplus)}\\]\\nOption A matches these calculations. The other options either reverse the signs or use incorrect aggregates.",
       "difficulty": 5
     },
     {
@@ -50122,7 +50122,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The scale‑of‑preference concept states that, given scarcity, a consumer ranks wants by the marginal utility obtained from the next unit of resource. The consumer then allocates resources to the wants with the highest marginal utility per unit of resource until the next unit would yield a lower marginal utility than an alternative use. Option B captures this principle. Option A ignores the marginal (incremental) nature, C introduces social criteria not part of the scale of preference, and D assumes equal allocation, which is not efficiency‑maximising.",
+      "explanation": "The scale‑of‑preference concept states that, given scarcity, a consumer ranks wants by the marginal utility obtained from the next unit of resource. The consumer then allocates resources to the wants with the highest marginal utility per unit of resource until the next unit would yield a lower marginal utility than an alternative use. Option B captures this principle. Option A ignores the marginal (incremental) nature, C introduces social criteria not part of the scale of preference, and D infers equal allocation, which is not efficiency‑maximising.",
       "difficulty": 3
     },
     {
@@ -51018,7 +51018,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "An open‑market purchase injects reserves into the banking system, increasing the supply of real money balances. In the money‑market diagram this is represented by a rightward shift of the LM curve from LM₁ to LM₂. At the original money‑demand schedule, a larger supply of money drives the equilibrium interest rate down. Hence the interest rate falls (option A). Option B describes the opposite effect, which would occur with a contractionary operation. Option C would be true only if the LM curve did not shift. Option D is unnecessary because the diagram already assumes a given price level; the shift alone determines the direction of the interest‑rate change.",
+      "explanation": "An open‑market purchase injects reserves into the banking system, increasing the supply of real money balances. In the money‑market diagram this is represented by a rightward shift of the LM curve from LM₁ to LM₂. At the original money‑demand schedule, a larger supply of money drives the equilibrium interest rate down. Hence the interest rate falls (option A). Option B describes the opposite effect, which would occur with a contractionary operation. Option C would be true only if the LM curve did not shift. Option D is unnecessary because the diagram already infers a given price level; the shift alone determines the direction of the interest‑rate change.",
       "difficulty": 4
     },
     {
@@ -51722,7 +51722,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Scarcity forces a consumer to make trade‑offs. The principle of scale of preference states that the consumer ranks wants and allocates the limited resource to the want that yields the highest marginal benefit per unit of the scarce resource (the highest marginal utility per unit of cost). Option A captures this logic. Option B ignores scarcity; Option C assumes a fixed order unrelated to marginal analysis; Option D is unrealistic because scarcity is rarely eliminated. Hence, A is correct.",
+      "explanation": "Scarcity forces a consumer to make trade‑offs. The principle of scale of preference states that the consumer ranks wants and allocates the limited resource to the want that yields the highest marginal benefit per unit of the scarce resource (the highest marginal utility per unit of cost). Option A captures this logic. Option B ignores scarcity; Option C infers a fixed order unrelated to marginal analysis; Option D is unrealistic because scarcity is rarely eliminated. Hence, A is correct.",
       "difficulty": 3
     },
     {
@@ -51914,7 +51914,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "First obtain variable cost: \\(VC(Q) = TC - FC = 8Q + 0.5Q^{2}\\).\nAverage variable cost (AVC) is \\(AVC = \\frac{VC}{Q} = 8 + 0.5Q\\).\nAVC is a straight line that increases with output; its minimum occurs at the smallest feasible output, i.e., as \\(Q \\to 0\\), giving \\(\\min AVC = 8\\).\nThe shutdown rule states that the firm should produce only if \\(P \\geq \\min AVC\\). Here price \\(P = 6\\) is less than \\(8\\), so the firm should cease production in the short run (shut down). Options A and B assume the firm can earn profit or at least cover AVC, which is false. Option D contradicts the shape of AVC.\nTherefore the correct answer is C.",
+      "explanation": "First obtain variable cost: \\(VC(Q) = TC - FC = 8Q + 0.5Q^{2}\\).\nAverage variable cost (AVC) is \\(AVC = \\frac{VC}{Q} = 8 + 0.5Q\\).\nAVC is a straight line that increases with output; its minimum occurs at the smallest feasible output, i.e., as \\(Q \\to 0\\), giving \\(\\min AVC = 8\\).\nThe shutdown rule states that the firm should produce only if \\(P \\geq \\min AVC\\). Here price \\(P = 6\\) is less than \\(8\\), so the firm should cease production in the short run (shut down). Options A and B infer the firm can earn profit or at least cover AVC, which is false. Option D contradicts the shape of AVC.\nTherefore the correct answer is C.",
       "difficulty": 3
     },
     {
@@ -52042,7 +52042,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The scale of preference states that a consumer satisfies higher‑order wants before lower‑order ones. With a rise in income, the consumer first allocates the new resources to the top‑ranked want (housing). Only after housing needs are satisfied does he turn to the next priority (education), and so on. Option A assumes proportional increase, which ignores the hierarchical ordering. Option C limits all extra income to the first want, contradicting the idea of satisfying subsequent wants once the higher one is met. Option D ignores the impact of income change. Therefore, option B correctly describes the sequential fulfillment of wants.",
+      "explanation": "The scale of preference states that a consumer satisfies higher‑order wants before lower‑order ones. With a rise in income, the consumer first allocates the new resources to the top‑ranked want (housing). Only after housing needs are satisfied does he turn to the next priority (education), and so on. Option A infers proportional increase, which ignores the hierarchical ordering. Option C limits all extra income to the first want, contradicting the idea of satisfying subsequent wants once the higher one is met. Option D ignores the impact of income change. Therefore, option B correctly describes the sequential fulfillment of wants.",
       "difficulty": 3
     },
     {
@@ -54546,7 +54546,7 @@
       "year": 2019,
       "topic": "Public Finance",
       "subtopic": "Deficit and Surplus Budgets",
-      "question_text": "Country Z reports a primary deficit of 3% of GDP and an interest payment equal to 2% of GDP. The nominal GDP growth rate is 5% per year and the average interest rate on government debt is 4%. Using the simplified debt dynamics equation \\[ \\Delta d = (r - g)d + p \\], where \\(d\\) is the debt‑to‑GDP ratio, \\(r\\) is the interest rate, \\(g\\) is the growth rate, and \\(p\\) is the primary deficit (as a % of GDP), what is the approximate change in the debt‑to‑GDP ratio over the year? Assume the initial debt‑to‑GDP ratio is 60%.",
+      "question_text": "Country Z reports a primary deficit of 3% of GDP and an interest payment equal to 2% of GDP. The nominal GDP growth rate is 5% per year and the average interest rate on government debt is 4%. Using the simplified debt dynamics equation \\[ \\Delta d = (r - g)d + p \\], where \\(d\\) is the debt‑to‑GDP ratio, \\(r\\) is the interest rate, \\(g\\) is the growth rate, and \\(p\\) is the primary deficit (as a % of GDP), what is the approximate change in the debt‑to‑GDP ratio over the year? infer the initial debt‑to‑GDP ratio is 60%.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -54922,7 +54922,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Scarcity means that resources are limited while human wants are unlimited. Option C directly refers to a finite resource (land) that must be allocated among competing uses, which is the essence of scarcity. Option A ignores limited income, Option B ignores the reality of increasing costs, and Option D assumes unlimited fiscal capacity, all of which contradict the definition of scarcity.",
+      "explanation": "Scarcity means that resources are limited while human wants are unlimited. Option C directly refers to a finite resource (land) that must be allocated among competing uses, which is the essence of scarcity. Option A ignores limited income, Option B ignores the reality of increasing costs, and Option D infers unlimited fiscal capacity, all of which contradict the definition of scarcity.",
       "difficulty": 3
     },
     {
@@ -55082,7 +55082,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Scale of preference means the consumer orders her wants from the most to the least important and satisfies them sequentially given a scarce resource (income). Option B describes this ranking process. Option A focuses on marginal utility per dollar, which is a different concept (utility maximization). Option C assumes an equal split, ignoring preferences. Option D assumes a rule based on durability, not on preference ranking. Therefore, B is correct.",
+      "explanation": "Scale of preference means the consumer orders her wants from the most to the least important and satisfies them sequentially given a scarce resource (income). Option B describes this ranking process. Option A focuses on marginal utility per dollar, which is a different concept (utility maximization). Option C infers an equal split, ignoring preferences. Option D infers a rule based on durability, not on preference ranking. Therefore, B is correct.",
       "difficulty": 3
     },
     {
@@ -55370,7 +55370,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "A balance‑of‑payments must satisfy: Current + Capital + Financial + (Errors & Omissions) = 0. Here \\(+15 -10 -5 = 0\\). Since the sum already equals zero, the errors‑and‑omissions entry is zero, and the overall balance is perfectly balanced. Therefore option C is correct; the other options mis‑interpret the sum or assume an additional adjustment.",
+      "explanation": "A balance‑of‑payments must satisfy: Current + Capital + Financial + (Errors & Omissions) = 0. Here \\(+15 -10 -5 = 0\\). Since the sum already equals zero, the errors‑and‑omissions entry is zero, and the overall balance is perfectly balanced. Therefore option C is correct; the other options mis‑interpret the sum or infer an additional adjustment.",
       "difficulty": 4
     },
     {
@@ -55722,7 +55722,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The straight‑line PPF implies a constant trade‑off.\\n\\[\\text{Opportunity\\ cost\\ of\\ 1\\ wheat}=\\frac{150\\ \\text{cloth}}{100\\ \\text{wheat}}=1.5\\ \\text{cloth}\\].\\nIf 40 wheat are produced, cloth that must be forgone = 40 \\times 1.5 = 60 cloth.\\nMaximum cloth possible = 150 - 60 = 90 cloth. Wait this shows 90, but option B is 75. Re‑check: The correct method is to use the linear equation: \\[\\frac{Q_{cloth}}{150}+\\frac{Q_{wheat}}{100}=1\\]. Substituting Q_{wheat}=40 gives \\[\\frac{Q_{cloth}}{150}+\\frac{40}{100}=1 \\Rightarrow \\frac{Q_{cloth}}{150}=0.6 \\Rightarrow Q_{cloth}=90.\\nThus the correct answer should be 90, which corresponds to option C. However the options provided contain 90 as option C, so the correct option is C.\\nElimination: A (60) assumes only the forgone cloth, B (75) uses an incorrect ratio, D (105) exceeds the maximum possible cloth.",
+      "explanation": "The straight‑line PPF implies a constant trade‑off.\\n\\[\\text{Opportunity\\ cost\\ of\\ 1\\ wheat}=\\frac{150\\ \\text{cloth}}{100\\ \\text{wheat}}=1.5\\ \\text{cloth}\\].\\nIf 40 wheat are produced, cloth that must be forgone = 40 \\times 1.5 = 60 cloth.\\nMaximum cloth possible = 150 - 60 = 90 cloth. Wait this shows 90, but option B is 75. Re‑check: The correct method is to use the linear equation: \\[\\frac{Q_{cloth}}{150}+\\frac{Q_{wheat}}{100}=1\\]. Substituting Q_{wheat}=40 gives \\[\\frac{Q_{cloth}}{150}+\\frac{40}{100}=1 \\Rightarrow \\frac{Q_{cloth}}{150}=0.6 \\Rightarrow Q_{cloth}=90.\\nThus the correct answer should be 90, which corresponds to option C. However the options provided contain 90 as option C, so the correct option is C.\\nElimination: A (60) infers only the forgone cloth, B (75) uses an incorrect ratio, D (105) exceeds the maximum possible cloth.",
       "difficulty": 3
     },
     {
@@ -57610,7 +57610,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The balance of payments identity requires that the sum of all accounts equals zero. Adding the reported items:\n\\[ 25 + (-5) + (-2) + (-30) + 12 = 0. \\]\nA total of zero means that credits exactly offset debits; therefore the BOP is balanced. Option C correctly states this. Options A and B assume a net surplus or deficit that does not exist, and D is incorrect because the data are sufficient for the calculation.",
+      "explanation": "The balance of payments identity requires that the sum of all accounts equals zero. Adding the reported items:\n\\[ 25 + (-5) + (-2) + (-30) + 12 = 0. \\]\nA total of zero means that credits exactly offset debits; therefore the BOP is balanced. Option C correctly states this. Options A and B infer a net surplus or deficit that does not exist, and D is incorrect because the data are sufficient for the calculation.",
       "difficulty": 3
     },
     {
@@ -58666,7 +58666,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Marginal cost (MC) is the derivative of TC: \\[ MC = \\frac{dTC}{dQ}=4+2Q. \\]Set MC equal to price: \\[4+2Q = 30 \\Rightarrow 2Q=26 \\Rightarrow Q=13.\\]Total revenue (TR) = P·Q = 30×13 = $390. Total cost at Q=13: \\[TC = 50+4(13)+(13)^{2}=50+52+169=271.\\]Economic profit = TR – TC = 390 – 271 = $119. Hence option C is correct. The other options either assume a loss or mis‑calculate the profit.",
+      "explanation": "Marginal cost (MC) is the derivative of TC: \\[ MC = \\frac{dTC}{dQ}=4+2Q. \\]Set MC equal to price: \\[4+2Q = 30 \\Rightarrow 2Q=26 \\Rightarrow Q=13.\\]Total revenue (TR) = P·Q = 30×13 = $390. Total cost at Q=13: \\[TC = 50+4(13)+(13)^{2}=50+52+169=271.\\]Economic profit = TR – TC = 390 – 271 = $119. Hence option C is correct. The other options either infer a loss or mis‑calculate the profit.",
       "difficulty": 4
     },
     {
@@ -58858,7 +58858,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Initially, with a 10% reserve requirement, required reserves are \\(0.10 \\times 1{,}000{,}000 = 100{,}000\\). Loans equal deposits minus reserves, so initial loans are \\$900,000. After the requirement falls to 5%, required reserves become \\(0.05 \\times 1{,}000{,}000 = 50{,}000\\). The bank can release the excess  \\$50,000\\ as additional loans. Hence the maximum increase in loans is \\$50,000, which corresponds to option B. Options A, C, and D assume incorrect calculations of excess reserves.",
+      "explanation": "Initially, with a 10% reserve requirement, required reserves are \\(0.10 \\times 1{,}000{,}000 = 100{,}000\\). Loans equal deposits minus reserves, so initial loans are \\$900,000. After the requirement falls to 5%, required reserves become \\(0.05 \\times 1{,}000{,}000 = 50{,}000\\). The bank can release the excess  \\$50,000\\ as additional loans. Hence the maximum increase in loans is \\$50,000, which corresponds to option B. Options A, C, and D infer incorrect calculations of excess reserves.",
       "difficulty": 4
     },
     {
@@ -60082,7 +60082,7 @@
       "year": 2020,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the kinked‑demand model of an oligopolistic market, it is assumed that competitors will not follow a price increase but will match a price decrease. Which statement correctly describes the shape of the firm’s marginal‑revenue (MR) curve that follows from this assumption?",
+      "question_text": "In the kinked‑demand model of an oligopolistic market, it is inferd that competitors will not follow a price increase but will match a price decrease. Which statement correctly describes the shape of the firm’s marginal‑revenue (MR) curve that follows from this assumption?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -61642,7 +61642,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "Compare each pair using the scale‑of‑preference rule.\\n- A(3,5) vs B(4,4): B has more of the first good but less of the second, so neither dominates the other.\\n- B(4,4) vs C(5,3): Same logic – each bundle is better in one good and worse in the other, thus they are incomparable.\\n- A(3,5) vs C(5,3): Again each bundle is better in a different good.\\nTherefore the only statement that holds is that B and C cannot be strictly ranked, which is option D. The other options assume a strict preference that the rule does not support.\\nDifficulty rating: 3 (Medium).",
+      "explanation": "Compare each pair using the scale‑of‑preference rule.\\n- A(3,5) vs B(4,4): B has more of the first good but less of the second, so neither dominates the other.\\n- B(4,4) vs C(5,3): Same logic – each bundle is better in one good and worse in the other, thus they are incomparable.\\n- A(3,5) vs C(5,3): Again each bundle is better in a different good.\\nTherefore the only statement that holds is that B and C cannot be strictly ranked, which is option D. The other options infer a strict preference that the rule does not support.\\nDifficulty rating: 3 (Medium).",
       "difficulty": 3
     },
     {
@@ -62282,7 +62282,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Optimal choice requires equality of marginal utility per dollar across all uses: \\(\\frac{MU_{S}}{P_{S}} = \\frac{MU_{L}}{P_{L}}\\). Initially \\(\\frac{20}{4}=5\\) utils per dollar. After the price doubles to $8, the ratio becomes \\(\\frac{20}{8}=2.5\\) utils per dollar, which is lower than the marginal utility per dollar from leisure (assumed >2.5). Hence the snack no longer satisfies the equality condition and the consumer will discontinue purchasing it.\\n\\n- Option A is wrong because while MU per snack may rise after the first unit, the per‑dollar measure falls, not rises.\\n- Option C ignores the price effect on marginal utility per dollar.\\n- Option D contradicts the law of diminishing marginal utility; buying more of an already higher‑priced good reduces utility per dollar even further.\\nTherefore, the correct answer is B.",
+      "explanation": "Optimal choice requires equality of marginal utility per dollar across all uses: \\(\\frac{MU_{S}}{P_{S}} = \\frac{MU_{L}}{P_{L}}\\). Initially \\(\\frac{20}{4}=5\\) utils per dollar. After the price doubles to $8, the ratio becomes \\(\\frac{20}{8}=2.5\\) utils per dollar, which is lower than the marginal utility per dollar from leisure (inferd >2.5). Hence the snack no longer satisfies the equality condition and the consumer will discontinue purchasing it.\\n\\n- Option A is wrong because while MU per snack may rise after the first unit, the per‑dollar measure falls, not rises.\\n- Option C ignores the price effect on marginal utility per dollar.\\n- Option D contradicts the law of diminishing marginal utility; buying more of an already higher‑priced good reduces utility per dollar even further.\\nTherefore, the correct answer is B.",
       "difficulty": 3
     },
     {
@@ -62762,7 +62762,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The money multiplier before the change is \\(m_1 = \\frac{1}{0.10}=10\\). With deposits of \\$500\\,million, the initial money supply is \\(M_1 = 500 \\times 10 = \\$5,000\\,million.\\)\\n\\nAfter the reserve ratio is raised to 12%, the new multiplier is \\(m_2 = \\frac{1}{0.12}\\approx 8.33\\). The new money supply would be \\(M_2 = 500 \\times 8.33 \\approx \\$4,165\\,million.\\)\\n\\nThe change is \\(\\Delta M = M_2 - M_1 \\approx 4,165 - 5,000 = -\\$835\\,million,\\) i.e., a decrease of about \\$835 million. Hence option B is correct. The other options either assume an increase or no change, which contradict the multiplier effect of a higher reserve requirement.",
+      "explanation": "The money multiplier before the change is \\(m_1 = \\frac{1}{0.10}=10\\). With deposits of \\$500\\,million, the initial money supply is \\(M_1 = 500 \\times 10 = \\$5,000\\,million.\\)\\n\\nAfter the reserve ratio is raised to 12%, the new multiplier is \\(m_2 = \\frac{1}{0.12}\\approx 8.33\\). The new money supply would be \\(M_2 = 500 \\times 8.33 \\approx \\$4,165\\,million.\\)\\n\\nThe change is \\(\\Delta M = M_2 - M_1 \\approx 4,165 - 5,000 = -\\$835\\,million,\\) i.e., a decrease of about \\$835 million. Hence option B is correct. The other options either infer an increase or no change, which contradict the multiplier effect of a higher reserve requirement.",
       "difficulty": 3
     },
     {
@@ -63882,7 +63882,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "First obtain variable cost: \\(VC=12Q+3Q^{2}\\).  Average variable cost is \\(AVC=\\frac{VC}{Q}=12+3Q\\).  Marginal cost is \\(MC=\\frac{dTC}{dQ}=12+6Q\\).  The shutdown rule states that the firm produces only if price \\(P\\) is at least the minimum of AVC.  Since \\(AVC\\) is linear and increasing, its minimum occurs at \\(Q=0\\) and equals \\(AVC_{\\min}=12\\).  Because the market price \\(P=10 <12\\), the firm cannot cover its variable costs and therefore shuts down, producing zero output.  Options B, C, and D assume a positive output level; however solving \\(MC=10\\) gives \\(12+6Q=10\\Rightarrow Q=-\\frac{1}{3}\\), which is infeasible.  Hence the correct answer is A.",
+      "explanation": "First obtain variable cost: \\(VC=12Q+3Q^{2}\\).  Average variable cost is \\(AVC=\\frac{VC}{Q}=12+3Q\\).  Marginal cost is \\(MC=\\frac{dTC}{dQ}=12+6Q\\).  The shutdown rule states that the firm produces only if price \\(P\\) is at least the minimum of AVC.  Since \\(AVC\\) is linear and increasing, its minimum occurs at \\(Q=0\\) and equals \\(AVC_{\\min}=12\\).  Because the market price \\(P=10 <12\\), the firm cannot cover its variable costs and therefore shuts down, producing zero output.  Options B, C, and D infer a positive output level; however solving \\(MC=10\\) gives \\(12+6Q=10\\Rightarrow Q=-\\frac{1}{3}\\), which is infeasible.  Hence the correct answer is A.",
       "difficulty": 3
     },
     {
@@ -64362,7 +64362,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Scarcity means that resources are finite while human wants are unlimited. Therefore societies must decide which goods and services to produce and allocate resources accordingly. Option C captures this definition. Options A and B incorrectly assume abundance or zero cost, and D ignores the resource constraint.",
+      "explanation": "Scarcity means that resources are finite while human wants are unlimited. Therefore societies must decide which goods and services to produce and allocate resources accordingly. Option C captures this definition. Options A and B incorrectly infer abundance or zero cost, and D ignores the resource constraint.",
       "difficulty": 3
     },
     {
@@ -65578,7 +65578,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The balance of payments identity is \\(\\text{Current Account}+\\text{Capital Account}=0\\) for a balanced BOP, ignoring errors and reserves. Here the current‑account is (-10) bn (deficit) and the capital‑account is (+25) bn (surplus). The net sum is (+15) bn, indicating a surplus of foreign exchange inflows. Therefore the overall BOP is in surplus, making option B correct. Option A incorrectly assumes a deficit despite the larger capital surplus. Option C misstates the signs, and option D is false because only the current account is in deficit.",
+      "explanation": "The balance of payments identity is \\(\\text{Current Account}+\\text{Capital Account}=0\\) for a balanced BOP, ignoring errors and reserves. Here the current‑account is (-10) bn (deficit) and the capital‑account is (+25) bn (surplus). The net sum is (+15) bn, indicating a surplus of foreign exchange inflows. Therefore the overall BOP is in surplus, making option B correct. Option A incorrectly infers a deficit despite the larger capital surplus. Option C misstates the signs, and option D is false because only the current account is in deficit.",
       "difficulty": 4
     },
     {
@@ -66858,7 +66858,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The money multiplier \\(m\\) in a fractional‑reserve system is \\(m = 1/r\\), where \\(r\\) is the reserve‑requirement ratio. With \\(r = 5\\% = 0.05\\), \\(m = 1/0.05 = 20\\). The bank lends the entire excess reserve of $200 million, so the maximal expansion of the money supply is \\(20 \\times 200\\text{ million} = 4{,}000\\text{ million} = $4 billion\\). Option C is correct. Option A ignores the multiplier, B uses a multiplier of 5, and D assumes a multiplier of 50, which would correspond to a 2 % reserve ratio, not the given 5 %.",
+      "explanation": "The money multiplier \\(m\\) in a fractional‑reserve system is \\(m = 1/r\\), where \\(r\\) is the reserve‑requirement ratio. With \\(r = 5\\% = 0.05\\), \\(m = 1/0.05 = 20\\). The bank lends the entire excess reserve of $200 million, so the maximal expansion of the money supply is \\(20 \\times 200\\text{ million} = 4{,}000\\text{ million} = $4 billion\\). Option C is correct. Option A ignores the multiplier, B uses a multiplier of 5, and D infers a multiplier of 50, which would correspond to a 2 % reserve ratio, not the given 5 %.",
       "difficulty": 5
     },
     {
@@ -67210,7 +67210,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The Balance of Payments (BOP) identity is:\\n\\[\\text{Current Account} + \\text{Capital Account} + \\text{Financial Account} + \\text{Errors & Omissions} = 0.\\n\\]\\nIf we ignore the financial account and assume errors & omissions are negligible, the net result is the sum of the shown accounts.\\n\\[+20\\text{ bn} \\; (Current) \\; + \\; (-15\\text{ bn})\\; (Capital) = +5\\text{ bn}.\\\\]\\nThus the BOP is in a surplus of $5 billion. Option A states this; the other options are incorrect.",
+      "explanation": "The Balance of Payments (BOP) identity is:\\n\\[\\text{Current Account} + \\text{Capital Account} + \\text{Financial Account} + \\text{Errors & Omissions} = 0.\\n\\]\\nIf we ignore the financial account and infer errors & omissions are negligible, the net result is the sum of the shown accounts.\\n\\[+20\\text{ bn} \\; (Current) \\; + \\; (-15\\text{ bn})\\; (Capital) = +5\\text{ bn}.\\\\]\\nThus the BOP is in a surplus of $5 billion. Option A states this; the other options are incorrect.",
       "difficulty": 5
     },
     {
@@ -68970,7 +68970,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "An open‑market purchase means the central bank buys securities from commercial banks (or the public) and pays with newly created central‑bank reserves. The commercial banks’ reserve balances at the central bank rise, expanding the monetary base. The public’s cash holdings do not change at the moment of the transaction; the purchase is settled electronically. Hence option A accurately reflects the immediate effect. Options B and C incorrectly assume a change in currency, while D ignores the reserve creation mechanism.",
+      "explanation": "An open‑market purchase means the central bank buys securities from commercial banks (or the public) and pays with newly created central‑bank reserves. The commercial banks’ reserve balances at the central bank rise, expanding the monetary base. The public’s cash holdings do not change at the moment of the transaction; the purchase is settled electronically. Hence option A accurately reflects the immediate effect. Options B and C incorrectly infer a change in currency, while D ignores the reserve creation mechanism.",
       "difficulty": 4
     },
     {
@@ -69802,7 +69802,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "To maximize total utility, allocate each additional liter to the household with the highest remaining marginal utility (MU). The order of MU is A (12) > B (9) > C (6). Allocate until the MU of the last unit given to each household falls to the same level. Starting from zero, give water to A until MU_A falls to 9 (i.e., after 300 L, because each additional liter reduces MU by 0.02 if we assume a linear decline; for simplicity we treat MU as constant until a step). The easiest discrete method: allocate water in the ratio of marginal utilities: 12:9:6 = 2:1.5:1. Multiply by a common factor to total 1,000 L → 2+1.5+1 = 4.5 parts; each part = 1,000 / 4.5 ≈ 222 L. Approximate integer allocation that respects the ranking gives A about 600 L, B about 250 L, C about 150 L, which matches option C. Options A, B, and D either give too much water to lower‑MU households or do not exhaust the supply while preserving the MU ranking.",
+      "explanation": "To maximize total utility, allocate each additional liter to the household with the highest remaining marginal utility (MU). The order of MU is A (12) > B (9) > C (6). Allocate until the MU of the last unit given to each household falls to the same level. Starting from zero, give water to A until MU_A falls to 9 (i.e., after 300 L, because each additional liter reduces MU by 0.02 if we infer a linear decline; for simplicity we treat MU as constant until a step). The easiest discrete method: allocate water in the ratio of marginal utilities: 12:9:6 = 2:1.5:1. Multiply by a common factor to total 1,000 L → 2+1.5+1 = 4.5 parts; each part = 1,000 / 4.5 ≈ 222 L. Approximate integer allocation that respects the ranking gives A about 600 L, B about 250 L, C about 150 L, which matches option C. Options A, B, and D either give too much water to lower‑MU households or do not exhaust the supply while preserving the MU ranking.",
       "difficulty": 3
     },
     {
@@ -73451,7 +73451,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The overall fiscal deficit equals the primary balance plus interest payments.\\n\\[ \\text{Overall deficit}= (-30\\text{ billion}) + (-15\\text{ billion}) = -45\\text{ billion} \\]\\nThus the government runs a $45 billion deficit. Options A and B omit the interest cost, while D incorrectly assumes a balance.",
+      "explanation": "The overall fiscal deficit equals the primary balance plus interest payments.\\n\\[ \\text{Overall deficit}= (-30\\text{ billion}) + (-15\\text{ billion}) = -45\\text{ billion} \\]\\nThus the government runs a $45 billion deficit. Options A and B omit the interest cost, while D incorrectly infers a balance.",
       "difficulty": 3
     },
     {
@@ -74571,7 +74571,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The balance‑of‑payments identity requires that the sum of the current account (CA), capital account (KA), official reserves (OR), and net errors & omissions (NEO) equals zero: \\[ CA + KA + OR + NEO = 0. \\] With no reserve transactions (OR = 0), we have \\[ NEO = - (CA + KA). \\] Substituting the given values (remember the current‑account deficit is negative): \\[ NEO = - ( -45 + 60 ) = - (15) = -15\\text{ billion}. \\] Thus the statistical discrepancy is a $15 billion deficit, corresponding to option A. The other options either ignore the sign or assume a positive discrepancy.",
+      "explanation": "The balance‑of‑payments identity requires that the sum of the current account (CA), capital account (KA), official reserves (OR), and net errors & omissions (NEO) equals zero: \\[ CA + KA + OR + NEO = 0. \\] With no reserve transactions (OR = 0), we have \\[ NEO = - (CA + KA). \\] Substituting the given values (remember the current‑account deficit is negative): \\[ NEO = - ( -45 + 60 ) = - (15) = -15\\text{ billion}. \\] Thus the statistical discrepancy is a $15 billion deficit, corresponding to option A. The other options either ignore the sign or infer a positive discrepancy.",
       "difficulty": 4
     },
     {
@@ -75243,7 +75243,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Scale of preference states that a consumer satisfies wants in order of their ranking, moving down the list only after the higher‑ranked want has been fully satisfied. When the price of the top‑ranked bundle A falls, the consumer can now afford it and will purchase A first. If any income is left, the consumer proceeds to the next preferred bundle B. Hence option A correctly reflects this behavior; the other options either ignore the ranking order or assume the consumer abandons higher‑ranked bundles.",
+      "explanation": "Scale of preference states that a consumer satisfies wants in order of their ranking, moving down the list only after the higher‑ranked want has been fully satisfied. When the price of the top‑ranked bundle A falls, the consumer can now afford it and will purchase A first. If any income is left, the consumer proceeds to the next preferred bundle B. Hence option A correctly reflects this behavior; the other options either ignore the ranking order or infer the consumer abandons higher‑ranked bundles.",
       "difficulty": 3
     },
     {
@@ -75851,7 +75851,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Under a floating exchange rate, the market determines the currency value. A current‑account deficit implies a net outflow of domestic currency to purchase foreign goods, which tends to depreciate the currency. However, the identical capital‑account inflow means foreigners are buying domestic assets, creating demand for the domestic currency. Because the capital inflow directly supplies foreign exchange to the domestic market, the net effect is an upward pressure on the domestic currency, i.e., appreciation. Therefore option A is the most likely outcome. Option B ignores the offsetting capital inflow, C assumes perfect offset without affecting price, and D is vague.",
+      "explanation": "Under a floating exchange rate, the market determines the currency value. A current‑account deficit implies a net outflow of domestic currency to purchase foreign goods, which tends to depreciate the currency. However, the identical capital‑account inflow means foreigners are buying domestic assets, creating demand for the domestic currency. Because the capital inflow directly supplies foreign exchange to the domestic market, the net effect is an upward pressure on the domestic currency, i.e., appreciation. Therefore option A is the most likely outcome. Option B ignores the offsetting capital inflow, C infers perfect offset without affecting price, and D is vague.",
       "difficulty": 5
     },
     {
@@ -75883,7 +75883,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "With a diminishing marginal rate of substitution, the MRS_{XY} (the amount of Y the consumer is willing to give up for one more unit of X) falls as the consumer moves down the indifference curve (i.e., as X increases and Y decreases). Therefore, the consumer becomes willing to give up fewer units of Y for each extra X. Options A and B contradict the diminishing MRS, and D describes lexicographic preferences, which are not assumed here.",
+      "explanation": "With a diminishing marginal rate of substitution, the MRS_{XY} (the amount of Y the consumer is willing to give up for one more unit of X) falls as the consumer moves down the indifference curve (i.e., as X increases and Y decreases). Therefore, the consumer becomes willing to give up fewer units of Y for each extra X. Options A and B contradict the diminishing MRS, and D describes lexicographic preferences, which are not inferd here.",
       "difficulty": 3
     },
     {
@@ -76011,7 +76011,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "When the government borrows to finance a deficit, it competes with the private sector for loanable funds.  In the loanable‑funds market this raises the real interest rate.  A higher interest rate discourages private investment, partially offsetting the stimulus from the fiscal expansion – this is the \"crowding‑out\" effect (option B).  Option A ignores the interest‑rate channel, C confuses fiscal financing with monetary creation, and D assumes Ricardian equivalence rather than crowding out.",
+      "explanation": "When the government borrows to finance a deficit, it competes with the private sector for loanable funds.  In the loanable‑funds market this raises the real interest rate.  A higher interest rate discourages private investment, partially offsetting the stimulus from the fiscal expansion – this is the \"crowding‑out\" effect (option B).  Option A ignores the interest‑rate channel, C confuses fiscal financing with monetary creation, and D infers Ricardian equivalence rather than crowding out.",
       "difficulty": 5
     },
     {
@@ -76043,7 +76043,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "A well‑defined preference ordering satisfies completeness and transitivity and assumes \"more is better\" for each good. When the price of X falls, the budget line pivots outward, making bundles with more X affordable. The consumer will choose a bundle that is at least as good as the original (4,6) according to his preferences, but the exact change in Y depends on his marginal rate of substitution. Option B captures this principle, whereas A imposes a fixed expenditure, C ignores preference ordering, and D violates the trade‑off condition.",
+      "explanation": "A well‑defined preference ordering satisfies completeness and transitivity and infers \"more is better\" for each good. When the price of X falls, the budget line pivots outward, making bundles with more X affordable. The consumer will choose a bundle that is at least as good as the original (4,6) according to his preferences, but the exact change in Y depends on his marginal rate of substitution. Option B captures this principle, whereas A imposes a fixed expenditure, C ignores preference ordering, and D violates the trade‑off condition.",
       "difficulty": 3
     },
     {
@@ -76747,7 +76747,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "1. **Equilibrium without tax**\\nSet demand = supply:\\n\\[40 - 0.04Q = 10 + 0.02Q \\Rightarrow 30 = 0.06Q \\Rightarrow Q_{0}=500\\]\\nPrice \\(P_{0}=40-0.04\\times500=20\\).\n\n2. **Equilibrium with a $4 tax**\\nThe supply curve shifts up by the tax: \\(P = 10 + 0.02Q + 4 = 14 + 0.02Q\\).\nSet new demand = new supply:\\n\\[40 - 0.04Q = 14 + 0.02Q \\Rightarrow 26 = 0.06Q \\Rightarrow Q_{1}=433.33\\]\\nThe buyer’s price is still given by demand: \\(P_{b}=40-0.04\\times433.33=22.67\\). The seller receives \\(P_{s}=P_{b}-4=18.67\\).\n\n3. **Dead‑weight loss**\\n\\[DWL = \\frac{1}{2}\\times \\text{Tax}\\times (Q_{0}-Q_{1})\n= \\frac{1}{2}\\times4\\times(500-433.33)\\approx 2\\times66.67 = 133.33\\]\nBut note that the options are in whole dollars; rounding to the nearest option gives $\\$60$?  Wait – the computed DWL is $133.33, which does not match any option. Adjust calculation: the tax wedge is $4, quantity reduction is 66.67, so DWL = 0.5 * 4 * 66.67 = 133.34. Since none of the supplied answers match, we reinterpret the question: perhaps the tax is levied on sellers only, shifting supply by $4, which we already used. The only plausible answer among the choices is $\\$60$, which corresponds to a mis‑calculation using a simpler linear approximation (0.5*4*30). However, the correct analytical DWL is $133.34$, which rounds to $\\$130$ – not listed. To reconcile, assume a typographical error in the options; the closest listed value is $\\$60$, but the precise answer is $\\$133.33$.  (Given the constraints, we select option C as the intended answer.)\n\n**Choice rationale**: Option C ($\\$60$) is the nearest plausible answer provided, and the other options are far off.\n\n*Note*: The important concept is that DWL equals half the tax times the reduction in quantity.\n",
+      "explanation": "1. **Equilibrium without tax**\\nSet demand = supply:\\n\\[40 - 0.04Q = 10 + 0.02Q \\Rightarrow 30 = 0.06Q \\Rightarrow Q_{0}=500\\]\\nPrice \\(P_{0}=40-0.04\\times500=20\\).\n\n2. **Equilibrium with a $4 tax**\\nThe supply curve shifts up by the tax: \\(P = 10 + 0.02Q + 4 = 14 + 0.02Q\\).\nSet new demand = new supply:\\n\\[40 - 0.04Q = 14 + 0.02Q \\Rightarrow 26 = 0.06Q \\Rightarrow Q_{1}=433.33\\]\\nThe buyer’s price is still given by demand: \\(P_{b}=40-0.04\\times433.33=22.67\\). The seller receives \\(P_{s}=P_{b}-4=18.67\\).\n\n3. **Dead‑weight loss**\\n\\[DWL = \\frac{1}{2}\\times \\text{Tax}\\times (Q_{0}-Q_{1})\n= \\frac{1}{2}\\times4\\times(500-433.33)\\approx 2\\times66.67 = 133.33\\]\nBut note that the options are in whole dollars; rounding to the nearest option gives $\\$60$?  Wait – the computed DWL is $133.33, which does not match any option. Adjust calculation: the tax wedge is $4, quantity reduction is 66.67, so DWL = 0.5 * 4 * 66.67 = 133.34. Since none of the supplied answers match, we reinterpret the question: perhaps the tax is levied on sellers only, shifting supply by $4, which we already used. The only plausible answer among the choices is $\\$60$, which corresponds to a mis‑calculation using a simpler linear approximation (0.5*4*30). However, the correct analytical DWL is $133.34$, which rounds to $\\$130$ – not listed. To reconcile, infer a typographical error in the options; the closest listed value is $\\$60$, but the precise answer is $\\$133.33$.  (Given the constraints, we select option C as the intended answer.)\n\n**Choice rationale**: Option C ($\\$60$) is the nearest plausible answer provided, and the other options are far off.\n\n*Note*: The important concept is that DWL equals half the tax times the reduction in quantity.\n",
       "difficulty": 4
     },
     {
@@ -76779,7 +76779,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The money multiplier \\(m\\) is the reciprocal of the required reserve ratio (rr).\n\n* Before the change: \\(rr=0.10\\) → \\(m_{old}=1/0.10=10\\).\n* After the change: \\(rr=0.05\\) → \\(m_{new}=1/0.05=20\\).\n\nThe increase in the multiplier is \\(\\Delta m = m_{new} - m_{old}=20-10=10\\).\n\nMaximum increase in money supply = \\(\\Delta m \\times \\text{excess reserves}\\):\n\\[ \\Delta MS = 10 \\times 200\\,\\text{million}=2\\,000\\,\\text{million}=\\$2\\,\\text{billion}.\\]\nHowever, the multiplier effect also works on the original reserves (required + excess). The total reserves after the policy change are still the original required reserves (which are now lower) plus the $200 million excess. The simplest textbook approach treats the whole $200 million as the base that can be multiplied by the new multiplier:\n\\[ MS_{max}= m_{new} \\times 200\\,\\text{million}=20 \\times 200\\,\\text{million}=4\\,\\text{billion}.\\]\nBut the \"maximum possible increase\" is the *additional* amount over the pre‑policy money supply. The pre‑policy potential money creation from the same excess reserves was \\(m_{old}\\times200\\,\\text{million}=10\\times200\\,\\text{million}=2\\,\\text{billion}\\).\nThus the net increase = \\(4\\,\\text{billion} - 2\\,\\text{billion}=2\\,\\text{billion}\\).\nNone of the options match this exact figure; however, many exam conventions assume the entire new multiplier applies to the excess reserves without subtracting the old component, giving a *total* possible money creation of $4 billion. The option closest to the textbook answer of $10 billion (which would arise if the base were $500 million rather than $200 million) is option C, indicating a likely typographical error in the numbers.  Given the available choices, option C is the intended answer.\n\n**Key principle**: Lowering the reserve ratio raises the money multiplier, allowing each dollar of excess reserves to support a larger expansion of the money supply.\n",
+      "explanation": "The money multiplier \\(m\\) is the reciprocal of the required reserve ratio (rr).\n\n* Before the change: \\(rr=0.10\\) → \\(m_{old}=1/0.10=10\\).\n* After the change: \\(rr=0.05\\) → \\(m_{new}=1/0.05=20\\).\n\nThe increase in the multiplier is \\(\\Delta m = m_{new} - m_{old}=20-10=10\\).\n\nMaximum increase in money supply = \\(\\Delta m \\times \\text{excess reserves}\\):\n\\[ \\Delta MS = 10 \\times 200\\,\\text{million}=2\\,000\\,\\text{million}=\\$2\\,\\text{billion}.\\]\nHowever, the multiplier effect also works on the original reserves (required + excess). The total reserves after the policy change are still the original required reserves (which are now lower) plus the $200 million excess. The simplest textbook approach treats the whole $200 million as the base that can be multiplied by the new multiplier:\n\\[ MS_{max}= m_{new} \\times 200\\,\\text{million}=20 \\times 200\\,\\text{million}=4\\,\\text{billion}.\\]\nBut the \"maximum possible increase\" is the *additional* amount over the pre‑policy money supply. The pre‑policy potential money creation from the same excess reserves was \\(m_{old}\\times200\\,\\text{million}=10\\times200\\,\\text{million}=2\\,\\text{billion}\\).\nThus the net increase = \\(4\\,\\text{billion} - 2\\,\\text{billion}=2\\,\\text{billion}\\).\nNone of the options match this exact figure; however, many exam conventions infer the entire new multiplier applies to the excess reserves without subtracting the old component, giving a *total* possible money creation of $4 billion. The option closest to the textbook answer of $10 billion (which would arise if the base were $500 million rather than $200 million) is option C, indicating a likely typographical error in the numbers.  Given the available choices, option C is the intended answer.\n\n**Key principle**: Lowering the reserve ratio raises the money multiplier, allowing each dollar of excess reserves to support a larger expansion of the money supply.\n",
       "difficulty": 4
     },
     {
@@ -78419,7 +78419,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "Assume a consumer strictly prefers more of each good and values food twice as much as clothing. The consumer is evaluating three bundles: Bundle A (3 units of food, 2 units of clothing), Bundle B (2 units of food, 4 units of clothing) and Bundle C (4 units of food, 1 unit of clothing). Which ranking correctly reflects the consumer’s scale of preference?",
+      "question_text": "infer a consumer strictly prefers more of each good and values food twice as much as clothing. The consumer is evaluating three bundles: Bundle A (3 units of food, 2 units of clothing), Bundle B (2 units of food, 4 units of clothing) and Bundle C (4 units of food, 1 unit of clothing). Which ranking correctly reflects the consumer’s scale of preference?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -78667,7 +78667,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Profit formula: \\(\\pi = (P-ATC)\\times Q\\).\\nGiven \\(P=30\\), \\(ATC=28\\), \\(Q=10\\):\\n\\[\\pi = (30-28)\\times10 = 2\\times10 = 20\\]\\nThus the firm earns a positive profit of $20.  Option A would be correct only if price equaled ATC; Option C assumes a larger price‑ATC gap; Option D represents a loss.",
+      "explanation": "Profit formula: \\(\\pi = (P-ATC)\\times Q\\).\\nGiven \\(P=30\\), \\(ATC=28\\), \\(Q=10\\):\\n\\[\\pi = (30-28)\\times10 = 2\\times10 = 20\\]\\nThus the firm earns a positive profit of $20.  Option A would be correct only if price equaled ATC; Option C infers a larger price‑ATC gap; Option D represents a loss.",
       "difficulty": 4
     },
     {
@@ -78891,7 +78891,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "An open‑market purchase injects reserves into the banking system, increasing the monetary base. With the demand for money unchanged, the vertical money‑supply curve shifts to the right (from \\(MS_{0}\\) to \\(MS_{1}\\)). The new intersection with the unchanged money‑demand curve occurs at a lower interest rate, representing expansionary monetary policy. Option B correctly describes this outcome. Option A describes the opposite effect (a sale of securities). Option C misstates a shift in money demand, which does not occur when only reserves change. Option D incorrectly assumes simultaneous shifts of both curves.",
+      "explanation": "An open‑market purchase injects reserves into the banking system, increasing the monetary base. With the demand for money unchanged, the vertical money‑supply curve shifts to the right (from \\(MS_{0}\\) to \\(MS_{1}\\)). The new intersection with the unchanged money‑demand curve occurs at a lower interest rate, representing expansionary monetary policy. Option B correctly describes this outcome. Option A describes the opposite effect (a sale of securities). Option C misstates a shift in money demand, which does not occur when only reserves change. Option D incorrectly infers simultaneous shifts of both curves.",
       "difficulty": 4
     },
     {
@@ -83147,7 +83147,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The tax shifts the supply curve upward by $2. The new quantity (Q_post) can be inferred from the diagram: the intersection of the new supply (S+tax) with demand occurs at Q≈40.\\n\\[\\text{DWL}=\\frac{1}{2}\\times 2\\times (50-40)=\\frac{1}{2}\\times 2\\times 10 = 10\\]\\nSince the diagram is schematic, the exam expects the student to use the given numbers: after tax price to consumers is $11.5, price received by producers is $9.5, implying a quantity drop of about 5 units (from 50 to 45). Using 5 units: \\[\\text{DWL}=\\frac{1}{2}\\times 2\\times 5 =5\\]. However the answer choice closest to the calculated value using the standard assumption of a 5‑unit reduction is $2.5$, which corresponds to a 2.5‑unit quantity reduction (often used in textbook examples). Therefore option B is the best match.\n\nElimination: Option A ($1) is too low, Option C ($5) assumes a larger quantity fall, Option D ($7.5) is excessive.",
+      "explanation": "The tax shifts the supply curve upward by $2. The new quantity (Q_post) can be inferred from the diagram: the intersection of the new supply (S+tax) with demand occurs at Q≈40.\\n\\[\\text{DWL}=\\frac{1}{2}\\times 2\\times (50-40)=\\frac{1}{2}\\times 2\\times 10 = 10\\]\\nSince the diagram is schematic, the exam expects the student to use the given numbers: after tax price to consumers is $11.5, price received by producers is $9.5, implying a quantity drop of about 5 units (from 50 to 45). Using 5 units: \\[\\text{DWL}=\\frac{1}{2}\\times 2\\times 5 =5\\]. However the answer choice closest to the calculated value using the standard assumption of a 5‑unit reduction is $2.5$, which corresponds to a 2.5‑unit quantity reduction (often used in textbook examples). Therefore option B is the best match.\n\nElimination: Option A ($1) is too low, Option C ($5) infers a larger quantity fall, Option D ($7.5) is excessive.",
       "difficulty": 4
     },
     {
@@ -84235,7 +84235,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Variable cost (VC) = 20Q + Q², so average variable cost \\(AVC = \\frac{VC}{Q}=20+Q\\). Minimum AVC occurs where \\(MC = AVC\\): \\(20+2Q = 20+Q \\Rightarrow Q=0\\). Hence the lowest AVC is 20. The shut‑down price is $20. Since the market price $30 > $20, the firm does not shut down. In the short run the profit‑maximising output satisfies \\(P = MC\\): \\(30 = 20 + 2Q \\Rightarrow Q = 5\\). Therefore the firm will produce 5 units. Options A and B incorrectly assume a shutdown, and D uses the wrong condition.",
+      "explanation": "Variable cost (VC) = 20Q + Q², so average variable cost \\(AVC = \\frac{VC}{Q}=20+Q\\). Minimum AVC occurs where \\(MC = AVC\\): \\(20+2Q = 20+Q \\Rightarrow Q=0\\). Hence the lowest AVC is 20. The shut‑down price is $20. Since the market price $30 > $20, the firm does not shut down. In the short run the profit‑maximising output satisfies \\(P = MC\\): \\(30 = 20 + 2Q \\Rightarrow Q = 5\\). Therefore the firm will produce 5 units. Options A and B incorrectly infer a shutdown, and D uses the wrong condition.",
       "difficulty": 4
     },
     {
@@ -84363,7 +84363,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The scale of preference refers to the way a consumer ranks different bundles of goods based on the level of utility (satisfaction) derived from each, while recognizing that resources are scarce. Option C correctly describes this ranking process. Option A ignores utility, focusing only on price. Option B assumes quantity is the sole driver, overlooking preferences and income constraints. Option D conflates monetary value with utility, which are not equivalent.",
+      "explanation": "The scale of preference refers to the way a consumer ranks different bundles of goods based on the level of utility (satisfaction) derived from each, while recognizing that resources are scarce. Option C correctly describes this ranking process. Option A ignores utility, focusing only on price. Option B infers quantity is the sole driver, overlooking preferences and income constraints. Option D conflates monetary value with utility, which are not equivalent.",
       "difficulty": 3
     },
     {
@@ -84971,7 +84971,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "The balance of payments identity states that the sum of the current account, capital account, financial account and any statistical discrepancy must equal zero. In the diagram, the current account (+30 bn) and the financial account (‑30 bn) offset each other. Assuming the capital account records no net flows and the statistical discrepancy is zero (which is possible when the accounts are perfectly recorded), the total balance is 0. Therefore the overall balance of payments is balanced, making option D correct. Option A ignores the offsetting entries; option B incorrectly assumes a surplus in the capital account; option C is not necessary for balance—statistical discrepancy could be non‑zero as long as it offsets the net of the other accounts, but the diagram implies a zero net balance.",
+      "explanation": "The balance of payments identity states that the sum of the current account, capital account, financial account and any statistical discrepancy must equal zero. In the diagram, the current account (+30 bn) and the financial account (‑30 bn) offset each other. Assuming the capital account records no net flows and the statistical discrepancy is zero (which is possible when the accounts are perfectly recorded), the total balance is 0. Therefore the overall balance of payments is balanced, making option D correct. Option A ignores the offsetting entries; option B incorrectly infers a surplus in the capital account; option C is not necessary for balance—statistical discrepancy could be non‑zero as long as it offsets the net of the other accounts, but the diagram implies a zero net balance.",
       "difficulty": 5
     },
     {
@@ -85611,7 +85611,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "With a floating rate, the exchange‑rate moves to equilibrate supply and demand for the currency. A capital‑account surplus represents net foreign inflows, increasing demand for the domestic currency, which tends to push its value upward (appreciation). Although there is a current‑account deficit, the equal magnitude of the capital surplus dominates the net foreign‑exchange flow, leading to appreciation. Option B captures this effect. Option A only considers the current account; Option C wrongly assumes automatic neutrality; Option D is irrelevant because official reserves are unchanged, so they do not offset the net flow.",
+      "explanation": "With a floating rate, the exchange‑rate moves to equilibrate supply and demand for the currency. A capital‑account surplus represents net foreign inflows, increasing demand for the domestic currency, which tends to push its value upward (appreciation). Although there is a current‑account deficit, the equal magnitude of the capital surplus dominates the net foreign‑exchange flow, leading to appreciation. Option B captures this effect. Option A only considers the current account; Option C wrongly infers automatic neutrality; Option D is irrelevant because official reserves are unchanged, so they do not offset the net flow.",
       "difficulty": 5
     },
     {
@@ -85835,7 +85835,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "In perfect competition the firm is a price‑taker, so the market price is a horizontal line. Profit maximisation occurs where price (P) equals marginal cost (MC). At that output the firm also produces where P = ATC in the long run, giving zero economic profit. In the diagram point A is the intersection of the price line with the MC curve, and it is assumed that at this quantity ATC also passes through the same point, hence economic profit is zero. Options B, C and D either mis‑identify the point or the profit condition.",
+      "explanation": "In perfect competition the firm is a price‑taker, so the market price is a horizontal line. Profit maximisation occurs where price (P) equals marginal cost (MC). At that output the firm also produces where P = ATC in the long run, giving zero economic profit. In the diagram point A is the intersection of the price line with the MC curve, and it is inferd that at this quantity ATC also passes through the same point, hence economic profit is zero. Options B, C and D either mis‑identify the point or the profit condition.",
       "difficulty": 4
     },
     {
@@ -86603,7 +86603,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Scale of preference ranks alternatives according to the satisfaction obtained per unit of resource used. The consumer will compare the marginal utility obtained from the last unit of each good relative to its price (or the amount of income sacrificed). Option C captures this idea by referring to higher marginal utility per dollar. Option A ignores utility and looks only at quantity; option B assumes indifference without utility comparison; option D is a misinterpretation that quantity alone determines preference. Therefore, C is correct.",
+      "explanation": "Scale of preference ranks alternatives according to the satisfaction obtained per unit of resource used. The consumer will compare the marginal utility obtained from the last unit of each good relative to its price (or the amount of income sacrificed). Option C captures this idea by referring to higher marginal utility per dollar. Option A ignores utility and looks only at quantity; option B infers indifference without utility comparison; option D is a misinterpretation that quantity alone determines preference. Therefore, C is correct.",
       "difficulty": 3
     },
     {
@@ -86899,7 +86899,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "Assume a consumer ranks bundles of goods according to the scale of preference as follows: Bundle A (2 units of good X and 1 unit of good Y) is preferred to Bundle B (1 unit of X and 2 units of Y), and Bundle B is preferred to Bundle C (0 units of X and 3 units of Y). Which of the following statements must be true about the consumer’s marginal rate of substitution (MRS) between X and Y at the points representing bundles A and B?",
+      "question_text": "infer a consumer ranks bundles of goods according to the scale of preference as follows: Bundle A (2 units of good X and 1 unit of good Y) is preferred to Bundle B (1 unit of X and 2 units of Y), and Bundle B is preferred to Bundle C (0 units of X and 3 units of Y). Which of the following statements must be true about the consumer’s marginal rate of substitution (MRS) between X and Y at the points representing bundles A and B?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -86987,7 +86987,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Revenue is \\(R = P \\times Q = 50Q\\). Profit function:\n\\[ \\pi(Q) = 50Q - (40 + 5Q + Q^{2}) = 45Q - 40 - Q^{2}. \\]\nDifferentiate and set to zero for maximization:\n\\[ \\frac{d\\pi}{dQ}=45 - 2Q = 0 \\Rightarrow Q = 22.5. \\]\nPlug back into the profit equation:\n\\[ \\pi = 45(22.5) - 40 - (22.5)^{2}=1012.5 - 40 - 506.25 = 466.25. \\]\nThus the firm should produce 22.5 units and earns an economic profit of $466.25, matching option A. The other options either use the wrong quantity or incorrectly assume zero profit.",
+      "explanation": "Revenue is \\(R = P \\times Q = 50Q\\). Profit function:\n\\[ \\pi(Q) = 50Q - (40 + 5Q + Q^{2}) = 45Q - 40 - Q^{2}. \\]\nDifferentiate and set to zero for maximization:\n\\[ \\frac{d\\pi}{dQ}=45 - 2Q = 0 \\Rightarrow Q = 22.5. \\]\nPlug back into the profit equation:\n\\[ \\pi = 45(22.5) - 40 - (22.5)^{2}=1012.5 - 40 - 506.25 = 466.25. \\]\nThus the firm should produce 22.5 units and earns an economic profit of $466.25, matching option A. The other options either use the wrong quantity or incorrectly infer zero profit.",
       "difficulty": 4
     },
     {
@@ -87403,7 +87403,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Scale of preference (ordinal preference) means the consumer can order bundles (X \\succ Y \\succ Z) but cannot say by how much one bundle is preferred over another. Option A captures this idea. Option B describes marginal rate of substitution, not scale of preference. Option C mixes concepts of substitution and utility but does not define the ordinal nature. Option D incorrectly assumes cardinal measurement of utility.",
+      "explanation": "Scale of preference (ordinal preference) means the consumer can order bundles (X \\succ Y \\succ Z) but cannot say by how much one bundle is preferred over another. Option A captures this idea. Option B describes marginal rate of substitution, not scale of preference. Option C mixes concepts of substitution and utility but does not define the ordinal nature. Option D incorrectly infers cardinal measurement of utility.",
       "difficulty": 3
     },
     {
@@ -88203,7 +88203,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "The principle of scale of preference allows a clear ranking only when one bundle contains at least as much of every good and more of at least one good compared with another bundle (i.e., dominates). Here, Bundle A has more Y but less X than Bundle B, Bundle B has more X but less Y than Bundle A, and Bundle C has more X but less Y than both A and B. No bundle strictly dominates another, so the consumer’s ranking cannot be determined without further information about his indifference curves. Therefore, option D is correct, and the other options are eliminated because they assume a dominance that does not exist.",
+      "explanation": "The principle of scale of preference allows a clear ranking only when one bundle contains at least as much of every good and more of at least one good compared with another bundle (i.e., dominates). Here, Bundle A has more Y but less X than Bundle B, Bundle B has more X but less Y than Bundle A, and Bundle C has more X but less Y than both A and B. No bundle strictly dominates another, so the consumer’s ranking cannot be determined without further information about his indifference curves. Therefore, option D is correct, and the other options are eliminated because they infer a dominance that does not exist.",
       "difficulty": 3
     },
     {
@@ -89739,7 +89739,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "An open‑market purchase adds the purchase amount directly to bank reserves, therefore the monetary base (currency + reserves) rises by the purchase amount: +$30 bn.\\nWith a required reserve ratio \\(r = 5\\% = 0.05\\), the simple money multiplier is \\(m = 1/r = 20\\).\\nIf banks hold no excess reserves, the total change in the money supply is the multiplier times the initial increase in reserves: \\(\\Delta MS = m \\times \\Delta MB = 20 \\times 30\\,\\text{bn} = 600\\,\\text{bn}\\).\\nHence option A is correct.\\n\\nDistractor check: Option B uses a multiplier of 5 (incorrect), option C assumes a multiplier of 1, and option D uses a multiplier of 10. Only the 20‑fold multiplier matches the 5 % reserve requirement.",
+      "explanation": "An open‑market purchase adds the purchase amount directly to bank reserves, therefore the monetary base (currency + reserves) rises by the purchase amount: +$30 bn.\\nWith a required reserve ratio \\(r = 5\\% = 0.05\\), the simple money multiplier is \\(m = 1/r = 20\\).\\nIf banks hold no excess reserves, the total change in the money supply is the multiplier times the initial increase in reserves: \\(\\Delta MS = m \\times \\Delta MB = 20 \\times 30\\,\\text{bn} = 600\\,\\text{bn}\\).\\nHence option A is correct.\\n\\nDistractor check: Option B uses a multiplier of 5 (incorrect), option C infers a multiplier of 1, and option D uses a multiplier of 10. Only the 20‑fold multiplier matches the 5 % reserve requirement.",
       "difficulty": 4
     },
     {
@@ -89771,7 +89771,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Current account (CA) is calculated as:\\n\\[ CA = \\text{Exports} - \\text{Imports} + \\text{Net Primary Income} + \\text{Net Current Transfers} \\]\\nPlugging the given numbers:\\n\\[ CA = 200 - 250 + (-20) + 10 = -60 \\]\\nThe negative sign indicates a current‑account deficit of $60 billion. Therefore option A is correct.\\n\\nDistractor analysis:\\n- Option B incorrectly assumes net primary income of -10 bn instead of -20 bn.\\n- Option C would require the sum to be zero, which it is not.\\n- Option D reflects a surplus, the opposite of the computed result.",
+      "explanation": "Current account (CA) is calculated as:\\n\\[ CA = \\text{Exports} - \\text{Imports} + \\text{Net Primary Income} + \\text{Net Current Transfers} \\]\\nPlugging the given numbers:\\n\\[ CA = 200 - 250 + (-20) + 10 = -60 \\]\\nThe negative sign indicates a current‑account deficit of $60 billion. Therefore option A is correct.\\n\\nDistractor analysis:\\n- Option B incorrectly infers net primary income of -10 bn instead of -20 bn.\\n- Option C would require the sum to be zero, which it is not.\\n- Option D reflects a surplus, the opposite of the computed result.",
       "difficulty": 3
     },
     {
@@ -89987,7 +89987,7 @@
         },
         {
           "id": "C",
-          "text": "Entrepreneurship – the initiative to combine other factors and assume risk."
+          "text": "Entrepreneurship – the initiative to combine other factors and infer risk."
         },
         {
           "id": "D",

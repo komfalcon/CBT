@@ -22951,7 +22951,7 @@
       "question_text": "The Nok culture is known for its terracotta sculptures, which often depicted",
       "question_type": "mcq",
       "has_diagram": true,
-      "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='180' fill='#f0f0f0'/><image x='50' y='20' width='200' height='160' href='https://example.com/nok-terracotta.jpg'/></svg>",
+      "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='180' fill='#f0f0f0'/><image x='50' y='20' width='200' height='160' href=''/></svg>",
       "latex": null,
       "options": [
         {
@@ -22983,7 +22983,7 @@
       "question_text": "The Nigerian Civil War was fought between the federal government and which secessionist region?",
       "question_type": "mcq",
       "has_diagram": true,
-      "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='180' fill='#f0f0f0'/><image x='20' y='20' width='280' height='160' href='https://example.com/nigerian-civil-war-map.jpg'/></svg>",
+      "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='180' fill='#f0f0f0'/><image x='20' y='20' width='280' height='160' href=''/></svg>",
       "latex": null,
       "options": [
         {
