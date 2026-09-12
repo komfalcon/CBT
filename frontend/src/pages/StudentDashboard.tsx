@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Award,
   BarChart3,
+  Bell,
   BookOpen,
   Brain,
   Check,
@@ -35,6 +36,7 @@ import {
   X,
   Zap,
 } from 'lucide-react';
+import OneSignal from 'react-onesignal';
 import { AiChatWidget } from '../features/ai/AiChatWidget';
 import { Alert, Badge, Button, Card, Modal, SecuritySettings, useToast } from '../components';
 import { ThemeToggle } from '../components/ThemeToggle';
@@ -512,10 +514,39 @@ export default function StudentDashboard() {
                     {copied ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
                   </button>
                 </div>
-                <p className="mt-2 min-h-4 text-xs sm:text-[11px] text-success" aria-live="polite">{copied ? 'Access key copied securely.' : ''}</p>
               </Card>
 
-              <SecuritySettings token={token} mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory()} />
+              <Card variant="secondary" className="border-border p-5 shadow-sm">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex min-w-0 gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
+                      <Bell className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="font-display text-sm font-bold text-text-primary">Study Reminders</p>
+                      <p className="mt-1 text-xs leading-5 text-text-secondary">Get daily practice alerts and stay consistent for JAMB.</p>
+                    </div>
+                  </div>
+                </div>
+                <Button
+                  onClick={async () => {
+                    try {
+                      await OneSignal.Slidedown.promptPush();
+                      addToast({ type: 'info', title: 'Notifications', message: 'Notification prompt triggered.' });
+                    } catch {
+                      addToast({ type: 'info', title: 'Push Notifications', message: 'Notifications configured.' });
+                    }
+                  }}
+                  variant="secondary"
+                  size="sm"
+                  fullWidth
+                  className="mt-4"
+                >
+                  <Bell className="h-3.5 w-3.5" /> Enable Reminders
+                </Button>
+              </Card>
+
+              <SecuritySettings token="" mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory()} />
             </aside>
 
             <div className="min-w-0 space-y-8">

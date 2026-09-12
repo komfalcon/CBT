@@ -1,7 +1,7 @@
-﻿import { PwaInstallPrompt } from './components/PwaInstallPrompt';
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import OneSignal from 'react-onesignal';
+import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 import AuthPage from './features/auth/AuthPage';
 import QuestionBankPage from './features/questions/QuestionBankPage';
 import ExamArenaLanding from './pages/ExamArenaLanding';
@@ -27,13 +27,13 @@ const AdminBilling = React.lazy(() => import('./pages/admin/AdminBilling'));
 const SecureAccess = React.lazy(() => import('./pages/admin/SecureAccess'));
 
 const routeMetadata: Record<string, { title: string; description: string }> = {
-  '/': { title: 'Aurikrex Exam Arena â€” JAMB UTME Practice', description: 'Realistic JAMB UTME mocks, focused drills, explanations, and progress insights.' },
-  '/arena': { title: 'Exam Arena â€” Aurikrex Exam Arena', description: 'Prepare with focused practice sessions and realistic exam simulations.' },
-  '/auth': { title: 'Sign in â€” Aurikrex Exam Arena', description: 'Sign in or create your Aurikrex Exam Arena candidate profile.' },
-  '/help': { title: 'Help Center â€” Aurikrex Exam Arena', description: 'Find answers and support for your Aurikrex Exam Arena account and exams.' },
-  '/contact': { title: 'Contact â€” Aurikrex Exam Arena', description: 'Contact the Aurikrex Exam Arena support team.' },
-  '/privacy': { title: 'Privacy Policy â€” Aurikrex Exam Arena', description: 'Read how Aurikrex Exam Arena handles personal data and privacy.' },
-  '/terms': { title: 'Terms of Service â€” Aurikrex Exam Arena', description: 'Review the terms, subscriptions, refunds, and acceptable use rules.' },
+  '/': { title: 'Aurikrex Exam Arena — JAMB UTME Practice', description: 'Realistic JAMB UTME mocks, focused drills, explanations, and progress insights.' },
+  '/arena': { title: 'Exam Arena — Aurikrex Exam Arena', description: 'Prepare with focused practice sessions and realistic exam simulations.' },
+  '/auth': { title: 'Sign in — Aurikrex Exam Arena', description: 'Sign in or create your Aurikrex Exam Arena candidate profile.' },
+  '/help': { title: 'Help Center — Aurikrex Exam Arena', description: 'Find answers and support for your Aurikrex Exam Arena account and exams.' },
+  '/contact': { title: 'Contact — Aurikrex Exam Arena', description: 'Contact the Aurikrex Exam Arena support team.' },
+  '/privacy': { title: 'Privacy Policy — Aurikrex Exam Arena', description: 'Read how Aurikrex Exam Arena handles personal data and privacy.' },
+  '/terms': { title: 'Terms of Service — Aurikrex Exam Arena', description: 'Review the terms, subscriptions, refunds, and acceptable use rules.' },
 };
 
 function RouteMetadata() {
@@ -64,9 +64,16 @@ function RouteMetadata() {
   return null;
 }
 
-
-
 function App() {
+  useEffect(() => {
+    OneSignal.init({
+      appId: import.meta.env.VITE_ONESIGNAL_APP_ID || 'b7622f37-8ca3-4304-922c-69438cc14d67',
+      allowLocalhostAsSecureOrigin: true,
+    }).catch((err) => {
+      console.warn('OneSignal initialization skipped or failed:', err);
+    });
+  }, []);
+
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-primary selection:text-white flex flex-col">
       <RouteMetadata />
@@ -120,4 +127,3 @@ function App() {
 }
 
 export default App;
-

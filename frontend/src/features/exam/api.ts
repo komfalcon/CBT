@@ -85,7 +85,6 @@ export async function saveExamAnswers(
   const { data } = await examApi.post<ExamSessionRecord>(
     `/sessions/${sessionId}/answers`,
     { answers, timeRemaining },
-    withAuth(token),
   );
   return normalizeExamSession(data);
 }

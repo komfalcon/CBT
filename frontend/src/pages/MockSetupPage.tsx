@@ -69,8 +69,6 @@ export default function MockSetupPage() {
   const handleStartMock = async () => {
     try {
       setLoading(true);
-      const token = '';
-
       const payload: any = { type: 'mock', difficultyLevel: mockDifficulty };
       if (mockSubjects.length > 0) payload.subjects = mockSubjects;
 
@@ -79,7 +77,7 @@ export default function MockSetupPage() {
         payload.subjectConfigs = Object.fromEntries(subjectConfigs);
       }
 
-      const session = await createExamSession(token, payload);
+      const session = await createExamSession(payload);
       if (session.warnings && session.warnings.length > 0) {
         session.warnings.forEach((w: string) => addToast({ type: 'info', title: 'Notice', message: w }));
       }
