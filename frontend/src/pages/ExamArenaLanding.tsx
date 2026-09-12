@@ -28,7 +28,7 @@ const subjects = [
 const missions = [
   { label: 'Repair Mission', title: 'Newton’s Laws', meta: '12 questions · 8 min', tone: 'amber', icon: Crosshair },
   { label: 'Quick Sprint', title: 'Use of English', meta: '5 questions · 3 min', tone: 'blue', icon: Zap },
-  { label: 'Live Arena', title: 'Find an opponent', meta: '2,481 learners online', tone: 'violet', icon: Swords },
+  { label: 'Live Arena', title: 'Find an opponent', meta: 'Beta Test Arena', tone: 'violet', icon: Swords },
 ];
 
 const loopSteps: Array<{ number: string; title: string; text: string; Icon: LucideIcon }> = [
@@ -53,7 +53,7 @@ export default function ExamArenaLanding() {
           <Link to="/" className="flex items-center gap-3" aria-label="Aurikrex Exam Arena home">
             <img src="/favicon.svg" alt="" className="h-10 w-10 shrink-0 rounded-2xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
             <span>
-              <span className="block text-sm font-black tracking-[.16em] text-white">EXAM ARENA</span>
+              <span className="block text-sm font-black tracking-[.16em] text-white">Aurikrex Exam Arena</span>
               <span className="block text-xs font-bold uppercase tracking-[.28em] text-cyan-300/70">by Aurikrex</span>
             </span>
           </Link>

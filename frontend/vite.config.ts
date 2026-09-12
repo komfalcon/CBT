@@ -8,8 +8,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Aurikrex CBT Portal',
-        short_name: 'CBT Portal',
+        name: 'Aurikrex Exam Arena',
+        short_name: 'Aurikrex Exam Arena',
         description: 'JAMB UTME CBT Practice Portal',
         theme_color: '#0f172a',
         icons: [

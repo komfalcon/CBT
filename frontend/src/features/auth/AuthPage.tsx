@@ -340,7 +340,7 @@ export default function AuthPage() {
               </div>
             </div>
             <div className="relative mt-16 rounded-2xl border border-white/10 bg-white/[0.05] p-5">
-              <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-400/10 text-emerald-300"><ShieldAlert className="h-4 w-4" /></div><div><p className="text-[14px] font-semibold text-white">Built for real exam confidence</p><p className="mt-1 text-xs text-blue-100/55">100K+ students are already practicing.</p></div></div>
+              <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-400/10 text-emerald-300"><ShieldAlert className="h-4 w-4" /></div><div><p className="text-[14px] font-semibold text-white">Built for real exam confidence</p><p className="mt-1 text-xs text-blue-100/55">Beta Access are already practicing.</p></div></div>
               <div className="mt-5 grid grid-cols-3 gap-3 border-t border-white/[0.08] pt-4"><div><p className="font-display text-xl font-semibold tracking-[-0.04em] text-white">17</p><p className="mt-1 text-xs text-blue-100/50">subjects</p></div><div><p className="font-display text-xl font-semibold tracking-[-0.04em] text-white">1M+</p><p className="mt-1 text-xs text-blue-100/50">questions</p></div><div><p className="font-display text-xl font-semibold tracking-[-0.04em] text-white">4.9</p><p className="mt-1 text-xs text-blue-100/50">rating</p></div></div>
             </div>
           </aside>

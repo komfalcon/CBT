@@ -22,7 +22,8 @@ export class PaymentsService {
 
   async verifyTransaction(userId: string, reference: string, planCode: string): Promise<any> {
     if (!this.paystackSecretKey) {
-      throw new InternalServerErrorException('Paystack secret key is not configured on the server.');
+      console.error('[Payment] Paystack secret key is missing in configuration.');
+      throw new InternalServerErrorException('Payment provider configuration is missing. Please contact support.');
     }
 
     if (!reference) {
@@ -34,7 +35,13 @@ export class PaymentsService {
       throw new BadRequestException('Invalid plan code.');
     }
 
-    // 1. Prevent Replay Attack / Double-spending
+    const userList = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
+    const user = userList[0];
+    if (!user) {
+      throw new BadRequestException('User not found.');
+    }
+
+    // 1. Idempotent processing: if this reference was already verified for this user, just return success.
     const existingLogList = await this.db
       .select()
       .from(schema.payment_logs)
@@ -43,7 +50,12 @@ export class PaymentsService {
     const existingLog = existingLogList[0];
 
     if (existingLog) {
-      throw new BadRequestException('This transaction reference has already been verified.');
+      if (existingLog.userId === userId) {
+        console.log(`[Payment] Idempotent hit: reference ${reference} already verified for user ${userId}.`);
+        return user;
+      } else {
+        throw new BadRequestException('This transaction reference has already been verified by a different account.');
+      }
     }
 
     try {
@@ -74,16 +86,9 @@ export class PaymentsService {
         throw new BadRequestException('Transaction plan code does not match.');
       }
 
-      // Update the user's subscription tier in the database
-      const userList = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
-      const user = userList[0];
-      if (!user) {
-        throw new BadRequestException('User not found.');
-      }
-
       // 2. Prevent Ownership Bypass: Check email matches
       if (data.customer?.email?.toLowerCase() !== user.email.toLowerCase()) {
-        throw new BadRequestException('Transaction owner email mismatch.');
+        throw new BadRequestException('Transaction owner email mismatch. Please ensure you are logged into the correct account.');
       }
 
       const updateData: any = {
@@ -109,12 +114,15 @@ export class PaymentsService {
       const updatedUserList = await this.db.update(schema.users).set(updateData).where(eq(schema.users.id, userId)).returning();
       const updatedUser = updatedUserList[0];
 
-      console.log(`Successfully upgraded user ${userId} to ${tier} tier.`);
+      console.log(`[Payment] Successfully upgraded user ${userId} to ${tier} tier.`);
       return updatedUser;
     } catch (error: any) {
       if (error instanceof BadRequestException || error instanceof InternalServerErrorException) throw error;
-      const errMsg = error.response?.data?.message || error.message || 'Payment verification failed.';
-      throw new BadRequestException(errMsg);
+      
+      // Preserve provider error codes in server logs without exposing secrets to the client
+      console.error(`[Payment] Provider error for ref ${reference}:`, error.response?.data || error.message);
+      
+      throw new BadRequestException('Payment verification failed. Please try again or contact support.');
     }
   }
 }

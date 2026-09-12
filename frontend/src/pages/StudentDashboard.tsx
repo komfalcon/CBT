@@ -86,7 +86,7 @@ function EmptyPanel({
 export default function StudentDashboard() {
   const navigate = useNavigate();
   const { addToast } = useToast();
-  const token = '';
+  
   const [student, setStudent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -259,7 +259,7 @@ export default function StudentDashboard() {
     if (!drillSubject) return;
     try {
       setLoading(true);
-      const session = await createExamSession(token, {
+      const session = await createExamSession({
         type: 'drill',
         subject: drillSubject,
         count: drillCount,

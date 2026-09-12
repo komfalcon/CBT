@@ -1253,3 +1253,10 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
     border-radius: 22px;
   }
 }
+
+@layer base {
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-bg-primary !important;
+  }
+}
+

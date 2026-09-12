@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import DOMPurify from 'dompurify';
 import { BookOpen, Check, CircleAlert, Flag, Sparkles } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
@@ -239,7 +240,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       )}
       {!isLoadingDiagram && diagramSvg && (
         <div className="mt-7 flex max-w-3xl justify-center overflow-auto rounded-2xl border border-border bg-bg-secondary/45 p-5">
-          {isTikz(diagramSvg) ? <TikzRenderer code={diagramSvg} /> : <div dangerouslySetInnerHTML={{ __html: diagramSvg }} />}
+          {isTikz(diagramSvg) ? <TikzRenderer code={diagramSvg} /> : <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(diagramSvg, { USE_PROFILES: { svg: true }, FORBID_TAGS: ['image'] }) }} />}
         </div>
       )}
 

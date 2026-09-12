@@ -8,7 +8,7 @@ const examApi = axios.create({
   withCredentials: true,
 });
 
-function withAuth(_token?: string) { return undefined; }
+// function withAuth
 
 export type ExamQuestionOption = {
   id: 'A' | 'B' | 'C' | 'D' | 'E';
@@ -47,10 +47,10 @@ export type ExamSessionRecord = {
 };
 
 export async function createExamSession(
-  token: string,
+  
   payload: { type: 'mock' | 'drill'; subject?: string; count?: number; difficultyLevel?: string; topics?: string[] },
 ) {
-  const { data } = await examApi.post<ExamSessionRecord>('/sessions', payload, withAuth(token));
+  const { data } = await examApi.post<ExamSessionRecord>('/sessions', payload);
   return normalizeExamSession(data);
 }
 
@@ -71,13 +71,13 @@ export function normalizeExamSession(session: ExamSessionRecord): ExamSessionRec
   return { ...session, questions, answers };
 }
 
-export async function getExamSession(token: string, sessionId: string) {
-  const { data } = await examApi.get<ExamSessionRecord>(`/sessions/${sessionId}`, withAuth(token));
+export async function getExamSession(sessionId: string) {
+  const { data } = await examApi.get<ExamSessionRecord>(`/sessions/${sessionId}`);
   return normalizeExamSession(data);
 }
 
 export async function saveExamAnswers(
-  token: string,
+  
   sessionId: string,
   answers: Record<string, string>,
   timeRemaining: number,
@@ -90,7 +90,7 @@ export async function saveExamAnswers(
   return normalizeExamSession(data);
 }
 
-export async function submitExamSession(token: string, sessionId: string) {
-  const { data } = await examApi.post<any>(`/sessions/${sessionId}/submit`, {}, withAuth(token));
+export async function submitExamSession(sessionId: string) {
+  const { data } = await examApi.post<any>(`/sessions/${sessionId}/submit`, {});
   return data;
 }

@@ -68,7 +68,22 @@ export default function ExamConsole() {
   const saveInFlight = useRef(false);
   const latestExamState = useRef({ answers, timeRemaining });
   latestExamState.current = { answers, timeRemaining };
-  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(new Set());
+
+  // Persist flagged questions locally so they survive reloads
+  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(() => {
+    if (!sessionId) return new Set();
+    try {
+      const stored = localStorage.getItem(`exam_flags_${sessionId}`);
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  useEffect(() => {
+    if (!sessionId) return;
+    localStorage.setItem(`exam_flags_${sessionId}`, JSON.stringify(Array.from(flaggedQuestions)));
+  }, [flaggedQuestions, sessionId]);
 
   // Modal and Alert states
   const [showSubmitModal, setShowSubmitModal] = useState(false);
@@ -175,7 +190,7 @@ export default function ExamConsole() {
     }
   };
 
-  const token = '';
+  
 
   // Fetch session details on mount
   useEffect(() => {
@@ -183,7 +198,7 @@ export default function ExamConsole() {
     const fetchSession = async () => {
       try {
         setLoading(true);
-        const data = await getExamSession(token, sessionId);
+        const data = await getExamSession(sessionId);
         if (data.status === 'completed') {
           // If already completed, redirect to review or results list
           showAlert('Session Completed', 'This exam session has already been submitted.', () => {
@@ -207,7 +222,7 @@ export default function ExamConsole() {
       }
     };
     fetchSession();
-  }, [sessionId, token, navigate]);
+  }, [sessionId, navigate]);
 
   // Filtered questions list for the active subject
   const currentSubjectQuestions = useMemo(() => {
@@ -242,11 +257,16 @@ export default function ExamConsole() {
     if (!sessionId) return;
     try {
       setSubmitting(true);
-      const result = await submitExamSession(token, sessionId);
+      const result = await submitExamSession(sessionId);
       navigate(`/results/${result.resultId || result.id}`);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      navigate('/dashboard');
+      setSubmitting(false);
+      showAlert(
+        'Submission Failed',
+        'Time is up, but we could not reach the server to submit your exam. Please check your connection and try again.',
+        () => autoSubmitExam()
+      );
     }
   };
 
@@ -258,7 +278,7 @@ export default function ExamConsole() {
       saveInFlight.current = true;
       const snapshot = latestExamState.current;
       try {
-        await saveExamAnswers(token, sessionId, snapshot.answers, snapshot.timeRemaining);
+        await saveExamAnswers(sessionId, snapshot.answers, snapshot.timeRemaining);
         setLastSaved(new Date());
       } catch (err) {
         console.warn('Auto-save failed:', err);
@@ -266,13 +286,13 @@ export default function ExamConsole() {
     };
     const interval = window.setInterval(saveLatest, 10000);
     return () => window.clearInterval(interval);
-  }, [loading, submitting, sessionId, token, session]);
+  }, [loading, submitting, sessionId, session]);
 
   const handleSelectOption = (questionId: string, optionId: string) => {
     setAnswers((prev) => {
       const updated = { ...prev, [questionId]: optionId };
       // Save instantly to database
-      saveExamAnswers(token, sessionId!, updated, timeRemaining)
+      saveExamAnswers(sessionId!, updated, timeRemaining)
         .then(() => setLastSaved(new Date()))
         .catch((err) => console.warn('Instant save failed:', err));
       return updated;
@@ -364,7 +384,7 @@ export default function ExamConsole() {
     try {
       setSubmitting(true);
       setSubmitError('');
-      const result = await submitExamSession(token, sessionId);
+      const result = await submitExamSession(sessionId);
       navigate(`/results/${result.resultId || result.id}`);
     } catch (err: any) {
       setSubmitError(err.response?.data?.message || 'Submission failed.');

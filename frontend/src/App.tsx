@@ -48,6 +48,14 @@ function RouteMetadata() {
     setMeta('meta[name="description"]', 'content', metadata.description);
     setMeta('meta[property="og:title"]', 'content', metadata.title);
     setMeta('meta[property="og:description"]', 'content', metadata.description);
+    
+    // SEO-01: Set route-specific metadata and social preview images
+    const currentUrl = `https://cbt.aurikrex.tech${pathname}`;
+    const defaultImage = 'https://cbt.aurikrex.tech/pwa-512x512.png';
+    setMeta('meta[property="og:url"]', 'content', currentUrl);
+    setMeta('meta[property="og:image"]', 'content', defaultImage);
+    setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image');
+    setMeta('meta[name="twitter:image"]', 'content', defaultImage);
     let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
     canonical.href = `${window.location.origin}${pathname}`;
