@@ -1,0 +1,17 @@
+name = "aurikrex-ai-proxy"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[vars]
+# Tier 1: Gemini API Keys
+GEMINI_API_KEY_1 = ""
+GEMINI_API_KEY_2 = ""
+
+# Tier 2: Cloudflare Workers AI / Account Config
+CF_ACCOUNT_ID = ""
+CF_API_TOKEN_1 = ""
+CF_API_TOKEN_2 = ""
+
+# Tier 3: Grok (xAI) API Keys
+GROK_API_KEY_1 = ""
+GROK_API_KEY_2 = ""

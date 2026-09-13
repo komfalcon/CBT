@@ -46,6 +46,33 @@ export class AiService {
   }
 
   private async callDigitalOceanApi(messages: any[], maxTokens: number = 500) {
+    // Option B: Cloudflare AI Gateway / Edge Proxy Worker Integration
+    const cfProxyUrl = process.env.CLOUDFLARE_AI_PROXY_URL || process.env.CLOUDFLARE_AI_GATEWAY_URL;
+    if (cfProxyUrl) {
+      try {
+        this.logger.log(`Routing AI completion request to Cloudflare AI Proxy: ${cfProxyUrl}`);
+        const cfResponse = await axios.post(
+          `${cfProxyUrl}/v1/chat/completions`,
+          {
+            messages,
+            max_tokens: maxTokens,
+            temperature: 0.3,
+          },
+          {
+            headers: { 'Content-Type': 'application/json' },
+            timeout: 15000,
+          }
+        );
+
+        if (cfResponse.data?.choices?.[0]?.message?.content) {
+          this.logger.log(`Cloudflare AI Proxy successfully served request via model: ${cfResponse.data.model || 'edge-fallback'}`);
+          return cfResponse.data.choices[0].message.content;
+        }
+      } catch (cfError: any) {
+        this.logger.warn(`Cloudflare AI Proxy call failed or timed out: ${cfError.message}. Falling back to secondary provider...`);
+      }
+    }
+
     try {
       const response = await axios.post(
         this.apiUrl,
