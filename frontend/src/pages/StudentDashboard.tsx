@@ -528,22 +528,44 @@ export default function StudentDashboard() {
                     </div>
                   </div>
                 </div>
-                <Button
-                  onClick={async () => {
-                    try {
-                      await OneSignal.Slidedown.promptPush();
-                      addToast({ type: 'info', title: 'Notifications', message: 'Notification prompt triggered.' });
-                    } catch {
-                      addToast({ type: 'info', title: 'Push Notifications', message: 'Notifications configured.' });
-                    }
-                  }}
-                  variant="secondary"
-                  size="sm"
-                  fullWidth
-                  className="mt-4"
-                >
-                  <Bell className="h-3.5 w-3.5" /> Enable Reminders
-                </Button>
+                <div className="mt-4 flex gap-2">
+                  <Button
+                    onClick={async () => {
+                      try {
+                        await OneSignal.Slidedown.promptPush();
+                        addToast({ type: 'info', title: 'Notifications', message: 'Notification prompt triggered.' });
+                      } catch {
+                        addToast({ type: 'info', title: 'Push Notifications', message: 'Notifications configured.' });
+                      }
+                    }}
+                    variant="secondary"
+                    size="sm"
+                    fullWidth
+                  >
+                    <Bell className="h-3.5 w-3.5" /> Enable Reminders
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      try {
+                        const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
+                        const res = await fetch(`${apiBase}/notifications/test-push`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                        });
+                        const data = await res.json();
+                        addToast({ type: data.success ? 'success' : 'error', title: 'Test Push', message: data.message });
+                      } catch {
+                        addToast({ type: 'error', title: 'Test Failed', message: 'Could not trigger test push request.' });
+                      }
+                    }}
+                    variant="ghost"
+                    size="sm"
+                    className="shrink-0"
+                    title="Send a test push notification"
+                  >
+                    Send Test
+                  </Button>
+                </div>
               </Card>
 
               <SecuritySettings token="" mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory()} />
