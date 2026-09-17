@@ -113,24 +113,41 @@ export default {
 };
 
 // Helper: Call Google Gemini API
-async function callGemini(apiKey: string, prompt: string, maxTokens: number, temperature: number): Promise<string | null> {
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { maxOutputTokens: maxTokens, temperature },
-    }),
-  });
+async function callGemini(apiKey: string, prompt: string, maxTokens: number, temperature: number, model: string = 'gemini-flash-latest'): Promise<string | null> {
+  const modelsToTry = [model, 'gemini-flash-latest', 'gemini-1.5-flash', 'gemini-2.0-flash-exp'];
+  let lastError: Error | null = null;
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Gemini HTTP ${response.status}: ${errorText}`);
+  for (const m of Array.from(new Set(modelsToTry))) {
+    try {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${apiKey}`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-goog-api-key': apiKey,
+        },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: maxTokens, temperature },
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Gemini (${m}) HTTP ${response.status}: ${errorText}`);
+      }
+
+      const data: any = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) return text;
+    } catch (err: any) {
+      lastError = err;
+      console.warn(`[AI Proxy] Gemini model ${m} failed: ${err.message}`);
+    }
   }
 
-  const data: any = await response.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  if (lastError) throw lastError;
+  return null;
 }
 
 // Helper: Call Cloudflare Workers AI REST API

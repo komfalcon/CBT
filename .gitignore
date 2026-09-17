@@ -10,3 +10,6 @@ frontend/.env
 backend/.env
 env
 .env
+cloudflare-ai-proxy/.env
+*.env
+.env.*
