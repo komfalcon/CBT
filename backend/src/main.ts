@@ -2,9 +2,16 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { randomBytes } from 'crypto';
-
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+
+process.on('unhandledRejection', (reason) => {
+  console.error('[CRITICAL SERVER ERROR] Unhandled Rejection:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('[CRITICAL SERVER ERROR] Uncaught Exception:', err);
+});
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,7 +30,8 @@ async function bootstrap() {
     'https://www.cbt.aurikrex.tech',
     'https://library.aurikrex.tech',
     'https://www.library.aurikrex.tech',
-    'https://cbt-vl4x.onrender.com'
+    'https://cbt-vl4x.onrender.com',
+    'https://cbt.pxxl.click',
   ];
 
   app.enableCors({
@@ -41,8 +49,6 @@ async function bootstrap() {
   });
   app.use(helmet({ crossOriginOpenerPolicy: false }));
 
-  // Bind state-changing browser requests to the same-site session. Auth bootstrap routes are public;
-  // all other unsafe methods require either a matching double-submit token or an allowed Origin.
   app.use((req: any, res: any, next: any) => {
     const cookieHeader = String(req.headers.cookie || '');
     const csrfCookie = cookieHeader.split(';').map((part: string) => part.trim()).find((part: string) => part.startsWith('csrf_token='))?.slice('csrf_token='.length);
@@ -67,7 +73,9 @@ async function bootstrap() {
   );
 
   const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+  console.log(`[BOOTSTRAP] Starting server on port ${port}, host 0.0.0.0`);
   await app.listen(port, '0.0.0.0');
+  console.log(`[BOOTSTRAP] NestJS Application listening on http://0.0.0.0:${port}`);
 }
 
 void bootstrap();
