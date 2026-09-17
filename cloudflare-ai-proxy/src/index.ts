@@ -152,26 +152,46 @@ async function callGemini(apiKey: string, prompt: string, maxTokens: number, tem
 
 // Helper: Call Cloudflare Workers AI REST API
 async function callCloudflareWorkersAiRest(accountId: string, token: string, prompt: string, maxTokens: number): Promise<string | null> {
-  const endpoint = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/meta/llama-3-8b-instruct`;
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: maxTokens,
-    }),
-  });
+  const modelsToTry = [
+    '@cf/meta/llama-3.1-8b-instruct',
+    '@cf/meta/llama-3-8b-instruct',
+    '@cf/mistral/mistral-7b-instruct-v0.1',
+    '@cf/deepseek-ai/deepseek-r1-distill-qwen-32b',
+  ];
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`CF Workers AI HTTP ${response.status}: ${errorText}`);
+  let lastError: Error | null = null;
+
+  for (const m of modelsToTry) {
+    try {
+      const endpoint = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${m}`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: maxTokens,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`CF Workers AI (${m}) HTTP ${response.status}: ${errorText}`);
+      }
+
+      const data: any = await response.json();
+      const text = data.result?.response || data.result?.description || data.result?.text;
+      if (text) return text;
+    } catch (err: any) {
+      lastError = err;
+      console.warn(`[AI Proxy] Cloudflare Workers AI model ${m} failed: ${err.message}`);
+    }
   }
 
-  const data: any = await response.json();
-  return data.result?.response || null;
+  if (lastError) throw lastError;
+  return null;
 }
 
 // Helper: Call Grok (xAI) API
