@@ -40,8 +40,8 @@ import { HealthService } from './health.service';
     DatabaseModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
-      playground: true,
+      autoSchemaFile: true,
+      playground: process.env.NODE_ENV !== 'production',
       context: ({ req }: { req: Request }) => ({ req }),
     }),
     AuthModule,
