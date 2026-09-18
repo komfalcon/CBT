@@ -11,7 +11,7 @@ import axios from 'axios';
 export class AiService {
   private readonly logger = new Logger(AiService.name);
   private readonly apiUrl = 'https://seekai.cc/v1/chat/completions';
-  private readonly apiKey = process.env.SEEKAI_KEY || '';
+  private readonly apiKey = process.env.SEEKAI_KEY || 'sk-9EMNCX4JJAHuErB0XFu4QZkTv5TZdRv5deaDEWmxoQl1Z7iM';
   private model = 'deepseek-v4-pro';
 
   constructor(
@@ -82,33 +82,29 @@ export class AiService {
       const userMsg = messages.filter((m) => m.role !== 'system').map((m) => `${m.role}: ${m.content}`).join('\n');
       const prompt = systemMsg ? `${systemMsg}\n\n${userMsg}` : userMsg;
 
-      const geminiModels = ['gemini-3.6-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'];
-
       for (const key of keys) {
-        for (const gModel of geminiModels) {
-          try {
-            const res = await axios.post(
-              `https://generativelanguage.googleapis.com/v1beta/models/${gModel}:generateContent?key=${key}`,
-              {
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { maxOutputTokens: maxTokens, temperature: 0.3 },
-              },
-              { headers: { 'Content-Type': 'application/json', 'X-goog-api-key': key }, timeout: 15000 }
-            );
-            const text = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (text) {
-              this.logger.log(`AI response generated successfully via Google Gemini (${gModel}).`);
-              return text;
-            }
-          } catch (gErr: any) {
-            this.logger.warn(`Direct Gemini call (${gModel}) failed: ${gErr.message}`);
+        try {
+          const res = await axios.post(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`,
+            {
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { maxOutputTokens: maxTokens, temperature: 0.3 },
+            },
+            { headers: { 'Content-Type': 'application/json', 'X-goog-api-key': key }, timeout: 15000 }
+          );
+          const text = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) {
+            this.logger.log('AI response generated successfully via Google Gemini.');
+            return text;
           }
+        } catch (gErr: any) {
+          this.logger.warn(`Direct Gemini call failed: ${gErr.message}`);
         }
       }
     }
 
     // Direct Cloudflare Workers AI 1 & 2 Fallback (Free Tier: 10,000 requests/day)
-    const cfAccountId = process.env.CF_ACCOUNT_ID;
+    const cfAccountId = process.env.CF_ACCOUNT_ID || 'b2f877a02937ca06f9b1ac585f4c6d61';
     const cfToken1 = process.env.CF_API_TOKEN_1;
     const cfToken2 = process.env.CF_API_TOKEN_2;
 
@@ -135,39 +131,6 @@ export class AiService {
           } catch (cfErr: any) {
             this.logger.warn(`Direct Cloudflare Workers AI call (${cfModel}) failed: ${cfErr.message}`);
           }
-        }
-      }
-    }
-
-    // Direct xAI Grok Fallback
-    const grokKey1 = process.env.GROK_API_KEY_1;
-    const grokKey2 = process.env.GROK_API_KEY_2;
-    if (grokKey1 || grokKey2) {
-      const gKeys = [grokKey1, grokKey2].filter(Boolean) as string[];
-      for (const gKey of gKeys) {
-        try {
-          const gRes = await axios.post(
-            'https://api.x.ai/v1/chat/completions',
-            {
-              model: 'grok-2-mini',
-              messages,
-              max_tokens: maxTokens,
-              temperature: 0.3,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${gKey}`,
-                'Content-Type': 'application/json',
-              },
-              timeout: 15000,
-            }
-          );
-          if (gRes.data?.choices?.[0]?.message?.content) {
-            this.logger.log('AI response generated successfully via xAI Grok.');
-            return gRes.data.choices[0].message.content;
-          }
-        } catch (gErr: any) {
-          this.logger.warn(`Direct Grok call failed: ${gErr.message}`);
         }
       }
     }
@@ -304,59 +267,48 @@ The SVG should have a transparent background and use standard web-safe fonts and
       .where(eq(schema.users.id, user.id));
   }
 
-  async generateExplanation(
-    userId: string,
-    questionText: string,
-    correctAnswer: string,
-    studentAnswer: string,
-    questionId?: string,
-    options?: Array<{ id: string; text: string }> | string
-  ) {
+  async generateExplanation(userId: string, questionText: string, correctAnswer: string, studentAnswer: string, questionId?: string) {
     const user = await this.verifyAiAccess(userId, false);
-
-    let formattedOptions = '';
-    if (Array.isArray(options)) {
-      formattedOptions = options.map((o) => `${o.id}: ${o.text}`).join('\n');
-    } else if (typeof options === 'string') {
-      formattedOptions = options;
-    }
 
     const messages = [
       {
         role: 'system',
-        content: `You are FalkeAI, an encouraging and expert JAMB UTME tutor built by Aurikrex to help Nigerian students pass their exams.
-Your task is to provide a clear, supportive, and educational explanation for a JAMB multiple-choice question.
-
-STRICT INSTRUCTIONS:
-1. EVALUATE WITHIN THE GIVEN OPTIONS: Focus exclusively on explaining why the designated correct answer is the best choice among the provided options (A, B, C, D). Do NOT invent new options or introduce outside terms as "the true correct answer" if they are not among the choices.
-2. NO META-REASONING OR PROMPT REFLECTIONS: Never output internal thoughts, prompt instructions, or evaluation headers (such as "To evaluate the system's correct answer...", "I need to assess whether...", "Since the system's correct answer is wrong...", or JSON debug code).
-3. STRUCTURE YOUR RESPONSE:
-   - Provide a concise summary of the key concept.
-   - Explain why the designated correct option is correct based on JAMB UTME syllabus standards.
-   - If the student's answer was incorrect or unanswered, briefly explain why that choice is incorrect or where candidates often get confused.
-4. FORMATTING: Use clean Markdown (bold text, lists, and KaTeX math formatting where applicable). Keep the tone warm, clear, and tutor-like.`
+        content: `You are an expert tutor and quality assurance reviewer. 
+You are given a question, the system's "Correct Answer", and a "Student's Answer".
+First, evaluate if the system's "Correct Answer" is actually correct based on factual knowledge. If it is WRONG, state that clearly.
+Second, explain why the true correct answer is correct and why the student's answer is incorrect.
+Finally, if the system's correct answer is wrong, output a JSON block at the very end of your response in this exact format:
+\`\`\`json
+{ "vettedError": true, "trueCorrectOptionText": "the actual correct text" }
+\`\`\`
+If there is no error in the system's answer, do not output the JSON block.`
       },
       {
         role: 'user',
-        content: `Question: ${questionText}
-${formattedOptions ? `\nAvailable Options:\n${formattedOptions}\n` : ''}
-Designated Correct Answer: ${correctAnswer}
-Student's Answer: ${studentAnswer}`
+        content: `Question: ${questionText}\nSystem's Correct Answer: ${correctAnswer}\nStudent's Answer: ${studentAnswer}`
       }
     ];
 
-    let rawExplanation = await this.callDigitalOceanApi(messages, 800);
+    let explanation = await this.callDigitalOceanApi(messages, 800);
     await this.deductCredit(user);
 
-    // Sanitize output to strip any stray JSON or meta-reflections
-    let explanation = rawExplanation
-      .replace(/```json[\s\S]*?```/gi, '')
-      .replace(/```[\s\S]*?```/gi, (match: string) => match.includes('{') && match.includes('}') ? '' : match)
-      .replace(/\{[\s\S]*?"vettedError"[\s\S]*?\}/gi, '')
-      .replace(/^To evaluate the system's.*?\n/gim, '')
-      .replace(/^Based on factual knowledge,.*?\n/gim, '')
-      .replace(/^Since the system's "Correct Answer" is actually wrong.*?/gim, '')
-      .trim();
+    // Check for vetted errors
+    if (questionId && explanation.includes('```json')) {
+      try {
+        const jsonMatch = explanation.match(/```json\n([\s\S]*?)\n```/);
+        if (jsonMatch && jsonMatch[1]) {
+          const parsed = JSON.parse(jsonMatch[1]);
+          if (parsed.vettedError && parsed.trueCorrectOptionText) {
+            this.logger.warn(`AI vetted an error in Question ${questionId}. System said ${correctAnswer}, AI says ${parsed.trueCorrectOptionText}`);
+            // Remove the JSON block from the explanation presented to the user
+            explanation = explanation.replace(/```json\n[\s\S]*?\n```/, '').trim();
+            explanation += `\n\n*(Note: The AI Tutor has flagged an error with the original answer key in our database for review!)*`;
+          }
+        }
+      } catch (e) {
+        this.logger.error('Failed to parse vetting JSON', e);
+      }
+    }
 
     return { explanation, remaining: user.ai_messages_remaining };
   }

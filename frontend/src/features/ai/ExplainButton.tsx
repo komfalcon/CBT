@@ -11,16 +11,9 @@ interface ExplainButtonProps {
   questionText: string;
   correctAnswer: string;
   studentAnswer: string;
-  options?: Array<{ id: string; text: string }>;
 }
 
-export const ExplainButton: React.FC<ExplainButtonProps> = ({
-  questionId,
-  questionText,
-  correctAnswer,
-  studentAnswer,
-  options,
-}) => {
+export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questionText, correctAnswer, studentAnswer }) => {
   const [explanation, setExplanation] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,13 +23,7 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({
     setIsLoading(true);
     setError(null);
     try {
-      const res = await explainQuestion({
-        questionId,
-        questionText,
-        correctAnswer,
-        studentAnswer,
-        options,
-      });
+      const res = await explainQuestion({ questionId, questionText, correctAnswer, studentAnswer });
       setExplanation(res.explanation);
     } catch (err: any) {
       console.error(err);
