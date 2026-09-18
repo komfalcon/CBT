@@ -135,6 +135,39 @@ export class AiService {
       }
     }
 
+    // Direct xAI Grok Fallback
+    const grokKey1 = process.env.GROK_API_KEY_1;
+    const grokKey2 = process.env.GROK_API_KEY_2;
+    if (grokKey1 || grokKey2) {
+      const gKeys = [grokKey1, grokKey2].filter(Boolean) as string[];
+      for (const gKey of gKeys) {
+        try {
+          const gRes = await axios.post(
+            'https://api.x.ai/v1/chat/completions',
+            {
+              model: 'grok-2-mini',
+              messages,
+              max_tokens: maxTokens,
+              temperature: 0.3,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${gKey}`,
+                'Content-Type': 'application/json',
+              },
+              timeout: 15000,
+            }
+          );
+          if (gRes.data?.choices?.[0]?.message?.content) {
+            this.logger.log('AI response generated successfully via xAI Grok.');
+            return gRes.data.choices[0].message.content;
+          }
+        } catch (gErr: any) {
+          this.logger.warn(`Direct Grok call failed: ${gErr.message}`);
+        }
+      }
+    }
+
     try {
       const response = await axios.post(
         this.apiUrl,
@@ -267,48 +300,59 @@ The SVG should have a transparent background and use standard web-safe fonts and
       .where(eq(schema.users.id, user.id));
   }
 
-  async generateExplanation(userId: string, questionText: string, correctAnswer: string, studentAnswer: string, questionId?: string) {
+  async generateExplanation(
+    userId: string,
+    questionText: string,
+    correctAnswer: string,
+    studentAnswer: string,
+    questionId?: string,
+    options?: Array<{ id: string; text: string }> | string
+  ) {
     const user = await this.verifyAiAccess(userId, false);
+
+    let formattedOptions = '';
+    if (Array.isArray(options)) {
+      formattedOptions = options.map((o) => `${o.id}: ${o.text}`).join('\n');
+    } else if (typeof options === 'string') {
+      formattedOptions = options;
+    }
 
     const messages = [
       {
         role: 'system',
-        content: `You are an expert tutor and quality assurance reviewer. 
-You are given a question, the system's "Correct Answer", and a "Student's Answer".
-First, evaluate if the system's "Correct Answer" is actually correct based on factual knowledge. If it is WRONG, state that clearly.
-Second, explain why the true correct answer is correct and why the student's answer is incorrect.
-Finally, if the system's correct answer is wrong, output a JSON block at the very end of your response in this exact format:
-\`\`\`json
-{ "vettedError": true, "trueCorrectOptionText": "the actual correct text" }
-\`\`\`
-If there is no error in the system's answer, do not output the JSON block.`
+        content: `You are FalkeAI, an encouraging and expert JAMB UTME tutor built by Aurikrex to help Nigerian students pass their exams.
+Your task is to provide a clear, supportive, and educational explanation for a JAMB multiple-choice question.
+
+STRICT INSTRUCTIONS:
+1. EVALUATE WITHIN THE GIVEN OPTIONS: Focus exclusively on explaining why the designated correct answer is the best choice among the provided options (A, B, C, D). Do NOT invent new options or introduce outside terms as "the true correct answer" if they are not among the choices.
+2. NO META-REASONING OR PROMPT REFLECTIONS: Never output internal thoughts, prompt instructions, or evaluation headers (such as "To evaluate the system's correct answer...", "I need to assess whether...", "Since the system's correct answer is wrong...", or JSON debug code).
+3. STRUCTURE YOUR RESPONSE:
+   - Provide a concise summary of the key concept.
+   - Explain why the designated correct option is correct based on JAMB UTME syllabus standards.
+   - If the student's answer was incorrect or unanswered, briefly explain why that choice is incorrect or where candidates often get confused.
+4. FORMATTING: Use clean Markdown (bold text, lists, and KaTeX math formatting where applicable). Keep the tone warm, clear, and tutor-like.`
       },
       {
         role: 'user',
-        content: `Question: ${questionText}\nSystem's Correct Answer: ${correctAnswer}\nStudent's Answer: ${studentAnswer}`
+        content: `Question: ${questionText}
+${formattedOptions ? `\nAvailable Options:\n${formattedOptions}\n` : ''}
+Designated Correct Answer: ${correctAnswer}
+Student's Answer: ${studentAnswer}`
       }
     ];
 
-    let explanation = await this.callDigitalOceanApi(messages, 800);
+    let rawExplanation = await this.callDigitalOceanApi(messages, 800);
     await this.deductCredit(user);
 
-    // Check for vetted errors
-    if (questionId && explanation.includes('```json')) {
-      try {
-        const jsonMatch = explanation.match(/```json\n([\s\S]*?)\n```/);
-        if (jsonMatch && jsonMatch[1]) {
-          const parsed = JSON.parse(jsonMatch[1]);
-          if (parsed.vettedError && parsed.trueCorrectOptionText) {
-            this.logger.warn(`AI vetted an error in Question ${questionId}. System said ${correctAnswer}, AI says ${parsed.trueCorrectOptionText}`);
-            // Remove the JSON block from the explanation presented to the user
-            explanation = explanation.replace(/```json\n[\s\S]*?\n```/, '').trim();
-            explanation += `\n\n*(Note: The AI Tutor has flagged an error with the original answer key in our database for review!)*`;
-          }
-        }
-      } catch (e) {
-        this.logger.error('Failed to parse vetting JSON', e);
-      }
-    }
+    // Sanitize output to strip any stray JSON or meta-reflections
+    let explanation = rawExplanation
+      .replace(/```json[\s\S]*?```/gi, '')
+      .replace(/```[\s\S]*?```/gi, (match: string) => match.includes('{') && match.includes('}') ? '' : match)
+      .replace(/\{[\s\S]*?"vettedError"[\s\S]*?\}/gi, '')
+      .replace(/^To evaluate the system's.*?\n/gim, '')
+      .replace(/^Based on factual knowledge,.*?\n/gim, '')
+      .replace(/^Since the system's "Correct Answer" is actually wrong.*?/gim, '')
+      .trim();
 
     return { explanation, remaining: user.ai_messages_remaining };
   }

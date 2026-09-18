@@ -411,6 +411,7 @@ export default function ResultReview() {
                     questionText={q.question_text}
                     correctAnswer={q.options.find((o: any) => o.id === q.correct_option)?.text || q.correct_option}
                     studentAnswer={q.options.find((o: any) => o.id === userChoice)?.text || 'Unanswered'}
+                    options={q.options}
                   />
                   {!isUserCorrect && !isSkipped ? (
                     <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 p-3">

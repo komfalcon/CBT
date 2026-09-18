@@ -11,14 +11,15 @@ export class AiController {
   @Post('explain')
   async explainQuestion(
     @Request() req: any,
-    @Body() body: { questionId?: string; questionText: string; correctAnswer: string; studentAnswer: string }
+    @Body() body: { questionId?: string; questionText: string; correctAnswer: string; studentAnswer: string; options?: Array<{ id: string; text: string }> | string }
   ) {
     return this.aiService.generateExplanation(
       req.user.sub,
       body.questionText,
       body.correctAnswer,
       body.studentAnswer,
-      body.questionId
+      body.questionId,
+      body.options
     );
   }
 

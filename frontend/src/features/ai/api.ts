@@ -5,7 +5,7 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export const explainQuestion = async (data: { questionId: string; questionText: string; correctAnswer: string; studentAnswer: string }) => {
+export const explainQuestion = async (data: { questionId: string; questionText: string; correctAnswer: string; studentAnswer: string; options?: Array<{ id: string; text: string }> }) => {
   const res = await api.post('/explain', data);
   return res.data;
 };
