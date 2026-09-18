@@ -82,23 +82,27 @@ export class AiService {
       const userMsg = messages.filter((m) => m.role !== 'system').map((m) => `${m.role}: ${m.content}`).join('\n');
       const prompt = systemMsg ? `${systemMsg}\n\n${userMsg}` : userMsg;
 
+      const geminiModels = ['gemini-3.6-flash', 'gemini-3.5-flash-lite', 'gemini-2.5-flash'];
+
       for (const key of keys) {
-        try {
-          const res = await axios.post(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`,
-            {
-              contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: { maxOutputTokens: maxTokens, temperature: 0.3 },
-            },
-            { headers: { 'Content-Type': 'application/json', 'X-goog-api-key': key }, timeout: 15000 }
-          );
-          const text = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) {
-            this.logger.log('AI response generated successfully via Google Gemini.');
-            return text;
+        for (const gModel of geminiModels) {
+          try {
+            const res = await axios.post(
+              `https://generativelanguage.googleapis.com/v1beta/models/${gModel}:generateContent?key=${key}`,
+              {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { maxOutputTokens: maxTokens, temperature: 0.3 },
+              },
+              { headers: { 'Content-Type': 'application/json', 'X-goog-api-key': key }, timeout: 15000 }
+            );
+            const text = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+              this.logger.log(`AI response generated successfully via Google Gemini (${gModel}).`);
+              return text;
+            }
+          } catch (gErr: any) {
+            this.logger.warn(`Direct Gemini call (${gModel}) failed: ${gErr.message}`);
           }
-        } catch (gErr: any) {
-          this.logger.warn(`Direct Gemini call failed: ${gErr.message}`);
         }
       }
     }
