@@ -73,6 +73,36 @@ export class AiService {
       }
     }
 
+    // Direct Gemini 1 & 2 Fallback (Free Tier: 3,000 requests/day)
+    const geminiKey1 = process.env.GEMINI_API_KEY_1;
+    const geminiKey2 = process.env.GEMINI_API_KEY_2;
+    if (geminiKey1 || geminiKey2) {
+      const keys = [geminiKey1, geminiKey2].filter(Boolean) as string[];
+      const systemMsg = messages.find((m) => m.role === 'system')?.content || '';
+      const userMsg = messages.filter((m) => m.role !== 'system').map((m) => `${m.role}: ${m.content}`).join('\n');
+      const prompt = systemMsg ? `${systemMsg}\n\n${userMsg}` : userMsg;
+
+      for (const key of keys) {
+        try {
+          const res = await axios.post(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`,
+            {
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { maxOutputTokens: maxTokens, temperature: 0.3 },
+            },
+            { headers: { 'Content-Type': 'application/json', 'X-goog-api-key': key }, timeout: 15000 }
+          );
+          const text = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) {
+            this.logger.log('AI response generated successfully via Google Gemini.');
+            return text;
+          }
+        } catch (gErr: any) {
+          this.logger.warn(`Direct Gemini call failed: ${gErr.message}`);
+        }
+      }
+    }
+
     try {
       const response = await axios.post(
         this.apiUrl,
@@ -102,7 +132,7 @@ export class AiService {
         
         let lastError: any = error;
         for (const fallbackModel of fallbackModels) {
-          if (fallbackModel === this.model) continue; // Skip the one that just failed
+          if (fallbackModel === this.model) continue;
           
           try {
             this.logger.log(`Attempting fallback with model: ${fallbackModel}`);
@@ -112,17 +142,14 @@ export class AiService {
               { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.apiKey}` } }
             );
             
-            // It worked! Save this as the new default model to avoid failing next time
             this.model = fallbackModel;
             return retryResponse.data.choices[0].message.content;
           } catch (retryError: any) {
             this.logger.warn(`Fallback model ${fallbackModel} failed: ${retryError.message}`);
             lastError = retryError;
-            // Continue loop to try the next model
           }
         }
         
-        // If we get here, all fallbacks failed
         const isRetryRateLimit = lastError?.response?.status === 429 || lastError?.response?.data?.error?.message?.includes('rate limit');
         if (isRetryRateLimit) {
           throw new InternalServerErrorException('AI Tutor is currently busy. Please wait a minute and try again (Rate Limit Exceeded).');
