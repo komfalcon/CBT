@@ -74,8 +74,8 @@ export class AiService {
     }
 
     // Direct Gemini 1 & 2 Fallback (Free Tier: 3,000 requests/day)
-    const geminiKey1 = process.env.GEMINI_API_KEY_1;
-    const geminiKey2 = process.env.GEMINI_API_KEY_2;
+    const geminiKey1 = process.env.GEMINI_API_KEY_1 || 'AQ.Ab8RN6KaILZnCw0I6ca6EfWXiwQfSdIbmplY3IJ-ex1VMdCH1A';
+    const geminiKey2 = process.env.GEMINI_API_KEY_2 || 'AQ.Ab8RN6LxqOPX48mtE0Gl3eVHQcETwa40YkjFWrRbYWjCCTntzQ';
     if (geminiKey1 || geminiKey2) {
       const keys = [geminiKey1, geminiKey2].filter(Boolean) as string[];
       const systemMsg = messages.find((m) => m.role === 'system')?.content || '';
@@ -109,8 +109,8 @@ export class AiService {
 
     // Direct Cloudflare Workers AI 1 & 2 Fallback (Free Tier: 10,000 requests/day)
     const cfAccountId = process.env.CF_ACCOUNT_ID || 'b2f877a02937ca06f9b1ac585f4c6d61';
-    const cfToken1 = process.env.CF_API_TOKEN_1;
-    const cfToken2 = process.env.CF_API_TOKEN_2;
+    const cfToken1 = process.env.CF_API_TOKEN_1 || 'cfut_S22A6XT7DqP5GcdHjgoMGD1TUcidPitwerG8VwqWc7485fe3';
+    const cfToken2 = process.env.CF_API_TOKEN_2 || 'cfut_wfB2szcPwaxjveSAtBxmREVme71v5jSPysWvUHrnbeb6721f';
 
     if (cfAccountId && (cfToken1 || cfToken2)) {
       const tokens = [cfToken1, cfToken2].filter(Boolean) as string[];
@@ -140,7 +140,7 @@ export class AiService {
     }
 
     // Direct xAI Grok Fallback
-    const grokKey1 = process.env.GROK_API_KEY_1;
+    const grokKey1 = process.env.GROK_API_KEY_1 || 'xai-8eUbxmp4msUDjM8RtSCx9FEyBY6Y7BvFdhz38ap8ikQ8wHhqdHNXzkAfWkQJzEdFzUpZvpDV6zlCaXMg';
     const grokKey2 = process.env.GROK_API_KEY_2;
     if (grokKey1 || grokKey2) {
       const gKeys = [grokKey1, grokKey2].filter(Boolean) as string[];
