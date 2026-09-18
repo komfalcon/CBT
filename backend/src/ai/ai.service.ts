@@ -103,6 +103,38 @@ export class AiService {
       }
     }
 
+    // Direct Cloudflare Workers AI 1 & 2 Fallback (Free Tier: 10,000 requests/day)
+    const cfAccountId = process.env.CF_ACCOUNT_ID || 'b2f877a02937ca06f9b1ac585f4c6d61';
+    const cfToken1 = process.env.CF_API_TOKEN_1;
+    const cfToken2 = process.env.CF_API_TOKEN_2;
+
+    if (cfAccountId && (cfToken1 || cfToken2)) {
+      const tokens = [cfToken1, cfToken2].filter(Boolean) as string[];
+      const systemMsg = messages.find((m) => m.role === 'system')?.content || '';
+      const userMsg = messages.filter((m) => m.role !== 'system').map((m) => `${m.role}: ${m.content}`).join('\n');
+      const prompt = systemMsg ? `${systemMsg}\n\n${userMsg}` : userMsg;
+      const cfModels = ['@cf/meta/llama-3.1-8b-instruct', '@cf/meta/llama-3-8b-instruct', '@cf/mistral/mistral-7b-instruct-v0.1'];
+
+      for (const token of tokens) {
+        for (const cfModel of cfModels) {
+          try {
+            const cfRes = await axios.post(
+              `https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/ai/run/${cfModel}`,
+              { messages: [{ role: 'user', content: prompt }], max_tokens: maxTokens },
+              { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, timeout: 15000 }
+            );
+            const text = cfRes.data?.result?.response || cfRes.data?.result?.description;
+            if (text) {
+              this.logger.log(`AI response generated successfully via Cloudflare Workers AI (${cfModel}).`);
+              return text;
+            }
+          } catch (cfErr: any) {
+            this.logger.warn(`Direct Cloudflare Workers AI call (${cfModel}) failed: ${cfErr.message}`);
+          }
+        }
+      }
+    }
+
     try {
       const response = await axios.post(
         this.apiUrl,
