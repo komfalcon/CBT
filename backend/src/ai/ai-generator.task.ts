@@ -27,7 +27,7 @@ export class AiGeneratorTask {
    *
    * Round-robin means all 17 subjects get covered every ~8.5 hours.
    */
-  @Cron('0 */30 * * * *') // Every 30 minutes
+  // @Cron('0 */30 * * * *') // DISABLED — uncomment to re-enable background question generation
   async handleQuestionGeneration() {
     if (this.isGenerating) {
       this.logger.warn('Question generation already in progress, skipping this tick.');
