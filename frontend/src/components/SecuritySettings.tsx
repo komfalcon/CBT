@@ -6,9 +6,11 @@ interface SecuritySettingsProps {
   token: string;
   mfaEnabled: boolean;
   onUpdate: () => void;
+  externalOpenTrigger?: number;
+  hideCard?: boolean;
 }
 
-export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettingsProps) {
+export function SecuritySettings({ token, mfaEnabled, onUpdate, externalOpenTrigger, hideCard }: SecuritySettingsProps) {
   const { addToast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [isDisabling, setIsDisabling] = useState(false);
@@ -18,6 +20,16 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
   const [secret, setSecret] = useState('');
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  React.useEffect(() => {
+    if (externalOpenTrigger && externalOpenTrigger > 0) {
+      if (mfaEnabled) {
+        setIsDisabling(true);
+      } else {
+        handleEnableStart();
+      }
+    }
+  }, [externalOpenTrigger]);
 
   const handleEnableStart = async () => {
     setIsLoading(true);
@@ -99,38 +111,8 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
     }
   };
 
-  return (
-    <Card className="col-span-1 border border-border bg-bg-secondary p-5 shadow-sm relative overflow-hidden group">
-      <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full blur-xl group-hover:bg-primary/10 transition-colors" />
-      <div className="space-y-4 relative">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-2">
-            <div className="rounded-lg bg-primary/10 p-2 text-primary border border-primary/20">
-              <Shield className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="text-sm font-bold text-text-primary">Two-Factor Authentication (2FA)</h3>
-              <p className="text-xs text-text-muted mt-0.5">Secure your account with an Authenticator App.</p>
-            </div>
-          </div>
-          <div className={`px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider ${mfaEnabled ? 'bg-success/10 text-success border border-success/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
-            {mfaEnabled ? 'Enabled' : 'Disabled'}
-          </div>
-        </div>
-
-        <div className="pt-2">
-          {mfaEnabled ? (
-            <Button variant="secondary" size="sm" onClick={() => setIsDisabling(true)} fullWidth>
-              Disable 2FA
-            </Button>
-          ) : (
-            <Button variant="gradient" size="sm" onClick={handleEnableStart} fullWidth disabled={isLoading}>
-              {isLoading ? 'Loading...' : 'Set Up 2FA Now'}
-            </Button>
-          )}
-        </div>
-      </div>
-
+  const modals = (
+    <>
       {/* Enable MFA Modal */}
       <Modal isOpen={isOpen} onClose={() => { setIsOpen(false); setOtp(''); }} title="Set Up Two-Factor Authentication" maxWidth="md">
         <div className="space-y-6">
@@ -196,6 +178,46 @@ export function SecuritySettings({ token, mfaEnabled, onUpdate }: SecuritySettin
           </Button>
         </div>
       </Modal>
+    </>
+  );
+
+  if (hideCard) {
+    return modals;
+  }
+
+  return (
+    <Card className="col-span-1 border border-border bg-bg-secondary p-5 shadow-sm relative overflow-hidden group">
+      <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full blur-xl group-hover:bg-primary/10 transition-colors" />
+      <div className="space-y-4 relative">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2">
+            <div className="rounded-lg bg-primary/10 p-2 text-primary border border-primary/20">
+              <Shield className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-text-primary">Two-Factor Authentication (2FA)</h3>
+              <p className="text-xs text-text-muted mt-0.5">Secure your account with an Authenticator App.</p>
+            </div>
+          </div>
+          <div className={`px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider ${mfaEnabled ? 'bg-success/10 text-success border border-success/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+            {mfaEnabled ? 'Enabled' : 'Disabled'}
+          </div>
+        </div>
+
+        <div className="pt-2">
+          {mfaEnabled ? (
+            <Button variant="secondary" size="sm" onClick={() => setIsDisabling(true)} fullWidth>
+              Disable 2FA
+            </Button>
+          ) : (
+            <Button variant="gradient" size="sm" onClick={handleEnableStart} fullWidth disabled={isLoading}>
+              {isLoading ? 'Loading...' : 'Set Up 2FA Now'}
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {modals}
     </Card>
   );
 }

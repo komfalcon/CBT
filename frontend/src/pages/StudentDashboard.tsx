@@ -29,6 +29,7 @@ import {
   Menu,
   Play,
   ShieldCheck,
+  Shield,
   Sparkles,
   Target,
   TrendingUp,
@@ -111,6 +112,8 @@ export default function StudentDashboard() {
   const [paymentError, setPaymentError] = useState('');
   const [paymentSuccess, setPaymentSuccess] = useState('');
   const [mobileActionsOpen, setMobileActionsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'overview' | 'practice' | 'analytics'>('overview');
+  const [securityModalTrigger, setSecurityModalTrigger] = useState(0);
 
   const combination = student?.exam_subject_combination || [];
   const isCombinationValid = combination.length === 4 && combination.includes('english');
@@ -398,42 +401,188 @@ export default function StudentDashboard() {
               <button
                 type="button"
                 className="min-h-11 min-w-11 rounded-xl border border-border bg-bg-secondary p-2 text-text-secondary transition-colors hover:border-border-hover hover:text-text-primary"
-                onClick={() => setMobileActionsOpen((open) => !open)}
-                aria-label="Toggle workspace actions"
+                onClick={() => setMobileActionsOpen(true)}
+                aria-label="Open workspace menu"
                 aria-expanded={mobileActionsOpen}
               >
-                {mobileActionsOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                <Menu className="h-4 w-4" />
               </button>
-              {mobileActionsOpen && (
-                <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-[min(calc(100vw-2rem),18rem)] rounded-2xl border border-border bg-bg-card p-2 shadow-2xl shadow-black/30 lg:hidden">
-                  <p className="px-3 pb-2 pt-1 text-xs font-bold uppercase tracking-[0.14em] text-text-muted">Workspace navigation</p>
-                  <nav className="grid gap-1" aria-label="Mobile workspace navigation">
-                    <button onClick={() => { setMobileActionsOpen(false); navigate('/exam-hub'); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
-                      <Target className="h-4 w-4" /> Exam Hub
-                    </button>
-                    <button onClick={() => { setMobileActionsOpen(false); navigate('/leaderboard'); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
-                      <Award className="h-4 w-4" /> Leaderboard
-                    </button>
-                    {/* Aurikrex E-Library button hidden - v2 feature */}
-                    <button onClick={() => { setMobileActionsOpen(false); handleLogout(); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
-                      <LogOut className="h-4 w-4" /> Log out
-                    </button>
-                  </nav>
-                </div>
-              )}
             </div>
           </div>
         </header>
 
-        <main className="mx-auto max-w-[1440px] px-6 py-8 xl:px-8 xl:py-10">
-          <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-info">Study dashboard</p>
-              <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-text-primary">Welcome back, {student?.fullName?.split(' ')[0] || 'Student'}.</h1>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-text-secondary">Choose a focused practice plan, keep an eye on your progress, and prepare with confidence.</p>
+        {/* Mobile Slide-Over Drawer with all tools & navigation */}
+        {mobileActionsOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            <div
+              className="fixed inset-0 bg-overlay/80 backdrop-blur-sm transition-opacity"
+              onClick={() => setMobileActionsOpen(false)}
+              aria-hidden="true"
+            />
+            <div className="fixed inset-y-0 right-0 z-50 flex w-[min(calc(100vw-1.5rem),22rem)] flex-col border-l border-border bg-bg-card p-5 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-200">
+              {/* Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-border">
+                <div className="flex items-center gap-2.5">
+                  <img src="/favicon.svg" alt="" className="h-7 w-7 rounded-lg object-cover" />
+                  <span className="font-display text-sm font-bold text-text-primary">Aurikrex CBT</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMobileActionsOpen(false)}
+                  className="rounded-lg p-1.5 text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
+                  aria-label="Close menu"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {/* Candidate Profile Summary */}
+              <div className="py-4 border-b border-border">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-sm font-black text-text-on-accent">
+                    {initials}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-bold text-text-primary">{student?.fullName}</p>
+                    <p className="truncate text-xs text-text-secondary">{student?.email}</p>
+                  </div>
+                </div>
+                <div className="mt-3 grid grid-cols-3 gap-2 rounded-xl bg-bg-secondary/70 p-2 text-center text-xs">
+                  <div>
+                    <span className="text-[10px] uppercase text-text-muted font-bold">Level</span>
+                    <p className="font-black text-text-primary">{student?.level || 1}</p>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase text-text-muted font-bold">XP</span>
+                    <p className="font-black text-text-primary">{student?.xp_points || 0}</p>
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase text-text-muted font-bold">Streak</span>
+                    <p className="font-black text-streak flex items-center justify-center gap-0.5"><Flame className="h-3 w-3" />{student?.streak_count || 0}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Navigation Tabs */}
+              <div className="py-3 border-b border-border space-y-1">
+                <p className="px-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-text-muted">Views</p>
+                <button
+                  onClick={() => { setActiveTab('overview'); setMobileActionsOpen(false); }}
+                  className={classNames(
+                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-colors",
+                    activeTab === 'overview' ? "bg-primary text-text-on-accent" : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
+                  )}
+                >
+                  <Brain className="h-4 w-4" /> Dashboard Overview
+                </button>
+                <button
+                  onClick={() => { setActiveTab('practice'); setMobileActionsOpen(false); }}
+                  className={classNames(
+                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-colors",
+                    activeTab === 'practice' ? "bg-primary text-text-on-accent" : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
+                  )}
+                >
+                  <Target className="h-4 w-4" /> Practice (Mock & Drills)
+                </button>
+                <button
+                  onClick={() => { setActiveTab('analytics'); setMobileActionsOpen(false); }}
+                  className={classNames(
+                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-colors",
+                    activeTab === 'analytics' ? "bg-primary text-text-on-accent" : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
+                  )}
+                >
+                  <BarChart3 className="h-4 w-4" /> My Analytics
+                </button>
+                <button
+                  onClick={() => { setMobileActionsOpen(false); navigate('/exam-hub'); }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
+                >
+                  <Target className="h-4 w-4" /> Exam Hub
+                </button>
+                <button
+                  onClick={() => { setMobileActionsOpen(false); navigate('/leaderboard'); }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
+                >
+                  <Award className="h-4 w-4" /> Leaderboard
+                </button>
+              </div>
+
+              {/* Quick Tools */}
+              <div className="py-3 border-b border-border space-y-1">
+                <p className="px-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-text-muted">Tools & Actions</p>
+                <button
+                  onClick={() => { setMobileActionsOpen(false); openDrill(); }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
+                >
+                  <Zap className="h-4 w-4 text-primary" /> Start Subject Drill
+                </button>
+                <button
+                  onClick={() => { setMobileActionsOpen(false); navigate('/mock-setup'); }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
+                >
+                  <Play className="h-4 w-4 text-primary" /> Start Mock Exam
+                </button>
+                <button
+                  onClick={() => { setMobileActionsOpen(false); setSecurityModalTrigger((prev) => prev + 1); }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
+                >
+                  <Shield className="h-4 w-4 text-success" /> Two-Factor Auth (2FA)
+                </button>
+                <button
+                  onClick={() => { handleCopyKey(); }}
+                  className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
+                >
+                  <span className="flex items-center gap-3"><KeyRound className="h-4 w-4 text-info" /> Copy CBT Access Key</span>
+                  <span className="text-[10px] font-mono bg-bg-secondary px-1.5 py-0.5 rounded border border-border">{copied ? 'Copied!' : 'Copy'}</span>
+                </button>
+                <button
+                  onClick={() => { setMobileActionsOpen(false); setIsEditModalOpen(true); }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
+                >
+                  <Grid3X3 className="h-4 w-4 text-primary" /> Change Subject Combo
+                </button>
+                <button
+                  onClick={async () => {
+                    setMobileActionsOpen(false);
+                    try {
+                      await OneSignal.Slidedown.promptPush();
+                      addToast({ type: 'info', title: 'Notifications', message: 'Notification prompt triggered.' });
+                    } catch {
+                      addToast({ type: 'info', title: 'Push Notifications', message: 'Notifications configured.' });
+                    }
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
+                >
+                  <Bell className="h-4 w-4 text-warning" /> Study Reminders
+                </button>
+                <button
+                  onClick={() => { setMobileActionsOpen(false); setShowUpgradeModal(true); }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
+                >
+                  <CreditCard className="h-4 w-4 text-streak" /> Subscription Plans
+                </button>
+              </div>
+
+              {/* Footer Actions */}
+              <div className="mt-auto pt-4 flex items-center justify-between">
+                <ThemeToggle />
+                <Button onClick={handleLogout} variant="ghost" size="sm">
+                  <LogOut className="h-4 w-4" /> Log out
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center gap-2 rounded-xl border border-border bg-bg-secondary/70 px-3 py-2 text-xs text-text-secondary shadow-sm">
-              <CircleDashed className="h-4 w-4 text-info" aria-hidden="true" />
+          </div>
+        )}
+
+        <main className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 sm:py-8 xl:px-8 xl:py-10">
+          <div className="mb-6 sm:mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.16em] text-info">Study dashboard</p>
+              <h1 className="mt-1.5 font-display text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-text-primary">Welcome back, {student?.fullName?.split(' ')[0] || 'Student'}.</h1>
+              <p className="mt-1 max-w-2xl text-xs sm:text-sm leading-5 sm:leading-6 text-text-secondary">Choose a focused practice plan, keep an eye on your progress, and prepare with confidence.</p>
+            </div>
+            <div className="flex items-center gap-2 rounded-xl border border-border bg-bg-secondary/70 px-3 py-1.5 text-xs text-text-secondary shadow-sm self-start sm:self-auto">
+              <CircleDashed className="h-3.5 w-3.5 text-info" aria-hidden="true" />
               <span>{resultsList.length ? `${resultsList.length} practice session${resultsList.length === 1 ? '' : 's'} recorded` : 'Your progress begins with one practice session'}</span>
             </div>
           </div>
@@ -441,16 +590,59 @@ export default function StudentDashboard() {
           {error && <Alert variant="error" className="mb-6 flex items-center gap-2"><CircleAlert className="h-4 w-4" />{error}</Alert>}
           {message && <Alert variant="info" className="mb-6 flex items-center gap-2">{message}</Alert>}
           {!isCombinationValid && (
-            <Alert variant="warning" title="Set your subject combination to unlock practice" className="mb-6 p-5">
+            <Alert variant="warning" title="Set your subject combination to unlock practice" className="mb-6 p-4 sm:p-5">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="max-w-2xl text-sm leading-6">Use of English plus three electives matching your university course are required before you can start a mock or drill.</p>
+                <p className="max-w-2xl text-xs sm:text-sm leading-5 sm:leading-6">Use of English plus three electives matching your university course are required before you can start a mock or drill.</p>
                 <Button onClick={() => setIsEditModalOpen(true)} size="sm" className="shrink-0">Set combination</Button>
               </div>
             </Alert>
           )}
 
+          {/* Tab Selector Switcher */}
+          <div className="mb-6 flex items-center gap-1.5 p-1 rounded-2xl bg-bg-secondary/80 border border-border max-w-md w-full shadow-sm">
+            <button
+              type="button"
+              onClick={() => setActiveTab('overview')}
+              className={classNames(
+                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 px-2 rounded-xl text-xs sm:text-[13px] font-bold transition-all",
+                activeTab === 'overview'
+                  ? "bg-primary text-text-on-accent shadow-md shadow-primary/25"
+                  : "text-text-secondary hover:text-text-primary hover:bg-bg-card/50"
+              )}
+            >
+              <Brain className="h-3.5 w-3.5" />
+              <span>Overview</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('practice')}
+              className={classNames(
+                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 px-2 rounded-xl text-xs sm:text-[13px] font-bold transition-all",
+                activeTab === 'practice'
+                  ? "bg-primary text-text-on-accent shadow-md shadow-primary/25"
+                  : "text-text-secondary hover:text-text-primary hover:bg-bg-card/50"
+              )}
+            >
+              <Target className="h-3.5 w-3.5" />
+              <span>Practice</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('analytics')}
+              className={classNames(
+                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 px-2 rounded-xl text-xs sm:text-[13px] font-bold transition-all",
+                activeTab === 'analytics'
+                  ? "bg-primary text-text-on-accent shadow-md shadow-primary/25"
+                  : "text-text-secondary hover:text-text-primary hover:bg-bg-card/50"
+              )}
+            >
+              <BarChart3 className="h-3.5 w-3.5" />
+              <span>My Analytics</span>
+            </button>
+          </div>
+
           <div className="grid min-w-0 items-start gap-8 xl:grid-cols-[340px,minmax(0,1fr)]">
-            <aside className="min-w-0 space-y-4 xl:sticky xl:top-24">
+            <aside className="hidden xl:block min-w-0 space-y-4 xl:sticky xl:top-24">
               <SectionKicker label="Account" detail="Your profile and secure access" />
               <Card className="overflow-hidden border-border bg-bg-card p-0 shadow-[0_16px_36px_rgba(0,0,0,0.16)]">
                 <div className="border-b border-border bg-[linear-gradient(145deg,rgba(91,114,255,0.16),rgba(17,29,52,0)_70%)] p-5">
@@ -564,166 +756,333 @@ export default function StudentDashboard() {
                 </div>
               </Card>
 
-              <SecuritySettings token="" mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory()} />
+              <SecuritySettings token="" mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory()} externalOpenTrigger={securityModalTrigger} />
             </aside>
 
+            {/* Hidden mobile anchor for SecuritySettings so 2FA modals mount cleanly when triggered on mobile */}
+            <div className="xl:hidden">
+              <SecuritySettings token="" mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory()} externalOpenTrigger={securityModalTrigger} hideCard={true} />
+            </div>
+
             <div className="min-w-0 space-y-8">
-              <section className="relative overflow-hidden rounded-3xl border border-primary/25 bg-bg-card p-6 shadow-xl shadow-primary/5 xl:p-7">
-                <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-                <div className="pointer-events-none absolute bottom-0 right-12 h-28 w-28 rounded-full border border-info/20" />
-                <div className="relative flex flex-col justify-between gap-7 lg:flex-row lg:items-center">
-                  <div className="max-w-xl">
-                    <div className="flex items-center gap-2 text-xs sm:text-[11px] font-bold uppercase tracking-[0.16em] text-info">
-                      <TrendingUp className="h-4 w-4" /> Preparation outlook
-                    </div>
-                    <h2 className="mt-3 font-display text-2xl font-bold tracking-tight text-text-primary">
-                      Build readiness one focused session at a time.
-                    </h2>
-                    <p className="mt-2 text-sm leading-6 text-text-secondary">
-                      {nextWeakTopic ? `Your next opportunity is ${nextWeakTopic.topic}. A short, targeted drill can turn a weak area into a confident one.` : 'Complete a practice session to reveal a personalized readiness signal and your next area of focus.'}
-                    </p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      <span className="rounded-full border border-info/25 bg-info/10 px-3 py-1.5 text-xs font-medium text-info">
-                        {nextWeakTopic ? `Focus: ${nextWeakTopic.topic}` : 'Focus: establish a baseline'}
-                      </span>
-                      <span className="rounded-full border border-border bg-bg-secondary/70 px-3 py-1.5 text-xs text-text-secondary">
-                        Target UTME score: 300+
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-5 rounded-2xl border border-border bg-bg-secondary/70 p-4 backdrop-blur-sm shadow-sm">
-                    <div className="text-right">
-                      <p className="text-xs sm:text-[10px] font-bold uppercase tracking-[0.15em] text-text-muted">Readiness</p>
-                      <p className="mt-1 font-display text-3xl font-black text-text-primary">
-                        {readinessScore}<span className="text-base font-semibold text-text-muted">/100</span>
-                      </p>
-                    </div>
-                    <Button onClick={() => openDrill()} disabled={!isCombinationValid} className="whitespace-nowrap">
-                      <Zap className="h-4 w-4" /> Start a drill
-                    </Button>
-                  </div>
-                </div>
-              </section>
-
-              <section className="space-y-4">
-                <SectionKicker label="Practice" detail="Choose the type of preparation that fits your next study block" />
-                <div className="grid gap-4 lg:grid-cols-2">
-                  <Card hoverable className="mock-exam-card relative overflow-hidden border-primary/30 p-6 shadow-[0_14px_30px_rgba(0,0,0,0.16)]">
-                    <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-primary/20 blur-2xl" />
-                    <div className="relative flex h-full flex-col">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/35 bg-primary/15 text-primary"><Play className="h-5 w-5" /></div>
-                      <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-primary">Full simulation</p>
-                      <h3 className="mt-2 font-display text-xl font-bold text-text-primary">Mock exam</h3>
-                      <p className="mt-2 max-w-md text-sm leading-6 text-text-secondary">A realistic 180-question exam with the timing and structure of the UTME experience.</p>
-                      <div className="mt-6"><Button onClick={() => navigate('/mock-setup')} disabled={!isCombinationValid} className="w-full lg:w-auto"><Play className="h-4 w-4" />Start mock exam</Button></div>
-                    </div>
-                  </Card>
-                  <Card hoverable className="border-border bg-bg-card p-6 shadow-[0_14px_30px_rgba(0,0,0,0.12)]">
-                    <div className="flex h-full flex-col">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-info/25 bg-info/10 text-info"><Target className="h-5 w-5" /></div>
-                      <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-info">Targeted practice</p>
-                      <h3 className="mt-2 font-display text-xl font-bold text-text-primary">Subject drill</h3>
-                      <p className="mt-2 max-w-md text-sm leading-6 text-text-secondary">Choose a subject, topic, question count, and difficulty to practice with immediate feedback.</p>
-                      <div className="mt-6"><Button onClick={() => openDrill()} disabled={!isCombinationValid} variant="secondary" className="w-full lg:w-auto"><Target className="h-4 w-4" />Configure drill</Button></div>
-                    </div>
-                  </Card>
-                </div>
-              </section>
-
-              <section className="space-y-4">
-                <SectionKicker label="Exam setup" detail="The subjects that shape your personalized mock and drill experience" />
-                <Card className="border-border p-5 shadow-sm">
-                  <div className="mb-4 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary"><Grid3X3 className="h-4 w-4" /></div>
-                      <div><h2 className="text-sm font-bold text-text-primary">Your subject combination</h2><p className="mt-0.5 text-xs text-text-secondary">Use of English plus three electives</p></div>
-                    </div>
-                    <Button onClick={() => setIsEditModalOpen(true)} variant="ghost" size="sm">{isCombinationValid ? 'Edit' : 'Set up'}<ChevronRight className="h-3.5 w-3.5" /></Button>
-                  </div>
-                  {isCombinationValid ? (
-                    <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-                      {combination.map((subject: string) => (
-                        <div key={subject} className="flex items-center gap-3 rounded-xl border border-border bg-bg-secondary/65 px-3 py-3">
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-xs sm:text-[10px] font-black text-primary">{subject.slice(0, 3).toUpperCase()}</div>
-                          <p className="min-w-0 truncate text-xs font-semibold text-text-primary" title={getSubjectLabel(subject)}>{getSubjectLabel(subject)}</p>
+              {/* TAB 1: OVERVIEW */}
+              {activeTab === 'overview' && (
+                <div className="space-y-8 animate-fade-in">
+                  {/* AI Preparation Outlook Hero Card (Preserved as requested) */}
+                  <section className="relative overflow-hidden rounded-3xl border border-primary/25 bg-bg-card p-5 sm:p-6 lg:p-7 shadow-xl shadow-primary/5">
+                    <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+                    <div className="pointer-events-none absolute bottom-0 right-12 h-28 w-28 rounded-full border border-info/20" />
+                    <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+                      <div className="max-w-xl">
+                        <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] text-info">
+                          <TrendingUp className="h-3.5 w-3.5" /> Preparation outlook
                         </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <EmptyPanel icon={Grid3X3} title="Your practice plan needs four subjects" detail="Set up Use of English and three electives to unlock mock exams and custom drills." action={() => setIsEditModalOpen(true)} actionLabel="Set combination" />
-                  )}
-                </Card>
-              </section>
-
-              <section className="space-y-4">
-                <SectionKicker label="Performance" detail="A concise view of your readiness, recent work, and subject-level progress" />
-                <div className="grid gap-4 xl:grid-cols-[1.12fr,0.88fr]">
-                  <Card className="border-border p-6 shadow-[0_14px_30px_rgba(0,0,0,0.12)]">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl border border-info/25 bg-info/10 text-info"><LineChart className="h-4 w-4" /></div><div><h2 className="text-sm font-bold text-text-primary">Performance overview</h2><p className="mt-0.5 text-xs text-text-secondary">Your session trend and readiness signal</p></div></div>
-                      <span className="rounded-full bg-info/10 px-2.5 py-1 text-xs sm:text-[10px] font-bold uppercase tracking-[0.12em] text-info">{resultsList.length ? 'Live data' : 'Baseline'}</span>
-                    </div>
-                    <div className="mt-6 grid min-w-0 items-center gap-5 sm:grid-cols-[112px,minmax(0,1fr)]">
-                      <div className="relative mx-auto flex h-28 w-28 items-center justify-center rounded-full" style={{ background: `conic-gradient(var(--color-accent-info) ${readinessScore * 3.6}deg, rgba(148, 163, 184, 0.16) 0deg)` }} aria-label={`Readiness score: ${readinessScore} out of 100`} role="img">
-                        <div className="flex h-[92px] w-[92px] flex-col items-center justify-center rounded-full bg-bg-card"><span className="font-display text-2xl font-black text-text-primary">{readinessScore}</span><span className="text-xs sm:text-[10px] font-bold uppercase tracking-wide text-text-muted">ready</span></div>
-                      </div>
-                      <div className="min-w-0">
-                        <div className="mb-3 flex items-center justify-between"><p className="text-xs font-semibold text-text-primary">Session trend</p><p className="text-xs sm:text-[11px] text-text-muted">Last {trendValues.length} sessions</p></div>
-                        <div className="h-20 min-w-0 overflow-hidden rounded-xl border border-border bg-bg-secondary/55 px-2 py-2">
-                          <svg viewBox="0 0 190 72" className="h-full w-full" preserveAspectRatio="none" aria-label="Practice score trend" role="img">
-                            <line x1="8" x2="178" y1="64" y2="64" stroke="currentColor" className="text-text-muted" strokeOpacity="0.22" strokeWidth="1" />
-                            <line x1="8" x2="178" y1="36" y2="36" stroke="currentColor" className="text-text-muted" strokeOpacity="0.12" strokeWidth="1" strokeDasharray="3 4" />
-                            <polyline points={trendPoints} fill="none" stroke="var(--color-accent-info)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={resultsList.length ? undefined : '5 5'} />
-                            {trendValues.map((value, index) => <circle key={`${value}-${index}`} cx={8 + index * 34} cy={64 - Math.min(52, Math.max(0, value) * 0.52)} r="3" fill="var(--color-bg-card)" stroke="var(--color-accent-info)" strokeWidth="2" />)}
-                          </svg>
+                        <h2 className="mt-2.5 font-display text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-text-primary">
+                          Build readiness one focused session at a time.
+                        </h2>
+                        <p className="mt-1.5 text-xs sm:text-sm leading-5 sm:leading-6 text-text-secondary">
+                          {nextWeakTopic ? `Your next opportunity is ${nextWeakTopic.topic}. A short, targeted drill can turn a weak area into a confident one.` : 'Complete a practice session to reveal a personalized readiness signal and your next area of focus.'}
+                        </p>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          <span className="rounded-full border border-info/25 bg-info/10 px-2.5 py-1 text-[11px] font-medium text-info">
+                            {nextWeakTopic ? `Focus: ${nextWeakTopic.topic}` : 'Focus: establish a baseline'}
+                          </span>
+                          <span className="rounded-full border border-border bg-bg-secondary/70 px-2.5 py-1 text-[11px] text-text-secondary">
+                            Target UTME score: 300+
+                          </span>
                         </div>
                       </div>
+                      <div className="flex items-center gap-4 rounded-2xl border border-border bg-bg-secondary/70 p-3.5 sm:p-4 backdrop-blur-sm shadow-sm">
+                        <div className="text-right">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-muted">Readiness</p>
+                          <p className="mt-0.5 font-display text-2xl sm:text-3xl font-black text-text-primary">
+                            {readinessScore}<span className="text-sm font-semibold text-text-muted">/100</span>
+                          </p>
+                        </div>
+                        <Button onClick={() => openDrill()} disabled={!isCombinationValid} size="sm" className="whitespace-nowrap">
+                          <Zap className="h-4 w-4" /> Start a drill
+                        </Button>
+                      </div>
                     </div>
-                    <div className="mt-6 grid grid-cols-1 divide-y divide-border rounded-xl border border-border bg-bg-secondary/45 py-1 text-center xl:grid-cols-3 xl:divide-x xl:divide-y-0 xl:py-3">
-                      <div className="py-2 xl:py-0"><p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Sessions</p><p className="mt-1 text-lg font-black text-text-primary">{resultsList.length}</p></div>
-                      <div className="py-2 xl:py-0"><p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Mock average</p><p className="mt-1 text-lg font-black text-primary">{averageMockScore ?? '—'}</p></div>
-                      <div className="py-2 xl:py-0"><p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Streak</p><p className="mt-1 text-lg font-black text-streak">{student?.streak_count || 0}d</p></div>
-                    </div>
-                    {!resultsList.length && <p className="mt-4 text-center text-xs leading-5 text-text-secondary">Your first completed session will turn this baseline into a personalized trend.</p>}
-                  </Card>
+                  </section>
 
-                  <Card className="border-border p-6 shadow-sm">
-                    <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary"><BarChart3 className="h-4 w-4" /></div><div><h2 className="text-sm font-bold text-text-primary">Subject breakdown</h2><p className="mt-0.5 text-xs text-text-secondary">Accuracy across the topics you have practiced</p></div></div>
-                    {subjectBreakdown.length ? (
-                      <div className="mt-6 space-y-4">
-                        {subjectBreakdown.map((subject) => (
-                          <div key={subject.subject}>
-                            <div className="mb-1.5 flex items-center justify-between gap-3 text-xs"><span className="truncate font-semibold text-text-primary">{getSubjectLabel(subject.subject)}</span><span className={classNames('font-bold tabular-nums', subject.accuracy >= 70 ? 'text-success' : subject.accuracy >= 40 ? 'text-warning' : 'text-error')}>{subject.accuracy}%</span></div>
-                            <div className="h-2 overflow-hidden rounded-full bg-bg-secondary"><div className={classNames('h-full rounded-full transition-[width] duration-500', subject.accuracy >= 70 ? 'bg-success' : subject.accuracy >= 40 ? 'bg-warning' : 'bg-error')} style={{ width: `${subject.accuracy}%` }} /></div>
-                            <p className="mt-1 text-xs sm:text-[11px] text-text-muted">{subject.correct} of {subject.total} correct</p>
+                  {/* Section: Mini Cards representing each tool/section */}
+                  <section className="space-y-4">
+                    <SectionKicker label="Quick Launch & Features" detail="Tap any card to open the complete tool" />
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      {/* Mini Card 1: Practice Arena */}
+                      <Card
+                        hoverable
+                        onClick={() => setActiveTab('practice')}
+                        className="cursor-pointer border-border bg-bg-card p-4 sm:p-5 transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 group"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary group-hover:scale-105 transition-transform">
+                            <Target className="h-4 w-4" />
                           </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <EmptyPanel icon={BarChart3} title="Your subject breakdown will appear here" detail="Complete a drill or mock exam to see the topics that need more attention." action={() => openDrill()} actionLabel="Start a drill" />
-                    )}
-                  </Card>
-                </div>
-              </section>
-
-              <section className="space-y-4 pb-8">
-                <SectionKicker label="Review" detail="Return to a completed practice session when you are ready to learn from it" />
-                <Card className="border-border p-6 shadow-sm">
-                  <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary"><History className="h-4 w-4" /></div><div><h2 className="text-sm font-bold text-text-primary">Recent attempts</h2><p className="mt-0.5 text-xs text-text-secondary">Review answers, scores, and feedback from your latest sessions</p></div></div>
-                  {resultsList.length ? (
-                    <div className="mt-5 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-bg-secondary/35">
-                      {resultsList.slice(0, 5).map((result) => (
-                        <div key={result.resultId || (result as any).id} className="flex flex-col gap-3 px-4 py-3.5 transition-colors hover:bg-bg-secondary sm:flex-row sm:items-center sm:justify-between">
-                          <div className="flex min-w-0 items-center gap-3"><div className={classNames('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border', result.type === 'mock' ? 'border-primary/25 bg-primary/10 text-primary' : 'border-info/25 bg-info/10 text-info')}><Play className="h-4 w-4" /></div><div className="min-w-0"><p className="truncate text-sm font-bold text-text-primary">{result.type === 'mock' ? 'Mock exam' : 'Subject drill'}</p><p className="mt-0.5 text-xs text-text-secondary">{new Date(result.completedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })} · {new Date(result.completedAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</p></div></div>
-                          <div className="flex items-center justify-between gap-4 sm:justify-end"><div className="text-left sm:text-right"><p className="text-sm font-black text-text-primary">{result.type === 'mock' ? result.totalScore : `${result.totalScore}%`}</p><p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">{result.type === 'mock' ? 'score' : 'accuracy'}</p></div><Button onClick={() => navigate(`/results/${result.resultId || (result as any).id}`)} variant="secondary" size="sm">Review</Button></div>
+                          <span className="text-xs font-bold text-primary flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                            Open Practice <ArrowRight className="h-3.5 w-3.5" />
+                          </span>
                         </div>
-                      ))}
+                        <h3 className="mt-3 font-display text-sm sm:text-base font-bold text-text-primary">Practice Arena</h3>
+                        <p className="mt-1 text-xs text-text-secondary leading-5">
+                          Full 180-question mock exams & targeted drills with immediate solutions.
+                        </p>
+                        <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs">
+                          <span className="text-text-muted">{isCombinationValid ? '4 subjects active' : 'Combo required'}</span>
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); navigate('/mock-setup'); }}
+                              className="font-bold text-primary hover:underline"
+                            >
+                              Mock
+                            </button>
+                            <span className="text-border">·</span>
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); openDrill(); }}
+                              className="font-bold text-info hover:underline"
+                            >
+                              Drill
+                            </button>
+                          </div>
+                        </div>
+                      </Card>
+
+                      {/* Mini Card 2: My Analytics */}
+                      <Card
+                        hoverable
+                        onClick={() => setActiveTab('analytics')}
+                        className="cursor-pointer border-border bg-bg-card p-4 sm:p-5 transition-all hover:border-info/40 hover:shadow-lg hover:shadow-info/5 group"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-info/25 bg-info/10 text-info group-hover:scale-105 transition-transform">
+                            <BarChart3 className="h-4 w-4" />
+                          </div>
+                          <span className="text-xs font-bold text-info flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                            Open Analytics <ArrowRight className="h-3.5 w-3.5" />
+                          </span>
+                        </div>
+                        <h3 className="mt-3 font-display text-sm sm:text-base font-bold text-text-primary">My Analytics & Review</h3>
+                        <p className="mt-1 text-xs text-text-secondary leading-5">
+                          Subject breakdown, score trends, and history of completed attempts.
+                        </p>
+                        <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs">
+                          <span className="text-text-muted">{resultsList.length} session{resultsList.length === 1 ? '' : 's'}</span>
+                          <span className="font-semibold text-info">Mock avg: {averageMockScore ?? '—'}</span>
+                        </div>
+                      </Card>
+
+                      {/* Mini Card 3: Subject Combination */}
+                      <Card className="border-border bg-bg-card p-4 sm:p-5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
+                            <Grid3X3 className="h-4 w-4" />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setIsEditModalOpen(true)}
+                            className="text-xs font-bold text-primary hover:underline"
+                          >
+                            Edit combo →
+                          </button>
+                        </div>
+                        <h3 className="mt-3 font-display text-sm sm:text-base font-bold text-text-primary">Subject Combination</h3>
+                        <p className="mt-1 text-xs text-text-secondary leading-5">
+                          4 examination subjects shaping your personalized drills and mocks.
+                        </p>
+                        <div className="mt-4 pt-3 border-t border-border flex flex-wrap gap-1.5">
+                          {combination.length ? combination.map((sub: string) => (
+                            <span key={sub} className="inline-flex items-center px-2 py-0.5 rounded-md bg-bg-secondary text-[11px] font-semibold text-text-primary border border-border">
+                              {getSubjectLabel(sub)}
+                            </span>
+                          )) : (
+                            <span className="text-xs text-warning">None selected yet</span>
+                          )}
+                        </div>
+                      </Card>
+
+                      {/* Mini Card 4: CBT Roaming Key & Security */}
+                      <Card className="border-border bg-bg-card p-4 sm:p-5">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
+                            <KeyRound className="h-4 w-4" />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setSecurityModalTrigger((prev) => prev + 1)}
+                            className="text-xs font-bold text-primary hover:underline"
+                          >
+                            2FA settings →
+                          </button>
+                        </div>
+                        <h3 className="mt-3 font-display text-sm sm:text-base font-bold text-text-primary">CBT Key & 2FA Security</h3>
+                        <p className="mt-1 text-xs text-text-secondary leading-5">
+                          Secure cafe access key and authenticator protection.
+                        </p>
+                        <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs">
+                          <span className="font-mono text-text-primary truncate max-w-[140px] text-xs">
+                            {showAccessKey ? student?.cbt_key || '—' : maskedKey}
+                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => setShowAccessKey(!showAccessKey)}
+                              className="p-1 rounded text-text-secondary hover:text-text-primary hover:bg-bg-secondary"
+                              title={showAccessKey ? 'Hide key' : 'Show key'}
+                            >
+                              {showAccessKey ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleCopyKey}
+                              className="p-1 rounded text-text-secondary hover:text-text-primary hover:bg-bg-secondary"
+                              title="Copy key"
+                            >
+                              {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
+                            </button>
+                          </div>
+                        </div>
+                      </Card>
                     </div>
-                  ) : (
-                    <div className="mt-5"><EmptyPanel icon={History} title="No completed attempts yet" detail="Your completed mocks and drills will be saved here for review." action={() => openDrill()} actionLabel="Start a drill" /></div>
-                  )}
-                </Card>
-              </section>
+                  </section>
+                </div>
+              )}
+
+              {/* TAB 2: PRACTICE */}
+              {activeTab === 'practice' && (
+                <div className="space-y-8 animate-fade-in">
+                  <section className="space-y-4">
+                    <SectionKicker label="Practice Modes" detail="Choose the type of preparation that fits your next study block" />
+                    <div className="grid gap-4 lg:grid-cols-2">
+                      <Card hoverable className="mock-exam-card relative overflow-hidden border-primary/30 p-5 sm:p-6 shadow-[0_14px_30px_rgba(0,0,0,0.16)]">
+                        <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-primary/20 blur-2xl" />
+                        <div className="relative flex h-full flex-col">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/35 bg-primary/15 text-primary"><Play className="h-5 w-5" /></div>
+                          <p className="mt-4 text-[10px] sm:text-xs font-bold uppercase tracking-[0.14em] text-primary">Full simulation</p>
+                          <h3 className="mt-1 font-display text-lg sm:text-xl font-bold text-text-primary">Mock exam</h3>
+                          <p className="mt-2 max-w-md text-xs sm:text-sm leading-5 sm:leading-6 text-text-secondary">A realistic 180-question exam with the timing and structure of the UTME experience.</p>
+                          <div className="mt-6"><Button onClick={() => navigate('/mock-setup')} disabled={!isCombinationValid} className="w-full sm:w-auto"><Play className="h-4 w-4" />Start mock exam</Button></div>
+                        </div>
+                      </Card>
+                      <Card hoverable className="border-border bg-bg-card p-5 sm:p-6 shadow-[0_14px_30px_rgba(0,0,0,0.12)]">
+                        <div className="flex h-full flex-col">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-info/25 bg-info/10 text-info"><Target className="h-5 w-5" /></div>
+                          <p className="mt-4 text-[10px] sm:text-xs font-bold uppercase tracking-[0.14em] text-info">Targeted practice</p>
+                          <h3 className="mt-1 font-display text-lg sm:text-xl font-bold text-text-primary">Subject drill</h3>
+                          <p className="mt-2 max-w-md text-xs sm:text-sm leading-5 sm:leading-6 text-text-secondary">Choose a subject, topic, question count, and difficulty to practice with immediate feedback.</p>
+                          <div className="mt-6"><Button onClick={() => openDrill()} disabled={!isCombinationValid} variant="secondary" className="w-full sm:w-auto"><Target className="h-4 w-4" />Configure drill</Button></div>
+                        </div>
+                      </Card>
+                    </div>
+                  </section>
+
+                  <section className="space-y-4">
+                    <SectionKicker label="Exam Setup" detail="The subjects that shape your personalized mock and drill experience" />
+                    <Card className="border-border p-5 shadow-sm">
+                      <div className="mb-4 flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary"><Grid3X3 className="h-4 w-4" /></div>
+                          <div><h2 className="text-sm font-bold text-text-primary">Your subject combination</h2><p className="mt-0.5 text-xs text-text-secondary">Use of English plus three electives</p></div>
+                        </div>
+                        <Button onClick={() => setIsEditModalOpen(true)} variant="ghost" size="sm">{isCombinationValid ? 'Edit' : 'Set up'}<ChevronRight className="h-3.5 w-3.5" /></Button>
+                      </div>
+                      {isCombinationValid ? (
+                        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                          {combination.map((subject: string) => (
+                            <div key={subject} className="flex items-center gap-3 rounded-xl border border-border bg-bg-secondary/65 px-3 py-2.5">
+                              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-[10px] font-black text-primary">{subject.slice(0, 3).toUpperCase()}</div>
+                              <p className="min-w-0 truncate text-xs font-semibold text-text-primary" title={getSubjectLabel(subject)}>{getSubjectLabel(subject)}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <EmptyPanel icon={Grid3X3} title="Your practice plan needs four subjects" detail="Set up Use of English and three electives to unlock mock exams and custom drills." action={() => setIsEditModalOpen(true)} actionLabel="Set combination" />
+                      )}
+                    </Card>
+                  </section>
+                </div>
+              )}
+
+              {/* TAB 3: MY ANALYTICS */}
+              {activeTab === 'analytics' && (
+                <div className="space-y-8 animate-fade-in">
+                  {/* Performance Overview */}
+                  <section className="space-y-4">
+                    <SectionKicker label="Performance Overview" detail="A concise view of your readiness, trend, and streak" />
+                    <Card className="border-border p-5 sm:p-6 shadow-[0_14px_30px_rgba(0,0,0,0.12)]">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl border border-info/25 bg-info/10 text-info"><LineChart className="h-4 w-4" /></div><div><h2 className="text-sm font-bold text-text-primary">Performance overview</h2><p className="mt-0.5 text-xs text-text-secondary">Your session trend and readiness signal</p></div></div>
+                        <span className="rounded-full bg-info/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-info">{resultsList.length ? 'Live data' : 'Baseline'}</span>
+                      </div>
+                      <div className="mt-6 grid min-w-0 items-center gap-5 sm:grid-cols-[112px,minmax(0,1fr)]">
+                        <div className="relative mx-auto flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-full" style={{ background: `conic-gradient(var(--color-accent-info) ${readinessScore * 3.6}deg, rgba(148, 163, 184, 0.16) 0deg)` }} aria-label={`Readiness score: ${readinessScore} out of 100`} role="img">
+                          <div className="flex h-[76px] w-[76px] sm:h-[92px] sm:w-[92px] flex-col items-center justify-center rounded-full bg-bg-card"><span className="font-display text-xl sm:text-2xl font-black text-text-primary">{readinessScore}</span><span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wide text-text-muted">ready</span></div>
+                        </div>
+                        <div className="min-w-0">
+                          <div className="mb-2 flex items-center justify-between"><p className="text-xs font-semibold text-text-primary">Session trend</p><p className="text-[11px] text-text-muted">Last {trendValues.length} sessions</p></div>
+                          <div className="h-20 min-w-0 overflow-hidden rounded-xl border border-border bg-bg-secondary/55 px-2 py-2">
+                            <svg viewBox="0 0 190 72" className="h-full w-full" preserveAspectRatio="none" aria-label="Practice score trend" role="img">
+                              <line x1="8" x2="178" y1="64" y2="64" stroke="currentColor" className="text-text-muted" strokeOpacity="0.22" strokeWidth="1" />
+                              <line x1="8" x2="178" y1="36" y2="36" stroke="currentColor" className="text-text-muted" strokeOpacity="0.12" strokeWidth="1" strokeDasharray="3 4" />
+                              <polyline points={trendPoints} fill="none" stroke="var(--color-accent-info)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={resultsList.length ? undefined : '5 5'} />
+                              {trendValues.map((value, index) => <circle key={`${value}-${index}`} cx={8 + index * 34} cy={64 - Math.min(52, Math.max(0, value) * 0.52)} r="3" fill="var(--color-bg-card)" stroke="var(--color-accent-info)" strokeWidth="2" />)}
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-6 grid grid-cols-3 divide-x divide-border rounded-xl border border-border bg-bg-secondary/45 py-2 text-center">
+                        <div><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Sessions</p><p className="mt-0.5 text-base sm:text-lg font-black text-text-primary">{resultsList.length}</p></div>
+                        <div><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Mock avg</p><p className="mt-0.5 text-base sm:text-lg font-black text-primary">{averageMockScore ?? '—'}</p></div>
+                        <div><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Streak</p><p className="mt-0.5 text-base sm:text-lg font-black text-streak">{student?.streak_count || 0}d</p></div>
+                      </div>
+                      {!resultsList.length && <p className="mt-3 text-center text-xs leading-5 text-text-secondary">Your first completed session will turn this baseline into a personalized trend.</p>}
+                    </Card>
+                  </section>
+
+                  {/* Subject Breakdown */}
+                  <section className="space-y-4">
+                    <SectionKicker label="Subject Breakdown" detail="Accuracy across the topics you have practiced" />
+                    <Card className="border-border p-5 sm:p-6 shadow-sm">
+                      <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary"><BarChart3 className="h-4 w-4" /></div><div><h2 className="text-sm font-bold text-text-primary">Subject accuracy</h2><p className="mt-0.5 text-xs text-text-secondary">Track your strongest and weakest areas</p></div></div>
+                      {subjectBreakdown.length ? (
+                        <div className="mt-6 space-y-4">
+                          {subjectBreakdown.map((subject) => (
+                            <div key={subject.subject}>
+                              <div className="mb-1.5 flex items-center justify-between gap-3 text-xs"><span className="truncate font-semibold text-text-primary">{getSubjectLabel(subject.subject)}</span><span className={classNames('font-bold tabular-nums', subject.accuracy >= 70 ? 'text-success' : subject.accuracy >= 40 ? 'text-warning' : 'text-error')}>{subject.accuracy}%</span></div>
+                              <div className="h-2 overflow-hidden rounded-full bg-bg-secondary"><div className={classNames('h-full rounded-full transition-[width] duration-500', subject.accuracy >= 70 ? 'bg-success' : subject.accuracy >= 40 ? 'bg-warning' : 'bg-error')} style={{ width: `${subject.accuracy}%` }} /></div>
+                              <p className="mt-1 text-[11px] text-text-muted">{subject.correct} of {subject.total} correct</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <EmptyPanel icon={BarChart3} title="Your subject breakdown will appear here" detail="Complete a drill or mock exam to see the topics that need more attention." action={() => openDrill()} actionLabel="Start a drill" />
+                      )}
+                    </Card>
+                  </section>
+
+                  {/* Recent Attempts */}
+                  <section className="space-y-4 pb-8">
+                    <SectionKicker label="Recent Attempts" detail="Review answers, scores, and feedback from your latest sessions" />
+                    <Card className="border-border p-5 sm:p-6 shadow-sm">
+                      <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary"><History className="h-4 w-4" /></div><div><h2 className="text-sm font-bold text-text-primary">Attempt history</h2><p className="mt-0.5 text-xs text-text-secondary">Return to a completed practice session to learn from mistakes</p></div></div>
+                      {resultsList.length ? (
+                        <div className="mt-5 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-bg-secondary/35">
+                          {resultsList.slice(0, 8).map((result) => (
+                            <div key={result.resultId || (result as any).id} className="flex flex-col gap-3 px-4 py-3 transition-colors hover:bg-bg-secondary sm:flex-row sm:items-center sm:justify-between">
+                              <div className="flex min-w-0 items-center gap-3"><div className={classNames('flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border', result.type === 'mock' ? 'border-primary/25 bg-primary/10 text-primary' : 'border-info/25 bg-info/10 text-info')}><Play className="h-3.5 w-3.5" /></div><div className="min-w-0"><p className="truncate text-xs sm:text-sm font-bold text-text-primary">{result.type === 'mock' ? 'Mock exam' : 'Subject drill'}</p><p className="mt-0.5 text-[11px] text-text-secondary">{new Date(result.completedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })} · {new Date(result.completedAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</p></div></div>
+                              <div className="flex items-center justify-between gap-4 sm:justify-end"><div className="text-left sm:text-right"><p className="text-xs sm:text-sm font-black text-text-primary">{result.type === 'mock' ? result.totalScore : `${result.totalScore}%`}</p><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">{result.type === 'mock' ? 'score' : 'accuracy'}</p></div><Button onClick={() => navigate(`/results/${result.resultId || (result as any).id}`)} variant="secondary" size="sm">Review</Button></div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="mt-5"><EmptyPanel icon={History} title="No completed attempts yet" detail="Your completed mocks and drills will be saved here for review." action={() => openDrill()} actionLabel="Start a drill" /></div>
+                      )}
+                    </Card>
+                  </section>
+                </div>
+              )}
             </div>
           </div>
         </main>
