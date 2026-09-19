@@ -12,7 +12,14 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   }, []);
 
   if (state === 'loading') {
-    return <div className="min-h-screen bg-bg-primary flex items-center justify-center text-text-secondary">Checking your session…</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-bg-primary font-sans text-text-primary">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary/20 border-t-primary" />
+          <p className="text-sm font-medium text-text-secondary">Verifying your study session…</p>
+        </div>
+      </div>
+    );
   }
   if (state === 'unauthenticated') return <Navigate to="/auth?mode=login" replace />;
   return <>{children}</>;

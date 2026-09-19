@@ -11,7 +11,7 @@ import axios from 'axios';
 export class AiService {
   private readonly logger = new Logger(AiService.name);
   private readonly apiUrl = 'https://seekai.cc/v1/chat/completions';
-  private readonly apiKey = process.env.SEEKAI_KEY || 'sk-9EMNCX4JJAHuErB0XFu4QZkTv5TZdRv5deaDEWmxoQl1Z7iM';
+  private readonly apiKey = process.env.SEEKAI_KEY || 'sk-uz8CMo5aLjbyGmP9JTOQ2olFoCW2Nyzp4isq8h2mqcBNPBCQ';
   private model = 'deepseek-v4-pro';
 
   constructor(

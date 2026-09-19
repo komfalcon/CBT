@@ -28,12 +28,6 @@ export default function ExamHub() {
   const fetchHubData = async () => {
     try {
       setLoading(true);
-      const token = '';
-      if (!token) {
-        navigate('/auth?mode=login');
-        return;
-      }
-
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
 
       const syllabusRes = await fetch(`${apiBase}/study/syllabus`, {
@@ -46,7 +40,8 @@ export default function ExamHub() {
       if (syllabusRes.ok) {
         const contentType = syllabusRes.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
-          setSyllabus(await syllabusRes.json());
+          const data = await syllabusRes.json();
+          setSyllabus(Array.isArray(data) && data.length > 0 ? data : []);
         }
       }
       if (timetableRes.ok) {
@@ -56,7 +51,7 @@ export default function ExamHub() {
         }
       }
     } catch (err) {
-      console.error(err);
+      console.error('Error fetching hub data:', err);
     } finally {
       setLoading(false);
     }
@@ -64,14 +59,13 @@ export default function ExamHub() {
 
   const handleToggleTopic = async (subject: string, topic: string, currentCompleted: boolean) => {
     try {
-      const token = '';
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const res = await fetch(`${apiBase}/study/syllabus/${subject}/topic`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
+        credentials: 'include',
         body: JSON.stringify({
           topic,
           completed: !currentCompleted
@@ -88,14 +82,13 @@ export default function ExamHub() {
 
   const handleAddSession = async () => {
     try {
-      const token = '';
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const res = await fetch(`${apiBase}/study/timetable/session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
         },
+        credentials: 'include',
         body: JSON.stringify({
           subject: newSession.subject,
           topic: newSession.topic || 'General Revision',
@@ -109,18 +102,17 @@ export default function ExamHub() {
         setNewSession({ subject: 'physics', topic: '', startTime: '', endTime: '' });
         fetchHubData(); // Refresh data
       } else {
-        alert('Failed to add study session');
+        console.warn('Failed to add study session');
       }
     } catch (err) {
-      console.error(err);
-      alert('Error adding study session');
+      console.error('Failed to add study session', err);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-100">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary" />
+      <div className="min-h-screen bg-bg-primary flex items-center justify-center text-text-primary">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-primary/20 border-t-primary" />
       </div>
     );
   }

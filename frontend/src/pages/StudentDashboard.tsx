@@ -385,9 +385,7 @@ export default function StudentDashboard() {
               <Button onClick={() => navigate('/leaderboard')} variant="ghost" size="sm">
                 <Award className="h-4 w-4" /> Leaderboard
               </Button>
-              <Button onClick={handleGoToLibrary} variant="secondary" size="sm">
-                <BookOpen className="h-4 w-4" /> E-Library
-              </Button>
+              {/* Aurikrex E-Library button hidden - v2 feature */}
               <div className="mx-1 h-5 w-px bg-border" />
               <ThemeToggle className="min-h-11 min-w-11 lg:min-h-0 lg:min-w-0" />
               <Button onClick={handleLogout} variant="ghost" size="sm" aria-label="Log out">
@@ -416,9 +414,7 @@ export default function StudentDashboard() {
                     <button onClick={() => { setMobileActionsOpen(false); navigate('/leaderboard'); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
                       <Award className="h-4 w-4" /> Leaderboard
                     </button>
-                    <button onClick={() => { setMobileActionsOpen(false); handleGoToLibrary(); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
-                      <BookOpen className="h-4 w-4" /> E-Library
-                    </button>
+                    {/* Aurikrex E-Library button hidden - v2 feature */}
                     <button onClick={() => { setMobileActionsOpen(false); handleLogout(); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary">
                       <LogOut className="h-4 w-4" /> Log out
                     </button>
@@ -572,25 +568,39 @@ export default function StudentDashboard() {
             </aside>
 
             <div className="min-w-0 space-y-8">
-              <section className="relative overflow-hidden rounded-3xl border border-primary/25 bg-[#101d38] p-6 shadow-[0_24px_54px_rgba(0,0,0,0.24)] xl:p-7">
-                <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
+              <section className="relative overflow-hidden rounded-3xl border border-primary/25 bg-bg-card p-6 shadow-xl shadow-primary/5 xl:p-7">
+                <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
                 <div className="pointer-events-none absolute bottom-0 right-12 h-28 w-28 rounded-full border border-info/20" />
                 <div className="relative flex flex-col justify-between gap-7 lg:flex-row lg:items-center">
                   <div className="max-w-xl">
-                    <div className="flex items-center gap-2 text-xs sm:text-[11px] font-bold uppercase tracking-[0.16em] text-info"><TrendingUp className="h-4 w-4" />Preparation outlook</div>
-                    <h2 className="mt-3 font-display text-2xl font-bold tracking-tight text-white">Build readiness one focused session at a time.</h2>
-                    <p className="mt-2 text-sm leading-6 text-slate-300">{nextWeakTopic ? `Your next opportunity is ${nextWeakTopic.topic}. A short, targeted drill can turn a weak area into a confident one.` : 'Complete a practice session to reveal a personalized readiness signal and your next area of focus.'}</p>
+                    <div className="flex items-center gap-2 text-xs sm:text-[11px] font-bold uppercase tracking-[0.16em] text-info">
+                      <TrendingUp className="h-4 w-4" /> Preparation outlook
+                    </div>
+                    <h2 className="mt-3 font-display text-2xl font-bold tracking-tight text-text-primary">
+                      Build readiness one focused session at a time.
+                    </h2>
+                    <p className="mt-2 text-sm leading-6 text-text-secondary">
+                      {nextWeakTopic ? `Your next opportunity is ${nextWeakTopic.topic}. A short, targeted drill can turn a weak area into a confident one.` : 'Complete a practice session to reveal a personalized readiness signal and your next area of focus.'}
+                    </p>
                     <div className="mt-5 flex flex-wrap gap-2">
-                      <span className="rounded-full border border-info/25 bg-info/10 px-3 py-1.5 text-xs font-medium text-info">{nextWeakTopic ? `Focus: ${nextWeakTopic.topic}` : 'Focus: establish a baseline'}</span>
-                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300">Target UTME score: 300+</span>
+                      <span className="rounded-full border border-info/25 bg-info/10 px-3 py-1.5 text-xs font-medium text-info">
+                        {nextWeakTopic ? `Focus: ${nextWeakTopic.topic}` : 'Focus: establish a baseline'}
+                      </span>
+                      <span className="rounded-full border border-border bg-bg-secondary/70 px-3 py-1.5 text-xs text-text-secondary">
+                        Target UTME score: 300+
+                      </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-5 rounded-2xl border border-white/10 bg-slate-950/30 p-4 backdrop-blur-sm">
+                  <div className="flex items-center gap-5 rounded-2xl border border-border bg-bg-secondary/70 p-4 backdrop-blur-sm shadow-sm">
                     <div className="text-right">
-                      <p className="text-xs sm:text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">Readiness</p>
-                      <p className="mt-1 font-display text-3xl font-black text-white">{readinessScore}<span className="text-base font-semibold text-slate-400">/100</span></p>
+                      <p className="text-xs sm:text-[10px] font-bold uppercase tracking-[0.15em] text-text-muted">Readiness</p>
+                      <p className="mt-1 font-display text-3xl font-black text-text-primary">
+                        {readinessScore}<span className="text-base font-semibold text-text-muted">/100</span>
+                      </p>
                     </div>
-                    <Button onClick={() => openDrill()} disabled={!isCombinationValid} className="whitespace-nowrap"><Zap className="h-4 w-4" />Start a drill</Button>
+                    <Button onClick={() => openDrill()} disabled={!isCombinationValid} className="whitespace-nowrap">
+                      <Zap className="h-4 w-4" /> Start a drill
+                    </Button>
                   </div>
                 </div>
               </section>

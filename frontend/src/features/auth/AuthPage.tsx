@@ -354,10 +354,16 @@ export default function AuthPage() {
 
               {(mode === 'login' || mode === 'register' || mode === 'cbt-key-login') && (
                 <div className="auth-tabs mb-7 grid grid-cols-3 gap-1 rounded-xl border border-white/[0.08] bg-black/20 p-1">
-                  <button onClick={() => setMode('login')} className={mode === 'login' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Sign in</button>
-                  <button onClick={() => setMode('register')} className={mode === 'register' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Sign up</button>
-                  <button onClick={() => setMode('cbt-key-login')} className={mode === 'cbt-key-login' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>CBT key</button>
+                  <button onClick={() => { setMode('login'); setMessage(''); }} className={mode === 'login' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Sign in</button>
+                  <button onClick={() => { setMode('register'); setMessage(''); }} className={mode === 'register' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Sign up</button>
+                  <button onClick={() => { setMode('cbt-key-login'); setMessage(''); }} className={mode === 'cbt-key-login' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>CBT key</button>
                 </div>
+              )}
+
+              {message && (
+                <Alert variant={messageType === 'error' ? 'error' : messageType === 'success' ? 'success' : 'info'} className="mb-6">
+                  {message}
+                </Alert>
               )}
 
               {mode === 'login' && !tempToken && (
@@ -365,7 +371,28 @@ export default function AuthPage() {
                   <div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Email</label><div className="relative"><Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="email" required placeholder="name@domain.com" value={loginState.email} onChange={(e) => setLoginState((prev) => ({ ...prev, email: e.target.value }))} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:bg-white/[0.07] focus:ring-4 focus:ring-blue-500/10" /></div></div>
                   <div className="space-y-2"><div className="flex items-center justify-between"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Password</label><button type="button" onClick={() => setMode('forgot-password')} className="text-xs font-medium text-blue-300 transition hover:text-blue-200">Forgot password?</button></div><div className="relative"><Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="password" required placeholder="••••••••" value={loginState.password} onChange={(e) => setLoginState((prev) => ({ ...prev, password: e.target.value }))} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:bg-white/[0.07] focus:ring-4 focus:ring-blue-500/10" /></div></div>
                   <Button type="submit" fullWidth>Sign in <ArrowRight className="h-4 w-4" /></Button>
-                  <div className="pt-2"><div className="relative flex items-center gap-3 py-2"><div className="h-px flex-1 bg-white/[0.08]" /><span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-600">Or continue with</span><div className="h-px flex-1 bg-white/[0.08]" /></div>{isGoogleAvailable ? <div className="mt-3 flex w-full justify-center" id="google-signin-btn"></div> : <div className="mt-3 flex justify-center"><button type="button" onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')} className="flex items-center justify-center gap-2 rounded-lg border border-white/[0.10] bg-white/[0.04] px-5 py-3 text-[14px] font-semibold text-slate-200 transition hover:border-white/20 hover:bg-white/[0.08]"><span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign in with Google</button></div>}</div>
+
+                  <div className="pt-2">
+                    <div className="relative flex items-center gap-3 py-2">
+                      <div className="h-px flex-1 bg-white/[0.08]" />
+                      <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Or continue with</span>
+                      <div className="h-px flex-1 bg-white/[0.08]" />
+                    </div>
+                    {isGoogleAvailable ? (
+                      <div className="mt-3 flex w-full justify-center min-h-[44px]" id="google-signin-btn"></div>
+                    ) : (
+                      <div className="mt-3 flex justify-center">
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')}
+                        >
+                          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign in with Google
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </form>
               )}
 
@@ -383,19 +410,72 @@ export default function AuthPage() {
                   <div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Password</label><div className="relative"><Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="password" required placeholder="Create password" value={registerState.password} onChange={(e) => setRegisterState((prev) => ({ ...prev, password: e.target.value }))} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:bg-white/[0.07] focus:ring-4 focus:ring-blue-500/10" /></div>{pass.length > 0 && <div className="auth-password-box space-y-2 rounded-xl border border-white/[0.07] bg-white/[0.025] p-3 animate-slide-up"><div className="flex items-center justify-between"><span className="text-xs font-medium text-slate-500">Password strength</span><span className="text-xs font-semibold text-slate-300">{strengthText}</span></div><div className="h-1.5 overflow-hidden rounded-full bg-white/[0.08]"><div className={'h-full ' + strengthColor + ' transition-all duration-500'} style={{ width: ((strengthCount / 4) * 100) + '%' }} /></div><div className="grid grid-cols-2 gap-2 pt-1 text-xs">{[[reqs.length, 'Min 8 characters'], [reqs.upper, '1 uppercase letter'], [reqs.number, '1 number'], [reqs.special, '1 special character']].map(([valid, label]) => <div key={label as string} className={'flex items-center gap-1.5 ' + (valid ? 'text-emerald-300' : 'text-slate-500')}>{valid ? <CheckCircle2 className="h-3.5 w-3.5" /> : <AlertCircle className="h-3.5 w-3.5" />}<span>{label as string}</span></div>)}</div></div>}</div>
                   <div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Confirm password</label><div className="relative"><Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="password" required placeholder="Repeat password" value={registerState.confirmPassword} onChange={(e) => setRegisterState((prev) => ({ ...prev, confirmPassword: e.target.value }))} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:bg-white/[0.07] focus:ring-4 focus:ring-blue-500/10" /></div>{registerState.confirmPassword.length > 0 && registerState.password !== registerState.confirmPassword && <p className="text-xs text-rose-300">Passwords do not match.</p>}</div>
                   <Button type="submit" fullWidth>Register candidate <ArrowRight className="h-4 w-4" /></Button>
-                  <div className="pt-2"><div className="relative flex items-center gap-3 py-2"><div className="h-px flex-1 bg-white/[0.08]" /><span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-600">Or continue with</span><div className="h-px flex-1 bg-white/[0.08]" /></div>{isGoogleAvailable ? <div className="mt-3 flex w-full justify-center" id="google-signin-btn"></div> : <div className="mt-3 flex justify-center"><Button type="button" variant="secondary" size="sm" onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')}><span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign up with Google</Button></div>}</div>
+
+                  <div className="pt-2">
+                    <div className="relative flex items-center gap-3 py-2">
+                      <div className="h-px flex-1 bg-white/[0.08]" />
+                      <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Or continue with</span>
+                      <div className="h-px flex-1 bg-white/[0.08]" />
+                    </div>
+                    {isGoogleAvailable ? (
+                      <div className="mt-3 flex w-full justify-center min-h-[44px]" id="google-signin-btn"></div>
+                    ) : (
+                      <div className="mt-3 flex justify-center">
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')}
+                        >
+                          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign up with Google
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </form>
               )}
 
-              {mode === 'cbt-key-login' && <form className="space-y-5" onSubmit={handleCbtKeyLogin}><Alert variant="info" title="Quick cafe roaming access">Type your 8-digit unique access key allotted during registration to login directly without typing your password.</Alert><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">CBT access key</label><div className="relative"><Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="text" required placeholder="CBT-XXXXXX" value={cbtKey} onChange={(e) => setCbtKey(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 font-mono text-[14px] tracking-wide text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div></div><Button type="submit" fullWidth>Quick login <ArrowRight className="h-4 w-4" /></Button><div className="pt-2"><div className="relative flex items-center gap-3 py-2"><div className="h-px flex-1 bg-white/[0.08]" /><span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-600">Or continue with</span><div className="h-px flex-1 bg-white/[0.08]" /></div>{isGoogleAvailable ? <div className="mt-3 flex w-full justify-center" id="google-signin-btn"></div> : <div className="mt-3 flex justify-center"><Button type="button" variant="secondary" size="sm" onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')}><span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign in with Google</Button></div>}</div></form>}
+              {mode === 'cbt-key-login' && (
+                <form className="space-y-5" onSubmit={handleCbtKeyLogin}>
+                  <Alert variant="info" title="Quick cafe roaming access">Type your 8-digit unique access key allotted during registration to login directly without typing your password.</Alert>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">CBT access key</label>
+                    <div className="relative">
+                      <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
+                      <input type="text" required placeholder="CBT-XXXXXX" value={cbtKey} onChange={(e) => setCbtKey(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 font-mono text-[14px] tracking-wide text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" />
+                    </div>
+                  </div>
+                  <Button type="submit" fullWidth>Quick login <ArrowRight className="h-4 w-4" /></Button>
+
+                  <div className="pt-2">
+                    <div className="relative flex items-center gap-3 py-2">
+                      <div className="h-px flex-1 bg-white/[0.08]" />
+                      <span className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Or continue with</span>
+                      <div className="h-px flex-1 bg-white/[0.08]" />
+                    </div>
+                    {isGoogleAvailable ? (
+                      <div className="mt-3 flex w-full justify-center min-h-[44px]" id="google-signin-btn"></div>
+                    ) : (
+                      <div className="mt-3 flex justify-center">
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')}
+                        >
+                          <span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign in with Google
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </form>
+              )}
 
               {mode === 'verify-email' && <form className="space-y-5 animate-fade-in" onSubmit={handleVerifyEmail}><Alert variant="info" title="Check your inbox">A 6-digit verification code has been sent to your email address. Please enter it below.</Alert><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Email address</label><input type="email" required placeholder="candidate@domain.com" value={verifyEmailAddress} onChange={(e) => setVerifyEmailAddress(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] px-4 py-3.5 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">6-digit verification code</label><input type="text" required maxLength={6} placeholder="123456" value={verificationToken} onChange={(e) => setVerificationToken(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] px-4 py-3.5 text-center font-mono text-[14px] tracking-widest text-blue-200 outline-none transition focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div><Button type="submit" fullWidth>Complete verification</Button><button type="button" onClick={() => setMode('login')} className="w-full text-center text-[14px] text-slate-500 transition hover:text-white">Back to sign in</button></form>}
 
               {mode === 'forgot-password' && <form className="space-y-5 animate-fade-in" onSubmit={handleForgotPassword}><div className="auth-callout rounded-xl border border-blue-400/15 bg-blue-400/[0.07] p-4 text-[14px] leading-6 text-blue-100/75">Enter the email connected to your candidate profile and we will generate a secure reset code.</div><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Email address</label><div className="relative"><Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="email" required placeholder="registered@email.com" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div></div><Button type="submit" fullWidth>Generate reset token</Button><button type="button" onClick={() => setMode('login')} className="w-full text-center text-[14px] text-slate-500 transition hover:text-white">Back to sign in</button></form>}
 
               {mode === 'reset-password' && <form className="space-y-5 animate-fade-in" onSubmit={handleResetPassword}><Alert variant="info" title="Check your inbox">A 6-digit password reset code has been sent to your email address. Please enter it below.</Alert><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Email address</label><div className="relative"><Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="email" required placeholder="candidate@domain.com" value={verifyEmailAddress} onChange={(e) => setVerifyEmailAddress(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div></div><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">6-digit reset code</label><div className="relative"><Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="text" required maxLength={6} placeholder="123456" value={resetToken} onChange={(e) => setResetToken(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-center font-mono text-[14px] tracking-widest text-blue-200 outline-none transition focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div></div><div className="space-y-2"><label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">New password</label><div className="relative"><Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" /><input type="password" required placeholder="Min. 8 characters" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 text-[14px] text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" /></div></div><Button type="submit" fullWidth>Update password</Button></form>}
-
-              {message && <Alert variant={messageType === 'error' ? 'error' : messageType === 'success' ? 'success' : 'info'} className="mt-6">{message}</Alert>}
               <p className="mt-8 text-center text-xs leading-5 text-slate-600">By continuing, you agree to prepare responsibly and keep your account details secure.</p>
             </div>
           </section>

@@ -13,10 +13,8 @@ export default function AdminCandidates() {
   const [userStatus, setUserStatus] = useState('');
   const [usersLoading, setUsersLoading] = useState(false);
   const { addToast } = useToast();
-  const token = '';
 
   const getHeaders = () => ({
-
     'Content-Type': 'application/json',
   });
 
@@ -31,7 +29,10 @@ export default function AdminCandidates() {
         status: userStatus,
       });
       const apiBase = import.meta.env.VITE_API_BASE_URL || '';
-      const res = await fetch(`${apiBase}/admin/users?${queryParams.toString()}`, { headers: getHeaders() });
+      const res = await fetch(`${apiBase}/admin/users?${queryParams.toString()}`, {
+        headers: getHeaders(),
+        credentials: 'include',
+      });
       if (!res.ok) throw new Error('Failed to load user accounts');
       const data = await res.json();
       setUsers(data.data);
@@ -56,6 +57,7 @@ export default function AdminCandidates() {
       const res = await fetch(`${apiBase}/admin/users/${userId}/status`, {
         method: 'PATCH',
         headers: getHeaders(),
+        credentials: 'include',
         body: JSON.stringify({ status: newStatus }),
       });
       if (!res.ok) throw new Error('Failed to update user account status');

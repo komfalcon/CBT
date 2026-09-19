@@ -10,10 +10,8 @@ export default function AdminBilling() {
   const [billingTotal, setBillingTotal] = useState(0);
   const [billingLoading, setBillingLoading] = useState(false);
   const { addToast } = useToast();
-  const token = '';
 
   const getHeaders = () => ({
-
     'Content-Type': 'application/json',
   });
 
@@ -25,7 +23,10 @@ export default function AdminBilling() {
         limit: billingLimit.toString(),
       });
       const apiBase = import.meta.env.VITE_API_BASE_URL || '';
-      const res = await fetch(`${apiBase}/admin/billing/logs?${queryParams.toString()}`, { headers: getHeaders() });
+      const res = await fetch(`${apiBase}/admin/billing/logs?${queryParams.toString()}`, {
+        headers: getHeaders(),
+        credentials: 'include',
+      });
       if (!res.ok) throw new Error('Failed to load billing ledger');
       const data = await res.json();
       setBillingLogs(data.data);

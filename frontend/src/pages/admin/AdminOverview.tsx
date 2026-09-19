@@ -7,10 +7,7 @@ export default function AdminOverview() {
   const [stats, setStats] = useState<OverviewStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(false);
   const { addToast } = useToast();
-  const token = '';
-
   const getHeaders = () => ({
-
     'Content-Type': 'application/json',
   });
 
@@ -18,7 +15,10 @@ export default function AdminOverview() {
     setStatsLoading(true);
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL || '';
-      const res = await fetch(`${apiBase}/admin/stats/overview`, { headers: getHeaders() });
+      const res = await fetch(`${apiBase}/admin/stats/overview`, {
+        headers: getHeaders(),
+        credentials: 'include',
+      });
       if (!res.ok) throw new Error('Failed to load overview statistics');
       const data = await res.json();
       setStats(data);

@@ -44,10 +44,13 @@ function safeEvaluate(expression: string): number {
   const value=parseAdditive(); if (index !== tokens.length || !Number.isFinite(value)) throw new Error('Invalid expression'); return value;
 }
 
-const getDefaultCalcPosition = () => ({
-  x: Math.max(12, window.innerWidth - CALCULATOR_WIDTH - 20),
-  y: Math.max(76, Math.min(120, window.innerHeight - CALCULATOR_HEIGHT - 20)),
-});
+const getDefaultCalcPosition = () => {
+  const isMobile = window.innerWidth < 640;
+  return {
+    x: isMobile ? Math.max(8, (window.innerWidth - CALCULATOR_WIDTH) / 2) : Math.max(12, window.innerWidth - CALCULATOR_WIDTH - 20),
+    y: Math.max(76, Math.min(120, window.innerHeight - CALCULATOR_HEIGHT - 20)),
+  };
+};
 
 export default function ExamConsole() {
   const { sessionId } = useParams<{ sessionId: string }>();
@@ -477,11 +480,12 @@ export default function ExamConsole() {
             <button
               type="button"
               onClick={() => setShowCalculator((previous) => !previous)}
-              className={`exam-toolbar-button hidden items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition-[background-color,border-color,color,box-shadow,transform] duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:flex ${showCalculator ? 'border-primary bg-primary/15 text-primary shadow-[0_8px_24px_rgba(91,114,255,0.16)]' : 'border-border bg-bg-secondary/55 text-text-secondary hover:border-primary/40 hover:text-text-primary'}`}
+              className={`exam-toolbar-button inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-2 text-xs font-bold transition-[background-color,border-color,color,box-shadow,transform] duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:px-3 ${showCalculator ? 'border-primary bg-primary/15 text-primary shadow-[0_8px_24px_rgba(91,114,255,0.16)]' : 'border-border bg-bg-secondary/55 text-text-secondary hover:border-primary/40 hover:text-text-primary'}`}
               title="Toggle calculator"
               aria-pressed={showCalculator}
             >
-              <Calculator className="h-3.5 w-3.5" aria-hidden="true" /> Calculator
+              <Calculator className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="hidden sm:inline">Calculator</span>
             </button>
             <ThemeToggle className="h-9 w-9 rounded-xl p-2" />
             <button
@@ -660,11 +664,11 @@ export default function ExamConsole() {
 
       {/* Custom Submit Confirmation Modal */}
       {showSubmitModal && (
-        <div className="fixed inset-0 bg-bg-primary backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-bg-secondary border border-border rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center gap-3 text-rose-500">
               <div className="h-10 w-10 rounded-full bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
-                <AlertTriangle className="h-5 w-5 text-rose-550" />
+                <AlertTriangle className="h-5 w-5 text-rose-500" />
               </div>
               <div>
                 <h3 className="text-base font-bold text-text-primary">Submit Exam</h3>
@@ -696,7 +700,7 @@ export default function ExamConsole() {
               <button
                 onClick={executeSubmit}
                 disabled={submitting}
-                className="rounded-xl bg-rose-600 hover:bg-rose-500 px-5 py-2.5 text-xs font-bold text-text-primary flex items-center gap-1.5 transition-all shadow-lg shadow-rose-600/10 disabled:opacity-50"
+                className="rounded-xl bg-rose-600 hover:bg-rose-500 px-5 py-2.5 text-xs font-bold text-white flex items-center gap-1.5 transition-all shadow-lg shadow-rose-600/10 disabled:opacity-50"
               >
                 {submitting ? (
                   <>
@@ -715,7 +719,7 @@ export default function ExamConsole() {
 
       {/* Custom Alert Modal */}
       {alertConfig && alertConfig.show && (
-        <div className="fixed inset-0 bg-bg-primary backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-bg-secondary border border-border rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center gap-3 text-primary">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
@@ -737,7 +741,7 @@ export default function ExamConsole() {
                   setAlertConfig(null);
                   if (onConfirm) onConfirm();
                 }}
-                className="rounded-xl bg-primary hover:bg-primary-hover px-6 py-2.5 text-xs font-bold text-text-primary transition-all shadow-lg shadow-primary/10"
+                className="rounded-xl bg-primary hover:bg-primary-hover px-6 py-2.5 text-xs font-bold text-text-on-accent transition-all shadow-lg shadow-primary/10"
               >
                 OK
               </button>

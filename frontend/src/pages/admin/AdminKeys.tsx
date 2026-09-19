@@ -13,10 +13,8 @@ export default function AdminKeys() {
   const [generatedKeys, setGeneratedKeys] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const { addToast } = useToast();
-  const token = '';
 
   const getHeaders = () => ({
-
     'Content-Type': 'application/json',
   });
 
@@ -30,7 +28,10 @@ export default function AdminKeys() {
         search: 'voucher-', // Voucher emails end in @aurikrex.local and start with voucher-
       });
       const apiBase = import.meta.env.VITE_API_BASE_URL || '';
-      const res = await fetch(`${apiBase}/admin/users?${queryParams.toString()}`, { headers: getHeaders() });
+      const res = await fetch(`${apiBase}/admin/users?${queryParams.toString()}`, {
+        headers: getHeaders(),
+        credentials: 'include',
+      });
       if (!res.ok) throw new Error('Failed to load voucher keys');
       const data = await res.json();
       setVoucherUsers(data.data);
@@ -59,6 +60,7 @@ export default function AdminKeys() {
       const res = await fetch(`${apiBase}/admin/cbt-keys/generate`, {
         method: 'POST',
         headers: getHeaders(),
+        credentials: 'include',
         body: JSON.stringify({ count: keyCount }),
       });
       if (!res.ok) throw new Error('Bulk key generation failed');

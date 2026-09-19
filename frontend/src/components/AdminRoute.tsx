@@ -13,7 +13,16 @@ export default function AdminRoute({ children }: { children: React.ReactNode }) 
     return () => { mounted = false; };
   }, []);
 
-  if (state === 'loading') return <div className="min-h-screen bg-bg-primary flex items-center justify-center text-text-secondary">Checking your admin session…</div>;
+  if (state === 'loading') {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-bg-primary font-sans text-text-primary">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary/20 border-t-primary" />
+          <p className="text-sm font-medium text-text-secondary">Verifying administrator credentials…</p>
+        </div>
+      </div>
+    );
+  }
   if (state === 'unauthenticated') return <Navigate to="/auth?mode=login" replace />;
   if (state === 'forbidden') return <Navigate to="/dashboard" replace />;
   return <>{children}</>;

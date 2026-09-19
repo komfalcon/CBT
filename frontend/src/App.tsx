@@ -85,7 +85,7 @@ function App() {
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
           <Route path="/exam-hub" element={<ProtectedRoute><ExamHub /></ProtectedRoute>} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
           <Route path="/mock-setup" element={<ProtectedRoute><MockSetupPage /></ProtectedRoute>} />
           <Route path="/questions" element={<ProtectedRoute><QuestionBankPage /></ProtectedRoute>} />
           <Route path="/exam/:sessionId" element={<ProtectedRoute><ExamConsole /></ProtectedRoute>} />
@@ -93,7 +93,14 @@ function App() {
           <Route
             path="/admin/*"
             element={
-              <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#0b0f19] text-slate-400">Loading Control Center...</div>}>
+              <Suspense
+                fallback={
+                  <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-bg-primary text-text-primary font-sans">
+                    <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary/20 border-t-primary" />
+                    <p className="text-sm font-medium text-text-secondary">Loading Control Center...</p>
+                  </div>
+                }
+              >
                 <AdminRoute>
                   <AdminLayout />
                 </AdminRoute>

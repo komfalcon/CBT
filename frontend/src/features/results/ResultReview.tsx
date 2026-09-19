@@ -34,14 +34,12 @@ export default function ResultReview() {
   const [filterSubject, setFilterSubject] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<'all' | 'correct' | 'incorrect' | 'unanswered'>('all');
 
-  const token = '';
-
   useEffect(() => {
     if (!resultId) return;
     const fetchResult = async () => {
       try {
         setLoading(true);
-        const data = await getResultDetail(token, resultId);
+        const data = await getResultDetail(undefined, resultId);
         setResult(data);
       } catch (err: any) {
         console.error(err);
@@ -51,7 +49,7 @@ export default function ResultReview() {
       }
     };
     fetchResult();
-  }, [resultId, token]);
+  }, [resultId]);
 
   const durationFormatted = useMemo(() => {
     if (!result) return '00:00';
@@ -119,7 +117,7 @@ export default function ResultReview() {
   }, [result]);
 
   const openConceptInLibrary = async (question: any) => {
-    if (!token || !resultId || !question?.subject || !question?.topic) return;
+    if (!resultId || !question?.subject || !question?.topic) return;
     try {
       const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
       const topicSlug = String(question.topic).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -186,7 +184,7 @@ export default function ResultReview() {
           >
             <ChevronLeft className="h-4 w-4" /> Dashboard
           </button>
-          <span className="text-sm font-bold text-slate-350">
+          <span className="text-sm font-bold text-text-primary">
             {result.type === 'mock' ? 'Mock Exam Graded Summary' : 'Subject Practice Review'}
           </span>
           <div className="flex items-center gap-4">
@@ -260,13 +258,13 @@ export default function ResultReview() {
               </div>
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div className="rounded-lg bg-emerald-500/5 border border-emerald-500/10 p-2">
-                  <div className="text-xs font-bold text-emerald-450">
+                  <div className="text-xs font-bold text-emerald-400">
                     {result.subjectScores.reduce((acc, val) => acc + val.correctCount, 0)}
                   </div>
                   <div className="text-xs text-text-muted uppercase mt-0.5">Correct</div>
                 </div>
                 <div className="rounded-lg bg-rose-500/5 border border-rose-500/10 p-2">
-                  <div className="text-xs font-bold text-rose-450">
+                  <div className="text-xs font-bold text-rose-400">
                     {result.subjectScores.reduce((acc, val) => acc + val.incorrectCount, 0)}
                   </div>
                   <div className="text-xs text-text-muted uppercase mt-0.5">Wrong</div>
@@ -318,13 +316,38 @@ export default function ResultReview() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden rounded-3xl border border-cyan-300/20 bg-[#0c1a2c] p-6 text-white shadow-2xl shadow-cyan-950/20">
-          <div className="pointer-events-none absolute -right-14 -top-16 h-52 w-52 rounded-full border border-cyan-200/10" />
+        <section className="relative overflow-hidden rounded-3xl border border-info/30 bg-bg-card p-6 text-text-primary shadow-xl shadow-primary/5">
+          <div className="pointer-events-none absolute -right-14 -top-16 h-52 w-52 rounded-full border border-info/10 bg-info/5 blur-2xl" />
           <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-            <div><div className="flex items-center gap-2 text-xs font-black uppercase tracking-[.2em] text-cyan-300"><Target className="h-3.5 w-3.5" /> Review Vault</div><h2 className="mt-2 text-2xl font-black tracking-tight">Your score is evidence, not a verdict.</h2><p className="mt-2 max-w-2xl text-xs leading-6 text-slate-400">We found {reviewSignals.wrong} wrong answers and {reviewSignals.skipped} skipped items. Repair the pattern, then return under pressure.</p></div>
-            <button type="button" onClick={() => navigate('/mock-setup')} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-cyan-300 px-4 py-3 text-xs font-black text-[#07111f] transition hover:bg-cyan-200"><Target className="h-4 w-4" /> Build a repair mission <ChevronRight className="h-4 w-4" /></button>
+            <div>
+              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[.2em] text-info">
+                <Target className="h-3.5 w-3.5" /> Review Vault
+              </div>
+              <h2 className="mt-2 font-display text-2xl font-black tracking-tight text-text-primary">Your score is evidence, not a verdict.</h2>
+              <p className="mt-2 max-w-2xl text-xs leading-6 text-text-secondary">We found {reviewSignals.wrong} wrong answers and {reviewSignals.skipped} skipped items. Repair the pattern, then return under pressure.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate('/mock-setup')}
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-xs font-bold text-text-on-accent shadow-md shadow-primary/20 transition hover:opacity-90"
+            >
+              <Target className="h-4 w-4" /> Build a repair mission <ChevronRight className="h-4 w-4" />
+            </button>
           </div>
-          <div className="relative z-10 mt-6 grid gap-3 sm:grid-cols-3"><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-xs font-black uppercase tracking-[.16em] text-slate-500">Concept review</div><div className="mt-2 text-sm font-bold text-white">{reviewSignals.wrong} items to revisit</div></div><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-xs font-black uppercase tracking-[.16em] text-slate-500">Timing signal</div><div className="mt-2 text-sm font-bold text-white">{Math.round(result.timeSpentSeconds / result.questionsSnapshot.length)}s per question</div></div><div className="rounded-xl border border-white/10 bg-white/[.04] p-3"><div className="text-xs font-black uppercase tracking-[.16em] text-slate-500">First focus</div><div className="mt-2 text-sm font-bold text-white">{reviewSignals.focusSubject}</div></div></div>
+          <div className="relative z-10 mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-border bg-bg-secondary/60 p-3">
+              <div className="text-xs font-black uppercase tracking-[.16em] text-text-muted">Concept review</div>
+              <div className="mt-2 text-sm font-bold text-text-primary">{reviewSignals.wrong} items to revisit</div>
+            </div>
+            <div className="rounded-xl border border-border bg-bg-secondary/60 p-3">
+              <div className="text-xs font-black uppercase tracking-[.16em] text-text-muted">Timing signal</div>
+              <div className="mt-2 text-sm font-bold text-text-primary">{Math.round(result.timeSpentSeconds / result.questionsSnapshot.length)}s per question</div>
+            </div>
+            <div className="rounded-xl border border-border bg-bg-secondary/60 p-3">
+              <div className="text-xs font-black uppercase tracking-[.16em] text-text-muted">First focus</div>
+              <div className="mt-2 text-sm font-bold text-text-primary">{reviewSignals.focusSubject}</div>
+            </div>
+          </div>
         </section>
 
         {/* Filters Controls block */}
@@ -412,21 +435,7 @@ export default function ResultReview() {
                     correctAnswer={q.options.find((o: any) => o.id === q.correct_option)?.text || q.correct_option}
                     studentAnswer={q.options.find((o: any) => o.id === userChoice)?.text || 'Unanswered'}
                   />
-                  {!isUserCorrect && !isSkipped ? (
-                    <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 p-3">
-                      <div className="flex-1 min-w-[12rem]">
-                        <div className="text-xs font-bold text-text-primary">Mistake category: concept review</div>
-                        <div className="text-xs text-text-secondary mt-1">Read the concept before attempting a targeted repair.</div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => openConceptInLibrary(q)}
-                        className="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-text-on-accent hover:bg-primary-hover transition-colors"
-                      >
-                        Read the concept in Library →
-                      </button>
-                    </div>
-                  ) : null}
+                  {/* Aurikrex Library SSO concept handoff hidden - v2 feature */}
                 </div>
               );
             })

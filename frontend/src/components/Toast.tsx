@@ -27,32 +27,28 @@ export const Toast: React.FC<ToastProps> = ({
 
     const styles = {
         success: {
-            bg: 'bg-emerald-950/90',
-            border: 'border-emerald-800',
-            icon: 'text-emerald-400',
-            iconBg: 'bg-emerald-900/30',
-            title: 'text-emerald-300',
+            border: 'border-success/30',
+            icon: 'text-success',
+            iconBg: 'bg-success/15',
+            title: 'text-success',
         },
         error: {
-            bg: 'bg-red-950/90',
-            border: 'border-red-800',
-            icon: 'text-red-400',
-            iconBg: 'bg-red-900/30',
-            title: 'text-red-300',
+            border: 'border-error/30',
+            icon: 'text-error',
+            iconBg: 'bg-error/15',
+            title: 'text-error',
         },
         warning: {
-            bg: 'bg-amber-950/90',
-            border: 'border-amber-800',
-            icon: 'text-amber-400',
-            iconBg: 'bg-amber-900/30',
-            title: 'text-amber-300',
+            border: 'border-warning/30',
+            icon: 'text-warning',
+            iconBg: 'bg-warning/15',
+            title: 'text-warning',
         },
         info: {
-            bg: 'bg-blue-950/90',
-            border: 'border-blue-800',
-            icon: 'text-blue-400',
-            iconBg: 'bg-blue-900/30',
-            title: 'text-blue-300',
+            border: 'border-info/30',
+            icon: 'text-info',
+            iconBg: 'bg-info/15',
+            title: 'text-info',
         },
     };
 
@@ -68,7 +64,7 @@ export const Toast: React.FC<ToastProps> = ({
 
     return (
         <div
-            className={`${style.bg} ${style.border} border backdrop-blur-xl rounded-xl p-4 shadow-2xl animate-in slide-in-from-right-5 fade-in duration-300 max-w-md w-full`}
+            className={`bg-bg-card border ${style.border} backdrop-blur-xl rounded-xl p-4 shadow-2xl animate-in slide-in-from-right-5 fade-in duration-300 max-w-md w-full`}
             role="alert"
         >
             <div className="flex items-start gap-3">
@@ -80,14 +76,14 @@ export const Toast: React.FC<ToastProps> = ({
                     <h3 className={`text-sm font-bold ${style.title}`}>
                         {title}
                     </h3>
-                    <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                    <p className="text-xs text-text-secondary mt-1 leading-relaxed">
                         {message}
                     </p>
                 </div>
 
                 <button
                     onClick={() => onClose(id)}
-                    className="flex-shrink-0 ml-2 text-slate-400 hover:text-white transition-colors p-1"
+                    className="flex-shrink-0 ml-2 text-text-muted hover:text-text-primary transition-colors p-1"
                     aria-label="Close notification"
                 >
                     <X className="h-4 w-4" />
