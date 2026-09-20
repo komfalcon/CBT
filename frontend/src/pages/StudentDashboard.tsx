@@ -23,6 +23,7 @@ import {
   Grid3X3,
   History,
   KeyRound,
+  Layers,
   LineChart,
   LockKeyhole,
   LogOut,
@@ -112,7 +113,7 @@ export default function StudentDashboard() {
   const [paymentError, setPaymentError] = useState('');
   const [paymentSuccess, setPaymentSuccess] = useState('');
   const [mobileActionsOpen, setMobileActionsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'practice' | 'analytics'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'practice' | 'analytics' | 'all'>('overview');
   const [securityModalTrigger, setSecurityModalTrigger] = useState(0);
 
   const combination = student?.exam_subject_combination || [];
@@ -413,27 +414,30 @@ export default function StudentDashboard() {
 
         {/* Mobile Slide-Over Drawer with all tools & navigation */}
         {mobileActionsOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="fixed inset-0 z-[80] lg:hidden">
             <div
               className="fixed inset-0 bg-overlay/80 backdrop-blur-sm transition-opacity"
               onClick={() => setMobileActionsOpen(false)}
               aria-hidden="true"
             />
-            <div className="fixed inset-y-0 right-0 z-50 flex w-[min(calc(100vw-1.5rem),22rem)] flex-col border-l border-border bg-bg-card p-5 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-200">
+            <div className="fixed inset-y-0 right-0 z-[85] flex w-[min(calc(100vw-1.5rem),22rem)] flex-col border-l border-border bg-bg-card p-5 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-200">
               {/* Header */}
               <div className="flex items-center justify-between pb-4 border-b border-border">
                 <div className="flex items-center gap-2.5">
                   <img src="/favicon.svg" alt="" className="h-7 w-7 rounded-lg object-cover" />
                   <span className="font-display text-sm font-bold text-text-primary">Aurikrex CBT</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setMobileActionsOpen(false)}
-                  className="rounded-lg p-1.5 text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
-                  aria-label="Close menu"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <ThemeToggle />
+                  <button
+                    type="button"
+                    onClick={() => setMobileActionsOpen(false)}
+                    className="rounded-lg p-1.5 text-text-secondary hover:bg-bg-secondary hover:text-text-primary transition-colors"
+                    aria-label="Close menu"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
 
               {/* Candidate Profile Summary */}
@@ -492,6 +496,15 @@ export default function StudentDashboard() {
                   )}
                 >
                   <BarChart3 className="h-4 w-4" /> My Analytics
+                </button>
+                <button
+                  onClick={() => { setActiveTab('all'); setMobileActionsOpen(false); }}
+                  className={classNames(
+                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-colors",
+                    activeTab === 'all' ? "bg-primary text-text-on-accent" : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
+                  )}
+                >
+                  <Layers className="h-4 w-4" /> All Sections (Full View)
                 </button>
                 <button
                   onClick={() => { setMobileActionsOpen(false); navigate('/exam-hub'); }}
@@ -563,12 +576,15 @@ export default function StudentDashboard() {
                 </button>
               </div>
 
-              {/* Footer Actions */}
-              <div className="mt-auto pt-4 flex items-center justify-between">
-                <ThemeToggle />
-                <Button onClick={handleLogout} variant="ghost" size="sm">
-                  <LogOut className="h-4 w-4" /> Log out
-                </Button>
+              {/* Footer Action: Sign Out */}
+              <div className="mt-auto pt-4 border-t border-border">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-error/25 bg-error/10 py-3 text-xs font-bold text-error transition-all hover:bg-error/15 active:scale-[0.98]"
+                >
+                  <LogOut className="h-4 w-4" /> Sign out
+                </button>
               </div>
             </div>
           </div>
@@ -598,47 +614,81 @@ export default function StudentDashboard() {
             </Alert>
           )}
 
-          {/* Tab Selector Switcher */}
-          <div className="mb-6 flex items-center gap-1.5 p-1 rounded-2xl bg-bg-secondary/80 border border-border max-w-md w-full shadow-sm">
-            <button
-              type="button"
-              onClick={() => setActiveTab('overview')}
-              className={classNames(
-                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 px-2 rounded-xl text-xs sm:text-[13px] font-bold transition-all",
-                activeTab === 'overview'
-                  ? "bg-primary text-text-on-accent shadow-md shadow-primary/25"
-                  : "text-text-secondary hover:text-text-primary hover:bg-bg-card/50"
-              )}
-            >
-              <Brain className="h-3.5 w-3.5" />
-              <span>Overview</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('practice')}
-              className={classNames(
-                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 px-2 rounded-xl text-xs sm:text-[13px] font-bold transition-all",
-                activeTab === 'practice'
-                  ? "bg-primary text-text-on-accent shadow-md shadow-primary/25"
-                  : "text-text-secondary hover:text-text-primary hover:bg-bg-card/50"
-              )}
-            >
-              <Target className="h-3.5 w-3.5" />
-              <span>Practice</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('analytics')}
-              className={classNames(
-                "flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 px-2 rounded-xl text-xs sm:text-[13px] font-bold transition-all",
-                activeTab === 'analytics'
-                  ? "bg-primary text-text-on-accent shadow-md shadow-primary/25"
-                  : "text-text-secondary hover:text-text-primary hover:bg-bg-card/50"
-              )}
-            >
-              <BarChart3 className="h-3.5 w-3.5" />
-              <span>My Analytics</span>
-            </button>
+          {/* Professional Tab Navigation Bar */}
+          <div className="mb-6 sm:mb-8 border-b border-border">
+            <div className="flex items-center justify-between">
+              <nav className="-mb-px flex space-x-2 sm:space-x-8 overflow-x-auto no-scrollbar" aria-label="Dashboard views">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('overview')}
+                  className={classNames(
+                    "group inline-flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-3 sm:px-1 text-xs sm:text-sm font-semibold transition-all duration-200",
+                    activeTab === 'overview'
+                      ? "border-primary text-text-primary"
+                      : "border-transparent text-text-secondary hover:border-border hover:text-text-primary"
+                  )}
+                >
+                  <Brain className={classNames("h-4 w-4 transition-colors", activeTab === 'overview' ? "text-primary" : "text-text-muted group-hover:text-text-secondary")} />
+                  <span>Overview</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('practice')}
+                  className={classNames(
+                    "group inline-flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-3 sm:px-1 text-xs sm:text-sm font-semibold transition-all duration-200",
+                    activeTab === 'practice'
+                      ? "border-primary text-text-primary"
+                      : "border-transparent text-text-secondary hover:border-border hover:text-text-primary"
+                  )}
+                >
+                  <Target className={classNames("h-4 w-4 transition-colors", activeTab === 'practice' ? "text-primary" : "text-text-muted group-hover:text-text-secondary")} />
+                  <span>Practice</span>
+                  <span className={classNames(
+                    "rounded-full px-2 py-0.5 text-[10px] font-bold transition-colors",
+                    activeTab === 'practice' ? "bg-primary/15 text-primary" : "bg-bg-secondary text-text-muted border border-border"
+                  )}>
+                    Mock & Drill
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('analytics')}
+                  className={classNames(
+                    "group inline-flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-3 sm:px-1 text-xs sm:text-sm font-semibold transition-all duration-200",
+                    activeTab === 'analytics'
+                      ? "border-primary text-text-primary"
+                      : "border-transparent text-text-secondary hover:border-border hover:text-text-primary"
+                  )}
+                >
+                  <BarChart3 className={classNames("h-4 w-4 transition-colors", activeTab === 'analytics' ? "text-primary" : "text-text-muted group-hover:text-text-secondary")} />
+                  <span>My Analytics</span>
+                  {resultsList.length > 0 && (
+                    <span className={classNames(
+                      "rounded-full px-2 py-0.5 text-[10px] font-bold transition-colors",
+                      activeTab === 'analytics' ? "bg-info/15 text-info" : "bg-bg-secondary text-text-muted border border-border"
+                    )}>
+                      {resultsList.length}
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('all')}
+                  className={classNames(
+                    "group inline-flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-3 sm:px-1 text-xs sm:text-sm font-semibold transition-all duration-200",
+                    activeTab === 'all'
+                      ? "border-primary text-text-primary"
+                      : "border-transparent text-text-secondary hover:border-border hover:text-text-primary"
+                  )}
+                >
+                  <Layers className={classNames("h-4 w-4 transition-colors", activeTab === 'all' ? "text-primary" : "text-text-muted group-hover:text-text-secondary")} />
+                  <span>All Sections</span>
+                </button>
+              </nav>
+            </div>
           </div>
 
           <div className="grid min-w-0 items-start gap-8 xl:grid-cols-[340px,minmax(0,1fr)]">
@@ -765,50 +815,50 @@ export default function StudentDashboard() {
             </div>
 
             <div className="min-w-0 space-y-8">
-              {/* TAB 1: OVERVIEW */}
-              {activeTab === 'overview' && (
-                <div className="space-y-8 animate-fade-in">
-                  {/* AI Preparation Outlook Hero Card (Preserved as requested) */}
-                  <section className="relative overflow-hidden rounded-3xl border border-primary/25 bg-bg-card p-5 sm:p-6 lg:p-7 shadow-xl shadow-primary/5">
-                    <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-                    <div className="pointer-events-none absolute bottom-0 right-12 h-28 w-28 rounded-full border border-info/20" />
-                    <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-                      <div className="max-w-xl">
-                        <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] text-info">
-                          <TrendingUp className="h-3.5 w-3.5" /> Preparation outlook
-                        </div>
-                        <h2 className="mt-2.5 font-display text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-text-primary">
-                          Build readiness one focused session at a time.
-                        </h2>
-                        <p className="mt-1.5 text-xs sm:text-sm leading-5 sm:leading-6 text-text-secondary">
-                          {nextWeakTopic ? `Your next opportunity is ${nextWeakTopic.topic}. A short, targeted drill can turn a weak area into a confident one.` : 'Complete a practice session to reveal a personalized readiness signal and your next area of focus.'}
-                        </p>
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          <span className="rounded-full border border-info/25 bg-info/10 px-2.5 py-1 text-[11px] font-medium text-info">
-                            {nextWeakTopic ? `Focus: ${nextWeakTopic.topic}` : 'Focus: establish a baseline'}
-                          </span>
-                          <span className="rounded-full border border-border bg-bg-secondary/70 px-2.5 py-1 text-[11px] text-text-secondary">
-                            Target UTME score: 300+
-                          </span>
-                        </div>
+              {/* AI Preparation Outlook Hero Card */}
+              {(activeTab === 'overview' || activeTab === 'all') && (
+                <section className="relative overflow-hidden rounded-3xl border border-primary/25 bg-bg-card p-5 sm:p-6 lg:p-7 shadow-xl shadow-primary/5 animate-fade-in">
+                  <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+                  <div className="pointer-events-none absolute bottom-0 right-12 h-28 w-28 rounded-full border border-info/20" />
+                  <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+                    <div className="max-w-xl">
+                      <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] text-info">
+                        <TrendingUp className="h-3.5 w-3.5" /> Preparation outlook
                       </div>
-                      <div className="flex items-center gap-4 rounded-2xl border border-border bg-bg-secondary/70 p-3.5 sm:p-4 backdrop-blur-sm shadow-sm">
-                        <div className="text-right">
-                          <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-muted">Readiness</p>
-                          <p className="mt-0.5 font-display text-2xl sm:text-3xl font-black text-text-primary">
-                            {readinessScore}<span className="text-sm font-semibold text-text-muted">/100</span>
-                          </p>
-                        </div>
-                        <Button onClick={() => openDrill()} disabled={!isCombinationValid} size="sm" className="whitespace-nowrap">
-                          <Zap className="h-4 w-4" /> Start a drill
-                        </Button>
+                      <h2 className="mt-2.5 font-display text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-text-primary">
+                        Build readiness one focused session at a time.
+                      </h2>
+                      <p className="mt-1.5 text-xs sm:text-sm leading-5 sm:leading-6 text-text-secondary">
+                        {nextWeakTopic ? `Your next opportunity is ${nextWeakTopic.topic}. A short, targeted drill can turn a weak area into a confident one.` : 'Complete a practice session to reveal a personalized readiness signal and your next area of focus.'}
+                      </p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        <span className="rounded-full border border-info/25 bg-info/10 px-2.5 py-1 text-[11px] font-medium text-info">
+                          {nextWeakTopic ? `Focus: ${nextWeakTopic.topic}` : 'Focus: establish a baseline'}
+                        </span>
+                        <span className="rounded-full border border-border bg-bg-secondary/70 px-2.5 py-1 text-[11px] text-text-secondary">
+                          Target UTME score: 300+
+                        </span>
                       </div>
                     </div>
-                  </section>
+                    <div className="flex items-center gap-4 rounded-2xl border border-border bg-bg-secondary/70 p-3.5 sm:p-4 backdrop-blur-sm shadow-sm">
+                      <div className="text-right">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-muted">Readiness</p>
+                        <p className="mt-0.5 font-display text-2xl sm:text-3xl font-black text-text-primary">
+                          {readinessScore}<span className="text-sm font-semibold text-text-muted">/100</span>
+                        </p>
+                      </div>
+                      <Button onClick={() => openDrill()} disabled={!isCombinationValid} size="sm" className="whitespace-nowrap">
+                        <Zap className="h-4 w-4" /> Start a drill
+                      </Button>
+                    </div>
+                  </div>
+                </section>
+              )}
 
-                  {/* Section: Mini Cards representing each tool/section */}
-                  <section className="space-y-4">
-                    <SectionKicker label="Quick Launch & Features" detail="Tap any card to open the complete tool" />
+              {/* Section: Mini Cards representing each tool/section (Quick navigation on Overview) */}
+              {activeTab === 'overview' && (
+                <section className="space-y-4 animate-fade-in">
+                  <SectionKicker label="Quick Launch & Features" detail="Tap any card to open the complete tool" />
                     <div className="grid gap-4 sm:grid-cols-2">
                       {/* Mini Card 1: Practice Arena */}
                       <Card
@@ -947,11 +997,10 @@ export default function StudentDashboard() {
                       </Card>
                     </div>
                   </section>
-                </div>
               )}
 
               {/* TAB 2: PRACTICE */}
-              {activeTab === 'practice' && (
+              {(activeTab === 'practice' || activeTab === 'all') && (
                 <div className="space-y-8 animate-fade-in">
                   <section className="space-y-4">
                     <SectionKicker label="Practice Modes" detail="Choose the type of preparation that fits your next study block" />
@@ -1006,7 +1055,7 @@ export default function StudentDashboard() {
               )}
 
               {/* TAB 3: MY ANALYTICS */}
-              {activeTab === 'analytics' && (
+              {(activeTab === 'analytics' || activeTab === 'all') && (
                 <div className="space-y-8 animate-fade-in">
                   {/* Performance Overview */}
                   <section className="space-y-4">
@@ -1145,7 +1194,7 @@ export default function StudentDashboard() {
         </div></div>
       </Modal>
 
-      <AiChatWidget />
+      <AiChatWidget hidden={mobileActionsOpen} />
     </div>
   );
 }

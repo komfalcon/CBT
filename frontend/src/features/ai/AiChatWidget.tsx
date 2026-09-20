@@ -23,6 +23,7 @@ import 'katex/dist/katex.min.css';
 
 interface AiChatWidgetProps {
   contextPayload?: string;
+  hidden?: boolean;
 }
 
 const suggestedPrompts = [
@@ -48,7 +49,9 @@ function FalkeMark({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   );
 }
 
-export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) => {
+export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload, hidden }) => {
+  if (hidden) return null;
+
   const [isOpen, setIsOpen] = useState(false);
   const [sessions, setSessions] = useState<any[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
@@ -100,6 +103,13 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
       setMessages([]);
     }
   }, [currentSessionId]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = 'auto';
+      inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 128)}px`;
+    }
+  }, [inputValue]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -228,7 +238,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
+    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
       event.preventDefault();
       handleSend();
     }
@@ -358,10 +368,10 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
                       placeholder="Ask FalkeAI about a topic, question, or study plan"
                       disabled={isLoading}
                       rows={1}
-                      className="max-h-28 min-h-11 flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-5 text-text-primary outline-none placeholder:text-text-muted disabled:cursor-not-allowed disabled:opacity-50"
+                      className="max-h-32 min-h-11 flex-1 resize-none overflow-y-auto bg-transparent px-2 py-2 text-sm leading-5 text-text-primary outline-none placeholder:text-text-muted disabled:cursor-not-allowed disabled:opacity-50"
                       aria-label="Message FalkeAI"
                     />
-                    <button type="button" onClick={handleSend} disabled={!inputValue.trim() || isLoading} className="flex h-11 w-11 min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl border border-ai-flag/50 bg-ai-flag text-[#3f2c0c] shadow-[0_6px_14px_rgba(215,179,92,0.22)] transition-[transform,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:bg-ai-flag-hover hover:shadow-[0_8px_18px_rgba(215,179,92,0.3)] active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none" aria-label="Send message" title="Send message"><Send className="h-4 w-4" /></button>
+                    <button type="button" onClick={handleSend} disabled={!inputValue.trim() || isLoading} className="flex h-11 w-11 min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl border border-ai-flag/50 bg-ai-flag text-[#3f2c0c] shadow-[0_6px_14px_rgba(215,179,92,0.22)] transition-[transform,background-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:bg-ai-flag-hover hover:shadow-[0_8px_18px_rgba(215,179,92,0.3)] active:scale-[0.95] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none" aria-label="Send message" title="Send message (Ctrl+Enter)"><Send className="h-4 w-4" /></button>
                   </div>
                   <p className="mt-2 text-center text-xs sm:text-[10px] text-text-muted">FalkeAI can make mistakes. Check important answers with your study materials.</p>
                 </div>
@@ -376,7 +386,7 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload }) =>
           ref={triggerRef}
           type="button"
           onClick={() => setIsOpen(true)}
-          className="group fixed bottom-6 right-6 z-[60] flex items-center gap-3 rounded-2xl border border-ai-flag/30 bg-bg-card px-3 py-3 shadow-[0_16px_34px_rgba(0,0,0,0.32)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-ai-flag/55 hover:shadow-[0_20px_42px_rgba(215,179,92,0.2)] active:scale-[0.98]"
+          className="group fixed bottom-6 right-6 z-30 flex items-center gap-3 rounded-2xl border border-ai-flag/30 bg-bg-card px-3 py-3 shadow-[0_16px_34px_rgba(0,0,0,0.32)] transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-ai-flag/55 hover:shadow-[0_20px_42px_rgba(215,179,92,0.2)] active:scale-[0.98]"
           aria-label="Open FalkeAI tutor"
         >
           <FalkeMark />
