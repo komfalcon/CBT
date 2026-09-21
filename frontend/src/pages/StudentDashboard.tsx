@@ -108,10 +108,6 @@ export default function StudentDashboard() {
   const [drillTopics, setDrillTopics] = useState<string[]>([]);
   const [availableTopics, setAvailableTopics] = useState<Array<{ topic: string; count: number }>>([]);
   const [isLoadingTopics, setIsLoadingTopics] = useState(false);
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const [paymentError, setPaymentError] = useState('');
-  const [paymentSuccess, setPaymentSuccess] = useState('');
   const [mobileActionsOpen, setMobileActionsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'practice' | 'analytics' | 'all'>('overview');
   const [securityModalTrigger, setSecurityModalTrigger] = useState(0);
@@ -176,15 +172,6 @@ export default function StudentDashboard() {
       .finally(() => setIsLoadingTopics(false));
   }, [drillSubject]);
 
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://js.paystack.co/v1/inline.js';
-    script.async = true;
-    document.head.appendChild(script);
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
 
   useEffect(() => {
     fetchProfileAndHistory();
@@ -213,53 +200,6 @@ export default function StudentDashboard() {
     }
   };
 
-  const verifyPayment = async (reference: string, planCode: string, newTier: string) => {
-    try {
-      setIsProcessingPayment(true);
-      setPaymentError('');
-      const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
-      const response = await fetch(`${apiBase}/payments/verify`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ reference, planCode }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Payment verification failed.');
-      setStudent((previous: any) => ({
-        ...previous,
-        subscription_tier: data.subscription_tier,
-        ai_messages_remaining: data.ai_messages_remaining,
-      }));
-      setPaymentSuccess(`Your ${newTier.toUpperCase()} plan is now active.`);
-      setShowUpgradeModal(false);
-    } catch (requestError: any) {
-      setPaymentError(requestError.message || 'An error occurred while verifying your payment.');
-    } finally {
-      setIsProcessingPayment(false);
-    }
-  };
-
-  const handleUpgradeClick = (planCode: string, tierName: string) => {
-    if (!student) return;
-    setPaymentError('');
-    setPaymentSuccess('');
-    const paystackPop = (window as any).PaystackPop;
-    if (!paystackPop) {
-      setPaymentError('Checkout is still loading. Please try again in a few seconds.');
-      return;
-    }
-    const handler = paystackPop.setup({
-      key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
-      email: student.email,
-      currency: 'NGN',
-      plan: planCode,
-      channels: ['card'],
-      callback: (response: any) => verifyPayment(response.reference, planCode, tierName),
-      onClose: () => undefined,
-    });
-    handler.openIframe();
-  };
 
   const handleStartDrill = async () => {
     if (!drillSubject) return;
@@ -568,12 +508,14 @@ export default function StudentDashboard() {
                 >
                   <Bell className="h-4 w-4 text-warning" /> Study Reminders
                 </button>
-                <button
-                  onClick={() => { setMobileActionsOpen(false); setShowUpgradeModal(true); }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
-                >
-                  <CreditCard className="h-4 w-4 text-streak" /> Subscription Plans
-                </button>
+                <div className="rounded-xl border border-primary/25 bg-primary/10 p-3 text-xs">
+                  <div className="flex items-center gap-1.5 font-bold text-primary">
+                    <Sparkles className="h-3.5 w-3.5" /> Public Beta (Free Access)
+                  </div>
+                  <p className="mt-1 text-[11px] leading-4 text-text-secondary">
+                    Max features unlocked for all students. Paid tiers will launch with the final release.
+                  </p>
+                </div>
               </div>
 
               {/* Footer Action: Sign Out */}
@@ -613,6 +555,26 @@ export default function StudentDashboard() {
               </div>
             </Alert>
           )}
+
+          {/* Public Beta Free Access Banner */}
+          <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl border border-primary/25 bg-gradient-to-r from-primary/10 via-bg-secondary to-primary/5 p-4 shadow-sm">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary text-text-on-accent font-black text-[11px] tracking-wider shadow-sm">
+                BETA
+              </div>
+              <div>
+                <p className="text-xs sm:text-sm font-bold text-text-primary">
+                  Public Beta — 100% Free Full Access Active
+                </p>
+                <p className="text-[11px] sm:text-xs text-text-secondary">
+                  Enjoy unlimited mocks, targeted drills, detailed analytics, and 20 free daily AI messages. Complete subscription tiers will roll out with the full release.
+                </p>
+              </div>
+            </div>
+            <span className="shrink-0 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary border border-primary/20">
+              Max Tier Active
+            </span>
+          </div>
 
           {/* Professional Tab Navigation Bar */}
           <div className="mb-6 sm:mb-8 border-b border-border">
@@ -703,8 +665,8 @@ export default function StudentDashboard() {
                       <p className="mt-1 break-all text-xs leading-5 text-text-secondary">{student?.email}</p>
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         <Badge variant="info">Candidate</Badge>
-                        <Badge variant={student?.subscription_tier === 'max' ? 'ai-flag' : student?.subscription_tier === 'pro' ? 'success' : student?.subscription_tier === 'plus' ? 'primary' : 'draft'}>
-                          {student?.subscription_tier || 'Free'} plan
+                        <Badge variant="ai-flag">
+                          Public Beta (Free Max Tier)
                         </Badge>
                       </div>
                     </div>
@@ -725,11 +687,14 @@ export default function StudentDashboard() {
                   </div>
                 </div>
                 <div className="px-5 pb-5">
-                  {student?.subscription_tier === 'max' ? (
-                    <div className="rounded-xl border border-ai-flag/25 bg-ai-flag/10 px-3 py-2.5 text-xs leading-5 text-text-secondary"><span className="font-bold text-ai-flag">Max plan active.</span> You have access to the complete study toolkit.</div>
-                  ) : (
-                    <Button onClick={() => setShowUpgradeModal(true)} variant="gradient" fullWidth size="sm"><CreditCard className="h-4 w-4" />Explore plans</Button>
-                  )}
+                  <div className="rounded-xl border border-primary/25 bg-primary/10 px-3.5 py-3 text-xs leading-5 text-text-secondary">
+                    <p className="font-bold text-primary flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5" /> Free All-Access Pass (Beta)
+                    </p>
+                    <p className="mt-1 text-[11px] leading-4 text-text-secondary">
+                      Full Max features & 20 daily AI prompts unlocked. Flexible plans will be sorted upon full release.
+                    </p>
+                  </div>
                 </div>
               </Card>
 
@@ -1171,28 +1136,6 @@ export default function StudentDashboard() {
         </div>
       </Modal>
 
-      <Modal isOpen={!!paymentSuccess} onClose={() => setPaymentSuccess('')} title="Plan updated" maxWidth="sm">
-        <div className="space-y-5 text-center"><div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-success/25 bg-success/10 text-success"><Check className="h-6 w-6" /></div><div><h3 className="font-display text-lg font-bold text-text-primary">Payment confirmed</h3><p className="mt-2 text-sm leading-6 text-text-secondary">{paymentSuccess}</p></div><Button onClick={() => setPaymentSuccess('')} fullWidth>Continue studying</Button></div>
-      </Modal>
-
-      <Modal isOpen={showUpgradeModal} onClose={() => setShowUpgradeModal(false)} title="Choose a study plan" maxWidth="4xl">
-        <div className="space-y-6"><p className="mx-auto max-w-xl text-center text-sm leading-6 text-text-secondary">Unlock more mocks, detailed reviews, targeted drills, and FalkeAI tutoring as your preparation needs grow.</p>{paymentError && <Alert variant="error" className="flex items-center gap-2">{paymentError}</Alert>}<div className="grid gap-4 md:grid-cols-3">
-          {[
-            { name: 'Plus', price: '₦3,500', plan: 'PLN_3pu5sd2pl33k7qw', summary: 'Core mock practice', features: ['1 full mock each day', 'Detailed score reviews', 'CBT access key'], icon: Zap, tone: 'primary' },
-            { name: 'Pro', price: '₦6,000', plan: 'PLN_yzw49g99ybur0c1', summary: 'More depth and flexibility', features: ['2 full mocks each day', 'Subject-specific drills', 'Detailed score reviews'], icon: Award, tone: 'info', featured: true },
-            { name: 'Max', price: '₦10,000', plan: 'PLN_kbpykg9tm67n6yv', summary: 'Complete preparation suite', features: ['Unlimited mock exams', 'Advanced performance review', 'FalkeAI tutor access'], icon: Brain, tone: 'ai-flag' },
-          ].map((plan) => {
-            const Icon = plan.icon;
-            return <div key={plan.name} className={classNames('relative flex flex-col rounded-2xl border bg-bg-secondary/50 p-5 shadow-sm transition-transform duration-200 hover:-translate-y-1', plan.featured ? 'border-primary/55 shadow-[0_12px_28px_rgba(91,114,255,0.12)]' : 'border-border')}>
-              {plan.featured && <span className="absolute right-4 top-4 rounded-full bg-primary/10 px-2 py-1 text-xs sm:text-[10px] font-bold uppercase tracking-wide text-primary">Popular</span>}
-              <div className={classNames('flex h-9 w-9 items-center justify-center rounded-xl border', plan.tone === 'ai-flag' ? 'border-ai-flag/30 bg-ai-flag/10 text-ai-flag' : plan.tone === 'info' ? 'border-info/30 bg-info/10 text-info' : 'border-primary/30 bg-primary/10 text-primary')}><Icon className="h-4 w-4" /></div>
-              <p className="mt-4 text-base font-bold text-text-primary">{plan.name}</p><p className="mt-1 text-xs text-text-secondary">{plan.summary}</p><p className="mt-5 font-display text-2xl font-black text-text-primary">{plan.price}<span className="ml-1 font-body text-xs font-medium text-text-muted">/month</span></p>
-              <ul className="mt-5 space-y-2 border-t border-border pt-4 text-xs leading-5 text-text-secondary">{plan.features.map((feature) => <li key={feature} className="flex items-start gap-2"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-success" />{feature}</li>)}</ul>
-              <Button onClick={() => handleUpgradeClick(plan.plan, plan.name.toLowerCase())} disabled={isProcessingPayment} variant={plan.featured ? 'gradient' : 'secondary'} fullWidth size="sm" className="mt-6">{isProcessingPayment ? 'Processing…' : `Choose ${plan.name}`}</Button>
-            </div>;
-          })}
-        </div></div>
-      </Modal>
 
       <AiChatWidget hidden={mobileActionsOpen} />
     </div>

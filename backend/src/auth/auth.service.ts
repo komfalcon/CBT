@@ -82,17 +82,26 @@ export class AuthService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    console.log('Running role fix migration...');
+    console.log('Running role & beta free tier migration...');
     const usersList = await this.db.select().from(schema.users);
     for (const user of usersList) {
+      let updatePayload: any = {};
       if (user.role && user.role !== user.role.toLowerCase()) {
-        console.log('Fixing role for', user.email);
+        updatePayload.role = user.role.toLowerCase() as any;
+      }
+      if (user.subscription_tier !== 'max') {
+        updatePayload.subscription_tier = 'max';
+      }
+      if (!user.ai_messages_remaining || user.ai_messages_remaining < 20) {
+        updatePayload.ai_messages_remaining = 20;
+      }
+      if (Object.keys(updatePayload).length > 0) {
         await this.db.update(schema.users)
-          .set({ role: user.role.toLowerCase() as any })
+          .set(updatePayload)
           .where(eq(schema.users.id, user.id));
       }
     }
-    console.log('Role fix migration complete.');
+    console.log('Role & beta free tier migration complete.');
   }
 
   async register(payload: RegisterDto) {
@@ -125,6 +134,8 @@ export class AuthService implements OnModuleInit {
       verification_code_expires: new Date(Date.now() + 24 * 3600 * 1000),
       cbt_key: plainCbtKey,
       cbt_key_hash: cbtKeyHash,
+      subscription_tier: 'max',
+      ai_messages_remaining: 20,
     }).returning();
 
     await this.notificationsService.queueEmailVerification({
@@ -503,6 +514,8 @@ export class AuthService implements OnModuleInit {
         profile_photo_url: googleUser.picture || null,
         role: "student" as any,
         account_status: 'active',
+        subscription_tier: 'max',
+        ai_messages_remaining: 20,
       }).returning();
       user = newUser;
     } else {

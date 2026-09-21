@@ -32,18 +32,15 @@ export class ExamService {
     }
 
     if (type === 'mock') {
-      const tier = user.subscription_tier || 'free';
-      let limit = 0;
+      const tier = user.subscription_tier || 'max';
+      // In Public Beta, all candidates enjoy full Max-tier privileges (10 full mocks per day)
+      let limit = 10;
       if (tier === 'plus') {
-        limit = 1;
+        limit = 3;
       } else if (tier === 'pro') {
-        limit = 2;
-      } else if (tier === 'max') {
         limit = 5;
-      }
-
-      if (tier === 'free' || limit === 0) {
-        throw new BadRequestException('Mock exams are not available on the Free plan. Please upgrade to a Plus, Pro, or Max plan to take mock exams.');
+      } else {
+        limit = 10;
       }
 
       const startOfToday = new Date();
@@ -59,7 +56,7 @@ export class ExamService {
       const mockCount = mockCountResult[0].value;
 
       if (mockCount >= limit) {
-        throw new BadRequestException(`You have reached your daily limit of ${limit} mock exam(s) for the ${tier.toUpperCase()} plan. Please upgrade your plan to take more mock exams.`);
+        throw new BadRequestException(`You have reached your daily limit of ${limit} mock exams for today. Please return tomorrow for more practice!`);
       }
 
       // Use custom subjects if provided, otherwise use user's default combination

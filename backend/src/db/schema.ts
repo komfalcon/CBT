@@ -33,7 +33,7 @@ export const users = pgTable('users', {
   level: integer('level').default(1),
   streak_count: integer('streak_count').default(0),
   subscription_tier: text('subscription_tier').default('max'),
-  ai_messages_remaining: integer('ai_messages_remaining').default(0),
+  ai_messages_remaining: integer('ai_messages_remaining').default(20),
   ai_messages_last_reset: timestamp('ai_messages_last_reset'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),

@@ -11,7 +11,7 @@ import axios from 'axios';
 export class AiService {
   private readonly logger = new Logger(AiService.name);
   private readonly apiUrl = 'https://seekai.cc/v1/chat/completions';
-  private readonly apiKey = process.env.SEEKAI_KEY || 'sk-uz8CMo5aLjbyGmP9JTOQ2olFoCW2Nyzp4isq8h2mqcBNPBCQ';
+  private readonly apiKey = process.env.SEEKAI_KEY || '';
   private model = 'deepseek-v4-pro';
 
   constructor(
@@ -104,7 +104,7 @@ export class AiService {
     }
 
     // Direct Cloudflare Workers AI 1 & 2 Fallback (Free Tier: 10,000 requests/day)
-    const cfAccountId = process.env.CF_ACCOUNT_ID || 'b2f877a02937ca06f9b1ac585f4c6d61';
+    const cfAccountId = process.env.CF_ACCOUNT_ID || '';
     const cfToken1 = process.env.CF_API_TOKEN_1;
     const cfToken2 = process.env.CF_API_TOKEN_2;
 
@@ -204,22 +204,26 @@ export class AiService {
     const user = users[0];
     if (!user) throw new UnauthorizedException('User not found');
 
+    // In Public Beta, all active students have access to the AI tutor and explanations
     if (user.subscription_tier !== 'max') {
-      throw new BadRequestException('AI features (including Conversational Tutor and Explanations) are only available on the Max plan.');
+      await this.db.update(schema.users)
+        .set({ subscription_tier: 'max' })
+        .where(eq(schema.users.id, userId));
+      user.subscription_tier = 'max';
     }
 
-    // Reset daily limit if it's a new day
+    // Reset daily limit if it's a new day (20 free AI messages per day in beta)
     const now = new Date();
     if (!user.ai_messages_last_reset || new Date(user.ai_messages_last_reset).getDate() !== now.getDate()) {
-      user.ai_messages_remaining = 1000; // Increased daily limit for early users
+      user.ai_messages_remaining = 20; // 20 free daily messages during public beta
       user.ai_messages_last_reset = now;
       await this.db.update(schema.users)
-        .set({ ai_messages_remaining: 1000, ai_messages_last_reset: now })
+        .set({ ai_messages_remaining: 20, ai_messages_last_reset: now })
         .where(eq(schema.users.id, userId));
     }
 
     if ((user.ai_messages_remaining || 0) <= 0) {
-      throw new BadRequestException('You have reached your daily limit of AI messages.');
+      throw new BadRequestException('You have reached your daily beta limit of 20 free AI messages. Quota resets at midnight!');
     }
 
     return user;

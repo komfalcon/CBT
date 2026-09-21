@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { normalizeExamAnswers, normalizeExamQuestions } from './sessionState';
 
-const baseURL = `${import.meta.env.VITE_API_BASE_URL ?? '/api'}/exam`;
+const apiBase = (import.meta.env.VITE_API_BASE_URL ?? '/api').replace(/\/+$/, '');
+const baseURL = `${apiBase}/exam`;
 
 const examApi = axios.create({
   baseURL,

@@ -13,4 +13,4 @@ jobs:
       - name: Ping Backend API
         run: |
           # Replace this URL with your actual production backend URL once deployed
-          curl -f -s -o /dev/null -w "%{http_code}\n" https://cbt-vl4x.onrender.com/api/health || echo "Failed to ping, but continuing"
+          curl -f -s -o /dev/null -w "%{http_code}\n" https://cbt-vl4x.onrender.com/health || echo "Failed to ping, but continuing"
