@@ -2,6 +2,7 @@ import { Controller, Get, Post, Patch, Body, Query, Param, UseGuards, Validation
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { AdminService } from './admin.service';
 
 @Controller('admin')
@@ -13,6 +14,20 @@ export class AdminController {
   @Get('stats/overview')
   getOverviewStats() {
     return this.adminService.getOverviewStats();
+  }
+
+  @Get('maintenance/status')
+  getMaintenanceStatus() {
+    return this.adminService.getMaintenanceStatus();
+  }
+
+  @Post('maintenance/toggle')
+  toggleMaintenance(
+    @CurrentUser() user: any,
+    @Body('password') password?: string,
+    @Body('enabled') enabled?: boolean,
+  ) {
+    return this.adminService.toggleMaintenance(user?.sub || 'admin', password, enabled);
   }
 
   @Get('users')

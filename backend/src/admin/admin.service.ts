@@ -1,13 +1,13 @@
-import { Injectable, BadRequestException, Inject } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException, OnModuleInit, Inject } from '@nestjs/common';
 import { createHash, randomUUID } from 'crypto';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { eq, and, or, not, like, count, sum, desc, gte, lte, ne } from 'drizzle-orm';
+import { eq, and, or, not, like, count, sum, desc, gte, lte, ne, sql } from 'drizzle-orm';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
 import { generateCbtKey, encryptFieldValue } from '../users/utils';
 
 @Injectable()
-export class AdminService {
+export class AdminService implements OnModuleInit {
   private statsCache?: {
     data: any;
     expiresAt: number;
@@ -17,6 +17,28 @@ export class AdminService {
   constructor(
     @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
   ) {}
+
+  async onModuleInit() {
+    try {
+      await this.db.execute(sql`
+        CREATE TABLE IF NOT EXISTS system_settings (
+          key text PRIMARY KEY,
+          value text NOT NULL,
+          updated_by text,
+          updated_at timestamp DEFAULT now()
+        );
+      `);
+      const [existing] = await this.db.select().from(schema.system_settings).where(eq(schema.system_settings.key, 'maintenance_mode')).limit(1);
+      if (!existing) {
+        await this.db.insert(schema.system_settings).values({
+          key: 'maintenance_mode',
+          value: 'false',
+        });
+      }
+    } catch (err: any) {
+      console.error('[ADMIN] Failed to initialize system_settings table:', err.message);
+    }
+  }
 
   async getOverviewStats(): Promise<any> {
     const now = Date.now();
@@ -192,6 +214,64 @@ export class AdminService {
       page: params.page,
       limit: params.limit,
       totalPages,
+    };
+  }
+
+  private maintenanceCache?: { isMaintenance: boolean; expiresAt: number; updatedAt?: Date | null; updatedBy?: string | null };
+
+  async getMaintenanceStatus(): Promise<{ isMaintenance: boolean; updatedAt?: Date | null; updatedBy?: string | null }> {
+    const now = Date.now();
+    if (this.maintenanceCache && this.maintenanceCache.expiresAt > now) {
+      return this.maintenanceCache;
+    }
+    try {
+      const [setting] = await this.db.select().from(schema.system_settings).where(eq(schema.system_settings.key, 'maintenance_mode')).limit(1);
+      const data = {
+        isMaintenance: setting?.value === 'true',
+        updatedAt: setting?.updatedAt || null,
+        updatedBy: setting?.updated_by || null,
+        expiresAt: now + 5000,
+      };
+      this.maintenanceCache = data;
+      return data;
+    } catch {
+      return { isMaintenance: false };
+    }
+  }
+
+  async toggleMaintenance(adminUserId: string, password?: string, requestedState?: boolean) {
+    const REQUIRED_PASSWORD = process.env.ADMIN_MAINTENANCE_PASSWORD || 'KorexTonyFalconStark1025$';
+    if (!password || password !== REQUIRED_PASSWORD) {
+      throw new UnauthorizedException('Invalid maintenance authorization password. Case-sensitive verification failed.');
+    }
+
+    const current = await this.getMaintenanceStatus();
+    const nextState = requestedState !== undefined ? requestedState : !current.isMaintenance;
+
+    await this.db.insert(schema.system_settings)
+      .values({
+        key: 'maintenance_mode',
+        value: nextState ? 'true' : 'false',
+        updated_by: adminUserId,
+        updatedAt: new Date(),
+      })
+      .onConflictDoUpdate({
+        target: schema.system_settings.key,
+        set: {
+          value: nextState ? 'true' : 'false',
+          updated_by: adminUserId,
+          updatedAt: new Date(),
+        },
+      });
+
+    this.maintenanceCache = undefined; // Invalidate cache immediately
+
+    return {
+      success: true,
+      isMaintenance: nextState,
+      message: nextState
+        ? 'Platform maintenance mode activated. All non-admin routes are now locked.'
+        : 'Platform maintenance mode deactivated. The entire platform is now live.',
     };
   }
 }

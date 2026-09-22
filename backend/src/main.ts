@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import { randomBytes } from 'crypto';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { AdminService } from './admin/admin.service';
 
 process.on('unhandledRejection', (reason) => {
   console.error('[CRITICAL SERVER ERROR] Unhandled Rejection:', reason);
@@ -60,6 +61,31 @@ async function bootstrap() {
       const origin = req.headers.origin;
       const originAllowed = !origin || allowedOrigins.includes(origin);
       if (req.headers['x-csrf-token'] !== csrfToken && !originAllowed) return res.status(403).json({ message: 'CSRF validation failed.' });
+    }
+    next();
+  });
+
+  const adminService = app.get(AdminService);
+  app.use(async (req: any, res: any, next: any) => {
+    const rawPath = String(req.path || req.originalUrl || '');
+    const cleanPath = rawPath.replace(/^\/api/, '');
+    const isExempt = /^\/(admin|sys|health|system\/maintenance-status)/.test(cleanPath);
+    const isAuthRoute = /^\/auth\/(login|refresh|logout|verify-otp)/.test(cleanPath);
+
+    if (!isExempt && !isAuthRoute) {
+      try {
+        const status = await adminService.getMaintenanceStatus();
+        if (status.isMaintenance) {
+          return res.status(503).json({
+            statusCode: 503,
+            error: 'Service Unavailable',
+            message: 'The Aurikrex CBT platform is currently undergoing scheduled maintenance. Please check back shortly.',
+            isMaintenance: true,
+          });
+        }
+      } catch {
+        // Fallback to allow if error
+      }
     }
     next();
   });

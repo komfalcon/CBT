@@ -174,3 +174,10 @@ export const integration_learning_events = pgTable('integration_learning_events'
   type: text('type'),
   data: jsonb('data'),
 });
+
+export const system_settings = pgTable('system_settings', {
+  key: text('key').primaryKey(),
+  value: text('value').notNull(),
+  updated_by: text('updated_by'),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});

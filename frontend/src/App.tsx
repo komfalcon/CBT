@@ -1,7 +1,8 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState, useCallback } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import OneSignal from 'react-onesignal';
 import { PwaInstallPrompt } from './components/PwaInstallPrompt';
+import UnderMaintenance from './pages/UnderMaintenance';
 import AuthPage from './features/auth/AuthPage';
 import QuestionBankPage from './features/questions/QuestionBankPage';
 import ExamArenaLanding from './pages/ExamArenaLanding';
@@ -65,6 +66,31 @@ function RouteMetadata() {
 }
 
 function App() {
+  const location = useLocation();
+  const [isMaintenance, setIsMaintenance] = useState<boolean>(false);
+
+  const checkMaintenance = useCallback(async () => {
+    try {
+      const apiBase = (import.meta.env.VITE_API_BASE_URL ?? '/api').replace(/\/+$/, '');
+      const res = await fetch(`${apiBase}/system/maintenance-status`, { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        const active = Boolean(data.isMaintenance);
+        setIsMaintenance(active);
+        return active;
+      }
+    } catch {
+      // Non-blocking on network failure
+    }
+    return false;
+  }, []);
+
+  useEffect(() => {
+    checkMaintenance();
+    const interval = setInterval(checkMaintenance, 15000);
+    return () => clearInterval(interval);
+  }, [checkMaintenance]);
+
   useEffect(() => {
     OneSignal.init({
       appId: import.meta.env.VITE_ONESIGNAL_APP_ID || 'b7622f37-8ca3-4304-922c-69438cc14d67',
@@ -73,6 +99,17 @@ function App() {
       console.warn('OneSignal initialization skipped or failed:', err);
     });
   }, []);
+
+  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/sys/auth-checkpoint');
+
+  if (isMaintenance && !isAdminRoute) {
+    return (
+      <div className="min-h-screen bg-[#0a1020] text-slate-100 flex flex-col">
+        <RouteMetadata />
+        <UnderMaintenance onCheckStatus={checkMaintenance} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-primary selection:text-white flex flex-col">
