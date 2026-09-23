@@ -100,9 +100,11 @@ function App() {
     });
   }, []);
 
+  const userRole = typeof window !== 'undefined' ? localStorage.getItem('user_role') : null;
+  const isStaff = userRole === 'admin' || userRole === 'super_admin';
   const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/sys/auth-checkpoint');
 
-  if (isMaintenance && !isAdminRoute) {
+  if (isMaintenance && !isAdminRoute && !isStaff) {
     return (
       <div className="min-h-screen bg-[#0a1020] text-slate-100 flex flex-col">
         <RouteMetadata />

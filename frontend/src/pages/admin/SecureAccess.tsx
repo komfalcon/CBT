@@ -26,6 +26,13 @@ export default function SecureAccess() {
         setTempToken('cookie');
         setMessage('MFA required. Enter your 6-digit code.');
       } else {
+        if (response.user?.role && response.user.role !== 'admin' && response.user.role !== 'super_admin') {
+          setMessage('Access Denied. This account does not have administrator privileges.');
+          return;
+        }
+        if (response.user?.role) {
+          localStorage.setItem('user_role', response.user.role);
+        }
         navigate('/admin/overview', { replace: true });
       }
     } catch (error: any) {
@@ -45,7 +52,14 @@ export default function SecureAccess() {
     try {
       setLoading(true);
       setMessage('Verifying OTP code...');
-      await verifyOtp({ otp });
+      const response = await verifyOtp({ otp });
+      if (response.user?.role && response.user.role !== 'admin' && response.user.role !== 'super_admin') {
+        setMessage('Access Denied. This account does not have administrator privileges.');
+        return;
+      }
+      if (response.user?.role) {
+        localStorage.setItem('user_role', response.user.role);
+      }
       navigate('/admin/overview', { replace: true });
     } catch (error: any) {
       setMessage(error.response?.data?.message || 'Access Denied. Invalid OTP.');

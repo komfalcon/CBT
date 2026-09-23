@@ -26,8 +26,10 @@ export class AdminController {
     @CurrentUser() user: any,
     @Body('password') password?: string,
     @Body('enabled') enabled?: boolean,
+    @Body('isMaintenance') isMaintenance?: boolean,
   ) {
-    return this.adminService.toggleMaintenance(user?.sub || 'admin', password, enabled);
+    const targetState = enabled !== undefined ? enabled : isMaintenance;
+    return this.adminService.toggleMaintenance(user?.sub || 'admin', password, targetState);
   }
 
   @Get('users')

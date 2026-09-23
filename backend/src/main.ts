@@ -70,7 +70,25 @@ async function bootstrap() {
     const rawPath = String(req.path || req.originalUrl || '');
     const cleanPath = rawPath.replace(/^\/api/, '');
     const isExempt = /^\/(admin|sys|health|system\/maintenance-status)/.test(cleanPath);
-    const isAuthRoute = /^\/auth\/(login|refresh|logout|verify-otp)/.test(cleanPath);
+    const isAuthRoute = /^\/auth\/(login|refresh|logout|verify-otp|me)/.test(cleanPath);
+
+    // If request contains an admin JWT in cookie or Authorization header, bypass maintenance
+    try {
+      const cookieHeader = String(req.headers.cookie || '');
+      const token = cookieHeader.split(';').map((p: string) => p.trim()).find((p: string) => p.startsWith('cbt_access_token='))?.slice(17)
+        || String(req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+      if (token && token.includes('.')) {
+        const parts = token.split('.');
+        if (parts.length === 3) {
+          const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
+          if (payload && (payload.role === 'admin' || payload.role === 'super_admin')) {
+            return next();
+          }
+        }
+      }
+    } catch {
+      // ignore parse errors and continue
+    }
 
     if (!isExempt && !isAuthRoute) {
       try {

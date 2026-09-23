@@ -238,7 +238,7 @@ export class AuthService implements OnModuleInit {
         '5m',
       );
 
-      return { requiresMFA: true, tempToken };
+      return { requiresMFA: true as const, tempToken };
     }
 
     const tokens = await this.issueAuthTokens(user);
@@ -248,7 +248,13 @@ export class AuthService implements OnModuleInit {
     await this.db.update(schema.users).set(updateData).where(eq(schema.users.id, user.id));
 
     return {
-      requiresMFA: false,
+      requiresMFA: false as const,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        fullName: user.fullName,
+      },
       ...tokens,
     };
   }
@@ -276,7 +282,13 @@ export class AuthService implements OnModuleInit {
     }).where(eq(schema.users.id, user.id));
 
     return {
-      requiresMFA: false,
+      requiresMFA: false as const,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        fullName: user.fullName,
+      },
       ...tokens,
     };
   }

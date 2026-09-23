@@ -8,7 +8,15 @@ export default function AdminRoute({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     let mounted = true;
     getMe()
-      .then((profile) => mounted && setState(profile.role === 'admin' || profile.role === 'super_admin' ? 'admin' : 'forbidden'))
+      .then((profile) => {
+        if (mounted) {
+          const isAdmin = profile.role === 'admin' || profile.role === 'super_admin';
+          if (isAdmin) {
+            localStorage.setItem('user_role', profile.role);
+          }
+          setState(isAdmin ? 'admin' : 'forbidden');
+        }
+      })
       .catch(() => mounted && setState('unauthenticated'));
     return () => { mounted = false; };
   }, []);
@@ -23,7 +31,7 @@ export default function AdminRoute({ children }: { children: React.ReactNode }) 
       </div>
     );
   }
-  if (state === 'unauthenticated') return <Navigate to="/auth?mode=login" replace />;
-  if (state === 'forbidden') return <Navigate to="/dashboard" replace />;
+  if (state === 'unauthenticated') return <Navigate to="/sys/auth-checkpoint" replace />;
+  if (state === 'forbidden') return <Navigate to="/sys/auth-checkpoint" replace />;
   return <>{children}</>;
 }
