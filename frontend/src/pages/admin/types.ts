@@ -17,6 +17,8 @@ export interface UserAccount {
   streak_count?: number;
   xp_points?: number;
   exam_subject_combination?: string[];
+  phone?: string;
+  last_login?: string;
 }
 
 export interface BillingLog {
@@ -26,4 +28,24 @@ export interface BillingLog {
   amount: number;
   email: string;
   verifiedAt: string;
+}
+
+export interface MaintenanceStatusResponse {
+  isMaintenance: boolean;
+  updatedAt?: string;
+  updatedBy?: string;
+}
+
+export interface ToggleMaintenanceResponse {
+  success: boolean;
+  isMaintenance: boolean;
+  message: string;
+  updatedAt?: string;
+}
+
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page?: number;
+  limit?: number;
 }

@@ -1,10 +1,18 @@
 import axios from 'axios';
 
-const baseURL = `${import.meta.env.VITE_API_BASE_URL ?? '/api'}`;
+const baseURL = `${(import.meta.env.VITE_API_BASE_URL ?? '/api').replace(/\/+$/, '')}`;
 
 const questionApi = axios.create({
   baseURL: `${baseURL}/questions`,
   withCredentials: true,
+});
+
+questionApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem('accessToken') || localStorage.getItem('token');
+  if (token && config.headers && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export type QuestionOption = {
@@ -22,6 +30,9 @@ export type QuestionRecord = {
   status: string;
   options?: QuestionOption[];
   correct_option?: string;
+  explanation?: string;
+  tags?: string[];
+  year_sourced?: number;
   created_at?: string;
 };
 
@@ -33,9 +44,15 @@ export type PaginatedQuestions = {
   totalPages: number;
 };
 
-function withAuth(_token?: string): { headers?: Record<string, string> } { return {}; }
+function withAuth(token?: string): { headers?: Record<string, string> } {
+  const activeToken = token || localStorage.getItem('accessToken') || localStorage.getItem('token');
+  if (activeToken) {
+    return { headers: { Authorization: `Bearer ${activeToken}` } };
+  }
+  return {};
+}
 
-export async function getQuestions(token: string, params?: Record<string, string | number | undefined>) {
+export async function getQuestions(token?: string, params?: Record<string, string | number | undefined>) {
   const { data } = await questionApi.get<PaginatedQuestions>('/', {
     ...(withAuth(token) ?? {}),
     params,
@@ -54,7 +71,7 @@ export async function searchQuestions(
 }
 
 export async function createQuestion(
-  token: string,
+  token: string | undefined,
   payload: {
     subject: string;
     topic: string;
@@ -70,7 +87,7 @@ export async function createQuestion(
   return data;
 }
 
-export async function getQuestionStats(token: string) {
+export async function getQuestionStats(token?: string) {
   const { data } = await questionApi.get('/stats', withAuth(token));
   return data;
 }
@@ -81,18 +98,20 @@ export async function getQuestionSubjects() {
 }
 
 export async function getSubjectTopics(subject: string) {
-  const { data } = await questionApi.get<Array<{ topic: string, count: number }>>('/topics', { params: { subject } });
+  const { data } = await questionApi.get<Array<{ topic: string; count: number }>>('/topics', {
+    params: { subject },
+  });
   return data;
 }
 
-export async function uploadImportFile(token: string, file: File) {
+export async function uploadImportFile(token: string | undefined, file: File) {
   const formData = new FormData();
   formData.append('file', file);
 
+  const authHeader = withAuth(token)?.headers ?? {};
   const { data } = await questionApi.post('/import/upload', formData, {
-    ...(withAuth(token) ?? {}),
     headers: {
-      ...(withAuth(token)?.headers ?? {}),
+      ...authHeader,
       'Content-Type': 'multipart/form-data',
     },
   });
@@ -105,7 +124,7 @@ export async function uploadImportFile(token: string, file: File) {
 }
 
 export async function commitImport(
-  token: string,
+  token: string | undefined,
   payload: { importId: string; columnMapping: Record<string, string>; async?: boolean },
 ) {
   const { data } = await questionApi.post('/import/commit', payload, withAuth(token));
