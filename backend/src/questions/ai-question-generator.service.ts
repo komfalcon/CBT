@@ -206,15 +206,18 @@ Respond ONLY with the raw JSON array.`;
     // Call chosen Provider
     let responseText = '';
     if (sourceType === 'new_svg_diagram' || !isNonTech) {
-      // Use NVIDIA Nemotron (nvapi) for technical subjects & SVG diagrams
-      responseText = await this.callNvidiaApi(systemPrompt, userPrompt);
+      try {
+        responseText = await this.callNvidiaApi(systemPrompt, userPrompt);
+      } catch (err: any) {
+        this.logger.warn(`NVIDIA API call failed: ${err.message}. Falling back to Mistral API...`);
+        responseText = await this.callMistralApi(systemPrompt, userPrompt);
+      }
     } else {
-      // Use Mistral or OrcaRouter for Non-Technical subjects (English, History, CRS, IRS, etc.)
       try {
         responseText = await this.callMistralApi(systemPrompt, userPrompt);
       } catch (err: any) {
-        this.logger.warn(`Mistral call failed: ${err.message}. Falling back to OrcaRouter...`);
-        responseText = await this.callOrcaApi(systemPrompt, userPrompt);
+        this.logger.warn(`Mistral call failed: ${err.message}. Falling back to NVIDIA API...`);
+        responseText = await this.callNvidiaApi(systemPrompt, userPrompt);
       }
     }
 
@@ -223,25 +226,40 @@ Respond ONLY with the raw JSON array.`;
 
   private async callNvidiaApi(systemPrompt: string, userPrompt: string): Promise<string> {
     const url = 'https://integrate.api.nvidia.com/v1/chat/completions';
-    const payload = {
-      model: 'nvidia/nemotron-3-ultra-550b',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
-      ],
-      max_tokens: 8192,
-      temperature: 0.3,
-    };
+    
+    // Primary active models on NVIDIA API: moonshotai/kimi-k3 -> mistralai/mistral-large-2-instruct
+    const models = ['moonshotai/kimi-k3', 'mistralai/mistral-large-2-instruct', 'meta/llama-3.2-90b-vision-instruct'];
+    
+    for (const model of models) {
+      try {
+        const payload = {
+          model,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt },
+          ],
+          max_tokens: 4096,
+          temperature: 0.3,
+        };
 
-    const res = await axios.post(url, payload, {
-      headers: {
-        Authorization: `Bearer ${this.nvidiaKey}`,
-        'Content-Type': 'application/json',
-      },
-      timeout: 60000,
-    });
+        const res = await axios.post(url, payload, {
+          headers: {
+            Authorization: `Bearer ${this.nvidiaKey}`,
+            'Content-Type': 'application/json',
+          },
+          timeout: 45000,
+        });
 
-    return res.data?.choices?.[0]?.message?.content || '';
+        const content = res.data?.choices?.[0]?.message?.content;
+        if (content) {
+          return content;
+        }
+      } catch (e: any) {
+        this.logger.warn(`NVIDIA model ${model} failed: ${e.message}. Trying next model...`);
+      }
+    }
+
+    throw new Error('All NVIDIA models failed to return content');
   }
 
   private async callMistralApi(systemPrompt: string, userPrompt: string): Promise<string> {
