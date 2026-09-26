@@ -309,29 +309,72 @@ Respond ONLY with the raw JSON array.`;
   }
 
   private parseJsonResponse(rawText: string): any[] {
+    let clean = rawText.trim();
+    if (clean.startsWith('```json')) {
+      clean = clean.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+    } else if (clean.startsWith('```')) {
+      clean = clean.replace(/^```\s*/, '').replace(/\s*```$/, '');
+    }
+    const jsonStart = clean.indexOf('[');
+    const jsonEnd = clean.lastIndexOf(']');
+    if (jsonStart !== -1 && jsonEnd !== -1) {
+      clean = clean.substring(jsonStart, jsonEnd + 1);
+    }
+
+    // 1. Try direct parse first
     try {
-      let clean = rawText.trim();
-      if (clean.startsWith('```json')) {
-        clean = clean.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-      } else if (clean.startsWith('```')) {
-        clean = clean.replace(/^```\s*/, '').replace(/\s*```$/, '');
-      }
-      const jsonStart = clean.indexOf('[');
-      const jsonEnd = clean.lastIndexOf(']');
-      if (jsonStart !== -1 && jsonEnd !== -1) {
-        clean = clean.substring(jsonStart, jsonEnd + 1);
-      }
-
-      // Fix single backslashes in LaTeX expressions (\theta, \frac, \vec, \alpha, \sqrt, \sin, \cos) for valid JSON strings
-      clean = clean.replace(/\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4})/g, '\\\\');
-
-      // Fix raw control line breaks inside JSON strings
-      clean = clean.replace(/\r\n/g, '\\n').replace(/\n/g, '\\n').replace(/\r/g, '');
-
       const items = JSON.parse(clean);
+      if (Array.isArray(items)) return items;
+    } catch (e1) {
+      // Direct parse failed, proceed to state-machine string repair
+    }
+
+    // 2. State-machine JSON repair: handles unescaped literal newlines/tabs inside quotes & LaTeX single backslashes
+    let inString = false;
+    let escaped = false;
+    let result = '';
+
+    for (let i = 0; i < clean.length; i++) {
+      const char = clean[i];
+
+      if (char === '"' && !escaped) {
+        inString = !inString;
+        result += char;
+      } else if (inString) {
+        if (char === '\n') {
+          result += '\\n';
+        } else if (char === '\r') {
+          // omit carriage return
+        } else if (char === '\t') {
+          result += '\\t';
+        } else if (char === '\\' && !escaped) {
+          const nextChar = clean[i + 1];
+          if (nextChar && ' "/bfnrtu'.includes(nextChar)) {
+            result += char;
+          } else {
+            result += '\\\\';
+          }
+        } else {
+          result += char;
+        }
+      } else {
+        result += char;
+      }
+
+      if (char === '\\' && !escaped) {
+        escaped = true;
+      } else {
+        escaped = false;
+      }
+    }
+
+    try {
+      const items = JSON.parse(result);
       return Array.isArray(items) ? items : [];
-    } catch (e: any) {
-      this.logger.error(`Failed to parse AI JSON response: ${e.message}. Raw output slice: ${rawText.slice(0, 200)}`);
+    } catch (e2: any) {
+      this.logger.error(
+        `Failed to parse AI JSON response: ${e2.message}. Raw output slice: ${rawText.slice(0, 200)}`,
+      );
       return [];
     }
   }
