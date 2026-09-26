@@ -375,6 +375,28 @@ Respond ONLY with the raw JSON array.`;
       const items = JSON.parse(result);
       return Array.isArray(items) ? items : [];
     } catch (e2: any) {
+      // 3. Object-level recovery fallback: extract valid individual question objects from response
+      const recovered: any[] = [];
+      const objectMatches = result.match(/\{[\s\S]*?\}(?=\s*,|\s*\]|$)/g);
+      if (objectMatches) {
+        for (const objStr of objectMatches) {
+          try {
+            const cleanObj = objStr.replace(/,\s*}/g, '}');
+            const parsedObj = JSON.parse(cleanObj);
+            if (parsedObj && parsedObj.question_text && parsedObj.options && Array.isArray(parsedObj.options)) {
+              recovered.push(parsedObj);
+            }
+          } catch {
+            // ignore unparseable single object
+          }
+        }
+      }
+
+      if (recovered.length > 0) {
+        this.logger.log(`Recovered ${recovered.length} valid question objects from partially truncated AI response.`);
+        return recovered;
+      }
+
       this.logger.error(
         `Failed to parse AI JSON response: ${e2.message}. Raw output slice: ${rawText.slice(0, 200)}`,
       );
