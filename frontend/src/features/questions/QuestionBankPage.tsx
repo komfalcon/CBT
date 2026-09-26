@@ -393,18 +393,18 @@ export default function QuestionBankPage() {
     }
   };
 
+  // Always check AI Generation & PDF Scanner status on mount and poll continuously
   useEffect(() => {
-    if (activeTab === 'pdf_scanner') {
-      loadPdfScanStatus();
-      const interval = setInterval(loadPdfScanStatus, 3000);
-      return () => clearInterval(interval);
-    }
-    if (activeTab === 'ai_generator') {
+    loadAiGenStatus();
+    loadPdfScanStatus();
+
+    const interval = setInterval(() => {
       loadAiGenStatus();
-      const interval = setInterval(loadAiGenStatus, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [activeTab, loadPdfScanStatus, loadAiGenStatus]);
+      loadPdfScanStatus();
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [loadAiGenStatus, loadPdfScanStatus]);
 
 
   // Generate downloadable sample CSV
@@ -507,6 +507,30 @@ export default function QuestionBankPage() {
             </button>
           </div>
         </Alert>
+      )}
+
+      {/* Active AI Background Generator Banner */}
+      {aiGenStatus.isRunning && (
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 rounded-xl bg-primary/10 border border-primary/30 p-3 text-xs text-primary">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 animate-spin text-primary shrink-0" />
+            <div>
+              <span className="font-bold">AI Background Generator Running:</span> Subject{' '}
+              <span className="capitalize font-black">{aiGenStatus.activeJob?.subject}</span> ({aiGenStatus.activeJob?.sourceType === 'new_svg_diagram' ? 'SVG Diagrams' : 'Standard Text'}).
+            </div>
+          </div>
+          <div className="flex items-center gap-3 font-mono font-bold self-end sm:self-auto">
+            <span>Progress: {aiGenStatus.generatedInCurrentJob} / {aiGenStatus.activeJob?.targetCount}</span>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setActiveTab('ai_generator')}
+              className="text-[11px] h-7 px-2.5"
+            >
+              View Generator
+            </Button>
+          </div>
+        </div>
       )}
 
       {/* Navigation Tabs */}
