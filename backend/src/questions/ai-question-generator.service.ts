@@ -327,21 +327,14 @@ Respond ONLY with the raw JSON array.`;
     clean = clean.replace(/:\s*`([\s\S]*?)`/g, (_m, p1) => `:${JSON.stringify(p1)}`);
     clean = clean.replace(/:\s*(\*[^\r\n,}]+\*)/g, ':"$1"');
 
-    // 1. Try direct parse first
-    try {
-      const items = JSON.parse(clean);
-      if (Array.isArray(items)) return items;
-    } catch (e1) {
-      // Direct parse failed, proceed to state-machine string repair
-    }
-
-    // 2. State-machine JSON repair: handles unescaped literal newlines/tabs inside quotes & LaTeX single backslashes
+    // 1. State-machine JSON repair & control-char sanitizer: handles unescaped literal newlines/tabs/control chars inside quotes & LaTeX single backslashes
     let inString = false;
     let escaped = false;
     let result = '';
 
     for (let i = 0; i < clean.length; i++) {
       const char = clean[i];
+      const code = clean.charCodeAt(i);
 
       if (char === '"' && !escaped) {
         inString = !inString;
@@ -353,6 +346,8 @@ Respond ONLY with the raw JSON array.`;
           // omit carriage return
         } else if (char === '\t') {
           result += '\\t';
+        } else if (code < 32) {
+          // omit raw ASCII control codes (0x00 - 0x1F) inside string literals
         } else if (char === '\\' && !escaped) {
           const nextChar = clean[i + 1];
           if (nextChar && '"/\\'.includes(nextChar)) {
@@ -364,7 +359,11 @@ Respond ONLY with the raw JSON array.`;
           result += char;
         }
       } else {
-        result += char;
+        if (code < 32 && char !== '\n' && char !== '\r' && char !== '\t') {
+          // omit raw control chars outside string literals
+        } else {
+          result += char;
+        }
       }
 
       if (char === '\\' && !escaped) {
@@ -384,7 +383,7 @@ Respond ONLY with the raw JSON array.`;
 
     try {
       const items = JSON.parse(result);
-      return Array.isArray(items) ? items : [];
+      if (Array.isArray(items)) return items;
     } catch (e2: any) {
       // 3. Object-level recovery fallback: extract valid individual question objects from response
       const recovered: any[] = [];
