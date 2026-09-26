@@ -227,8 +227,14 @@ Respond ONLY with the raw JSON array.`;
   private async callNvidiaApi(systemPrompt: string, userPrompt: string): Promise<string> {
     const url = 'https://integrate.api.nvidia.com/v1/chat/completions';
     
-    // Primary active models on NVIDIA API: nv-mistralai/mistral-nemo-12b-instruct (0.5s) -> moonshotai/kimi-k3
-    const models = ['nv-mistralai/mistral-nemo-12b-instruct', 'moonshotai/kimi-k3', 'meta/llama-3.2-90b-vision-instruct'];
+    // Active validated models on NVIDIA NIM API
+    const models = [
+      'mistralai/mistral-large-2-instruct',
+      'nvidia/llama-3.1-nemotron-70b-instruct',
+      'moonshotai/kimi-k3',
+      'meta/llama-3.2-90b-vision-instruct',
+      'deepseek-ai/deepseek-v4.1-flash',
+    ];
     
     for (const model of models) {
       try {
@@ -247,7 +253,7 @@ Respond ONLY with the raw JSON array.`;
             Authorization: `Bearer ${this.nvidiaKey}`,
             'Content-Type': 'application/json',
           },
-          timeout: 25000,
+          timeout: 60000,
         });
 
         const content = res.data?.choices?.[0]?.message?.content;
@@ -279,7 +285,7 @@ Respond ONLY with the raw JSON array.`;
         Authorization: `Bearer ${this.mistralKey}`,
         'Content-Type': 'application/json',
       },
-      timeout: 25000,
+      timeout: 60000,
     });
 
     return res.data?.choices?.[0]?.message?.content || '';
@@ -302,7 +308,7 @@ Respond ONLY with the raw JSON array.`;
         Authorization: `Bearer ${this.orcaKey}`,
         'Content-Type': 'application/json',
       },
-      timeout: 25000,
+      timeout: 60000,
     });
 
     return res.data?.choices?.[0]?.message?.content || '';
@@ -321,7 +327,8 @@ Respond ONLY with the raw JSON array.`;
       clean = clean.substring(jsonStart, jsonEnd + 1);
     }
     clean = clean.replace(/,\s*([\]}])/g, '$1');
-    // Pre-repair unquoted string values like "explanation": *Option B* ...
+    // Pre-repair unquoted string values like "explanation": *Option B* or backticked SVG strings "diagram_svg": `<svg...>`
+    clean = clean.replace(/:\s*`([\s\S]*?)`/g, (_m, p1) => `:${JSON.stringify(p1)}`);
     clean = clean.replace(/:\s*(\*[^\r\n,}]+\*)/g, ':"$1"');
 
     // 1. Try direct parse first
