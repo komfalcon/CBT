@@ -203,21 +203,17 @@ Respond ONLY with the raw JSON array.`;
       }
     }
 
-    // Call chosen Provider
+    // Call chosen Provider (Prioritize Mistral API for fast 11s responses with LaTeX & SVG support)
     let responseText = '';
-    if (sourceType === 'new_svg_diagram' || !isNonTech) {
+    try {
+      responseText = await this.callMistralApi(systemPrompt, userPrompt);
+    } catch (err: any) {
+      this.logger.warn(`Mistral API call failed: ${err.message}. Falling back to NVIDIA API...`);
       try {
         responseText = await this.callNvidiaApi(systemPrompt, userPrompt);
-      } catch (err: any) {
-        this.logger.warn(`NVIDIA API call failed: ${err.message}. Falling back to Mistral API...`);
-        responseText = await this.callMistralApi(systemPrompt, userPrompt);
-      }
-    } else {
-      try {
-        responseText = await this.callMistralApi(systemPrompt, userPrompt);
-      } catch (err: any) {
-        this.logger.warn(`Mistral call failed: ${err.message}. Falling back to NVIDIA API...`);
-        responseText = await this.callNvidiaApi(systemPrompt, userPrompt);
+      } catch (err2: any) {
+        this.logger.warn(`NVIDIA API call failed: ${err2.message}. Falling back to Orca API...`);
+        responseText = await this.callOrcaApi(systemPrompt, userPrompt);
       }
     }
 
@@ -251,7 +247,7 @@ Respond ONLY with the raw JSON array.`;
             Authorization: `Bearer ${this.nvidiaKey}`,
             'Content-Type': 'application/json',
           },
-          timeout: 60000,
+          timeout: 45000,
         });
 
         const content = res.data?.choices?.[0]?.message?.content;
@@ -283,7 +279,7 @@ Respond ONLY with the raw JSON array.`;
         Authorization: `Bearer ${this.mistralKey}`,
         'Content-Type': 'application/json',
       },
-      timeout: 60000,
+      timeout: 30000,
     });
 
     return res.data?.choices?.[0]?.message?.content || '';
@@ -306,7 +302,7 @@ Respond ONLY with the raw JSON array.`;
         Authorization: `Bearer ${this.orcaKey}`,
         'Content-Type': 'application/json',
       },
-      timeout: 60000,
+      timeout: 30000,
     });
 
     return res.data?.choices?.[0]?.message?.content || '';
@@ -357,7 +353,7 @@ Respond ONLY with the raw JSON array.`;
           result += '\\t';
         } else if (char === '\\' && !escaped) {
           const nextChar = clean[i + 1];
-          if (nextChar && ' "/bfnrtu'.includes(nextChar)) {
+          if (nextChar && '"/\\'.includes(nextChar)) {
             result += char;
           } else {
             result += '\\\\';
