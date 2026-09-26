@@ -26,6 +26,11 @@ import {
   getQuestionSubjects,
   searchQuestions,
   uploadImportFile,
+  triggerAiGeneration,
+  stopAiGeneration,
+  getAiGenerationStatus,
+  triggerPdfScan,
+  getPdfScanStatus,
   QuestionRecord,
   QuestionOption,
 } from './api';
@@ -66,13 +71,42 @@ const defaultCreateState = {
   tags: '',
 };
 
-type ActiveTab = 'browse' | 'create' | 'import' | 'stats';
+type ActiveTab = 'browse' | 'create' | 'import' | 'pdf_scanner' | 'ai_generator' | 'stats';
 
 export default function QuestionBankPage() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('browse');
   const [query, setQuery] = useState('');
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState('');
   const [notification, setNotification] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
+
+  // PDF Scanner State
+  const [pdfDirPath, setPdfDirPath] = useState('C:\\Users\\DELL\\Downloads\\PQ');
+  const [pdfScanProgress, setPdfScanProgress] = useState<{
+    isScanning?: boolean;
+    currentDirectory?: string;
+    scannedFiles?: string[];
+    currentFile?: string | null;
+    totalExtractedQuestions?: number;
+    logs?: string[];
+  }>({});
+  const [isPdfScanLoading, setIsPdfScanLoading] = useState(false);
+
+  // AI Question Generator State
+  const [aiSubject, setAiSubject] = useState('english');
+  const [aiSourceType, setAiSourceType] = useState<'new_text' | 'new_svg_diagram'>('new_text');
+  const [aiTargetCount, setAiTargetCount] = useState(50);
+  const [aiGenStatus, setAiGenStatus] = useState<{
+    isRunning?: boolean;
+    activeJob?: { subject: string; sourceType: string; targetCount: number } | null;
+    generatedInCurrentJob?: number;
+    totalStats?: {
+      newText: number;
+      newSvgDiagram: number;
+      scannedPastPaper: number;
+      bySubject: Record<string, { newText: number; newSvgDiagram: number; scannedPastPaper: number }>;
+    };
+  }>({});
+  const [isAiGenLoading, setIsAiGenLoading] = useState(false);
 
   // Browse state
   const [isLoading, setIsLoading] = useState(false);
@@ -290,11 +324,6 @@ export default function QuestionBankPage() {
         columnMapping,
         async: false,
       });
-      showToast('success', 'Bulk import committed successfully to the database!');
-      setImportUpload({});
-      setImportFile(null);
-      loadQuestionBank(1);
-      loadStatsData();
       setActiveTab('browse');
     } catch (err: unknown) {
       console.error('Commit import failed:', err);
@@ -303,6 +332,80 @@ export default function QuestionBankPage() {
       setIsCommitting(false);
     }
   };
+
+  // PDF Scanner Handlers & Polling
+  const loadPdfScanStatus = useCallback(async () => {
+    try {
+      const status = await getPdfScanStatus(undefined);
+      setPdfScanProgress(status);
+    } catch (e) {
+      console.error('Failed to load PDF scan status:', e);
+    }
+  }, []);
+
+  const handleStartPdfScan = async () => {
+    setIsPdfScanLoading(true);
+    try {
+      const res = await triggerPdfScan(undefined, pdfDirPath);
+      showToast('info', res.message || 'Started scanning PDF past papers.');
+      loadPdfScanStatus();
+    } catch (e: any) {
+      showToast('error', e.response?.data?.message || 'Failed to start PDF scanner.');
+    } finally {
+      setIsPdfScanLoading(false);
+    }
+  };
+
+  // AI Generator Handlers & Polling
+  const loadAiGenStatus = useCallback(async () => {
+    try {
+      const status = await getAiGenerationStatus(undefined);
+      setAiGenStatus(status);
+    } catch (e) {
+      console.error('Failed to load AI generation status:', e);
+    }
+  }, []);
+
+  const handleStartAiGen = async () => {
+    setIsAiGenLoading(true);
+    try {
+      const res = await triggerAiGeneration(undefined, {
+        subject: aiSubject,
+        sourceType: aiSourceType,
+        targetCount: Number(aiTargetCount) || 50,
+      });
+      showToast('success', res.message || 'Started background AI question generation.');
+      loadAiGenStatus();
+    } catch (e: any) {
+      showToast('error', e.response?.data?.message || 'Failed to start AI generation job.');
+    } finally {
+      setIsAiGenLoading(false);
+    }
+  };
+
+  const handleStopAiGen = async () => {
+    try {
+      const res = await stopAiGeneration(undefined);
+      showToast('info', res.message || 'Stopped AI generation job.');
+      loadAiGenStatus();
+    } catch (e: any) {
+      showToast('error', 'Failed to stop AI generation job.');
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'pdf_scanner') {
+      loadPdfScanStatus();
+      const interval = setInterval(loadPdfScanStatus, 3000);
+      return () => clearInterval(interval);
+    }
+    if (activeTab === 'ai_generator') {
+      loadAiGenStatus();
+      const interval = setInterval(loadAiGenStatus, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [activeTab, loadPdfScanStatus, loadAiGenStatus]);
+
 
   // Generate downloadable sample CSV
   const downloadSampleCsv = () => {
@@ -449,6 +552,30 @@ export default function QuestionBankPage() {
         >
           <UploadCloud className="h-3.5 w-3.5" />
           Bulk CSV Import
+        </button>
+
+        <button
+          onClick={() => setActiveTab('pdf_scanner')}
+          className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
+            activeTab === 'pdf_scanner'
+              ? 'bg-primary text-white shadow-sm'
+              : 'text-text-secondary hover:bg-bg-secondary hover:text-text-primary'
+          }`}
+        >
+          <FileCheck2 className="h-3.5 w-3.5" />
+          PDF Past Paper Scanner
+        </button>
+
+        <button
+          onClick={() => setActiveTab('ai_generator')}
+          className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
+            activeTab === 'ai_generator'
+              ? 'bg-primary text-white shadow-sm'
+              : 'text-text-secondary hover:bg-bg-secondary hover:text-text-primary'
+          }`}
+        >
+          <Sparkles className="h-3.5 w-3.5 text-yellow-400" />
+          AI Question Generator
         </button>
 
         <button
@@ -1158,6 +1285,264 @@ export default function QuestionBankPage() {
               )}
             </Card>
           )}
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB: PDF PAST PAPER SCANNER                                               */}
+      {/* ========================================================================= */}
+      {activeTab === 'pdf_scanner' && (
+        <div className="space-y-6">
+          <Card className="p-6 space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
+              <div>
+                <h2 className="text-lg font-bold text-text-primary flex items-center gap-2">
+                  <FileCheck2 className="h-5 w-5 text-primary" />
+                  PDF Past Paper Directory Scanner
+                </h2>
+                <p className="text-xs text-text-secondary mt-1">
+                  Scans multi-question pages (5-10 questions per page) and printed diagrams from past paper PDFs into PostgreSQL/LibSQL.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="primary"
+                  onClick={handleStartPdfScan}
+                  disabled={isPdfScanLoading || pdfScanProgress.isScanning}
+                  className="text-xs gap-2 shadow-sm"
+                >
+                  {pdfScanProgress.isScanning ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 animate-spin" />
+                      Scanning in Progress...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4" />
+                      Start Scanning Folder
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-text-secondary">PDF Directory Location on Server / PC</label>
+                <input
+                  type="text"
+                  value={pdfDirPath}
+                  onChange={(e) => setPdfDirPath(e.target.value)}
+                  placeholder="C:\Users\DELL\Downloads\PQ"
+                  className="w-full px-3 py-2 bg-bg-secondary border border-border rounded-xl text-xs text-text-primary focus:outline-none focus:border-primary font-mono"
+                />
+                <p className="text-[11px] text-text-muted">
+                  Default target: <code className="text-primary font-bold">C:\Users\DELL\Downloads\PQ</code> (Contains JAMB Maths, Physics, Chem, Biology, English past papers)
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-xl border border-border bg-bg-secondary/20 p-3 space-y-1">
+                  <span className="text-[10px] font-bold uppercase text-text-muted">Scanned Files</span>
+                  <p className="text-xl font-black text-text-primary">
+                    {pdfScanProgress.scannedFiles?.length || 0}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-border bg-bg-secondary/20 p-3 space-y-1">
+                  <span className="text-[10px] font-bold uppercase text-text-muted">Questions Extracted</span>
+                  <p className="text-xl font-black text-success">
+                    {pdfScanProgress.totalExtractedQuestions || 0}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Currently Processing Banner */}
+            {pdfScanProgress.isScanning && (
+              <div className="rounded-xl border border-primary/30 bg-primary/10 p-3.5 flex items-center justify-between animate-pulse">
+                <div className="flex items-center gap-2 text-xs font-semibold text-primary">
+                  <RefreshCw className="h-4 w-4 animate-spin" />
+                  Currently Processing: <span className="font-mono">{pdfScanProgress.currentFile}</span>
+                </div>
+                <Badge variant="warning">NVIDIA Kimi K3 Vision Active</Badge>
+              </div>
+            )}
+
+            {/* Real-time Scanner Execution Console Log */}
+            <div className="space-y-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-text-secondary flex items-center gap-1.5">
+                <BarChart3 className="h-3.5 w-3.5" />
+                Live Execution Logs
+              </span>
+              <div className="h-48 overflow-y-auto rounded-xl border border-border bg-black/80 p-3 font-mono text-[11px] text-emerald-400 space-y-1 leading-relaxed">
+                {(!pdfScanProgress.logs || pdfScanProgress.logs.length === 0) ? (
+                  <p className="text-gray-500 italic">No scanner logs available. Click 'Start Scanning Folder' to initiate.</p>
+                ) : (
+                  pdfScanProgress.logs.map((line, idx) => <p key={idx}>{line}</p>)
+                )}
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB: AI QUESTION GENERATOR                                               */}
+      {/* ========================================================================= */}
+      {activeTab === 'ai_generator' && (
+        <div className="space-y-6">
+          {/* Main Controls */}
+          <Card className="p-6 space-y-5">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
+              <div>
+                <h2 className="text-lg font-bold text-text-primary flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-yellow-400" />
+                  Background AI Question Generator
+                </h2>
+                <p className="text-xs text-text-secondary mt-1">
+                  Generates JAMB CBT standard text questions and vector SVG diagram questions continuously in background.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {aiGenStatus.isRunning ? (
+                  <Button
+                    variant="secondary"
+                    onClick={handleStopAiGen}
+                    className="text-xs gap-2 border-error/50 text-error hover:bg-error/10"
+                  >
+                    <X className="h-4 w-4" />
+                    Stop Generation Job
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    onClick={handleStartAiGen}
+                    disabled={isAiGenLoading}
+                    className="text-xs gap-2 shadow-sm"
+                  >
+                    {isAiGenLoading ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 animate-spin" />
+                        Launching...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4" />
+                        Start Background Generator
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-text-secondary">Target Subject</label>
+                <select
+                  value={aiSubject}
+                  onChange={(e) => setAiSubject(e.target.value)}
+                  className="w-full bg-bg-secondary border border-border rounded-xl px-3 py-2 text-xs text-text-primary focus:outline-none focus:border-primary"
+                >
+                  {AVAILABLE_SUBJECTS.map((s) => (
+                    <option key={s.value} value={s.value}>
+                      {s.label} ({s.value})
+                    </option>
+                  ))}
+                </select>
+                <div className="pt-1">
+                  {['english', 'crk', 'irk', 'history', 'literature', 'commerce', 'government', 'civic_education'].includes(aiSubject) ? (
+                    <Badge variant="success" className="text-[10px]">
+                      Mistral & OrcaRouter Free Keys (Nigerian Context History Focus)
+                    </Badge>
+                  ) : (
+                    <Badge variant="info" className="text-[10px]">
+                      NVIDIA Key (STEM, Math LaTeX & Diagram SVG Focus)
+                    </Badge>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-text-secondary">Question Category</label>
+                <select
+                  value={aiSourceType}
+                  onChange={(e) => setAiSourceType(e.target.value as any)}
+                  className="w-full bg-bg-secondary border border-border rounded-xl px-3 py-2 text-xs text-text-primary focus:outline-none focus:border-primary"
+                >
+                  <option value="new_text">Standard Digital Text (Target: 10,000)</option>
+                  <option value="new_svg_diagram">Vector SVG Diagram Questions (Target: 5,000)</option>
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-text-secondary">Batch Quantity</label>
+                <select
+                  value={aiTargetCount}
+                  onChange={(e) => setAiTargetCount(Number(e.target.value))}
+                  className="w-full bg-bg-secondary border border-border rounded-xl px-3 py-2 text-xs text-text-primary focus:outline-none focus:border-primary"
+                >
+                  <option value={10}>10 Questions</option>
+                  <option value={50}>50 Questions</option>
+                  <option value={100}>100 Questions</option>
+                  <option value={500}>500 Questions</option>
+                  <option value={1000}>1,000 Questions</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Active Job Progress */}
+            {aiGenStatus.isRunning && aiGenStatus.activeJob && (
+              <div className="rounded-xl border border-primary/30 bg-primary/10 p-4 space-y-2">
+                <div className="flex items-center justify-between text-xs font-semibold text-primary">
+                  <div className="flex items-center gap-2">
+                    <RefreshCw className="h-4 w-4 animate-spin" />
+                    Generating {aiGenStatus.activeJob.sourceType} for '{aiGenStatus.activeJob.subject}'...
+                  </div>
+                  <span>
+                    {aiGenStatus.generatedInCurrentJob || 0} / {aiGenStatus.activeJob.targetCount}
+                  </span>
+                </div>
+                <div className="w-full bg-bg-secondary/60 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="bg-primary h-2 transition-all duration-300"
+                    style={{
+                      width: `${Math.min(
+                        100,
+                        ((aiGenStatus.generatedInCurrentJob || 0) / (aiGenStatus.activeJob.targetCount || 1)) * 100
+                      )}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Target Quota Dashboard Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+              <div className="rounded-xl border border-border bg-bg-secondary/20 p-4 space-y-1">
+                <span className="text-[11px] font-bold uppercase text-text-muted">Standard Text Questions</span>
+                <p className="text-2xl font-black text-text-primary">
+                  {aiGenStatus.totalStats?.newText || 0} <span className="text-xs text-text-muted font-normal">/ 10,000 Target</span>
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-border bg-bg-secondary/20 p-4 space-y-1">
+                <span className="text-[11px] font-bold uppercase text-text-muted">Vector SVG Diagrams</span>
+                <p className="text-2xl font-black text-primary">
+                  {aiGenStatus.totalStats?.newSvgDiagram || 0} <span className="text-xs text-text-muted font-normal">/ 5,000 Target</span>
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-border bg-bg-secondary/20 p-4 space-y-1">
+                <span className="text-[11px] font-bold uppercase text-text-muted">Scanned Past Papers</span>
+                <p className="text-2xl font-black text-success">
+                  {aiGenStatus.totalStats?.scannedPastPaper || 0} <span className="text-xs text-text-muted font-normal">Extracted</span>
+                </p>
+              </div>
+            </div>
+          </Card>
         </div>
       )}
 

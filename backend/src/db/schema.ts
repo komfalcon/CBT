@@ -78,6 +78,7 @@ export const questions = pgTable('questions', {
   latex: text('latex'),
   import_batch_id: text('import_batch_id'),
   source: text('source').default('manual'),
+  question_source_type: text('question_source_type').default('new_text'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });

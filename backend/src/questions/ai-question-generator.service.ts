@@ -1,0 +1,401 @@
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { DRIZZLE } from '../db/database.module';
+import * as schema from '../db/schema';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import { count, eq, sql } from 'drizzle-orm';
+import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+import {
+  NON_TECHNICAL_SUBJECTS,
+  TECHNICAL_SUBJECTS,
+  QuestionSourceType,
+} from './types/question.types';
+
+export interface GenerationJobConfig {
+  subject: string;
+  sourceType: 'new_text' | 'new_svg_diagram';
+  targetCount: number;
+}
+
+export interface GenerationStatus {
+  isRunning: boolean;
+  activeJob: GenerationJobConfig | null;
+  generatedInCurrentJob: number;
+  totalStats: {
+    newText: number;
+    newSvgDiagram: number;
+    scannedPastPaper: number;
+    bySubject: Record<string, { newText: number; newSvgDiagram: number; scannedPastPaper: number }>;
+  };
+}
+
+@Injectable()
+export class AiQuestionGeneratorService {
+  private readonly logger = new Logger(AiQuestionGeneratorService.name);
+
+  // Free Tier & Metered API Keys
+  private readonly nvidiaKey =
+    process.env.NVIDIA_API_KEY ||
+    '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';
+  private readonly mistralKey =
+    process.env.MISTRAL_API_KEY ||
+    'mstrl_JQlXieutzBLjhxC6HJnqbCBM893KsBqJ_0CcPas';
+  private readonly orcaKey =
+    process.env.ORCAROUTER_API_KEY ||
+    'sk-orca-gk0Simt2OkYhhB1TCYoEDT1j7zv8FSeVrjD5G11oGqu';
+
+  private isRunning = false;
+  private activeJob: GenerationJobConfig | null = null;
+  private generatedInCurrentJob = 0;
+
+  constructor(
+    @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
+  ) {}
+
+  public isNonTechnicalSubject(subject: string): boolean {
+    const norm = subject.toLowerCase().trim();
+    return (NON_TECHNICAL_SUBJECTS as readonly string[]).includes(norm);
+  }
+
+  /**
+   * Main entry point to generate questions in batch or background
+   */
+  async startGenerationJob(config: GenerationJobConfig): Promise<{ success: boolean; message: string }> {
+    if (this.isRunning) {
+      return { success: false, message: `A generation job is already running for ${this.activeJob?.subject}` };
+    }
+
+    this.isRunning = true;
+    this.activeJob = config;
+    this.generatedInCurrentJob = 0;
+
+    // Run asynchronously in background
+    this.runBackgroundGeneration(config).catch((err) => {
+      this.logger.error(`Background generation failed: ${err.message}`, err.stack);
+      this.isRunning = false;
+      this.activeJob = null;
+    });
+
+    return {
+      success: true,
+      message: `Started generation job for subject '${config.subject}' (${config.sourceType}), targeting ${config.targetCount} questions.`,
+    };
+  }
+
+  async stopGenerationJob(): Promise<{ success: boolean; message: string }> {
+    if (!this.isRunning) {
+      return { success: false, message: 'No generation job is currently running.' };
+    }
+    this.isRunning = false;
+    this.activeJob = null;
+    return { success: true, message: 'Generation job stopped.' };
+  }
+
+  private async runBackgroundGeneration(config: GenerationJobConfig) {
+    this.logger.log(
+      `Starting background generation job: subject=${config.subject}, type=${config.sourceType}, targetCount=${config.targetCount}`,
+    );
+
+    const batchSize = 10;
+    while (this.isRunning && this.generatedInCurrentJob < config.targetCount) {
+      const needed = Math.min(batchSize, config.targetCount - this.generatedInCurrentJob);
+      try {
+        const questions = await this.generateBatch(config.subject, config.sourceType, needed);
+        if (questions && questions.length > 0) {
+          await this.saveQuestionsToDb(questions, config.subject, config.sourceType);
+          this.generatedInCurrentJob += questions.length;
+          this.logger.log(
+            `Generated and saved ${questions.length} questions for ${config.subject}. Total in job: ${this.generatedInCurrentJob}/${config.targetCount}`,
+          );
+        } else {
+          this.logger.warn(`Generated batch was empty for ${config.subject}. Retrying...`);
+        }
+      } catch (err: any) {
+        this.logger.error(`Error in generation batch: ${err.message}`);
+        // Pause briefly before retrying
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
+    }
+
+    this.logger.log(`Completed generation job for ${config.subject}. Total generated: ${this.generatedInCurrentJob}`);
+    this.isRunning = false;
+    this.activeJob = null;
+  }
+
+  /**
+   * Generates a single batch of questions using the designated provider routing
+   */
+  async generateBatch(
+    subject: string,
+    sourceType: 'new_text' | 'new_svg_diagram',
+    count: number,
+  ): Promise<any[]> {
+    const isNonTech = this.isNonTechnicalSubject(subject);
+
+    let systemPrompt = '';
+    let userPrompt = '';
+
+    if (sourceType === 'new_svg_diagram') {
+      systemPrompt = `You are a high-level educational content designer for Nigerian UTME/JAMB exams.
+You create high-quality STEM questions containing embedded, responsive vector SVG diagrams.`;
+
+      userPrompt = `Generate EXACTLY ${count} JAMB/UTME standard multiple-choice questions for the subject '${subject}'.
+Each question MUST include an inline vector SVG diagram in the 'diagram_svg' field.
+
+Guidelines for SVG Diagrams:
+- Must be valid XML/SVG code starting with <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"> and ending with </svg>.
+- Use clean dark/light mode compatible colors (e.g. stroke="#3b82f6", fill="#1e293b", text fill="#e2e8f0").
+- Illustrate real concepts (e.g., ray optics, electric circuits, force vectors, chemical structures, biological cell diagrams, Venn diagrams, geometric shapes, coordinate graphs).
+
+Output a raw JSON array containing objects with:
+- 'subject': "${subject}"
+- 'topic': string
+- 'question_text': string (full stem text)
+- 'options': array of 4 objects [{ 'id': 'A', 'text': '...' }, { 'id': 'B', 'text': '...' }, { 'id': 'C', 'text': '...' }, { 'id': 'D', 'text': '...' }]
+- 'correct_option': 'A' | 'B' | 'C' | 'D'
+- 'explanation': string (detailed solution walkthrough)
+- 'difficulty_level': number (1 to 5)
+- 'has_diagram': true
+- 'diagram_svg': string (complete inline <svg>...</svg> code)
+- 'latex': string or null (use $...$ math formatting where applicable)
+
+Respond ONLY with the raw JSON array.`;
+    } else {
+      // Standard Text Question Generation
+      if (isNonTech) {
+        systemPrompt = `You are an expert examiner for Nigerian UTME/JAMB in Humanities and Social Sciences (English, History, CRS, IRS, Government, Literature, Commerce, Civic Education).
+Special Note for History: Prioritize authentic NIGERIAN HISTORY (e.g., 1960 Independence, 1914 Amalgamation, pre-colonial Oyo, Benin, Sokoto Caliphate, Kanem-Borno empires, constitutional developments like Richards/Macpherson constitutions, military regimes, democratic transitions, nationalism).
+For English: Comprehension passages, antonyms, synonyms, stress patterns, registers, and grammatical accuracy.`;
+
+        userPrompt = `Generate EXACTLY ${count} high-quality JAMB standard CBT questions for '${subject}'.
+
+Output a raw JSON array containing objects with:
+- 'subject': "${subject}"
+- 'topic': string
+- 'question_text': string
+- 'options': array of 4 objects [{ 'id': 'A', 'text': '...' }, { 'id': 'B', 'text': '...' }, { 'id': 'C', 'text': '...' }, { 'id': 'D', 'text': '...' }]
+- 'correct_option': 'A' | 'B' | 'C' | 'D'
+- 'explanation': string
+- 'difficulty_level': number (1 to 5)
+- 'has_diagram': false
+- 'diagram_svg': null
+
+Respond ONLY with the raw JSON array.`;
+      } else {
+        systemPrompt = `You are an expert examiner for Nigerian UTME/JAMB in STEM subjects (Mathematics, Physics, Chemistry, Biology, Geography, Accounting, Further Math).
+All mathematical and chemical equations MUST use standard LaTeX enclosed in $...$ (e.g. $f(x) = \\int_0^1 x^2 dx$ or $H_2SO_4$).`;
+
+        userPrompt = `Generate EXACTLY ${count} high-quality JAMB standard CBT questions for '${subject}'.
+
+Output a raw JSON array containing objects with:
+- 'subject': "${subject}"
+- 'topic': string
+- 'question_text': string (including LaTeX math expressions)
+- 'options': array of 4 objects [{ 'id': 'A', 'text': '...' }, { 'id': 'B', 'text': '...' }, { 'id': 'C', 'text': '...' }, { 'id': 'D', 'text': '...' }]
+- 'correct_option': 'A' | 'B' | 'C' | 'D'
+- 'explanation': string (step-by-step mathematical or scientific derivation)
+- 'difficulty_level': number (1 to 5)
+- 'has_diagram': false
+- 'diagram_svg': null
+- 'latex': string or null
+
+Respond ONLY with the raw JSON array.`;
+      }
+    }
+
+    // Call chosen Provider
+    let responseText = '';
+    if (sourceType === 'new_svg_diagram' || !isNonTech) {
+      // Use NVIDIA Nemotron (nvapi) for technical subjects & SVG diagrams
+      responseText = await this.callNvidiaApi(systemPrompt, userPrompt);
+    } else {
+      // Use Mistral or OrcaRouter for Non-Technical subjects (English, History, CRS, IRS, etc.)
+      try {
+        responseText = await this.callMistralApi(systemPrompt, userPrompt);
+      } catch (err: any) {
+        this.logger.warn(`Mistral call failed: ${err.message}. Falling back to OrcaRouter...`);
+        responseText = await this.callOrcaApi(systemPrompt, userPrompt);
+      }
+    }
+
+    return this.parseJsonResponse(responseText);
+  }
+
+  private async callNvidiaApi(systemPrompt: string, userPrompt: string): Promise<string> {
+    const url = 'https://integrate.api.nvidia.com/v1/chat/completions';
+    const payload = {
+      model: 'nvidia/nemotron-3-ultra-550b',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      max_tokens: 8192,
+      temperature: 0.3,
+    };
+
+    const res = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${this.nvidiaKey}`,
+        'Content-Type': 'application/json',
+      },
+      timeout: 60000,
+    });
+
+    return res.data?.choices?.[0]?.message?.content || '';
+  }
+
+  private async callMistralApi(systemPrompt: string, userPrompt: string): Promise<string> {
+    const url = 'https://api.mistral.ai/v1/chat/completions';
+    const payload = {
+      model: 'ministral-3b-latest',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      max_tokens: 4096,
+      temperature: 0.3,
+    };
+
+    const res = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${this.mistralKey}`,
+        'Content-Type': 'application/json',
+      },
+      timeout: 30000,
+    });
+
+    return res.data?.choices?.[0]?.message?.content || '';
+  }
+
+  private async callOrcaApi(systemPrompt: string, userPrompt: string): Promise<string> {
+    const url = 'https://api.orcarouter.com/v1/chat/completions';
+    const payload = {
+      model: 'deepseek/deepseek-v4-flash-free',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      max_tokens: 4096,
+      temperature: 0.3,
+    };
+
+    const res = await axios.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${this.orcaKey}`,
+        'Content-Type': 'application/json',
+      },
+      timeout: 30000,
+    });
+
+    return res.data?.choices?.[0]?.message?.content || '';
+  }
+
+  private parseJsonResponse(rawText: string): any[] {
+    try {
+      let clean = rawText.trim();
+      if (clean.startsWith('```json')) {
+        clean = clean.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+      } else if (clean.startsWith('```')) {
+        clean = clean.replace(/^```\s*/, '').replace(/\s*```$/, '');
+      }
+      const jsonStart = clean.indexOf('[');
+      const jsonEnd = clean.lastIndexOf(']');
+      if (jsonStart !== -1 && jsonEnd !== -1) {
+        clean = clean.substring(jsonStart, jsonEnd + 1);
+      }
+
+      const items = JSON.parse(clean);
+      return Array.isArray(items) ? items : [];
+    } catch (e: any) {
+      this.logger.error(`Failed to parse AI JSON response: ${e.message}. Raw output slice: ${rawText.slice(0, 200)}`);
+      return [];
+    }
+  }
+
+  private async saveQuestionsToDb(questions: any[], subject: string, sourceType: QuestionSourceType) {
+    for (const q of questions) {
+      if (!q.question_text || !q.options || !Array.isArray(q.options) || q.options.length < 2) {
+        continue;
+      }
+
+      const id = `q_${uuidv4().replace(/-/g, '').slice(0, 16)}`;
+      const newQuestion = {
+        id,
+        subject: (q.subject || subject).toLowerCase().trim(),
+        topic: q.topic || 'General',
+        question_text: q.question_text,
+        options: q.options,
+        correct_option: q.correct_option || 'A',
+        explanation: q.explanation || null,
+        question_type: 'mcq_single',
+        difficulty_level: Number(q.difficulty_level) || 3,
+        has_diagram: Boolean(q.has_diagram || q.diagram_svg),
+        diagram_svg: q.diagram_svg || null,
+        latex: q.latex || null,
+        source: 'ai_generated',
+        question_source_type: sourceType,
+        created_by: 'ai_system',
+        status: 'published',
+      };
+
+      await this.db.insert(schema.questions).values(newQuestion as any).onConflictDoNothing();
+    }
+  }
+
+  async getGenerationStatus(): Promise<GenerationStatus> {
+    // Query totals by source type
+    const totals = await this.db
+      .select({
+        sourceType: schema.questions.question_source_type,
+        count: count(),
+      })
+      .from(schema.questions)
+      .groupBy(schema.questions.question_source_type);
+
+    let newText = 0;
+    let newSvgDiagram = 0;
+    let scannedPastPaper = 0;
+
+    totals.forEach((row) => {
+      const type = row.sourceType || 'new_text';
+      if (type === 'new_svg_diagram') newSvgDiagram = Number(row.count);
+      else if (type === 'scanned_past_paper') scannedPastPaper = Number(row.count);
+      else newText += Number(row.count);
+    });
+
+    // Query per-subject counts
+    const subjectRows = await this.db
+      .select({
+        subject: schema.questions.subject,
+        sourceType: schema.questions.question_source_type,
+        count: count(),
+      })
+      .from(schema.questions)
+      .groupBy(schema.questions.subject, schema.questions.question_source_type);
+
+    const bySubject: Record<string, { newText: number; newSvgDiagram: number; scannedPastPaper: number }> = {};
+
+    subjectRows.forEach((row) => {
+      const sub = row.subject || 'unknown';
+      if (!bySubject[sub]) {
+        bySubject[sub] = { newText: 0, newSvgDiagram: 0, scannedPastPaper: 0 };
+      }
+      const st = row.sourceType || 'new_text';
+      if (st === 'new_svg_diagram') bySubject[sub].newSvgDiagram += Number(row.count);
+      else if (st === 'scanned_past_paper') bySubject[sub].scannedPastPaper += Number(row.count);
+      else bySubject[sub].newText += Number(row.count);
+    });
+
+    return {
+      isRunning: this.isRunning,
+      activeJob: this.activeJob,
+      generatedInCurrentJob: this.generatedInCurrentJob,
+      totalStats: {
+        newText,
+        newSvgDiagram,
+        scannedPastPaper,
+        bySubject,
+      },
+    };
+  }
+}

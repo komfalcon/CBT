@@ -27,6 +27,7 @@ import {
   sum,
   or,
   gt,
+  sql,
 } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 import { SearchService } from "./search/search.service";
@@ -989,4 +990,94 @@ export class QuestionsService {
       `Question ${questionId} corrected via AI vetting: ${newCorrectOption}`,
     );
   }
+
+  async getInterleavedExamQuestions(
+    subjects: string[],
+    countPerSubject: number = 40,
+  ): Promise<Record<string, any[]>> {
+    const result: Record<string, any[]> = {};
+
+    for (const rawSubject of subjects) {
+      const subject = rawSubject.toLowerCase().trim();
+      const targetTextCount = Math.floor(countPerSubject * 0.5); // 50%
+      const targetDiagramCount = Math.floor(countPerSubject * 0.25); // 25%
+      const targetScannedCount = countPerSubject - targetTextCount - targetDiagramCount; // 25%
+
+      // Fetch by source type
+      const textQuestions = await this.db
+        .select()
+        .from(schema.questions)
+        .where(
+          and(
+            eq(schema.questions.subject, subject),
+            or(
+              eq(schema.questions.question_source_type, 'new_text'),
+              sql`${schema.questions.question_source_type} IS NULL`,
+            ),
+          ),
+        )
+        .limit(targetTextCount * 2);
+
+      const diagramQuestions = await this.db
+        .select()
+        .from(schema.questions)
+        .where(
+          and(
+            eq(schema.questions.subject, subject),
+            eq(schema.questions.question_source_type, 'new_svg_diagram'),
+          ),
+        )
+        .limit(targetDiagramCount * 2);
+
+      const scannedQuestions = await this.db
+        .select()
+        .from(schema.questions)
+        .where(
+          and(
+            eq(schema.questions.subject, subject),
+            eq(schema.questions.question_source_type, 'scanned_past_paper'),
+          ),
+        )
+        .limit(targetScannedCount * 2);
+
+      const pickRandom = (arr: any[], n: number) =>
+        [...arr].sort(() => 0.5 - Math.random()).slice(0, n);
+
+      const pickedText = pickRandom(textQuestions, targetTextCount);
+      const pickedDiagram = pickRandom(diagramQuestions, targetDiagramCount);
+      const pickedScanned = pickRandom(scannedQuestions, targetScannedCount);
+
+      // Interleave items in alternating order: text -> diagram -> scanned
+      const interleaved: any[] = [];
+      const maxLength = Math.max(pickedText.length, pickedDiagram.length, pickedScanned.length);
+
+      for (let i = 0; i < maxLength; i++) {
+        if (pickedText[i]) interleaved.push(pickedText[i]);
+        if (pickedDiagram[i]) interleaved.push(pickedDiagram[i]);
+        if (pickedScanned[i]) interleaved.push(pickedScanned[i]);
+      }
+
+      if (interleaved.length < countPerSubject) {
+        const existingIds = new Set(interleaved.map((q) => q.id));
+        const fillCandidates = await this.db
+          .select()
+          .from(schema.questions)
+          .where(eq(schema.questions.subject, subject))
+          .limit(countPerSubject * 2);
+
+        for (const candidate of fillCandidates) {
+          if (interleaved.length >= countPerSubject) break;
+          if (!existingIds.has(candidate.id)) {
+            interleaved.push(candidate);
+            existingIds.add(candidate.id);
+          }
+        }
+      }
+
+      result[subject] = interleaved.slice(0, countPerSubject);
+    }
+
+    return result;
+  }
 }
+

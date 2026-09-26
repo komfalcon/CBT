@@ -130,3 +130,54 @@ export async function commitImport(
   const { data } = await questionApi.post('/import/commit', payload, withAuth(token));
   return data;
 }
+
+export async function triggerAiGeneration(
+  token: string | undefined,
+  payload: { subject: string; sourceType?: 'new_text' | 'new_svg_diagram'; targetCount?: number },
+) {
+  const { data } = await questionApi.post('/ai-generate', payload, withAuth(token));
+  return data;
+}
+
+export async function stopAiGeneration(token: string | undefined) {
+  const { data } = await questionApi.post('/stop-ai-generate', {}, withAuth(token));
+  return data;
+}
+
+export async function getAiGenerationStatus(token?: string) {
+  const { data } = await questionApi.get('/ai-generate-status', withAuth(token));
+  return data;
+}
+
+export async function triggerPdfScan(
+  token: string | undefined,
+  directoryPath?: string,
+) {
+  const { data } = await questionApi.post(
+    '/scan-pdf',
+    { directoryPath: directoryPath || 'C:\\Users\\DELL\\Downloads\\PQ' },
+    withAuth(token),
+  );
+  return data;
+}
+
+export async function getPdfScanStatus(token?: string) {
+  const { data } = await questionApi.get('/scan-pdf-status', withAuth(token));
+  return data;
+}
+
+export async function uploadAndScanPdfFile(token: string | undefined, file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const authHeader = withAuth(token)?.headers ?? {};
+  const { data } = await questionApi.post('/scan-pdf-file', formData, {
+    headers: {
+      ...authHeader,
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return data as { success: boolean; extractedCount: number; message: string };
+}
+
+

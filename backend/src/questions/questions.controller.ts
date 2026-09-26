@@ -11,8 +11,11 @@ import {
   Query,
   Req,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
   ValidationPipe,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
@@ -37,9 +40,72 @@ class OptionalJwtAuthGuard extends AuthGuard('jwt') {
   }
 }
 
+import { AiQuestionGeneratorService } from './ai-question-generator.service';
+import { PdfScannerService } from './pdf-scanner.service';
+
 @Controller('questions')
 export class QuestionsController {
-  constructor(private readonly questionsService: QuestionsService) {}
+  constructor(
+    private readonly questionsService: QuestionsService,
+    private readonly aiGeneratorService: AiQuestionGeneratorService,
+    private readonly pdfScannerService: PdfScannerService,
+  ) {}
+
+  @Post('ai-generate')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'super_admin')
+  startAiGeneration(
+    @Body() payload: { subject: string; sourceType?: 'new_text' | 'new_svg_diagram'; targetCount?: number },
+  ) {
+    if (!payload.subject) {
+      throw new BadRequestException('subject is required');
+    }
+    return this.aiGeneratorService.startGenerationJob({
+      subject: payload.subject,
+      sourceType: payload.sourceType || 'new_text',
+      targetCount: payload.targetCount || 50,
+    });
+  }
+
+  @Post('stop-ai-generate')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'super_admin')
+  stopAiGeneration() {
+    return this.aiGeneratorService.stopGenerationJob();
+  }
+
+  @Get('ai-generate-status')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'super_admin', 'examiner')
+  getAiGenerationStatus() {
+    return this.aiGeneratorService.getGenerationStatus();
+  }
+
+  @Post('scan-pdf')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'super_admin')
+  scanPdfDirectory(@Body('directoryPath') directoryPath?: string) {
+    return this.pdfScannerService.scanDirectory(directoryPath);
+  }
+
+  @Post('scan-pdf-file')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'super_admin')
+  @UseInterceptors(FileInterceptor('file'))
+  scanPdfUploadedFile(@UploadedFile() file: any) {
+    if (!file || !file.buffer) {
+      throw new BadRequestException('No PDF file uploaded');
+    }
+    return this.pdfScannerService.scanUploadedPdf(file.buffer, file.originalname || 'uploaded_paper.pdf');
+  }
+
+  @Get('scan-pdf-status')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin', 'super_admin', 'examiner')
+  getScanPdfStatus() {
+    return this.pdfScannerService.getScanProgress();
+  }
+
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)

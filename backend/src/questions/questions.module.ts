@@ -9,13 +9,24 @@ import { ImportController } from './import/import.controller';
 import { ImportService } from './import/import.service';
 import { ImportProcessor } from './import/import.processor';
 
+import { AiQuestionGeneratorService } from './ai-question-generator.service';
+import { PdfScannerService } from './pdf-scanner.service';
+
 @Module({
   imports: [
     ConfigModule,
     NotificationsModule,
   ],
   controllers: [QuestionsController, ImportController],
-  providers: [QuestionsService, SearchService, QuestionsResolver, ImportService, ImportProcessor],
-  exports: [QuestionsService, SearchService],
+  providers: [
+    QuestionsService,
+    SearchService,
+    QuestionsResolver,
+    ImportService,
+    ImportProcessor,
+    AiQuestionGeneratorService,
+    PdfScannerService,
+  ],
+  exports: [QuestionsService, SearchService, AiQuestionGeneratorService, PdfScannerService],
 })
 export class QuestionsModule {}
