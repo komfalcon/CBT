@@ -380,10 +380,20 @@ Respond ONLY with the raw JSON array.`;
   }
 
   private async saveQuestionsToDb(questions: any[], subject: string, sourceType: QuestionSourceType) {
+    let savedCount = 0;
     for (const q of questions) {
       if (!q.question_text || !q.options || !Array.isArray(q.options) || q.options.length < 2) {
         continue;
       }
+
+      const formattedOptions = q.options.map((opt: any, idx: number) => {
+        const optionId = (opt.id || ['A', 'B', 'C', 'D', 'E'][idx] || 'A').toUpperCase().trim();
+        const optionText = typeof opt === 'string' ? opt : String(opt.text || opt);
+        return { id: optionId, text: optionText };
+      });
+
+      const rawCorrect = String(q.correct_option || 'A').toUpperCase().trim();
+      const validCorrect = ['A', 'B', 'C', 'D', 'E'].includes(rawCorrect[0]) ? rawCorrect[0] : 'A';
 
       const id = `q_${uuidv4().replace(/-/g, '').slice(0, 16)}`;
       const newQuestion = {
@@ -391,11 +401,11 @@ Respond ONLY with the raw JSON array.`;
         subject: (q.subject || subject).toLowerCase().trim(),
         topic: q.topic || 'General',
         question_text: q.question_text,
-        options: q.options,
-        correct_option: q.correct_option || 'A',
+        options: formattedOptions,
+        correct_option: validCorrect,
         explanation: q.explanation || null,
         question_type: 'mcq_single',
-        difficulty_level: Number(q.difficulty_level) || 3,
+        difficulty_level: Math.min(5, Math.max(1, Number(q.difficulty_level) || 3)),
         has_diagram: Boolean(q.has_diagram || q.diagram_svg),
         diagram_svg: q.diagram_svg || null,
         latex: q.latex || null,
@@ -405,7 +415,16 @@ Respond ONLY with the raw JSON array.`;
         status: 'published',
       };
 
-      await this.db.insert(schema.questions).values(newQuestion as any).onConflictDoNothing();
+      try {
+        await this.db.insert(schema.questions).values(newQuestion as any);
+        savedCount++;
+      } catch (dbErr: any) {
+        this.logger.error(`Database insertion error for question '${id}': ${dbErr.message}`);
+      }
+    }
+
+    if (savedCount > 0) {
+      this.logger.log(`Successfully persisted ${savedCount} questions into database for subject '${subject}'.`);
     }
   }
 
