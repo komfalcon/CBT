@@ -412,6 +412,8 @@ Respond ONLY with the raw JSON array.`;
       );
       return [];
     }
+
+    return [];
   }
 
   private async saveQuestionsToDb(questions: any[], subject: string, sourceType: QuestionSourceType) {
