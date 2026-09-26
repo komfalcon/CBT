@@ -321,6 +321,8 @@ Respond ONLY with the raw JSON array.`;
       clean = clean.substring(jsonStart, jsonEnd + 1);
     }
     clean = clean.replace(/,\s*([\]}])/g, '$1');
+    // Pre-repair unquoted string values like "explanation": *Option B* ...
+    clean = clean.replace(/:\s*(\*[^\r\n,}]+\*)/g, ':"$1"');
 
     // 1. Try direct parse first
     try {
