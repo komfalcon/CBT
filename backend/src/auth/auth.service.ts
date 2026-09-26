@@ -25,7 +25,7 @@ import { JwtPayload } from './types/jwt-payload.type';
 import { DRIZZLE } from '../db/database.module';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, sql } from 'drizzle-orm';
 
 type UserDocument = typeof schema.users.$inferSelect;
 
@@ -83,6 +83,15 @@ export class AuthService implements OnModuleInit {
 
   async onModuleInit() {
     console.log('Running role & beta free tier migration...');
+    try {
+      await this.db.execute(sql`ALTER TABLE questions ADD COLUMN IF NOT EXISTS question_source_type text DEFAULT 'new_text';`);
+      await this.db.execute(sql`ALTER TABLE questions ADD COLUMN IF NOT EXISTS has_diagram boolean DEFAULT false;`);
+      await this.db.execute(sql`ALTER TABLE questions ADD COLUMN IF NOT EXISTS diagram_svg text;`);
+      await this.db.execute(sql`ALTER TABLE questions ADD COLUMN IF NOT EXISTS latex text;`);
+      await this.db.execute(sql`ALTER TABLE questions ADD COLUMN IF NOT EXISTS import_batch_id text;`);
+    } catch {
+      // Ignore migration notice
+    }
     const usersList = await this.db.select().from(schema.users);
     for (const user of usersList) {
       let updatePayload: any = {};

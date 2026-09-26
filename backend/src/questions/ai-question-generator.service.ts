@@ -320,6 +320,7 @@ Respond ONLY with the raw JSON array.`;
     if (jsonStart !== -1 && jsonEnd !== -1) {
       clean = clean.substring(jsonStart, jsonEnd + 1);
     }
+    clean = clean.replace(/,\s*([\]}])/g, '$1');
 
     // 1. Try direct parse first
     try {
@@ -367,6 +368,8 @@ Respond ONLY with the raw JSON array.`;
         escaped = false;
       }
     }
+
+    result = result.replace(/,\s*([\]}])/g, '$1');
 
     try {
       const items = JSON.parse(result);
