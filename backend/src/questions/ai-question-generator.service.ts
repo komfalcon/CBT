@@ -96,7 +96,7 @@ export class AiQuestionGeneratorService {
       `Starting background generation job: subject=${config.subject}, type=${config.sourceType}, targetCount=${config.targetCount}`,
     );
 
-    const batchSize = 10;
+    const batchSize = config.sourceType === 'new_svg_diagram' ? 3 : 10;
     while (this.isRunning && this.generatedInCurrentJob < config.targetCount) {
       const needed = Math.min(batchSize, config.targetCount - this.generatedInCurrentJob);
       try {
@@ -227,13 +227,11 @@ Respond ONLY with the raw JSON array.`;
   private async callNvidiaApi(systemPrompt: string, userPrompt: string): Promise<string> {
     const url = 'https://integrate.api.nvidia.com/v1/chat/completions';
     
-    // Active validated models on NVIDIA NIM API
+    // Live validated models on NVIDIA API
     const models = [
-      'mistralai/mistral-large-2-instruct',
-      'nvidia/llama-3.1-nemotron-70b-instruct',
-      'moonshotai/kimi-k3',
+      'meta/llama-3.2-11b-vision-instruct',
       'meta/llama-3.2-90b-vision-instruct',
-      'deepseek-ai/deepseek-v4.1-flash',
+      'moonshotai/kimi-k3',
     ];
     
     for (const model of models) {
