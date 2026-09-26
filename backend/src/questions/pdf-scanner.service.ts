@@ -9,6 +9,8 @@ import * as os from 'os';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import axios from 'axios';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pdfParse = require('pdf-parse');
 
 const execAsync = promisify(exec);
 
@@ -25,9 +27,6 @@ export interface ScanProgress {
 export class PdfScannerService {
   private readonly logger = new Logger(PdfScannerService.name);
   private readonly defaultDirectory = 'C:\\Users\\DELL\\Downloads\\PQ';
-  private readonly nvidiaKey =
-    process.env.NVIDIA_API_KEY ||
-    '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';
 
   private isScanning = false;
   private currentDirectory = this.defaultDirectory;
@@ -102,27 +101,47 @@ export class PdfScannerService {
   }
 
   async scanUploadedPdf(fileBuffer: Buffer, filename: string): Promise<{ success: boolean; extractedCount: number; message: string }> {
-    const tempPath = path.join(os.tmpdir(), `upload_${Date.now()}_${filename}`);
-    fs.writeFileSync(tempPath, fileBuffer);
     try {
       this.addLog(`Processing uploaded PDF past paper: ${filename}...`);
-      const questions = await this.processPdfFile(tempPath, filename);
+      const subject = this.inferSubjectFromFilename(filename);
+
+      let pdfData: any = null;
+      try {
+        pdfData = await pdfParse(fileBuffer);
+      } catch (err: any) {
+        this.addLog(`Failed to parse PDF binary content: ${err.message}`);
+        return { success: false, extractedCount: 0, message: `Could not read PDF file format: ${err.message}` };
+      }
+
+      const rawText = pdfData?.text || '';
+      this.addLog(`PDF loaded: ${pdfData?.numpages || 0} pages, ${rawText.length} characters extracted from ${filename}.`);
+
+      if (!rawText || rawText.trim().length < 50) {
+        return {
+          success: true,
+          extractedCount: 0,
+          message: `Uploaded '${filename}' appears to be a scanned image PDF (no embedded text layer found). Please upload a text-readable PDF or use AI Generator.`,
+        };
+      }
+
+      const questions = await this.extractQuestionsFromText(rawText, subject, filename);
       if (questions && questions.length > 0) {
         await this.saveScannedQuestions(questions, filename);
         return {
           success: true,
           extractedCount: questions.length,
-          message: `Successfully extracted ${questions.length} questions from ${filename}.`,
+          message: `Successfully extracted ${questions.length} questions from '${filename}'!`,
         };
       }
-      return { success: true, extractedCount: 0, message: `Processed ${filename}, but no standard questions were extracted.` };
+
+      return {
+        success: true,
+        extractedCount: 0,
+        message: `Processed '${filename}', but no standard 4-option questions were detected in the text.`,
+      };
     } catch (e: any) {
       this.addLog(`Error processing uploaded file ${filename}: ${e.message}`);
       return { success: false, extractedCount: 0, message: `Failed to scan ${filename}: ${e.message}` };
-    } finally {
-      if (fs.existsSync(tempPath)) {
-        fs.unlinkSync(tempPath);
-      }
     }
   }
 
@@ -140,15 +159,15 @@ export class PdfScannerService {
         this.currentFile = pdfFile;
         this.addLog(`Processing PDF past paper: ${pdfFile}...`);
 
-        const extracted = await this.processPdfFile(fullPath, pdfFile);
-        if (extracted && extracted.length > 0) {
-          await this.saveScannedQuestions(extracted, pdfFile);
-          this.totalExtractedQuestions += extracted.length;
+        const fileBuffer = fs.readFileSync(fullPath);
+        const res = await this.scanUploadedPdf(fileBuffer, pdfFile);
+        if (res.success && res.extractedCount > 0) {
+          this.totalExtractedQuestions += res.extractedCount;
           this.addLog(
-            `Extracted & saved ${extracted.length} questions from ${pdfFile}. Total: ${this.totalExtractedQuestions}`,
+            `Extracted & saved ${res.extractedCount} questions from ${pdfFile}. Total: ${this.totalExtractedQuestions}`,
           );
         } else {
-          this.addLog(`No questions extracted or page text parsed for ${pdfFile}.`);
+          this.addLog(`Directory scan note for ${pdfFile}: ${res.message}`);
         }
 
         this.scannedFiles.push(pdfFile);
@@ -165,35 +184,183 @@ export class PdfScannerService {
     }
   }
 
-  /**
-   * Processes a single PDF file using vision or python helper
-   */
-  async processPdfFile(fullPath: string, filename: string): Promise<any[]> {
-    const subject = this.inferSubjectFromFilename(filename);
+  private async extractQuestionsFromText(rawText: string, subject: string, filename: string): Promise<any[]> {
+    const chunkSize = 3500;
+    const chunks: string[] = [];
+    for (let i = 0; i < rawText.length; i += chunkSize) {
+      chunks.push(rawText.substring(i, i + chunkSize));
+    }
 
-    // Python script path
-    const pythonScript = 'C:\\Users\\DELL\\.gemini\\antigravity\\brain\\f8ccf9be-8a30-439b-9374-75aa4d27a865\\scratch\\pdf_question_scanner.py';
+    this.addLog(`Split document text into ${chunks.length} processing chunks for subject '${subject}'.`);
 
-    if (fs.existsSync(pythonScript)) {
+    const allQuestions: any[] = [];
+
+    for (let i = 0; i < chunks.length; i++) {
+      const chunk = chunks[i];
       try {
-        const cmd = `python "${pythonScript}" "${fullPath}" "${subject}"`;
-        this.addLog(`Invoking vision scanner pipeline for subject '${subject}'...`);
-        const { stdout } = await execAsync(cmd, { timeout: 120000 });
-        if (stdout) {
-          const jsonStart = stdout.indexOf('[');
-          const jsonEnd = stdout.lastIndexOf(']');
-          if (jsonStart !== -1 && jsonEnd !== -1) {
-            const clean = stdout.substring(jsonStart, jsonEnd + 1);
-            return JSON.parse(clean);
+        const prompt = `You are an expert JAMB UTME exam scanner. Extract all standard 4-option multiple-choice questions from the following past paper text content.
+Subject: ${subject}
+Source File: ${filename}
+
+Text Content (Chunk ${i + 1}/${chunks.length}):
+${chunk}
+
+Strict Formatting Instructions:
+- Return ONLY a raw JSON array of objects. Do not wrap in markdown or backticks if possible.
+- Output JSON schema for each question object:
+[
+  {
+    "subject": "${subject}",
+    "topic": "Topic Name",
+    "question_text": "Stem question text",
+    "options": [
+      { "id": "A", "text": "Option A text" },
+      { "id": "B", "text": "Option B text" },
+      { "id": "C", "text": "Option C text" },
+      { "id": "D", "text": "Option D text" }
+    ],
+    "correct_option": "A",
+    "explanation": "Detailed explanation",
+    "difficulty_level": 3,
+    "latex": null
+  }
+]`;
+
+        const responseText = await this.callMistralApi(prompt);
+        if (responseText) {
+          const parsed = this.cleanAndParseQuestions(responseText, subject);
+          if (parsed && parsed.length > 0) {
+            allQuestions.push(...parsed);
+            this.addLog(`Chunk ${i + 1}/${chunks.length}: Extracted ${parsed.length} questions.`);
           }
         }
-      } catch (e: any) {
-        this.addLog(`Python helper note: ${e.message}. Using built-in fallback parser...`);
+      } catch (err: any) {
+        this.addLog(`Chunk ${i + 1}/${chunks.length} parsing note: ${err.message}`);
       }
     }
 
-    // Fallback direct text/AI parsing
-    return this.parsePdfFallback(fullPath, subject);
+    return allQuestions;
+  }
+
+  private async callMistralApi(prompt: string): Promise<string | null> {
+    const mistralKey = process.env.MISTRAL_API_KEY || 'mstrl_JQlXieutzBLjhxC6HJnqbCBM893KsBqJ_0CcPas';
+    const url = 'https://api.mistral.ai/v1/chat/completions';
+
+    try {
+      const res = await axios.post(
+        url,
+        {
+          model: 'ministral-3b-latest',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a high-accuracy educational past paper text scanner. Extract structured exam questions in raw JSON.',
+            },
+            {
+              role: 'user',
+              content: prompt,
+            },
+          ],
+          temperature: 0.1,
+          max_tokens: 3000,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${mistralKey}`,
+            'Content-Type': 'application/json',
+          },
+          timeout: 25000,
+        },
+      );
+
+      return res.data?.choices?.[0]?.message?.content || null;
+    } catch (e: any) {
+      this.logger.warn(`Mistral API call failed in PDF scanner: ${e.message}`);
+      return null;
+    }
+  }
+
+  private cleanAndParseQuestions(rawText: string, defaultSubject: string): any[] {
+    let clean = rawText.trim();
+
+    // Strip markdown code fence blocks if present
+    clean = clean.replace(/^```json\s*/i, '').replace(/^```\s*/, '').replace(/```\s*$/, '').trim();
+
+    // Control character & escape sanitizer
+    let result = '';
+    let inString = false;
+    let escaped = false;
+
+    for (let i = 0; i < clean.length; i++) {
+      const char = clean[i];
+      const code = clean.charCodeAt(i);
+
+      if (char === '"' && !escaped) {
+        inString = !inString;
+      }
+
+      if (inString) {
+        if (char === '\n') {
+          result += '\\n';
+        } else if (char === '\r') {
+          result += '\\r';
+        } else if (char === '\t') {
+          result += '\\t';
+        } else if (code < 32) {
+          // omit control codes
+        } else if (char === '\\' && !escaped) {
+          const nextChar = clean[i + 1];
+          if (nextChar && '"/\\'.includes(nextChar)) {
+            result += char;
+          } else {
+            result += '\\\\';
+          }
+        } else {
+          result += char;
+        }
+      } else {
+        if (code < 32 && char !== '\n' && char !== '\r' && char !== '\t') {
+          // omit control chars outside string literals
+        } else {
+          result += char;
+        }
+      }
+
+      if (char === '\\' && !escaped) {
+        escaped = true;
+      } else {
+        escaped = false;
+      }
+    }
+
+    result = result.replace(/,\s*([\]}])/g, '$1');
+
+    try {
+      const items = JSON.parse(result);
+      if (Array.isArray(items)) return items;
+    } catch {
+      // Object-level recovery fallback
+      const recovered: any[] = [];
+      const objectMatches = result.match(/\{[\s\S]*?\}(?=\s*,|\s*\]|$)/g);
+      if (objectMatches) {
+        for (const objStr of objectMatches) {
+          try {
+            const cleanObj = objStr.replace(/,\s*}/g, '}');
+            const parsedObj = JSON.parse(cleanObj);
+            if (parsedObj && parsedObj.question_text && parsedObj.options && Array.isArray(parsedObj.options)) {
+              recovered.push(parsedObj);
+            }
+          } catch {
+            // ignore
+          }
+        }
+      }
+      if (recovered.length > 0) {
+        return recovered;
+      }
+    }
+
+    return [];
   }
 
   private inferSubjectFromFilename(filename: string): string {
@@ -217,22 +384,20 @@ export class PdfScannerService {
     return 'general';
   }
 
-  private async parsePdfFallback(fullPath: string, subject: string): Promise<any[]> {
-    // If text file preview is available or basic stream read
-    try {
-      const stats = fs.statSync(fullPath);
-      this.addLog(`File size for ${path.basename(fullPath)}: ${(stats.size / 1024 / 1024).toFixed(2)} MB`);
-      return [];
-    } catch (err: any) {
-      return [];
-    }
-  }
-
   private async saveScannedQuestions(questions: any[], filename: string) {
     for (const q of questions) {
       if (!q.question_text || !q.options || !Array.isArray(q.options)) {
         continue;
       }
+
+      const formattedOptions = q.options.map((opt: any, idx: number) => {
+        const optionId = (opt.id || ['A', 'B', 'C', 'D', 'E'][idx] || 'A').toUpperCase().trim();
+        const optionText = typeof opt === 'string' ? opt : String(opt.text || opt);
+        return { id: optionId, text: optionText };
+      });
+
+      const rawCorrect = String(q.correct_option || 'A').toUpperCase().trim();
+      const validCorrect = ['A', 'B', 'C', 'D', 'E'].includes(rawCorrect[0]) ? rawCorrect[0] : 'A';
 
       const id = `q_scan_${uuidv4().replace(/-/g, '').slice(0, 16)}`;
       const newQuestion = {
@@ -240,11 +405,11 @@ export class PdfScannerService {
         subject: (q.subject || this.inferSubjectFromFilename(filename)).toLowerCase().trim(),
         topic: q.topic || 'Past Questions',
         question_text: q.question_text,
-        options: q.options,
-        correct_option: q.correct_option || 'A',
+        options: formattedOptions,
+        correct_option: validCorrect,
         explanation: q.explanation || null,
         question_type: 'mcq_single',
-        difficulty_level: Number(q.difficulty_level) || 3,
+        difficulty_level: Math.min(5, Math.max(1, Number(q.difficulty_level) || 3)),
         has_diagram: Boolean(q.has_diagram || q.diagram_svg),
         diagram_svg: q.diagram_svg || null,
         latex: q.latex || null,

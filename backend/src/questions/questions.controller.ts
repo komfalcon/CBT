@@ -91,7 +91,11 @@ export class QuestionsController {
   @Post('scan-pdf-file')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin', 'super_admin')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: { fileSize: 50 * 1024 * 1024 },
+    }),
+  )
   scanPdfUploadedFile(@UploadedFile() file: any) {
     if (!file || !file.buffer) {
       throw new BadRequestException('No PDF file uploaded');

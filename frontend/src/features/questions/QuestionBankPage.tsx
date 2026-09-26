@@ -362,10 +362,14 @@ export default function QuestionBankPage() {
   const handleUploadAndScanPdfFile = async (file: File) => {
     setIsPdfUploadLoading(true);
     try {
-      showToast('info', `Uploading and scanning '${file.name}' via NVIDIA Vision Engine...`);
+      showToast('info', `Uploading and scanning '${file.name}' with AI past paper scanner...`);
       const res = await uploadAndScanPdfFile(undefined, file);
       if (res.success) {
-        showToast('success', res.message || `Extracted questions from '${file.name}'!`);
+        if (res.extractedCount > 0) {
+          showToast('success', res.message || `Extracted ${res.extractedCount} questions from '${file.name}'!`);
+        } else {
+          showToast('info', res.message || `Processed '${file.name}', 0 questions extracted.`);
+        }
         loadPdfScanStatus();
         loadQuestionBank(1);
         loadStatsData();

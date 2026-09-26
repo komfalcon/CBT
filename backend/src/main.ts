@@ -6,6 +6,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { AdminService } from './admin/admin.service';
 
+import { json, urlencoded } from 'express';
+
 process.on('unhandledRejection', (reason) => {
   console.error('[CRITICAL SERVER ERROR] Unhandled Rejection:', reason);
 });
@@ -16,6 +18,9 @@ process.on('uncaughtException', (err) => {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
 
   const configuredOrigins = process.env.ALLOWED_ORIGINS
     ?.split(',')
