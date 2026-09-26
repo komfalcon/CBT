@@ -144,8 +144,10 @@ Each question MUST include an inline vector SVG diagram in the 'diagram_svg' fie
 
 Guidelines for SVG Diagrams:
 - Must be valid XML/SVG code starting with <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"> and ending with </svg>.
+- ALL SVG attribute values MUST use single quotes (e.g. <svg viewBox='0 0 400 300' fill='#3b82f6'>). Do NOT use double quotes inside SVG tags.
 - Use clean dark/light mode compatible colors (e.g. stroke="#3b82f6", fill="#1e293b", text fill="#e2e8f0").
 - Illustrate real concepts (e.g., ray optics, electric circuits, force vectors, chemical structures, biological cell diagrams, Venn diagrams, geometric shapes, coordinate graphs).
+- All string values ('question_text', 'explanation', 'diagram_svg') MUST be single-line strings with escaped newlines (\n). Do NOT output literal linebreaks.
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
@@ -156,7 +158,7 @@ Output a raw JSON array containing objects with:
 - 'explanation': string (detailed solution walkthrough)
 - 'difficulty_level': number (1 to 5)
 - 'has_diagram': true
-- 'diagram_svg': string (complete inline <svg>...</svg> code)
+- 'diagram_svg': string (complete inline <svg viewBox='0 0 400 300' xmlns='http://www.w3.org/2000/svg'>...</svg> code using single quotes)
 - 'latex': string or null (use $...$ math formatting where applicable)
 
 Respond ONLY with the raw JSON array.`;
@@ -373,6 +375,12 @@ Respond ONLY with the raw JSON array.`;
     }
 
     result = result.replace(/,\s*([\]}])/g, '$1');
+
+    // Convert any unescaped double quotes inside diagram_svg field to single quotes
+    result = result.replace(/("diagram_svg"\s*:\s*")([\s\S]*?)("\s*,\s*"latex"|\s*,\s*"source"|\s*,\s*"difficulty_level"|\s*,\s*"has_diagram"|\s*\})/g, (_m, p1, svg, p3) => {
+      const safeSvg = svg.replace(/"/g, "'");
+      return p1 + safeSvg + p3;
+    });
 
     try {
       const items = JSON.parse(result);
