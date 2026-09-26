@@ -70,10 +70,14 @@ export class PdfScannerService {
 
     const targetDir = dirPath || this.defaultDirectory;
     if (!fs.existsSync(targetDir)) {
-      return {
-        success: false,
-        message: `Directory does not exist: ${targetDir}`,
-      };
+      try {
+        fs.mkdirSync(targetDir, { recursive: true });
+      } catch {
+        return {
+          success: false,
+          message: `Directory '${targetDir}' does not exist on the web server. Since you are using the deployed website, please click 'Upload PDF Past Paper File' to upload your PDF directly from your PC!`,
+        };
+      }
     }
 
     this.isScanning = true;

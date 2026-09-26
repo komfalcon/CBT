@@ -31,6 +31,7 @@ import {
   getAiGenerationStatus,
   triggerPdfScan,
   getPdfScanStatus,
+  uploadAndScanPdfFile,
   QuestionRecord,
   QuestionOption,
 } from './api';
@@ -343,6 +344,8 @@ export default function QuestionBankPage() {
     }
   }, []);
 
+  const [isPdfUploadLoading, setIsPdfUploadLoading] = useState(false);
+
   const handleStartPdfScan = async () => {
     setIsPdfScanLoading(true);
     try {
@@ -353,6 +356,26 @@ export default function QuestionBankPage() {
       showToast('error', e.response?.data?.message || 'Failed to start PDF scanner.');
     } finally {
       setIsPdfScanLoading(false);
+    }
+  };
+
+  const handleUploadAndScanPdfFile = async (file: File) => {
+    setIsPdfUploadLoading(true);
+    try {
+      showToast('info', `Uploading and scanning '${file.name}' via NVIDIA Vision Engine...`);
+      const res = await uploadAndScanPdfFile(undefined, file);
+      if (res.success) {
+        showToast('success', res.message || `Extracted questions from '${file.name}'!`);
+        loadPdfScanStatus();
+        loadQuestionBank(1);
+        loadStatsData();
+      } else {
+        showToast('error', res.message || 'Could not extract questions from PDF.');
+      }
+    } catch (e: any) {
+      showToast('error', e.response?.data?.message || 'Failed to upload and scan PDF file.');
+    } finally {
+      setIsPdfUploadLoading(false);
     }
   };
 
@@ -1351,34 +1374,51 @@ export default function QuestionBankPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-text-secondary">PDF Directory Location on Server / PC</label>
-                <input
-                  type="text"
-                  value={pdfDirPath}
-                  onChange={(e) => setPdfDirPath(e.target.value)}
-                  placeholder="C:\Users\DELL\Downloads\PQ"
-                  className="w-full px-3 py-2 bg-bg-secondary border border-border rounded-xl text-xs text-text-primary focus:outline-none focus:border-primary font-mono"
-                />
-                <p className="text-[11px] text-text-muted">
-                  Default target: <code className="text-primary font-bold">C:\Users\DELL\Downloads\PQ</code> (Contains JAMB Maths, Physics, Chem, Biology, English past papers)
+            {/* Web PDF File Upload (Recommended for Deployed Website) */}
+            <div className="rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 p-4 text-center space-y-3">
+              <div className="flex flex-col items-center justify-center gap-1.5">
+                <UploadCloud className="h-7 w-7 text-primary" />
+                <span className="text-xs font-bold text-text-primary">
+                  Upload & Scan PDF File Directly (Recommended for Web Deployment)
+                </span>
+                <p className="text-[11px] text-text-secondary max-w-md">
+                  Select any JAMB Past Paper PDF file from your computer (e.g. <code className="text-primary font-bold">JAMB_Maths_2023.pdf</code>). NVIDIA Kimi K3 Vision Engine will scan the pages and extract questions into PostgreSQL!
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-border bg-bg-secondary/20 p-3 space-y-1">
-                  <span className="text-[10px] font-bold uppercase text-text-muted">Scanned Files</span>
-                  <p className="text-xl font-black text-text-primary">
-                    {pdfScanProgress.scannedFiles?.length || 0}
-                  </p>
-                </div>
-                <div className="rounded-xl border border-border bg-bg-secondary/20 p-3 space-y-1">
-                  <span className="text-[10px] font-bold uppercase text-text-muted">Questions Extracted</span>
-                  <p className="text-xl font-black text-success">
-                    {pdfScanProgress.totalExtractedQuestions || 0}
-                  </p>
-                </div>
+              <div className="flex items-center justify-center gap-3">
+                <input
+                  type="file"
+                  id="pdf-file-upload-input"
+                  accept=".pdf"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      handleUploadAndScanPdfFile(file);
+                      e.target.value = '';
+                    }
+                  }}
+                />
+                <Button
+                  variant="primary"
+                  size="sm"
+                  disabled={isPdfUploadLoading || pdfScanProgress.isScanning}
+                  className="text-xs gap-2 shadow-sm cursor-pointer"
+                  onClick={() => document.getElementById('pdf-file-upload-input')?.click()}
+                >
+                  {isPdfUploadLoading ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 animate-spin" />
+                      Uploading & Scanning PDF...
+                    </>
+                  ) : (
+                    <>
+                      <UploadCloud className="h-4 w-4" />
+                      Select PDF File from Computer
+                    </>
+                  )}
+                </Button>
               </div>
             </div>
 
