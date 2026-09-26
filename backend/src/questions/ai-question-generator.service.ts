@@ -96,7 +96,8 @@ export class AiQuestionGeneratorService {
       `Starting background generation job: subject=${config.subject}, type=${config.sourceType}, targetCount=${config.targetCount}`,
     );
 
-    const batchSize = config.sourceType === 'new_svg_diagram' ? 3 : 10;
+    const isCalculationHeavy = ['accounting', 'further_mathematics', 'mathematics', 'physics', 'chemistry'].includes(config.subject.toLowerCase());
+    const batchSize = config.sourceType === 'new_svg_diagram' ? 3 : isCalculationHeavy ? 4 : 10;
     while (this.isRunning && this.generatedInCurrentJob < config.targetCount) {
       const needed = Math.min(batchSize, config.targetCount - this.generatedInCurrentJob);
       try {
@@ -184,18 +185,19 @@ Output a raw JSON array containing objects with:
 
 Respond ONLY with the raw JSON array.`;
       } else {
-        systemPrompt = `You are an expert examiner for Nigerian UTME/JAMB in STEM subjects (Mathematics, Physics, Chemistry, Biology, Geography, Accounting, Further Math).
-All mathematical and chemical equations MUST use standard LaTeX enclosed in $...$ (e.g. $f(x) = \\int_0^1 x^2 dx$ or $H_2SO_4$).`;
+        systemPrompt = `You are an expert examiner for Nigerian UTME/JAMB in STEM and Financial Accounting subjects (Mathematics, Physics, Chemistry, Biology, Geography, Accounting, Further Math).
+All currency values should use N (Naira) or ₦. All mathematical equations should use LaTeX $...$.`;
 
         userPrompt = `Generate EXACTLY ${count} high-quality JAMB standard CBT questions for '${subject}'.
+All string values MUST be single-line strings with escaped newlines (\\n).
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
 - 'topic': string
-- 'question_text': string (including LaTeX math expressions)
+- 'question_text': string (including financial transactions or equations)
 - 'options': array of 4 objects [{ 'id': 'A', 'text': '...' }, { 'id': 'B', 'text': '...' }, { 'id': 'C', 'text': '...' }, { 'id': 'D', 'text': '...' }]
 - 'correct_option': 'A' | 'B' | 'C' | 'D'
-- 'explanation': string (step-by-step mathematical or scientific derivation)
+- 'explanation': string (step-by-step accounting or mathematical solution)
 - 'difficulty_level': number (1 to 5)
 - 'has_diagram': false
 - 'diagram_svg': null
@@ -240,7 +242,7 @@ Respond ONLY with the raw JSON array.`;
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt },
           ],
-          max_tokens: 3000,
+          max_tokens: 4000,
           temperature: 0.3,
         };
 
@@ -272,7 +274,7 @@ Respond ONLY with the raw JSON array.`;
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      max_tokens: 3000,
+      max_tokens: 4000,
       temperature: 0.3,
     };
 
@@ -281,7 +283,7 @@ Respond ONLY with the raw JSON array.`;
         Authorization: `Bearer ${this.mistralKey}`,
         'Content-Type': 'application/json',
       },
-      timeout: 30000,
+      timeout: 45000,
     });
 
     return res.data?.choices?.[0]?.message?.content || '';
@@ -295,7 +297,7 @@ Respond ONLY with the raw JSON array.`;
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      max_tokens: 3000,
+      max_tokens: 4000,
       temperature: 0.3,
     };
 
@@ -304,7 +306,7 @@ Respond ONLY with the raw JSON array.`;
         Authorization: `Bearer ${this.orcaKey}`,
         'Content-Type': 'application/json',
       },
-      timeout: 30000,
+      timeout: 45000,
     });
 
     return res.data?.choices?.[0]?.message?.content || '';
