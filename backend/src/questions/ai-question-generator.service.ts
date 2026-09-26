@@ -227,8 +227,8 @@ Respond ONLY with the raw JSON array.`;
   private async callNvidiaApi(systemPrompt: string, userPrompt: string): Promise<string> {
     const url = 'https://integrate.api.nvidia.com/v1/chat/completions';
     
-    // Primary active models on NVIDIA API: moonshotai/kimi-k3 -> mistralai/mistral-large-2-instruct
-    const models = ['moonshotai/kimi-k3', 'mistralai/mistral-large-2-instruct', 'meta/llama-3.2-90b-vision-instruct'];
+    // Primary active models on NVIDIA API: nv-mistralai/mistral-nemo-12b-instruct (0.5s) -> moonshotai/kimi-k3
+    const models = ['nv-mistralai/mistral-nemo-12b-instruct', 'moonshotai/kimi-k3', 'meta/llama-3.2-90b-vision-instruct'];
     
     for (const model of models) {
       try {
@@ -238,7 +238,7 @@ Respond ONLY with the raw JSON array.`;
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt },
           ],
-          max_tokens: 4096,
+          max_tokens: 3000,
           temperature: 0.3,
         };
 
@@ -247,7 +247,7 @@ Respond ONLY with the raw JSON array.`;
             Authorization: `Bearer ${this.nvidiaKey}`,
             'Content-Type': 'application/json',
           },
-          timeout: 45000,
+          timeout: 25000,
         });
 
         const content = res.data?.choices?.[0]?.message?.content;
@@ -270,7 +270,7 @@ Respond ONLY with the raw JSON array.`;
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      max_tokens: 4096,
+      max_tokens: 3000,
       temperature: 0.3,
     };
 
@@ -279,7 +279,7 @@ Respond ONLY with the raw JSON array.`;
         Authorization: `Bearer ${this.mistralKey}`,
         'Content-Type': 'application/json',
       },
-      timeout: 30000,
+      timeout: 25000,
     });
 
     return res.data?.choices?.[0]?.message?.content || '';
@@ -293,7 +293,7 @@ Respond ONLY with the raw JSON array.`;
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      max_tokens: 4096,
+      max_tokens: 3000,
       temperature: 0.3,
     };
 
@@ -302,7 +302,7 @@ Respond ONLY with the raw JSON array.`;
         Authorization: `Bearer ${this.orcaKey}`,
         'Content-Type': 'application/json',
       },
-      timeout: 30000,
+      timeout: 25000,
     });
 
     return res.data?.choices?.[0]?.message?.content || '';
@@ -321,6 +321,12 @@ Respond ONLY with the raw JSON array.`;
       if (jsonStart !== -1 && jsonEnd !== -1) {
         clean = clean.substring(jsonStart, jsonEnd + 1);
       }
+
+      // Fix single backslashes in LaTeX expressions (\theta, \frac, \vec, \alpha, \sqrt, \sin, \cos) for valid JSON strings
+      clean = clean.replace(/\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4})/g, '\\\\');
+
+      // Fix raw control line breaks inside JSON strings
+      clean = clean.replace(/\r\n/g, '\\n').replace(/\n/g, '\\n').replace(/\r/g, '');
 
       const items = JSON.parse(clean);
       return Array.isArray(items) ? items : [];
