@@ -193,9 +193,13 @@ export class AiQuestionGeneratorService {
   private readonly nvidiaKey =
     process.env.NVIDIA_API_KEY ||
     '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';
-  private readonly mistralKey =
-    process.env.MISTRAL_API_KEY ||
-    'mstrl_JQlXieutzBLjhxC6HJnqbCBM893KsBqJ_0CcPas';
+
+  // Dual Mistral API Keys for High-Throughput Parallel Generation
+  private readonly mistralKeys = [
+    process.env.MISTRAL_API_KEY || 'mstrl_JQlXieutzBLjhxC6HJnqbCBM893KsBqJ_0CcPas',
+    process.env.MISTRAL_API_KEY_2 || 'mstrl_W5k9kLK6jqWLrt7wW8i4C4cXw5p1pRde_4mixRZ',
+  ];
+
   private readonly orcaKey =
     process.env.ORCAROUTER_API_KEY ||
     'sk-orca-gk0Simt2OkYhhB1TCYoEDT1j7zv8FSeVrjD5G11oGqu';
@@ -225,7 +229,7 @@ export class AiQuestionGeneratorService {
     this.activeJob = config;
     this.generatedInCurrentJob = 0;
 
-    // Run asynchronously in background
+    // Run asynchronously in background using Dual-Worker Parallel Execution
     this.runBackgroundGeneration(config).catch((err) => {
       this.logger.error(`Background generation failed: ${err.message}`, err.stack);
       this.isRunning = false;
@@ -234,7 +238,7 @@ export class AiQuestionGeneratorService {
 
     return {
       success: true,
-      message: `Started background AI generation for subject '${config.subject}' (${config.sourceType}), targeting ${config.targetCount} questions.`,
+      message: `Started dual-worker background AI generation for subject '${config.subject}' (${config.sourceType}), targeting ${config.targetCount} questions across 2 API keys.`,
     };
   }
 
@@ -249,44 +253,62 @@ export class AiQuestionGeneratorService {
 
   private async runBackgroundGeneration(config: GenerationJobConfig) {
     this.logger.log(
-      `Starting background generation job: subject=${config.subject}, type=${config.sourceType}, targetCount=${config.targetCount}`,
+      `Launching DUAL-WORKER parallel generation job: subject=${config.subject}, type=${config.sourceType}, targetCount=${config.targetCount}`,
     );
 
     const isCalculationHeavy = ['accounting', 'further_mathematics', 'mathematics', 'physics', 'chemistry'].includes(config.subject.toLowerCase());
     const batchSize = config.sourceType === 'new_svg_diagram' ? 3 : isCalculationHeavy ? 4 : 8;
 
-    while (this.isRunning && this.generatedInCurrentJob < config.targetCount) {
-      const needed = Math.min(batchSize, config.targetCount - this.generatedInCurrentJob);
-      try {
-        const questions = await this.generateBatch(config.subject, config.sourceType, needed, config.topics);
-        if (questions && questions.length > 0) {
-          await this.saveQuestionsToDb(questions, config.subject, config.sourceType);
-          this.generatedInCurrentJob += questions.length;
-          this.logger.log(
-            `Generated and saved ${questions.length} questions for ${config.subject}. Total in job: ${this.generatedInCurrentJob}/${config.targetCount}`,
-          );
-        } else {
-          this.logger.warn(`Generated batch was empty for ${config.subject}. Retrying...`);
-        }
-      } catch (err: any) {
-        this.logger.error(`Error in generation batch: ${err.message}`);
-        // Pause briefly before retrying
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-      }
-    }
+    // Launch Worker 1 (Key 1) and Worker 2 (Key 2) concurrently in parallel
+    const worker1 = this.runWorkerLoop(config, batchSize, this.mistralKeys[0], 'Worker-1');
+    const worker2 = this.runWorkerLoop(config, batchSize, this.mistralKeys[1], 'Worker-2');
 
-    this.logger.log(`Completed generation job for ${config.subject}. Total generated: ${this.generatedInCurrentJob}`);
+    await Promise.allSettled([worker1, worker2]);
+
+    this.logger.log(`Completed dual-worker generation job for ${config.subject}. Total generated: ${this.generatedInCurrentJob}/${config.targetCount}`);
     this.isRunning = false;
     this.activeJob = null;
   }
 
+  private async runWorkerLoop(
+    config: GenerationJobConfig,
+    batchSize: number,
+    apiKey: string,
+    workerId: string,
+  ) {
+    this.logger.log(`[${workerId}] Started parallel generation loop for ${config.subject}...`);
+
+    while (this.isRunning && this.generatedInCurrentJob < config.targetCount) {
+      const remaining = config.targetCount - this.generatedInCurrentJob;
+      const needed = Math.min(batchSize, remaining);
+      if (needed <= 0) break;
+
+      try {
+        const questions = await this.generateBatch(config.subject, config.sourceType, needed, apiKey, config.topics);
+        if (questions && questions.length > 0) {
+          const saved = await this.saveQuestionsToDb(questions, config.subject, config.sourceType);
+          this.generatedInCurrentJob += saved;
+          this.logger.log(
+            `[${workerId}] Saved ${saved} questions for ${config.subject}. Progress: ${this.generatedInCurrentJob}/${config.targetCount}`,
+          );
+        } else {
+          this.logger.warn(`[${workerId}] Generated batch was empty for ${config.subject}. Retrying...`);
+        }
+      } catch (err: any) {
+        this.logger.error(`[${workerId}] Error in generation batch: ${err.message}`);
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
+    }
+  }
+
   /**
-   * Generates a single batch of questions using the designated provider routing
+   * Generates a single batch of questions using designated API key & routing
    */
   async generateBatch(
     subject: string,
     sourceType: GenerationSourceType,
     count: number,
+    apiKey?: string,
     customTopics?: string[],
   ): Promise<any[]> {
     const isNonTech = this.isNonTechnicalSubject(subject);
@@ -315,12 +337,10 @@ You create high-quality STEM questions containing embedded, responsive vector SV
 Topics to cover: ${topicStr}.
 Each question MUST include an inline vector SVG diagram in the 'diagram_svg' field.
 
-Guidelines for SVG Diagrams:
-- Must be valid XML/SVG code starting with <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"> and ending with </svg>.
-- ALL SVG attribute values MUST use single quotes (e.g. <svg viewBox='0 0 400 300' fill='#3b82f6'>). Do NOT use double quotes inside SVG tags.
-- Use clean dark/light mode compatible colors (e.g. stroke="#3b82f6", fill="#1e293b", text fill="#e2e8f0").
-- Illustrate real concepts from: ${topicStr}.
-- All string values MUST be single-line strings with escaped newlines (\\n).
+Formatting Rules:
+- Enclose all JSON string values in double quotes ("...").
+- Inside 'diagram_svg', use single quotes for XML attributes (e.g. <svg viewBox='0 0 400 300' fill='#3b82f6'>).
+- Escape backslashes in LaTeX formulas (e.g. \\\\(3x^2 - 12x - 15 = 0\\\\)).
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
@@ -342,7 +362,7 @@ You create step-by-step calculation questions formatted with LaTeX mathematics (
       userPrompt = `Generate EXACTLY ${count} calculation-based JAMB UTME questions for '${subject}'.
 Topics to cover: ${topicStr}.
 All mathematical equations must use LaTeX ($...$). Currency should use ₦ or N (Naira).
-Populate 'latex' field with key formulas used.
+Escape backslashes in LaTeX (e.g. \\\\frac{a}{b} or \\\\(x^2 + y^2 = r^2\\\\)).
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
@@ -388,6 +408,7 @@ Cover topics: ${topicStr}.
 Dynamic Mix Rules:
 - Include a variety of question styles: conceptual theory, mathematical calculations with LaTeX ($...$), inline vector SVG diagrams (where appropriate), and scenario/passage questions.
 - For vector SVG diagrams (if any), use single quotes inside SVG tag attributes (<svg viewBox='0 0 400 300' fill='#3b82f6'>).
+- Escape backslashes in LaTeX (e.g. \\\\(3x^2 - 12x - 15 = 0\\\\) or \\\\frac{a}{b}).
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
@@ -405,7 +426,7 @@ Respond ONLY with the raw JSON array.`;
     } else {
       // Standard Text Question Generation
       if (isNonTech) {
-        systemPrompt = `You are an expert examiner for Nigerian UTME/JAMB in Humanities and Social Sciences (English, History, CRS, IRS, Government, Literature, Commerce, Civic Education).
+        systemPrompt = `You are an expert examiner for Nigerian UTME/JAMB in Humanities and Social Sciences.
 Special Note for History: Prioritize authentic NIGERIAN HISTORY (e.g., 1960 Independence, 1914 Amalgamation, pre-colonial Oyo, Benin, Sokoto Caliphate, Kanem-Borno empires, constitutional developments like Richards/Macpherson constitutions, military regimes, democratic transitions, nationalism).`;
 
         userPrompt = `Generate EXACTLY ${count} high-quality JAMB standard CBT questions for '${subject}'.
@@ -447,10 +468,10 @@ Respond ONLY with the raw JSON array.`;
       }
     }
 
-    // Call chosen Provider (Prioritize Mistral API for fast 11s responses)
+    // Call chosen Provider (Prioritize Mistral API with worker designated key)
     let responseText = '';
     try {
-      responseText = await this.callMistralApi(systemPrompt, userPrompt);
+      responseText = await this.callMistralApi(systemPrompt, userPrompt, apiKey);
     } catch (err: any) {
       this.logger.warn(`Mistral API call failed: ${err.message}. Falling back to NVIDIA API...`);
       try {
@@ -506,7 +527,8 @@ Respond ONLY with the raw JSON array.`;
     throw new Error('All NVIDIA models failed to return content');
   }
 
-  private async callMistralApi(systemPrompt: string, userPrompt: string): Promise<string> {
+  private async callMistralApi(systemPrompt: string, userPrompt: string, apiKey?: string): Promise<string> {
+    const key = apiKey || this.mistralKeys[0];
     const url = 'https://api.mistral.ai/v1/chat/completions';
     const payload = {
       model: 'ministral-3b-latest',
@@ -520,7 +542,7 @@ Respond ONLY with the raw JSON array.`;
 
     const res = await axios.post(url, payload, {
       headers: {
-        Authorization: `Bearer ${this.mistralKey}`,
+        Authorization: `Bearer ${key}`,
         'Content-Type': 'application/json',
       },
       timeout: 45000,
@@ -642,39 +664,68 @@ Respond ONLY with the raw JSON array.`;
     try {
       const items = JSON.parse(result);
       if (Array.isArray(items)) return items;
-    } catch (e2: any) {
-      // 3. Object-level recovery fallback
-      const recovered: any[] = [];
-      const objectMatches = result.match(/\{[\s\S]*?\}(?=\s*,|\s*\]|$)/g);
-      if (objectMatches) {
-        for (const objStr of objectMatches) {
-          try {
-            const cleanObj = objStr.replace(/,\s*}/g, '}');
-            const parsedObj = JSON.parse(cleanObj);
-            if (parsedObj && parsedObj.question_text && parsedObj.options && Array.isArray(parsedObj.options)) {
-              recovered.push(parsedObj);
-            }
-          } catch {
-            // ignore unparseable single object
-          }
-        }
+    } catch {
+      // Automatic Truncated JSON Repair & Object Recovery Fallback
+      const salvaged = this.salvageTruncatedJson(result);
+      if (salvaged.length > 0) {
+        this.logger.log(`Salvaged ${salvaged.length} completed question objects from truncated AI response.`);
+        return salvaged;
       }
-
-      if (recovered.length > 0) {
-        this.logger.log(`Recovered ${recovered.length} valid question objects from AI response.`);
-        return recovered;
-      }
-
-      this.logger.error(
-        `Failed to parse AI JSON response: ${e2.message}. Raw output slice: ${rawText.slice(0, 200)}`,
-      );
-      return [];
     }
 
     return [];
   }
 
-  private async saveQuestionsToDb(questions: any[], subject: string, sourceType: GenerationSourceType) {
+  private salvageTruncatedJson(clean: string): any[] {
+    const recovered: any[] = [];
+    
+    // Find the last complete object ending with '}'
+    const lastObjectEnd = clean.lastIndexOf('}');
+    if (lastObjectEnd !== -1) {
+      let trimmed = clean.substring(0, lastObjectEnd + 1).trim();
+      if (!trimmed.startsWith('[')) {
+        const firstBracket = trimmed.indexOf('[');
+        if (firstBracket !== -1) trimmed = trimmed.substring(firstBracket);
+      }
+      if (!trimmed.endsWith(']')) {
+        trimmed += ']';
+      }
+
+      try {
+        const items = JSON.parse(trimmed);
+        if (Array.isArray(items)) {
+          for (const item of items) {
+            if (item && item.question_text && item.options && Array.isArray(item.options)) {
+              recovered.push(item);
+            }
+          }
+          if (recovered.length > 0) return recovered;
+        }
+      } catch {
+        // Fallback to regex object extraction if trimmed array parse fails
+      }
+    }
+
+    // Extract all valid complete question objects using regex
+    const objectMatches = clean.match(/\{[^{}]*"question_text"[\s\S]*?"options"[\s\S]*?\}/g);
+    if (objectMatches) {
+      for (const objStr of objectMatches) {
+        try {
+          const cleanObj = objStr.replace(/,\s*}/g, '}');
+          const parsedObj = JSON.parse(cleanObj);
+          if (parsedObj && parsedObj.question_text && parsedObj.options && Array.isArray(parsedObj.options)) {
+            recovered.push(parsedObj);
+          }
+        } catch {
+          // ignore unparseable partial object
+        }
+      }
+    }
+
+    return recovered;
+  }
+
+  private async saveQuestionsToDb(questions: any[], subject: string, sourceType: GenerationSourceType): Promise<number> {
     let savedCount = 0;
     for (const q of questions) {
       if (!q.question_text || !q.options || !Array.isArray(q.options) || q.options.length < 2) {
@@ -724,6 +775,8 @@ Respond ONLY with the raw JSON array.`;
     if (savedCount > 0) {
       this.logger.log(`Successfully persisted ${savedCount} questions into database for subject '${subject}'.`);
     }
+
+    return savedCount;
   }
 
   async getGenerationStatus(): Promise<GenerationStatus> {
