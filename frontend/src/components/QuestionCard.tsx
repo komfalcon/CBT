@@ -38,22 +38,28 @@ export const TikzRenderer: React.FC<{ code: string }> = ({ code }) => {
 
 export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
   if (!svg) return null;
+
+  // Auto-clean dark text colors and low-contrast fills for dark theme legibility
+  let sanitizedSvg = svg.replace(/\\n/g, ' ').replace(/\n/g, ' ');
+
+  // Replace hardcoded black/dark text fill colors with bright slate (#f8fafc)
+  sanitizedSvg = sanitizedSvg.replace(/(<text[^>]*?\bfill=['"])(?:#000000|#000|#111111|#111|#333333|#333|#0f172a|black|darkgray|darkgrey)(['"])/gi, '$1#f8fafc$2');
+  // If <text> has no fill attribute specified, add fill='#f8fafc'
+  sanitizedSvg = sanitizedSvg.replace(/<text(?![^>]*\bfill=)/gi, "<text fill='#f8fafc' ");
+
   return (
-    <div className="mt-4 flex max-w-3xl justify-center overflow-auto rounded-2xl border border-border bg-bg-secondary/45 p-4">
+    <div className="mt-4 flex max-w-3xl flex-col items-center justify-center overflow-auto rounded-2xl border border-slate-700/60 bg-[#0b1329] p-5 shadow-inner">
       {isTikz(svg) ? (
         <TikzRenderer code={svg} />
       ) : (
         <div
-          className="w-full flex justify-center [&>svg]:max-w-full [&>svg]:h-auto"
+          className="w-full flex justify-center [&>svg]:max-w-full [&>svg]:h-auto [&>svg_text]:fill-slate-100 [&>svg_text]:font-sans [&>svg_text]:font-semibold"
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(
-              svg.replace(/\\n/g, ' ').replace(/\n/g, ' '),
-              {
-                USE_PROFILES: { svg: true, svgFilters: true },
-                ADD_TAGS: ['use', 'path', 'rect', 'circle', 'text', 'line', 'polygon', 'polyline', 'g', 'defs', 'style', 'svg', 'marker', 'pattern'],
-                ADD_ATTR: ['viewBox', 'xmlns', 'fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'text-anchor', 'font-size', 'font-family', 'font-weight', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'width', 'height', 'd', 'transform', 'opacity', 'id'],
-              }
-            ),
+            __html: DOMPurify.sanitize(sanitizedSvg, {
+              USE_PROFILES: { svg: true, svgFilters: true },
+              ADD_TAGS: ['use', 'path', 'rect', 'circle', 'text', 'line', 'polygon', 'polyline', 'g', 'defs', 'style', 'svg', 'marker', 'pattern'],
+              ADD_ATTR: ['viewBox', 'xmlns', 'fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'text-anchor', 'font-size', 'font-family', 'font-weight', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'width', 'height', 'd', 'transform', 'opacity', 'id'],
+            }),
           }}
         />
       )}
@@ -66,12 +72,22 @@ const addLatexDelimiters = (text: string): string => {
   
   let result = text;
 
+  // Fix FormFeed (\x0c / \u000c / ♠) control character corruptions from bad \f JSON escape (e.g. \frac -> ♠rac)
+  result = result.replace(/[\x0c\u000c♠]rac/g, '\\frac');
+  result = result.replace(/[\x0c\u000c♠]([a-zA-Z]+)/g, '\\$1');
+
+  // Fix Tab (\x09 / \t) control character corruptions from bad \t JSON escape (e.g. \text -> \ext, \theta -> \heta)
+  result = result.replace(/\\ext(?=\s*[\({]|\s*[a-zA-Z0-9])/g, '\\text');
+  result = result.replace(/[\x09\t]ext(?=\s*[\({]|\s*[a-zA-Z0-9])/g, '\\text');
+  result = result.replace(/[\x09\t]heta/g, '\\theta');
+  result = result.replace(/[\x09\t]an(?=\s*[\({]|\s*[a-zA-Z0-9])/g, '\\tan ');
+  result = result.replace(/[\x09\t]au/g, '\\tau');
+  result = result.replace(/[\x09\t]o(?=\s+)/g, '\\to ');
+
   // Repair corrupted escape sequences from bad DB scraping (e.g. \right evaluated as \r + ight)
   result = result.replace(/\right/g, '\\right');
   result = result.replace(/\nu(?=[\s_])/g, '\\nu');
   result = result.replace(/\tau(?=[\s_])/g, '\\tau');
-  result = result.replace(/\to\b/g, '\\to '); // \t + o
-  result = result.replace(/\tan\b/g, '\\tan '); // \t + an
 
   // Repair \b (ASCII backspace, char 8) corrupting \begin and \end
   result = result.replace(/\begin(?=\s*\{)/g, '\\begin');
@@ -94,6 +110,9 @@ const addLatexDelimiters = (text: string): string => {
   Object.entries(unicodeMap).forEach(([uni, latex]) => {
     result = result.replace(new RegExp(uni, 'g'), latex);
   });
+
+  // Fix trailing unclosed $$ delimiters at the end of text (e.g. 2\vec{B}$$.)
+  result = result.replace(/(\\\w+(?:\{[^}]*\})*)\$\$(?=\s*[\.\,\;\:]|\s*$)/g, '$$$1$$');
 
   // Convert standard \( ... \) and \[ ... \] LaTeX blocks to KaTeX expected $ ... $ blocks
   // Crucial: remark-math requires no spaces immediately after $ and before $, so we use \s* to trim them.

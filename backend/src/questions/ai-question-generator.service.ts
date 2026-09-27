@@ -331,7 +331,18 @@ export class AiQuestionGeneratorService {
 
     if (sourceType === 'new_svg_diagram') {
       systemPrompt = `You are a high-level educational content designer for Nigerian UTME/JAMB exams.
-You create high-quality STEM questions containing embedded, responsive vector SVG diagrams.`;
+You create high-quality STEM questions containing embedded, responsive vector SVG diagrams.
+
+SVG Design Standards for Dark Theme:
+- ViewBox: Responsive viewBox='0 0 500 320' with ample padding (at least 30px) on all sides so labels are never cut off.
+- Colors (High Contrast for Dark Backgrounds):
+  * Diagram Text / Labels: fill='#f8fafc' font-size='14' font-family='sans-serif' font-weight='600'. NEVER use black (#000) or dark grey text.
+  * Vectors / Main Lines: stroke='#38bdf8' (bright sky blue), stroke-width='2.5' or '3'.
+  * Secondary Lines / Forces: stroke='#f59e0b' (amber gold), stroke-width='2'.
+  * Grid / Axes: stroke='#475569' (slate), stroke-width='1.5', stroke-dasharray='4,4'.
+  * Fill Shapes: fill='rgba(56, 189, 248, 0.15)' stroke='#38bdf8'.
+- Arrowheads: Define <marker id='arrow' viewBox='0 0 10 10' refX='6' refY='5' markerWidth='6' markerHeight='6' orient='auto-start-reverse'><path d='M 0 0 L 10 5 L 0 10 z' fill='#38bdf8'/></marker> in <defs> for vectors.
+- Layout: Clean, uncluttered, properly positioned labels that do not overlap lines or text.`;
 
       userPrompt = `Generate EXACTLY ${count} JAMB/UTME standard multiple-choice questions for '${subject}'.
 Topics to cover: ${topicStr}.
@@ -617,12 +628,18 @@ Respond ONLY with the raw JSON array.`;
           escaped = false;
         } else if (char === '\\') {
           const nextChar = clean[i + 1];
-          // Valid standard JSON escape sequences: \", \\, \/, \b, \f, \n, \r, \t, \uXXXX
-          if (nextChar && '"\\/bfnrtu'.includes(nextChar)) {
+          const remainder = clean.substring(i + 1, i + 10);
+          const isLatexMacro = /^f(?:rac|actor)/i.test(remainder) || /^t(?:ext|heta|an|au|o|imes)\b/i.test(remainder);
+
+          if (isLatexMacro) {
+            // Escape LaTeX macro backslashes so JSON.parse outputs \frac or \text
+            result += '\\\\';
+            escaped = false;
+          } else if (nextChar && '"\\/bfnrtu'.includes(nextChar)) {
             result += char;
             escaped = true;
           } else {
-            // Unescaped LaTeX backslash (e.g. \( \) \int \frac \sqrt \vec). Escape it as \\
+            // Unescaped LaTeX backslash (e.g. \( \) \int \sqrt \vec). Escape it as \\
             result += '\\\\';
             escaped = false;
           }
