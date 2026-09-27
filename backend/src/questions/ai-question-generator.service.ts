@@ -567,6 +567,13 @@ Respond ONLY with the raw JSON array.`;
       clean = clean.substring(jsonStart);
     }
 
+    // 1. Convert single-quoted "diagram_svg": '<svg...' to standard double-quoted "diagram_svg": "<svg...>"
+    clean = clean.replace(/"diagram_svg"\s*:\s*'([\s\S]*?)'(?=\s*,\s*"|\s*\})/g, (_m, svgContent) => {
+      const safeSvg = svgContent.replace(/"/g, "'");
+      return `"diagram_svg": "${safeSvg}"`;
+    });
+
+    // 2. Character-level state machine parser for controls, escapes & LaTeX backslashes
     let result = '';
     let inString = false;
     let escaped = false;
@@ -577,44 +584,56 @@ Respond ONLY with the raw JSON array.`;
 
       if (char === '"' && !escaped) {
         inString = !inString;
+        result += char;
+        escaped = false;
+        continue;
       }
 
       if (inString) {
-        if (char === '\n') {
+        if (escaped) {
+          result += char;
+          escaped = false;
+        } else if (char === '\\') {
+          const nextChar = clean[i + 1];
+          // Valid standard JSON escape sequences: \", \\, \/, \b, \f, \n, \r, \t, \uXXXX
+          if (nextChar && '"\\/bfnrtu'.includes(nextChar)) {
+            result += char;
+            escaped = true;
+          } else {
+            // Unescaped LaTeX backslash (e.g. \( \) \int \frac \sqrt \vec). Escape it as \\
+            result += '\\\\';
+            escaped = false;
+          }
+        } else if (char === '\n') {
           result += '\\n';
+          escaped = false;
         } else if (char === '\r') {
           result += '\\r';
+          escaped = false;
         } else if (char === '\t') {
           result += '\\t';
+          escaped = false;
         } else if (code < 32) {
-          // omit raw ASCII control codes
-        } else if (char === '\\' && !escaped) {
-          const nextChar = clean[i + 1];
-          if (nextChar && '"/\\'.includes(nextChar)) {
-            result += char;
-          } else {
-            result += '\\\\';
-          }
+          // omit raw ASCII control codes (< 0x20)
+          escaped = false;
         } else {
           result += char;
+          escaped = false;
         }
       } else {
         if (code < 32 && char !== '\n' && char !== '\r' && char !== '\t') {
-          // omit raw control chars outside string literals
+          // omit raw control codes outside strings
         } else {
           result += char;
         }
-      }
-
-      if (char === '\\' && !escaped) {
-        escaped = true;
-      } else {
         escaped = false;
       }
     }
 
+    // Trailing comma cleanup
     result = result.replace(/,\s*([\]}])/g, '$1');
 
+    // Convert internal double-quotes inside diagram_svg field to single-quotes
     result = result.replace(/("diagram_svg"\s*:\s*")([\s\S]*?)("\s*,\s*"latex"|\s*,\s*"source"|\s*,\s*"difficulty_level"|\s*,\s*"has_diagram"|\s*\})/g, (_m, p1, svg, p3) => {
       const safeSvg = svg.replace(/"/g, "'");
       return p1 + safeSvg + p3;
@@ -624,6 +643,7 @@ Respond ONLY with the raw JSON array.`;
       const items = JSON.parse(result);
       if (Array.isArray(items)) return items;
     } catch (e2: any) {
+      // 3. Object-level recovery fallback
       const recovered: any[] = [];
       const objectMatches = result.match(/\{[\s\S]*?\}(?=\s*,|\s*\]|$)/g);
       if (objectMatches) {
@@ -635,7 +655,7 @@ Respond ONLY with the raw JSON array.`;
               recovered.push(parsedObj);
             }
           } catch {
-            // ignore
+            // ignore unparseable single object
           }
         }
       }
