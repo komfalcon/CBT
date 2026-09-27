@@ -36,6 +36,31 @@ export const TikzRenderer: React.FC<{ code: string }> = ({ code }) => {
   return <div ref={containerRef} className="flex max-w-full items-center justify-center overflow-auto" />;
 };
 
+export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
+  if (!svg) return null;
+  return (
+    <div className="mt-4 flex max-w-3xl justify-center overflow-auto rounded-2xl border border-border bg-bg-secondary/45 p-4">
+      {isTikz(svg) ? (
+        <TikzRenderer code={svg} />
+      ) : (
+        <div
+          className="w-full flex justify-center [&>svg]:max-w-full [&>svg]:h-auto"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(
+              svg.replace(/\\n/g, ' ').replace(/\n/g, ' '),
+              {
+                USE_PROFILES: { svg: true, svgFilters: true },
+                ADD_TAGS: ['use', 'path', 'rect', 'circle', 'text', 'line', 'polygon', 'polyline', 'g', 'defs', 'style', 'svg', 'marker', 'pattern'],
+                ADD_ATTR: ['viewBox', 'xmlns', 'fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'text-anchor', 'font-size', 'font-family', 'font-weight', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'width', 'height', 'd', 'transform', 'opacity', 'id'],
+              }
+            ),
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
 const addLatexDelimiters = (text: string): string => {
   if (!text) return text;
   
@@ -238,27 +263,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           Preparing the supporting diagram…
         </div>
       )}
-      {!isLoadingDiagram && diagramSvg && (
-        <div className="mt-7 flex max-w-3xl justify-center overflow-auto rounded-2xl border border-border bg-bg-secondary/45 p-5">
-          {isTikz(diagramSvg) ? (
-            <TikzRenderer code={diagramSvg} />
-          ) : (
-            <div
-              className="w-full flex justify-center [&>svg]:max-w-full [&>svg]:h-auto"
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(
-                  diagramSvg.replace(/\\n/g, ' ').replace(/\n/g, ' '),
-                  {
-                    USE_PROFILES: { svg: true, svgFilters: true },
-                    ADD_TAGS: ['use', 'path', 'rect', 'circle', 'text', 'line', 'polygon', 'polyline', 'g', 'defs', 'style', 'svg', 'marker', 'pattern'],
-                    ADD_ATTR: ['viewBox', 'xmlns', 'fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'text-anchor', 'font-size', 'font-family', 'font-weight', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'width', 'height', 'd', 'transform', 'opacity', 'id'],
-                  }
-                ),
-              }}
-            />
-          )}
-        </div>
-      )}
+      {!isLoadingDiagram && <DiagramRenderer svg={diagramSvg} />}
 
       <div className="mt-8 grid max-w-3xl gap-3 sm:grid-cols-2" role="radiogroup" aria-label="Answer options">
         {question.options.map((option) => {

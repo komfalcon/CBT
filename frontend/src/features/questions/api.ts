@@ -34,6 +34,8 @@ export type QuestionRecord = {
   tags?: string[];
   year_sourced?: number;
   created_at?: string;
+  has_diagram?: boolean;
+  diagram_svg?: string | null;
 };
 
 export type PaginatedQuestions = {

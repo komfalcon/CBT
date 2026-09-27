@@ -36,6 +36,7 @@ import {
   QuestionOption,
 } from './api';
 import { Button, Card, Input, Alert, Badge } from '../../components';
+import { SmartTextRenderer, DiagramRenderer } from '../../components/QuestionCard';
 
 const AVAILABLE_SUBJECTS = [
   { value: 'english', label: 'Use of English' },
@@ -800,8 +801,13 @@ export default function QuestionBankPage() {
 
                   {/* Question Stem */}
                   <div className="text-sm font-medium text-text-primary leading-relaxed">
-                    {q.question_text}
+                    <SmartTextRenderer text={q.question_text} />
                   </div>
+
+                  {/* Supporting SVG Diagram (if available) */}
+                  {Boolean(q.diagram_svg) && (
+                    <DiagramRenderer svg={q.diagram_svg} />
+                  )}
 
                   {/* Options List */}
                   {Array.isArray(q.options) && q.options.length > 0 && (
@@ -826,7 +832,7 @@ export default function QuestionBankPage() {
                             >
                               {opt.id}
                             </span>
-                            <span className="flex-1 mt-0.5">{opt.text}</span>
+                            <span className="flex-1 mt-0.5"><SmartTextRenderer text={opt.text} /></span>
                             {isCorrect && (
                               <CheckCircle2 className="h-4 w-4 shrink-0 text-success ml-auto self-center" />
                             )}
