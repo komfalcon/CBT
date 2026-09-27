@@ -94,8 +94,14 @@ export default function QuestionBankPage() {
 
   // AI Question Generator State
   const [aiSubject, setAiSubject] = useState('english');
-  const [aiSourceType, setAiSourceType] = useState<'new_text' | 'new_svg_diagram'>('new_text');
-  const [aiTargetCount, setAiTargetCount] = useState(50);
+  const [aiSourceType, setAiSourceType] = useState<
+    'mixed_curriculum' | 'new_text' | 'calculation_latex' | 'new_svg_diagram' | 'passage_comprehension'
+  >('mixed_curriculum');
+  const [aiTargetCount, setAiTargetCount] = useState<number>(30000);
+  const [customTargetCount, setCustomTargetCount] = useState<string>('30000');
+  const [useCustomTarget, setUseCustomTarget] = useState<boolean>(false);
+  const [selectedTopicsInput, setSelectedTopicsInput] = useState<string>('');
+
   const [aiGenStatus, setAiGenStatus] = useState<{
     isRunning?: boolean;
     activeJob?: { subject: string; sourceType: string; targetCount: number } | null;
@@ -395,13 +401,20 @@ export default function QuestionBankPage() {
 
   const handleStartAiGen = async () => {
     setIsAiGenLoading(true);
+    const target = useCustomTarget ? (Number(customTargetCount) || 30000) : aiTargetCount;
+    const topicsArr = selectedTopicsInput
+      .split(',')
+      .map((t) => t.trim())
+      .filter(Boolean);
+
     try {
       const res = await triggerAiGeneration(undefined, {
         subject: aiSubject,
         sourceType: aiSourceType,
-        targetCount: Number(aiTargetCount) || 50,
+        targetCount: target,
+        topics: topicsArr.length > 0 ? topicsArr : undefined,
       });
-      showToast('success', res.message || 'Started background AI question generation.');
+      showToast('success', res.message || `Started background AI generation targeting ${target.toLocaleString()} questions.`);
       loadAiGenStatus();
     } catch (e: any) {
       showToast('error', e.response?.data?.message || 'Failed to start AI generation job.');
@@ -1534,31 +1547,80 @@ export default function QuestionBankPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-text-secondary">Question Category</label>
+                <label className="text-xs font-semibold text-text-secondary">Question Category / Mode</label>
                 <select
                   value={aiSourceType}
                   onChange={(e) => setAiSourceType(e.target.value as any)}
-                  className="w-full bg-bg-secondary border border-border rounded-xl px-3 py-2 text-xs text-text-primary focus:outline-none focus:border-primary"
+                  className="w-full bg-bg-secondary border border-border rounded-xl px-3 py-2 text-xs text-text-primary focus:outline-none focus:border-primary font-medium"
                 >
-                  <option value="new_text">Standard Digital Text (Target: 10,000)</option>
-                  <option value="new_svg_diagram">Vector SVG Diagram Questions (Target: 5,000)</option>
+                  <option value="mixed_curriculum">Full Curriculum Mix (Theory, Calculation, Diagrams & Passages)</option>
+                  <option value="new_text">Standard Digital Text (Theory & Concepts)</option>
+                  <option value="calculation_latex">Step-by-Step Calculation & LaTeX Formulae ($...$)</option>
+                  <option value="new_svg_diagram">Vector SVG Diagram & Geometry Questions</option>
+                  <option value="passage_comprehension">Reading Passages, Cloze Tests & Case Studies</option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-text-secondary">Batch Quantity</label>
-                <select
-                  value={aiTargetCount}
-                  onChange={(e) => setAiTargetCount(Number(e.target.value))}
-                  className="w-full bg-bg-secondary border border-border rounded-xl px-3 py-2 text-xs text-text-primary focus:outline-none focus:border-primary"
-                >
-                  <option value={10}>10 Questions</option>
-                  <option value={50}>50 Questions</option>
-                  <option value={100}>100 Questions</option>
-                  <option value={500}>500 Questions</option>
-                  <option value={1000}>1,000 Questions</option>
-                </select>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-text-secondary">Target Generation Count</label>
+                  <button
+                    type="button"
+                    onClick={() => setUseCustomTarget(!useCustomTarget)}
+                    className="text-[11px] text-primary hover:underline font-bold"
+                  >
+                    {useCustomTarget ? 'Use Presets' : 'Custom Number'}
+                  </button>
+                </div>
+                {useCustomTarget ? (
+                  <input
+                    type="number"
+                    value={customTargetCount}
+                    onChange={(e) => setCustomTargetCount(e.target.value)}
+                    placeholder="e.g. 30000"
+                    min={1}
+                    max={50000}
+                    className="w-full bg-bg-secondary border border-border rounded-xl px-3 py-2 text-xs text-text-primary focus:outline-none focus:border-primary font-mono"
+                  />
+                ) : (
+                  <select
+                    value={aiTargetCount}
+                    onChange={(e) => setAiTargetCount(Number(e.target.value))}
+                    className="w-full bg-bg-secondary border border-border rounded-xl px-3 py-2 text-xs text-text-primary focus:outline-none focus:border-primary font-medium"
+                  >
+                    <option value={100}>100 Questions</option>
+                    <option value={500}>500 Questions</option>
+                    <option value={1000}>1,000 Questions</option>
+                    <option value={5000}>5,000 Questions</option>
+                    <option value={10000}>10,000 Questions</option>
+                    <option value={20000}>20,000 Questions</option>
+                    <option value={30000}>30,000 Questions (High-Volume Full Subject Target)</option>
+                  </select>
+                )}
               </div>
+            </div>
+
+            {/* Multi-Topic Syllabus Selection Box */}
+            <div className="rounded-xl border border-border bg-bg-secondary/40 p-3.5 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-text-primary flex items-center gap-1.5">
+                  <Layers className="h-3.5 w-3.5 text-primary" />
+                  Syllabus Topic Focus / Multi-Topic Selection (Optional)
+                </span>
+                <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                  Auto-Full Syllabus Rotation Active
+                </span>
+              </div>
+              <input
+                type="text"
+                value={selectedTopicsInput}
+                onChange={(e) => setSelectedTopicsInput(e.target.value)}
+                placeholder="e.g. Calculus & Derivatives, Trigonometry, Statistics & Probability (Comma-separated for multi-topics)"
+                className="w-full bg-bg-secondary border border-border rounded-xl px-3 py-2 text-xs text-text-primary focus:outline-none focus:border-primary font-mono placeholder:text-text-muted"
+              />
+              <p className="text-[11px] text-text-muted">
+                Leave empty for automatic full syllabus rotation. The AI generator will continuously cycle across every topic in the JAMB UTME curriculum for <strong className="text-text-primary">{aiSubject}</strong>!
+              </p>
             </div>
 
             {/* Active Job Progress */}

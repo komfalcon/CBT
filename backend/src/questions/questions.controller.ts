@@ -55,15 +55,21 @@ export class QuestionsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin', 'super_admin')
   startAiGeneration(
-    @Body() payload: { subject: string; sourceType?: 'new_text' | 'new_svg_diagram'; targetCount?: number },
+    @Body() payload: {
+      subject: string;
+      sourceType?: 'new_text' | 'new_svg_diagram' | 'calculation_latex' | 'passage_comprehension' | 'mixed_curriculum';
+      targetCount?: number;
+      topics?: string[];
+    },
   ) {
     if (!payload.subject) {
       throw new BadRequestException('subject is required');
     }
     return this.aiGeneratorService.startGenerationJob({
       subject: payload.subject,
-      sourceType: payload.sourceType || 'new_text',
-      targetCount: payload.targetCount || 50,
+      sourceType: payload.sourceType || 'mixed_curriculum',
+      targetCount: Math.min(50000, Math.max(1, Number(payload.targetCount) || 50)),
+      topics: Array.isArray(payload.topics) ? payload.topics : undefined,
     });
   }
 

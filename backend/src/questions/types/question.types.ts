@@ -55,7 +55,14 @@ export type QuestionStatus = (typeof QUESTION_STATUSES)[number];
 export const QUESTION_SOURCES = ['manual', 'import', 'ai_generated'] as const;
 export type QuestionSource = (typeof QUESTION_SOURCES)[number];
 
-export const QUESTION_SOURCE_TYPES = ['new_text', 'new_svg_diagram', 'scanned_past_paper'] as const;
+export const QUESTION_SOURCE_TYPES = [
+  'new_text',
+  'new_svg_diagram',
+  'calculation_latex',
+  'passage_comprehension',
+  'mixed_curriculum',
+  'scanned_past_paper',
+] as const;
 export type QuestionSourceType = (typeof QUESTION_SOURCE_TYPES)[number];
 
 export const NON_TECHNICAL_SUBJECTS = [

@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { count, eq, sql } from 'drizzle-orm';
+import { count } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import {
@@ -11,10 +11,18 @@ import {
   QuestionSourceType,
 } from './types/question.types';
 
+export type GenerationSourceType =
+  | 'new_text'
+  | 'new_svg_diagram'
+  | 'calculation_latex'
+  | 'passage_comprehension'
+  | 'mixed_curriculum';
+
 export interface GenerationJobConfig {
   subject: string;
-  sourceType: 'new_text' | 'new_svg_diagram';
+  sourceType: GenerationSourceType;
   targetCount: number;
+  topics?: string[];
 }
 
 export interface GenerationStatus {
@@ -28,6 +36,154 @@ export interface GenerationStatus {
     bySubject: Record<string, { newText: number; newSvgDiagram: number; scannedPastPaper: number }>;
   };
 }
+
+export const SUBJECT_SYLLABUS_MAP: Record<string, string[]> = {
+  mathematics: [
+    'Algebra & Quadratic Equations',
+    'Calculus & Derivatives/Integrals',
+    'Trigonometry & Polar Coordinates',
+    'Geometry, Mensuration & Vectors',
+    'Statistics & Probability Distributions',
+    'Indices, Logarithms & Surds',
+    'Matrices, Determinants & Transformations',
+    'Sequence, Series & Progressions',
+  ],
+  further_mathematics: [
+    'Vectors & 3D Analytical Geometry',
+    'Advanced Calculus & Differential Equations',
+    'Complex Numbers & De Moivre Theorem',
+    'Statics, Dynamics & Kinematics',
+    'Probability Distributions & Variance',
+    'Linear Algebra & Matrix Transformations',
+    'Numerical Methods & Approximation',
+  ],
+  physics: [
+    'Mechanics, Motion & Newton Laws',
+    'Waves, Sound & Wave Optics',
+    'Electricity, Circuits & Magnetism',
+    'Thermodynamics, Gas Laws & Heat',
+    'Atomic, Quantum & Nuclear Physics',
+    'Gravitational & Electric Fields',
+    'Simple Harmonic Motion & Elasticity',
+    'Fluids, Viscosity & Surface Tension',
+  ],
+  chemistry: [
+    'Organic Chemistry & Functional Groups',
+    'Stoichiometry & Mole Concept',
+    'Periodic Table & Chemical Bonding',
+    'Electrochemistry & Redox Reactions',
+    'Chemical Equilibrium & Reaction Kinetics',
+    'Acids, Bases & Salt Analysis',
+    'Thermodynamics & Thermochemistry',
+    'Gas Laws & Kinetic Theory of Matter',
+  ],
+  biology: [
+    'Cell Biology, Organelles & Mitosis',
+    'Genetics, DNA & Heredity',
+    'Ecology, Ecosystems & Biomes',
+    'Human Physiology & Organ Systems',
+    'Plant Physiology, Photosynthesis & Transport',
+    'Evolution & Natural Selection',
+    'Taxonomy & Diversity of Organisms',
+    'Microbiology, Immunity & Diseases',
+  ],
+  english: [
+    'Comprehension & Passage Analysis',
+    'Lexis, Structure & Sentence Completion',
+    'Synonyms & Antonyms in Context',
+    'Vowels, Consonants & Stress Patterns',
+    'Idioms, Phrasal Verbs & Figures of Speech',
+    'Cloze Test & Contextual Vocabulary',
+  ],
+  accounting: [
+    'Financial Accounting Principles & Conventions',
+    'Trial Balance, Trading & P/L Accounts',
+    'Partnership Accounts & Dissolution',
+    'Company Accounts & Share Capital',
+    'Depreciation & Fixed Assets Management',
+    'Bank Reconciliation & Control Accounts',
+    'Costing, Budgeting & Marginal Costing',
+  ],
+  economics: [
+    'Microeconomics & Demand/Supply Elasticity',
+    'Macroeconomics & National Income Accounting',
+    'Money, Banking & Monetary Policy',
+    'Public Finance, Taxation & Fiscal Policy',
+    'International Trade & Exchange Rates',
+    'Inflation, Unemployment & Business Cycles',
+    'Economic Growth & Development Planning',
+  ],
+  government: [
+    'Basic Political Concepts & Power/Authority',
+    'Nigerian Constitutional Development (1914-1999)',
+    'Federalism & Local Government Administration',
+    'Public Service & Civil Bureaucracy',
+    'International Organizations (ECOWAS, AU, UN)',
+    'Electoral Systems, Parties & Pressure Groups',
+  ],
+  literature: [
+    'African Prose & Novel Analysis',
+    'Non-African Prose & Classics',
+    'African Poetry & Stanza Analysis',
+    'Non-African Poetry',
+    'African & Non-African Drama/Plays',
+    'Literary Devices, Devices & Themes',
+  ],
+  commerce: [
+    'Home & Foreign Trade Operations',
+    'Forms of Business Units & Ownership',
+    'Commercial Banking & Insurance Services',
+    'Transportation, Communication & Warehousing',
+    'Marketing, Advertising & Consumer Protection',
+    'Stock Exchange & Capital Markets',
+  ],
+  geography: [
+    'Physical Geography & Landforms',
+    'Weather, Climate & Biomes',
+    'Map Reading, Scales & Topography',
+    'Human Settlement & Population Geography',
+    'Economic Geography & Mineral Resources',
+    'Regional Geography of Nigeria & West Africa',
+  ],
+  agriculture: [
+    'Crop Agronomy & Production Systems',
+    'Animal Husbandry, Livestock & Breeding',
+    'Soil Fertility, Chemistry & Irrigation',
+    'Agricultural Economics & Extension Services',
+    'Agricultural Mechanics, Tools & Implements',
+    'Pest Management & Disease Control',
+  ],
+  history: [
+    'Pre-Colonial Nigerian Empires (Oyo, Benin, Sokoto, Kanem)',
+    'British Colonial Rule & Amalgamation (1914)',
+    'Constitutional Developments & Nationalism (Richards/Macpherson)',
+    'Independence Movement (1960) & First Republic',
+    'Nigerian Civil War & Military Regimes',
+    'Contemporary Nigerian Foreign Policy & Pan-Africanism',
+  ],
+  civic_education: [
+    'Human Rights, Rule of Law & Justice',
+    'Democracy, Constitution & Governance',
+    'Citizenship Duties & National Values',
+    'Youth Empowerment & Community Service',
+    'Addressing Cultism, Corruption & Drug Abuse',
+  ],
+  crk: [
+    'Sovereignty of God & Creation',
+    'Leadership in Israel (Moses, Joshua, Judges)',
+    'The Kings of Israel (Saul, David, Solomon)',
+    'The Prophets & Social Justice (Amos, Hosea, Isaiah)',
+    'Life, Ministry & Parables of Jesus Christ',
+    'The Early Church & Missionary Journeys of Paul',
+  ],
+  irk: [
+    'Tawhid, Faith & Articles of Islam',
+    'Selected Surahs of Quran & Tafsir',
+    'Hadith Collections & Prophetic Guidance',
+    'Islamic History & Rightly Guided Caliphs',
+    'Fiqh, Sharia & Acts of Worship (Salat, Zakat, Hajj)',
+  ],
+};
 
 @Injectable()
 export class AiQuestionGeneratorService {
@@ -78,7 +234,7 @@ export class AiQuestionGeneratorService {
 
     return {
       success: true,
-      message: `Started generation job for subject '${config.subject}' (${config.sourceType}), targeting ${config.targetCount} questions.`,
+      message: `Started background AI generation for subject '${config.subject}' (${config.sourceType}), targeting ${config.targetCount} questions.`,
     };
   }
 
@@ -97,11 +253,12 @@ export class AiQuestionGeneratorService {
     );
 
     const isCalculationHeavy = ['accounting', 'further_mathematics', 'mathematics', 'physics', 'chemistry'].includes(config.subject.toLowerCase());
-    const batchSize = config.sourceType === 'new_svg_diagram' ? 3 : isCalculationHeavy ? 4 : 10;
+    const batchSize = config.sourceType === 'new_svg_diagram' ? 3 : isCalculationHeavy ? 4 : 8;
+
     while (this.isRunning && this.generatedInCurrentJob < config.targetCount) {
       const needed = Math.min(batchSize, config.targetCount - this.generatedInCurrentJob);
       try {
-        const questions = await this.generateBatch(config.subject, config.sourceType, needed);
+        const questions = await this.generateBatch(config.subject, config.sourceType, needed, config.topics);
         if (questions && questions.length > 0) {
           await this.saveQuestionsToDb(questions, config.subject, config.sourceType);
           this.generatedInCurrentJob += questions.length;
@@ -128,10 +285,24 @@ export class AiQuestionGeneratorService {
    */
   async generateBatch(
     subject: string,
-    sourceType: 'new_text' | 'new_svg_diagram',
+    sourceType: GenerationSourceType,
     count: number,
+    customTopics?: string[],
   ): Promise<any[]> {
     const isNonTech = this.isNonTechnicalSubject(subject);
+    const subNorm = subject.toLowerCase().trim();
+
+    // Select topics for this batch
+    let selectedTopics: string[] = [];
+    if (customTopics && customTopics.length > 0) {
+      selectedTopics = customTopics;
+    } else {
+      const syllabus = SUBJECT_SYLLABUS_MAP[subNorm] || ['General Syllabus'];
+      const shuffled = [...syllabus].sort(() => 0.5 - Math.random());
+      selectedTopics = shuffled.slice(0, 3);
+    }
+
+    const topicStr = selectedTopics.join(', ');
 
     let systemPrompt = '';
     let userPrompt = '';
@@ -140,41 +311,109 @@ export class AiQuestionGeneratorService {
       systemPrompt = `You are a high-level educational content designer for Nigerian UTME/JAMB exams.
 You create high-quality STEM questions containing embedded, responsive vector SVG diagrams.`;
 
-      userPrompt = `Generate EXACTLY ${count} JAMB/UTME standard multiple-choice questions for the subject '${subject}'.
+      userPrompt = `Generate EXACTLY ${count} JAMB/UTME standard multiple-choice questions for '${subject}'.
+Topics to cover: ${topicStr}.
 Each question MUST include an inline vector SVG diagram in the 'diagram_svg' field.
 
 Guidelines for SVG Diagrams:
 - Must be valid XML/SVG code starting with <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"> and ending with </svg>.
 - ALL SVG attribute values MUST use single quotes (e.g. <svg viewBox='0 0 400 300' fill='#3b82f6'>). Do NOT use double quotes inside SVG tags.
 - Use clean dark/light mode compatible colors (e.g. stroke="#3b82f6", fill="#1e293b", text fill="#e2e8f0").
-- Illustrate real concepts (e.g., ray optics, electric circuits, force vectors, chemical structures, biological cell diagrams, Venn diagrams, geometric shapes, coordinate graphs).
-- All string values ('question_text', 'explanation', 'diagram_svg') MUST be single-line strings with escaped newlines (\n). Do NOT output literal linebreaks.
+- Illustrate real concepts from: ${topicStr}.
+- All string values MUST be single-line strings with escaped newlines (\\n).
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
-- 'topic': string
-- 'question_text': string (full stem text)
+- 'topic': string (sub-topic from: ${topicStr})
+- 'question_text': string
 - 'options': array of 4 objects [{ 'id': 'A', 'text': '...' }, { 'id': 'B', 'text': '...' }, { 'id': 'C', 'text': '...' }, { 'id': 'D', 'text': '...' }]
 - 'correct_option': 'A' | 'B' | 'C' | 'D'
-- 'explanation': string (detailed solution walkthrough)
+- 'explanation': string
 - 'difficulty_level': number (1 to 5)
 - 'has_diagram': true
-- 'diagram_svg': string (complete inline <svg viewBox='0 0 400 300' xmlns='http://www.w3.org/2000/svg'>...</svg> code using single quotes)
-- 'latex': string or null (use $...$ math formatting where applicable)
+- 'diagram_svg': string (complete inline <svg viewBox='0 0 400 300' xmlns='http://www.w3.org/2000/svg'>...</svg>)
+- 'latex': string or null
+
+Respond ONLY with the raw JSON array.`;
+    } else if (sourceType === 'calculation_latex') {
+      systemPrompt = `You are a STEM & Quantitative Reasoning expert for Nigerian UTME/JAMB.
+You create step-by-step calculation questions formatted with LaTeX mathematics ($...$) and detailed solutions.`;
+
+      userPrompt = `Generate EXACTLY ${count} calculation-based JAMB UTME questions for '${subject}'.
+Topics to cover: ${topicStr}.
+All mathematical equations must use LaTeX ($...$). Currency should use ₦ or N (Naira).
+Populate 'latex' field with key formulas used.
+
+Output a raw JSON array containing objects with:
+- 'subject': "${subject}"
+- 'topic': string (sub-topic from: ${topicStr})
+- 'question_text': string
+- 'options': array of 4 objects [{ 'id': 'A', 'text': '...' }, { 'id': 'B', 'text': '...' }, { 'id': 'C', 'text': '...' }, { 'id': 'D', 'text': '...' }]
+- 'correct_option': 'A' | 'B' | 'C' | 'D'
+- 'explanation': string (step-by-step solution)
+- 'difficulty_level': number (1 to 5)
+- 'has_diagram': false
+- 'diagram_svg': null
+- 'latex': string (formulas in $...$)
+
+Respond ONLY with the raw JSON array.`;
+    } else if (sourceType === 'passage_comprehension') {
+      systemPrompt = `You are an expert reading comprehension and passage-based exam author for Nigerian UTME/JAMB.
+You create reading passages, excerpts, cloze tests, or scenario case studies followed by analytical multiple-choice questions.`;
+
+      userPrompt = `Generate EXACTLY ${count} passage-based questions for '${subject}'.
+Topics to cover: ${topicStr}.
+Each question stem in 'question_text' must include the reading passage/scenario excerpt followed by the question.
+
+Output a raw JSON array containing objects with:
+- 'subject': "${subject}"
+- 'topic': string (sub-topic from: ${topicStr})
+- 'question_text': string (reading passage/scenario context followed by stem question)
+- 'options': array of 4 objects [{ 'id': 'A', 'text': '...' }, { 'id': 'B', 'text': '...' }, { 'id': 'C', 'text': '...' }, { 'id': 'D', 'text': '...' }]
+- 'correct_option': 'A' | 'B' | 'C' | 'D'
+- 'explanation': string
+- 'difficulty_level': number (1 to 5)
+- 'has_diagram': false
+- 'diagram_svg': null
+- 'latex': null
+
+Respond ONLY with the raw JSON array.`;
+    } else if (sourceType === 'mixed_curriculum') {
+      systemPrompt = `You are a master curriculum examiner for Nigerian UTME/JAMB.
+You generate a rich, dynamic mix of conceptual theory, step-by-step calculation (LaTeX), responsive vector SVG diagrams, and reading comprehension passages.`;
+
+      userPrompt = `Generate EXACTLY ${count} JAMB UTME standard questions for '${subject}'.
+Cover topics: ${topicStr}.
+
+Dynamic Mix Rules:
+- Include a variety of question styles: conceptual theory, mathematical calculations with LaTeX ($...$), inline vector SVG diagrams (where appropriate), and scenario/passage questions.
+- For vector SVG diagrams (if any), use single quotes inside SVG tag attributes (<svg viewBox='0 0 400 300' fill='#3b82f6'>).
+
+Output a raw JSON array containing objects with:
+- 'subject': "${subject}"
+- 'topic': string (sub-topic from: ${topicStr})
+- 'question_text': string
+- 'options': array of 4 objects [{ 'id': 'A', 'text': '...' }, { 'id': 'B', 'text': '...' }, { 'id': 'C', 'text': '...' }, { 'id': 'D', 'text': '...' }]
+- 'correct_option': 'A' | 'B' | 'C' | 'D'
+- 'explanation': string
+- 'difficulty_level': number (1 to 5)
+- 'has_diagram': boolean
+- 'diagram_svg': string or null
+- 'latex': string or null
 
 Respond ONLY with the raw JSON array.`;
     } else {
       // Standard Text Question Generation
       if (isNonTech) {
         systemPrompt = `You are an expert examiner for Nigerian UTME/JAMB in Humanities and Social Sciences (English, History, CRS, IRS, Government, Literature, Commerce, Civic Education).
-Special Note for History: Prioritize authentic NIGERIAN HISTORY (e.g., 1960 Independence, 1914 Amalgamation, pre-colonial Oyo, Benin, Sokoto Caliphate, Kanem-Borno empires, constitutional developments like Richards/Macpherson constitutions, military regimes, democratic transitions, nationalism).
-For English: Comprehension passages, antonyms, synonyms, stress patterns, registers, and grammatical accuracy.`;
+Special Note for History: Prioritize authentic NIGERIAN HISTORY (e.g., 1960 Independence, 1914 Amalgamation, pre-colonial Oyo, Benin, Sokoto Caliphate, Kanem-Borno empires, constitutional developments like Richards/Macpherson constitutions, military regimes, democratic transitions, nationalism).`;
 
         userPrompt = `Generate EXACTLY ${count} high-quality JAMB standard CBT questions for '${subject}'.
+Topics to cover: ${topicStr}.
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
-- 'topic': string
+- 'topic': string (sub-topic from: ${topicStr})
 - 'question_text': string
 - 'options': array of 4 objects [{ 'id': 'A', 'text': '...' }, { 'id': 'B', 'text': '...' }, { 'id': 'C', 'text': '...' }, { 'id': 'D', 'text': '...' }]
 - 'correct_option': 'A' | 'B' | 'C' | 'D'
@@ -182,22 +421,23 @@ Output a raw JSON array containing objects with:
 - 'difficulty_level': number (1 to 5)
 - 'has_diagram': false
 - 'diagram_svg': null
+- 'latex': null
 
 Respond ONLY with the raw JSON array.`;
       } else {
-        systemPrompt = `You are an expert examiner for Nigerian UTME/JAMB in STEM and Financial Accounting subjects (Mathematics, Physics, Chemistry, Biology, Geography, Accounting, Further Math).
+        systemPrompt = `You are an expert examiner for Nigerian UTME/JAMB in STEM and Financial Accounting subjects.
 All currency values should use N (Naira) or ₦. All mathematical equations should use LaTeX $...$.`;
 
         userPrompt = `Generate EXACTLY ${count} high-quality JAMB standard CBT questions for '${subject}'.
-All string values MUST be single-line strings with escaped newlines (\\n).
+Topics to cover: ${topicStr}.
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
-- 'topic': string
-- 'question_text': string (including financial transactions or equations)
+- 'topic': string (sub-topic from: ${topicStr})
+- 'question_text': string
 - 'options': array of 4 objects [{ 'id': 'A', 'text': '...' }, { 'id': 'B', 'text': '...' }, { 'id': 'C', 'text': '...' }, { 'id': 'D', 'text': '...' }]
 - 'correct_option': 'A' | 'B' | 'C' | 'D'
-- 'explanation': string (step-by-step accounting or mathematical solution)
+- 'explanation': string
 - 'difficulty_level': number (1 to 5)
 - 'has_diagram': false
 - 'diagram_svg': null
@@ -207,7 +447,7 @@ Respond ONLY with the raw JSON array.`;
       }
     }
 
-    // Call chosen Provider (Prioritize Mistral API for fast 11s responses with LaTeX & SVG support)
+    // Call chosen Provider (Prioritize Mistral API for fast 11s responses)
     let responseText = '';
     try {
       responseText = await this.callMistralApi(systemPrompt, userPrompt);
@@ -313,26 +553,23 @@ Respond ONLY with the raw JSON array.`;
   }
 
   private parseJsonResponse(rawText: string): any[] {
+    if (!rawText) return [];
+
     let clean = rawText.trim();
-    if (clean.startsWith('```json')) {
-      clean = clean.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-    } else if (clean.startsWith('```')) {
-      clean = clean.replace(/^```\s*/, '').replace(/\s*```$/, '');
-    }
+    clean = clean.replace(/^```json\s*/i, '').replace(/^```\s*/, '').replace(/```\s*$/, '').trim();
+
     const jsonStart = clean.indexOf('[');
     const jsonEnd = clean.lastIndexOf(']');
-    if (jsonStart !== -1 && jsonEnd !== -1) {
-      clean = clean.substring(jsonStart, jsonEnd + 1);
-    }
-    clean = clean.replace(/,\s*([\]}])/g, '$1');
-    // Pre-repair unquoted string values like "explanation": *Option B* or backticked SVG strings "diagram_svg": `<svg...>`
-    clean = clean.replace(/:\s*`([\s\S]*?)`/g, (_m, p1) => `:${JSON.stringify(p1)}`);
-    clean = clean.replace(/:\s*(\*[^\r\n,}]+\*)/g, ':"$1"');
 
-    // 1. State-machine JSON repair & control-char sanitizer: handles unescaped literal newlines/tabs/control chars inside quotes & LaTeX single backslashes
+    if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+      clean = clean.substring(jsonStart, jsonEnd + 1);
+    } else if (jsonStart !== -1) {
+      clean = clean.substring(jsonStart);
+    }
+
+    let result = '';
     let inString = false;
     let escaped = false;
-    let result = '';
 
     for (let i = 0; i < clean.length; i++) {
       const char = clean[i];
@@ -340,16 +577,17 @@ Respond ONLY with the raw JSON array.`;
 
       if (char === '"' && !escaped) {
         inString = !inString;
-        result += char;
-      } else if (inString) {
+      }
+
+      if (inString) {
         if (char === '\n') {
           result += '\\n';
         } else if (char === '\r') {
-          // omit carriage return
+          result += '\\r';
         } else if (char === '\t') {
           result += '\\t';
         } else if (code < 32) {
-          // omit raw ASCII control codes (0x00 - 0x1F) inside string literals
+          // omit raw ASCII control codes
         } else if (char === '\\' && !escaped) {
           const nextChar = clean[i + 1];
           if (nextChar && '"/\\'.includes(nextChar)) {
@@ -377,7 +615,6 @@ Respond ONLY with the raw JSON array.`;
 
     result = result.replace(/,\s*([\]}])/g, '$1');
 
-    // Convert any unescaped double quotes inside diagram_svg field to single quotes
     result = result.replace(/("diagram_svg"\s*:\s*")([\s\S]*?)("\s*,\s*"latex"|\s*,\s*"source"|\s*,\s*"difficulty_level"|\s*,\s*"has_diagram"|\s*\})/g, (_m, p1, svg, p3) => {
       const safeSvg = svg.replace(/"/g, "'");
       return p1 + safeSvg + p3;
@@ -387,7 +624,6 @@ Respond ONLY with the raw JSON array.`;
       const items = JSON.parse(result);
       if (Array.isArray(items)) return items;
     } catch (e2: any) {
-      // 3. Object-level recovery fallback: extract valid individual question objects from response
       const recovered: any[] = [];
       const objectMatches = result.match(/\{[\s\S]*?\}(?=\s*,|\s*\]|$)/g);
       if (objectMatches) {
@@ -399,13 +635,13 @@ Respond ONLY with the raw JSON array.`;
               recovered.push(parsedObj);
             }
           } catch {
-            // ignore unparseable single object
+            // ignore
           }
         }
       }
 
       if (recovered.length > 0) {
-        this.logger.log(`Recovered ${recovered.length} valid question objects from partially truncated AI response.`);
+        this.logger.log(`Recovered ${recovered.length} valid question objects from AI response.`);
         return recovered;
       }
 
@@ -418,7 +654,7 @@ Respond ONLY with the raw JSON array.`;
     return [];
   }
 
-  private async saveQuestionsToDb(questions: any[], subject: string, sourceType: QuestionSourceType) {
+  private async saveQuestionsToDb(questions: any[], subject: string, sourceType: GenerationSourceType) {
     let savedCount = 0;
     for (const q of questions) {
       if (!q.question_text || !q.options || !Array.isArray(q.options) || q.options.length < 2) {
@@ -434,6 +670,8 @@ Respond ONLY with the raw JSON array.`;
       const rawCorrect = String(q.correct_option || 'A').toUpperCase().trim();
       const validCorrect = ['A', 'B', 'C', 'D', 'E'].includes(rawCorrect[0]) ? rawCorrect[0] : 'A';
 
+      const questionType = q.diagram_svg ? 'image_based' : q.latex ? 'latex' : 'mcq_single';
+
       const id = `q_${uuidv4().replace(/-/g, '').slice(0, 16)}`;
       const newQuestion = {
         id,
@@ -443,19 +681,20 @@ Respond ONLY with the raw JSON array.`;
         options: formattedOptions,
         correct_option: validCorrect,
         explanation: q.explanation || null,
-        question_type: 'mcq_single',
+        question_type: questionType,
         difficulty_level: Math.min(5, Math.max(1, Number(q.difficulty_level) || 3)),
         has_diagram: Boolean(q.has_diagram || q.diagram_svg),
         diagram_svg: q.diagram_svg || null,
         latex: q.latex || null,
+        import_batch_id: `ai_${sourceType}_${Date.now()}`,
         source: 'ai_generated',
         question_source_type: sourceType,
-        created_by: 'ai_system',
+        created_by: 'ai_generator',
         status: 'published',
       };
 
       try {
-        await this.db.insert(schema.questions).values(newQuestion as any);
+        await this.db.insert(schema.questions).values(newQuestion as any).onConflictDoNothing();
         savedCount++;
       } catch (dbErr: any) {
         this.logger.error(`Database insertion error for question '${id}': ${dbErr.message}`);
@@ -468,7 +707,6 @@ Respond ONLY with the raw JSON array.`;
   }
 
   async getGenerationStatus(): Promise<GenerationStatus> {
-    // Query totals by source type
     const totals = await this.db
       .select({
         sourceType: schema.questions.question_source_type,
@@ -488,7 +726,6 @@ Respond ONLY with the raw JSON array.`;
       else newText += Number(row.count);
     });
 
-    // Query per-subject counts
     const subjectRows = await this.db
       .select({
         subject: schema.questions.subject,

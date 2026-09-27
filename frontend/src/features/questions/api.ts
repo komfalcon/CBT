@@ -133,7 +133,12 @@ export async function commitImport(
 
 export async function triggerAiGeneration(
   token: string | undefined,
-  payload: { subject: string; sourceType?: 'new_text' | 'new_svg_diagram'; targetCount?: number },
+  payload: {
+    subject: string;
+    sourceType?: 'new_text' | 'new_svg_diagram' | 'calculation_latex' | 'passage_comprehension' | 'mixed_curriculum';
+    targetCount?: number;
+    topics?: string[];
+  },
 ) {
   const { data } = await questionApi.post('/ai-generate', payload, withAuth(token));
   return data;
