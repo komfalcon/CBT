@@ -194,10 +194,12 @@ export class AiQuestionGeneratorService {
     process.env.NVIDIA_API_KEY ||
     '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';
 
-  // Dual Mistral API Keys for High-Throughput Parallel Generation
+  // Quad Mistral API Keys for High-Throughput Quad-Worker Parallel Generation
   private readonly mistralKeys = [
     process.env.MISTRAL_API_KEY || 'mstrl_JQlXieutzBLjhxC6HJnqbCBM893KsBqJ_0CcPas',
     process.env.MISTRAL_API_KEY_2 || 'mstrl_W5k9kLK6jqWLrt7wW8i4C4cXw5p1pRde_4mixRZ',
+    process.env.MISTRAL_API_KEY_3 || 'mstrl_VHCxpOIRIakcVLoN7roX99CKOO5IQAnS_2YYpMZ',
+    process.env.MISTRAL_API_KEY_4 || 'mstrl_JcLgvZfie7cjgOtJ4ka9pxDOnRmYlDrX_1py0hg',
   ];
 
   private readonly orcaKey =
@@ -229,7 +231,7 @@ export class AiQuestionGeneratorService {
     this.activeJob = config;
     this.generatedInCurrentJob = 0;
 
-    // Run asynchronously in background using Dual-Worker Parallel Execution
+    // Run asynchronously in background using Quad-Worker Parallel Execution
     this.runBackgroundGeneration(config).catch((err) => {
       this.logger.error(`Background generation failed: ${err.message}`, err.stack);
       this.isRunning = false;
@@ -238,7 +240,7 @@ export class AiQuestionGeneratorService {
 
     return {
       success: true,
-      message: `Started dual-worker background AI generation for subject '${config.subject}' (${config.sourceType}), targeting ${config.targetCount} questions across 2 API keys.`,
+      message: `Started quad-worker background AI generation for subject '${config.subject}' (${config.sourceType}), targeting ${config.targetCount} questions across ${this.mistralKeys.length} API keys.`,
     };
   }
 
@@ -253,19 +255,20 @@ export class AiQuestionGeneratorService {
 
   private async runBackgroundGeneration(config: GenerationJobConfig) {
     this.logger.log(
-      `Launching DUAL-WORKER parallel generation job: subject=${config.subject}, type=${config.sourceType}, targetCount=${config.targetCount}`,
+      `Launching QUAD-WORKER parallel generation job across ${this.mistralKeys.length} keys: subject=${config.subject}, type=${config.sourceType}, targetCount=${config.targetCount}`,
     );
 
     const isCalculationHeavy = ['accounting', 'further_mathematics', 'mathematics', 'physics', 'chemistry'].includes(config.subject.toLowerCase());
     const batchSize = config.sourceType === 'new_svg_diagram' ? 3 : isCalculationHeavy ? 4 : 8;
 
-    // Launch Worker 1 (Key 1) and Worker 2 (Key 2) concurrently in parallel
-    const worker1 = this.runWorkerLoop(config, batchSize, this.mistralKeys[0], 'Worker-1');
-    const worker2 = this.runWorkerLoop(config, batchSize, this.mistralKeys[1], 'Worker-2');
+    // Launch 4 concurrent workers (one for each Mistral API key)
+    const workers = this.mistralKeys.map((key, idx) =>
+      this.runWorkerLoop(config, batchSize, key, `Worker-${idx + 1}`),
+    );
 
-    await Promise.allSettled([worker1, worker2]);
+    await Promise.allSettled(workers);
 
-    this.logger.log(`Completed dual-worker generation job for ${config.subject}. Total generated: ${this.generatedInCurrentJob}/${config.targetCount}`);
+    this.logger.log(`Completed quad-worker generation job for ${config.subject}. Total generated: ${this.generatedInCurrentJob}/${config.targetCount}`);
     this.isRunning = false;
     this.activeJob = null;
   }
