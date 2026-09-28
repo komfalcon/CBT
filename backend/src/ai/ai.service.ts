@@ -45,6 +45,49 @@ export class AiService {
     return ['deepseek-chat', 'deepseek-v4-flash', 'grok-4.6'];
   }
 
+  private async callMistralApi(messages: any[], maxTokens: number = 1000): Promise<string> {
+    const keys = [
+      process.env.MISTRAL_CHAT_API_KEY,
+      process.env.MISTRAL_API_KEY_CHAT,
+      process.env.MISTRAL_API_KEY,
+      process.env.MISTRAL_API_KEY_2,
+      process.env.MISTRAL_API_KEY_3,
+      process.env.MISTRAL_API_KEY_4,
+    ].filter(Boolean) as string[];
+
+    for (const key of keys) {
+      try {
+        const response = await axios.post(
+          'https://api.mistral.ai/v1/chat/completions',
+          {
+            model: 'mistral-small-latest',
+            messages,
+            max_tokens: maxTokens,
+            temperature: 0.4,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${key}`,
+            },
+            timeout: 20000,
+          }
+        );
+
+        const text = response.data?.choices?.[0]?.message?.content;
+        if (text) {
+          this.logger.log('AI response generated successfully via Mistral API.');
+          return text;
+        }
+      } catch (err: any) {
+        this.logger.warn(`Mistral API attempt failed: ${err?.response?.data?.error?.message || err.message}`);
+      }
+    }
+
+    // Fall back to secondary AI completion logic if Mistral calls fail
+    return this.callDigitalOceanApi(messages, maxTokens);
+  }
+
   private async callDigitalOceanApi(messages: any[], maxTokens: number = 500) {
     // Option B: Cloudflare AI Gateway / Edge Proxy Worker Integration
     const cfProxyUrl = process.env.CLOUDFLARE_AI_PROXY_URL || process.env.CLOUDFLARE_AI_GATEWAY_URL;
@@ -293,7 +336,7 @@ If there is no error in the system's answer, do not output the JSON block.`
       }
     ];
 
-    let explanation = await this.callDigitalOceanApi(messages, 800);
+    let explanation = await this.callMistralApi(messages, 1000);
     await this.deductCredit(user);
 
     // Check for vetted errors
@@ -414,11 +457,17 @@ FORBIDDEN PHRASES - NEVER USE THESE:
 
 You are a personalized AI tutor for ${user.fullName}. Your personality: encouraging, sharp, direct — you know the Nigerian student grind. You use motivating phrases when appropriate. You use the Socratic method to make students think. You are always focused on helping ${user.fullName} crush their JAMB UTME.
 
+CONCISE GREETING & CASUAL CONVERSATION RULE (CRITICAL):
+- If the user sends a simple greeting or casual conversational opener (such as "hey", "hi", "hello", "good morning", "good day", "sup", "yo", "how are you", "how far"):
+  Respond SHORT, FRIENDLY, and CONCISE in 1 to 2 natural sentences (just like Claude or ChatGPT).
+  Example response: "Hey! How's your revision going today? What topic or subject can I help you with?"
+- DO NOT output long multi-paragraph essays, whiteboard breakdowns, or unsolicited lesson plans for simple greetings like "hey" or "hi".
+- ONLY provide detailed step-by-step whiteboard explanations when the user asks a specific academic question, requests a concept explanation, or asks for help with a problem.
+
 When explaining concepts or answering questions:
-- ALWAYS provide a detailed, step-by-step "whiteboard-style" explanation.
+- Provide a clear, step-by-step explanation.
 - Break down complex topics into digestible points.
-- Use bold text, lists, and markdown formatting to structure your thoughts clearly.
-- Walk the student through the logic just like a tutor would on a physical whiteboard.`;
+- Use bold text, lists, and markdown formatting to structure your thoughts clearly.`;
 
     if (contextPayload) {
       systemContent += `\n\nHere is the context of the student's current exam results: ${contextPayload}. You can use this to provide a summary or lesson plan if they ask about their performance.`;
@@ -438,7 +487,7 @@ When explaining concepts or answering questions:
       }
     ];
 
-    const reply = await this.callDigitalOceanApi(messages, 800);
+    const reply = await this.callMistralApi(messages, 1200);
     await this.deductCredit(user);
 
     if (session) {

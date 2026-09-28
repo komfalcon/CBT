@@ -189,22 +189,18 @@ export const SUBJECT_SYLLABUS_MAP: Record<string, string[]> = {
 export class AiQuestionGeneratorService {
   private readonly logger = new Logger(AiQuestionGeneratorService.name);
 
-  // Free Tier & Metered API Keys
-  private readonly nvidiaKey =
-    process.env.NVIDIA_API_KEY ||
-    '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';
+  // Free Tier & Metered API Keys from Environment Variables
+  private readonly nvidiaKey = process.env.NVIDIA_API_KEY || '';
 
   // Quad Mistral API Keys for High-Throughput Quad-Worker Parallel Generation
   private readonly mistralKeys = [
-    process.env.MISTRAL_API_KEY || 'mstrl_JQlXieutzBLjhxC6HJnqbCBM893KsBqJ_0CcPas',
-    process.env.MISTRAL_API_KEY_2 || 'mstrl_W5k9kLK6jqWLrt7wW8i4C4cXw5p1pRde_4mixRZ',
-    process.env.MISTRAL_API_KEY_3 || 'mstrl_VHCxpOIRIakcVLoN7roX99CKOO5IQAnS_2YYpMZ',
-    process.env.MISTRAL_API_KEY_4 || 'mstrl_JcLgvZfie7cjgOtJ4ka9pxDOnRmYlDrX_1py0hg',
-  ];
+    process.env.MISTRAL_API_KEY,
+    process.env.MISTRAL_API_KEY_2,
+    process.env.MISTRAL_API_KEY_3,
+    process.env.MISTRAL_API_KEY_4,
+  ].filter(Boolean) as string[];
 
-  private readonly orcaKey =
-    process.env.ORCAROUTER_API_KEY ||
-    'sk-orca-gk0Simt2OkYhhB1TCYoEDT1j7zv8FSeVrjD5G11oGqu';
+  private readonly orcaKey = process.env.ORCAROUTER_API_KEY || '';
 
   private isRunning = false;
   private activeJob: GenerationJobConfig | null = null;

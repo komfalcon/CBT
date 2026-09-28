@@ -243,7 +243,7 @@ Strict Formatting Instructions:
   }
 
   private async callMistralApi(prompt: string): Promise<string | null> {
-    const mistralKey = process.env.MISTRAL_API_KEY || 'mstrl_JQlXieutzBLjhxC6HJnqbCBM893KsBqJ_0CcPas';
+    const mistralKey = process.env.MISTRAL_API_KEY || process.env.MISTRAL_API_KEY_2 || process.env.MISTRAL_API_KEY_3 || process.env.MISTRAL_API_KEY_4 || '';
     const url = 'https://api.mistral.ai/v1/chat/completions';
 
     try {

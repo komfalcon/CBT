@@ -28,9 +28,9 @@ export interface LLMResponse {
 }
 
 const DEFAULT_KEYS = {
-  mistral: 'mstrl_JQlXieutzBLjhxC6HJnqbCBM893KsBqJ_0CcPas',
-  orca: 'sk-orca-gk0Simt2OkYhhB1TCYoEDT1j7zv8FSeVrjD5G11oGqu',
-  nvidia: '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',
+  mistral: (import.meta as any).env?.VITE_MISTRAL_API_KEY || '',
+  orca: (import.meta as any).env?.VITE_ORCAROUTER_API_KEY || '',
+  nvidia: (import.meta as any).env?.VITE_NVIDIA_API_KEY || '',
 };
 
 export class AIRouter {
