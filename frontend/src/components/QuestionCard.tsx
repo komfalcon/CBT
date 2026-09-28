@@ -57,8 +57,23 @@ export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(sanitizedSvg, {
               USE_PROFILES: { svg: true, svgFilters: true },
-              ADD_TAGS: ['use', 'path', 'rect', 'circle', 'text', 'line', 'polygon', 'polyline', 'g', 'defs', 'style', 'svg', 'marker', 'pattern'],
-              ADD_ATTR: ['viewBox', 'xmlns', 'fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'text-anchor', 'font-size', 'font-family', 'font-weight', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'width', 'height', 'd', 'transform', 'opacity', 'id'],
+              ADD_TAGS: ['use', 'path', 'rect', 'circle', 'ellipse', 'text', 'tspan', 'line', 'polygon', 'polyline', 'g', 'defs', 'style', 'svg', 'marker', 'pattern', 'linearGradient', 'radialGradient', 'stop'],
+              ADD_ATTR: [
+                'viewBox', 'xmlns', 'fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'stroke-dashoffset',
+                'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit',
+                'text-anchor', 'dominant-baseline', 'alignment-baseline',
+                'font-size', 'font-family', 'font-weight', 'font-style',
+                'cx', 'cy', 'r', 'rx', 'ry',
+                'x', 'y', 'x1', 'y1', 'x2', 'y2', 'dx', 'dy',
+                'width', 'height', 'd', 'points',
+                'transform', 'opacity', 'fill-opacity', 'stroke-opacity',
+                'id', 'class',
+                'marker-end', 'marker-start', 'marker-mid',
+                'refX', 'refY', 'markerWidth', 'markerHeight', 'orient', 'markerUnits',
+                'gradientUnits', 'gradientTransform', 'offset', 'stop-color', 'stop-opacity',
+                'patternUnits', 'patternTransform',
+                'preserveAspectRatio',
+              ],
             }),
           }}
         />
@@ -80,8 +95,9 @@ const addLatexDelimiters = (text: string): string => {
   result = result.replace(/\\ext(?=\s*[\({]|\s*[a-zA-Z0-9])/g, '\\text');
   result = result.replace(/[\x09\t]ext(?=\s*[\({]|\s*[a-zA-Z0-9])/g, '\\text');
   result = result.replace(/[\x09\t]heta/g, '\\theta');
+  result = result.replace(/[\x09\t]imes\b/g, '\\times');
   result = result.replace(/[\x09\t]an(?=\s*[\({]|\s*[a-zA-Z0-9])/g, '\\tan ');
-  result = result.replace(/[\x09\t]au/g, '\\tau');
+  result = result.replace(/[\x09\t]au\b/g, '\\tau');
   result = result.replace(/[\x09\t]o(?=\s+)/g, '\\to ');
 
   // Repair corrupted escape sequences from bad DB scraping (e.g. \right evaluated as \r + ight)

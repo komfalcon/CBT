@@ -4,7 +4,6 @@ import {
   ChevronLeft,
   ChevronRight,
   History,
-  Loader2,
   MessageSquare,
   PanelLeft,
   Plus,
@@ -27,10 +26,10 @@ interface AiChatWidgetProps {
 }
 
 const suggestedPrompts = [
-  'Explain this topic simply',
-  'Create a 20-minute revision plan',
-  'Test me with five questions',
-  'Help me understand an incorrect answer',
+  "Explain a JAMB topic I'm struggling with",
+  'Quiz me on 5 questions from any subject',
+  'What are the highest-yield topics for UTME?',
+  'Help me understand why I got this question wrong',
 ];
 
 function FalkeMark({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
@@ -350,7 +349,14 @@ export const AiChatWidget: React.FC<AiChatWidgetProps> = ({ contextPayload, hidd
                   ))}
 
                   {isLoading && (
-                    <div className="flex items-center gap-3"><FalkeMark size="sm" /><div className="flex items-center gap-2 rounded-2xl rounded-bl-md border border-border bg-bg-card px-4 py-3 text-sm text-text-secondary"><Loader2 className="h-4 w-4 animate-spin text-ai-flag" />Falke is thinking</div></div>
+                    <div className="flex items-center gap-3">
+                      <FalkeMark size="sm" />
+                      <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-md border border-border bg-bg-card px-4 py-3.5">
+                        <span className="h-2 w-2 animate-bounce rounded-full bg-ai-flag [animation-delay:0ms]" />
+                        <span className="h-2 w-2 animate-bounce rounded-full bg-ai-flag [animation-delay:150ms]" />
+                        <span className="h-2 w-2 animate-bounce rounded-full bg-ai-flag [animation-delay:300ms]" />
+                      </div>
+                    </div>
                   )}
                   {error && <div className="rounded-xl border border-error/25 bg-error/10 px-4 py-3 text-center text-xs leading-5 text-error">{error}</div>}
                   <div ref={messagesEndRef} />
