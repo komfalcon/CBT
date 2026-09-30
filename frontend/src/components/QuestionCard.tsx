@@ -98,6 +98,25 @@ export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
     return `style='${cleanStyle}'`;
   });
 
+  // Clean raw LaTeX macros inside SVG <text> and <tspan> tags (which SVG cannot render natively)
+  sanitizedSvg = sanitizedSvg.replace(/(<(?:text|tspan)[^>]*>)([\s\S]*?)(<\/(?:text|tspan)>)/gi, (_match, openTag, textContent, closeTag) => {
+    let cleanText = textContent
+      .replace(/\\sqrt\{(\d+|\w+)\}/g, '√$1')
+      .replace(/\\sqrt\((.*?)\)/g, '√($1)')
+      .replace(/\\pi/g, 'π')
+      .replace(/\\theta/g, 'θ')
+      .replace(/\\alpha/g, 'α')
+      .replace(/\\beta/g, 'β')
+      .replace(/\\gamma/g, 'γ')
+      .replace(/\\lambda/g, 'λ')
+      .replace(/\\vec\{(\w+)\}/g, '$1⃗')
+      .replace(/\\cdot/g, '·')
+      .replace(/\\times/g, '×')
+      .replace(/\\pm/g, '±')
+      .replace(/\\infty/g, '∞');
+    return openTag + cleanText + closeTag;
+  });
+
   return (
     <div className="mt-4 flex max-w-3xl flex-col items-center justify-center overflow-auto rounded-2xl border border-slate-700/60 bg-[#0b1329] p-5 shadow-inner">
       {isTikz(svg) ? (
@@ -138,13 +157,18 @@ const addLatexDelimiters = (text: string): string => {
   
   let result = text;
 
-  // Fix FormFeed (\x0c / \u000c / ♠) control character corruptions from bad \f JSON escape (e.g. \frac -> ♠rac)
+  // 1. Repair escaped markdown bold corruptions like \** or **\(...\)** or **$...$**
+  result = result.replace(/\\\*\*/g, '**');
+  result = result.replace(/\*\*\s*\\?\(\s*([\s\S]*?)\s*\\?\)\s*\*\*/g, '$\\mathbf{$1}$');
+  result = result.replace(/\*\*\s*\$\s*([\s\S]*?)\s*\$\s*\*\*/g, '$\\mathbf{$1}$');
+
+  // 2. Fix FormFeed (\x0c / \u000c / ♠) control character corruptions from bad \f JSON escape
   result = result.replace(/[\x0c\u000c♠]rac/g, '\\frac');
   result = result.replace(/[\x0c\u000c♠]actor/g, '\\factor');
   result = result.replace(/[\x0c\u000c♠]ormula/g, '\\formula');
   result = result.replace(/[\x0c\u000c♠]([a-zA-Z]+)/g, '\\$1');
 
-  // Fix Tab (\x09 / \t) control character corruptions from bad \t JSON escape (e.g. \text -> \ext, \theta -> \heta)
+  // 3. Fix Tab (\x09 / \t) control character corruptions from bad \t JSON escape
   result = result.replace(/\\ext(?=\s*[\({]|\s*[a-zA-Z0-9])/g, '\\text');
   result = result.replace(/[\x09\t]ext(?=\s*[\({]|\s*[a-zA-Z0-9])/g, '\\text');
   result = result.replace(/[\x09\t]heta/g, '\\theta');
@@ -154,7 +178,7 @@ const addLatexDelimiters = (text: string): string => {
   result = result.replace(/[\x09\t]o(?=\s+)/g, '\\to ');
   result = result.replace(/[\x09\t]riangle/g, '\\triangle');
 
-  // Fix Backspace (\x08 / \b) control character corruptions (e.g. \begin -> \x08egin, \bmatrix -> \x08matrix)
+  // 4. Fix Backspace (\x08 / \b) control character corruptions
   result = result.replace(/[\x08]egin(?=\s*\{)/g, '\\begin');
   result = result.replace(/[\x08]end(?=\s*\{)/g, '\\end');
   result = result.replace(/[\x08]matrix/g, '\\bmatrix');
@@ -162,29 +186,31 @@ const addLatexDelimiters = (text: string): string => {
   result = result.replace(/[\x08]ar\b/g, '\\bar');
   result = result.replace(/[\x08]inom/g, '\\binom');
 
-  // Repair corrupted escape sequences from bad DB scraping (e.g. \right evaluated as \r + ight)
-  result = result.replace(/\right/g, '\\right');
-  result = result.replace(/\nu(?=[\s_])/g, '\\nu');
-  result = result.replace(/\tau(?=[\s_])/g, '\\tau');
+  // 5. Repair corrupted escape sequences from bad DB scraping
+  result = result.replace(/\\right(?=[\s\)\}])/g, '\\right');
+  result = result.replace(/\\nu(?=[\s_])/g, '\\nu');
+  result = result.replace(/\\tau(?=[\s_])/g, '\\tau');
+  result = result.replace(/\\begin(?=\s*\{)/g, '\\begin');
+  result = result.replace(/\\end(?=\s*\{)/g, '\\end');
 
-  // Repair \b (ASCII backspace, char 8) corrupting \begin and \end
-  result = result.replace(/\begin(?=\s*\{)/g, '\\begin');
-  result = result.replace(/\bend(?=\s*\{)/g, '\\end');
-
-  // Repair single backslash row separators inside matrix / array / cases environments
+  // 6. Repair single backslash row separators inside matrix / array / cases environments
   result = result.replace(/(\\begin\s*\{(?:matrix|bmatrix|pmatrix|vmatrix|Vmatrix|cases|align|array)\}[\s\S]*?\\end\s*\{(?:matrix|bmatrix|pmatrix|vmatrix|Vmatrix|cases|align|array)\})/gi, (matrixBlock) => {
     return matrixBlock.replace(/(?<!\\)\\(?!\\[a-zA-Z0-9\s]|begin|end|quad|qquad|text|frac|sqrt|left|right|&|\s*$)/g, '\\\\');
   });
 
-  // Fix unsupported or badly nested LaTeX macros
-  result = result.replace(/\\textsuperscript\{([^}]*)\}/g, '^{$1}');
-  result = result.replace(/\\text\{\s*\\\(\s*(.*?)\s*\\\)\s*\}/g, '$1'); // Unwrap \text{\(\Omega\)} to \Omega
+  // 7. Convert LaTeX inline \( ... \) into single dollar sign $ ... $ (INLINE MATH)
+  // Crucial: remark-math requires no spaces immediately inside $, so we trim whitespace.
+  result = result.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$1$');
 
-  // Convert plain ASCII math (like sqrt(x) or √x) to valid KaTeX blocks
-  result = result.replace(/\bsqrt\((.*?)\)/g, '$$\\sqrt{$1}$$');
-  result = result.replace(/√(\d+|\w+)/g, '$$\\sqrt{$1}$$');
+  // 8. Convert LaTeX display \[ ... \] into double dollar sign $$ ... $$ (BLOCK MATH)
+  result = result.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, '\n\n$$$$1$$\n\n');
 
-  // Convert common Unicode math symbols directly into KaTeX equivalents
+  // 9. Convert plain ASCII math (like sqrt(x) or √x) to valid KaTeX inline blocks
+  result = result.replace(/\bsqrt\{([^}]+)\}/g, '$\\sqrt{$1}$');
+  result = result.replace(/\bsqrt\((.*?)\)/g, '$\\sqrt{$1}$');
+  result = result.replace(/√(\d+|\w+)/g, '$\\sqrt{$1}$');
+
+  // 10. Convert common Unicode math symbols directly into KaTeX equivalents
   const unicodeMap: Record<string, string> = {
     'α': '$\\alpha$', 'β': '$\\beta$', 'γ': '$\\gamma$', 'Δ': '$\\Delta$',
     'δ': '$\\delta$', 'θ': '$\\theta$', 'λ': '$\\lambda$', 'μ': '$\\mu$',
@@ -196,23 +222,20 @@ const addLatexDelimiters = (text: string): string => {
     result = result.replace(new RegExp(uni, 'g'), latex);
   });
 
-  // Fix trailing unclosed $$ delimiters at the end of text (e.g. 2\vec{B}$$.)
-  result = result.replace(/(\\\w+(?:\{[^}]*\})*)\$\$(?=\s*[\.\,\;\:]|\s*$)/g, '$$$1$$');
+  // 11. Wrap full math expressions like "z = 1 - \sqrt{3}i" or "\vec{v} = (2,-1,4)" or "P(1,3,-2)"
+  result = result.replace(/(?<!\$)\b([a-zA-Z]\s*=\s*[0-9A-Za-z\s\+\-\*\/\^\(\)\\]*\\(?:sqrt|frac|vec|pi|theta|alpha|beta|lambda)[0-9A-Za-z\s\+\-\*\/\^\(\)\\]*)(?!\$)/g, '$$1$');
 
-  // Convert standard \( ... \) and \[ ... \] LaTeX blocks to KaTeX expected $ ... $ blocks
-  // Crucial: remark-math requires no spaces immediately after $ and before $, so we use \s* to trim them.
-  result = result.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$$1$$');
-  result = result.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, '$$$$$1$$$$');
+  // 12. Fix trailing unclosed $$ or $ delimiters (e.g. 2\sqrt{2}$$ -> 2$\sqrt{2}$)
+  result = result.replace(/\$\$(?=\s*[\.\,\;\:\)]|\s*$)/g, '');
 
-  // Normalize any run of 3+ dollar signs down to 2 (avoids broken $$$...$$$$ delimiters)
+  // 13. Normalize any run of 3+ dollar signs down to 2
   result = result.replace(/\${3,}/g, '$$');
 
-  // SAFELY wrap bare \begin{env}...\end{env} blocks that are NOT already inside $$ delimiters.
-  // Strategy: split on existing $$...$$, process only the non-math parts, then reassemble.
-  const mathBlockRegex = /(\$\$[\s\S]*?\$\$)/g;
+  // 14. SAFELY wrap bare \begin{env}...\end{env} blocks that are NOT already inside $$ delimiters.
+  const mathBlockRegex = /(\$\$[\s\S]*?\$\$|\$[^$\n]+\$)/g;
   const parts = result.split(mathBlockRegex);
   result = parts.map((part, i) => {
-    // Even indices are plain text; odd indices are already-wrapped $$ math blocks — leave them alone
+    // Even indices are plain text; odd indices are already-wrapped math blocks — leave them alone
     if (i % 2 !== 0) return part;
 
     // Wrap any bare \begin{env}...\end{env} that appear in plain text
@@ -222,11 +245,10 @@ const addLatexDelimiters = (text: string): string => {
     );
   }).join('');
 
-  // Wrap naked LaTeX commands that are not already inside $..$ or $$..$$ blocks
+  // 15. Wrap naked LaTeX commands that are not already inside $..$ or $$..$$ blocks
   const parts2 = result.split(mathBlockRegex);
   result = parts2.map((part, i) => {
     if (i % 2 !== 0) return part;
-    // Also skip inline $ blocks
     return part.replace(
       /(?<!\$)(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|cot|sec|csc|log|ln|exp|det|max|min|binom|hat|vec|bar|dot|ddot|tilde|overline|underline|overbrace|underbrace|left|right|mathbf|mathbb|mathrm|text|bold|it|le|ge|to|leftarrow|rightarrow|degree|circ|parallel|perp|angle|triangle|quad|qquad|propto|sim|cong|subset|supset|emptyset|implies)(?:\{[^}]*\}|\[[^\]]*\])*(?:[_^](?:\{[^}]*\}|[^\s{]))*)/g,
       (match) => `$${match}$`,

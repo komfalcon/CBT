@@ -341,7 +341,8 @@ SVG Design Standards for Dark Theme:
   * Grid / Axes: stroke='#475569' (slate), stroke-width='1.5', stroke-dasharray='4,4'.
   * Fill Shapes: fill='rgba(56, 189, 248, 0.15)' stroke='#38bdf8'.
 - Arrowheads: Define <marker id='arrow' viewBox='0 0 10 10' refX='6' refY='5' markerWidth='6' markerHeight='6' orient='auto-start-reverse'><path d='M 0 0 L 10 5 L 0 10 z' fill='#38bdf8'/></marker> in <defs> for vectors.
-- Layout: Clean, uncluttered, properly positioned labels that do not overlap lines or text.`;
+- Layout: Clean, uncluttered, properly positioned labels with distinct x/y coordinates so labels NEVER overlap lines, axes, or other text labels.
+- Text Content: In SVG <text> tags, NEVER output raw LaTeX backslash macros (like \\sqrt, \\pi, \\vec). Use clean text or Unicode symbols (√3, π, θ, v⃗).`;
 
       userPrompt = `Generate EXACTLY ${count} JAMB/UTME standard multiple-choice questions for '${subject}'.
 Topics to cover: ${topicStr}.
@@ -350,7 +351,9 @@ Each question MUST include an inline vector SVG diagram in the 'diagram_svg' fie
 Formatting Rules:
 - Enclose all JSON string values in double quotes ("...").
 - Inside 'diagram_svg', use single quotes for XML attributes (e.g. <svg viewBox='0 0 400 300' fill='#3b82f6'>).
-- Escape backslashes in LaTeX formulas (e.g. \\\\(3x^2 - 12x - 15 = 0\\\\)).
+- Escape backslashes in LaTeX formulas (e.g. \\\\(3x^2 - 12x - 15 = 0\\\\) or \\\\vec{v} = (2, -1, 4)).
+- In 'options', do NOT include option prefixes like 'A. ', 'B) ', or 'Option C: ' inside the 'text' field.
+- In 'explanation', format solutions in clear, step-by-step paragraphs with inline LaTeX ($...$) for formulas.
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
