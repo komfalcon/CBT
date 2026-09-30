@@ -750,14 +750,21 @@ Respond ONLY with the raw JSON array.`;
 
       const formattedOptions = q.options.map((opt: any, idx: number) => {
         const optionId = (opt.id || ['A', 'B', 'C', 'D', 'E'][idx] || 'A').toUpperCase().trim();
-        const optionText = typeof opt === 'string' ? opt : String(opt.text || opt);
+        let optionText = typeof opt === 'string' ? opt : String(opt.text || opt);
+        // Strip duplicate option label prefixes (e.g. "A. 25 cm" -> "25 cm")
+        optionText = optionText.replace(/^(?:[A-Ea-e][\.\):]\s*|\([A-Ea-e]\)\s*|Option\s+[A-Ea-e][:\.]?\s*)/i, '').trim();
         return { id: optionId, text: optionText };
       });
 
       const rawCorrect = String(q.correct_option || 'A').toUpperCase().trim();
       const validCorrect = ['A', 'B', 'C', 'D', 'E'].includes(rawCorrect[0]) ? rawCorrect[0] : 'A';
 
-      const questionType = q.diagram_svg ? 'image_based' : q.latex ? 'latex' : 'mcq_single';
+      let cleanSvg = q.diagram_svg;
+      if (cleanSvg && typeof cleanSvg === 'string') {
+        cleanSvg = cleanSvg.replace(/^```(?:xml|svg)?\s*/i, '').replace(/\s*```$/, '').trim();
+      }
+
+      const questionType = cleanSvg ? 'image_based' : q.latex ? 'latex' : 'mcq_single';
 
       const id = `q_${uuidv4().replace(/-/g, '').slice(0, 16)}`;
       const newQuestion = {
@@ -770,8 +777,8 @@ Respond ONLY with the raw JSON array.`;
         explanation: q.explanation || null,
         question_type: questionType,
         difficulty_level: Math.min(5, Math.max(1, Number(q.difficulty_level) || 3)),
-        has_diagram: Boolean(q.has_diagram || q.diagram_svg),
-        diagram_svg: q.diagram_svg || null,
+        has_diagram: Boolean(q.has_diagram || cleanSvg),
+        diagram_svg: cleanSvg || null,
         latex: q.latex || null,
         import_batch_id: `ai_${sourceType}_${Date.now()}`,
         source: 'ai_generated',

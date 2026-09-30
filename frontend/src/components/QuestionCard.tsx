@@ -39,13 +39,64 @@ export const TikzRenderer: React.FC<{ code: string }> = ({ code }) => {
 export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
   if (!svg) return null;
 
-  // Auto-clean dark text colors and low-contrast fills for dark theme legibility
-  let sanitizedSvg = svg.replace(/\\n/g, ' ').replace(/\n/g, ' ');
+  // Render direct image URLs or data URIs if provided as diagram
+  if (typeof svg === 'string' && (svg.startsWith('http://') || svg.startsWith('https://') || svg.startsWith('/uploads/') || svg.startsWith('data:image/'))) {
+    return (
+      <div className="mt-4 flex max-w-3xl justify-center overflow-auto rounded-2xl border border-slate-700/60 bg-[#0b1329] p-4 shadow-inner">
+        <img src={svg} alt="Question Diagram" className="max-h-[360px] w-auto max-w-full rounded-xl object-contain" />
+      </div>
+    );
+  }
 
-  // Replace hardcoded black/dark text fill colors with bright slate (#f8fafc)
-  sanitizedSvg = sanitizedSvg.replace(/(<text[^>]*?\bfill=['"])(?:#000000|#000|#111111|#111|#333333|#333|#0f172a|black|darkgray|darkgrey)(['"])/gi, '$1#f8fafc$2');
-  // If <text> has no fill attribute specified, add fill='#f8fafc'
-  sanitizedSvg = sanitizedSvg.replace(/<text(?![^>]*\bfill=)/gi, "<text fill='#f8fafc' ");
+  // Clean raw markdown code block tags and XML declarations
+  let sanitizedSvg = svg
+    .replace(/^```(?:xml|svg)?\s*/i, '')
+    .replace(/\s*```$/, '')
+    .replace(/<\?xml[^>]*\?>/gi, '')
+    .replace(/<!DOCTYPE[^>]*>/gi, '')
+    .replace(/\\n/g, ' ')
+    .replace(/\n/g, ' ')
+    .trim();
+
+  // Inject viewBox if missing but width and height exist
+  if (!/viewBox=/i.test(sanitizedSvg)) {
+    const widthMatch = sanitizedSvg.match(/\bwidth=['"](\d+)(?:px)?['"]/i);
+    const heightMatch = sanitizedSvg.match(/\bheight=['"](\d+)(?:px)?['"]/i);
+    if (widthMatch && heightMatch) {
+      const w = widthMatch[1];
+      const h = heightMatch[1];
+      sanitizedSvg = sanitizedSvg.replace(/<svg\b/i, `<svg viewBox='0 0 ${w} ${h}' `);
+    }
+  }
+
+  // Dark Theme Contrast Fixes:
+  // 1. Text fill replacement: replace black/dark grey text fills with bright slate (#f8fafc)
+  sanitizedSvg = sanitizedSvg.replace(
+    /(<(?:text|tspan)[^>]*?\bfill=['"])(?:#000000|#000|#111111|#111|#333333|#333|#0f172a|#1e293b|black|darkgray|darkgrey)(['"])/gi,
+    '$1#f8fafc$2'
+  );
+  // Add fill='#f8fafc' to <text> or <tspan> tags missing fill attribute
+  sanitizedSvg = sanitizedSvg.replace(/<(text|tspan)(?![^>]*\bfill=)/gi, "<$1 fill='#f8fafc' ");
+
+  // 2. Vector/Line stroke replacement: replace black/dark grey strokes with bright sky blue (#38bdf8) or slate (#94a3b8)
+  sanitizedSvg = sanitizedSvg.replace(
+    /(<(?:path|line|polyline|polygon|rect|circle|ellipse)[^>]*?\bstroke=['"])(?:#000000|#000|#111111|#111|#0f172a|#1e293b|black)(['"])/gi,
+    '$1#38bdf8$2'
+  );
+
+  // 3. Replace fill='black' or fill='#000' on shapes with soft semi-transparent blue fill
+  sanitizedSvg = sanitizedSvg.replace(
+    /(<(?:rect|polygon|path|circle|ellipse)[^>]*?\bfill=['"])(?:#000000|#000|#111111|#111|black)(['"])/gi,
+    '$1rgba(56, 189, 248, 0.15)$2'
+  );
+
+  // 4. Style attribute dark color replacements
+  sanitizedSvg = sanitizedSvg.replace(/style=['"]([^'"]*)['"]/gi, (_match, styleContent) => {
+    let cleanStyle = styleContent
+      .replace(/fill:\s*(?:#000000|#000|#111111|#111|#0f172a|black);?/gi, 'fill: #f8fafc;')
+      .replace(/stroke:\s*(?:#000000|#000|#111111|#111|#0f172a|black);?/gi, 'stroke: #38bdf8;');
+    return `style='${cleanStyle}'`;
+  });
 
   return (
     <div className="mt-4 flex max-w-3xl flex-col items-center justify-center overflow-auto rounded-2xl border border-slate-700/60 bg-[#0b1329] p-5 shadow-inner">
@@ -89,6 +140,8 @@ const addLatexDelimiters = (text: string): string => {
 
   // Fix FormFeed (\x0c / \u000c / ♠) control character corruptions from bad \f JSON escape (e.g. \frac -> ♠rac)
   result = result.replace(/[\x0c\u000c♠]rac/g, '\\frac');
+  result = result.replace(/[\x0c\u000c♠]actor/g, '\\factor');
+  result = result.replace(/[\x0c\u000c♠]ormula/g, '\\formula');
   result = result.replace(/[\x0c\u000c♠]([a-zA-Z]+)/g, '\\$1');
 
   // Fix Tab (\x09 / \t) control character corruptions from bad \t JSON escape (e.g. \text -> \ext, \theta -> \heta)
@@ -99,6 +152,15 @@ const addLatexDelimiters = (text: string): string => {
   result = result.replace(/[\x09\t]an(?=\s*[\({]|\s*[a-zA-Z0-9])/g, '\\tan ');
   result = result.replace(/[\x09\t]au\b/g, '\\tau');
   result = result.replace(/[\x09\t]o(?=\s+)/g, '\\to ');
+  result = result.replace(/[\x09\t]riangle/g, '\\triangle');
+
+  // Fix Backspace (\x08 / \b) control character corruptions (e.g. \begin -> \x08egin, \bmatrix -> \x08matrix)
+  result = result.replace(/[\x08]egin(?=\s*\{)/g, '\\begin');
+  result = result.replace(/[\x08]end(?=\s*\{)/g, '\\end');
+  result = result.replace(/[\x08]matrix/g, '\\bmatrix');
+  result = result.replace(/[\x08]eta/g, '\\beta');
+  result = result.replace(/[\x08]ar\b/g, '\\bar');
+  result = result.replace(/[\x08]inom/g, '\\binom');
 
   // Repair corrupted escape sequences from bad DB scraping (e.g. \right evaluated as \r + ight)
   result = result.replace(/\right/g, '\\right');
@@ -108,6 +170,11 @@ const addLatexDelimiters = (text: string): string => {
   // Repair \b (ASCII backspace, char 8) corrupting \begin and \end
   result = result.replace(/\begin(?=\s*\{)/g, '\\begin');
   result = result.replace(/\bend(?=\s*\{)/g, '\\end');
+
+  // Repair single backslash row separators inside matrix / array / cases environments
+  result = result.replace(/(\\begin\s*\{(?:matrix|bmatrix|pmatrix|vmatrix|Vmatrix|cases|align|array)\}[\s\S]*?\\end\s*\{(?:matrix|bmatrix|pmatrix|vmatrix|Vmatrix|cases|align|array)\})/gi, (matrixBlock) => {
+    return matrixBlock.replace(/(?<!\\)\\(?!\\[a-zA-Z0-9\s]|begin|end|quad|qquad|text|frac|sqrt|left|right|&|\s*$)/g, '\\\\');
+  });
 
   // Fix unsupported or badly nested LaTeX macros
   result = result.replace(/\\textsuperscript\{([^}]*)\}/g, '^{$1}');
@@ -121,7 +188,9 @@ const addLatexDelimiters = (text: string): string => {
   const unicodeMap: Record<string, string> = {
     'α': '$\\alpha$', 'β': '$\\beta$', 'γ': '$\\gamma$', 'Δ': '$\\Delta$',
     'δ': '$\\delta$', 'θ': '$\\theta$', 'λ': '$\\lambda$', 'μ': '$\\mu$',
-    'π': '$\\pi$', 'σ': '$\\sigma$', 'Ω': '$\\Omega$'
+    'π': '$\\pi$', 'σ': '$\\sigma$', 'Ω': '$\\Omega$', '±': '$\\pm$',
+    '≤': '$\\le$', '≥': '$\\ge$', '≠': '$\\neq$', '×': '$\\times$',
+    '÷': '$\\div$', '∞': '$\\infty$', '°': '^\\circ', 'Å': '\\text{Å}', '→': '$\\to$'
   };
   Object.entries(unicodeMap).forEach(([uni, latex]) => {
     result = result.replace(new RegExp(uni, 'g'), latex);
@@ -159,7 +228,7 @@ const addLatexDelimiters = (text: string): string => {
     if (i % 2 !== 0) return part;
     // Also skip inline $ blocks
     return part.replace(
-      /(?<!\$)(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|cot|sec|csc|log|ln|exp|det|max|min|binom|hat|vec|bar|dot|ddot|tilde|overline|underline|overbrace|underbrace|left|right|mathbf|mathbb|mathrm|text|bold|it)(?:\{[^}]*\}|\[[^\]]*\])*(?:[_^](?:\{[^}]*\}|[^\s{]))*)/g,
+      /(?<!\$)(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|cot|sec|csc|log|ln|exp|det|max|min|binom|hat|vec|bar|dot|ddot|tilde|overline|underline|overbrace|underbrace|left|right|mathbf|mathbb|mathrm|text|bold|it|le|ge|to|leftarrow|rightarrow|degree|circ|parallel|perp|angle|triangle|quad|qquad|propto|sim|cong|subset|supset|emptyset|implies)(?:\{[^}]*\}|\[[^\]]*\])*(?:[_^](?:\{[^}]*\}|[^\s{]))*)/g,
       (match) => `$${match}$`,
     );
   }).join('');
@@ -305,6 +374,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           const isOptionSelected = selectedOption === option.id;
           const isCorrect = showFeedback && (correctOption || question.correct_option) === option.id;
           const isWrongSelection = showFeedback && isOptionSelected && !isCorrect;
+
+          // Clean duplicate option label prefix if present (e.g. "A. 25 cm" -> "25 cm")
+          const cleanOptionText = (option.text || '').replace(/^(?:[A-Ea-e][\.\):]\s*|\([A-Ea-e]\)\s*|Option\s+[A-Ea-e][:\.]?\s*)/i, '');
+
           const stateClass = isCorrect
             ? 'border-success/70 bg-success/10 text-text-primary shadow-[0_10px_28px_rgba(52,211,153,0.12)]'
             : isWrongSelection
@@ -325,7 +398,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border text-sm font-black transition-[background-color,border-color,box-shadow,color,transform] duration-200 ${badgeClass}`}>
                 {isCorrect ? <Check className="h-4 w-4" strokeWidth={3} /> : isWrongSelection ? <CircleAlert className="h-4 w-4" /> : option.id}
               </span>
-              <span className="min-w-0 flex-1 text-[15px] font-semibold leading-7"><SmartTextRenderer text={option.text} /></span>
+              <span className="min-w-0 flex-1 text-[15px] font-semibold leading-7"><SmartTextRenderer text={cleanOptionText} /></span>
             </>
           );
 

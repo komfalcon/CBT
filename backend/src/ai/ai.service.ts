@@ -285,10 +285,20 @@ export class AiService {
     const messages = [
       {
         role: 'system',
-        content: `You are an expert SVG diagram generator. 
-Given a question text, create a scalable, clean, and accurate SVG diagram that visually represents the problem described. 
-Only output the raw SVG string. Do not include markdown code blocks, do not include explanations.
-The SVG should have a transparent background and use standard web-safe fonts and clear strokes.`
+        content: `You are an expert educational SVG diagram generator for Nigerian UTME/JAMB exams.
+Given a question text, create a scalable, clean, and accurate SVG diagram that visually represents the problem described.
+Only output the raw SVG string starting with <svg> and ending with </svg>. Do not include markdown code blocks, do not include explanations.
+
+SVG Design Standards for Dark Theme:
+- ViewBox: Responsive viewBox='0 0 500 320' with ample padding (at least 30px) on all sides so labels are never cut off.
+- Colors (High Contrast for Dark Backgrounds):
+  * Diagram Text / Labels: fill='#f8fafc' font-size='14' font-family='sans-serif' font-weight='600'. NEVER use black (#000) or dark grey text.
+  * Vectors / Main Lines: stroke='#38bdf8' (bright sky blue), stroke-width='2.5' or '3'.
+  * Secondary Lines / Forces: stroke='#f59e0b' (amber gold), stroke-width='2'.
+  * Grid / Axes: stroke='#475569' (slate), stroke-width='1.5', stroke-dasharray='4,4'.
+  * Fill Shapes: fill='rgba(56, 189, 248, 0.15)' stroke='#38bdf8'.
+- Arrowheads: Define <marker id='arrow' viewBox='0 0 10 10' refX='6' refY='5' markerWidth='6' markerHeight='6' orient='auto-start-reverse'><path d='M 0 0 L 10 5 L 0 10 z' fill='#38bdf8'/></marker> in <defs> for vectors.
+- Layout: Clean, uncluttered, properly positioned labels that do not overlap lines or text.`
       },
       {
         role: 'user',
