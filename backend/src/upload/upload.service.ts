@@ -6,6 +6,7 @@ export class UploadService {
   private readonly logger = new Logger(UploadService.name);
   private byteshipClient: any = null;
   private readonly byteshipApiKey = process.env.BYTESHIP_API_KEY || 'bship_a22bcd5fa3d842849b5522f43cbc4dda';
+  private readonly sendbytesApiKey = process.env.SENDBYTES_API_KEY || 'sk_live_466460f875ccfdcdc5da4f82691d840512dcd88c';
 
   constructor() {
     this.initByteshipClient();
@@ -27,17 +28,21 @@ export class UploadService {
 
   /**
    * Uploads an image or file using Cloudinary as the primary provider,
-   * with Byteship (@byteship/js) as a backup provider if Cloudinary fails or is unconfigured.
+   * with Byteship (@byteship/js) and SendBytes as isolated backup providers.
+   * Backup failures are safely caught and will never crash or affect main code execution.
    */
   async uploadFile(
     fileBuffer: Buffer,
     filename: string,
     mimetype: string = 'image/png',
     folder: string = 'uploads'
-  ): Promise<{ url: string; provider: 'cloudinary' | 'byteship' }> {
+  ): Promise<{ url: string; provider: 'cloudinary' | 'byteship' | 'sendbytes' }> {
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
     const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET || 'unsigned_preset';
     const uint8Array = new Uint8Array(fileBuffer);
+    const year = new Date().getFullYear();
+    const safeFilename = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+    const path = `${folder}/${year}/${safeFilename}`;
 
     // 1. Primary Attempt: Cloudinary Upload
     if (cloudName) {
@@ -72,13 +77,9 @@ export class UploadService {
       this.logger.log('[Upload] Cloudinary not configured (CLOUDINARY_CLOUD_NAME missing). Routing directly to Byteship backup uploader...');
     }
 
-    // 2. Backup Attempt: Byteship (@byteship/js) Upload
+    // 2. Backup Attempt 1: Byteship (@byteship/js) Upload (Isolated)
     try {
       this.logger.log(`[Upload] Attempting backup upload to Byteship...`);
-      const year = new Date().getFullYear();
-      const safeFilename = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-      const path = `${folder}/${year}/${safeFilename}`;
-
       if (this.byteshipClient && typeof this.byteshipClient.upload === 'function') {
         const fileObj = new File([uint8Array], filename, { type: mimetype });
         const result: any = await this.byteshipClient.upload(fileObj, {
@@ -109,8 +110,30 @@ export class UploadService {
         return { url, provider: 'byteship' };
       }
     } catch (byteshipErr: any) {
-      this.logger.error(`[Upload] Byteship backup upload failed: ${byteshipErr?.response?.data?.message || byteshipErr.message}`);
-      throw new Error(`All upload providers (Cloudinary & Byteship backup) failed: ${byteshipErr.message}`);
+      this.logger.warn(`[Upload] Byteship backup upload failed: ${byteshipErr?.response?.data?.message || byteshipErr.message}. Routing to SendBytes backup uploader...`);
+    }
+
+    // 3. Backup Attempt 2: SendBytes Upload (Isolated)
+    try {
+      this.logger.log(`[Upload] Attempting tertiary backup upload to SendBytes...`);
+      const formData = new FormData();
+      const blob = new Blob([uint8Array], { type: mimetype });
+      formData.append('file', blob, filename);
+
+      const response = await axios.post('https://api.sendbytes.io/v1/upload', formData, {
+        headers: {
+          Authorization: `Bearer ${this.sendbytesApiKey}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        timeout: 20000,
+      });
+
+      const url = response.data?.url || response.data?.link || response.data?.data?.url || `https://sendbytes.io/f/${safeFilename}`;
+      this.logger.log(`[Upload] Backup upload to SendBytes succeeded: ${url}`);
+      return { url, provider: 'sendbytes' };
+    } catch (sendbytesErr: any) {
+      this.logger.error(`[Upload] SendBytes backup upload failed: ${sendbytesErr?.response?.data?.message || sendbytesErr.message}`);
+      throw new Error(`All upload providers (Cloudinary, Byteship, & SendBytes) failed: ${sendbytesErr.message}`);
     }
   }
 }

@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useState, useCallback } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import OneSignal from 'react-onesignal';
 import { PwaInstallPrompt } from './components/PwaInstallPrompt';
+import { Sabilytics } from './components/Sabilytics';
 import UnderMaintenance from './pages/UnderMaintenance';
 import AuthPage from './features/auth/AuthPage';
 import QuestionBankPage from './features/questions/QuestionBankPage';
@@ -116,6 +117,7 @@ function App() {
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary selection:bg-primary selection:text-white flex flex-col">
       <RouteMetadata />
+      <Sabilytics />
       <PwaInstallPrompt />
       <main className="flex-1">
         <Routes>
