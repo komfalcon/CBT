@@ -9,6 +9,7 @@
         "test": "npm run build && jest --passWithNoTests --runTestsByPath tests/auth.service.spec.js tests/google-auth.service.spec.js tests/questions.service.spec.js tests/maintenance.spec.js"
     },
     "dependencies": {
+        "@byteship/js": "^0.1.5",
         "@elastic/elasticsearch": "^8.15.0",
         "@golevelup/nestjs-rabbitmq": "^5.6.1",
         "@libsql/client": "^0.18.0",

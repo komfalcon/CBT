@@ -21,6 +21,7 @@ import { StudyModule } from './study/study.module';
 import { ArenaModule } from './arena/arena.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { IntegrationModule } from './integration/integration.module';
+import { UploadModule } from './upload/upload.module';
 import { AppController } from './app.controller';
 import { HealthService } from './health.service';
 
@@ -57,6 +58,7 @@ import { HealthService } from './health.service';
     ArenaModule,
     LeaderboardModule,
     IntegrationModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [
