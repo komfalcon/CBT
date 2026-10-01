@@ -332,17 +332,24 @@ export class AiQuestionGeneratorService {
       systemPrompt = `You are a high-level educational content designer for Nigerian UTME/JAMB exams.
 You create high-quality STEM questions containing embedded, responsive vector SVG diagrams.
 
-SVG Design Standards for Dark Theme:
+SVG Design Standards for Subject Diagrams:
 - ViewBox: Responsive viewBox='0 0 500 320' with ample padding (at least 30px) on all sides so labels are never cut off.
-- Colors (High Contrast for Dark Backgrounds):
+- Colors (High Contrast for Dark Theme):
   * Diagram Text / Labels: fill='#f8fafc' font-size='14' font-family='sans-serif' font-weight='600'. NEVER use black (#000) or dark grey text.
-  * Vectors / Main Lines: stroke='#38bdf8' (bright sky blue), stroke-width='2.5' or '3'.
-  * Secondary Lines / Forces: stroke='#f59e0b' (amber gold), stroke-width='2'.
+  * Primary Lines / Curves: stroke='#38bdf8' (bright sky blue), stroke-width='2.5' or '3'.
+  * Secondary Lines / Demand: stroke='#f59e0b' (amber gold), stroke-width='2.5'.
+  * Shaded Areas (e.g. DWL / Regions): fill='rgba(239, 68, 68, 0.25)' stroke='#ef4444' stroke-width='2'.
   * Grid / Axes: stroke='#475569' (slate), stroke-width='1.5', stroke-dasharray='4,4'.
-  * Fill Shapes: fill='rgba(56, 189, 248, 0.15)' stroke='#38bdf8'.
-- Arrowheads: Define <marker id='arrow' viewBox='0 0 10 10' refX='6' refY='5' markerWidth='6' markerHeight='6' orient='auto-start-reverse'><path d='M 0 0 L 10 5 L 0 10 z' fill='#38bdf8'/></marker> in <defs> for vectors.
-- Layout: Clean, uncluttered, properly positioned labels with distinct x/y coordinates so labels NEVER overlap lines, axes, or other text labels.
-- Text Content: In SVG <text> tags, NEVER output raw LaTeX backslash macros (like \\sqrt, \\pi, \\vec). Use clean text or Unicode symbols (√3, π, θ, v⃗).`;
+- Economics Diagrams (Supply/Demand, DWL, Cost Curves):
+  * Draw X & Y axes labeled 'Quantity (Q)' and 'Price (P)'.
+  * Supply Curve: upward slope line stroke='#38bdf8'. Demand Curve: downward slope line stroke='#f59e0b'.
+  * Deadweight Loss (DWL): shaded triangular region fill='rgba(239, 68, 68, 0.25)' stroke='#ef4444' with distinct 'DWL' text label inside or offset with an arrow.
+- Mathematics & Further Maths (Geometry, Vectors, Complex Argand Plane):
+  * Draw clear labeled X/Y or Re/Im axes.
+  * Vector Arrows: stroke='#38bdf8' with marker-end='url(#arrow)' and clear label offset from line.
+- General Rules:
+  * NEVER let text labels overlap lines, curves, points, or other text labels.
+  * In SVG <text> elements, NEVER output raw LaTeX backslash macros (like \\sqrt, \\pi, \\vec). Use clean Unicode (√3, π, θ, v⃗).`;
 
       userPrompt = `Generate EXACTLY ${count} JAMB/UTME standard multiple-choice questions for '${subject}'.
 Topics to cover: ${topicStr}.

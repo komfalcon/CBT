@@ -159,8 +159,8 @@ const addLatexDelimiters = (text: string): string => {
 
   // 1. Repair escaped markdown bold corruptions like \** or **\(...\)** or **$...$**
   result = result.replace(/\\\*\*/g, '**');
-  result = result.replace(/\*\*\s*\\?\(\s*([\s\S]*?)\s*\\?\)\s*\*\*/g, '$\\mathbf{$1}$');
-  result = result.replace(/\*\*\s*\$\s*([\s\S]*?)\s*\$\s*\*\*/g, '$\\mathbf{$1}$');
+  result = result.replace(/\*\*\s*\\?\(\s*([\s\S]*?)\s*\\?\)\s*\*\*/g, (_m, g1) => `$\\mathbf{${g1.trim()}}$`);
+  result = result.replace(/\*\*\s*\$\s*([\s\S]*?)\s*\$\s*\*\*/g, (_m, g1) => `$\\mathbf{${g1.trim()}}$`);
 
   // 2. Fix FormFeed (\x0c / \u000c / ♠) control character corruptions from bad \f JSON escape
   result = result.replace(/[\x0c\u000c♠]rac/g, '\\frac');
@@ -199,16 +199,15 @@ const addLatexDelimiters = (text: string): string => {
   });
 
   // 7. Convert LaTeX inline \( ... \) into single dollar sign $ ... $ (INLINE MATH)
-  // Crucial: remark-math requires no spaces immediately inside $, so we trim whitespace.
-  result = result.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$1$');
+  result = result.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, (_m, g1) => `$${g1.trim()}$`);
 
   // 8. Convert LaTeX display \[ ... \] into double dollar sign $$ ... $$ (BLOCK MATH)
-  result = result.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, '\n\n$$$$1$$\n\n');
+  result = result.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, (_m, g1) => `\n\n$$\n${g1.trim()}\n$$\n\n`);
 
   // 9. Convert plain ASCII math (like sqrt(x) or √x) to valid KaTeX inline blocks
-  result = result.replace(/\bsqrt\{([^}]+)\}/g, '$\\sqrt{$1}$');
-  result = result.replace(/\bsqrt\((.*?)\)/g, '$\\sqrt{$1}$');
-  result = result.replace(/√(\d+|\w+)/g, '$\\sqrt{$1}$');
+  result = result.replace(/\bsqrt\{([^}]+)\}/g, (_m, g1) => `$\\sqrt{${g1.trim()}}$`);
+  result = result.replace(/\bsqrt\((.*?)\)/g, (_m, g1) => `$\\sqrt{${g1.trim()}}$`);
+  result = result.replace(/√(\d+|\w+)/g, (_m, g1) => `$\\sqrt{${g1.trim()}}$`);
 
   // 10. Convert common Unicode math symbols directly into KaTeX equivalents
   const unicodeMap: Record<string, string> = {
@@ -223,7 +222,7 @@ const addLatexDelimiters = (text: string): string => {
   });
 
   // 11. Wrap full math expressions like "z = 1 - \sqrt{3}i" or "\vec{v} = (2,-1,4)" or "P(1,3,-2)"
-  result = result.replace(/(?<!\$)\b([a-zA-Z]\s*=\s*[0-9A-Za-z\s\+\-\*\/\^\(\)\\]*\\(?:sqrt|frac|vec|pi|theta|alpha|beta|lambda)[0-9A-Za-z\s\+\-\*\/\^\(\)\\]*)(?!\$)/g, '$$1$');
+  result = result.replace(/(?<!\$)\b([a-zA-Z]\s*=\s*[0-9A-Za-z\s\+\-\*\/\^\(\)\\]*\\(?:sqrt|frac|vec|pi|theta|alpha|beta|lambda)[0-9A-Za-z\s\+\-\*\/\^\(\)\\]*)(?!\$)/g, (_m, g1) => `$${g1.trim()}$`);
 
   // 12. Fix trailing unclosed $$ or $ delimiters (e.g. 2\sqrt{2}$$ -> 2$\sqrt{2}$)
   result = result.replace(/\$\$(?=\s*[\.\,\;\:\)]|\s*$)/g, '');
@@ -235,10 +234,7 @@ const addLatexDelimiters = (text: string): string => {
   const mathBlockRegex = /(\$\$[\s\S]*?\$\$|\$[^$\n]+\$)/g;
   const parts = result.split(mathBlockRegex);
   result = parts.map((part, i) => {
-    // Even indices are plain text; odd indices are already-wrapped math blocks — leave them alone
     if (i % 2 !== 0) return part;
-
-    // Wrap any bare \begin{env}...\end{env} that appear in plain text
     return part.replace(
       /\\begin\s*\{([^}]+)\}[\s\S]*?\\end\s*\{\1\}/g,
       (match) => `\n\n$$\n${match}\n$$\n\n`,
@@ -251,7 +247,7 @@ const addLatexDelimiters = (text: string): string => {
     if (i % 2 !== 0) return part;
     return part.replace(
       /(?<!\$)(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|cot|sec|csc|log|ln|exp|det|max|min|binom|hat|vec|bar|dot|ddot|tilde|overline|underline|overbrace|underbrace|left|right|mathbf|mathbb|mathrm|text|bold|it|le|ge|to|leftarrow|rightarrow|degree|circ|parallel|perp|angle|triangle|quad|qquad|propto|sim|cong|subset|supset|emptyset|implies)(?:\{[^}]*\}|\[[^\]]*\])*(?:[_^](?:\{[^}]*\}|[^\s{]))*)/g,
-      (match) => `$${match}$`,
+      (_m, g1) => `$${g1.trim()}$`
     );
   }).join('');
 
