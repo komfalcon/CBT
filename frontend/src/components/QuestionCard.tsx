@@ -4,6 +4,7 @@ import { BookOpen, Check, CircleAlert, Flag, Sparkles } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
+import 'katex/dist/katex.min.css';
 import { generateQuestionDiagram } from '../features/ai/api';
 
 const isTikz = (text: string): boolean => {
@@ -221,19 +222,45 @@ const addLatexDelimiters = (text: string): string => {
     result = result.replace(new RegExp(uni, 'g'), latex);
   });
 
-  // 11. Wrap full math expressions like "z = 1 - \sqrt{3}i" or "\vec{v} = (2,-1,4)" or "P(1,3,-2)"
-  result = result.replace(/(?<!\$)\b([a-zA-Z]\s*=\s*[0-9A-Za-z\s\+\-\*\/\^\(\)\\]*\\(?:sqrt|frac|vec|pi|theta|alpha|beta|lambda)[0-9A-Za-z\s\+\-\*\/\^\(\)\\]*)(?!\$)/g, (_m, g1) => `$${g1.trim()}$`);
+  // 11. Replace plain comparison & arithmetic symbols like +/- or <= or >=
+  result = result.replace(/\s*\+\/\-\s*/g, ' $\\pm$ ');
+  result = result.replace(/\s*<=\s*/g, ' $\\le$ ');
+  result = result.replace(/\s*>=\s*/g, ' $\\ge$ ');
+  result = result.replace(/\s*!=\s*/g, ' $\\neq$ ');
 
-  // 12. Fix trailing unclosed $$ or $ delimiters (e.g. 2\sqrt{2}$$ -> 2$\sqrt{2}$)
+  // 12. Helper regex to match content already enclosed in $...$ or $$...$$
+  const mathBlockRegex = /(\$\$[\s\S]*?\$\$|\$[^$\n]+\$)/g;
+
+  // 13. Auto-wrap naked variable options/statements like "x = 5 or x = -1" or "x = 2.5" outside of math blocks
+  const partsVar = result.split(mathBlockRegex);
+  result = partsVar.map((part, i) => {
+    if (i % 2 !== 0) return part;
+    return part.replace(
+      /(?<![a-zA-Z0-9_\$])([a-zA-Z]\s*=\s*[\-+]?\d+(?:\.\d+)?(?:\s+(?:or|and)\s+[a-zA-Z]\s*=\s*[\-+]?\d+(?:\.\d+)?)?)(?![a-zA-Z0-9_\$])/g,
+      (_m, match) => match.split(/\s+(or|and)\s+/i).map(sub => {
+        if (/^(or|and)$/i.test(sub)) return sub;
+        return `$${sub.trim()}$`;
+      }).join(' ')
+    );
+  }).join('');
+
+  // 14. Auto-wrap expressions with caret exponents like "3x^2 - 12x - 15 = 0" or "x^2" or "10^-3" outside of math blocks
+  const partsExp = result.split(mathBlockRegex);
+  result = partsExp.map((part, i) => {
+    if (i % 2 !== 0) return part;
+    return part.replace(
+      /(?<!\$)\b([a-zA-Z0-9_\-\+\s\*\/\(\)\=]+\^[a-zA-Z0-9_\-\+\{\}]+[a-zA-Z0-9_\-\+\s\*\/\(\)\=]*)(?!\$)/g,
+      (_m, g1) => `$${g1.trim()}$`
+    );
+  }).join('');
+
+  // 15. Fix trailing unclosed $$ or $ delimiters
   result = result.replace(/\$\$(?=\s*[\.\,\;\:\)]|\s*$)/g, '');
-
-  // 13. Normalize any run of 3+ dollar signs down to 2
   result = result.replace(/\${3,}/g, '$$');
 
-  // 14. SAFELY wrap bare \begin{env}...\end{env} blocks that are NOT already inside $$ delimiters.
-  const mathBlockRegex = /(\$\$[\s\S]*?\$\$|\$[^$\n]+\$)/g;
-  const parts = result.split(mathBlockRegex);
-  result = parts.map((part, i) => {
+  // 16. SAFELY wrap bare \begin{env}...\end{env} blocks
+  const partsEnv = result.split(mathBlockRegex);
+  result = partsEnv.map((part, i) => {
     if (i % 2 !== 0) return part;
     return part.replace(
       /\\begin\s*\{([^}]+)\}[\s\S]*?\\end\s*\{\1\}/g,
@@ -241,9 +268,9 @@ const addLatexDelimiters = (text: string): string => {
     );
   }).join('');
 
-  // 15. Wrap naked LaTeX commands that are not already inside $..$ or $$..$$ blocks
-  const parts2 = result.split(mathBlockRegex);
-  result = parts2.map((part, i) => {
+  // 17. Wrap naked LaTeX commands that are not already inside $..$ or $$..$$ blocks
+  const partsCmd = result.split(mathBlockRegex);
+  result = partsCmd.map((part, i) => {
     if (i % 2 !== 0) return part;
     return part.replace(
       /(?<!\$)(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|cot|sec|csc|log|ln|exp|det|max|min|binom|hat|vec|bar|dot|ddot|tilde|overline|underline|overbrace|underbrace|left|right|mathbf|mathbb|mathrm|text|bold|it|le|ge|to|leftarrow|rightarrow|degree|circ|parallel|perp|angle|triangle|quad|qquad|propto|sim|cong|subset|supset|emptyset|implies)(?:\{[^}]*\}|\[[^\]]*\])*(?:[_^](?:\{[^}]*\}|[^\s{]))*)/g,
@@ -277,7 +304,7 @@ export const SmartTextRenderer: React.FC<{ text: string }> = ({ text }) => {
         ) : (
           <ReactMarkdown
             key={index}
-            remarkPlugins={[remarkMath]}
+            remarkPlugins={[[remarkMath, { singleDollarTextMath: true }]]}
             rehypePlugins={[rehypeKatex]}
             components={markdownComponents}
           >

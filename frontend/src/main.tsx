@@ -7,6 +7,7 @@ import App from './App';
 import { ToastProvider } from './components';
 import { ThemeProvider } from './contexts/ThemeContext';
 import './index.css';
+import 'katex/dist/katex.min.css';
 import './i18n';
 import { store } from './store';
 
