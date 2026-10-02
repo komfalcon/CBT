@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
+import { addLatexDelimiters } from '../../components/QuestionCard';
 
 interface ExplainButtonProps {
   questionId: string;
@@ -82,7 +83,7 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
               remarkPlugins={[[remarkMath, { singleDollarTextMath: true }]]}
               rehypePlugins={[rehypeKatex]}
             >
-              {explanation.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, '$$$1$$').replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, '$$$$$1$$$$')}
+              {addLatexDelimiters(explanation)}
             </ReactMarkdown>
           </div>
         </div>

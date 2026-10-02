@@ -153,7 +153,7 @@ export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
   );
 };
 
-const addLatexDelimiters = (text: string): string => {
+export const addLatexDelimiters = (text: string): string => {
   if (!text) return text;
   
   let result = text;
@@ -179,7 +179,7 @@ const addLatexDelimiters = (text: string): string => {
   result = result.replace(/[\x09\t]o(?=\s+)/g, '\\to ');
   result = result.replace(/[\x09\t]riangle/g, '\\triangle');
 
-  // 4. Fix Backspace (\x08 / \b) control character corruptions
+  // 4. Fix Backspace (\x08) control character corruptions
   result = result.replace(/[\x08]egin(?=\s*\{)/g, '\\begin');
   result = result.replace(/[\x08]end(?=\s*\{)/g, '\\end');
   result = result.replace(/[\x08]matrix/g, '\\bmatrix');
@@ -187,98 +187,85 @@ const addLatexDelimiters = (text: string): string => {
   result = result.replace(/[\x08]ar\b/g, '\\bar');
   result = result.replace(/[\x08]inom/g, '\\binom');
 
-  // 5. Repair corrupted escape sequences from bad DB scraping
-  result = result.replace(/\\right(?=[\s\)\}])/g, '\\right');
-  result = result.replace(/\\nu(?=[\s_])/g, '\\nu');
-  result = result.replace(/\\tau(?=[\s_])/g, '\\tau');
-  result = result.replace(/\\begin(?=\s*\{)/g, '\\begin');
-  result = result.replace(/\\end(?=\s*\{)/g, '\\end');
-
-  // 6. Repair single backslash row separators inside matrix / array / cases environments
-  result = result.replace(/(\\begin\s*\{(?:matrix|bmatrix|pmatrix|vmatrix|Vmatrix|cases|align|array)\}[\s\S]*?\\end\s*\{(?:matrix|bmatrix|pmatrix|vmatrix|Vmatrix|cases|align|array)\})/gi, (matrixBlock) => {
-    return matrixBlock.replace(/(?<!\\)\\(?!\\[a-zA-Z0-9\s]|begin|end|quad|qquad|text|frac|sqrt|left|right|&|\s*$)/g, '\\\\');
-  });
-
-  // 7. Convert LaTeX inline \( ... \) into single dollar sign $ ... $ (INLINE MATH)
+  // 5. Convert LaTeX inline \( ... \) into single dollar sign $ ... $ (INLINE MATH)
   result = result.replace(/\\\(\s*([\s\S]*?)\s*\\\)/g, (_m, g1) => `$${g1.trim()}$`);
 
-  // 8. Convert LaTeX display \[ ... \] into double dollar sign $$ ... $$ (BLOCK MATH)
+  // 6. Convert LaTeX display \[ ... \] into double dollar sign $$ ... $$ (BLOCK MATH)
   result = result.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, (_m, g1) => `\n\n$$\n${g1.trim()}\n$$\n\n`);
 
-  // 9. Convert plain ASCII math (like sqrt(x) or √x) to valid KaTeX inline blocks
-  result = result.replace(/\bsqrt\{([^}]+)\}/g, (_m, g1) => `$\\sqrt{${g1.trim()}}$`);
-  result = result.replace(/\bsqrt\((.*?)\)/g, (_m, g1) => `$\\sqrt{${g1.trim()}}$`);
-  result = result.replace(/√(\d+|\w+)/g, (_m, g1) => `$\\sqrt{${g1.trim()}}$`);
+  // 7. Normalize unclosed dollar signs
+  result = result.replace(/\$\$(?=\s*[\.\,\;\:\)]|\s*$)/g, '');
+  result = result.replace(/\${3,}/g, '$$');
 
-  // 10. Convert common Unicode math symbols directly into KaTeX equivalents
-  const unicodeMap: Record<string, string> = {
-    'α': '$\\alpha$', 'β': '$\\beta$', 'γ': '$\\gamma$', 'Δ': '$\\Delta$',
-    'δ': '$\\delta$', 'θ': '$\\theta$', 'λ': '$\\lambda$', 'μ': '$\\mu$',
-    'π': '$\\pi$', 'σ': '$\\sigma$', 'Ω': '$\\Omega$', '±': '$\\pm$',
-    '≤': '$\\le$', '≥': '$\\ge$', '≠': '$\\neq$', '×': '$\\times$',
-    '÷': '$\\div$', '∞': '$\\infty$', '°': '^\\circ', 'Å': '\\text{Å}', '→': '$\\to$'
-  };
-  Object.entries(unicodeMap).forEach(([uni, latex]) => {
-    result = result.replace(new RegExp(uni, 'g'), latex);
-  });
-
-  // 11. Replace plain comparison & arithmetic symbols like +/- or <= or >=
-  result = result.replace(/\s*\+\/\-\s*/g, ' $\\pm$ ');
-  result = result.replace(/\s*<=\s*/g, ' $\\le$ ');
-  result = result.replace(/\s*>=\s*/g, ' $\\ge$ ');
-  result = result.replace(/\s*!=\s*/g, ' $\\neq$ ');
-
-  // 12. Helper regex to match content already enclosed in $...$ or $$...$$
+  // 8. SPLIT BY EXISTING MATH BLOCKS TO PROCESS ONLY NON-MATH TEXT OUTSIDE DOLLAR SIGNS:
   const mathBlockRegex = /(\$\$[\s\S]*?\$\$|\$[^$\n]+\$)/g;
+  const parts = result.split(mathBlockRegex);
 
-  // 13. Auto-wrap naked variable options/statements like "x = 5 or x = -1" or "x = 2.5" outside of math blocks
-  const partsVar = result.split(mathBlockRegex);
-  result = partsVar.map((part, i) => {
-    if (i % 2 !== 0) return part;
-    return part.replace(
+  return parts.map((part, i) => {
+    // If i % 2 !== 0, this part is ALREADY inside $...$ or $$...$$. DO NOT MODIFY IT!
+    if (i % 2 !== 0) {
+      return part;
+    }
+
+    let clean = part;
+
+    // A. Repair single backslash row separators inside matrix / array / cases environments
+    clean = clean.replace(/(\\begin\s*\{(?:matrix|bmatrix|pmatrix|vmatrix|Vmatrix|cases|align|array)\}[\s\S]*?\\end\s*\{(?:matrix|bmatrix|pmatrix|vmatrix|Vmatrix|cases|align|array)\})/gi, (matrixBlock) => {
+      return matrixBlock.replace(/(?<!\\)\\(?!\\[a-zA-Z0-9\s]|begin|end|quad|qquad|text|frac|sqrt|left|right|&|\s*$)/g, '\\\\');
+    });
+
+    // B. Convert plain ASCII sqrt (like sqrt(x) or √x) outside math blocks to valid KaTeX inline blocks
+    clean = clean.replace(/\bsqrt\{([^}]+)\}/g, (_m, g1) => `$\\sqrt{${g1.trim()}}$`);
+    clean = clean.replace(/\bsqrt\((.*?)\)/g, (_m, g1) => `$\\sqrt{${g1.trim()}}$`);
+    clean = clean.replace(/√(\d+|\w+)/g, (_m, g1) => `$\\sqrt{${g1.trim()}}$`);
+
+    // C. Convert common Unicode math symbols directly into KaTeX equivalents outside math blocks
+    const unicodeMap: Record<string, string> = {
+      'α': '$\\alpha$', 'β': '$\\beta$', 'γ': '$\\gamma$', 'Δ': '$\\Delta$',
+      'δ': '$\\delta$', 'θ': '$\\theta$', 'λ': '$\\lambda$', 'μ': '$\\mu$',
+      'π': '$\\pi$', 'σ': '$\\sigma$', 'Ω': '$\\Omega$', '±': '$\\pm$',
+      '≤': '$\\le$', '≥': '$\\ge$', '≠': '$\\neq$', '×': '$\\times$',
+      '÷': '$\\div$', '∞': '$\\infty$', '°': '^\\circ', 'Å': '\\text{Å}', '→': '$\\to$'
+    };
+    Object.entries(unicodeMap).forEach(([uni, latex]) => {
+      clean = clean.replace(new RegExp(uni, 'g'), latex);
+    });
+
+    // D. Replace plain comparison & arithmetic symbols like +/- or <= or >=
+    clean = clean.replace(/\s*\+\/\-\s*/g, ' $\\pm$ ');
+    clean = clean.replace(/\s*<=\s*/g, ' $\\le$ ');
+    clean = clean.replace(/\s*>=\s*/g, ' $\\ge$ ');
+    clean = clean.replace(/\s*!=\s*/g, ' $\\neq$ ');
+
+    // E. Auto-wrap naked variable options/statements like "x = 5 or x = -1" outside of math blocks
+    clean = clean.replace(
       /(?<![a-zA-Z0-9_\$])([a-zA-Z]\s*=\s*[\-+]?\d+(?:\.\d+)?(?:\s+(?:or|and)\s+[a-zA-Z]\s*=\s*[\-+]?\d+(?:\.\d+)?)?)(?![a-zA-Z0-9_\$])/g,
       (_m, match) => match.split(/\s+(or|and)\s+/i).map((sub: string) => {
         if (/^(or|and)$/i.test(sub)) return sub;
         return `$${sub.trim()}$`;
       }).join(' ')
     );
-  }).join('');
 
-  // 14. Auto-wrap expressions with caret exponents like "3x^2 - 12x - 15 = 0" or "x^2" or "10^-3" outside of math blocks
-  const partsExp = result.split(mathBlockRegex);
-  result = partsExp.map((part, i) => {
-    if (i % 2 !== 0) return part;
-    return part.replace(
+    // F. Auto-wrap expressions with caret exponents like "3x^2 - 12x - 15 = 0" or "x^2" outside of math blocks
+    clean = clean.replace(
       /(?<!\$)\b([a-zA-Z0-9_\-\+\s\*\/\(\)\=]+\^[a-zA-Z0-9_\-\+\{\}]+[a-zA-Z0-9_\-\+\s\*\/\(\)\=]*)(?!\$)/g,
       (_m, g1) => `$${g1.trim()}$`
     );
-  }).join('');
 
-  // 15. Fix trailing unclosed $$ or $ delimiters
-  result = result.replace(/\$\$(?=\s*[\.\,\;\:\)]|\s*$)/g, '');
-  result = result.replace(/\${3,}/g, '$$');
-
-  // 16. SAFELY wrap bare \begin{env}...\end{env} blocks
-  const partsEnv = result.split(mathBlockRegex);
-  result = partsEnv.map((part, i) => {
-    if (i % 2 !== 0) return part;
-    return part.replace(
+    // G. SAFELY wrap bare \begin{env}...\end{env} blocks outside math blocks
+    clean = clean.replace(
       /\\begin\s*\{([^}]+)\}[\s\S]*?\\end\s*\{\1\}/g,
       (match) => `\n\n$$\n${match}\n$$\n\n`,
     );
-  }).join('');
 
-  // 17. Wrap naked LaTeX commands that are not already inside $..$ or $$..$$ blocks
-  const partsCmd = result.split(mathBlockRegex);
-  result = partsCmd.map((part, i) => {
-    if (i % 2 !== 0) return part;
-    return part.replace(
+    // H. Wrap naked LaTeX commands that are not already inside $..$ or $$..$$ blocks
+    clean = clean.replace(
       /(?<!\$)(\\(?:frac|sqrt|sum|int|lim|infty|alpha|beta|gamma|delta|theta|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|cdot|times|div|pm|mp|leq|geq|neq|approx|equiv|in|notin|cup|cap|forall|exists|partial|nabla|sin|cos|tan|cot|sec|csc|log|ln|exp|det|max|min|binom|hat|vec|bar|dot|ddot|tilde|overline|underline|overbrace|underbrace|left|right|mathbf|mathbb|mathrm|text|bold|it|le|ge|to|leftarrow|rightarrow|degree|circ|parallel|perp|angle|triangle|quad|qquad|propto|sim|cong|subset|supset|emptyset|implies)(?:\{[^}]*\}|\[[^\]]*\])*(?:[_^](?:\{[^}]*\}|[^\s{]))*)/g,
       (_m, g1) => `$${g1.trim()}$`
     );
-  }).join('');
 
-  return result;
+    return clean;
+  }).join('');
 };
 
 const markdownComponents = {
