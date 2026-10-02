@@ -85,6 +85,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
   async login(@Req() req: Request & { user: any }, @Res({ passthrough: true }) res: Response, @Body() _: LoginDto, @Ip() ipAddress?: string) {
@@ -136,6 +137,7 @@ export class AuthController {
   }
 
   @Post('forgot-password')
+  @Throttle({ default: { limit: 3, ttl: 15 * 60_000 } })
   @HttpCode(200)
   forgotPassword(
     @Body(new ValidationPipe({ whitelist: true, transform: true })) forgotPasswordDto: ForgotPasswordDto,

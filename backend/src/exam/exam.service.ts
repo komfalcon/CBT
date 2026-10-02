@@ -320,11 +320,21 @@ export class ExamService {
       conditions.push(inArray(schema.questions.topic, topics));
     }
 
-    let result = await this.db.select().from(schema.questions)
+    const candidates = await this.db.select().from(schema.questions)
       .where(and(...conditions))
-      .groupBy(schema.questions.question_text)
       .orderBy(sql`RANDOM()`)
-      .limit(targetCount);
+      .limit(targetCount * 3);
+
+    const seenTexts = new Set<string>();
+    let result: any[] = [];
+    for (const q of candidates) {
+      const normalized = (q.question_text || '').trim().toLowerCase();
+      if (!seenTexts.has(normalized)) {
+        seenTexts.add(normalized);
+        result.push(q);
+        if (result.length >= targetCount) break;
+      }
+    }
 
     // Graceful Fallback (Option A)
     if (topics && topics.length > 0 && result.length < targetCount) {
@@ -344,11 +354,20 @@ export class ExamService {
         fallbackConditions.push(eq(schema.questions.difficulty_level, Number(difficultyLevel)));
       }
 
-      const fallbackQuestions = await this.db.select().from(schema.questions)
+      const fallbackCandidates = await this.db.select().from(schema.questions)
         .where(and(...fallbackConditions))
-        .groupBy(schema.questions.question_text)
         .orderBy(sql`RANDOM()`)
-        .limit(remainingCount);
+        .limit(remainingCount * 3);
+
+      const fallbackQuestions: any[] = [];
+      for (const q of fallbackCandidates) {
+        const normalized = (q.question_text || '').trim().toLowerCase();
+        if (!seenTexts.has(normalized)) {
+          seenTexts.add(normalized);
+          fallbackQuestions.push(q);
+          if (fallbackQuestions.length >= remainingCount) break;
+        }
+      }
 
       if (fallbackQuestions.length > 0) {
         warnings.push(`${subject} only has ${result.length} questions for the selected topics, filled the remaining ${fallbackQuestions.length} with random ${subject} questions.`);
