@@ -237,7 +237,7 @@ const addLatexDelimiters = (text: string): string => {
     if (i % 2 !== 0) return part;
     return part.replace(
       /(?<![a-zA-Z0-9_\$])([a-zA-Z]\s*=\s*[\-+]?\d+(?:\.\d+)?(?:\s+(?:or|and)\s+[a-zA-Z]\s*=\s*[\-+]?\d+(?:\.\d+)?)?)(?![a-zA-Z0-9_\$])/g,
-      (_m, match) => match.split(/\s+(or|and)\s+/i).map(sub => {
+      (_m, match) => match.split(/\s+(or|and)\s+/i).map((sub: string) => {
         if (/^(or|and)$/i.test(sub)) return sub;
         return `$${sub.trim()}$`;
       }).join(' ')
