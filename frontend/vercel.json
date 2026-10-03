@@ -1,7 +1,8 @@
 {
+  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!sitemap\\.xml|robots\\.txt|favicon\\.ico|favicon\\.svg|apple-touch-icon\\.png|pwa-.*|images/|.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|json|woff|woff2|ttf|eot|xml|txt)).*)",
       "destination": "/index.html"
     }
   ]
