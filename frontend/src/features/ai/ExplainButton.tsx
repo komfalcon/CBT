@@ -78,7 +78,7 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
             <Sparkles className="w-4 h-4" />
             AI Explanation
           </div>
-          <div className="prose prose-invert prose-sm max-w-none text-slate-300 overflow-x-auto">
+          <div className="prose dark:prose-invert prose-sm max-w-none text-text-primary overflow-x-auto">
             <ReactMarkdown
               remarkPlugins={[[remarkMath, { singleDollarTextMath: true }]]}
               rehypePlugins={[rehypeKatex]}
