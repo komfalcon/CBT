@@ -20,6 +20,39 @@ export const DRIZZLE = Symbol('DRIZZLE_CONNECTION');
         }
 
         const client = postgres(url, { ssl: 'require', max: 10 });
+
+        try {
+          await client`ALTER TABLE users ADD COLUMN IF NOT EXISTS aurikrex_id text UNIQUE;`;
+          await client`
+            CREATE TABLE IF NOT EXISTS sso_clients (
+              id text PRIMARY KEY,
+              client_id text NOT NULL UNIQUE,
+              client_name text NOT NULL,
+              client_secret_hash text,
+              redirect_uris jsonb NOT NULL,
+              allowed_scopes jsonb NOT NULL,
+              created_at timestamp DEFAULT now()
+            );
+          `;
+          await client`
+            CREATE TABLE IF NOT EXISTS sso_codes (
+              id text PRIMARY KEY,
+              code text NOT NULL UNIQUE,
+              client_id text NOT NULL,
+              aurikrex_id text NOT NULL,
+              code_challenge text,
+              code_challenge_method text,
+              redirect_uri text NOT NULL,
+              scope text,
+              expires_at timestamp NOT NULL,
+              created_at timestamp DEFAULT now()
+            );
+          `;
+          console.log('[DATABASE] Auto-migration for aurikrex_id and SSO tables completed successfully.');
+        } catch (err) {
+          console.warn('[DATABASE] Auto-migration warning:', err);
+        }
+
         return drizzle(client, { schema });
       },
     },
