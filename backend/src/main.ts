@@ -80,7 +80,7 @@ async function bootstrap() {
   app.use(async (req: any, res: any, next: any) => {
     const rawPath = String(req.path || req.originalUrl || '');
     const cleanPath = rawPath.replace(/^\/api/, '');
-    const isExempt = /^\/(admin|sys|health|system\/maintenance-status)/.test(cleanPath);
+    const isExempt = /^\/(admin|sys|health|system\/maintenance-status|sitemap\.xml|robots\.txt)/.test(cleanPath);
     const isAuthRoute = /^\/auth\/(login|refresh|logout|verify-otp|me)/.test(cleanPath);
 
     // If request contains an admin JWT in cookie or Authorization header, bypass maintenance
