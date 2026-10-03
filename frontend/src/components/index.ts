@@ -13,3 +13,5 @@ export * from './SupportPageShell';
 export * from './PwaInstallPrompt';
 
 export * from './CloudflareTurnstile';
+export * from './AurikrexAppsSwitcher';
+

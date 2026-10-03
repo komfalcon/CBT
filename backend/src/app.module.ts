@@ -22,6 +22,7 @@ import { ArenaModule } from './arena/arena.module';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { IntegrationModule } from './integration/integration.module';
 import { UploadModule } from './upload/upload.module';
+import { SsoModule } from './auth/sso/sso.module';
 import { AppController } from './app.controller';
 import { HealthService } from './health.service';
 
@@ -46,6 +47,7 @@ import { HealthService } from './health.service';
       context: ({ req }: { req: Request }) => ({ req }),
     }),
     AuthModule,
+    SsoModule,
     ExamModule,
     QuestionsModule,
     ResultsModule,

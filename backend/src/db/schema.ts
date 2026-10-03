@@ -3,6 +3,7 @@ import { pgTable, text, integer, real, boolean, timestamp, jsonb } from 'drizzle
 
 export const users = pgTable('users', {
   id: text('id').primaryKey(),
+  aurikrex_id: text('aurikrex_id').unique(),
   cbt_key: text('cbt_key').unique(),
   cbt_key_hash: text('cbt_key_hash').unique(),
   jamb_reg_no: text('jamb_reg_no').unique(),
@@ -182,3 +183,27 @@ export const system_settings = pgTable('system_settings', {
   updated_by: text('updated_by'),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
+
+export const ssoClients = pgTable('sso_clients', {
+  id: text('id').primaryKey(),
+  client_id: text('client_id').notNull().unique(),
+  client_name: text('client_name').notNull(),
+  client_secret_hash: text('client_secret_hash'),
+  redirect_uris: jsonb('redirect_uris').notNull(),
+  allowed_scopes: jsonb('allowed_scopes').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export const ssoCodes = pgTable('sso_codes', {
+  id: text('id').primaryKey(),
+  code: text('code').notNull().unique(),
+  client_id: text('client_id').notNull(),
+  aurikrex_id: text('aurikrex_id').notNull(),
+  code_challenge: text('code_challenge'),
+  code_challenge_method: text('code_challenge_method'),
+  redirect_uri: text('redirect_uri').notNull(),
+  scope: text('scope'),
+  expires_at: timestamp('expires_at').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+

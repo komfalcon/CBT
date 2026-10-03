@@ -69,3 +69,13 @@ export function generateCbtKey(): string {
   }
   return `CBT-${code}`;
 }
+
+export function generateAurikrexId(): string {
+  const chars = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+  let code = '';
+  for (let i = 0; i < 20; i++) {
+    code += chars.charAt(randomInt(0, chars.length));
+  }
+  return `ax_${code}`;
+}
+
