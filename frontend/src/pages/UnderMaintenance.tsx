@@ -125,8 +125,8 @@ export default function UnderMaintenance({ onCheckStatus }: UnderMaintenanceProp
       <footer className="relative z-10 w-full max-w-7xl mx-auto px-6 py-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
         <p>© {new Date().getFullYear()} Aurikrex Exam Arena. All student records remain securely protected.</p>
         <div className="flex items-center gap-4">
-          <a href="mailto:info@aurikrex.tech" className="transition hover:text-white">
-            Support: info@aurikrex.tech
+          <a href="mailto:info@aurikrex.com" className="transition hover:text-white">
+            Support: info@aurikrex.com
           </a>
           <span className="text-slate-700">|</span>
           <Link

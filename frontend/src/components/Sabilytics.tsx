@@ -6,7 +6,7 @@ export function Sabilytics() {
     script.async = true;
     script.src = "https://www.sabilytics.com/script.js";
     script.setAttribute("data-site", "55js22qh8djh");
-    script.setAttribute("data-domain", "aurikrex.tech");
+    script.setAttribute("data-domain", "aurikrex.com");
     document.head.appendChild(script);
   }, []);
 

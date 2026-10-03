@@ -56,7 +56,7 @@ const faqs: FaqItem[] = [
     id: 'cancel-refund',
     category: 'account',
     question: 'How do I cancel a plan or ask about a refund?',
-    answer: 'Cancel before the next billing date to prevent renewal; your paid access remains available until the end of the current billing period. If you cannot see a cancellation control in your account, email info@aurikrex.tech from the email connected to the plan. For a refund review, send the Paystack reference, charge date, amount, and a short explanation within 7 days. See the Terms of Service for the full refund policy.',
+    answer: 'Cancel before the next billing date to prevent renewal; your paid access remains available until the end of the current billing period. If you cannot see a cancellation control in your account, email info@aurikrex.com from the email connected to the plan. For a refund review, send the Paystack reference, charge date, amount, and a short explanation within 7 days. See the Terms of Service for the full refund policy.',
   },
   {
     id: 'mock-format',

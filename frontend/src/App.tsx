@@ -53,8 +53,8 @@ function RouteMetadata() {
     setMeta('meta[property="og:description"]', 'content', metadata.description);
     
     // SEO-01: Set route-specific metadata and social preview images
-    const currentUrl = `https://cbt.aurikrex.tech${pathname}`;
-    const defaultImage = 'https://cbt.aurikrex.tech/pwa-512x512.png';
+    const currentUrl = `https://cbt.aurikrex.com${pathname}`;
+    const defaultImage = 'https://cbt.aurikrex.com/pwa-512x512.png';
     setMeta('meta[property="og:url"]', 'content', currentUrl);
     setMeta('meta[property="og:image"]', 'content', defaultImage);
     setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image');

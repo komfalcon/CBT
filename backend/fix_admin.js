@@ -12,7 +12,7 @@ async function run() {
     const db = mongoose.connection.db;
     const users = db.collection('users');
 
-    const email = 'falcon@aurikrex.tech';
+    const email = 'falcon@aurikrex.com';
     const plainPassword = 'Korex1025$1025$';
     const passwordHash = await bcrypt.hash(plainPassword, 10);
 

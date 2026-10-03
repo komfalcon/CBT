@@ -65,9 +65,9 @@ export default function ContactUs() {
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary"><Phone className="h-5 w-5" /></span>
                   <span><span className="block text-xs text-text-muted">Call support</span><span className="mt-1 block text-[14px] font-semibold text-text-primary group-hover:text-primary">{supportChannels.phoneDisplay}</span></span>
                 </a>
-                <a href="https://www.aurikrex.tech" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 rounded-xl border border-border bg-bg-primary/35 p-4 transition hover:border-primary/35 hover:bg-primary/[0.06]">
+                <a href="https://www.aurikrex.com" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 rounded-xl border border-border bg-bg-primary/35 p-4 transition hover:border-primary/35 hover:bg-primary/[0.06]">
                   <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary"><Globe2 className="h-5 w-5" /></span>
-                  <span><span className="block text-xs text-text-muted">Aurikrex website</span><span className="mt-1 block text-[14px] font-semibold text-text-primary group-hover:text-primary">www.aurikrex.tech</span></span>
+                  <span><span className="block text-xs text-text-muted">Aurikrex website</span><span className="mt-1 block text-[14px] font-semibold text-text-primary group-hover:text-primary">www.aurikrex.com</span></span>
                 </a>
               </div>
             </div>

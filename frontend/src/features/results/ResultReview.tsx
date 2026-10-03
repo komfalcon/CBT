@@ -137,7 +137,7 @@ export default function ResultReview() {
       });
       if (!response.ok) throw new Error('handoff_failed');
       const { handoff } = await response.json();
-      const libraryUrl = import.meta.env.VITE_LIBRARY_URL || 'https://library.aurikrex.tech';
+      const libraryUrl = import.meta.env.VITE_LIBRARY_URL || 'https://library.aurikrex.com';
       window.open(`${libraryUrl}/sso?handoff=${encodeURIComponent(handoff)}`, '_blank', 'noopener,noreferrer');
     } catch {
       setError('Unable to open the concept in Aurikrex Library right now.');

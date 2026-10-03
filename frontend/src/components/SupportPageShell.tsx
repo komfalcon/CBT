@@ -3,7 +3,7 @@ import { ArrowLeft, ExternalLink, Globe2, Mail, Phone } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 
-const SUPPORT_EMAIL = 'info@aurikrex.tech';
+const SUPPORT_EMAIL = 'info@aurikrex.com';
 const SUPPORT_PHONE_DISPLAY = '+234 911 368 3395';
 const SUPPORT_PHONE_LINK = '+2349113683395';
 
@@ -74,7 +74,7 @@ export function SupportPageShell({ children }: SupportPageShellProps) {
           <div className="support-footer-links flex items-center gap-5 text-xs font-medium text-text-secondary">
             <a href={`mailto:${SUPPORT_EMAIL}`} className="inline-flex items-center gap-1.5 transition hover:text-primary"><Mail className="h-3.5 w-3.5" />{SUPPORT_EMAIL}</a>
             <a href={`tel:${SUPPORT_PHONE_LINK}`} className="inline-flex items-center gap-1.5 transition hover:text-primary"><Phone className="h-3.5 w-3.5" />{SUPPORT_PHONE_DISPLAY}</a>
-            <a href="https://www.aurikrex.tech" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 transition hover:text-primary"><Globe2 className="h-3.5 w-3.5" />Aurikrex <ExternalLink className="h-3 w-3" /></a>
+            <a href="https://www.aurikrex.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 transition hover:text-primary"><Globe2 className="h-3.5 w-3.5" />Aurikrex <ExternalLink className="h-3 w-3" /></a>
           </div>
         </div>
       </footer>

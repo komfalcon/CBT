@@ -8,9 +8,10 @@ import * as schema from '../db/schema';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, gt } from 'drizzle-orm';
 
-const LIBRARY_ORIGIN = process.env.LIBRARY_ORIGIN || 'https://library.aurikrex.tech';
+const LIBRARY_ORIGIN = process.env.LIBRARY_ORIGIN || 'https://library.aurikrex.com';
 const ALLOWED_RETURN_ORIGINS = [
-  process.env.CBT_ORIGIN || 'https://cbt.aurikrex.tech',
+  process.env.CBT_ORIGIN || 'https://cbt.aurikrex.com',
+  'https://cbt.aurikrex.tech',
   'http://localhost:5173',
 ];
 

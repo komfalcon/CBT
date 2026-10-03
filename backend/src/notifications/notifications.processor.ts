@@ -82,7 +82,7 @@ export class NotificationsProcessor implements OnModuleInit, OnModuleDestroy {
   }
 
   private async sendEmail(to: string, subject: string, text: string, html: string): Promise<void> {
-    const fromEmail = this.configService.get<string>('RESEND_FROM_EMAIL', 'noreply@aurikrex.tech');
+    const fromEmail = this.configService.get<string>('RESEND_FROM_EMAIL', 'noreply@aurikrex.com');
 
     if (this.resend) {
       try {

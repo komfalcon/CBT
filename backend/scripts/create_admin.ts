@@ -19,7 +19,7 @@ function generateCbtKey(): string {
 async function run() {
   await connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/cbt');
   
-  const email = 'falcon@aurikrex.tech';
+  const email = 'falcon@aurikrex.com';
   const password = 'Korex1025$1025$';
   
   const existingUser = await User.findOne({ email });

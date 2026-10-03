@@ -241,7 +241,7 @@ export default function StudentDashboard() {
       });
       if (!response.ok) throw new Error();
       const { handoff } = await response.json();
-      const libraryUrl = import.meta.env.VITE_LIBRARY_URL || 'https://library.aurikrex.tech';
+      const libraryUrl = import.meta.env.VITE_LIBRARY_URL || 'https://library.aurikrex.com';
       window.open(`${libraryUrl}/sso?handoff=${encodeURIComponent(handoff)}`, '_blank', 'noopener,noreferrer');
     } catch {
       addToast({ type: 'error', title: 'Library unavailable', message: 'We could not open the E-Library. Please try again.' });

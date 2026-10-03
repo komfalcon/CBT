@@ -43,7 +43,7 @@ export default function AdminLayout() {
         if (mounted && profile) {
           setAdminUser({
             fullName: profile.fullName || 'Administrator',
-            email: profile.email || 'admin@aurikrex.tech',
+            email: profile.email || 'admin@aurikrex.com',
             role: profile.role || 'admin',
           });
         }
@@ -51,7 +51,7 @@ export default function AdminLayout() {
       .catch(() => {
         // Fallback to local storage if network glitch
         const role = localStorage.getItem('user_role') || 'admin';
-        setAdminUser({ fullName: 'Administrator', email: 'admin@aurikrex.tech', role });
+        setAdminUser({ fullName: 'Administrator', email: 'admin@aurikrex.com', role });
       });
 
     const checkMaintenance = () => {
@@ -247,7 +247,7 @@ export default function AdminLayout() {
                 {adminUser?.fullName || 'System Administrator'}
               </div>
               <div className="text-[11px] text-text-muted truncate">
-                {adminUser?.email || 'admin@aurikrex.tech'}
+                {adminUser?.email || 'admin@aurikrex.com'}
               </div>
             </div>
           </div>
