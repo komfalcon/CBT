@@ -559,14 +559,19 @@ export class AuthService implements OnModuleInit {
 
   async loginWithCbtKey(cbtKey: string, ipAddress?: string) {
     if (!cbtKey) {
-      throw new BadRequestException('CBT Key is required.');
+      throw new BadRequestException('Aurikrex ID or CBT Key is required.');
     }
 
-    const formattedKey = cbtKey.trim().toUpperCase();
-    const hash = createHash('sha256').update(formattedKey).digest('hex');
-    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.cbt_key_hash, hash)).limit(1);
+    const formattedKey = cbtKey.trim();
+    const hash = createHash('sha256').update(formattedKey.toUpperCase()).digest('hex');
+
+    let [user] = await this.db.select().from(schema.users).where(eq(schema.users.aurikrex_id, formattedKey)).limit(1);
     if (!user) {
-      throw new UnauthorizedException('Invalid CBT Key.');
+      [user] = await this.db.select().from(schema.users).where(eq(schema.users.cbt_key_hash, hash)).limit(1);
+    }
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid Aurikrex ID or CBT Key.');
     }
 
     if (user.account_status !== 'active') {
@@ -582,6 +587,12 @@ export class AuthService implements OnModuleInit {
     const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
     if (!user) {
       throw new NotFoundException('User not found.');
+    }
+
+    if (!user.aurikrex_id) {
+      const newAurikrexId = generateAurikrexId();
+      await this.db.update(schema.users).set({ aurikrex_id: newAurikrexId }).where(eq(schema.users.id, user.id));
+      user.aurikrex_id = newAurikrexId;
     }
 
     if (!user.cbt_key) {

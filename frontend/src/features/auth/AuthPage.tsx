@@ -348,7 +348,7 @@ export default function AuthPage() {
           <section className="auth-form-panel min-w-0 max-h-[calc(100vh-48px)] overflow-y-auto p-4 sm:p-9 lg:p-10">
             <div className="mx-auto min-w-0 w-full max-w-md">
               <div className="mb-8 flex items-start justify-between gap-6">
-                <div><div className="auth-form-brand mb-4 flex items-center gap-2 lg:hidden"><img src="/favicon.svg" alt="" className="h-9 w-9 shrink-0 rounded-xl object-cover" /><span className="font-display text-[15px] font-semibold text-white">Aurikrex Exam Arena</span></div><div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Candidate portal</div><h1 className="auth-title mt-3 font-display text-3xl font-semibold tracking-[-0.055em] text-white">{mode === 'login' && 'Welcome back.'}{mode === 'register' && 'Create your profile.'}{mode === 'cbt-key-login' && 'Use your CBT key.'}{mode === 'verify-email' && 'Verify your email.'}{mode === 'forgot-password' && 'Reset your password.'}{mode === 'reset-password' && 'Set a new password.'}</h1><p className="auth-subtitle mt-2 text-[14px] leading-6 text-slate-400">{mode === 'login' && 'Sign in to continue practicing.'}{mode === 'register' && 'Create a candidate profile and start practicing.'}{mode === 'cbt-key-login' && 'Quick access for shared devices and cafe sessions.'}{mode === 'verify-email' && 'Confirm your email to activate your account.'}{mode === 'forgot-password' && 'Enter your email to receive a reset code.'}{mode === 'reset-password' && 'Enter your new account password below.'}</p></div>
+                <div><div className="auth-form-brand mb-4 flex items-center gap-2 lg:hidden"><img src="/favicon.svg" alt="" className="h-9 w-9 shrink-0 rounded-xl object-cover" /><span className="font-display text-[15px] font-semibold text-white">Aurikrex Exam Arena</span></div><div className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Candidate portal</div><h1 className="auth-title mt-3 font-display text-3xl font-semibold tracking-[-0.055em] text-white">{mode === 'login' && 'Welcome back.'}{mode === 'register' && 'Create your profile.'}{mode === 'cbt-key-login' && 'Use your Aurikrex ID.'}{mode === 'verify-email' && 'Verify your email.'}{mode === 'forgot-password' && 'Reset your password.'}{mode === 'reset-password' && 'Set a new password.'}</h1><p className="auth-subtitle mt-2 text-[14px] leading-6 text-slate-400">{mode === 'login' && 'Sign in to continue practicing.'}{mode === 'register' && 'Create a candidate profile and start practicing.'}{mode === 'cbt-key-login' && 'Quick access using your unique Aurikrex ID or legacy key.'}{mode === 'verify-email' && 'Confirm your email to activate your account.'}{mode === 'forgot-password' && 'Enter your email to receive a reset code.'}{mode === 'reset-password' && 'Enter your new account password below.'}</p></div>
                 <span className="auth-secure-badge mt-1 hidden shrink-0 whitespace-nowrap rounded-full border border-emerald-400/20 bg-emerald-400/[0.08] px-2.5 py-1 text-xs font-semibold text-emerald-300 sm:inline-flex">Secure access</span>
               </div>
 
@@ -356,7 +356,7 @@ export default function AuthPage() {
                 <div className="auth-tabs mb-7 grid grid-cols-3 gap-1 rounded-xl border border-white/[0.08] bg-black/20 p-1">
                   <button onClick={() => { setMode('login'); setMessage(''); }} className={mode === 'login' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Sign in</button>
                   <button onClick={() => { setMode('register'); setMessage(''); }} className={mode === 'register' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Sign up</button>
-                  <button onClick={() => { setMode('cbt-key-login'); setMessage(''); }} className={mode === 'cbt-key-login' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>CBT key</button>
+                  <button onClick={() => { setMode('cbt-key-login'); setMessage(''); }} className={mode === 'cbt-key-login' ? 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition bg-blue-600 text-white shadow-[0_8px_20px_rgba(37,99,235,0.22)]' : 'min-h-11 rounded-lg py-2.5 text-xs font-semibold transition text-slate-500 hover:text-slate-200'}>Aurikrex ID</button>
                 </div>
               )}
 
@@ -386,7 +386,7 @@ export default function AuthPage() {
                           type="button"
                           variant="secondary"
                           size="sm"
-                          onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')}
+                          onClick={() => setMessage('Google sign-in is not configured. Please use email or Aurikrex ID.')}
                         >
                           <span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign in with Google
                         </Button>
@@ -425,7 +425,7 @@ export default function AuthPage() {
                           type="button"
                           variant="secondary"
                           size="sm"
-                          onClick={() => setMessage('Google sign-in is not configured. Please use email or CBT key.')}
+                          onClick={() => setMessage('Google sign-in is not configured. Please use email or Aurikrex ID.')}
                         >
                           <span className="flex h-5 w-5 items-center justify-center rounded-full border border-blue-400/30 bg-blue-400/10 text-xs font-bold text-blue-300">G</span> Sign up with Google
                         </Button>
@@ -437,12 +437,12 @@ export default function AuthPage() {
 
               {mode === 'cbt-key-login' && (
                 <form className="space-y-5" onSubmit={handleCbtKeyLogin}>
-                  <Alert variant="info" title="Quick cafe roaming access">Type your 8-digit unique access key allotted during registration to login directly without typing your password.</Alert>
+                  <Alert variant="info" title="Quick roaming access">Type your permanent Aurikrex ID (ax_...) or legacy access key to login directly without typing your password.</Alert>
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">CBT access key</label>
+                    <label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Aurikrex ID / Access key</label>
                     <div className="relative">
                       <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-500" />
-                      <input type="text" required placeholder="CBT-XXXXXX" value={cbtKey} onChange={(e) => setCbtKey(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 font-mono text-[14px] tracking-wide text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" />
+                      <input type="text" required placeholder="ax_01K... / CBT-XXXXXX" value={cbtKey} onChange={(e) => setCbtKey(e.target.value)} className="w-full rounded-xl border border-white/[0.10] bg-white/[0.045] py-3.5 pl-10 pr-4 font-mono text-[14px] tracking-wide text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-500/10" />
                     </div>
                   </div>
                   <Button type="submit" fullWidth>Quick login <ArrowRight className="h-4 w-4" /></Button>
