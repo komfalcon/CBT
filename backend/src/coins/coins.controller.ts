@@ -26,8 +26,17 @@ export class CoinsController {
   constructor(private readonly coinsService: CoinsService) {}
 
   @Get('balance')
-  async getCoinsBalance(@Request() req: any) {
+  async getCoinsBalanceGet(@Request() req: any) {
     return this.coinsService.getCoinsBalance(req.user.sub || req.user.id || req.user.email);
+  }
+
+  @Post('balance')
+  async getCoinsBalancePost(@Request() req: any, @Body() body: { userId?: string; userEmail?: string }) {
+    const targetUser = req.user?.sub || req.user?.id || req.user?.email || body.userId || body.userEmail;
+    if (!targetUser) {
+      throw new UnauthorizedException('User identification required for coin balance');
+    }
+    return this.coinsService.getCoinsBalance(targetUser);
   }
 
   @Get('history')
