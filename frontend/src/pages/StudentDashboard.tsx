@@ -569,7 +569,7 @@ export default function StudentDashboard() {
                   Public Beta — 100% Free Full Access Active
                 </p>
                 <p className="text-[11px] sm:text-xs text-text-secondary">
-                  Enjoy unlimited mocks, targeted drills, detailed analytics, and 20 free daily AI messages. Complete subscription tiers will roll out with the full release.
+                  Enjoy unlimited mocks, targeted drills, detailed analytics, and 20 free daily Falke AI messages. Complete subscription tiers will roll out with the full release.
                 </p>
               </div>
             </div>

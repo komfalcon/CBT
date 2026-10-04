@@ -29,7 +29,7 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
     } catch (err: any) {
       console.error(err);
       if (err.response?.status === 401 || err.response?.status === 403) {
-        setError('AI Explanations require an active Plus, Pro, or Max plan.');
+        setError('Falke AI Explanations require an active Plus, Pro, or Max plan.');
       } else {
         setError(err.response?.data?.message || 'Failed to generate explanation. Please try again.');
       }
@@ -46,14 +46,14 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
           className="flex items-center gap-2 text-sm font-medium text-ai-flag hover:text-ai-flag-hover transition-colors bg-ai-flag/10 hover:bg-ai-flag/20 px-3 py-1.5 rounded-lg border border-ai-flag/20"
         >
           <Sparkles className="w-4 h-4" />
-          Explain with AI
+          Explain with Falke AI
         </button>
       )}
 
       {isLoading && (
         <div className="flex items-center gap-2 text-sm text-ai-flag">
           <Loader2 className="w-4 h-4 animate-spin" />
-          AI is thinking...
+          Falke AI is thinking...
         </div>
       )}
 
@@ -76,7 +76,7 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
           </button>
           <div className="flex items-center gap-2 mb-2 text-ai-flag font-medium text-sm">
             <Sparkles className="w-4 h-4" />
-            AI Explanation
+            Falke AI Explanation
           </div>
           <div className="prose dark:prose-invert prose-sm max-w-none text-text-primary overflow-x-auto">
             <ReactMarkdown

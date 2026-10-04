@@ -166,7 +166,7 @@ export default function ExamHub() {
 
                 {isExpanded && (
                   <div className="mt-4 space-y-2 border-t border-border pt-4">
-                    <p className="text-xs text-text-secondary mb-2">Check off topics as you study. AI will also automatically check these off when you score highly on CBT quizzes.</p>
+                    <p className="text-xs text-text-secondary mb-2">Check off topics as you study. Falke AI will also automatically check these off when you score highly on CBT quizzes.</p>
                     {allTopics.map(topic => {
                       const isCompleted = subjectData.completedTopics.includes(topic);
                       return (

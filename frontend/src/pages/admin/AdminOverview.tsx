@@ -405,7 +405,7 @@ export default function AdminOverview() {
               </span>
             </div>
             <p className="text-xs text-text-muted leading-relaxed mt-4">
-              During the Free Public Beta phase, all registered students automatically receive Max tier CBT privileges and daily AI tutor access (20 messages/day). Paywall enforcement is paused.
+              During the Free Public Beta phase, all registered students automatically receive Max tier CBT privileges and daily Falke AI tutor access (20 messages/day). Paywall enforcement is paused.
             </p>
           </div>
           <div className="pt-4 border-t border-border mt-4 flex items-center justify-between text-xs text-text-muted">

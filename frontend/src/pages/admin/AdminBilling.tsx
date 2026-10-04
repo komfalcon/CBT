@@ -95,7 +95,7 @@ export default function AdminBilling() {
               Free Public Beta Active — Paywalls Paused
             </div>
             <div className="text-xs text-slate-300 mt-0.5">
-              All students have full mock exam access and 20 daily AI messages free of charge. Subscriptions will activate upon commercial launch.
+              All students have full mock exam access and 20 daily Falke AI messages free of charge. Subscriptions will activate upon commercial launch.
             </div>
           </div>
         </div>

@@ -369,7 +369,7 @@ export default function QuestionBankPage() {
   const handleUploadAndScanPdfFile = async (file: File) => {
     setIsPdfUploadLoading(true);
     try {
-      showToast('info', `Uploading and scanning '${file.name}' with AI past paper scanner...`);
+      showToast('info', `Uploading and scanning '${file.name}' with Falke AI past paper scanner...`);
       const res = await uploadAndScanPdfFile(undefined, file);
       if (res.success) {
         if (res.extractedCount > 0) {
@@ -556,7 +556,7 @@ export default function QuestionBankPage() {
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 animate-spin text-primary shrink-0" />
             <div>
-              <span className="font-bold">AI Background Generator Running:</span> Subject{' '}
+              <span className="font-bold">Falke AI Background Generator Running:</span> Subject{' '}
               <span className="capitalize font-black">{aiGenStatus.activeJob?.subject}</span> ({aiGenStatus.activeJob?.sourceType === 'new_svg_diagram' ? 'SVG Diagrams' : 'Standard Text'}).
             </div>
           </div>
@@ -640,7 +640,7 @@ export default function QuestionBankPage() {
           }`}
         >
           <Sparkles className="h-3.5 w-3.5 text-yellow-400" />
-          AI Question Generator
+          Falke AI Question Generator
         </button>
 
         <button
@@ -1485,7 +1485,7 @@ export default function QuestionBankPage() {
               <div>
                 <h2 className="text-lg font-bold text-text-primary flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-yellow-400" />
-                  Background AI Question Generator
+                  Background Falke AI Question Generator
                 </h2>
                 <p className="text-xs text-text-secondary mt-1">
                   Generates JAMB CBT standard text questions and vector SVG diagram questions continuously in background.
@@ -1625,7 +1625,7 @@ export default function QuestionBankPage() {
                 className="w-full bg-bg-secondary border border-border rounded-xl px-3 py-2 text-xs text-text-primary focus:outline-none focus:border-primary font-mono placeholder:text-text-muted"
               />
               <p className="text-[11px] text-text-muted">
-                Leave empty for automatic full syllabus rotation. The AI generator will continuously cycle across every topic in the JAMB UTME curriculum for <strong className="text-text-primary">{aiSubject}</strong>!
+                Leave empty for automatic full syllabus rotation. The Falke AI generator will continuously cycle across every topic in the JAMB UTME curriculum for <strong className="text-text-primary">{aiSubject}</strong>!
               </p>
             </div>
 

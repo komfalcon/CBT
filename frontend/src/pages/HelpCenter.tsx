@@ -50,7 +50,7 @@ const faqs: FaqItem[] = [
     id: 'plans-and-payments',
     category: 'account',
     question: 'Which plan should I choose and how do I pay?',
-    answer: 'Plus includes one full mock each day. Pro includes two full mocks each day plus subject drills. Max includes up to five full mocks each day, advanced performance review, drills, and FalkeAI access subject to daily AI limits. Select a plan from the study workspace and complete the secure Paystack checkout with your card. The plan and amount are confirmed after payment verification.',
+    answer: 'Plus includes one full mock each day. Pro includes two full mocks each day plus subject drills. Max includes up to five full mocks each day, advanced performance review, drills, and FalkeAI access subject to daily Falke AI limits. Select a plan from the study workspace and complete the secure Paystack checkout with your card. The plan and amount are confirmed after payment verification.',
   },
   {
     id: 'cancel-refund',
