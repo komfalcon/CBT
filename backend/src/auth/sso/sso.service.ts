@@ -12,7 +12,7 @@ import { createHash, randomBytes } from 'crypto';
 import { DRIZZLE } from '../../db/database.module';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, or } from 'drizzle-orm';
 import { generateAurikrexId } from '../../users/utils';
 
 @Injectable()
@@ -36,7 +36,16 @@ export class SsoService {
         return {
           client_id: clientId,
           client_name: clientId === 'aurikrex_library' ? 'Aurikrex Library' : clientId === 'aurikrex_bytes' ? 'Aurikrex Bytes' : 'Aurikrex CBT',
-          redirect_uris: ['https://library.aurikrex.com/sso/callback', 'https://bytes.aurikrex.com/sso/callback', 'https://cbt.aurikrex.com/sso/callback', 'http://localhost:5173/sso/callback', 'http://localhost:5174/sso/callback'],
+          redirect_uris: [
+            'https://library.aurikrex.com/sso/callback',
+            'https://www.library.aurikrex.com/sso/callback',
+            'https://bytes.aurikrex.com/sso/callback',
+            'https://www.bytes.aurikrex.com/sso/callback',
+            'https://cbt.aurikrex.com/sso/callback',
+            'https://www.cbt.aurikrex.com/sso/callback',
+            'http://localhost:5173/sso/callback',
+            'http://localhost:5174/sso/callback',
+          ],
           allowed_scopes: ['openid', 'profile', 'email'],
         };
       }
@@ -45,7 +54,11 @@ export class SsoService {
 
     const client = clients[0];
     if (redirectUri && Array.isArray(client.redirect_uris)) {
-      const allowed = (client.redirect_uris as string[]).some((uri) => uri === redirectUri || redirectUri.startsWith(uri));
+      const normReq = redirectUri.replace(/^https?:\/\/(www\.)?/, '').replace(/\/+$/, '');
+      const allowed = (client.redirect_uris as string[]).some((uri) => {
+        const normUri = uri.replace(/^https?:\/\/(www\.)?/, '').replace(/\/+$/, '');
+        return normReq === normUri || normReq.startsWith(normUri);
+      });
       if (!allowed) {
         throw new BadRequestException(`Redirect URI '${redirectUri}' is not authorized for client '${clientId}'`);
       }
@@ -125,7 +138,7 @@ export class SsoService {
     const users = await this.db
       .select()
       .from(schema.users)
-      .where(eq(schema.users.aurikrex_id, record.aurikrex_id))
+      .where(or(eq(schema.users.aurikrex_id, record.aurikrex_id), eq(schema.users.id, record.aurikrex_id)))
       .limit(1);
 
     if (!users.length) {
@@ -133,6 +146,9 @@ export class SsoService {
     }
 
     const user = users[0];
+    if (!user.aurikrex_id) {
+      user.aurikrex_id = await this.ensureAurikrexId(user.id);
+    }
     const payload = {
       sub: user.aurikrex_id,
       aurikrex_id: user.aurikrex_id,
