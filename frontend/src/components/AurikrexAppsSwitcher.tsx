@@ -91,6 +91,8 @@ export function AurikrexAppsSwitcher() {
               <a
                 key={app.id}
                 href={getTargetUrl(app)}
+                target={app.id === 'cbt' ? '_self' : '_blank'}
+                rel="noopener noreferrer"
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-slate-800/80 transition-colors group"
                 onClick={() => setIsOpen(false)}
               >
