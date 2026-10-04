@@ -2,31 +2,43 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Grid, ExternalLink, BookOpen, FileText, Monitor } from 'lucide-react';
 
 export interface AppOption {
+  id: string;
   name: string;
   description: string;
-  url: string;
+  defaultUrl: string;
+  clientId: string;
+  redirectUri: string;
   icon: React.ReactNode;
   badge?: string;
 }
 
 const AURIKREX_APPS: AppOption[] = [
   {
+    id: 'cbt',
     name: 'Aurikrex CBT',
     description: 'JAMB UTME Exam Arena & Adaptive Practice',
-    url: 'https://cbt.aurikrex.com',
+    defaultUrl: 'https://cbt.aurikrex.com',
+    clientId: 'aurikrex_cbt',
+    redirectUri: 'https://cbt.aurikrex.com',
     icon: <Monitor className="w-5 h-5 text-blue-400" />,
     badge: 'Active',
   },
   {
+    id: 'library',
     name: 'Aurikrex Library',
     description: 'Digital E-Library & Academic Resources',
-    url: 'https://library.aurikrex.com/sso/login?client_id=aurikrex_library',
+    defaultUrl: 'https://library.aurikrex.com',
+    clientId: 'aurikrex_library',
+    redirectUri: 'https://library.aurikrex.com/sso/callback',
     icon: <BookOpen className="w-5 h-5 text-emerald-400" />,
   },
   {
+    id: 'bytes',
     name: 'Aurikrex Bytes',
     description: 'Bite-Sized Summaries & Study Flashcards',
-    url: 'https://bytes.aurikrex.com/sso/login?client_id=aurikrex_bytes',
+    defaultUrl: 'https://bytes.aurikrex.com',
+    clientId: 'aurikrex_bytes',
+    redirectUri: 'https://bytes.aurikrex.com/sso/callback',
     icon: <FileText className="w-5 h-5 text-amber-400" />,
   },
 ];
@@ -44,6 +56,17 @@ export function AurikrexAppsSwitcher() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const getTargetUrl = (app: AppOption): string => {
+    if (app.id === 'cbt') return app.defaultUrl;
+    const token = localStorage.getItem('accessToken') || localStorage.getItem('token');
+    const apiBase = (import.meta.env.VITE_API_BASE_URL ?? '/api').replace(/\/+$/, '');
+
+    if (token) {
+      return `${apiBase}/auth/sso/authorize?client_id=${app.clientId}&redirect_uri=${encodeURIComponent(app.redirectUri)}&token=${encodeURIComponent(token)}`;
+    }
+    return app.defaultUrl;
+  };
 
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
@@ -66,8 +89,8 @@ export function AurikrexAppsSwitcher() {
           <div className="p-1.5 space-y-1">
             {AURIKREX_APPS.map((app) => (
               <a
-                key={app.name}
-                href={app.url}
+                key={app.id}
+                href={getTargetUrl(app)}
                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-slate-800/80 transition-colors group"
                 onClick={() => setIsOpen(false)}
               >

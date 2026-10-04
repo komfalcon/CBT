@@ -33,16 +33,18 @@ export class SsoController {
     @Query('code_challenge_method') codeChallengeMethod: string,
     @Query('state') state: string,
     @Query('scope') scope: string,
+    @Query('token') queryToken: string,
     @Req() req: Request,
     @Res() res: Response,
   ) {
     await this.ssoService.validateClient(clientId, redirectUri);
 
-    // Check if user is logged into CBT backend via JWT cookie or Authorization header
+    // Check if user is logged into CBT backend via query token, JWT cookie, or Authorization header
     let userPayload: any = null;
     try {
       const cookieHeader = String(req.headers.cookie || '');
       const token =
+        queryToken ||
         cookieHeader
           .split(';')
           .map((p) => p.trim())
