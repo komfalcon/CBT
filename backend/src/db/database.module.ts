@@ -23,6 +23,21 @@ export const DRIZZLE = Symbol('DRIZZLE_CONNECTION');
 
         try {
           await client`ALTER TABLE users ADD COLUMN IF NOT EXISTS aurikrex_id text UNIQUE;`;
+          await client`ALTER TABLE users ADD COLUMN IF NOT EXISTS auri_coins_balance integer DEFAULT 5000;`;
+          await client`ALTER TABLE users ADD COLUMN IF NOT EXISTS auri_coins_last_reset timestamp DEFAULT now();`;
+          await client`ALTER TABLE users ADD COLUMN IF NOT EXISTS auri_coins_monthly_allowance integer DEFAULT 5000;`;
+          await client`
+            CREATE TABLE IF NOT EXISTS auri_coin_ledger (
+              id text PRIMARY KEY,
+              user_id text NOT NULL,
+              app_id text NOT NULL,
+              feature_name text NOT NULL,
+              amount integer NOT NULL,
+              balance_after integer NOT NULL,
+              metadata jsonb,
+              created_at timestamp DEFAULT now()
+            );
+          `;
           await client`
             CREATE TABLE IF NOT EXISTS sso_clients (
               id text PRIMARY KEY,
@@ -48,7 +63,7 @@ export const DRIZZLE = Symbol('DRIZZLE_CONNECTION');
               created_at timestamp DEFAULT now()
             );
           `;
-          console.log('[DATABASE] Auto-migration for aurikrex_id and SSO tables completed successfully.');
+          console.log('[DATABASE] Auto-migration for aurikrex_id, Auri Coins, and SSO tables completed successfully.');
         } catch (err) {
           console.warn('[DATABASE] Auto-migration warning:', err);
         }

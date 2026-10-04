@@ -32,19 +32,22 @@ export class SsoService {
 
     if (!clients.length) {
       // Default auto-registered clients for ecosystem
-      if (['aurikrex_library', 'aurikrex_bytes', 'aurikrex_cbt'].includes(clientId)) {
+      if (['aurikrex_library', 'aurikrex_bytes', 'aurikrex_cbt', 'aurikrex_vault'].includes(clientId)) {
         return {
           client_id: clientId,
-          client_name: clientId === 'aurikrex_library' ? 'Aurikrex Library' : clientId === 'aurikrex_bytes' ? 'Aurikrex Bytes' : 'Aurikrex CBT',
+          client_name: clientId === 'aurikrex_library' ? 'Aurikrex Library' : clientId === 'aurikrex_bytes' ? 'Aurikrex Bytes' : clientId === 'aurikrex_vault' ? 'Aurikrex Phorynt' : 'Aurikrex CBT',
           redirect_uris: [
             'https://library.aurikrex.com/sso/callback',
             'https://www.library.aurikrex.com/sso/callback',
             'https://bytes.aurikrex.com/sso/callback',
             'https://www.bytes.aurikrex.com/sso/callback',
+            'https://phorynt.aurikrex.com/sso/callback',
+            'https://www.phorynt.aurikrex.com/sso/callback',
             'https://cbt.aurikrex.com/sso/callback',
             'https://www.cbt.aurikrex.com/sso/callback',
             'http://localhost:5173/sso/callback',
             'http://localhost:5174/sso/callback',
+            'http://localhost:5175/sso/callback',
           ],
           allowed_scopes: ['openid', 'profile', 'email'],
         };

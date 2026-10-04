@@ -110,7 +110,7 @@ export class SsoController {
     return res.redirect(targetUrl.toString());
   }
 
-  @Post('token')
+  @Post(['token', 'exchange'])
   async token(
     @Body('client_id') clientId: string,
     @Body('code') code: string,
