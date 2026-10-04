@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Grid, ExternalLink, BookOpen, FileText, Monitor } from 'lucide-react';
+import { ExternalLink, BookOpen, FileText, Monitor } from 'lucide-react';
 
 export interface AppOption {
   id: string;
@@ -9,19 +9,17 @@ export interface AppOption {
   clientId: string;
   redirectUri: string;
   icon: React.ReactNode;
-  badge?: string;
 }
 
 const AURIKREX_APPS: AppOption[] = [
   {
     id: 'cbt',
     name: 'Aurikrex CBT',
-    description: 'JAMB UTME Exam Arena & Adaptive Practice',
+    description: 'JAMB UTME Exam Arena & Practice',
     defaultUrl: 'https://cbt.aurikrex.com',
     clientId: 'aurikrex_cbt',
     redirectUri: 'https://cbt.aurikrex.com',
     icon: <Monitor className="w-5 h-5 text-blue-400" />,
-    badge: 'Active',
   },
   {
     id: 'library',
@@ -43,7 +41,7 @@ const AURIKREX_APPS: AppOption[] = [
   },
 ];
 
-export function AurikrexAppsSwitcher() {
+export function AurikrexAppsSwitcher({ currentAppId = 'cbt' }: { currentAppId?: 'cbt' | 'library' | 'bytes' }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -58,12 +56,12 @@ export function AurikrexAppsSwitcher() {
   }, []);
 
   const getTargetUrl = (app: AppOption): string => {
-    if (app.id === 'cbt') return app.defaultUrl;
+    if (app.id === currentAppId) return app.defaultUrl;
     const token = localStorage.getItem('accessToken') || localStorage.getItem('token');
-    const apiBase = (import.meta.env.VITE_API_BASE_URL ?? '/api').replace(/\/+$/, '');
+    const cbtIdpUrl = 'https://cbt.aurikrex.com';
 
-    if (token) {
-      return `${apiBase}/auth/sso/authorize?client_id=${app.clientId}&redirect_uri=${encodeURIComponent(app.redirectUri)}&token=${encodeURIComponent(token)}`;
+    if (token && app.id !== 'cbt') {
+      return `${cbtIdpUrl}/api/v1/auth/sso/authorize?client_id=${app.clientId}&redirect_uri=${encodeURIComponent(app.redirectUri)}&token=${encodeURIComponent(token)}`;
     }
     return app.defaultUrl;
   };
@@ -72,10 +70,10 @@ export function AurikrexAppsSwitcher() {
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-text-secondary hover:text-text-primary bg-bg-secondary hover:bg-bg-card border border-border rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+        className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-text-secondary hover:text-text-primary bg-bg-secondary hover:bg-bg-card border border-border rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
         title="Aurikrex Ecosystem Apps"
       >
-        <Grid className="w-4 h-4 text-primary" />
+        <img src="/aurikrex-logo.png" alt="Aurikrex Logo" className="w-5 h-5 object-contain rounded" />
         <span className="hidden sm:inline">Aurikrex Apps</span>
       </button>
 
@@ -87,34 +85,37 @@ export function AurikrexAppsSwitcher() {
           </div>
 
           <div className="p-1.5 space-y-1">
-            {AURIKREX_APPS.map((app) => (
-              <a
-                key={app.id}
-                href={getTargetUrl(app)}
-                target={app.id === 'cbt' ? '_self' : '_blank'}
-                rel="noopener noreferrer"
-                className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-bg-secondary transition-colors group"
-                onClick={() => setIsOpen(false)}
-              >
-                <div className="p-2 rounded-lg bg-bg-secondary group-hover:bg-bg-primary/20 transition-colors shrink-0">
-                  {app.icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-text-primary group-hover:text-primary flex items-center gap-1">
-                      {app.name}
-                      <ExternalLink className="w-3 h-3 text-text-muted group-hover:text-text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </span>
-                    {app.badge && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary font-medium">
-                        {app.badge}
-                      </span>
-                    )}
+            {AURIKREX_APPS.map((app) => {
+              const isCurrent = app.id === currentAppId;
+              return (
+                <a
+                  key={app.id}
+                  href={getTargetUrl(app)}
+                  target={isCurrent ? '_self' : '_blank'}
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-bg-secondary transition-colors group"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <div className="p-2 rounded-lg bg-bg-secondary group-hover:bg-bg-primary/20 transition-colors shrink-0">
+                    {app.icon}
                   </div>
-                  <p className="text-xs text-text-secondary truncate mt-0.5">{app.description}</p>
-                </div>
-              </a>
-            ))}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-text-primary group-hover:text-primary flex items-center gap-1">
+                        {app.name}
+                        {!isCurrent && <ExternalLink className="w-3 h-3 text-text-muted group-hover:text-text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />}
+                      </span>
+                      {isCurrent && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary font-medium">
+                          Active
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-text-secondary truncate mt-0.5">{app.description}</p>
+                  </div>
+                </a>
+              );
+            })}
           </div>
         </div>
       )}
