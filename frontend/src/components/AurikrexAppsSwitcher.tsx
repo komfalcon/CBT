@@ -74,7 +74,7 @@ export function AurikrexAppsSwitcher({ currentAppId = 'cbt' }: { currentAppId?: 
         className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-text-secondary hover:text-text-primary bg-bg-secondary hover:bg-bg-card border border-border rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
         title="Aurikrex Ecosystem Apps"
       >
-        <img src="/aurikrex-logo.png" alt="Aurikrex Logo" className="w-5 h-5 object-contain rounded" />
+        <img src="/aurikrex-logo.png" alt="Aurikrex Logo" className="w-5 h-5 object-contain rounded" style={{ width: '20px', height: '20px', minWidth: '20px', minHeight: '20px', objectFit: 'contain' }} />
         <span className="hidden sm:inline">Aurikrex Apps</span>
       </button>
 
