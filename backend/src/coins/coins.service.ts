@@ -65,8 +65,18 @@ export class CoinsService {
     return user;
   }
 
+  public async findUserByEmail(email: string) {
+    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.email, email.toLowerCase().trim())).limit(1);
+    return user;
+  }
+
   public async getCoinsBalance(userId: string) {
-    const user = await this.checkAndResetMonthlyCoins(userId);
+    let targetId = userId;
+    if (userId && userId.includes('@')) {
+      const u = await this.findUserByEmail(userId);
+      if (u) targetId = u.id;
+    }
+    const user = await this.checkAndResetMonthlyCoins(targetId);
     const balance = user.auri_coins_balance ?? MONTHLY_COIN_ALLOWANCE;
     const lastReset = user.auri_coins_last_reset ? new Date(user.auri_coins_last_reset) : new Date();
     const nextReset = new Date(lastReset.getTime() + THIRTY_DAYS_MS);
@@ -81,12 +91,20 @@ export class CoinsService {
   }
 
   public async deductCoins(
-    userId: string,
+    userIdentifier: string,
     appId: string,
     featureName: string,
     amount: number = COIN_COST_PER_REQUEST,
     metadata?: any
   ) {
+    let userId = userIdentifier;
+    if (userIdentifier && userIdentifier.includes('@')) {
+      const userObj = await this.findUserByEmail(userIdentifier);
+      if (!userObj) {
+        throw new NotFoundException(`User with email ${userIdentifier} not found`);
+      }
+      userId = userObj.id;
+    }
     const user = await this.checkAndResetMonthlyCoins(userId);
     const currentBalance = user.auri_coins_balance ?? MONTHLY_COIN_ALLOWANCE;
     const lastReset = user.auri_coins_last_reset ? new Date(user.auri_coins_last_reset) : new Date();

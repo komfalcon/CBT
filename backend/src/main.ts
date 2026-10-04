@@ -36,6 +36,11 @@ async function bootstrap() {
     'https://www.cbt.aurikrex.com',
     'https://library.aurikrex.com',
     'https://www.library.aurikrex.com',
+    'https://bytes.aurikrex.com',
+    'https://www.bytes.aurikrex.com',
+    'https://phorynt.aurikrex.com',
+    'https://www.phorynt.aurikrex.com',
+    'https://vault.aurikrex.com',
     'https://aurikrex.com',
     'https://www.aurikrex.com',
     'https://cbt.aurikrex.tech',
@@ -46,17 +51,34 @@ async function bootstrap() {
     'https://cbt.pxxl.click',
   ];
 
+  const isAllowedDomain = (originStr?: string): boolean => {
+    if (!originStr) return true;
+    if (allowedOrigins.includes(originStr) || allowedOrigins.includes('*')) return true;
+    try {
+      const host = new URL(originStr).hostname;
+      return (
+        host.endsWith('.aurikrex.com') ||
+        host.endsWith('.aurikrex.tech') ||
+        host.endsWith('.pxxl.click') ||
+        host === 'aurikrex.com' ||
+        host === 'aurikrex.tech' ||
+        host === 'pxxl.click'
+      );
+    } catch {
+      return false;
+    }
+  };
+
   app.enableCors({
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+      if (isAllowedDomain(origin)) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
       }
     },
     methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Aurikrex-Internal-Key'],
     credentials: true,
   });
   app.use(helmet({ crossOriginOpenerPolicy: false }));
@@ -70,7 +92,7 @@ async function bootstrap() {
     const publicPath = /^\/auth\/(login|register|google|login\/cbt-key|forgot-password|reset-password|verify-email)$/.test(req.path || '');
     if (unsafe && !publicPath) {
       const origin = req.headers.origin;
-      const originAllowed = !origin || allowedOrigins.includes(origin);
+      const originAllowed = !origin || isAllowedDomain(origin);
       if (req.headers['x-csrf-token'] !== csrfToken && !originAllowed) return res.status(403).json({ message: 'CSRF validation failed.' });
     }
     next();

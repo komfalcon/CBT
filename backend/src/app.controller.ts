@@ -9,7 +9,7 @@ export class AppController {
     private readonly adminService: AdminService,
   ) {}
 
-  @Get('health')
+  @Get(['', 'health', 'api/health', 'api/v1/health', 'api/v1'])
   health(): Promise<HealthStatus> {
     return this.healthService.check();
   }
