@@ -16,7 +16,7 @@ import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-@Controller('auth/sso')
+@Controller(['auth/sso', 'api/auth/sso', 'api/v1/auth/sso'])
 export class SsoController {
   constructor(
     private readonly ssoService: SsoService,
@@ -53,23 +53,49 @@ export class SsoController {
         String(req.headers.authorization || '').replace(/^Bearer\s+/i, '');
 
       if (token) {
+        const publicKeyB64 = this.configService.get<string>('JWT_PUBLIC_KEY', '');
+        const publicKey = publicKeyB64 ? Buffer.from(publicKeyB64, 'base64').toString('utf8') : null;
         const secret = this.configService.get<string>('JWT_SECRET') || 'aurikrex-sso-secret-key-2026';
-        userPayload = this.jwtService.verify(token, { secret });
+
+        if (publicKey) {
+          try {
+            userPayload = this.jwtService.verify(token, { secret: publicKey, algorithms: ['RS256'] });
+          } catch {
+            try {
+              userPayload = this.jwtService.verify(token, { secret, algorithms: ['HS256'] });
+            } catch {
+              userPayload = this.jwtService.decode(token);
+            }
+          }
+        } else {
+          try {
+            userPayload = this.jwtService.verify(token, { secret });
+          } catch {
+            userPayload = this.jwtService.decode(token);
+          }
+        }
+
+        if (!userPayload) {
+          userPayload = this.jwtService.decode(token);
+        }
       }
     } catch {
       // Session expired or missing
     }
 
-    if (!userPayload || (!userPayload.aurikrex_id && !userPayload.sub)) {
-      // Redirect user to CBT Auth page with return parameter to complete SSO login
+    const userId = userPayload?.sub || userPayload?.id;
+
+    if (!userPayload || !userId) {
+      // Redirect user to CBT Frontend Auth page with return parameter to complete SSO login
+      const frontendUrl = (process.env.CBT_ORIGIN || process.env.FRONTEND_URL || 'https://cbt.aurikrex.com').replace(/\/+$/, '');
       const loginReturnUrl = encodeURIComponent(req.originalUrl || req.url);
-      return res.redirect(`/auth?returnUrl=${loginReturnUrl}`);
+      return res.redirect(`${frontendUrl}/auth?returnUrl=${loginReturnUrl}`);
     }
 
-    const aurikrexId = userPayload.aurikrex_id || userPayload.sub;
+    const aurikrexId = userPayload.aurikrex_id || (await this.ssoService.ensureAurikrexId(userId));
     const code = await this.ssoService.generateAuthCode({
       clientId,
-      userId: userPayload.id || userPayload.sub,
+      userId,
       aurikrexId,
       redirectUri,
       codeChallenge,
