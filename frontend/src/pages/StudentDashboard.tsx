@@ -40,7 +40,7 @@ import {
 } from 'lucide-react';
 import OneSignal from 'react-onesignal';
 import { AiChatWidget } from '../features/ai/AiChatWidget';
-import { Alert, Badge, Button, Card, Modal, SecuritySettings, useToast } from '../components';
+import { Alert, Badge, Button, Card, Modal, SecuritySettings, useToast, AurikrexAppsSwitcher } from '../components';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { AVAILABLE_SUBJECTS, getSubjectLabel } from '../constants/subjects';
 
@@ -323,6 +323,7 @@ export default function StudentDashboard() {
             </div>
 
             <nav className="hidden items-center gap-2 lg:flex" aria-label="Workspace navigation">
+              <AurikrexAppsSwitcher />
               <Button onClick={() => navigate('/exam-hub')} variant="ghost" size="sm">
                 <Target className="h-4 w-4" /> Exam Hub
               </Button>
@@ -338,6 +339,7 @@ export default function StudentDashboard() {
             </nav>
 
             <div className="relative flex items-center gap-2 lg:hidden">
+              <AurikrexAppsSwitcher />
               <ThemeToggle className="min-h-11 min-w-11 lg:min-h-0 lg:min-w-0" />
               <button
                 type="button"

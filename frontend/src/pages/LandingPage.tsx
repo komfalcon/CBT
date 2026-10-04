@@ -8,6 +8,7 @@ import {
   Target, TrendingUp, Twitter, UserCheck, Users, X, Youtube, Zap,
 } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { AurikrexAppsSwitcher } from '../components/AurikrexAppsSwitcher';
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -246,6 +247,7 @@ export default function LandingPage() {
             <a href="#pricing" className="transition-colors hover:text-white">Pricing</a>
           </nav>
           <div className="flex items-center gap-3 sm:gap-4">
+            <AurikrexAppsSwitcher />
             <ThemeToggle />
             <Link to="/auth?mode=login" className="hidden text-xs sm:text-sm font-medium text-slate-300 transition-colors hover:text-white sm:inline-flex">Sign in</Link>
             <Link to="/auth?mode=register" className="hidden min-h-11 items-center rounded-lg bg-white px-3 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.08)] transition hover:bg-blue-50 active:scale-[0.98] sm:inline-flex sm:px-4">Get started</Link>
