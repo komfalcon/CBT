@@ -5,6 +5,7 @@ import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, desc } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
 import { QuestionsService } from '../questions/questions.service';
+import { CoinsService } from '../coins/coins.service';
 import axios from 'axios';
 
 @Injectable()
@@ -17,6 +18,7 @@ export class AiService {
   constructor(
     @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
     private questionsService: QuestionsService,
+    private coinsService: CoinsService,
   ) { }
 
   private async fetchAvailableModels(): Promise<string[]> {
@@ -243,33 +245,8 @@ export class AiService {
   }
 
   private async verifyAiAccess(userId: string, isChat: boolean): Promise<any> {
-    const users = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
-    const user = users[0];
-    if (!user) throw new UnauthorizedException('User not found');
-
-    // In Public Beta, all active students have access to the AI tutor and explanations
-    if (user.subscription_tier !== 'max') {
-      await this.db.update(schema.users)
-        .set({ subscription_tier: 'max' })
-        .where(eq(schema.users.id, userId));
-      user.subscription_tier = 'max';
-    }
-
-    // Reset daily limit if it's a new day (20 free AI messages per day in beta)
-    const now = new Date();
-    if (!user.ai_messages_last_reset || new Date(user.ai_messages_last_reset).getDate() !== now.getDate()) {
-      user.ai_messages_remaining = 20; // 20 free daily messages during public beta
-      user.ai_messages_last_reset = now;
-      await this.db.update(schema.users)
-        .set({ ai_messages_remaining: 20, ai_messages_last_reset: now })
-        .where(eq(schema.users.id, userId));
-    }
-
-    if ((user.ai_messages_remaining || 0) <= 0) {
-      throw new BadRequestException('You have reached your daily beta limit of 20 free AI messages. Quota resets at midnight!');
-    }
-
-    return user;
+    const featureName = isChat ? 'sabilytics_chat' : 'explain_question';
+    return this.coinsService.deductCoins(userId, 'cbt', featureName, 5);
   }
 
   async generateDiagram(questionId: string): Promise<string> {
@@ -317,15 +294,8 @@ SVG Design Standards for Dark Theme:
     return svgContent;
   }
 
-  private async deductCredit(user: any) {
-    user.ai_messages_remaining = (user.ai_messages_remaining as number || 0) - 1;
-    await this.db.update(schema.users)
-      .set({ ai_messages_remaining: user.ai_messages_remaining })
-      .where(eq(schema.users.id, user.id));
-  }
-
   async generateExplanation(userId: string, questionText: string, correctAnswer: string, studentAnswer: string, questionId?: string) {
-    const user = await this.verifyAiAccess(userId, false);
+    const coinResult = await this.verifyAiAccess(userId, false);
 
     const messages = [
       {
@@ -347,7 +317,6 @@ If there is no error in the system's answer, do not output the JSON block.`
     ];
 
     let explanation = await this.callMistralApi(messages, 1000);
-    await this.deductCredit(user);
 
     // Check for vetted errors
     if (questionId && explanation.includes('```json')) {
@@ -367,7 +336,7 @@ If there is no error in the system's answer, do not output the JSON block.`
       }
     }
 
-    return { explanation, remaining: user.ai_messages_remaining };
+    return { explanation, remainingCoins: coinResult.remainingCoins, nextResetDate: coinResult.nextResetDate };
   }
 
   async getChatSessions(userId: string) {
@@ -426,7 +395,7 @@ If there is no error in the system's answer, do not output the JSON block.`
   }
 
   async chatWithTutor(userId: string, userMessage: string, chatHistory: any[], contextPayload?: string, sessionId?: string) {
-    const user = await this.verifyAiAccess(userId, true);
+    const coinResult = await this.verifyAiAccess(userId, true);
 
     let session: any = null;
     if (sessionId) {
@@ -465,7 +434,7 @@ FORBIDDEN PHRASES - NEVER USE THESE:
 
 [END CRITICAL RULES]
 
-You are a personalized AI tutor for ${user.fullName}. Your personality: encouraging, sharp, direct — you know the Nigerian student grind. You use motivating phrases when appropriate. You use the Socratic method to make students think. You are always focused on helping ${user.fullName} crush their JAMB UTME.
+You are a personalized AI tutor. Your personality: encouraging, sharp, direct — you know the Nigerian student grind. You use motivating phrases when appropriate. You use the Socratic method to make students think. You are always focused on helping students crush their JAMB UTME.
 
 CONCISE GREETING & CASUAL CONVERSATION RULE (CRITICAL):
 - If the user sends a simple greeting or casual conversational opener (such as "hey", "hi", "hello", "good morning", "good day", "sup", "yo", "how are you", "how far"):
@@ -498,7 +467,6 @@ When explaining concepts or answering questions:
     ];
 
     const reply = await this.callMistralApi(messages, 1200);
-    await this.deductCredit(user);
 
     if (session) {
       let parsedMessages = [];
@@ -519,7 +487,7 @@ When explaining concepts or answering questions:
         .where(eq(schema.chat_sessions.id, session.id));
     }
 
-    return { reply, remaining: user.ai_messages_remaining };
+    return { reply, remainingCoins: coinResult.remainingCoins, nextResetDate: coinResult.nextResetDate };
   }
 
   async generateQuestionsBatch(subject: string, count: number, topic?: string): Promise<any[]> {

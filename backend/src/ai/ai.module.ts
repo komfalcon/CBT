@@ -4,9 +4,12 @@ import { AiService } from './ai.service';
 import { QuestionsModule } from '../questions/questions.module';
 import { AiGeneratorTask } from './ai-generator.task';
 
+import { CoinsModule } from '../coins/coins.module';
+
 @Module({
   imports: [
-    QuestionsModule
+    QuestionsModule,
+    CoinsModule,
   ],
   controllers: [AiController],
   providers: [AiService, AiGeneratorTask],

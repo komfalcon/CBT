@@ -36,6 +36,9 @@ export const users = pgTable('users', {
   subscription_tier: text('subscription_tier').default('max'),
   ai_messages_remaining: integer('ai_messages_remaining').default(20),
   ai_messages_last_reset: timestamp('ai_messages_last_reset'),
+  auri_coins_balance: integer('auri_coins_balance').default(5000),
+  auri_coins_last_reset: timestamp('auri_coins_last_reset').defaultNow(),
+  auri_coins_monthly_allowance: integer('auri_coins_monthly_allowance').default(5000),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -204,6 +207,17 @@ export const ssoCodes = pgTable('sso_codes', {
   redirect_uri: text('redirect_uri').notNull(),
   scope: text('scope'),
   expires_at: timestamp('expires_at').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+export const auriCoinLedger = pgTable('auri_coin_ledger', {
+  id: text('id').primaryKey(),
+  user_id: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  app_id: text('app_id').notNull(),
+  feature_name: text('feature_name').notNull(),
+  amount: integer('amount').notNull(),
+  balance_after: integer('balance_after').notNull(),
+  metadata: jsonb('metadata'),
   createdAt: timestamp('created_at').defaultNow(),
 });
 

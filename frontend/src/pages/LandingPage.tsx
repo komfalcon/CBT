@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { AurikrexAppsSwitcher } from '../components/AurikrexAppsSwitcher';
+import { AuriCoinBadge } from '../components/AuriCoinBadge';
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -247,6 +248,7 @@ export default function LandingPage() {
             <a href="#pricing" className="transition-colors hover:text-white">Pricing</a>
           </nav>
           <div className="flex items-center gap-3 sm:gap-4">
+            <AuriCoinBadge />
             <AurikrexAppsSwitcher />
             <ThemeToggle />
             <Link to="/auth?mode=login" className="hidden text-xs sm:text-sm font-medium text-slate-300 transition-colors hover:text-white sm:inline-flex">Sign in</Link>

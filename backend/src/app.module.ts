@@ -23,6 +23,7 @@ import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { IntegrationModule } from './integration/integration.module';
 import { UploadModule } from './upload/upload.module';
 import { SsoModule } from './auth/sso/sso.module';
+import { CoinsModule } from './coins/coins.module';
 import { AppController } from './app.controller';
 import { HealthService } from './health.service';
 
@@ -48,6 +49,7 @@ import { HealthService } from './health.service';
     }),
     AuthModule,
     SsoModule,
+    CoinsModule,
     ExamModule,
     QuestionsModule,
     ResultsModule,
