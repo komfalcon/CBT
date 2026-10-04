@@ -32,22 +32,29 @@ export function ThemeProvider({
 
   useEffect(() => {
     const root = window.document.documentElement;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    root.classList.remove('light', 'dark');
+    const updateTheme = (effectiveTheme: 'dark' | 'light') => {
+      root.classList.remove('light', 'dark');
+      root.classList.add(effectiveTheme);
+      root.setAttribute('data-theme', effectiveTheme);
+
+      const metaThemeColor = document.getElementById('meta-theme-color');
+      if (metaThemeColor) {
+        metaThemeColor.setAttribute('content', effectiveTheme === 'dark' ? '#08101f' : '#f7f8fa');
+      }
+    };
 
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light';
-
-      root.classList.add(systemTheme);
-      root.setAttribute('data-theme', systemTheme);
-      return;
+      updateTheme(mediaQuery.matches ? 'dark' : 'light');
+      const handleChange = (e: MediaQueryListEvent) => {
+        updateTheme(e.matches ? 'dark' : 'light');
+      };
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    } else {
+      updateTheme(theme);
     }
-
-    root.classList.add(theme);
-    root.setAttribute('data-theme', theme);
   }, [theme]);
 
   const value = {

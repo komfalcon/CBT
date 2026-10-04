@@ -41,7 +41,7 @@ export default function Leaderboard() {
     }
     if (rank === 2) {
       return (
-        <div className="h-8 w-8 rounded-full bg-slate-300/20 text-slate-300 flex items-center justify-center font-black text-xs border border-slate-300/40 shadow-sm">
+        <div className="h-8 w-8 rounded-full bg-slate-400/20 text-slate-600 dark:text-slate-300 flex items-center justify-center font-black text-xs border border-slate-400/40 shadow-sm">
           🥈
         </div>
       );

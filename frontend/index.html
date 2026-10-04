@@ -4,7 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="keywords" content="JAMB, UTME, CBT, Nigeria, exam prep, practice test, JAMB simulator, JAMB questions" />
-    <meta name="theme-color" content="#08101f" />
+    <script>
+      (function() {
+        try {
+          var t = localStorage.getItem('aurikrex-ui-theme') || 'dark';
+          var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = t === 'system' ? (sysDark ? 'dark' : 'light') : t;
+          var root = document.documentElement;
+          root.classList.remove('light', 'dark');
+          root.classList.add(theme);
+          root.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
+    <meta name="theme-color" id="meta-theme-color" content="#08101f" />
     <link rel="shortcut icon" href="https://cbt.aurikrex.com/favicon.ico" />
     <link rel="icon" type="image/png" sizes="48x48" href="https://cbt.aurikrex.com/pwa-192x192.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="https://cbt.aurikrex.com/pwa-192x192.png" />

@@ -64,19 +64,15 @@ export class SsoController {
             try {
               userPayload = this.jwtService.verify(token, { secret, algorithms: ['HS256'] });
             } catch {
-              userPayload = this.jwtService.decode(token);
+              userPayload = null;
             }
           }
         } else {
           try {
             userPayload = this.jwtService.verify(token, { secret });
           } catch {
-            userPayload = this.jwtService.decode(token);
+            userPayload = null;
           }
-        }
-
-        if (!userPayload) {
-          userPayload = this.jwtService.decode(token);
         }
       }
     } catch {

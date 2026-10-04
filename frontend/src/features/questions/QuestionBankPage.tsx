@@ -82,7 +82,7 @@ export default function QuestionBankPage() {
   const [notification, setNotification] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
 
   // PDF Scanner State
-  const [pdfDirPath, setPdfDirPath] = useState('C:\\Users\\DELL\\Downloads\\PQ');
+  const [pdfDirPath, setPdfDirPath] = useState('');
   const [pdfScanProgress, setPdfScanProgress] = useState<{
     isScanning?: boolean;
     currentDirectory?: string;

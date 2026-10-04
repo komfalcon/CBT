@@ -83,22 +83,22 @@ async function bootstrap() {
     const isExempt = /^\/(admin|sys|health|system\/maintenance-status|sitemap\.xml|robots\.txt)/.test(cleanPath);
     const isAuthRoute = /^\/auth\/(login|refresh|logout|verify-otp|me)/.test(cleanPath);
 
-    // If request contains an admin JWT in cookie or Authorization header, bypass maintenance
+    // If request contains a verified admin JWT in cookie or Authorization header, bypass maintenance
     try {
       const cookieHeader = String(req.headers.cookie || '');
       const token = cookieHeader.split(';').map((p: string) => p.trim()).find((p: string) => p.startsWith('cbt_access_token='))?.slice(17)
         || String(req.headers.authorization || '').replace(/^Bearer\s+/i, '');
-      if (token && token.includes('.')) {
-        const parts = token.split('.');
-        if (parts.length === 3) {
-          const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
-          if (payload && (payload.role === 'admin' || payload.role === 'super_admin')) {
-            return next();
-          }
+      if (token) {
+        const jwt = require('jsonwebtoken');
+        const publicKeyB64 = process.env.JWT_PUBLIC_KEY || '';
+        const secretKey = publicKeyB64 ? Buffer.from(publicKeyB64, 'base64').toString('utf8') : (process.env.JWT_SECRET || 'aurikrex-sso-secret-key-2026');
+        const payload: any = jwt.verify(token, secretKey, { algorithms: publicKeyB64 ? ['RS256', 'HS256'] : ['HS256', 'RS256'] });
+        if (payload && (payload.role === 'admin' || payload.role === 'super_admin')) {
+          return next();
         }
       }
     } catch {
-      // ignore parse errors and continue
+      // Ignore invalid/unverified tokens and continue
     }
 
     if (!isExempt && !isAuthRoute) {

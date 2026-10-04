@@ -11,7 +11,24 @@ import { JwtService } from '@nestjs/jwt';
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: (origin, callback) => {
+      const allowed = process.env.ALLOWED_ORIGINS
+        ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim()).filter(Boolean)
+        : [
+            'http://localhost:5173',
+            'http://localhost:5174',
+            'https://cbt.aurikrex.com',
+            'https://www.cbt.aurikrex.com',
+            'https://cbt.aurikrex.tech',
+            'https://www.cbt.aurikrex.tech',
+          ];
+      if (!origin || allowed.includes(origin) || allowed.includes('*')) {
+        callback(null, true);
+      } else {
+        callback(new Error('WebSocket origin not allowed by CORS'));
+      }
+    },
+    credentials: true,
   },
 })
 export class ArenaGateway implements OnGatewayConnection, OnGatewayDisconnect {

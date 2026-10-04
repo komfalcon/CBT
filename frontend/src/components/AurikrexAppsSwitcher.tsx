@@ -72,18 +72,18 @@ export function AurikrexAppsSwitcher() {
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-text-secondary hover:text-text-primary bg-bg-secondary hover:bg-bg-card border border-border rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
         title="Aurikrex Ecosystem Apps"
       >
-        <Grid className="w-4 h-4 text-blue-400" />
+        <Grid className="w-4 h-4 text-primary" />
         <span className="hidden sm:inline">Aurikrex Apps</span>
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-72 rounded-xl bg-slate-900 border border-slate-700 shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="p-3 border-b border-slate-800 bg-slate-950/60">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Aurikrex Ecosystem</p>
-            <p className="text-[11px] text-slate-500 mt-0.5">One identity across all applications</p>
+        <div className="absolute right-0 mt-2 w-72 rounded-xl bg-bg-card border border-border shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="p-3 border-b border-border bg-bg-secondary/60">
+            <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Aurikrex Ecosystem</p>
+            <p className="text-[11px] text-text-secondary mt-0.5">One identity across all applications</p>
           </div>
 
           <div className="p-1.5 space-y-1">
@@ -93,25 +93,25 @@ export function AurikrexAppsSwitcher() {
                 href={getTargetUrl(app)}
                 target={app.id === 'cbt' ? '_self' : '_blank'}
                 rel="noopener noreferrer"
-                className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-slate-800/80 transition-colors group"
+                className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-bg-secondary transition-colors group"
                 onClick={() => setIsOpen(false)}
               >
-                <div className="p-2 rounded-lg bg-slate-800 group-hover:bg-slate-700 transition-colors shrink-0">
+                <div className="p-2 rounded-lg bg-bg-secondary group-hover:bg-bg-primary/20 transition-colors shrink-0">
                   {app.icon}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-slate-200 group-hover:text-white flex items-center gap-1">
+                    <span className="text-sm font-medium text-text-primary group-hover:text-primary flex items-center gap-1">
                       {app.name}
-                      <ExternalLink className="w-3 h-3 text-slate-500 group-hover:text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <ExternalLink className="w-3 h-3 text-text-muted group-hover:text-text-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                     </span>
                     {app.badge && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 font-medium">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary font-medium">
                         {app.badge}
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-400 truncate mt-0.5">{app.description}</p>
+                  <p className="text-xs text-text-secondary truncate mt-0.5">{app.description}</p>
                 </div>
               </a>
             ))}

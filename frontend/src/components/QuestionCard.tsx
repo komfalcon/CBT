@@ -43,7 +43,7 @@ export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
   // Render direct image URLs or data URIs if provided as diagram
   if (typeof svg === 'string' && (svg.startsWith('http://') || svg.startsWith('https://') || svg.startsWith('/uploads/') || svg.startsWith('data:image/'))) {
     return (
-      <div className="mt-4 flex max-w-3xl justify-center overflow-auto rounded-2xl border border-slate-700/60 bg-[#0b1329] p-4 shadow-inner">
+      <div className="mt-4 flex max-w-3xl justify-center overflow-auto rounded-2xl border border-border bg-bg-secondary/80 p-4 shadow-sm">
         <img src={svg} alt="Question Diagram" className="max-h-[360px] w-auto max-w-full rounded-xl object-contain" />
       </div>
     );
@@ -70,34 +70,8 @@ export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
     }
   }
 
-  // Dark Theme Contrast Fixes:
-  // 1. Text fill replacement: replace black/dark grey text fills with bright slate (#f8fafc)
-  sanitizedSvg = sanitizedSvg.replace(
-    /(<(?:text|tspan)[^>]*?\bfill=['"])(?:#000000|#000|#111111|#111|#333333|#333|#0f172a|#1e293b|black|darkgray|darkgrey)(['"])/gi,
-    '$1#f8fafc$2'
-  );
-  // Add fill='#f8fafc' to <text> or <tspan> tags missing fill attribute
-  sanitizedSvg = sanitizedSvg.replace(/<(text|tspan)(?![^>]*\bfill=)/gi, "<$1 fill='#f8fafc' ");
-
-  // 2. Vector/Line stroke replacement: replace black/dark grey strokes with bright sky blue (#38bdf8) or slate (#94a3b8)
-  sanitizedSvg = sanitizedSvg.replace(
-    /(<(?:path|line|polyline|polygon|rect|circle|ellipse)[^>]*?\bstroke=['"])(?:#000000|#000|#111111|#111|#0f172a|#1e293b|black)(['"])/gi,
-    '$1#38bdf8$2'
-  );
-
-  // 3. Replace fill='black' or fill='#000' on shapes with soft semi-transparent blue fill
-  sanitizedSvg = sanitizedSvg.replace(
-    /(<(?:rect|polygon|path|circle|ellipse)[^>]*?\bfill=['"])(?:#000000|#000|#111111|#111|black)(['"])/gi,
-    '$1rgba(56, 189, 248, 0.15)$2'
-  );
-
-  // 4. Style attribute dark color replacements
-  sanitizedSvg = sanitizedSvg.replace(/style=['"]([^'"]*)['"]/gi, (_match, styleContent) => {
-    let cleanStyle = styleContent
-      .replace(/fill:\s*(?:#000000|#000|#111111|#111|#0f172a|black);?/gi, 'fill: #f8fafc;')
-      .replace(/stroke:\s*(?:#000000|#000|#111111|#111|#0f172a|black);?/gi, 'stroke: #38bdf8;');
-    return `style='${cleanStyle}'`;
-  });
+  // Add fill='currentColor' to <text> or <tspan> tags missing fill attribute
+  sanitizedSvg = sanitizedSvg.replace(/<(text|tspan)(?![^>]*\bfill=)/gi, "<$1 fill='currentColor' ");
 
   // Clean raw LaTeX macros inside SVG <text> and <tspan> tags (which SVG cannot render natively)
   sanitizedSvg = sanitizedSvg.replace(/(<(?:text|tspan)[^>]*>)([\s\S]*?)(<\/(?:text|tspan)>)/gi, (_match, openTag, textContent, closeTag) => {
@@ -119,12 +93,12 @@ export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
   });
 
   return (
-    <div className="mt-4 flex max-w-3xl flex-col items-center justify-center overflow-auto rounded-2xl border border-slate-700/60 bg-[#0b1329] p-5 shadow-inner">
+    <div className="mt-4 flex max-w-3xl flex-col items-center justify-center overflow-auto rounded-2xl border border-border bg-bg-secondary/80 p-5 shadow-sm">
       {isTikz(svg) ? (
         <TikzRenderer code={svg} />
       ) : (
         <div
-          className="w-full flex justify-center [&>svg]:max-w-full [&>svg]:h-auto [&>svg_text]:fill-slate-100 [&>svg_text]:font-sans [&>svg_text]:font-semibold"
+          className="w-full flex justify-center [&>svg]:max-w-full [&>svg]:h-auto [&>svg_text]:fill-text-primary [&>svg_text]:font-sans [&>svg_text]:font-semibold"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(sanitizedSvg, {
               USE_PROFILES: { svg: true, svgFilters: true },

@@ -5,8 +5,8 @@ import axios from 'axios';
 export class UploadService {
   private readonly logger = new Logger(UploadService.name);
   private byteshipClient: any = null;
-  private readonly byteshipApiKey = process.env.BYTESHIP_API_KEY || 'bship_a22bcd5fa3d842849b5522f43cbc4dda';
-  private readonly sendbytesApiKey = process.env.SENDBYTES_API_KEY || 'sk_live_466460f875ccfdcdc5da4f82691d840512dcd88c';
+  private readonly byteshipApiKey = process.env.BYTESHIP_API_KEY || '';
+  private readonly sendbytesApiKey = process.env.SENDBYTES_API_KEY || '';
 
   constructor() {
     this.initByteshipClient();
