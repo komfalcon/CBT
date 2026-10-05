@@ -87,7 +87,10 @@ export class SsoController {
 
     if (!userPayload || !userId) {
       // Redirect user to CBT Frontend Auth page with return parameter to complete SSO login
-      const frontendUrl = (process.env.CBT_ORIGIN || process.env.FRONTEND_URL || 'https://cbt.aurikrex.com').replace(/\/+$/, '');
+      const host = (req.headers['x-forwarded-host'] as string) || req.headers.host;
+      const protocol = (req.headers['x-forwarded-proto'] as string) || req.protocol || 'https';
+      const reqOrigin = host ? `${protocol}://${host}` : null;
+      const frontendUrl = (process.env.CBT_ORIGIN || process.env.FRONTEND_URL || reqOrigin || 'https://cbt.pxxl.click').replace(/\/+$/, '');
       const loginReturnUrl = encodeURIComponent(req.originalUrl || req.url);
       return res.redirect(`${frontendUrl}/auth?returnUrl=${loginReturnUrl}`);
     }
