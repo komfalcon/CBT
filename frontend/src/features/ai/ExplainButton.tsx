@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { explainQuestion } from './api';
+import { explainQuestion, reportExplanation } from './api';
 import { Sparkles, Loader2, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
@@ -18,6 +18,11 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
   const [explanation, setExplanation] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [canReport, setCanReport] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [reportMessage, setReportMessage] = useState<string | null>(null);
+  const [isReporting, setIsReporting] = useState(false);
 
   const handleExplain = async () => {
     if (explanation) return;
@@ -26,6 +31,7 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
     try {
       const res = await explainQuestion({ questionId, questionText, correctAnswer, studentAnswer });
       setExplanation(res.explanation);
+      setCanReport(Boolean(res.reportable));
     } catch (err: any) {
       console.error(err);
       if (err.response?.status === 401 || err.response?.status === 403) {
@@ -35,6 +41,21 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
       }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleReport = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsReporting(true);
+    setReportMessage(null);
+    try {
+      const result = await reportExplanation(questionId, reportReason.trim() || undefined);
+      setReportMessage(result.reported ? 'Thank you. Your report was recorded for review.' : 'This explanation has already been reported from your account.');
+      setReportOpen(false);
+    } catch (err: any) {
+      setReportMessage(err.response?.data?.message || 'Could not submit your report. Please try again later.');
+    } finally {
+      setIsReporting(false);
     }
   };
 
@@ -86,6 +107,33 @@ export const ExplainButton: React.FC<ExplainButtonProps> = ({ questionId, questi
               {addLatexDelimiters(explanation)}
             </ReactMarkdown>
           </div>
+          {canReport && <div className="mt-3 border-t border-border pt-3">
+            {!reportOpen && !reportMessage && (
+              <button type="button" onClick={() => setReportOpen(true)} className="text-xs text-text-secondary hover:text-text-primary underline underline-offset-2">
+                Report an issue with this explanation
+              </button>
+            )}
+            {reportOpen && (
+              <form onSubmit={handleReport} className="space-y-2">
+                <label htmlFor={`explanation-report-${questionId}`} className="block text-xs text-text-secondary">Optional reason (max 500 characters)</label>
+                <textarea
+                  id={`explanation-report-${questionId}`}
+                  value={reportReason}
+                  onChange={(event) => setReportReason(event.target.value.slice(0, 500))}
+                  maxLength={500}
+                  rows={2}
+                  className="w-full rounded-md border border-border bg-bg-primary p-2 text-sm text-text-primary"
+                />
+                <div className="flex gap-2">
+                  <button type="submit" disabled={isReporting} className="rounded-md bg-ai-flag px-3 py-1.5 text-xs font-medium text-white disabled:opacity-50">
+                    {isReporting ? 'Sending…' : 'Send report'}
+                  </button>
+                  <button type="button" onClick={() => setReportOpen(false)} className="px-3 py-1.5 text-xs text-text-secondary">Cancel</button>
+                </div>
+              </form>
+            )}
+            {reportMessage && <p role="status" className="text-xs text-text-secondary">{reportMessage}</p>}
+          </div>}
         </div>
       )}
     </div>
