@@ -24,6 +24,7 @@ import { IntegrationModule } from './integration/integration.module';
 import { UploadModule } from './upload/upload.module';
 import { SsoModule } from './auth/sso/sso.module';
 import { CoinsModule } from './coins/coins.module';
+import { CentralModule } from './central/central.module';
 import { AppController } from './app.controller';
 import { HealthService } from './health.service';
 
@@ -50,6 +51,7 @@ import { HealthService } from './health.service';
     AuthModule,
     SsoModule,
     CoinsModule,
+    CentralModule,
     ExamModule,
     QuestionsModule,
     ResultsModule,

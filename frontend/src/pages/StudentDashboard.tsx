@@ -96,7 +96,20 @@ export default function StudentDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  const [copiedAkxId, setCopiedAkxId] = useState(false);
   const [showAccessKey, setShowAccessKey] = useState(false);
+
+  const handleCopyAurikrexId = async () => {
+    if (!student?.aurikrex_id) return;
+    try {
+      await navigator.clipboard.writeText(student.aurikrex_id);
+      setCopiedAkxId(true);
+      addToast({ type: 'success', title: 'Aurikrex ID Copied', message: `${student.aurikrex_id} copied to clipboard.` });
+      setTimeout(() => setCopiedAkxId(false), 2000);
+    } catch {
+      addToast({ type: 'error', title: 'Copy Failed', message: 'Failed to copy Aurikrex ID.' });
+    }
+  };
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [message, setMessage] = useState('');
@@ -668,8 +681,20 @@ export default function StudentDashboard() {
                     <div className="min-w-0 flex-1">
                       <h2 className="break-words font-display text-base font-bold leading-5 text-text-primary">{student?.fullName}</h2>
                       <p className="mt-1 break-all text-xs leading-5 text-text-secondary">{student?.email}</p>
-                      <div className="mt-3 flex flex-wrap gap-1.5">
+                      <div className="mt-3 flex flex-wrap items-center gap-1.5">
                         <Badge variant="info">Candidate</Badge>
+                        {student?.aurikrex_id && (
+                          <button
+                            type="button"
+                            onClick={handleCopyAurikrexId}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 text-[11px] font-mono font-bold text-primary transition-all hover:bg-primary/20 active:scale-95 shadow-sm"
+                            title="Click to copy your Aurikrex ID"
+                          >
+                            <Sparkles className="h-3 w-3 text-primary" />
+                            <span>{student.aurikrex_id}</span>
+                            {copiedAkxId ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3 opacity-70" />}
+                          </button>
+                        )}
                         <Badge variant="ai-flag">
                           Public Beta (Free Max Tier)
                         </Badge>

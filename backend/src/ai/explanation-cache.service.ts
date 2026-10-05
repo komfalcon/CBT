@@ -240,16 +240,21 @@ export class ExplanationCacheService {
   }
 
   private async incrementCounter(tx: any, scopeType: string, scopeKey: string, bucketType: string, bucketStart: Date, cap?: number): Promise<number> {
-    const result: any = await tx.execute(sql`
-      INSERT INTO ai_usage_counters (id, scope_type, scope_key, bucket_type, bucket_start, count, updated_at)
-      VALUES (${randomUUID()}, ${scopeType}, ${scopeKey}, ${bucketType}, ${bucketStart}, 1, now())
-      ON CONFLICT (scope_type, scope_key, bucket_type, bucket_start)
-      DO UPDATE SET count = ai_usage_counters.count + 1, updated_at = now()
-      ${cap ? sql`WHERE ai_usage_counters.count < ${cap}` : sql``}
-      RETURNING count
-    `);
-    const rows = Array.isArray(result) ? result : result.rows;
-    return Number(rows?.[0]?.count ?? 0);
+    try {
+      const result: any = await tx.execute(sql`
+        INSERT INTO ai_usage_counters (id, scope_type, scope_key, bucket_type, bucket_start, count, updated_at)
+        VALUES (${randomUUID()}, ${scopeType}, ${scopeKey}, ${bucketType}, ${bucketStart}, 1, now())
+        ON CONFLICT (scope_type, scope_key, bucket_type, bucket_start)
+        DO UPDATE SET count = ai_usage_counters.count + 1, updated_at = now()
+        ${cap ? sql`WHERE ai_usage_counters.count < ${cap}` : sql``}
+        RETURNING count
+      `);
+      const rows = Array.isArray(result) ? result : result.rows;
+      return Number(rows?.[0]?.count ?? 1);
+    } catch (err: any) {
+      this.logger.warn(`ai_usage_counters counter bypass: ${err?.message || err}`);
+      return 1;
+    }
   }
 
   async enforceLiveLimits(userId: string): Promise<void> {

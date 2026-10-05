@@ -6,6 +6,7 @@ import { eq, and, desc } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
 import { QuestionsService } from '../questions/questions.service';
 import { CoinsService } from '../coins/coins.service';
+import { CentralService } from '../central/central.service';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { ExplanationCacheService, GeneratedExplanation } from './explanation-cache.service';
@@ -21,6 +22,7 @@ export class AiService {
     @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
     private questionsService: QuestionsService,
     private coinsService: CoinsService,
+    private centralService: CentralService,
     private readonly config: ConfigService,
     private readonly explanationCache: ExplanationCacheService,
     private readonly keyManager: AiKeyManagerService,
@@ -307,8 +309,24 @@ export class AiService {
 
   private async verifyAiAccess(userId: string, isChat: boolean, limitsAlreadyApplied = false): Promise<any> {
     if (!limitsAlreadyApplied) await this.explanationCache.enforceLiveLimits(userId);
-    const featureName = isChat ? 'sabilytics_chat' : 'explain_question';
-    return this.coinsService.deductCoins(userId, 'cbt', featureName, 5);
+    const featureName = isChat ? 'ai_tutor_chat' : 'essay_grading';
+    const idempotencyKey = `cbt_${featureName}_${userId}_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    
+    try {
+      const centralResult = await this.centralService.deductCoins({
+        userId,
+        featureName,
+        idempotencyKey,
+      });
+      return {
+        remainingCoins: centralResult.remainingCoins ?? centralResult.balance,
+        nextResetDate: centralResult.nextResetDate,
+        idempotencyKey,
+      };
+    } catch (err: any) {
+      this.logger.warn(`Central coin deduction fallback to local coin balance: ${err?.message || err}`);
+      return this.coinsService.deductCoins(userId, 'cbt', featureName, 5);
+    }
   }
 
   async generateDiagram(questionId: string): Promise<string> {
