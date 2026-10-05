@@ -250,7 +250,7 @@ export default function LandingPage() {
           <div className="flex min-w-0 items-center gap-1 sm:gap-3 xl:gap-4">
             <AuriCoinBadge compact className="shrink-0 px-2 sm:px-2.5" />
             <AurikrexAppsSwitcher />
-            <ThemeToggle className="hidden min-h-11 min-w-11 xl:flex" />
+            <ThemeToggle className="hidden min-h-11 min-w-11 sm:flex" />
             <Link to="/auth?mode=login" className="hidden text-xs sm:text-sm font-medium text-slate-300 transition-colors hover:text-white xl:inline-flex">Sign in</Link>
             <Link to="/auth?mode=register" className="hidden min-h-11 items-center rounded-lg bg-white px-3 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.08)] transition hover:bg-blue-50 active:scale-[0.98] xl:inline-flex xl:px-4">Get started</Link>
             <button className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-2 text-slate-300 transition hover:bg-white/[0.06] hover:text-white xl:hidden" aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileMenuOpen} aria-controls="mobile-navigation" onClick={() => setMobileMenuOpen((open) => !open)}>{mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
@@ -264,7 +264,7 @@ export default function LandingPage() {
                 <X className="h-4 w-4" />Close
               </button>
             </div>
-            <div className="mb-2 flex min-h-11 items-center justify-between rounded-lg px-3 text-xs sm:text-sm font-medium text-slate-300">
+            <div className="mb-2 flex min-h-11 items-center justify-between rounded-lg px-3 text-xs sm:text-sm font-medium text-slate-300 sm:hidden">
               <span>Dark mode</span>
               <ThemeToggle className="min-h-11 min-w-11" />
             </div>
