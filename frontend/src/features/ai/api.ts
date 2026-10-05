@@ -6,9 +6,16 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export const explainQuestion = async (data: { questionId: string; questionText: string; correctAnswer: string; studentAnswer: string }) => {
+export type ExplanationResponse = { explanation: string; remainingCoins: number; nextResetDate: string; reportable?: boolean };
+
+export const explainQuestion = async (data: { questionId: string; questionText: string; correctAnswer: string; studentAnswer: string }): Promise<ExplanationResponse> => {
   const res = await api.post('/explain', data);
-  return res.data;
+  return res.data as ExplanationResponse;
+};
+
+export const reportExplanation = async (questionId: string, reason?: string) => {
+  const res = await api.post(`/explanations/${questionId}/report`, { reason });
+  return res.data as { reported: boolean; flagged: boolean; reportCount: number };
 };
 
 export const getChatSessions = async () => {

@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, UnauthorizedException, BadRequestException, Logger, NotFoundException, Inject } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException, BadRequestException, ForbiddenException, Logger, NotFoundException, Inject } from '@nestjs/common';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
@@ -7,24 +7,31 @@ import { randomUUID } from 'crypto';
 import { QuestionsService } from '../questions/questions.service';
 import { CoinsService } from '../coins/coins.service';
 import axios from 'axios';
+import { ConfigService } from '@nestjs/config';
+import { ExplanationCacheService, GeneratedExplanation } from './explanation-cache.service';
+import { AiKeyManagerService } from './ai-key-manager.service';
 
 @Injectable()
 export class AiService {
   private readonly logger = new Logger(AiService.name);
   private readonly apiUrl = 'https://seekai.cc/v1/chat/completions';
-  private readonly apiKey = process.env.SEEKAI_KEY || '';
   private model = 'deepseek-v4-pro';
 
   constructor(
     @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
     private questionsService: QuestionsService,
     private coinsService: CoinsService,
+    private readonly config: ConfigService,
+    private readonly explanationCache: ExplanationCacheService,
+    private readonly keyManager: AiKeyManagerService,
   ) { }
 
   private async fetchAvailableModels(): Promise<string[]> {
+    const apiKey = this.keyManager.getSeekAiKey();
+    if (!apiKey) return ['deepseek-chat', 'deepseek-v4-flash', 'grok-4.6'];
     try {
       const res = await axios.get('https://seekai.cc/v1/models', {
-        headers: { Authorization: `Bearer ${this.apiKey}` }
+        headers: { Authorization: `Bearer ${apiKey}` }
       });
       if (res.data?.data && res.data.data.length > 0) {
         // Exclude expensive/fake models and only select safe, affordable ones
@@ -47,55 +54,95 @@ export class AiService {
     return ['deepseek-chat', 'deepseek-v4-flash', 'grok-4.6'];
   }
 
-  private async callMistralApi(messages: any[], maxTokens: number = 1000): Promise<string> {
-    const keys = [
-      process.env.MISTRAL_CHAT_API_KEY,
-      process.env.MISTRAL_API_KEY_CHAT,
-      process.env.MISTRAL_API_KEY,
-      process.env.MISTRAL_API_KEY_2,
-      process.env.MISTRAL_API_KEY_3,
-      process.env.MISTRAL_API_KEY_4,
-    ].filter(Boolean) as string[];
-
-    for (const key of keys) {
+  private async callMistralApi(messages: any[], maxTokens: number = 1000, callType = 'follow_up', questionId?: string): Promise<string> {
+    try {
+      const completion = await this.callMistralApiWithMetadata(messages, maxTokens, callType, questionId);
+      return completion.text;
+    } catch {
+      // Preserve the existing provider fallback chain for non-cache personalized and system requests.
       try {
-        const response = await axios.post(
-          'https://api.mistral.ai/v1/chat/completions',
-          {
-            model: 'mistral-small-latest',
-            messages,
-            max_tokens: maxTokens,
-            temperature: 0.4,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${key}`,
-            },
-            timeout: 20000,
-          }
-        );
-
-        const text = response.data?.choices?.[0]?.message?.content;
-        if (text) {
-          this.logger.log('AI response generated successfully via Mistral API.');
-          return text;
-        }
-      } catch (err: any) {
-        this.logger.warn(`Mistral API attempt failed: ${err?.response?.data?.error?.message || err.message}`);
+        return await this.callDigitalOceanApi(messages, maxTokens, callType, questionId);
+      } catch {
+        throw new BadRequestException('AI help is resting, back tomorrow. Please try again tomorrow.');
       }
     }
-
-    // Fall back to secondary AI completion logic if Mistral calls fail
-    return this.callDigitalOceanApi(messages, maxTokens);
   }
 
-  private async callDigitalOceanApi(messages: any[], maxTokens: number = 500) {
+  private async callMistralApiWithMetadata(
+    messages: any[],
+    maxTokens: number,
+    callType: string,
+    questionId?: string,
+    audit = true,
+    transaction?: any,
+  ): Promise<GeneratedExplanation> {
+    let lastError: any;
+    for (const entry of this.keyManager.getMistralKeys()) {
+      const configuredRetries = Number(this.config.get<string>('AI_PROVIDER_RETRIES', '2'));
+      const retries = Number.isFinite(configuredRetries) ? Math.max(0, Math.min(2, Math.floor(configuredRetries))) : 2;
+      const baseDelayMs = positiveConfigInt(this.config.get<string>('AI_RETRY_BASE_MS'), 250);
+      for (let attempt = 0; attempt <= retries; attempt += 1) {
+        if (!(await this.keyManager.reserveDailyKeyUse(entry.alias, transaction))) break;
+        try {
+          const response = await axios.post(
+            'https://api.mistral.ai/v1/chat/completions',
+            { model: 'mistral-small-latest', messages, max_tokens: maxTokens, temperature: 0.3 },
+            { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${entry.key}` }, timeout: positiveConfigInt(this.config.get<string>('AI_PROVIDER_TIMEOUT_MS'), 20000) },
+          );
+          const text = response.data?.choices?.[0]?.message?.content;
+          if (!text) throw new Error('empty_provider_response');
+          const completion: GeneratedExplanation = {
+            text,
+            modelUsed: response.data?.model || 'mistral-small-latest',
+            keyAlias: entry.alias,
+            inputTokens: response.data?.usage?.prompt_tokens ?? null,
+            outputTokens: response.data?.usage?.completion_tokens ?? null,
+          };
+          if (audit) await this.logAiCall({ ...completion, questionId, callType, success: true });
+          return completion;
+        } catch (error: any) {
+          lastError = error;
+          const status = Number(error?.response?.status || 0);
+          const quota = status === 429 || /quota|rate.?limit|insufficient/i.test(String(error?.response?.data?.error?.code || error?.response?.data?.error?.message || ''));
+          this.logger.warn(`Mistral attempt via key alias ${entry.alias} failed (${status || 'provider_error'}).`);
+          if (audit) await this.logAiCall({ questionId, callType, modelUsed: 'mistral-small-latest', keyAlias: entry.alias, success: false, errorCode: status ? `http_${status}` : 'provider_error' });
+          if (quota || !isTransientProviderFailure(error) || attempt === retries) break;
+          await new Promise((resolve) => setTimeout(resolve, baseDelayMs * (2 ** attempt)));
+        }
+      }
+    }
+    if (!this.keyManager.getMistralKeys().length) throw new Error('no_mistral_keys_configured');
+    throw lastError || new Error('all_mistral_keys_exhausted');
+  }
+
+  private async logAiCall(params: {
+    questionId?: string;
+    callType: string;
+    modelUsed?: string;
+    keyAlias?: string;
+    inputTokens?: number | null;
+    outputTokens?: number | null;
+    success: boolean;
+    errorCode?: string;
+  }): Promise<void> {
+    try {
+      await this.db.insert(schema.aiCallLogs).values({
+        id: randomUUID(), questionId: params.questionId ?? null, callType: params.callType,
+        modelUsed: params.modelUsed ?? null, keyAlias: params.keyAlias ?? null,
+        inputTokens: params.inputTokens ?? null, outputTokens: params.outputTokens ?? null,
+        success: params.success, errorCode: params.errorCode ?? null, createdAt: new Date(),
+      });
+    } catch (error: any) {
+      this.logger.warn(`Could not write AI call log (${error?.code || error?.name || 'db_error'}).`);
+    }
+  }
+
+  private async callDigitalOceanApi(messages: any[], maxTokens: number = 500, callType = 'follow_up', questionId?: string, audit = true, transaction?: any) {
     // Option B: Cloudflare AI Gateway / Edge Proxy Worker Integration
     const cfProxyUrl = process.env.CLOUDFLARE_AI_PROXY_URL || process.env.CLOUDFLARE_AI_GATEWAY_URL;
     if (cfProxyUrl) {
       try {
-        this.logger.log(`Routing AI completion request to Cloudflare AI Proxy: ${cfProxyUrl}`);
+        this.logger.log('Routing AI completion request to configured Cloudflare AI Proxy.');
         const cfResponse = await axios.post(
           `${cfProxyUrl}/v1/chat/completions`,
           {
@@ -111,23 +158,24 @@ export class AiService {
 
         if (cfResponse.data?.choices?.[0]?.message?.content) {
           this.logger.log(`Cloudflare AI Proxy successfully served request via model: ${cfResponse.data.model || 'edge-fallback'}`);
+          if (audit) await this.logAiCall({ questionId, callType, modelUsed: cfResponse.data.model || 'edge-fallback', keyAlias: 'cloudflare-proxy', inputTokens: cfResponse.data?.usage?.prompt_tokens, outputTokens: cfResponse.data?.usage?.completion_tokens, success: true });
           return cfResponse.data.choices[0].message.content;
         }
       } catch (cfError: any) {
-        this.logger.warn(`Cloudflare AI Proxy call failed or timed out: ${cfError.message}. Falling back to secondary provider...`);
+        this.logger.warn(`Cloudflare AI Proxy call failed or timed out (${cfError?.response?.status || cfError?.code || 'provider_error'}). Falling back to secondary provider...`);
+        if (audit) await this.logAiCall({ questionId, callType, modelUsed: 'edge-fallback', keyAlias: 'cloudflare-proxy', success: false, errorCode: cfError?.response?.status ? `http_${cfError.response.status}` : 'provider_error' });
       }
     }
 
     // Direct Gemini 1 & 2 Fallback (Free Tier: 3,000 requests/day)
-    const geminiKey1 = process.env.GEMINI_API_KEY_1;
-    const geminiKey2 = process.env.GEMINI_API_KEY_2;
-    if (geminiKey1 || geminiKey2) {
-      const keys = [geminiKey1, geminiKey2].filter(Boolean) as string[];
+    const geminiKeys = this.keyManager.getGeminiKeys();
+    if (geminiKeys.length) {
       const systemMsg = messages.find((m) => m.role === 'system')?.content || '';
       const userMsg = messages.filter((m) => m.role !== 'system').map((m) => `${m.role}: ${m.content}`).join('\n');
       const prompt = systemMsg ? `${systemMsg}\n\n${userMsg}` : userMsg;
 
-      for (const key of keys) {
+      for (const { alias: keyAlias, key } of geminiKeys) {
+        if (!(await this.keyManager.reserveDailyKeyUse(keyAlias, transaction))) continue;
         try {
           const res = await axios.post(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`,
@@ -140,27 +188,28 @@ export class AiService {
           const text = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
           if (text) {
             this.logger.log('AI response generated successfully via Google Gemini.');
+            if (audit) await this.logAiCall({ questionId, callType, modelUsed: 'gemini-flash-latest', keyAlias, inputTokens: res.data?.usageMetadata?.promptTokenCount, outputTokens: res.data?.usageMetadata?.candidatesTokenCount, success: true });
             return text;
           }
         } catch (gErr: any) {
-          this.logger.warn(`Direct Gemini call failed: ${gErr.message}`);
+          this.logger.warn(`Direct Gemini call failed (${gErr?.response?.status || gErr?.code || 'provider_error'}).`);
+          if (audit) await this.logAiCall({ questionId, callType, modelUsed: 'gemini-flash-latest', keyAlias, success: false, errorCode: gErr?.response?.status ? `http_${gErr.response.status}` : 'provider_error' });
         }
       }
     }
 
     // Direct Cloudflare Workers AI 1 & 2 Fallback (Free Tier: 10,000 requests/day)
-    const cfAccountId = process.env.CF_ACCOUNT_ID || '';
-    const cfToken1 = process.env.CF_API_TOKEN_1;
-    const cfToken2 = process.env.CF_API_TOKEN_2;
+    const cfAccountId = this.keyManager.getCloudflareAccountId();
+    const workerKeys = this.keyManager.getCloudflareWorkerKeys();
 
-    if (cfAccountId && (cfToken1 || cfToken2)) {
-      const tokens = [cfToken1, cfToken2].filter(Boolean) as string[];
+    if (cfAccountId && workerKeys.length) {
       const systemMsg = messages.find((m) => m.role === 'system')?.content || '';
       const userMsg = messages.filter((m) => m.role !== 'system').map((m) => `${m.role}: ${m.content}`).join('\n');
       const prompt = systemMsg ? `${systemMsg}\n\n${userMsg}` : userMsg;
       const cfModels = ['@cf/meta/llama-3.1-8b-instruct', '@cf/meta/llama-3-8b-instruct', '@cf/mistral/mistral-7b-instruct-v0.1'];
 
-      for (const token of tokens) {
+      for (const { alias: keyAlias, key: token } of workerKeys) {
+        if (!(await this.keyManager.reserveDailyKeyUse(keyAlias, transaction))) continue;
         for (const cfModel of cfModels) {
           try {
             const cfRes = await axios.post(
@@ -171,16 +220,23 @@ export class AiService {
             const text = cfRes.data?.result?.response || cfRes.data?.result?.description;
             if (text) {
               this.logger.log(`AI response generated successfully via Cloudflare Workers AI (${cfModel}).`);
+              if (audit) await this.logAiCall({ questionId, callType, modelUsed: cfModel, keyAlias, success: true });
               return text;
             }
           } catch (cfErr: any) {
-            this.logger.warn(`Direct Cloudflare Workers AI call (${cfModel}) failed: ${cfErr.message}`);
+            this.logger.warn(`Direct Cloudflare Workers AI call (${cfModel}) failed (${cfErr?.response?.status || cfErr?.code || 'provider_error'}).`);
+            if (audit) await this.logAiCall({ questionId, callType, modelUsed: cfModel, keyAlias, success: false, errorCode: cfErr?.response?.status ? `http_${cfErr.response.status}` : 'provider_error' });
           }
         }
       }
     }
 
+    const seekAiKey = this.keyManager.getSeekAiKey();
     try {
+      if (!seekAiKey) throw new InternalServerErrorException('No configured AI provider key is available.');
+      if (!(await this.keyManager.reserveDailyKeyUse('seekai-primary', transaction))) {
+        throw new InternalServerErrorException('The configured AI provider key has reached its daily cap.');
+      }
       const response = await axios.post(
         this.apiUrl,
         {
@@ -192,12 +248,14 @@ export class AiService {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.apiKey}`,
+          Authorization: `Bearer ${seekAiKey}`,
           },
         }
       );
 
-      return response.data.choices[0].message.content;
+      const text = response.data.choices[0].message.content;
+      if (audit) await this.logAiCall({ questionId, callType, modelUsed: this.model, keyAlias: 'seekai-primary', inputTokens: response.data?.usage?.prompt_tokens, outputTokens: response.data?.usage?.completion_tokens, success: true });
+      return text;
     } catch (error: any) {
       const isRateLimit = error?.response?.status === 429 || error?.response?.data?.error?.message?.includes('rate limit') || error?.response?.data?.error?.message?.includes('1');
 
@@ -210,19 +268,22 @@ export class AiService {
         let lastError: any = error;
         for (const fallbackModel of fallbackModels) {
           if (fallbackModel === this.model) continue;
+          if (!(await this.keyManager.reserveDailyKeyUse('seekai-primary', transaction))) break;
           
           try {
             this.logger.log(`Attempting fallback with model: ${fallbackModel}`);
             const retryResponse = await axios.post(
               this.apiUrl,
               { model: fallbackModel, messages, max_tokens: maxTokens, temperature: 0.3 },
-              { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.apiKey}` } }
+              { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${seekAiKey}` } }
             );
             
             this.model = fallbackModel;
-            return retryResponse.data.choices[0].message.content;
+            const text = retryResponse.data.choices[0].message.content;
+            if (audit) await this.logAiCall({ questionId, callType, modelUsed: fallbackModel, keyAlias: 'seekai-primary', inputTokens: retryResponse.data?.usage?.prompt_tokens, outputTokens: retryResponse.data?.usage?.completion_tokens, success: true });
+            return text;
           } catch (retryError: any) {
-            this.logger.warn(`Fallback model ${fallbackModel} failed: ${retryError.message}`);
+            this.logger.warn(`Fallback model ${fallbackModel} failed (${retryError?.response?.status || retryError?.code || 'provider_error'}).`);
             lastError = retryError;
           }
         }
@@ -238,13 +299,14 @@ export class AiService {
         throw new InternalServerErrorException('Your AI API key has run out of funds. Please top up your SeekAI account or update the SEEKAI_KEY in your Render environment variables.');
       }
 
-      this.logger.error('Error calling AI API', error?.response?.data || error);
-      const upstreamError = error?.response?.data?.error?.message || 'The upstream AI provider is currently experiencing issues.';
-      throw new InternalServerErrorException(`Failed to generate AI response: ${upstreamError}`);
+      this.logger.error(`Error calling AI API (${error?.response?.status || error?.code || 'provider_error'}).`);
+      if (audit) await this.logAiCall({ questionId, callType, modelUsed: this.model, keyAlias: 'seekai-primary', success: false, errorCode: error?.response?.status ? `http_${error.response.status}` : 'provider_error' });
+      throw new InternalServerErrorException('Failed to generate AI response. The AI provider is temporarily unavailable.');
     }
   }
 
-  private async verifyAiAccess(userId: string, isChat: boolean): Promise<any> {
+  private async verifyAiAccess(userId: string, isChat: boolean, limitsAlreadyApplied = false): Promise<any> {
+    if (!limitsAlreadyApplied) await this.explanationCache.enforceLiveLimits(userId);
     const featureName = isChat ? 'sabilytics_chat' : 'explain_question';
     return this.coinsService.deductCoins(userId, 'cbt', featureName, 5);
   }
@@ -283,7 +345,8 @@ SVG Design Standards for Dark Theme:
       }
     ];
 
-    let svgContent = await this.callDigitalOceanApi(messages, 1500);
+    await this.explanationCache.enforceGlobalLiveLimit();
+    let svgContent = await this.callDigitalOceanApi(messages, 1500, 'diagram', questionId);
 
     // Clean up potentially wrapped markdown
     svgContent = svgContent.replace(/```xml/gi, '').replace(/```svg/gi, '').replace(/```/g, '').trim();
@@ -295,6 +358,9 @@ SVG Design Standards for Dark Theme:
   }
 
   async generateExplanation(userId: string, questionText: string, correctAnswer: string, studentAnswer: string, questionId?: string) {
+    if (this.explanationCache.isEnabled() && questionId) {
+      return this.generateCachedStandardExplanation(userId, questionId);
+    }
     const coinResult = await this.verifyAiAccess(userId, false);
 
     const messages = [
@@ -316,7 +382,7 @@ If there is no error in the system's answer, do not output the JSON block.`
       }
     ];
 
-    let explanation = await this.callMistralApi(messages, 1000);
+    let explanation = await this.callMistralApi(messages, 1000, 'explanation', questionId);
 
     // Check for vetted errors
     if (questionId && explanation.includes('```json')) {
@@ -337,6 +403,68 @@ If there is no error in the system's answer, do not output the JSON block.`
     }
 
     return { explanation, remainingCoins: coinResult.remainingCoins, nextResetDate: coinResult.nextResetDate };
+  }
+
+  private async generateCachedStandardExplanation(userId: string, questionId: string) {
+    const [question] = await this.db.select().from(schema.questions)
+      .where(eq(schema.questions.id, questionId)).limit(1);
+    if (!question) throw new NotFoundException('Question not found');
+    const [user] = await this.db.select({ id: schema.users.id, role: schema.users.role })
+      .from(schema.users).where(eq(schema.users.id, userId)).limit(1);
+    if (!user) throw new UnauthorizedException('User not found');
+    if (user.role === 'student' && question.status !== 'published') {
+      throw new ForbiddenException('Only published questions are visible to students.');
+    }
+
+    const wallet = await this.coinsService.getCoinsBalance(userId);
+    let coinResult: any = null;
+    const result = await this.explanationCache.explain({
+      userId,
+      question,
+      remaining: null,
+      generate: async (messages, transaction) => {
+        coinResult = await this.verifyAiAccess(userId, false, true);
+        let completion: GeneratedExplanation;
+        try {
+          completion = await this.callMistralApiWithMetadata(messages, 500, 'explanation', questionId, false, transaction);
+        } catch {
+          const fallbackText = await this.callDigitalOceanApi(messages, 500, 'explanation', questionId, false, transaction);
+          completion = { text: fallbackText, modelUsed: 'configured-fallback-provider', keyAlias: 'fallback-provider-chain' };
+        }
+        return completion;
+      },
+    });
+    return {
+      explanation: result.explanation,
+      remainingCoins: coinResult?.remainingCoins ?? wallet.balance,
+      nextResetDate: coinResult?.nextResetDate ?? wallet.nextResetDate,
+      reportable: result.reportable ?? false,
+    };
+  }
+
+  async reportExplanation(userId: string, questionId: string, reason?: string) {
+    const [user] = await this.db.select({ role: schema.users.role }).from(schema.users).where(eq(schema.users.id, userId)).limit(1);
+    if (!user) throw new UnauthorizedException('User not found');
+    const [question] = await this.db.select({ status: schema.questions.status }).from(schema.questions).where(eq(schema.questions.id, questionId)).limit(1);
+    if (!question) throw new NotFoundException('Question not found');
+    if (user.role === 'student' && question.status !== 'published') {
+      throw new ForbiddenException('Only published questions are visible to students.');
+    }
+    return this.explanationCache.report({ userId, questionId, reason });
+  }
+
+  async prewarmExplanation(questionId: string) {
+    const [question] = await this.db.select().from(schema.questions)
+      .where(eq(schema.questions.id, questionId)).limit(1);
+    if (!question) throw new NotFoundException('Question not found');
+    return this.explanationCache.prewarm(question, async (messages, transaction) => {
+      try {
+        return await this.callMistralApiWithMetadata(messages, 500, 'prewarm', questionId, false, transaction);
+      } catch {
+        const text = await this.callDigitalOceanApi(messages, 500, 'prewarm', questionId, false, transaction);
+        return { text, modelUsed: 'configured-fallback-provider', keyAlias: 'fallback-provider-chain' };
+      }
+    });
   }
 
   async getChatSessions(userId: string) {
@@ -466,7 +594,7 @@ When explaining concepts or answering questions:
       }
     ];
 
-    const reply = await this.callMistralApi(messages, 1200);
+    const reply = await this.callMistralApi(messages, 1200, 'follow_up');
 
     if (session) {
       let parsedMessages = [];
@@ -515,7 +643,8 @@ Focus on variety to prevent duplicates.`
     ];
 
     try {
-      const rawResponse = await this.callDigitalOceanApi(messages, 4000); // Increased for batch generation
+      await this.explanationCache.enforceGlobalLiveLimit();
+      const rawResponse = await this.callDigitalOceanApi(messages, 4000, 'question_generation'); // Increased for batch generation
       let jsonStr = rawResponse.trim();
 
       // Robustly extract the JSON array from the response
@@ -536,3 +665,13 @@ Focus on variety to prevent duplicates.`
   }
 }
 
+function positiveConfigInt(value: string | undefined, fallback: number): number {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
+}
+
+function isTransientProviderFailure(error: any): boolean {
+  const status = Number(error?.response?.status || 0);
+  const code = String(error?.code || '').toUpperCase();
+  return status === 408 || status === 425 || status >= 500 || ['ECONNRESET', 'ETIMEDOUT', 'ECONNABORTED', 'EAI_AGAIN'].includes(code);
+}

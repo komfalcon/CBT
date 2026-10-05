@@ -22,6 +22,15 @@ export class AiController {
     );
   }
 
+  @Post('explanations/:questionId/report')
+  async reportExplanation(
+    @Request() req: any,
+    @Param('questionId') questionId: string,
+    @Body() body: { reason?: string },
+  ) {
+    return this.aiService.reportExplanation(req.user.sub, questionId, body.reason);
+  }
+
   @Get('sessions')
   async getChatSessions(@Request() req: any) {
     return this.aiService.getChatSessions(req.user.sub);

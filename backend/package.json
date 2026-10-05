@@ -6,7 +6,10 @@
         "start": "node dist/main.js",
         "start:dev": "ts-node-dev --respawn --transpile-only src/main.ts",
         "build": "tsc -p tsconfig.json",
-        "test": "npm run build && jest --passWithNoTests --runTestsByPath tests/auth.service.spec.js tests/google-auth.service.spec.js tests/questions.service.spec.js tests/maintenance.spec.js"
+        "test": "npm run build && jest --passWithNoTests --runTestsByPath tests/auth.service.spec.js tests/google-auth.service.spec.js tests/questions.service.spec.js tests/maintenance.spec.js tests/ai-explanation-cache.spec.js",
+        "ai:cache:migrate": "tsx scripts/migrate-explanation-cache.ts",
+        "ai:cache:prewarm": "tsx scripts/prewarm-explanations.ts",
+        "ai:cache:report": "tsx scripts/report-explanations.ts"
     },
     "dependencies": {
         "@byteship/js": "^0.1.5",

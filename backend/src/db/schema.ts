@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { pgTable, text, integer, real, boolean, timestamp, jsonb } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, real, boolean, timestamp, jsonb, index, uniqueIndex } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: text('id').primaryKey(),
@@ -221,3 +221,89 @@ export const auriCoinLedger = pgTable('auri_coin_ledger', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
+export const questionExplanations = pgTable('question_explanations', {
+  id: text('id').primaryKey(),
+  questionId: text('question_id').notNull(),
+  contentHash: text('content_hash').notNull(),
+  promptVersion: text('prompt_version').notNull(),
+  explanationText: text('explanation_text').notNull(),
+  modelUsed: text('model_used').notNull(),
+  status: text('status').notNull().default('active'),
+  reportCount: integer('report_count').notNull().default(0),
+  hitCount: integer('hit_count').notNull().default(0),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+  lastServedAt: timestamp('last_served_at'),
+}, (table) => ({
+  questionPromptUnique: uniqueIndex('question_explanations_question_prompt_uq').on(table.questionId, table.promptVersion),
+  statusIdx: index('question_explanations_status_idx').on(table.status),
+}));
+
+export const questionExplanationHistory = pgTable('question_explanation_history', {
+  id: text('id').primaryKey(),
+  explanationId: text('explanation_id').notNull(),
+  questionId: text('question_id').notNull(),
+  promptVersion: text('prompt_version').notNull(),
+  contentHash: text('content_hash').notNull(),
+  explanationText: text('explanation_text').notNull(),
+  modelUsed: text('model_used').notNull(),
+  status: text('status').notNull(),
+  archivedAt: timestamp('archived_at').defaultNow(),
+}, (table) => ({
+  questionPromptIdx: index('question_explanation_history_question_prompt_idx').on(table.questionId, table.promptVersion),
+  archivedIdx: index('question_explanation_history_archived_idx').on(table.archivedAt),
+}));
+
+export const questionExplanationReports = pgTable('question_explanation_reports', {
+  id: text('id').primaryKey(),
+  explanationId: text('explanation_id').notNull(),
+  questionId: text('question_id').notNull(),
+  promptVersion: text('prompt_version').notNull(),
+  contentHash: text('content_hash').notNull(),
+  reporterHash: text('reporter_hash').notNull(),
+  reason: text('reason'),
+  createdAt: timestamp('created_at').defaultNow(),
+}, (table) => ({
+  explanationIdx: index('question_explanation_reports_explanation_idx').on(table.explanationId),
+  reporterUnique: uniqueIndex('question_explanation_reports_reporter_uq').on(table.explanationId, table.reporterHash),
+  createdIdx: index('question_explanation_reports_created_idx').on(table.createdAt),
+}));
+
+export const questionExplanationEvents = pgTable('question_explanation_events', {
+  id: text('id').primaryKey(),
+  questionId: text('question_id').notNull(),
+  eventType: text('event_type').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+}, (table) => ({
+  createdTypeIdx: index('question_explanation_events_created_type_idx').on(table.createdAt, table.eventType),
+  questionIdx: index('question_explanation_events_question_idx').on(table.questionId),
+}));
+
+export const aiCallLogs = pgTable('ai_call_logs', {
+  id: text('id').primaryKey(),
+  questionId: text('question_id'),
+  callType: text('call_type').notNull(),
+  modelUsed: text('model_used'),
+  keyAlias: text('key_alias'),
+  inputTokens: integer('input_tokens'),
+  outputTokens: integer('output_tokens'),
+  success: boolean('success').notNull(),
+  errorCode: text('error_code'),
+  createdAt: timestamp('created_at').defaultNow(),
+}, (table) => ({
+  createdIdx: index('ai_call_logs_created_idx').on(table.createdAt),
+  callTypeIdx: index('ai_call_logs_call_type_idx').on(table.callType),
+}));
+
+export const aiUsageCounters = pgTable('ai_usage_counters', {
+  id: text('id').primaryKey(),
+  scopeType: text('scope_type').notNull(),
+  scopeKey: text('scope_key').notNull(),
+  bucketType: text('bucket_type').notNull(),
+  bucketStart: timestamp('bucket_start').notNull(),
+  count: integer('count').notNull().default(0),
+  updatedAt: timestamp('updated_at').defaultNow(),
+}, (table) => ({
+  scopeBucketUnique: uniqueIndex('ai_usage_counters_scope_bucket_uq').on(table.scopeType, table.scopeKey, table.bucketType, table.bucketStart),
+  bucketIdx: index('ai_usage_counters_bucket_idx').on(table.bucketType, table.bucketStart),
+}));
