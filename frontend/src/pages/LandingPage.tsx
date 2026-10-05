@@ -60,7 +60,7 @@ function BrandMark({ compact = false }: { compact?: boolean }) {
     <div className="flex items-center gap-2.5 sm:gap-3">
       <img src="/favicon.svg" alt="" className="h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-xl object-cover shadow-[0_8px_20px_rgba(74,91,255,0.25)]" />
       {!compact && (
-        <div className="flex flex-col">
+        <div className="hidden flex-col xl:flex">
           <span className="brand-name font-display text-[13px] sm:text-[15px] font-semibold leading-tight tracking-[-0.02em] text-white">Aurikrex Exam Arena</span>
           <span className="brand-kicker mt-0.5 text-[9px] sm:text-[11px] font-medium uppercase leading-none tracking-[0.16em] text-blue-300">by Aurikrex</span>
         </div>
@@ -239,24 +239,45 @@ export default function LandingPage() {
   return (
     <div className="landing-page landing-shell min-h-screen w-full max-w-full overflow-x-hidden bg-bg-primary font-body text-text-primary selection:bg-blue-500/30 selection:text-white">
       <header className="site-header fixed top-0 inset-x-0 z-50 border-b border-white/[0.08] bg-[#0a1020]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 sm:h-[76px] max-w-7xl items-center justify-between px-4 sm:px-6">
-          <Link to="/" aria-label="Aurikrex Exam Arena home"><BrandMark /></Link>
-          <nav className="hidden items-center gap-8 text-xs sm:text-sm font-medium text-slate-400 md:flex">
+        <div className="mx-auto flex h-16 sm:h-[76px] max-w-7xl items-center justify-between px-3 sm:px-6">
+          <Link to="/" aria-label="Aurikrex Exam Arena home" className="shrink-0"><BrandMark /></Link>
+          <nav className="hidden items-center gap-8 text-xs sm:text-sm font-medium text-slate-400 xl:flex">
             <a href="#features" className="transition-colors hover:text-white">Features</a>
             <a href="#subjects" className="transition-colors hover:text-white">Subjects</a>
             <a href="#how-it-works" className="transition-colors hover:text-white">How it works</a>
             <a href="#pricing" className="transition-colors hover:text-white">Pricing</a>
           </nav>
-          <div className="flex items-center gap-3 sm:gap-4">
-            <AuriCoinBadge />
+          <div className="flex min-w-0 items-center gap-1 sm:gap-3 xl:gap-4">
+            <AuriCoinBadge compact className="shrink-0 px-2 sm:px-2.5" />
             <AurikrexAppsSwitcher />
-            <ThemeToggle />
-            <Link to="/auth?mode=login" className="hidden text-xs sm:text-sm font-medium text-slate-300 transition-colors hover:text-white sm:inline-flex">Sign in</Link>
-            <Link to="/auth?mode=register" className="hidden min-h-11 items-center rounded-lg bg-white px-3 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.08)] transition hover:bg-blue-50 active:scale-[0.98] sm:inline-flex sm:px-4">Get started</Link>
-            <button className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-2 text-slate-300 transition hover:bg-white/[0.06] hover:text-white md:hidden" aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileMenuOpen} aria-controls="mobile-navigation" onClick={() => setMobileMenuOpen((open) => !open)}>{mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
+            <ThemeToggle className="hidden min-h-11 min-w-11 xl:flex" />
+            <Link to="/auth?mode=login" className="hidden text-xs sm:text-sm font-medium text-slate-300 transition-colors hover:text-white xl:inline-flex">Sign in</Link>
+            <Link to="/auth?mode=register" className="hidden min-h-11 items-center rounded-lg bg-white px-3 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.08)] transition hover:bg-blue-50 active:scale-[0.98] xl:inline-flex xl:px-4">Get started</Link>
+            <button className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-2 text-slate-300 transition hover:bg-white/[0.06] hover:text-white xl:hidden" aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileMenuOpen} aria-controls="mobile-navigation" onClick={() => setMobileMenuOpen((open) => !open)}>{mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
           </div>
         </div>
-        {mobileMenuOpen && <div id="mobile-navigation" className="mobile-nav border-t border-white/[0.07] bg-[#0a1020] px-4 py-4 sm:px-6 md:hidden"><div className="mb-3 flex items-center justify-between"><span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Menu</span><button type="button" className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-xs sm:text-sm font-semibold text-slate-300 transition hover:bg-white/[0.06] hover:text-white" onClick={() => setMobileMenuOpen(false)}><X className="h-4 w-4" />Close</button></div><nav className="grid gap-1 text-xs sm:text-sm font-medium text-slate-300" aria-label="Mobile navigation"><a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a><a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#subjects" onClick={() => setMobileMenuOpen(false)}>Subjects</a><a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>How it works</a><a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a><Link className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" to="/auth?mode=login" onClick={() => setMobileMenuOpen(false)}>Sign in</Link><Link className="mt-1 flex min-h-11 items-center justify-center rounded-lg bg-blue-600 px-3 font-semibold text-white transition hover:bg-blue-500 text-xs sm:text-sm" to="/auth?mode=register" onClick={() => setMobileMenuOpen(false)}>Get started</Link></nav></div>}
+        {mobileMenuOpen && (
+          <div id="mobile-navigation" className="mobile-nav border-t border-white/[0.07] bg-[#0a1020] px-4 py-4 sm:px-6 xl:hidden">
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Menu</span>
+              <button type="button" className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-xs sm:text-sm font-semibold text-slate-300 transition hover:bg-white/[0.06] hover:text-white" onClick={() => setMobileMenuOpen(false)}>
+                <X className="h-4 w-4" />Close
+              </button>
+            </div>
+            <div className="mb-2 flex min-h-11 items-center justify-between rounded-lg px-3 text-xs sm:text-sm font-medium text-slate-300">
+              <span>Dark mode</span>
+              <ThemeToggle className="min-h-11 min-w-11" />
+            </div>
+            <nav className="grid gap-1 text-xs sm:text-sm font-medium text-slate-300" aria-label="Mobile navigation">
+              <a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a>
+              <a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#subjects" onClick={() => setMobileMenuOpen(false)}>Subjects</a>
+              <a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>How it works</a>
+              <a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
+              <Link className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" to="/auth?mode=login" onClick={() => setMobileMenuOpen(false)}>Sign in</Link>
+              <Link className="mt-1 flex min-h-11 items-center justify-center rounded-lg bg-blue-600 px-3 font-semibold text-white transition hover:bg-blue-500 text-xs sm:text-sm" to="/auth?mode=register" onClick={() => setMobileMenuOpen(false)}>Get started</Link>
+            </nav>
+          </div>
+        )}
       </header>
 
       <main className="pt-16 sm:pt-[76px]">

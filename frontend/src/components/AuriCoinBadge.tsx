@@ -9,7 +9,7 @@ export interface CoinBalanceData {
   nextResetDate: string;
 }
 
-export function AuriCoinBadge({ className = '' }: { className?: string }) {
+export function AuriCoinBadge({ className = '', compact = false }: { className?: string; compact?: boolean }) {
   const [balanceData, setBalanceData] = useState<CoinBalanceData | null>(null);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -90,10 +90,11 @@ export function AuriCoinBadge({ className = '' }: { className?: string }) {
             : 'bg-amber-500/10 text-amber-300 border-amber-500/30 hover:bg-amber-500/20'
         } ${className}`}
         title="Auri Coin Ecosystem AI Balance"
+        aria-label={`Auri Coin balance: ${balance.toLocaleString()} coins`}
       >
-        <span className="text-sm">🪙</span>
+        <span className="text-sm" aria-hidden="true">🪙</span>
         <span className="tabular-nums">{loading && !balanceData ? '...' : balance.toLocaleString()}</span>
-        <span className="text-[10px] opacity-75 font-normal">Coins</span>
+        <span className={`${compact ? 'hidden xl:inline' : ''} text-[10px] opacity-75 font-normal`}>Coins</span>
       </button>
 
       {isOpen && (
