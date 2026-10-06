@@ -312,9 +312,15 @@ export class AiService {
     const featureName = isChat ? 'ai_tutor_chat' : 'essay_grading';
     const idempotencyKey = `cbt_${featureName}_${userId}_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     
+    let targetUserId = userId;
+    try {
+      const [u] = await this.db.select({ aurikrex_id: schema.users.aurikrex_id }).from(schema.users).where(eq(schema.users.id, userId)).limit(1);
+      if (u?.aurikrex_id) targetUserId = u.aurikrex_id;
+    } catch {}
+
     try {
       const centralResult = await this.centralService.deductCoins({
-        userId,
+        userId: targetUserId,
         featureName,
         idempotencyKey,
       });
