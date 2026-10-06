@@ -10,7 +10,21 @@ export interface CoinBalanceData {
 }
 
 export function AuriCoinBadge({ className = '', compact = false }: { className?: string; compact?: boolean }) {
-  const [balanceData, setBalanceData] = useState<CoinBalanceData | null>(null);
+  const [balanceData, setBalanceData] = useState<CoinBalanceData | null>(() => {
+    if (typeof window === 'undefined') return null;
+    const cachedBalance = localStorage.getItem('aurikrex:last-coin-balance');
+    const cachedReset = localStorage.getItem('aurikrex:last-coin-reset-date');
+    if (cachedBalance !== null && !isNaN(Number(cachedBalance))) {
+      return {
+        balance: Number(cachedBalance),
+        allowance: 5000,
+        costPerRequest: 5,
+        lastResetDate: new Date().toISOString(),
+        nextResetDate: cachedReset || new Date(Date.now() + 30 * 86400000).toISOString(),
+      };
+    }
+    return null;
+  });
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -34,15 +48,31 @@ export function AuriCoinBadge({ className = '', compact = false }: { className?:
     try {
       setLoading(true);
       const apiBase = getSanitizedCbtBackendUrl();
-      const res = await fetch(`${apiBase}/api/v1/coins/balance`, {
+      const centralUrl = import.meta.env.VITE_CENTRAL_URL || 'https://aurikrex-central.pxxl.click';
+
+      let res = await fetch(`${apiBase}/api/v1/coins/balance`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      });
-      if (res.ok) {
+      }).catch(() => null);
+
+      if (!res || !res.ok) {
+        res = await fetch(`${centralUrl}/api/v1/coins/balance`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }).catch(() => null);
+      }
+
+      if (res && res.ok) {
         const data = await res.json();
         setBalanceData(data);
+        if (typeof window !== 'undefined' && typeof data.balance === 'number') {
+          localStorage.setItem('aurikrex:last-coin-balance', String(data.balance));
+          if (data.nextResetDate) localStorage.setItem('aurikrex:last-coin-reset-date', data.nextResetDate);
+        }
       }
     } catch (err) {
       console.warn('Failed to fetch Auri Coin balance', err);
@@ -56,10 +86,16 @@ export function AuriCoinBadge({ className = '', compact = false }: { className?:
     const handleCoinsUpdated = (event: Event) => {
       const customEv = event as CustomEvent<{ remainingCoins?: number; nextResetDate?: string }>;
       if (typeof customEv.detail?.remainingCoins === 'number') {
+        const newCoins = customEv.detail.remainingCoins;
+        const newReset = customEv.detail.nextResetDate;
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('aurikrex:last-coin-balance', String(newCoins));
+          if (newReset) localStorage.setItem('aurikrex:last-coin-reset-date', newReset);
+        }
         setBalanceData((prev) =>
           prev
-            ? { ...prev, balance: customEv.detail.remainingCoins!, nextResetDate: customEv.detail.nextResetDate || prev.nextResetDate }
-            : { balance: customEv.detail.remainingCoins!, allowance: 5000, costPerRequest: 5, lastResetDate: new Date().toISOString(), nextResetDate: customEv.detail.nextResetDate || new Date().toISOString() }
+            ? { ...prev, balance: newCoins, nextResetDate: newReset || prev.nextResetDate }
+            : { balance: newCoins, allowance: 5000, costPerRequest: 5, lastResetDate: new Date().toISOString(), nextResetDate: newReset || new Date().toISOString() }
         );
       } else {
         fetchBalance();
