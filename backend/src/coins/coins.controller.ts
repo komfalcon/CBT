@@ -20,7 +20,7 @@ export class CoinsAuthGuard extends AuthGuard('jwt') {
   }
 }
 
-@Controller('coins')
+@Controller(['coins', 'api/v1/coins'])
 @UseGuards(CoinsAuthGuard)
 export class CoinsController {
   constructor(private readonly coinsService: CoinsService) {}
