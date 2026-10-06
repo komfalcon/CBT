@@ -19,10 +19,10 @@ export class CentralService {
 
   private get s2sSecret(): string {
     return (
-      this.configService.get<string>('AURIKREX_CENTRAL_S2S_SECRET') ||
-      'aurikrex-s2s-master-key-2026'
+      this.configService.get<string>('AURIKREX_CENTRAL_S2S_SECRET') || ''
     );
   }
+
 
   /**
    * Fetch and cache Public Key from Central JWKS endpoint
