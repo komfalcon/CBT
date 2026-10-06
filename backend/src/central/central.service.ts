@@ -71,6 +71,28 @@ export class CentralService {
   }
 
   /**
+   * Server-to-Server AuriCoin Balance Check
+   */
+  public async getBalance(userIdOrAurikrexId: string) {
+    try {
+      const response = await axios.get(
+        `${this.centralUrl}/api/v1/coins/balance?userId=${encodeURIComponent(userIdOrAurikrexId)}`,
+        {
+          headers: {
+            'X-Central-Api-Key': this.s2sSecret,
+            'Content-Type': 'application/json',
+          },
+          timeout: 5000,
+        },
+      );
+      return response.data;
+    } catch (err: any) {
+      this.logger.warn(`Failed to fetch AuriCoin balance for user ${userIdOrAurikrexId}: ${err?.message}`);
+      return null;
+    }
+  }
+
+  /**
    * Server-to-Server AuriCoin Deduction
    * Prices are set strictly server-side per feature in Central Engine.
    */

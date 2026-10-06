@@ -314,8 +314,13 @@ export class AiService {
     
     let targetUserId = userId;
     try {
-      const [u] = await this.db.select({ aurikrex_id: schema.users.aurikrex_id }).from(schema.users).where(eq(schema.users.id, userId)).limit(1);
+      const [u] = await this.db
+        .select({ aurikrex_id: schema.users.aurikrex_id, email: schema.users.email })
+        .from(schema.users)
+        .where(eq(schema.users.id, userId))
+        .limit(1);
       if (u?.aurikrex_id) targetUserId = u.aurikrex_id;
+      else if (u?.email) targetUserId = u.email;
     } catch {}
 
     try {
@@ -324,8 +329,19 @@ export class AiService {
         featureName,
         idempotencyKey,
       });
+
+      const remainingCoins = centralResult.remainingCoins ?? centralResult.balance;
+      if (typeof remainingCoins === 'number') {
+        try {
+          await this.db
+            .update(schema.users)
+            .set({ auri_coins_balance: remainingCoins })
+            .where(eq(schema.users.id, userId));
+        } catch {}
+      }
+
       return {
-        remainingCoins: centralResult.remainingCoins ?? centralResult.balance,
+        remainingCoins,
         nextResetDate: centralResult.nextResetDate,
         idempotencyKey,
       };
