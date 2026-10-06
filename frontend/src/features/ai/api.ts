@@ -10,7 +10,15 @@ export type ExplanationResponse = { explanation: string; remainingCoins: number;
 
 export const explainQuestion = async (data: { questionId: string; questionText: string; correctAnswer: string; studentAnswer: string }): Promise<ExplanationResponse> => {
   const res = await api.post('/explain', data);
-  return res.data as ExplanationResponse;
+  const result = res.data as ExplanationResponse;
+  if (typeof result?.remainingCoins === 'number') {
+    window.dispatchEvent(
+      new CustomEvent('aurikrex:coins-updated', {
+        detail: { remainingCoins: result.remainingCoins, nextResetDate: result.nextResetDate },
+      })
+    );
+  }
+  return result;
 };
 
 export const reportExplanation = async (questionId: string, reason?: string) => {
@@ -40,7 +48,15 @@ export const deleteChatSession = async (sessionId: string) => {
 
 export const chatWithTutor = async (data: { message: string; history: any[]; contextPayload?: string; sessionId?: string }) => {
   const res = await api.post('/chat', data);
-  return res.data;
+  const result = res.data;
+  if (typeof result?.remainingCoins === 'number') {
+    window.dispatchEvent(
+      new CustomEvent('aurikrex:coins-updated', {
+        detail: { remainingCoins: result.remainingCoins, nextResetDate: result.nextResetDate },
+      })
+    );
+  }
+  return result;
 };
 
 export const generateQuestionDiagram = async (questionId: string) => {

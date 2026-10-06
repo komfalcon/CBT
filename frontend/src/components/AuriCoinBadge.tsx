@@ -53,8 +53,27 @@ export function AuriCoinBadge({ className = '', compact = false }: { className?:
 
   useEffect(() => {
     fetchBalance();
-    const interval = setInterval(fetchBalance, 60000); // refresh every minute
-    return () => clearInterval(interval);
+    const handleCoinsUpdated = (event: Event) => {
+      const customEv = event as CustomEvent<{ remainingCoins?: number; nextResetDate?: string }>;
+      if (typeof customEv.detail?.remainingCoins === 'number') {
+        setBalanceData((prev) =>
+          prev
+            ? { ...prev, balance: customEv.detail.remainingCoins!, nextResetDate: customEv.detail.nextResetDate || prev.nextResetDate }
+            : { balance: customEv.detail.remainingCoins!, allowance: 5000, costPerRequest: 5, lastResetDate: new Date().toISOString(), nextResetDate: customEv.detail.nextResetDate || new Date().toISOString() }
+        );
+      } else {
+        fetchBalance();
+      }
+    };
+
+    window.addEventListener('aurikrex:coins-updated', handleCoinsUpdated);
+    window.addEventListener('auricobadge:refresh', fetchBalance);
+    const interval = setInterval(fetchBalance, 60000);
+    return () => {
+      window.removeEventListener('aurikrex:coins-updated', handleCoinsUpdated);
+      window.removeEventListener('auricobadge:refresh', fetchBalance);
+      clearInterval(interval);
+    };
   }, [token]);
 
   useEffect(() => {
