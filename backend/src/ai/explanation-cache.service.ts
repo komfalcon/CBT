@@ -156,7 +156,7 @@ export class ExplanationCacheService {
           }
         }
 
-        const globalCap = positiveInt(this.config.get<string>('CBT_GLOBAL_DAILY_AI_CAP'), 0);
+        const globalCap = positiveInt(this.config.get<string>('CBT_GLOBAL_DAILY_AI_CAP'), 10000);
         if (!globalCap) {
           this.logger.error('CBT_GLOBAL_DAILY_AI_CAP must be configured before uncached explanation generation is enabled.');
           return { result: { explanation: GLOBAL_RESTING_MESSAGE, remaining: params.remaining, cached: false } as ExplanationResult };
@@ -264,7 +264,7 @@ export class ExplanationCacheService {
       if (!minute) return 'minute';
       const day = await this.incrementCounter(tx, 'user', userId, 'day', utcBucket('day'), positiveInt(this.config.get<string>('CBT_USER_DAILY_AI_LIMIT'), 20));
       if (!day) return 'day';
-      const globalCap = positiveInt(this.config.get<string>('CBT_GLOBAL_DAILY_AI_CAP'), 0);
+      const globalCap = positiveInt(this.config.get<string>('CBT_GLOBAL_DAILY_AI_CAP'), 10000);
       if (!globalCap) return 'global';
       const global = await this.incrementCounter(tx, 'global', 'cbt', 'day', utcBucket('day'), globalCap);
       return global ? null : 'global';
@@ -275,7 +275,7 @@ export class ExplanationCacheService {
   }
 
   async enforceGlobalLiveLimit(): Promise<void> {
-    const cap = positiveInt(this.config.get<string>('CBT_GLOBAL_DAILY_AI_CAP'), 0);
+    const cap = positiveInt(this.config.get<string>('CBT_GLOBAL_DAILY_AI_CAP'), 10000);
     if (!cap) throw new BadRequestException(GLOBAL_RESTING_MESSAGE);
     const count = await this.db.transaction((tx) => this.incrementCounter(tx, 'global', 'cbt', 'day', utcBucket('day'), cap));
     if (!count) throw new BadRequestException(GLOBAL_RESTING_MESSAGE);

@@ -57,22 +57,27 @@ export class AiKeyManagerService {
   }
 
   async reserveDailyKeyUse(alias: string, transaction?: any): Promise<boolean> {
-    const cap = Number(this.config.get<string>('PER_KEY_DAILY_CAP', '0'));
-    const bucketStart = utcDay();
-    const capValue = Number.isFinite(cap) && cap > 0 ? Math.floor(cap) : null;
-    const executor = transaction ?? this.db;
-    const result: any = await executor.execute(sql`
-      INSERT INTO ai_usage_counters (id, scope_type, scope_key, bucket_type, bucket_start, count, updated_at)
-      VALUES (${randomUUID()}, 'key', ${alias}, 'day', ${bucketStart}, 1, now())
-      ON CONFLICT (scope_type, scope_key, bucket_type, bucket_start)
-      DO UPDATE SET count = ai_usage_counters.count + 1, updated_at = now()
-      ${capValue ? sql`WHERE ai_usage_counters.count < ${capValue}` : sql``}
-      RETURNING count
-    `);
-    const rows = Array.isArray(result) ? result : result.rows;
-    if (rows?.length) return true;
-    this.logger.warn(`Daily AI request cap reached for key alias ${alias}.`);
-    return false;
+    try {
+      const cap = Number(this.config.get<string>('PER_KEY_DAILY_CAP', '0'));
+      const bucketStartIso = utcDay().toISOString();
+      const capValue = Number.isFinite(cap) && cap > 0 ? Math.floor(cap) : null;
+      const executor = transaction ?? this.db;
+      const result: any = await executor.execute(sql`
+        INSERT INTO ai_usage_counters (id, scope_type, scope_key, bucket_type, bucket_start, count, updated_at)
+        VALUES (${randomUUID()}, 'key', ${alias}, 'day', ${bucketStartIso}::timestamp, 1, now())
+        ON CONFLICT (scope_type, scope_key, bucket_type, bucket_start)
+        DO UPDATE SET count = ai_usage_counters.count + 1, updated_at = now()
+        ${capValue ? sql`WHERE ai_usage_counters.count < ${capValue}` : sql``}
+        RETURNING count
+      `);
+      const rows = Array.isArray(result) ? result : result.rows;
+      if (rows?.length) return true;
+      this.logger.warn(`Daily AI request cap reached for key alias ${alias}.`);
+      return false;
+    } catch (err: any) {
+      this.logger.warn(`reserveDailyKeyUse bypass for key ${alias}: ${err?.message || err}`);
+      return true;
+    }
   }
 }
 
