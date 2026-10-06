@@ -68,7 +68,7 @@ const AURIKREX_APPS: AppOption[] = [
 
 export function getSanitizedCbtBackendUrl() {
   let url = (import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://cbt.pxxl.click').replace(/\/+$/, '');
-  if (!url || !url.includes('pxxl.click')) {
+  if (!url) {
     url = 'https://cbt.pxxl.click';
   }
   return url;
