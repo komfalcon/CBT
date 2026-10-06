@@ -8,12 +8,17 @@ import { AdminService } from './admin/admin.service';
 
 import { json, urlencoded } from 'express';
 
+let serverListening = false;
+
 process.on('unhandledRejection', (reason) => {
   console.error('[CRITICAL SERVER ERROR] Unhandled Rejection:', reason);
 });
 
 process.on('uncaughtException', (err) => {
   console.error('[CRITICAL SERVER ERROR] Uncaught Exception:', err);
+  // A process that threw an uncaught exception is in an undefined state.
+  // Exit so the hosting platform restarts a clean container instead of serving 502s.
+  setTimeout(() => process.exit(1), 500);
 });
 
 async function bootstrap() {
@@ -152,7 +157,31 @@ async function bootstrap() {
   const port = process.env.PORT ? Number(process.env.PORT) : 3000;
   console.log(`[BOOTSTRAP] Starting server on port ${port}, host 0.0.0.0`);
   await app.listen(port, '0.0.0.0');
+  serverListening = true;
   console.log(`[BOOTSTRAP] NestJS Application listening on http://0.0.0.0:${port}`);
 }
 
-void bootstrap();
+async function startWithRetry(maxAttempts = 5) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      await bootstrap();
+      return;
+    } catch (err) {
+      console.error(`[BOOTSTRAP] Startup attempt ${attempt}/${maxAttempts} failed:`, err);
+      if (attempt === maxAttempts) break;
+      await new Promise((r) => setTimeout(r, attempt * 3000));
+    }
+  }
+  console.error('[BOOTSTRAP] All startup attempts failed. Exiting so the platform restarts the container.');
+  process.exit(1);
+}
+
+void startWithRetry();
+
+// Watchdog: if the HTTP server never comes up, don't sit there as a zombie returning 502s.
+setTimeout(() => {
+  if (!serverListening) {
+    console.error('[BOOTSTRAP] Server not listening after 120s. Exiting for restart.');
+    process.exit(1);
+  }
+}, 120_000).unref();
