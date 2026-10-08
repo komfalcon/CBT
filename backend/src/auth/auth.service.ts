@@ -14,7 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcryptjs';
 import { createHmac, randomInt, createHash } from 'crypto';
-import { authenticator } from 'otplib';
+import { generateSecret, generateURI, verifySync } from 'otplib';
 import * as QRCode from 'qrcode';
 import { z } from 'zod';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -393,7 +393,7 @@ export class AuthService implements OnModuleInit {
     if (!secret || !/^\d{6}$/.test(otp)) {
       return false;
     }
-    return authenticator.verify({ token: otp, secret });
+    return Boolean(verifySync({ token: otp, secret })?.valid);
   }
 
   async generateMfaSecret(userId: string) {
@@ -402,8 +402,8 @@ export class AuthService implements OnModuleInit {
       throw new NotFoundException('User not found.');
     }
 
-    const secret = authenticator.generateSecret();
-    const otpauthUrl = authenticator.keyuri(user.email, 'Aurikrex CBT', secret);
+    const secret = generateSecret();
+    const otpauthUrl = generateURI({ secret, label: user.email, issuer: 'Aurikrex CBT' });
     const qrCodeDataUrl = await QRCode.toDataURL(otpauthUrl);
 
     await this.db.update(schema.users).set({ mfa_secret: secret }).where(eq(schema.users.id, user.id));
