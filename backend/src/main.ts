@@ -115,7 +115,7 @@ async function bootstrap() {
     if (req.method === 'OPTIONS') return next();
     const rawPath = String(req.path || req.originalUrl || '');
     const cleanPath = rawPath.replace(/^\/api/, '');
-    const isExempt = /^\/(admin|sys|health|system\/maintenance-status|sitemap\.xml|robots\.txt)/.test(cleanPath);
+    const isExempt = /^\/($|admin|sys|health|system\/maintenance-status|sitemap\.xml|robots\.txt)/.test(cleanPath);
     const isAuthRoute = /^\/auth\/(login|refresh|logout|verify-otp|me)/.test(cleanPath);
 
     // If request contains a verified admin JWT in cookie or Authorization header, bypass maintenance
@@ -163,10 +163,10 @@ async function bootstrap() {
   );
 
   const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-  console.log(`[BOOTSTRAP] Starting server on port ${port}, host 0.0.0.0`);
-  await app.listen(port, '0.0.0.0');
+  console.log(`[BOOTSTRAP] Starting server on port ${port}`);
+  await app.listen(port);
   serverListening = true;
-  console.log(`[BOOTSTRAP] NestJS Application listening on http://0.0.0.0:${port}`);
+  console.log(`[BOOTSTRAP] NestJS Application listening on port ${port}`);
 }
 
 async function startWithRetry(maxAttempts = 5) {
