@@ -58,7 +58,17 @@ export function AuriCoinBadge({ className = '', compact = false }: { className?:
       }).catch(() => null);
 
       if (!res || !res.ok) {
-        res = await fetch(`${centralUrl}/api/v1/coins/balance`, {
+        let userIdParam = '';
+        try {
+          const userStr = localStorage.getItem('user') || localStorage.getItem('aurikrex_user');
+          if (userStr) {
+            const u = JSON.parse(userStr);
+            userIdParam = u.email || u.aurikrex_id || u.id || '';
+          }
+        } catch (_) {}
+
+        const querySuffix = userIdParam ? `?userId=${encodeURIComponent(userIdParam)}` : '';
+        res = await fetch(`${centralUrl}/api/v1/coins/balance${querySuffix}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

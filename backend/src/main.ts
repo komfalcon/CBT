@@ -67,7 +67,9 @@ async function bootstrap() {
         host.endsWith('.pxxl.click') ||
         host === 'aurikrex.com' ||
         host === 'aurikrex.tech' ||
-        host === 'pxxl.click'
+        host === 'pxxl.click' ||
+        host === 'localhost' ||
+        host === '127.0.0.1'
       );
     } catch {
       return false;
@@ -76,19 +78,24 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      if (isAllowedDomain(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
+      callback(null, !origin || isAllowedDomain(origin));
     },
     methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Aurikrex-Internal-Key'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'X-CSRF-Token',
+      'X-Aurikrex-Internal-Key',
+      'x-central-api-key',
+      'Accept',
+      'X-Requested-With',
+    ],
     credentials: true,
   });
   app.use(helmet({ crossOriginOpenerPolicy: false }));
 
   app.use((req: any, res: any, next: any) => {
+    if (req.method === 'OPTIONS') return next();
     const cookieHeader = String(req.headers.cookie || '');
     const csrfCookie = cookieHeader.split(';').map((part: string) => part.trim()).find((part: string) => part.startsWith('csrf_token='))?.slice('csrf_token='.length);
     const csrfToken = csrfCookie || randomBytes(24).toString('hex');
@@ -105,6 +112,7 @@ async function bootstrap() {
 
   const adminService = app.get(AdminService);
   app.use(async (req: any, res: any, next: any) => {
+    if (req.method === 'OPTIONS') return next();
     const rawPath = String(req.path || req.originalUrl || '');
     const cleanPath = rawPath.replace(/^\/api/, '');
     const isExempt = /^\/(admin|sys|health|system\/maintenance-status|sitemap\.xml|robots\.txt)/.test(cleanPath);
