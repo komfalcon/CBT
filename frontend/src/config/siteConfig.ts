@@ -1,0 +1,27 @@
+export const siteConfig = {
+  name: 'Aurikrex Exam Arena',
+  tagline: 'A serious computer-based test cockpit for Nigerian UTME candidates.',
+  operator: 'Korede Samuel Omotosho',
+  legalNotice: 'Aurikrex Exam Arena is a product of Aurikrex, operated by Korede Samuel Omotosho.',
+  founderNotice: 'Founder notice: this is a public beta — features may change.',
+  disclaimer: 'Aurikrex Exam Arena is an independent practice platform. It is not affiliated with or endorsed by JAMB.',
+  supportEmail: 'support@aurikrex.com',
+  supportPhone: '+2349113683395',
+  supportPhoneDisplay: '+234 911 368 3395',
+  urls: {
+    dashboard: '/dashboard',
+    register: '/register',
+    signIn: '/register?tab=sign-in',
+    cbtKey: '/register?tab=cbt-key',
+    helpCenter: '/help',
+    contactUs: '/contact',
+    privacyPolicy: '/privacy',
+    termsOfService: '/terms',
+    leaderboard: '/leaderboard',
+    questionBank: '/questions',
+    mockSetup: '/mock-setup',
+    falkeAi: '/falke-ai',
+    examArena: '#',
+    systemStatus: '#', // Not yet implemented in codebase
+  },
+} as const;

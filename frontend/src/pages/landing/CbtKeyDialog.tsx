@@ -11,8 +11,8 @@ interface Props {
 }
 
 /**
- * Native <dialog> gives Escape-to-close, focus trapping and inert background for free.
- * The key is sent straight to the API instead of being placed in a URL.
+ * Native <dialog> modal for CBT key authentication.
+ * Formatted with responsive padding, touch-friendly inputs, landscape containment, and clear keyboard support.
  */
 export function CbtKeyDialog({ open, onClose }: Props) {
   const navigate = useNavigate();
@@ -32,8 +32,10 @@ export function CbtKeyDialog({ open, onClose }: Props) {
       dialog.showModal();
       document.body.style.overflow = 'hidden';
     }
-    if (!open && dialog.open) dialog.close();
-    if (!open) document.body.style.overflow = '';
+    if (!open && dialog.open) {
+      dialog.close();
+      document.body.style.overflow = '';
+    }
     return () => {
       document.body.style.overflow = '';
     };
@@ -76,53 +78,61 @@ export function CbtKeyDialog({ open, onClose }: Props) {
       onClick={(event) => {
         if (event.target === dialogRef.current) onClose();
       }}
-      className="m-auto w-[calc(100%-2rem)] max-w-md rounded-xl border border-border bg-bg-card p-0 text-text-primary shadow-2xl backdrop:bg-overlay backdrop:backdrop-blur-sm"
+      className="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-xl border border-border bg-bg-card p-0 text-text-primary shadow-2xl backdrop:bg-overlay backdrop:backdrop-blur-sm"
     >
-      <form onSubmit={submit} className="p-6" noValidate>
-        <div className="flex items-start justify-between gap-4">
-          <h2 id={`${uid}-title`} className="font-display text-xl font-semibold">
+      <form onSubmit={submit} className="p-5 sm:p-6" noValidate>
+        {/* Header */}
+        <div className="flex items-start justify-between gap-3">
+          <h2 id={`${uid}-title`} className="font-display text-lg font-semibold sm:text-xl">
             Sign in with your CBT key
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
-            className="-m-2 inline-flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary hover:text-text-primary"
+            aria-label="Close dialog"
+            className="-mr-1.5 -mt-1.5 inline-flex h-11 w-11 items-center justify-center rounded-lg text-text-secondary hover:bg-bg-secondary hover:text-text-primary focus-visible:outline-none"
           >
             <X size={20} aria-hidden="true" />
           </button>
         </div>
-        <p className="mt-2 text-body-md text-text-secondary">
+
+        <p className="mt-2 text-xs leading-relaxed text-text-secondary sm:text-body-md">
           Your CBT key was created with your account. Enter it to go straight to your dashboard.
         </p>
 
-        <label htmlFor={inputId} className="mt-5 block text-sm font-medium">
-          CBT key
-        </label>
-        <input
-          id={inputId}
-          type="text"
-          value={value}
-          onChange={(event) => setValue(event.target.value.toUpperCase())}
-          autoFocus
-          autoComplete="off"
-          autoCapitalize="characters"
-          spellCheck={false}
-          placeholder="CBT-XXXXXX"
-          aria-describedby={error ? `${hintId} ${errorId}` : hintId}
-          aria-invalid={error ? true : undefined}
-          className="mt-1.5 min-h-11 w-full rounded-lg border border-border bg-bg-secondary px-3 font-mono tracking-wider text-text-primary placeholder:text-text-tertiary"
-        />
-        <p id={hintId} className="mt-1.5 text-sm text-text-secondary">
-          Looks like CBT-XXXXXX.
-        </p>
-        <p id={errorId} role="alert" className="mt-2 min-h-5 text-sm text-error">
-          {error}
-        </p>
+        {/* Form controls */}
+        <div className="mt-4 sm:mt-5">
+          <label htmlFor={inputId} className="block text-xs font-medium text-text-primary sm:text-sm">
+            CBT key
+          </label>
+          <input
+            id={inputId}
+            type="text"
+            value={value}
+            onChange={(event) => setValue(event.target.value.toUpperCase())}
+            autoFocus
+            autoComplete="off"
+            autoCapitalize="characters"
+            spellCheck={false}
+            placeholder="CBT-XXXXXX"
+            aria-describedby={error ? `${hintId} ${errorId}` : hintId}
+            aria-invalid={error ? true : undefined}
+            className="mt-1.5 min-h-[44px] w-full rounded-lg border border-border bg-bg-secondary px-3.5 font-mono text-sm tracking-wider text-text-primary placeholder:text-text-tertiary focus:border-accent-royal-blue focus:outline-none sm:text-base"
+          />
+          <p id={hintId} className="mt-1.5 text-xs text-text-secondary sm:text-sm">
+            Format: CBT-XXXXXX (case-insensitive)
+          </p>
+          <p id={errorId} role="alert" className="mt-1.5 min-h-5 text-xs text-error sm:text-sm">
+            {error}
+          </p>
+        </div>
 
-        <div className="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <ActionLink onClick={onClose}>Cancel</ActionLink>
-          <ActionLink variant="primary" type="submit" disabled={busy}>
+        {/* Actions with 44px min touch targets */}
+        <div className="mt-4 flex flex-col-reverse gap-2.5 sm:mt-6 sm:flex-row sm:justify-end sm:gap-3">
+          <ActionLink onClick={onClose} size="md" className="w-full sm:w-auto">
+            Cancel
+          </ActionLink>
+          <ActionLink variant="primary" type="submit" size="md" disabled={busy} className="w-full sm:w-auto">
             {busy ? 'Checking key…' : 'Sign in'}
           </ActionLink>
         </div>
