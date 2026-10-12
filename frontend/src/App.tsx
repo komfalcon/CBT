@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState, useCallback } from 'react';
+import React, { Suspense, useEffect, useState, useCallback, useRef } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import OneSignal from 'react-onesignal';
 import { PwaInstallPrompt } from './components/PwaInstallPrompt';
@@ -18,6 +18,9 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import ExamHub from './pages/ExamHub';
 import Leaderboard from './pages/Leaderboard';
+import SyllabusTrackerPage from './pages/SyllabusTrackerPage';
+import CandidateProfilePage from './pages/CandidateProfilePage';
+import FalkeAiStudioPage from './pages/FalkeAiStudioPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 
@@ -92,7 +95,13 @@ function App() {
     return () => clearInterval(interval);
   }, [checkMaintenance]);
 
+  const oneSignalInitRef = useRef(false);
   useEffect(() => {
+    if (oneSignalInitRef.current) return;
+    oneSignalInitRef.current = true;
+    if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+      return;
+    }
     OneSignal.init({
       appId: import.meta.env.VITE_ONESIGNAL_APP_ID || 'b7622f37-8ca3-4304-922c-69438cc14d67',
       allowLocalhostAsSecureOrigin: true,
@@ -127,6 +136,12 @@ function App() {
           <Route path="/dashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
           <Route path="/exam-hub" element={<ProtectedRoute><ExamHub /></ProtectedRoute>} />
           <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
+          <Route path="/study" element={<ProtectedRoute><SyllabusTrackerPage /></ProtectedRoute>} />
+          <Route path="/syllabus" element={<ProtectedRoute><SyllabusTrackerPage /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><CandidateProfilePage /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><CandidateProfilePage /></ProtectedRoute>} />
+          <Route path="/falke-ai" element={<ProtectedRoute><FalkeAiStudioPage /></ProtectedRoute>} />
+          <Route path="/falke" element={<ProtectedRoute><FalkeAiStudioPage /></ProtectedRoute>} />
           <Route path="/mock-setup" element={<ProtectedRoute><MockSetupPage /></ProtectedRoute>} />
           <Route path="/questions" element={<ProtectedRoute><QuestionBankPage /></ProtectedRoute>} />
           <Route path="/exam/:sessionId" element={<ProtectedRoute><ExamConsole /></ProtectedRoute>} />

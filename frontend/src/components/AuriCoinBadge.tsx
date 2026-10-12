@@ -48,9 +48,9 @@ export function AuriCoinBadge({ className = '', compact = false }: { className?:
     try {
       setLoading(true);
       const apiBase = getSanitizedCbtBackendUrl();
-      const centralUrl = import.meta.env.VITE_CENTRAL_URL || 'https://aurikrex-central.pxxl.click';
+      const primaryUrl = apiBase.endsWith('/api') ? `${apiBase}/coins/balance` : `${apiBase}/api/v1/coins/balance`;
 
-      let res = await fetch(`${apiBase}/api/v1/coins/balance`, {
+      let res = await fetch(primaryUrl, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -58,22 +58,16 @@ export function AuriCoinBadge({ className = '', compact = false }: { className?:
       }).catch(() => null);
 
       if (!res || !res.ok) {
-        let userIdParam = '';
-        try {
-          const userStr = localStorage.getItem('user') || localStorage.getItem('aurikrex_user');
-          if (userStr) {
-            const u = JSON.parse(userStr);
-            userIdParam = u.email || u.aurikrex_id || u.id || '';
-          }
-        } catch (_) {}
-
-        const querySuffix = userIdParam ? `?userId=${encodeURIComponent(userIdParam)}` : '';
-        res = await fetch(`${centralUrl}/api/v1/coins/balance${querySuffix}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }).catch(() => null);
+        // Fallback to /coins/balance if primary path differed
+        const altUrl = `${apiBase}/coins/balance`;
+        if (altUrl !== primaryUrl) {
+          res = await fetch(altUrl, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }).catch(() => null);
+        }
       }
 
       if (res && res.ok) {
@@ -151,8 +145,8 @@ export function AuriCoinBadge({ className = '', compact = false }: { className?:
         type="button"
         className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition-colors shadow-sm focus:outline-none ${
           isLow
-            ? 'bg-rose-500/10 text-rose-300 border-rose-500/30 hover:bg-rose-500/20'
-            : 'bg-amber-500/10 text-amber-300 border-amber-500/30 hover:bg-amber-500/20'
+            ? 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/30 hover:bg-rose-500/20'
+            : 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30 hover:bg-amber-500/20'
         } ${className}`}
         title="Auri Coin Ecosystem AI Balance"
         aria-label={`Auri Coin balance: ${balance.toLocaleString()} coins`}
@@ -163,40 +157,40 @@ export function AuriCoinBadge({ className = '', compact = false }: { className?:
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-72 rounded-xl bg-slate-900 border border-slate-800 p-4 shadow-2xl z-50 text-left">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="absolute right-0 top-full mt-2 w-72 max-w-[calc(100vw-2rem)] rounded-xl bg-bg-card border border-border p-4 shadow-2xl z-50 text-left text-text-primary">
+          <div className="flex items-center justify-between border-b border-border pb-3">
             <div className="flex items-center gap-2">
               <span className="text-xl">🪙</span>
               <div>
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">Auri Coin Balance</h4>
-                <p className="text-[10px] text-slate-400">Aurikrex Ecosystem AI Credits</p>
+                <h4 className="text-xs font-bold text-text-primary uppercase tracking-wider">Auri Coin Balance</h4>
+                <p className="text-[10px] text-text-muted">Aurikrex Ecosystem AI Credits</p>
               </div>
             </div>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${isLow ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'}`}>
+            <span className={`text-xs px-2 py-0.5 rounded-full font-bold ${isLow ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300' : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'}`}>
               {isLow ? 'Low Coins' : 'Active'}
             </span>
           </div>
 
           <div className="my-3 space-y-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-400">Current Balance:</span>
-              <span className="font-bold text-amber-300 text-sm">{balance.toLocaleString()} Coins</span>
+              <span className="text-text-muted">Current Balance:</span>
+              <span className="font-bold text-accent-ai-gold text-sm">{balance.toLocaleString()} Coins</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-400">Monthly Allowance:</span>
-              <span className="font-semibold text-slate-200">5,000 Coins</span>
+              <span className="text-text-muted">Monthly Allowance:</span>
+              <span className="font-semibold text-text-primary">5,000 Coins</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-400">Cost per AI Request:</span>
-              <span className="font-semibold text-slate-200">5 Coins</span>
+              <span className="text-text-muted">Cost per AI Request:</span>
+              <span className="font-semibold text-text-primary">5 Coins</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-400">Next Monthly Refresh:</span>
-              <span className="font-semibold text-sky-400">{formatCountdown(balanceData?.nextResetDate)}</span>
+              <span className="text-text-muted">Next Monthly Refresh:</span>
+              <span className="font-semibold text-secondary">{formatCountdown(balanceData?.nextResetDate)}</span>
             </div>
           </div>
 
-          <div className="rounded-lg bg-slate-950 p-2.5 text-[11px] text-slate-400 leading-relaxed">
+          <div className="rounded-lg bg-surface-container-high p-2.5 text-[11px] text-text-secondary leading-relaxed">
             💡 Every registered student receives 5,000 Auri Coins every 30 days (1,000 AI requests). Coins reset automatically on your monthly anniversary date.
           </div>
         </div>
@@ -227,23 +221,23 @@ export function OutOfCoinsModal({
 
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-      <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl text-center">
+      <div className="w-full max-w-md rounded-2xl bg-bg-card border border-border p-6 shadow-2xl text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-500/10 text-3xl">
           🪙
         </div>
-        <h3 className="text-lg font-bold text-white">Out of Auri Coins for this Month</h3>
-        <p className="mt-2 text-sm text-slate-400 leading-relaxed">
+        <h3 className="text-lg font-bold text-text-primary">Out of Auri Coins for this Month</h3>
+        <p className="mt-2 text-sm text-text-secondary leading-relaxed">
           You've used all 5,000 Auri Coins for your current 30-day period (1,000 AI requests across CBT, Library, Bytes, and Phorynt).
         </p>
 
-        <div className="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 text-xs text-amber-200">
-          ⏳ Next 5,000 Coin Refresh in: <strong className="font-bold text-white">{formatDays(nextResetDate)}</strong>
+        <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-accent-ai-gold">
+          ⏳ Next 5,000 Coin Refresh in: <strong className="font-bold text-text-primary">{formatDays(nextResetDate)}</strong>
         </div>
 
         <button
           onClick={onClose}
           type="button"
-          className="mt-6 w-full rounded-xl bg-blue-600 hover:bg-blue-500 py-2.5 text-sm font-semibold text-white transition-colors"
+          className="mt-6 w-full rounded-xl bg-primary hover:bg-primary-hover py-2.5 text-sm font-semibold text-white transition-colors"
         >
           Got it
         </button>

@@ -3019,7 +3019,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the cost curves of a firm are shown. In the diagram below, what is the significance of the point where the Average Variable Cost (AVC) curve intersects the Marginal Cost (MC) curve?",
+      "question_text": "In the diagram below, the cost curves of a firm are shown. In the diagram below, what is the significance of the point where the Average Variable Cost (AV",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><path d='M 20 180 L 300 180' stroke='black'/><path d='M 20 20 L 20 180' stroke='black'/><path d='M 50 150 Q 120 50 200 50 T 280 150' stroke='black' fill='none'/><path d='M 50 160 Q 100 60 180 60 T 280 160' stroke='black' fill='none'/><text x='250' y='170'>Output</text><text x='10' y='100'>Cost</text><text x='180' y='40'>MC</text><text x='220' y='170'>AVC</text></svg>",
@@ -3531,7 +3531,7 @@
       "year": 2020,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm's short-run total cost function is given by \\( TC = 400 + 25Q + 4Q^2 \\), where \\( Q \\) is the quantity produced. What is the firm's average variable cost (AVC) when \\( Q = 10 \\)?",
+      "question_text": "A firm's short-run total cost function is given by \\( TC = 400 + 25Q + 4Q^2 \\), where \\( Q \\) is the quantity produce",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -3691,7 +3691,7 @@
       "year": 2020,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm's short-run total cost function is given by \\( TC = 300 + 12Q + 2Q^2 \\), where \\( Q \\) is the quantity produced. What is the firm's average variable cost (AVC) when \\( Q = 10 \\)?",
+      "question_text": "A firm's short-run total cost function is given by \\( TC = 300 + 12Q + 2Q^2 \\), where \\( Q \\) is the quantity produce",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -9934,7 +9934,7 @@
       "year": 2020,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm's short-run total cost function is given by \\( TC = 200 + 15Q + 3Q^2 \\), where \\( Q \\) is the quantity produced. What is the firm's average variable cost (AVC) equation?",
+      "question_text": "A firm's short-run total cost function is given by \\( TC = 200 + 15Q + 3Q^2 \\), where \\( Q \\) is the quantity produce",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -14097,7 +14097,7 @@
       "year": 2020,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm's short-run total cost function is given by \\( TC = 150 + 10Q + 2Q^2 \\), where \\( Q \\) is the quantity produced. What is the firm's average variable cost (AVC) when \\( Q = 10 \\)?",
+      "question_text": "A firm's short-run total cost function is given by \\( TC = 150 + 10Q + 2Q^2 \\), where \\( Q \\) is the quantity produce",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -19217,7 +19217,7 @@
       "year": 2020,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm's short-run total cost function is given by \\( TC = 300 + 25Q + 4Q^2 \\), where \\( Q \\) is the quantity produced. What is the firm's average variable cost (AVC) when \\( Q = 10 \\)?",
+      "question_text": "A firm's short-run total cost function is given by \\( TC = 300 + 25Q + 4Q^2 \\), where \\( Q \\) is the quantity produce",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -23090,7 +23090,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, point A is the intersection of the Marginal Cost (MC) curve and the Average Total Cost (ATC) curve. What does point A represent for a firm operating in the short run?",
+      "question_text": "In the diagram below, point A is the intersection of the Marginal Cost (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='280' y2='20' stroke='black' stroke-width='2'/><!-- MC curve -->\n<line x1='40' y1='120' x2='280' y2='120' stroke='gray' stroke-dasharray='5,5' stroke-width='2'/><!-- ATC curve -->\n<circle cx='180' cy='120' r='4' fill='red'/><!-- point A -->\n<text x='150' y='190' font-size='12'>Quantity</text>\n<text x='10' y='100' font-size='12' transform='rotate(-90 10,100)'>Cost</text>\n<text x='190' y='115' font-size='12' fill='red'>A</text>\n</svg>",
@@ -23434,7 +23434,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First write ATC:\n\\[\\text{ATC}(Q)=\\frac{TFC+TVC}{Q}=\\frac{200+5Q^{2}-30Q}{Q}=\\frac{200}{Q}+5Q-30\\]\nTo find the minimum, differentiate with respect to \\(Q\\) and set the derivative to zero:\n\\[\\frac{d\\text{ATC}}{dQ}= -\\frac{200}{Q^{2}}+5=0\\]\n\\[5=\\frac{200}{Q^{2}}\\Rightarrow Q^{2}=\\frac{200}{5}=40\\]\n\\[Q=\\sqrt{40}\\approx 6.32\\]\nThe output level closest to the analytical solution and usually reported in whole units is **6**. Substituting \\(Q=6\\) gives ATC \\(=\\frac{200}{6}+5\\times6-30 \\approx 33.33+30-30=33.33\\), confirming the minimum occurs near this point.\n\nOption B (6 units) is therefore correct. Options A, C, and D produce higher ATC values.\n",
+      "explanation": "First write ATC:\n\\[\\text{ATC}(Q)=\\frac{TFC+TVC}{Q}=\\frac{200+5Q^{2}-30Q}{Q}=\\frac{200}{Q}+5Q-30\\]\nTo find the minimum, differentiate with respect to \\(Q\\) and set the derivative to zero:\n\\[\\frac{d\\text{ATC}}{dQ}= -\\frac{200}{Q^{2}}+5=0\\]\n\\[5=\\frac{200}{Q^{2}}\\Rightarrow Q^{2}=\\frac{200}{5}=40\\]\n\\[Q=\\sqrt{40}\\approx 6.32\\]\nThe output level closest to the analytical solution and usually reported in whole units is **6**. Substituting \\(Q=6\\) gives ATC \\(=\\frac{200}{6}+5\\times6-30 \\approx 33.33+30-30=33.33\\), confirming the minimum occurs near this point.\n\nOption B (6 units) is therefore correct. Options A, C, and D produce higher ATC values.",
       "difficulty": 4
     },
     {
@@ -23466,7 +23466,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Profit‑maximising monopolist sets marginal revenue (MR) equal to marginal cost (MC).\n\n1. **Derive MR** from total revenue \\(TR = P\\times Q = (100-2Q)Q = 100Q - 2Q^{2}\\):\n\\[MR = \\frac{dTR}{dQ}= 100 - 4Q\\]\n2. **Derive MC** from total cost:\n\\[MC = \\frac{dTC}{dQ}= 20 + Q\\]\n3. **Equate MR and MC**:\n\\[100 - 4Q = 20 + Q \\Rightarrow 80 = 5Q \\Rightarrow Q^{*}=16\\]\n4. **Find the price** using the demand equation:\n\\[P^{*}= 100 - 2(16) = 100 - 32 = 68\\]\nThus the profit‑maximising price is **68** (option A). The other options correspond to incorrect algebraic solutions or ignore the MR=MC rule.\n",
+      "explanation": "Profit‑maximising monopolist sets marginal revenue (MR) equal to marginal cost (MC).\n\n1. **Derive MR** from total revenue \\(TR = P\\times Q = (100-2Q)Q = 100Q - 2Q^{2}\\):\n\\[MR = \\frac{dTR}{dQ}= 100 - 4Q\\]\n2. **Derive MC** from total cost:\n\\[MC = \\frac{dTC}{dQ}= 20 + Q\\]\n3. **Equate MR and MC**:\n\\[100 - 4Q = 20 + Q \\Rightarrow 80 = 5Q \\Rightarrow Q^{*}=16\\]\n4. **Find the price** using the demand equation:\n\\[P^{*}= 100 - 2(16) = 100 - 32 = 68\\]\nThus the profit‑maximising price is **68** (option A). The other options correspond to incorrect algebraic solutions or ignore the MR=MC rule.",
       "difficulty": 4
     },
     {
@@ -23498,7 +23498,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Inflation is measured by the proportional increase in the overall price level.\n\\[\\%\\,\\Delta P = \\frac{P_{new}-P_{old}}{P_{old}}\\times 100\\]\nPlugging the numbers:\n\\[\\%\\,\\Delta P = \\frac{115-100}{100}\\times 100 = \\frac{15}{100}\\times 100 = 15\\%\\]\nHence the correct answer is **15 %** (option C). The other percentages correspond to different numerators (10, 13.5, 20) and do not match the given change.\n",
+      "explanation": "Inflation is measured by the proportional increase in the overall price level.\n\\[\\%\\,\\Delta P = \\frac{P_{new}-P_{old}}{P_{old}}\\times 100\\]\nPlugging the numbers:\n\\[\\%\\,\\Delta P = \\frac{115-100}{100}\\times 100 = \\frac{15}{100}\\times 100 = 15\\%\\]\nHence the correct answer is **15 %** (option C). The other percentages correspond to different numerators (10, 13.5, 20) and do not match the given change.",
       "difficulty": 5
     },
     {
@@ -23530,7 +23530,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The removal of a tariff lowers the domestic price of the imported good. When price falls, the quantity demanded rises, and the area between the demand curve and the new lower price line (including the former tariff wedge) expands. This gain in area represents an increase in consumer surplus. \n\n- Option A is opposite to the effect of a price reduction. \n- Option B would require the price to stay the same, which is not the case. \n- Option D exaggerates the impact; consumer surplus cannot disappear because of a tariff removal.\n\nThus, the appropriate outcome is an **increase** in consumer surplus (option C).\n",
+      "explanation": "The removal of a tariff lowers the domestic price of the imported good. When price falls, the quantity demanded rises, and the area between the demand curve and the new lower price line (including the former tariff wedge) expands. This gain in area represents an increase in consumer surplus. \n\n- Option A is opposite to the effect of a price reduction. \n- Option B would require the price to stay the same, which is not the case. \n- Option D exaggerates the impact; consumer surplus cannot disappear because of a tariff removal.\n\nThus, the appropriate outcome is an **increase** in consumer surplus (option C).",
       "difficulty": 4
     },
     {
@@ -23570,7 +23570,7 @@
       "year": 2020,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the short‑run average variable cost (AVC) curve intersects the marginal cost (MC) curve at point S. Which of the following statements is correct regarding point S?",
+      "question_text": "In the diagram below, the short‑run average variable cost (AV",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><polyline points='60,150 120,100 180,120 240,80' fill='none' stroke='black' stroke-width='2'/><line x1='60' y1='150' x2='300' y2='150' stroke='black' stroke-width='1'/><text x='55' y='165' font-size='12'>Q</text><text x='260' y='170' font-size='12'>P</text><circle cx='120' cy='100' r='4' fill='red'/><text x='115' y='95' font-size='12' fill='red'>S</text></svg>",
@@ -24050,7 +24050,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the red dashed line represents the Long‑Run Average Cost (LRAC) curve and the black solid lines represent several Short‑Run Average Cost (SRAC) curves for different plant sizes. Which statement correctly describes the relationship between LRAC and the SRAC curves?",
+      "question_text": "In the diagram below, the red dashed line represents the Long‑Run Average Cost (LRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><path d='M20,180 L100,80 L180,100 L260,60' stroke='black' fill='none'/><path d='M20,180 L260,60' stroke='red' stroke-dasharray='5,5' fill='none'/></svg>",
@@ -24530,7 +24530,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the short‑run average cost (SRAC) curves for three plant sizes intersect the long‑run average cost (LRAC) curve at points A, B, and C. Which of the following statements is accurate?",
+      "question_text": "In the diagram below, the short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\\\"0 0 320 200\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\"><polyline points=\\\"40,180 120,80 200,120 280,130\\\" fill=\\\"none\\\" stroke=\\\"black\\\"/><polyline points=\\\"40,180 140,100 260,150\\\" fill=\\\"none\\\" stroke=\\\"gray\\\"/><polyline points=\\\"40,180 120,90 240,140\\\" fill=\\\"none\\\" stroke=\\\"lightgray\\\"/><circle cx=\\\"120\\\" cy=\\\"80\\\" r=\\\"4\\\" fill=\\\"red\\\"/><text x=\\\"125\\\" y=\\\"75\\\" font-size=\\\"10\\\">A</text><circle cx=\\\"140\\\" cy=\\\"100\\\" r=\\\"4\\\" fill=\\\"red\\\"/><text x=\\\"145\\\" y=\\\"95\\\" font-size=\\\"10\\\">B</text><circle cx=\\\"200\\\" cy=\\\"120\\\" r=\\\"4\\\" fill=\\\"red\\\"/><text x=\\\"205\\\" y=\\\"115\\\" font-size=\\\"10\\\">C</text></svg>",
@@ -24850,7 +24850,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the long‑run average cost (LRAC) curve is U‑shaped. The minimum point of LRAC occurs at an output of 150 units, where LRAC = $20. Which of the following statements is correct regarding the firm's average cost if it produces 200 units instead of 150 units?",
+      "question_text": "In the diagram below, the long‑run average cost (LRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><polyline points=\"40,160 80,120 120,100 160,90 200,95 240,110 280,150\" fill=\"none\" stroke=\"black\" stroke-width=\"2\"/></svg>",
@@ -25170,7 +25170,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the long‑run average cost (LRAC) curve is U‑shaped and intersects the short‑run average cost (SRAC) curves of three plant sizes at points A, B, and C respectively. Which point indicates the minimum efficient scale (MES) of the industry?",
+      "question_text": "In the diagram below, the long‑run average cost (LRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"40\" y1=\"180\" x2=\"280\" y2=\"20\" stroke=\"black\"/><circle cx=\"80\" cy=\"140\" r=\"5\" fill=\"red\"/><text x=\"80\" y=\"135\" font-size=\"12\" fill=\"black\">A</text><circle cx=\"160\" cy=\"100\" r=\"5\" fill=\"red\"/><text x=\"160\" y=\"95\" font-size=\"12\" fill=\"black\">B</text><circle cx=\"240\" cy=\"60\" r=\"5\" fill=\"red\"/><text x=\"240\" y=\"55\" font-size=\"12\" fill=\"black\">C</text></svg>",
@@ -25490,7 +25490,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the short‑run average cost (SRAC) curves for three plant sizes intersect the long‑run average cost (LRAC) curve. At which output level does the firm achieve the lowest long‑run average cost?",
+      "question_text": "In the diagram below, the short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><polyline points='40,180 80,140 120,110 160,100 200,105 240,120 280,150' fill='none' stroke='black'/></svg>",
@@ -25810,7 +25810,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "Suppose the short‑run average cost (SRAC) of a firm is given by \\( SRAC = 2 + \\frac{Q}{20} \\) and its long‑run average cost (LRAC) is \\( LRAC = 2 + \\frac{10}{Q} \\). At what level of output \\(Q\\) do the two curves intersect?",
+      "question_text": "Suppose the short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='20' y1='180' x2='300' y2='20' stroke='blue' stroke-width='2'/><line x1='20' y1='20' x2='300' y2='180' stroke='red' stroke-width='2'/></svg>",
@@ -26258,7 +26258,7 @@
       "year": 2021,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A consumer’s utility from consuming quantity Q of a good is given by \\( U(Q) = 12\\\\sqrt{Q} \\). According to the law of diminishing marginal utility, which of the following statements is true regarding the marginal utility when Q increases from 4 to 9 units?",
+      "question_text": "A consumer’s utility from consuming quantity Q of a good is given by \\( U(Q) = 12\\sqrt{Q} \\). According to the law of diminishing marginal utility, which of the following statements is true regarding the marginal utility when Q increases from 4 to 9 units?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -26270,7 +26270,7 @@
         },
         {
           "id": "B",
-          "text": "Marginal utility remains constant because utility is proportional to \\(\\\\sqrt{Q}\\)."
+          "text": "Marginal utility remains constant because utility is proportional to \\(\\sqrt{Q}\\)."
         },
         {
           "id": "C",
@@ -26282,7 +26282,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The marginal utility is the derivative of the utility function: \\( MU = \\frac{dU}{dQ} = \\frac{6}{\\\\sqrt{Q}} \\).  At Q=4, \\( MU = 6/2 = 3 \\).  At Q=9, \\( MU = 6/3 = 2 \\).  Because MU falls from 3 to 2 when quantity rises, the additional utility from each extra unit is decreasing, which is exactly the law of diminishing marginal utility.  Option C states this correctly.  Option A is wrong because the square‑root function is concave **down**, not up, so MU falls.  Option B is wrong because MU is not constant; it varies with Q.  Option D is wrong because MU remains positive for all positive Q; it only approaches zero as Q becomes very large.",
+      "explanation": "The marginal utility is the derivative of the utility function: \\( MU = \\frac{dU}{dQ} = \\frac{6}{\\sqrt{Q}} \\).  At Q=4, \\( MU = 6/2 = 3 \\).  At Q=9, \\( MU = 6/3 = 2 \\).  Because MU falls from 3 to 2 when quantity rises, the additional utility from each extra unit is decreasing, which is exactly the law of diminishing marginal utility.  Option C states this correctly.  Option A is wrong because the square‑root function is concave **down**, not up, so MU falls.  Option B is wrong because MU is not constant; it varies with Q.  Option D is wrong because MU remains positive for all positive Q; it only approaches zero as Q becomes very large.",
       "difficulty": 3
     },
     {
@@ -26290,7 +26290,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s long‑run total cost (LRTC) function is \\( LRTC = 20\\\\sqrt{Q} + 0.05Q^{2} \\). At which output level does the firm first experience economies of scale in the long run (i.e., where LRAC is falling)?",
+      "question_text": "A firm’s long‑run total cost (LRTC) function is \\( LRTC = 20\\sqrt{Q} + 0.05Q^{2} \\). At which output level does the firm first experience economies of scale in the long run (i.e., where LRAC is falling)?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -26610,7 +26610,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost (STC) function is \\(STC = 200 + 5Q + 2Q^{2}\\). Its short‑run marginal cost (SRMC) is the derivative of STC with respect to \\(Q\\). At what output level does short‑run average cost equal short‑run marginal cost?",
+      "question_text": "A firm’s short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -27410,7 +27410,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run average total cost (SATC) function is \\(\\text{SATC}=\\frac{10}{Q}+15+Q\\) and its long‑run average cost (LRAC) function is \\(\\text{LRAC}=5+\\frac{30}{Q}\\). At approximately what level of output do the two curves intersect?",
+      "question_text": "A firm’s short‑run average total cost (SAT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -29322,7 +29322,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The consumer maximizes utility where the marginal rate of substitution (MRS) equals the price ratio. For the given Cobb‑Douglas utility, \\(MRS = \\frac{\\partial U/\\partial F}{\\partial U/\\partial C}=\\frac{0.4}{0.6}\\frac{C}{F}=\\frac{2}{3}\\frac{C}{F}\\). The price ratio is \\(P_F/P_C = 4/6 = 2/3\\). Setting them equal gives \\(\\frac{2}{3}\\frac{C}{F}=\\frac{2}{3}\\) ⇒ \\(C=F\\). Using the budget constraint \\(4F+6C = 120\\) with \\(C=F\\) gives \\(10F = 120\\) ⇒ \\(F = 12\\) and \\(C = 12\\). Therefore the optimal bundle is (12,12), which corresponds to option B. \n\nDistractor check: \n- A (10,10) satisfies \\(C=F\\) but violates the budget (cost = 4·10+6·10 = 100 <120). \n- C (15,10) does not satisfy \\(C=F\\) and exceeds the budget (4·15+6·10=120, but MRS condition fails). \n- D (8,14) violates both the MRS condition and the budget. ",
+      "explanation": "The consumer maximizes utility where the marginal rate of substitution (MRS) equals the price ratio. For the given Cobb‑Douglas utility, \\(MRS = \\frac{\\partial U/\\partial F}{\\partial U/\\partial C}=\\frac{0.4}{0.6}\\frac{C}{F}=\\frac{2}{3}\\frac{C}{F}\\). The price ratio is \\(P_F/P_C = 4/6 = 2/3\\). Setting them equal gives \\(\\frac{2}{3}\\frac{C}{F}=\\frac{2}{3}\\) ⇒ \\(C=F\\). Using the budget constraint \\(4F+6C = 120\\) with \\(C=F\\) gives \\(10F = 120\\) ⇒ \\(F = 12\\) and \\(C = 12\\). Therefore the optimal bundle is (12,12), which corresponds to option B. \n\nDistractor check: \n- A (10,10) satisfies \\(C=F\\) but violates the budget (cost = 4·10+6·10 = 100 <120). \n- C (15,10) does not satisfy \\(C=F\\) and exceeds the budget (4·15+6·10=120, but MRS condition fails). \n- D (8,14) violates both the MRS condition and the budget.",
       "difficulty": 3
     },
     {
@@ -30154,7 +30154,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Short‑run average cost (SRAC) is \\(\\frac{STC}{Q}=\\frac{20}{Q}+4+Q\\). Set SRAC equal to LRAC (14):\\n\\\\[\\frac{20}{Q}+4+Q=14\\]\\\\nSimplify: \\(\\frac{20}{Q}+Q=10\\). Multiply by \\(Q\\): \\(20+Q^{2}=10Q\\)\\n=> \\(Q^{2}-10Q+20=0\\). Solve using quadratic formula: \\(Q=\\frac{10\\pm\\sqrt{100-80}}{2}=\\frac{10\\pm\\sqrt{20}}{2}\\). The positive roots are approximately 7.24 and 2.76. The larger output corresponds to the minimum efficient scale, about 7 units. Option B is correct; A, C and D are far from the calculated values.",
+      "explanation": "Short‑run average cost (SRAC) is \\(\\frac{STC}{Q}=\\frac{20}{Q}+4+Q\\). Set SRAC equal to LRAC (14):\\n\\[\\frac{20}{Q}+4+Q=14\\]\\nSimplify: \\(\\frac{20}{Q}+Q=10\\). Multiply by \\(Q\\): \\(20+Q^{2}=10Q\\)\\n=> \\(Q^{2}-10Q+20=0\\). Solve using quadratic formula: \\(Q=\\frac{10\\pm\\sqrt{100-80}}{2}=\\frac{10\\pm\\sqrt{20}}{2}\\). The positive roots are approximately 7.24 and 2.76. The larger output corresponds to the minimum efficient scale, about 7 units. Option B is correct; A, C and D are far from the calculated values.",
       "difficulty": 4
     },
     {
@@ -30642,7 +30642,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the industry is perfectly competitive in the long run. The market price is $30, which just touches the firm’s long‑run average cost (LRAC) curve.\n\nIn the diagram below, ...",
+      "question_text": "In the diagram below, the industry is perfectly competitive in the long run. The market price is $30, which just touches the firm’s long‑run average cost (LRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='20' y1='180' x2='300' y2='180' stroke='black'/><line x1='20' y1='180' x2='20' y2='20' stroke='black'/><path d='M20 180 C120 100, 200 100, 300 180' fill='none' stroke='blue'/><text x='150' y='160' font-size='12' text-anchor='middle'>LRAC</text><text x='150' y='190' font-size='12' text-anchor='middle'>Q</text><text x='10' y='110' font-size='12' text-anchor='middle' transform='rotate(-90 10,110)'>Cost / Price</text><text x='160' y='30' font-size='12' fill='red'>P = $30</text></svg>",
@@ -30770,7 +30770,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the firm’s short‑run marginal cost (SMC) curve intersects the short‑run average total cost (SATC) curve. At this output level, which of the following statements is true?",
+      "question_text": "In the diagram below, the firm’s short‑run marginal cost (SM",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><polyline points=\"40,180 120,100 200,100 280,40\" fill=\"none\" stroke=\"black\" stroke-width=\"2\"/><polyline points=\"40,180 200,120 280,40\" fill=\"none\" stroke=\"red\" stroke-width=\"2\"/></svg>",
@@ -32170,7 +32170,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "WTO’s Agreement on Safeguards allows a temporary increase in tariffs or quantitative restrictions to give a domestic industry time to adjust to import surges. The measure can last **no less than three years and no more than ten years**, after which it must be reviewed and possibly withdrawn. Hence option B is correct. Option A is wrong because safeguards are time‑limited. Option C is incorrect; WTO does not bar safeguards merely because the parties share a regional agreement, though other rules may apply. Option D misstates the rule: safeguards may not exceed the bound tariff rate without compensation; any excess must be offset.\n",
+      "explanation": "WTO’s Agreement on Safeguards allows a temporary increase in tariffs or quantitative restrictions to give a domestic industry time to adjust to import surges. The measure can last **no less than three years and no more than ten years**, after which it must be reviewed and possibly withdrawn. Hence option B is correct. Option A is wrong because safeguards are time‑limited. Option C is incorrect; WTO does not bar safeguards merely because the parties share a regional agreement, though other rules may apply. Option D misstates the rule: safeguards may not exceed the bound tariff rate without compensation; any excess must be offset.",
       "difficulty": 4
     },
     {
@@ -32210,7 +32210,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s long‑run total cost (LRTC) function is given by \\[LRTC(Q)=0.5Q^{2}+20Q+100\\]. What is the long‑run average cost (LRAC) when the firm produces 20 units of output?",
+      "question_text": "A firm’s long‑run total cost (LRT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -32242,7 +32242,7 @@
       "year": 2021,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the monopolist's marginal revenue (MR) curve (blue) and marginal cost (MC) curve (red) intersect at the profit‑maximizing quantity. The market demand is \\(P=120-4Q\\) and the firm's total cost function is \\(TC=20Q+50\\). What is the monopolist's profit at the equilibrium output?",
+      "question_text": "In the diagram below, the monopolist's marginal revenue (MR) curve (blu",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='300' y2='180' stroke='black'/> <line x1='40' y1='180' x2='40' y2='20' stroke='black'/> <polyline points='40,180 120,120 200,80 280,60' fill='none' stroke='blue'/> <polyline points='40,180 120,140 200,100 280,80' fill='none' stroke='red'/></svg>",
@@ -32370,7 +32370,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm's short‑run total cost (STC) function is \\(STC(Q)= 100 + 20Q + Q^{2}\\). Determine the output level at which short‑run marginal cost (SMC) equals short‑run average total cost (SATC).",
+      "question_text": "A firm's short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -32402,7 +32402,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the market demand curve (D) and the marginal cost curve (MC) for a monopolist are shown. The monopolist sets output where MR = MC. The perfectly competitive outcome would be where P = MC. What is the deadweight loss (DWL) due to monopoly relative to perfect competition?",
+      "question_text": "In the diagram below, the market demand curve",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"40\" y1=\"180\" x2=\"280\" y2=\"180\" stroke=\"black\"/><line x1=\"40\" y1=\"180\" x2=\"40\" y2=\"20\" stroke=\"black\"/><polyline points=\"280,60 200,80 120,120 40,160\" fill=\"none\" stroke=\"blue\"/><polyline points=\"280,140 200,120 120,100 40,80\" fill=\"none\" stroke=\"red\"/><text x=\"150\" y=\"30\" font-size=\"12\">Demand</text><text x=\"150\" y=\"190\" font-size=\"12\">Quantity</text></svg>",
@@ -32722,7 +32722,7 @@
       "year": 2019,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, a monopolist faces the inverse demand curve \\(P = 120 - 2Q\\). The marginal revenue (MR) curve is shown as the steeper red line and the marginal cost (MC) curve is the upward‑sloping blue line. What output and price will the profit‑maximising monopolist choose?",
+      "question_text": "In the diagram below, a monopolist faces the inverse demand curve \\(P = 120 - 2Q\\). The marginal revenue (MR) curve is shown as the steeper red line and the marginal cost (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\\\"0 0 320 200\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\"><line x1=\\\"40\\\" y1=\\\"160\\\" x2=\\\"280\\\" y2=\\\"20\\\" stroke=\\\"black\\\" stroke-width=\\\"2\\\"/> <!-- Demand --><line x1=\\\"40\\\" y1=\\\"120\\\" x2=\\\"280\\\" y2=\\\"20\\\" stroke=\\\"red\\\" stroke-width=\\\"2\\\"/> <!-- MR --><line x1=\\\"40\\\" y1=\\\"160\\\" x2=\\\"280\\\" y2=\\\"140\\\" stroke=\\\"blue\\\" stroke-width=\\\"2\\\"/> <!-- MC --><text x=\\\"30\\\" y=\\\"165\\\" font-size=\\\"12\\\">0</text><text x=\\\"285\\\" y=\\\"15\\\" font-size=\\\"12\\\">P</text><text x=\\\"285\\\" y=\\\"155\\\" font-size=\\\"12\\\">Q</text></svg>",
@@ -32842,7 +32842,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Scale of preference (or monotonicity) states that, ceteris paribus, more of any good is preferred to less. The utility function is strictly increasing in both \\(X\\) and \\(Y\\) because the partial derivatives \\(\\partial U/\\partial X = \\frac{3}{2}X^{-0.5}Y^{0.5}>0\\) and \\(\\partial U/\\partial Y = \\frac{3}{2}X^{0.5}Y^{-0.5}>0\\). Therefore any bundle with higher quantities of both goods yields higher utility, making option A correct. Option B is false because the two bundles give different utilities (\\(U_{(20,10)} = 3\\sqrt{20}\\sqrt{10} \\neq 3\\sqrt{30}\\sqrt{15}=U_{(30,15)}\\)). Option C is not a definition of scale of preference (budget exhaustion is a separate constraint). Option D is false because the marginal rate of substitution for a Cobb‑Douglas function is \\(MRS = Y/X\\), which varies with the bundle. ",
+      "explanation": "Scale of preference (or monotonicity) states that, ceteris paribus, more of any good is preferred to less. The utility function is strictly increasing in both \\(X\\) and \\(Y\\) because the partial derivatives \\(\\partial U/\\partial X = \\frac{3}{2}X^{-0.5}Y^{0.5}>0\\) and \\(\\partial U/\\partial Y = \\frac{3}{2}X^{0.5}Y^{-0.5}>0\\). Therefore any bundle with higher quantities of both goods yields higher utility, making option A correct. Option B is false because the two bundles give different utilities (\\(U_{(20,10)} = 3\\sqrt{20}\\sqrt{10} \\neq 3\\sqrt{30}\\sqrt{15}=U_{(30,15)}\\)). Option C is not a definition of scale of preference (budget exhaustion is a separate constraint). Option D is false because the marginal rate of substitution for a Cobb‑Douglas function is \\(MRS = Y/X\\), which varies with the bundle.",
       "difficulty": 3
     },
     {
@@ -32850,7 +32850,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the short‑run total cost (STC) curve and the long‑run total cost (LRTC) curve are shown for a firm. The LRTC curve is tangent to the STC curve at output \\(Q=50\\). Which of the following statements is correct about the firm’s cost condition at \\(Q=50\\)?",
+      "question_text": "In the diagram below, the short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='280' y2='180' stroke='black' stroke-width='2'/><line x1='40' y1='180' x2='40' y2='20' stroke='black' stroke-width='2'/><polyline points='40,180 120,120 200,100 280,80' fill='none' stroke='blue' stroke-width='2'/> <!-- STC --> <polyline points='40,180 140,130 240,110 280,100' fill='none' stroke='red' stroke-width='2'/> <!-- LRTC tangent at Q=50 --> <text x='150' y='150' font-size='12'>STC</text><text x='210' y='120' font-size='12'>LRTC</text></svg>",
@@ -33362,7 +33362,7 @@
       "year": 2019,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s long‑run total cost (LRTC) function is given by \\[LRTC(Q)=20Q+0.2Q^{2}.\\] What is the long‑run average cost (LRAC) at an output level of \\(Q=40\\)?",
+      "question_text": "A firm’s long‑run total cost (LRT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -33490,7 +33490,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm's short‑run total cost is \\(STC(Q)=50+10Q+2Q^{2}\\) and its long‑run total cost is \\(LTC(Q)=5Q^{2}+20\\). At what output level do the short‑run average cost (SRAC) and long‑run average cost (LRAC) intersect?",
+      "question_text": "A firm's short‑run total cost is \\(STC(Q)=50+10Q+2Q^{2}\\) and its long‑run total cost is \\(LTC(Q)=5Q^{2}+20\\). At what output level do the short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -35186,7 +35186,7 @@
       "year": 2019,
       "topic": "Public Finance",
       "subtopic": "Deficit and Surplus Budgets",
-      "question_text": "In the diagram below, the vertical axis shows total revenue (R) and total expenditure (E) of the government. The budget line pivots around the revenue axis when tax rates change. If the government’s revenue is \\$500 billion and its expenditure is \\$620 billion, what is the primary deficit as a percentage of GDP, given that GDP equals \\$2 trillion?",
+      "question_text": "In the diagram below, the vertical axis shows total revenue (R) and total expenditure",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"50\" y=\"50\" width=\"80\" height=\"100\" fill=\"lightgray\" stroke=\"black\"/><rect x=\"150\" y=\"30\" width=\"80\" height=\"120\" fill=\"lightblue\" stroke=\"black\"/></svg>",
@@ -36338,7 +36338,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A consumer has $100 to spend on two goods, Good A priced at $10 per unit and Good B priced at $20 per unit. If the consumer chooses to allocate all income to Good A, she can purchase 10 units of A and 0 of B. Alternatively, she could allocate all income to Good B, obtaining 5 units of B and 0 of A. What is the marginal rate of transformation (MRT) between Good A and Good B implied by this allocation?",
+      "question_text": "A consumer has $100 to spend on two goods, Good A priced at $10 per unit and Good B priced at $20 per unit. If the consumer chooses to allocate all income to Good A, she can purchase 10 units of A and 0 of",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -36370,7 +36370,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s long‑run total cost (LTC) function is given by \\(LTC(Q)=0.5Q^{2}+40Q+200\\). Determine the output level at which long‑run average cost (LRAC) is minimized.",
+      "question_text": "A firm’s long‑run total cost (LT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -36402,7 +36402,7 @@
       "year": 2021,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the market demand curve faced by a monopolist is \\(P = 100 - 2Q\\). The marginal cost (MC) is constant at $20. The monopolist’s marginal revenue (MR) curve is shown as the red line. At the profit‑maximizing quantity, MR = MC. What price does the monopolist charge?",
+      "question_text": "In the diagram below, the market demand curve faced by a monopolist is \\(P = 100 - 2Q\\). The marginal cost (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='280' y2='180' stroke='black' stroke-width='2'/> <!-- X‑axis -->\n<line x1='40' y1='180' x2='40' y2='20' stroke='black' stroke-width='2'/> <!-- Y‑axis -->\n<polyline points='40,180 180,20' fill='none' stroke='black' stroke-width='2'/> <!-- Demand: P = 100-2Q -->\n<polyline points='40,180 280,140' fill='none' stroke='red' stroke-width='2'/> <!-- MR: 100-4Q -->\n<line x1='40' y1='140' x2='280' y2='140' stroke='blue' stroke-width='2'/> <!-- MC = 20 -->\n<text x='190' y='30' font-size='12' fill='black'>Demand</text>\n<text x='210' y='150' font-size='12' fill='red'>MR</text>\n<text x='45' y='135' font-size='12' fill='blue'>MC = 20</text>\n</svg>",
@@ -38930,7 +38930,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run average cost (SRAC) curve is given by \\(SRAC = \\frac{100}{Q} + 2\\) and its long‑run average cost (LRAC) curve by \\(LRAC = 5 + 0.1Q\\). At what output level do the two curves intersect, indicating the minimum efficient scale?",
+      "question_text": "A firm’s short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -38954,7 +38954,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "Set SRAC equal to LRAC and solve for \\(Q\\):\\n\\\\[ \\frac{100}{Q} + 2 = 5 + 0.1Q \\]\\\\nMultiply by \\(Q\\):\\n\\\\[ 100 + 2Q = 5Q + 0.1Q^{2} \\]\\\\nRearrange: \\(0.1Q^{2} + 5Q - 2Q - 100 = 0\\) → \\(0.1Q^{2} + 3Q - 100 = 0\\). Multiply by 10: \\(Q^{2} + 30Q - 1000 = 0\\). Using the quadratic formula, \\[ Q = \\frac{-30 \\pm \\sqrt{30^{2} + 4\\times1000}}{2} = \\frac{-30 \\pm 70}{2}. \\] The feasible positive root is \\(Q = \\frac{40}{2} = 20\\). Hence the curves intersect at 20 units, which is the minimum efficient scale. Options A, B, and C give incorrect quantities.",
+      "explanation": "Set SRAC equal to LRAC and solve for \\(Q\\):\\n\\[ \\frac{100}{Q} + 2 = 5 + 0.1Q \\]\\nMultiply by \\(Q\\):\\n\\[ 100 + 2Q = 5Q + 0.1Q^{2} \\]\\nRearrange: \\(0.1Q^{2} + 5Q - 2Q - 100 = 0\\) → \\(0.1Q^{2} + 3Q - 100 = 0\\). Multiply by 10: \\(Q^{2} + 30Q - 1000 = 0\\). Using the quadratic formula, \\[ Q = \\frac{-30 \\pm \\sqrt{30^{2} + 4\\times1000}}{2} = \\frac{-30 \\pm 70}{2}. \\] The feasible positive root is \\(Q = \\frac{40}{2} = 20\\). Hence the curves intersect at 20 units, which is the minimum efficient scale. Options A, B, and C give incorrect quantities.",
       "difficulty": 4
     },
     {
@@ -38986,7 +38986,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Profit maximisation for a monopoly occurs where marginal revenue equals marginal cost. Set \\(MR = MC\\):\\n\\\\[ 120 - 4Q = 30 \\]\\\\nSolve for \\(Q\\):\\n\\\\[ 4Q = 90 \\Rightarrow Q = 22.5 \\]\\\\nInsert \\(Q\\) into the demand equation to obtain price:\\n\\\\[ P = 120 - 2(22.5) = 120 - 45 = 75 \\]\\\\nThus the profit‑maximising combination is \\(P = 75\\) and \\(Q = 22.5\\), which corresponds to option B. Options A, C, and D arise from incorrect equating of MR or from using the demand curve directly without the MR adjustment.",
+      "explanation": "Profit maximisation for a monopoly occurs where marginal revenue equals marginal cost. Set \\(MR = MC\\):\\n\\[ 120 - 4Q = 30 \\]\\nSolve for \\(Q\\):\\n\\[ 4Q = 90 \\Rightarrow Q = 22.5 \\]\\nInsert \\(Q\\) into the demand equation to obtain price:\\n\\[ P = 120 - 2(22.5) = 120 - 45 = 75 \\]\\nThus the profit‑maximising combination is \\(P = 75\\) and \\(Q = 22.5\\), which corresponds to option B. Options A, C, and D arise from incorrect equating of MR or from using the demand curve directly without the MR adjustment.",
       "difficulty": 4
     },
     {
@@ -39570,7 +39570,7 @@
       "year": 2020,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost (SRTC) function is \\(SRTC(Q)=100+20Q+5Q^{2}\\) and its long‑run total cost (LRTC) function is \\(LRTC(Q)=100+5Q^{2}\\). At what level of output does the firm attain the minimum long‑run average cost (LRAC)?",
+      "question_text": "A firm’s short‑run total cost (SRT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -39914,7 +39914,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "First compute marginal cost (MC):\n\\[ MC = \\frac{dTC}{dQ} = 10 + Q \\]\nSet MC = P to obtain profit‑maximising output:\n\\[ 10 + Q = 12 \\Rightarrow Q = 2 \\]\nCheck the shutdown condition. Variable cost (VC) = 10Q + 0.5Q^{2}, so average variable cost (AVC) = \\(10 + 0.5Q\\). The minimum AVC occurs at the smallest Q because AVC is increasing; the lowest AVC is 10 at Q→0. Since P = 12 > AVC_{min}=10, the firm should produce rather than shut down. Hence the optimal short‑run output is 2 units (Option C).\n\nElimination of distractors:\n- A is wrong because price exceeds minimum AVC.\n- B yields MC = 11 < 12, not profit‑maximising.\n- D gives MC = 14 > 12, producing beyond the profit‑maximising point.\n",
+      "explanation": "First compute marginal cost (MC):\n\\[ MC = \\frac{dTC}{dQ} = 10 + Q \\]\nSet MC = P to obtain profit‑maximising output:\n\\[ 10 + Q = 12 \\Rightarrow Q = 2 \\]\nCheck the shutdown condition. Variable cost (VC) = 10Q + 0.5Q^{2}, so average variable cost (AVC) = \\(10 + 0.5Q\\). The minimum AVC occurs at the smallest Q because AVC is increasing; the lowest AVC is 10 at Q→0. Since P = 12 > AVC_{min}=10, the firm should produce rather than shut down. Hence the optimal short‑run output is 2 units (Option C).\n\nElimination of distractors:\n- A is wrong because price exceeds minimum AVC.\n- B yields MC = 11 < 12, not profit‑maximising.\n- D gives MC = 14 > 12, producing beyond the profit‑maximising point.",
       "difficulty": 4
     },
     {
@@ -39946,7 +39946,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "With a per‑unit tax \\(t=10\\), the effective marginal cost becomes:\n\\[ MC_{\\text{tax}} = MC + t = 20 + 2Q + 10 = 30 + 2Q \\]\nMarginal revenue (MR) for linear demand is:\n\\[ MR = \\frac{d(PQ)}{dQ} = 200 - 8Q \\]\nSet MR = MC_{tax}:\n\\[ 200 - 8Q = 30 + 2Q \\]\n\\[ 170 = 10Q \\]\n\\[ Q^{*} = 17 \\]\nInsert \\(Q^{*}\\) into the demand equation to obtain price:\n\\[ P^{*} = 200 - 4(17) = 200 - 68 = 132 \\]\nThus the profit‑maximising quantity‑price pair is \\( (17,\\,132) \\) – Option B.\n\nWhy the others are wrong:\n- A gives too low Q, resulting in MR > MC_{tax}.\n- C and D give Q where MR < MC_{tax}, reducing profit.\n",
+      "explanation": "With a per‑unit tax \\(t=10\\), the effective marginal cost becomes:\n\\[ MC_{\\text{tax}} = MC + t = 20 + 2Q + 10 = 30 + 2Q \\]\nMarginal revenue (MR) for linear demand is:\n\\[ MR = \\frac{d(PQ)}{dQ} = 200 - 8Q \\]\nSet MR = MC_{tax}:\n\\[ 200 - 8Q = 30 + 2Q \\]\n\\[ 170 = 10Q \\]\n\\[ Q^{*} = 17 \\]\nInsert \\(Q^{*}\\) into the demand equation to obtain price:\n\\[ P^{*} = 200 - 4(17) = 200 - 68 = 132 \\]\nThus the profit‑maximising quantity‑price pair is \\( (17,\\,132) \\) – Option B.\n\nWhy the others are wrong:\n- A gives too low Q, resulting in MR > MC_{tax}.\n- C and D give Q where MR < MC_{tax}, reducing profit.",
       "difficulty": 4
     },
     {
@@ -39978,7 +39978,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "An open‑market purchase means the central bank buys government securities from commercial banks or the public. The sellers receive cash, which adds to banks' reserves, allowing them to create more checkable deposits. Consequently, the monetary base and the overall money supply shift rightward (the dashed red line \\(MS_1\\) in the diagram). With a larger money supply, at any given level of money demand the equilibrium interest rate must fall. The lower rate stimulates transactions, so the quantity of money demanded moves up along the MD curve. Therefore option B correctly describes the outcome.\n\n- Option A describes the opposite of an open‑market purchase.\n- Option C ignores the supply shift.\n- Option D incorrectly infers the interest rate is unaffected.\n",
+      "explanation": "An open‑market purchase means the central bank buys government securities from commercial banks or the public. The sellers receive cash, which adds to banks' reserves, allowing them to create more checkable deposits. Consequently, the monetary base and the overall money supply shift rightward (the dashed red line \\(MS_1\\) in the diagram). With a larger money supply, at any given level of money demand the equilibrium interest rate must fall. The lower rate stimulates transactions, so the quantity of money demanded moves up along the MD curve. Therefore option B correctly describes the outcome.\n\n- Option A describes the opposite of an open‑market purchase.\n- Option C ignores the supply shift.\n- Option D incorrectly infers the interest rate is unaffected.",
       "difficulty": 3
     },
     {
@@ -40010,7 +40010,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "1. **Primary deficit** (includes interest):\\n\\[ \\text{Primary Deficit}=620\\,\\text{bn}-500\\,\\text{bn}-30\\,\\text{bn}=90\\,\\text{bn} \\]\n2. **Cyclical deficit** is 5% of revenue:\\n\\[ \\text{Cyclical Deficit}=0.05 \\times 500\\,\\text{bn}=25\\,\\text{bn} \\]\n3. **Structural deficit** = Primary deficit – Cyclical deficit (the portion that would remain even at potential output).\\n\\[ \\text{Structural Deficit}=90\\,\\text{bn}-25\\,\\text{bn}=65\\,\\text{bn} \\]\nHence the underlying structural deficit is $65 bn, which corresponds to option B.\n\nWhy the other options are incorrect:\n- A subtracts an extra $20 bn (treating the disaster aid as cyclical).\\n- C adds the disaster aid to the deficit, but one‑time relief is already part of total expenditure and should not affect the structural measure.\\n- D ignores the cyclical component altogether.\n",
+      "explanation": "1. **Primary deficit** (includes interest):\\n\\[ \\text{Primary Deficit}=620\\,\\text{bn}-500\\,\\text{bn}-30\\,\\text{bn}=90\\,\\text{bn} \\]\n2. **Cyclical deficit** is 5% of revenue:\\n\\[ \\text{Cyclical Deficit}=0.05 \\times 500\\,\\text{bn}=25\\,\\text{bn} \\]\n3. **Structural deficit** = Primary deficit – Cyclical deficit (the portion that would remain even at potential output).\\n\\[ \\text{Structural Deficit}=90\\,\\text{bn}-25\\,\\text{bn}=65\\,\\text{bn} \\]\nHence the underlying structural deficit is $65 bn, which corresponds to option B.\n\nWhy the other options are incorrect:\n- A subtracts an extra $20 bn (treating the disaster aid as cyclical).\\n- C adds the disaster aid to the deficit, but one‑time relief is already part of total expenditure and should not affect the structural measure.\\n- D ignores the cyclical component altogether.",
       "difficulty": 5
     },
     {
@@ -40234,7 +40234,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Short‑run marginal cost is the derivative of total cost: \\(MC = dTC_{SR}/dQ = 15 + Q\\). Short‑run average total cost is \\(ATC = TC_{SR}/Q = 200/Q + 15 + 0.5Q\\). Set \\(MC = ATC\\):\\n\\\\[15 + Q = \\frac{200}{Q} + 15 + 0.5Q\\\\]\\nCancel 15 on both sides and bring terms together: \\(Q = \\frac{200}{Q} + 0.5Q\\). Multiply by \\(Q\\): \\(Q^{2} = 200 + 0.5Q^{2}\\). Hence \\(0.5Q^{2} = 200\\) → \\(Q^{2}=400\\) → \\(Q = 20\\) (positive output). Therefore the correct output is 20 units.",
+      "explanation": "Short‑run marginal cost is the derivative of total cost: \\(MC = dTC_{SR}/dQ = 15 + Q\\). Short‑run average total cost is \\(ATC = TC_{SR}/Q = 200/Q + 15 + 0.5Q\\). Set \\(MC = ATC\\):\\n\\[15 + Q = \\frac{200}{Q} + 15 + 0.5Q\\]\\nCancel 15 on both sides and bring terms together: \\(Q = \\frac{200}{Q} + 0.5Q\\). Multiply by \\(Q\\): \\(Q^{2} = 200 + 0.5Q^{2}\\). Hence \\(0.5Q^{2} = 200\\) → \\(Q^{2}=400\\) → \\(Q = 20\\) (positive output). Therefore the correct output is 20 units.",
       "difficulty": 4
     },
     {
@@ -42450,7 +42450,7 @@
       "year": 2020,
       "topic": "Money, Banking and Inflation",
       "subtopic": "Inflation Causes and Controls",
-      "question_text": "The short‑run Phillips curve is given by \\( \\pi = \\pi^{e} - \\beta (u - u_n) \\), where \\(\\pi\\) is inflation, \\(\\pi^{e}\\) expected inflation, \\(u\\) unemployment and \\(u_n\\) the natural rate. A negative supply shock shifts the curve upward. Which of the following statements correctly describes the likely outcome?",
+      "question_text": "The short‑run Phillips curve is given by \\( \\pi = \\pi^{e} - \\beta (u - u_n) \\), where \\(\\pi\\) is inflation, \\(\\pi^{e}\\) expected inflation, \\(u\\) unemployment and \\(u_n\\) the natural rat",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -43922,7 +43922,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the long‑run average cost (LRAC) curve is U‑shaped. At output level Q1 the firm experiences economies of scale, while at Q2 it experiences diseconomies of scale. Which statement is correct?",
+      "question_text": "In the diagram below, the long‑run average cost (LRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M40,180 L80,140 L120,100 L160,80 L200,70 L240,68\" stroke=\"black\" fill=\"none\"/><circle cx=\"80\" cy=\"140\" r=\"3\" fill=\"red\"/><circle cx=\"200\" cy=\"70\" r=\"3\" fill=\"red\"/><text x=\"60\" y=\"155\" font-size=\"12\">Q1</text><text x=\"190\" y=\"55\" font-size=\"12\">Q2</text></svg>",
@@ -44690,7 +44690,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost (STC) function is \\(TC_{SR}= 100 + 20Q + 5Q^{2}\\). Its long‑run average cost (LRAC) curve is given by \\(LRAC = 30 - Q\\) for output levels where this expression is positive. At what output level does short‑run marginal cost equal long‑run average cost?",
+      "question_text": "A firm’s short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -45330,7 +45330,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm has the following cost functions:\\\\\n\\\\(TC_{SR}= 40 + 8Q + Q^{2}\\\\)\\\\\n\\\\(TC_{LR}= 12Q + Q^{2}\\\\)\\\\\nAt which output level do the short‑run average cost (SRAC) and long‑run average cost (LRAC) curves intersect?",
+      "question_text": "A firm has the following cost functions:\\\\\n\\(TC_{SR}= 40 + 8Q + Q^{2}\\)\\\\\n\\(TC_{LR}= 12Q + Q^{2}\\)\\\\\nAt which output level do the short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -45354,7 +45354,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "SRAC = \\(\\frac{TC_{SR}}{Q}=\\frac{40}{Q}+8+Q\\).\\nLRAC = \\(\\frac{TC_{LR}}{Q}=12+Q\\).\\nSet SRAC = LRAC:\\n\\\\[\\frac{40}{Q}+8+Q = 12+Q\\\\]\\\\nCancel \\(Q\\) on both sides and solve for \\(Q\\):\\\\n\\\\[\\frac{40}{Q}+8 = 12\\\\]\\\\[\\frac{40}{Q}=4\\\\]\\\\[Q = 10\\\\]\\\\nThus the curves intersect at \\(Q=10\\). Options A, B, and D give incorrect quantities.",
+      "explanation": "SRAC = \\(\\frac{TC_{SR}}{Q}=\\frac{40}{Q}+8+Q\\).\\nLRAC = \\(\\frac{TC_{LR}}{Q}=12+Q\\).\\nSet SRAC = LRAC:\\n\\[\\frac{40}{Q}+8+Q = 12+Q\\]\\nCancel \\(Q\\) on both sides and solve for \\(Q\\):\\n\\[\\frac{40}{Q}+8 = 12\\]\\[\\frac{40}{Q}=4\\]\\[Q = 10\\]\\nThus the curves intersect at \\(Q=10\\). Options A, B, and D give incorrect quantities.",
       "difficulty": 4
     },
     {
@@ -46130,7 +46130,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm has the following total‑cost functions: short‑run \\(TC_{SR}=20+5Q+Q^{2}\\) and long‑run \\(TC_{LR}=5Q^{2}\\). At which output level are the short‑run average cost (SRAC) and long‑run average cost (LRAC) equal?",
+      "question_text": "A firm has the following total‑cost functions: short‑run \\(TC_{SR}=20+5Q+Q^{2}\\) and long‑run \\(TC_{LR}=5Q^{2}\\). At which output level are the short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><path d='M10,190 L310,10' stroke='black' fill='none'/></svg>",
@@ -47986,7 +47986,7 @@
       "year": 2023,
       "topic": "International Trade and Economic Organizations",
       "subtopic": "ECOWAS and WTO",
-      "question_text": "Country A, a WTO member, has entered into a regional free‑trade agreement (RTA) with Country B. Under WTO law, which of the following actions by Country A would be permissible?",
+      "question_text": "Country A, a WTO member, has entered into a regional free‑trade agreement (RT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -48818,7 +48818,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A consumer has a limited monthly income of $120 and three wants: food (F) priced at $4 per unit, clothing (C) priced at $20 per unit, and entertainment (E) priced at $30 per unit. According to the concept of scale of preference, which ranking of wants is most consistent with utility maximisation?",
+      "question_text": "A consumer has a limited monthly income of $120 and three wants: food (F) priced at $4 per unit, clothing",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -49010,7 +49010,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost function is \\(TC_{SR}(Q)=200+5Q+Q^{2}\\) and its long‑run total cost function is \\(TC_{LR}(Q)=50\\sqrt{Q}+2Q\\). At what level of output do the short‑run marginal cost (SRMC) and long‑run marginal cost (LRMC) become equal? (Answer to one decimal place.)",
+      "question_text": "A firm’s short‑run total cost function is \\(TC_{SR}(Q)=200+5Q+Q^{2}\\) and its long‑run total cost function is \\(TC_{LR}(Q)=50\\sqrt{Q}+2Q\\). At what level of output do the short‑run marginal cost (SRM",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -49170,7 +49170,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost function is \\(TC_{SR}=100+20Q+5Q^{2}\\) and its short‑run variable cost is \\(VC=20Q+5Q^{2}\\). Its long‑run total cost function is \\(TC_{LR}=10Q+2Q^{2}\\). At output level \\(Q=5\\), what is the firm’s short‑run average total cost (SATC) and long‑run average total cost (LATC) respectively?",
+      "question_text": "A firm’s short‑run total cost function is \\(TC_{SR}=100+20Q+5Q^{2}\\) and its short‑run variable cost is \\(VC=20Q+5Q^{2}\\). Its long‑run total cost function is \\(TC_{LR}=10Q+2Q^{2}\\). At output level \\(Q=5\\), what is the firm’s short‑run average total cost (SAT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -49394,7 +49394,7 @@
       "year": 2019,
       "topic": "National Income and Economic Analysis",
       "subtopic": "GDP, GNP and NNP Measurement",
-      "question_text": "Using the following data for Country X (all values in billions of dollars):\\n\\nConsumption (C) = 500\\nInvestment (I) = 200\\nGovernment spending (G) = 300\\nExports (X) = 150\\nImports (M) = 100\\nNet factor income from abroad (NFIA) = 20\\nDepreciation (D) = 80\\n\\nWhat is the Net National Product (NNP) at market price?",
+      "question_text": "Using the following data for Country X (all values in billions of dollars):\\n\\nConsumption",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -49490,7 +49490,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s long‑run total cost (LRTC) function is given by \\[LRTC(Q)=Q^{3}-12Q^{2}+36Q\\]. The long‑run average cost (LRAC) is therefore \\[LRAC(Q)=\\frac{LRTC(Q)}{Q}=Q^{2}-12Q+36\\]. At what output level does LRAC attain its minimum?",
+      "question_text": "A firm’s long‑run total cost (LRT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -49522,7 +49522,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, a firm operates as a natural monopoly. The average total cost (ATC) curve is downward‑sloping throughout the relevant range, while marginal cost (MC) lies below ATC. If the regulator sets the price equal to marginal cost, what is the likely outcome for the firm?",
+      "question_text": "In the diagram below, a firm operates as a natural monopoly. The average total cost (AT",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><polyline points='40,150 300,80' stroke='blue' fill='none' stroke-width='2'/><polyline points='40,170 300,90' stroke='red' fill='none' stroke-width='2'/><text x='50' y='145' font-size='12' fill='blue'>ATC</text><text x='50' y='165' font-size='12' fill='red'>MC</text></svg>",
@@ -49834,7 +49834,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "To minimise LRAC, differentiate with respect to \\(Q\\) and set the derivative to zero:\\n\\\\[\\frac{d\\,LRAC}{dQ}=0.02-\\frac{150}{Q^{2}}=0\\]\\nSolving gives \\(Q^{2}=\\frac{150}{0.02}=7500\\) so \\(Q=\\sqrt{7500}\\approx86.6\\). The closest answer is 85 units, therefore option B is correct. Option A is too low, C is slightly high, and D is far from the optimal point.",
+      "explanation": "To minimise LRAC, differentiate with respect to \\(Q\\) and set the derivative to zero:\\n\\[\\frac{d\\,LRAC}{dQ}=0.02-\\frac{150}{Q^{2}}=0\\]\\nSolving gives \\(Q^{2}=\\frac{150}{0.02}=7500\\) so \\(Q=\\sqrt{7500}\\approx86.6\\). The closest answer is 85 units, therefore option B is correct. Option A is too low, C is slightly high, and D is far from the optimal point.",
       "difficulty": 4
     },
     {
@@ -49866,7 +49866,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "First obtain marginal revenue (MR). For a linear demand \\(P = a - bQ\\), MR is \\(a - 2bQ\\). Hence MR = 120 - 4Q. Set MR = MC:\\n\\\\[120 - 4Q = 30\\]\\n\\\\[4Q = 90\\]\\n\\\\[Q = 22.5\\]\\\\nSubstitute \\(Q\\) back into the demand equation to get price:\\n\\\\[P = 120 - 2(22.5) = 75\\]\\\\nThus the profit‑maximising combination is 22.5 units at $75, which is option A. The other options either use incorrect MR‑MC equality or ignore the relationship between price and quantity.",
+      "explanation": "First obtain marginal revenue (MR). For a linear demand \\(P = a - bQ\\), MR is \\(a - 2bQ\\). Hence MR = 120 - 4Q. Set MR = MC:\\n\\[120 - 4Q = 30\\]\\n\\[4Q = 90\\]\\n\\[Q = 22.5\\]\\nSubstitute \\(Q\\) back into the demand equation to get price:\\n\\[P = 120 - 2(22.5) = 75\\]\\nThus the profit‑maximising combination is 22.5 units at $75, which is option A. The other options either use incorrect MR‑MC equality or ignore the relationship between price and quantity.",
       "difficulty": 4
     },
     {
@@ -49970,7 +49970,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the market demand curve (D), the monopoly marginal‑revenue curve (MR) and the marginal‑cost curve (MC) are shown. The competitive equilibrium would occur where price equals marginal cost at point E, while the monopoly maximizes profit where MR = MC at point M. Compared with the competitive outcome, the monopoly creates a dead‑weight loss represented by the shaded triangle. Which of the following statements correctly describes the area of this dead‑weight loss?",
+      "question_text": "In the diagram below, the market demand curve (D), the monopoly marginal‑revenue curve (MR) and the marginal‑cost curve (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\\\"0 0 320 200\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\"><line x1=\\\"40\\\" y1=\\\"180\\\" x2=\\\"280\\\" y2=\\\"180\\\" stroke=\\\"black\\\"/><line x1=\\\"40\\\" y1=\\\"180\\\" x2=\\\"40\\\" y2=\\\"20\\\" stroke=\\\"black\\\"/><polyline points=\\\"40,180 120,140 200,100 280,60\\\" fill=\\\"none\\\" stroke=\\\"blue\\\"/><polyline points=\\\"40,180 120,120 200,80 280,40\\\" fill=\\\"none\\\" stroke=\\\"red\\\"/><polyline points=\\\"40,140 120,140 200,140 280,140\\\" fill=\\\"none\\\" stroke=\\\"green\\\"/></svg>",
@@ -50482,7 +50482,7 @@
       "year": 2021,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "A perfectly competitive firm faces the following marginal cost (MC) function: \\( MC = 2Q + 10 \\). Its average variable cost (AVC) function is \\( AVC = Q + 10 \\). The market price is $30. What is the profit‑maximizing output of the firm in the short run?",
+      "question_text": "A perfectly competitive firm faces the following marginal cost (M",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -50994,7 +50994,7 @@
       "year": 2023,
       "topic": "Money, Banking and Inflation",
       "subtopic": "Roles of Central and Commercial Banks",
-      "question_text": "In the diagram below, the money market is shown with the interest rate \\(i\\) on the vertical axis and real money balances \\(M/P\\) on the horizontal axis. The initial equilibrium is at point E₁ where the money demand curve (MD) intersects the original LM curve. The central bank conducts an open‑market purchase of government securities, shifting the LM curve to LM₂. Which of the following best describes the immediate effect on the equilibrium interest rate?",
+      "question_text": "In the diagram below, the money market is shown with the interest rate \\(i\\) on the vertical axis and real money balances \\(M/P\\) on the horizontal axis. The initial equilibrium is at point E₁ where the money demand curve (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='300' y2='180' stroke='black' stroke-width='2'/><!-- horizontal axis -->\n<line x1='40' y1='180' x2='40' y2='20' stroke='black' stroke-width='2'/><!-- vertical axis -->\n<text x='310' y='185' font-size='12'>M/P</text>\n<text x='30' y='15' font-size='12'>i</text>\n<!-- MD curve (downward) -->\n<polyline points='50,170 150,120 250,70' fill='none' stroke='blue' stroke-width='2'/>\n<!-- LM1 (original) -->\n<polyline points='50,130 150,130 250,130' fill='none' stroke='red' stroke-width='2'/>\n<!-- LM2 (rightward shift) -->\n<polyline points='80,130 180,130 280,130' fill='none' stroke='green' stroke-width='2' stroke-dasharray='4 2'/>\n<!-- equilibrium points -->\n<circle cx='150' cy='130' r='4' fill='black'/>\n<circle cx='180' cy='130' r='4' fill='black'/>\n<text x='140' y='125' font-size='10'>E₁</text>\n<text x='170' y='125' font-size='10'>E₂</text>\n</svg>",
@@ -51274,7 +51274,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "First find marginal cost: \\(MC = \\frac{dTC}{dQ} = 5 + Q\\). Set \\(MC = P\\): \\(5 + Q = 12 \\Rightarrow Q = 7\\).\\n\\\\nAverage variable cost (AVC) is \\(AVC = \\frac{5Q + 0.5Q^{2}}{Q} = 5 + 0.5Q\\). At \\(Q=7\\), \\(AVC = 5 + 3.5 = 8.5\\). Since \\(P=12 > AVC\\), the firm covers its variable costs and contributes to fixed costs, so it should produce.\\n\\\\nOption C correctly states the profit‑maximizing output and that the firm earns a positive contribution margin. Options A and D are wrong because price exceeds AVC. Option B uses the wrong MC solution (\\(Q=14\\) would give \\(MC=19\\), not equal to price).",
+      "explanation": "First find marginal cost: \\(MC = \\frac{dTC}{dQ} = 5 + Q\\). Set \\(MC = P\\): \\(5 + Q = 12 \\Rightarrow Q = 7\\).\\n\\nAverage variable cost (AVC) is \\(AVC = \\frac{5Q + 0.5Q^{2}}{Q} = 5 + 0.5Q\\). At \\(Q=7\\), \\(AVC = 5 + 3.5 = 8.5\\). Since \\(P=12 > AVC\\), the firm covers its variable costs and contributes to fixed costs, so it should produce.\\n\\nOption C correctly states the profit‑maximizing output and that the firm earns a positive contribution margin. Options A and D are wrong because price exceeds AVC. Option B uses the wrong MC solution (\\(Q=14\\) would give \\(MC=19\\), not equal to price).",
       "difficulty": 4
     },
     {
@@ -51594,7 +51594,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "To find the minimum of short‑run ATC, differentiate \\(ATC_{SR}\\):\\n\\\\[\\frac{dATC_{SR}}{dQ}= -\\frac{150}{Q^{2}}+0.5\\]=0\\\\n=> \\(0.5=\\frac{150}{Q^{2}}\\) => \\(Q^{2}=300\\) => \\(Q\\approx 17.32\\). Rounded to the nearest integer, \\(Q\\approx 17\\).\\n\\nLong‑run ATC at \\(Q=17\\):\\n\\\\[ATC_{LR}=\\frac{120}{17}+15+0.3\\times17\\approx 6.9+15+5.1\\approx 27\\] which is lower than the short‑run ATC (about 37). Because the firm can produce the same quantity at a lower long‑run average cost, the output is feasible in the long run.\\n\\nOption A correctly states the output level and feasibility; the other options give incorrect quantities or wrong feasibility assessments.",
+      "explanation": "To find the minimum of short‑run ATC, differentiate \\(ATC_{SR}\\):\\n\\[\\frac{dATC_{SR}}{dQ}= -\\frac{150}{Q^{2}}+0.5\\]=0\\n=> \\(0.5=\\frac{150}{Q^{2}}\\) => \\(Q^{2}=300\\) => \\(Q\\approx 17.32\\). Rounded to the nearest integer, \\(Q\\approx 17\\).\\n\\nLong‑run ATC at \\(Q=17\\):\\n\\[ATC_{LR}=\\frac{120}{17}+15+0.3\\times17\\approx 6.9+15+5.1\\approx 27\\] which is lower than the short‑run ATC (about 37). Because the firm can produce the same quantity at a lower long‑run average cost, the output is feasible in the long run.\\n\\nOption A correctly states the output level and feasibility; the other options give incorrect quantities or wrong feasibility assessments.",
       "difficulty": 4
     },
     {
@@ -51626,7 +51626,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "For a linear demand \\(P = a - bQ\\) the marginal revenue is \\(MR = a - 2bQ\\). Here \\(a=100\\) and \\(b=2\\), so \\(MR = 100 - 4Q\\). Profit maximisation requires \\(MR = MC\\):\\n\\\\[100 - 4Q = 20\\]\\\\[4Q = 80\\]\\\\[Q = 20\\]\\nSubstituting \\(Q=20\\) into the demand equation gives the price: \\(P = 100 - 2(20) = 60\\). Thus the profit‑maximising bundle is \\((Q,P) = (20, 60)\\). Options B, C and D either solve a different equation or use incorrect algebra, so they are incorrect.",
+      "explanation": "For a linear demand \\(P = a - bQ\\) the marginal revenue is \\(MR = a - 2bQ\\). Here \\(a=100\\) and \\(b=2\\), so \\(MR = 100 - 4Q\\). Profit maximisation requires \\(MR = MC\\):\\n\\[100 - 4Q = 20\\]\\[4Q = 80\\]\\[Q = 20\\]\\nSubstituting \\(Q=20\\) into the demand equation gives the price: \\(P = 100 - 2(20) = 60\\). Thus the profit‑maximising bundle is \\((Q,P) = (20, 60)\\). Options B, C and D either solve a different equation or use incorrect algebra, so they are incorrect.",
       "difficulty": 4
     },
     {
@@ -52690,7 +52690,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm has the following cost functions: \\[ TC_{SR}(Q)=50+8Q+2Q^{2},\\quad TC_{LR}(Q)=5Q^{0.9}. \\] What is the long‑run average cost (LRAC) at \\(Q=100\\) units, and how does it compare to the short‑run average cost (SRAC) at the same output?",
+      "question_text": "A firm has the following cost functions: \\[ TC_{SR}(Q)=50+8Q+2Q^{2},\\quad TC_{LR}(Q)=5Q^{0.9}. \\] What is the long‑run average cost (LRA",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -54162,7 +54162,7 @@
       "year": 2020,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the long‑run average cost (LRAC) curve of a perfectly competitive industry is shown together with its long‑run marginal cost (LRMC) curve. The point where LRMC intersects LRAC determines the efficient scale of production. At this point, the market price is $12 per unit. Which of the following statements is correct about a firm operating at this efficient scale?",
+      "question_text": "In the diagram below, the long‑run average cost (LRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'>\n  <line x1='20' y1='180' x2='300' y2='180' stroke='black' stroke-width='2'/>\n  <line x1='20' y1='180' x2='20' y2='20' stroke='black' stroke-width='2'/>\n  <!-- LRAC (U‑shaped) -->\n  <path d='M20,180 C80,100 140,80 300,80' stroke='blue' fill='none' stroke-width='2'/>\n  <!-- LRMC (downward‑sloping then upward crossing) -->\n  <path d='M20,180 L300,80' stroke='red' fill='none' stroke-width='2'/>\n  <!-- Labels (optional) -->\n  <text x='150' y='190' font-size='12'>Quantity</text>\n  <text x='5' y='100' transform='rotate(-90,5,100)' font-size='12'>Cost</text>\n</svg>",
@@ -54802,7 +54802,7 @@
       "year": 2020,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the market demand curve is \\(P = 100 - 2Q\\) and the marginal cost (MC) is constant at \\(\\$20\\). A monopolist’s marginal‑revenue (MR) curve is twice as steep as the demand curve. What is the dead‑weight loss (DWL) created by the monopoly relative to a perfectly competitive outcome?",
+      "question_text": "In the diagram below, the market demand curve is \\(P = 100 - 2Q\\) and the marginal cost (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='280' y2='20' stroke='black' stroke-width='2'/><line x1='40' y1='150' x2='280' y2='150' stroke='red' stroke-width='2'/><text x='290' y='25' font-size='12'>P</text><text x='35' y='185' font-size='12'>Q</text></svg>",
@@ -54930,7 +54930,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost function is \\(TC_{SR}=100+20Q+5Q^{2}\\) and its long‑run total cost function is \\(TC_{LR}=50Q+4Q^{2}\\). At which output level do short‑run average cost (SRAC) and long‑run average cost (LRAC) become equal?",
+      "question_text": "A firm’s short‑run total cost function is \\(TC_{SR}=100+20Q+5Q^{2}\\) and its long‑run total cost function is \\(TC_{LR}=50Q+4Q^{2}\\). At which output level do short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -55154,7 +55154,7 @@
       "year": 2019,
       "topic": "Money, Banking and Inflation",
       "subtopic": "Roles of Central and Commercial Banks",
-      "question_text": "In the diagram below, the money market shows money demand (MD) downward sloping and money supply (MS) initially vertical at MS₁. The central bank conducts an open‑market purchase of government securities, shifting the money supply curve rightward to MS₂ while MD remains unchanged. What is the most likely effect on the equilibrium interest rate?",
+      "question_text": "In the diagram below, the money market shows money demand (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='50' y1='150' x2='270' y2='150' stroke='black' stroke-width='2'/> <!-- horizontal axis --> <line x1='50' y1='150' x2='50' y2='30' stroke='black' stroke-width='2'/> <!-- vertical axis --> <text x='160' y='170' font-size='12' text-anchor='middle'>Quantity of Money</text> <text x='20' y='90' font-size='12' transform='rotate(-90 20,90)'>Interest Rate</text> <polyline points='50,150 150,80 270,80' fill='none' stroke='red' stroke-width='2'/> <!-- MD --> <line x1='50' y1='120' x2='270' y2='120' stroke='blue' stroke-width='2'/> <!-- MS1 --> <line x1='50' y1='90' x2='270' y2='90' stroke='blue' stroke-width='2' stroke-dasharray='4 2'/> <!-- MS2 --> <text x='260' y='115' font-size='10' fill='blue'>MS₁</text> <text x='260' y='85' font-size='10' fill='blue'>MS₂</text> <text x='160' y='70' font-size='10' fill='red'>MD</text></svg>",
@@ -55378,7 +55378,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A consumer can afford any combination of three goods A, B, and C. Based on her preferences, she always chooses a bundle containing 3 units of A and 2 units of B over a bundle containing 2 units of A and 3 units of B, regardless of the amount of C. Which of the following statements best describes this behavior in terms of the concept of scale of preference?",
+      "question_text": "A consumer can afford any combination of three goods A, B, and",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -58962,7 +58962,7 @@
       "year": 2022,
       "topic": "Money, Banking and Inflation",
       "subtopic": "Inflation Causes and Controls",
-      "question_text": "In the diagram below, the short‑run aggregate supply curve shifts left from SRAS₁ to SRAS₂ while aggregate demand (AD) stays unchanged. The initial equilibrium price level is 100 and real GDP is 500. After the leftward shift, real GDP falls to 480 and the price level rises to 104. What is the approximate percentage increase in the price level?",
+      "question_text": "In the diagram below, the short‑run aggregate supply curve shifts left from SRAS₁ to SRAS₂ while aggregate demand (A",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\\\"0 0 320 200\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\"><line x1=\\\"40\\\" y1=\\\"180\\\" x2=\\\"280\\\" y2=\\\"180\\\" stroke=\\\"black\\\"/><line x1=\\\"40\\\" y1=\\\"180\\\" x2=\\\"40\\\" y2=\\\"20\\\" stroke=\\\"black\\\"/><text x=\\\"150\\\" y=\\\"190\\\" font-size=\\\"12\\\">Real GDP (Y)</text><text x=\\\"10\\\" y=\\\"30\\\" font-size=\\\"12\\\">Price Level (P)</text><polyline points=\\\"60,160 120,140 180,130 240,125\\\" fill=\\\"none\\\" stroke=\\\"blue\\\" stroke-width=\\\"2\\\"/><polyline points=\\\"60,170 120,150 180,140 240,135\\\" fill=\\\"none\\\" stroke=\\\"red\\\" stroke-width=\\\"2\\\"/><text x=\\\"250\\\" y=\\\"125\\\" font-size=\\\"10\\\" fill=\\\"blue\\\">SRAS₁</text><text x=\\\"250\\\" y=\\\"135\\\" font-size=\\\"10\\\" fill=\\\"red\\\">SRAS₂</text><line x1=\\\"150\\\" y1=\\\"180\\\" x2=\\\"150\\\" y2=\\\"140\\\" stroke=\\\"green\\\" stroke-dasharray=\\\"4\\\"/><text x=\\\"155\\\" y=\\\"150\\\" font-size=\\\"10\\\">AD</text></svg>",
@@ -60050,7 +60050,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm faces the short‑run total cost function \\( TC_{SR}=150+5Q+Q^{2} \\) and the long‑run average‑cost function \\( LRAC=10+\\frac{200}{Q} \\). At what output level do short‑run average total cost (SATC) and long‑run average cost (LRAC) coincide?",
+      "question_text": "A firm faces the short‑run total cost function \\( TC_{SR}=150+5Q+Q^{2} \\) and the long‑run average‑cost function \\( LRAC=10+\\frac{200}{Q} \\). At what output level do short‑run average total cost (SAT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -60498,7 +60498,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A planner must allocate a scarce water resource of 100 units between agriculture (A) and industry (I). The marginal benefit (MB) curves are MB_A = 120 - 0.8Q_A and MB_I = 100 - 0.5Q_I, where Q_A and Q_I are the quantities allocated to each sector. Which allocation maximizes total net benefit?",
+      "question_text": "A planner must allocate a scarce water resource of 100 units between agriculture",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -60658,7 +60658,7 @@
       "year": 2021,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A consumer has $100 to spend on two goods X and Y. The price of X is $10 per unit and the price of Y is $5 per unit. The marginal utilities (MU) for the first few units are: \\(MU_X = 40, 30, 20\\) for the first three units of X and then 10 for each additional unit; \\(MU_Y = 25, 20, 15, 10\\) for the first four units of Y and then 5 for each additional unit. Assuming total utility is the sum of marginal utilities, which combination of units maximizes total utility subject to the budget? ",
+      "question_text": "A consumer has $100 to spend on two goods X and Y. The price of X is $10 per unit and the price of Y is $5 per unit. The marginal utilities (MU) for the first few units are: \\(MU_X = 40, 30, 20\\) for the first three units of X and then 10 for each additional unit; \\(MU_Y = 25, 20, 15, 10\\) for the first four units of Y and then 5 for each additional unit. Assuming total utility is the sum of marginal utilities, which combination of units maximizes total utility subject to the budget?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -61010,7 +61010,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost function is \\(TC(Q)=100+20Q+5Q^{2}\\).  The short‑run average variable cost (AVC) and marginal cost (MC) are derived from this function.  What is the shutdown price for the firm?",
+      "question_text": "A firm’s short‑run total cost function is \\(TC(Q)=100+20Q+5Q^{2}\\).  The short‑run average variable cost (AV",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -61066,7 +61066,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "First find the monopoly’s profit‑maximising output.  The monopoly’s marginal revenue (MR) for a linear demand is \\(MR = 120 - 8Q\\).  Set MR = MC:\n\\[120 - 8Q = 20 + 2Q \\Rightarrow 100 = 10Q \\Rightarrow Q_{m}=10.\\]\nPrice from the demand curve: \\[P_{m}=120-4(10)=80.\\]\n\nCompetitive equilibrium occurs where \\(P = MC\\):\n\\[120 - 4Q = 20 + 2Q \\Rightarrow 100 = 6Q \\Rightarrow Q_{c}=\\frac{100}{6}=16.666\\ldots\\]\nCorresponding competitive price (also MC at this output):\n\\[P_{c}=MC=20+2(16.666)=53.33.\\]\nDead‑weight loss is the area of the triangle between the demand and MC curves from \\(Q_{m}\\) to \\(Q_{c}\\):\n\\[DWL = \\frac{1}{2}(Q_{c}-Q_{m})(P_{m}-MC_{m})\\]\nwhere \\(MC_{m}=20+2(10)=40\\).\n\\[DWL = \\frac{1}{2}(16.667-10)(80-40)=\\frac{1}{2}(6.667)(40)=133.34\\approx\\$133.33.\\]\nThus option A is correct.  Options B, C and D either over‑estimate or ignore the welfare loss.\n",
+      "explanation": "First find the monopoly’s profit‑maximising output.  The monopoly’s marginal revenue (MR) for a linear demand is \\(MR = 120 - 8Q\\).  Set MR = MC:\n\\[120 - 8Q = 20 + 2Q \\Rightarrow 100 = 10Q \\Rightarrow Q_{m}=10.\\]\nPrice from the demand curve: \\[P_{m}=120-4(10)=80.\\]\n\nCompetitive equilibrium occurs where \\(P = MC\\):\n\\[120 - 4Q = 20 + 2Q \\Rightarrow 100 = 6Q \\Rightarrow Q_{c}=\\frac{100}{6}=16.666\\ldots\\]\nCorresponding competitive price (also MC at this output):\n\\[P_{c}=MC=20+2(16.666)=53.33.\\]\nDead‑weight loss is the area of the triangle between the demand and MC curves from \\(Q_{m}\\) to \\(Q_{c}\\):\n\\[DWL = \\frac{1}{2}(Q_{c}-Q_{m})(P_{m}-MC_{m})\\]\nwhere \\(MC_{m}=20+2(10)=40\\).\n\\[DWL = \\frac{1}{2}(16.667-10)(80-40)=\\frac{1}{2}(6.667)(40)=133.34\\approx\\$133.33.\\]\nThus option A is correct.  Options B, C and D either over‑estimate or ignore the welfare loss.",
       "difficulty": 4
     },
     {
@@ -61778,7 +61778,7 @@
       "year": 2021,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "According to the scale‑of‑preference principle, which of the following statements is correct?\\nA) A bundle that provides more of one good and less of another is always preferred.\\nB) A consumer will always choose the bundle that maximizes total utility regardless of income.\\nC) Preferences are irrelevant when scarcity is present.\\nD) If one bundle contains at least as much of every good and more of at least one good than another bundle, the former is strictly preferred.",
+      "question_text": "According to the scale‑of‑preference principle, which of the following statements is correct?\\n",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -61810,7 +61810,7 @@
       "year": 2020,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm observes that its long‑run average cost (LRAC) curve declines until output reaches 500 units and then begins to rise. Which of the following best explains this U‑shaped LRAC pattern?",
+      "question_text": "A firm observes that its long‑run average cost (LRA",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -62954,7 +62954,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "Average total cost is \\(ATC = \\frac{TC}{Q}=\\frac{100}{Q}+40+5Q\\). To minimise ATC differentiate with respect to \\(Q\\):\\n\\\\[\\frac{d ATC}{dQ}= -\\frac{100}{Q^{2}} + 5 = 0\\]\\\\nSolving gives \\(5 = \\frac{100}{Q^{2}} \\Rightarrow Q^{2}=20 \\Rightarrow Q = \\sqrt{20} \\approx 4.47\\). The closest option is 4.5 units, which therefore minimises ATC. Options A, B and D either give higher ATC values (check by substituting) or lie on the upward‑sloping part of the ATC curve.",
+      "explanation": "Average total cost is \\(ATC = \\frac{TC}{Q}=\\frac{100}{Q}+40+5Q\\). To minimise ATC differentiate with respect to \\(Q\\):\\n\\[\\frac{d ATC}{dQ}= -\\frac{100}{Q^{2}} + 5 = 0\\]\\nSolving gives \\(5 = \\frac{100}{Q^{2}} \\Rightarrow Q^{2}=20 \\Rightarrow Q = \\sqrt{20} \\approx 4.47\\). The closest option is 4.5 units, which therefore minimises ATC. Options A, B and D either give higher ATC values (check by substituting) or lie on the upward‑sloping part of the ATC curve.",
       "difficulty": 4
     },
     {
@@ -62986,7 +62986,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "For a linear demand, marginal revenue (MR) has twice the slope of the demand curve: \\(MR = 200 - 20Q\\). Set MR = MC to obtain the profit‑maximising output:\\n\\\\[200 - 20Q = 30 \\Rightarrow 20Q = 170 \\Rightarrow Q = 8.5\\]\\\\nSubstituting \\(Q\\) back into the demand equation gives the price:\\n\\\\[P = 200 - 10(8.5) = 200 - 85 = 115\\]\\\\nThus the profit‑maximising combination is \\(Q=8.5\\) and \\(P=\\$115\\). The other options either do not satisfy MR=MC or give a lower profit.",
+      "explanation": "For a linear demand, marginal revenue (MR) has twice the slope of the demand curve: \\(MR = 200 - 20Q\\). Set MR = MC to obtain the profit‑maximising output:\\n\\[200 - 20Q = 30 \\Rightarrow 20Q = 170 \\Rightarrow Q = 8.5\\]\\nSubstituting \\(Q\\) back into the demand equation gives the price:\\n\\[P = 200 - 10(8.5) = 200 - 85 = 115\\]\\nThus the profit‑maximising combination is \\(Q=8.5\\) and \\(P=\\$115\\). The other options either do not satisfy MR=MC or give a lower profit.",
       "difficulty": 4
     },
     {
@@ -63018,7 +63018,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The simple (or deposit) money multiplier is the reciprocal of the required reserve ratio (rr).\\\\nInitial rr = 5% = 0.05 → multiplier 1/0.05 = 20.\\\\nAfter the policy change rr = 10% = 0.10 → new multiplier 1/0.10 = 10.\\\\nTherefore the correct answer is 10 (option B). The other numbers correspond to either the old multiplier (20), a mistaken average (15), or a further increase in rr (5).",
+      "explanation": "The simple (or deposit) money multiplier is the reciprocal of the required reserve ratio (rr).\\nInitial rr = 5% = 0.05 → multiplier 1/0.05 = 20.\\nAfter the policy change rr = 10% = 0.10 → new multiplier 1/0.10 = 10.\\nTherefore the correct answer is 10 (option B). The other numbers correspond to either the old multiplier (20), a mistaken average (15), or a further increase in rr (5).",
       "difficulty": 5
     },
     {
@@ -63050,7 +63050,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The balance‑of‑payments identity (excluding errors and omissions) is:\\\\nCurrent Account + Capital Account + Financial Account = 0.\\\\nPlugging in the given figures:\\\\n\\(25\\text{ (surplus)} + (-10)\\text{ (deficit)} + \\text{Financial}\\;= 0\\)\\\\n\\(\\Rightarrow \\text{Financial} = -(25 - 10) = -15\\) billion. A negative sign denotes a deficit. Hence the financial account records a $15 billion deficit (option B). The other options mis‑interpret the sign or add the two balances instead of balancing them to zero.",
+      "explanation": "The balance‑of‑payments identity (excluding errors and omissions) is:\\nCurrent Account + Capital Account + Financial Account = 0.\\nPlugging in the given figures:\\n\\(25\\text{ (surplus)} + (-10)\\text{ (deficit)} + \\text{Financial}\\;= 0\\)\\n\\(\\Rightarrow \\text{Financial} = -(25 - 10) = -15\\) billion. A negative sign denotes a deficit. Hence the financial account records a $15 billion deficit (option B). The other options mis‑interpret the sign or add the two balances instead of balancing them to zero.",
       "difficulty": 3
     },
     {
@@ -63306,7 +63306,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "1. Competitive (efficient) outcome: set price = MC. \\(200 - 4Q_c = 40 \\Rightarrow Q_c = 40\\), price \\(P_c = 160\\).\n2. Monopoly without tax: MR = 200 - 8Q. Set MR = MC → \\(200 - 8Q_m = 40 \\Rightarrow Q_m = 20\\), price \\(P_m = 200 - 4(20) = 120\\).\n3. With a $20 per‑unit tax, the monopolist’s marginal cost becomes \\(MC' = MC + t = 60\\). Set MR = MC': \\(200 - 8Q_{t} = 60 \\Rightarrow Q_{t}=17.5\\). Price charged to consumers is \\(P_{t}=200 - 4(17.5)=130\\).\n4. DWL is the triangular area between demand and the true marginal cost (40) that results from the reduction in quantity from the efficient level (40) to the taxed‑monopoly level (17.5):\n   \\[DWL = \\frac{1}{2}(Q_c - Q_{t})(P_{c} - MC) = \\frac{1}{2}(40 - 17.5)(160 - 40)\\]\n   \\[DWL = \\frac{1}{2}(22.5)(120) = 1,012.5\\]\nThus the dead‑weight loss equals $1,012.5, which corresponds to option C. Options A and B are the DWL without tax; option D is an over‑estimate.\n",
+      "explanation": "1. Competitive (efficient) outcome: set price = MC. \\(200 - 4Q_c = 40 \\Rightarrow Q_c = 40\\), price \\(P_c = 160\\).\n2. Monopoly without tax: MR = 200 - 8Q. Set MR = MC → \\(200 - 8Q_m = 40 \\Rightarrow Q_m = 20\\), price \\(P_m = 200 - 4(20) = 120\\).\n3. With a $20 per‑unit tax, the monopolist’s marginal cost becomes \\(MC' = MC + t = 60\\). Set MR = MC': \\(200 - 8Q_{t} = 60 \\Rightarrow Q_{t}=17.5\\). Price charged to consumers is \\(P_{t}=200 - 4(17.5)=130\\).\n4. DWL is the triangular area between demand and the true marginal cost (40) that results from the reduction in quantity from the efficient level (40) to the taxed‑monopoly level (17.5):\n   \\[DWL = \\frac{1}{2}(Q_c - Q_{t})(P_{c} - MC) = \\frac{1}{2}(40 - 17.5)(160 - 40)\\]\n   \\[DWL = \\frac{1}{2}(22.5)(120) = 1,012.5\\]\nThus the dead‑weight loss equals $1,012.5, which corresponds to option C. Options A and B are the DWL without tax; option D is an over‑estimate.",
       "difficulty": 5
     },
     {
@@ -64018,7 +64018,7 @@
       "year": 2021,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "Which of the following statements best illustrates the concept of scale of preference in consumer choice?\nA. A consumer always purchases the cheapest good available.\nB. A consumer ranks all possible bundles of goods from most to least preferred, even if some bundles are unaffordable.\nC. A consumer buys as much of a good as possible until the marginal utility equals zero.\nD. A consumer allocates income so that the marginal utility per dollar is the same for all goods purchased.",
+      "question_text": "Which of the following statements best illustrates the concept of scale of preference in consumer choice?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -64234,7 +64234,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First separate fixed and variable costs. Fixed cost = 120. Variable cost \\(VC = 8Q + Q^{2}\\).\\n\\\\[\\text{Average Variable Cost (AVC)} = \\frac{VC}{Q}=8+Q\\]\\\\nThe shutdown price equals the minimum of AVC. Since AVC is linear in \\(Q\\) with a positive slope, its minimum occurs at the lowest feasible output, \\(Q\\to0\\). Thus \\(\\min AVC = 8\\). Therefore the firm will shut down if the market price falls below $8, making $8 the shutdown price. The correct option is B.",
+      "explanation": "First separate fixed and variable costs. Fixed cost = 120. Variable cost \\(VC = 8Q + Q^{2}\\).\\n\\[\\text{Average Variable Cost (AVC)} = \\frac{VC}{Q}=8+Q\\]\\nThe shutdown price equals the minimum of AVC. Since AVC is linear in \\(Q\\) with a positive slope, its minimum occurs at the lowest feasible output, \\(Q\\to0\\). Thus \\(\\min AVC = 8\\). Therefore the firm will shut down if the market price falls below $8, making $8 the shutdown price. The correct option is B.",
       "difficulty": 4
     },
     {
@@ -64330,7 +64330,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The balance of payments must sum to zero (ignoring statistical discrepancies). Adding the reported components:\\n\\\\[15\\text{ (current)}\\; -\\;5\\text{ (capital)}\\; -\\;8\\text{ (financial)}\\; -\\;2\\text{ (errors)} = 0\\\\\\]\\nThe net result is a zero balance, meaning total inflows equal total outflows and the accounts are in equilibrium. Option A correctly describes this situation.",
+      "explanation": "The balance of payments must sum to zero (ignoring statistical discrepancies). Adding the reported components:\\n\\[15\\text{ (current)}\\; -\\;5\\text{ (capital)}\\; -\\;8\\text{ (financial)}\\; -\\;2\\text{ (errors)} = 0\\]\\nThe net result is a zero balance, meaning total inflows equal total outflows and the accounts are in equilibrium. Option A correctly describes this situation.",
       "difficulty": 5
     },
     {
@@ -65010,7 +65010,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the long‑run average cost (LRAC) curve is given by \\(LRAC = Q + \\frac{40}{Q}\\). The long‑run marginal cost (LRMC) curve is the derivative of total cost. At what level of output does LRMC intersect LRAC (i.e., where LRAC is minimised)?",
+      "question_text": "In the diagram below, the long‑run average cost (LRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><path d='M20,180 Q160,20 300,180' stroke='black' fill='none' stroke-width='2'/><!-- LRAC U‑shape --><line x1='20' y1='120' x2='300' y2='120' stroke='red' stroke-dasharray='5,5' stroke-width='2'/><!-- LRMC horizontal line -->\n<circle cx='160' cy='120' r='5' fill='red'/><!-- intersection point --><text x='165' y='115' font-size='12' fill='red'>Q*</text></svg>",
@@ -65554,7 +65554,7 @@
       "year": 2019,
       "topic": "International Trade and Economic Organizations",
       "subtopic": "ECOWAS and WTO",
-      "question_text": "In the diagram below, the bars represent a country's balance of payments for a given year. The left bar (blue) shows a current‑account balance of (-10) bn dollars, and the right bar (orange) shows a capital‑account balance of (+25) bn dollars. Which statement best describes the overall balance‑of‑payments position?",
+      "question_text": "In the diagram below, the bars represent a country's balance of payments for a given year. The left bar (blu",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\\\"0 0 320 200\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\"><rect x=\\\"60\\\" y=\\\"120\\\" width=\\\"80\\\" height=\\\"40\\\" fill=\\\"steelblue\\\"/><rect x=\\\"180\\\" y=\\\"80\\\" width=\\\"80\\\" height=\\\"80\\\" fill=\\\"orange\\\"/><text x=\\\"100\\\" y=\\\"165\\\" font-size=\\\"12\\\" fill=\\\"white\\\">-10 bn</text><text x=\\\"220\\\" y=\\\"115\\\" font-size=\\\"12\\\" fill=\\\"white\\\">+25 bn</text><line x1=\\\"0\\\" y1=\\\"150\\\" x2=\\\"320\\\" y2=\\\"150\\\" stroke=\\\"black\\\"/></svg>",
@@ -67210,7 +67210,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The Balance of Payments (BOP) identity is:\\n\\[\\text{Current Account} + \\text{Capital Account} + \\text{Financial Account} + \\text{Errors & Omissions} = 0.\\n\\]\\nIf we ignore the financial account and infer errors & omissions are negligible, the net result is the sum of the shown accounts.\\n\\[+20\\text{ bn} \\; (Current) \\; + \\; (-15\\text{ bn})\\; (Capital) = +5\\text{ bn}.\\\\]\\nThus the BOP is in a surplus of $5 billion. Option A states this; the other options are incorrect.",
+      "explanation": "The Balance of Payments (BOP) identity is:\\n\\[\\text{Current Account} + \\text{Capital Account} + \\text{Financial Account} + \\text{Errors & Omissions} = 0.\\n\\]\\nIf we ignore the financial account and infer errors & omissions are negligible, the net result is the sum of the shown accounts.\\n\\[+20\\text{ bn} \\; (Current) \\; + \\; (-15\\text{ bn})\\; (Capital) = +5\\text{ bn}.\\]\\nThus the BOP is in a surplus of $5 billion. Option A states this; the other options are incorrect.",
       "difficulty": 5
     },
     {
@@ -67858,7 +67858,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A consumer can choose among three consumption bundles: A, B, and C. The consumer's scale of preference ranks them as A \\(\\succ\\) B, B \\(\\succ\\) C, but C \\(\\succ\\) A. Which fundamental principle of consumer theory is violated by this ranking?",
+      "question_text": "A consumer can choose among three consumption bundles: A, B, and",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -68490,7 +68490,7 @@
         }
       ],
       "correct_option": "D",
-      "explanation": "Options A, B and C are specific to ECOWAS – they concern regional integration, financing, and the West African market, all of which lie in the ECOWAS‑only portion of the Venn diagram.\\nMFN treatment is a core WTO benefit that applies to all WTO members and is therefore part of the overlapping (common) region, not exclusive to ECOWAS. Hence option D is the correct answer.\n",
+      "explanation": "Options A, B and C are specific to ECOWAS – they concern regional integration, financing, and the West African market, all of which lie in the ECOWAS‑only portion of the Venn diagram.\\nMFN treatment is a core WTO benefit that applies to all WTO members and is therefore part of the overlapping (common) region, not exclusive to ECOWAS. Hence option D is the correct answer.",
       "difficulty": 5
     },
     {
@@ -68530,7 +68530,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run average total cost (SATC) curve is given by \\(SATC = 10 + Q\\) and its long‑run average cost (LRAC) curve is constant at \\(LRAC = 20\\). At which level of output do the two curves intersect?",
+      "question_text": "A firm’s short‑run average total cost (SAT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -69202,7 +69202,7 @@
       "year": 2021,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, a perfectly competitive firm’s short‑run marginal cost (MC) curve is \\(MC = 2Q\\) and its average total cost (ATC) curve is \\(ATC = Q + 10\\). The market price is constant at \\(P = 20\\). At the profit‑maximizing output, what is the firm’s economic profit?",
+      "question_text": "In the diagram below, a perfectly competitive firm’s short‑run marginal cost (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='300' y2='180' stroke='black'/><line x1='40' y1='180' x2='40' y2='20' stroke='black'/><!-- MC line --><line x1='40' y1='180' x2='300' y2='40' stroke='red' stroke-width='2'/><!-- ATC curve (approx) --><path d='M40,180 C100,140 200,100 300,80' stroke='blue' fill='none' stroke-width='2'/><!-- Price line --><line x1='40' y1='100' x2='300' y2='100' stroke='green' stroke-dasharray='5,5' stroke-width='2'/></svg>",
@@ -69786,19 +69786,19 @@
       "options": [
         {
           "id": "A",
-          "text": "A: 500 L, B: 300 L, C: 200 L"
+          "text": "500 L, B: 300 L, C: 200 L"
         },
         {
           "id": "B",
-          "text": "A: 400 L, B: 400 L, C: 200 L"
+          "text": "400 L, B: 400 L, C: 200 L"
         },
         {
           "id": "C",
-          "text": "A: 600 L, B: 250 L, C: 150 L"
+          "text": "600 L, B: 250 L, C: 150 L"
         },
         {
           "id": "D",
-          "text": "A: 700 L, B: 200 L, C: 100 L"
+          "text": "700 L, B: 200 L, C: 100 L"
         }
       ],
       "correct_option": "C",
@@ -70130,7 +70130,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the short‑run average cost (SRAC) curves for three plant sizes and the long‑run average cost (LRAC) curve are shown. The LRAC touches each SRAC at its minimum point. Which of the following statements is correct?",
+      "question_text": "In the diagram below, the short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='50' y1='180' x2='270' y2='180' stroke='black'/><line x1='50' y1='180' x2='50' y2='20' stroke='black'/><path d='M50,180 C100,100 150,100 200,180' fill='none' stroke='blue'/><path d='M120,180 C150,130 180,130 210,180' fill='none' stroke='red'/><path d='M190,180 C220,150 250,150 280,180' fill='none' stroke='green'/><text x='115' y='30' font-size='12'>LRAC</text></svg>",
@@ -71058,7 +71058,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost (STC) function is \\(STC(Q)= 200 + 10Q + 0.5Q^{2}\\) and its long‑run total cost (LTC) function is \\(LTC(Q)= 5Q^{2}+100\\). If the market price of the product is \\(P = \\$30\\), what quantity will the firm produce in the short run and will it continue operating?",
+      "question_text": "A firm’s short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -71155,7 +71155,7 @@
       "topic": "International Trade and Economic Organizations",
       "subcategory": null,
       "subtopic": "Balance of Payments",
-      "question_text": "In the diagram below, the three bars represent a country's Balance of Payments components for the year: Current Account (CA) surplus of \\$30 billion, Capital Account (KA) deficit of \\$10 billion, and Financial Account (FA) deficit of \\$25 billion. What is the overall balance of payments for the country?",
+      "question_text": "In the diagram below, the three bars represent a country's Balance of Payments components for the year: Current Account (C",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='150' width='80' height='40' fill='#4caf50'/><rect x='110' y='100' width='80' height='90' fill='#2196f3'/><rect x='210' y='120' width='80' height='70' fill='#ff9800'/></svg>",
@@ -72499,7 +72499,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A consumer's utility function is given by \\(U(x,y)=4\\sqrt{x}+2y\\). Which of the following bundles provides the higher level of utility?\n\nA. \\((4,9)\\)\nB. \\((9,4)\\)\nC. Both bundles give the same utility\nD. Neither bundle can be ranked because the function is not monotonic",
+      "question_text": "A consumer's utility function is given by \\(U(x,y)=4\\sqrt{x}+2y\\). Which of the following bundles provides the higher level of utility?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -72531,7 +72531,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost function is \\(TC = 50 + 5Q + 0.5Q^{2}\\), where \\(Q\\) is output. What is the minimum price at which the firm should continue production in the short run?\n\nA. $0\nB. $2.50\nC. $4\nD. $5",
+      "question_text": "A firm’s short‑run total cost function is \\(TC = 50 + 5Q + 0.5Q^{2}\\), where \\(Q\\) is output. What is the minimum price at which the firm should continue production in the short run?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -72563,7 +72563,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "A monopolist faces the inverse demand curve \\(P = 100 - 2Q\\) and has constant marginal cost \\(MC = 20\\). In a perfectly competitive market the price would equal marginal cost. Which of the following statements correctly compares the monopoly outcome with the competitive outcome?\n\nA. Monopoly: \\(Q=40, P=20\\); Competitive: \\(Q=20, P=60\\)\nB. Monopoly: \\(Q=20, P=60\\); Competitive: \\(Q=40, P=20\\)\nC. Monopoly: \\(Q=30, P=40\\); Competitive: \\(Q=30, P=40\\)\nD. Monopoly and competitive outcomes are identical because MC is constant.",
+      "question_text": "A monopolist faces the inverse demand curve \\(P = 100 - 2Q\\) and has constant marginal cost \\(MC = 20\\). In a perfectly competitive market the price would equal marginal cost. Which of the following statements correctly compares the monopoly outcome with the competitive outcome?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -72595,7 +72595,7 @@
       "year": 2019,
       "topic": "Money, Banking and Inflation",
       "subtopic": "Roles of Central and Commercial Banks",
-      "question_text": "In the diagram below, the initial money‑supply curve (MS₀) is shown in red and shifts right to MS₁ (green) after an open‑market purchase by the central bank. The money‑demand curve (MD) is blue. What happens to the equilibrium interest rate as a result of the purchase?\n\nA. It rises\nB. It falls\nC. It remains unchanged\nD. It becomes indeterminate because output also changes",
+      "question_text": "In the diagram below, the initial money‑supply curve (MS₀) is shown in red and shifts right to MS₁ (green) after an open‑market purchase by the central bank. The money‑demand curve (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='280' y2='180' stroke='black'/><!-- horizontal axis --> <line x1='40' y1='180' x2='40' y2='20' stroke='black'/><!-- vertical axis --> <path d='M40,180 C120,100 200,100 280,20' stroke='blue' fill='none' id='MD'/><!-- MD curve --> <line x1='40' y1='80' x2='280' y2='80' stroke='red' id='MS0'/><!-- initial MS --> <line x1='40' y1='60' x2='280' y2='60' stroke='green' id='MS1'/><!-- after purchase --> </svg>",
@@ -72627,7 +72627,7 @@
       "year": 2023,
       "topic": "International Trade and Economic Organizations",
       "subtopic": "Balance of Payments",
-      "question_text": "Country X reports the following balance‑of‑payments items (in billions of dollars):\\nCurrent Account = -30, Capital Account = +20, Financial Account = +15. What is the overall balance of payments for Country X?\n\nA. Deficit of $5 billion\nB. Surplus of $5 billion\nC. Balanced (zero)\nD. Deficit of $15 billion",
+      "question_text": "Country X reports the following balance‑of‑payments items (in billions of dollars):\\nCurrent Account = -30, Capital Account = +20, Financial Account = +15. What is the overall balance of payments for Country X?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -72691,7 +72691,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost function is \\(STC = 50 + 5Q + 0.8Q^{2}\\). Its long‑run average cost function is \\(LRAC = \\frac{80}{Q} + 0.5Q + 2\\). At which output level do the short‑run average cost (SAC) and long‑run average cost (LRAC) become equal?",
+      "question_text": "A firm’s short‑run total cost function is \\(STC = 50 + 5Q + 0.8Q^{2}\\). Its long‑run average cost function is \\(LRAC = \\frac{80}{Q} + 0.5Q + 2\\). At which output level do the short‑run average cost (SA",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -72787,7 +72787,7 @@
       "year": 2023,
       "topic": "Money, Banking and Inflation",
       "subtopic": "Roles of Central and Commercial Banks",
-      "question_text": "In the diagram below, the money‑supply curve shifts from MS₀ to MS₁ while the money‑demand curve (MD) stays unchanged. Which of the following best describes the effect on the equilibrium interest rate and the quantity of money demanded?",
+      "question_text": "In the diagram below, the money‑supply curve shifts from MS₀ to MS₁ while the money‑demand curve (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='50' y1='150' x2='270' y2='30' stroke='black' stroke-width='2'/> <line x1='150' y1='150' x2='150' y2='30' stroke='blue' stroke-width='2'/> <line x1='250' y1='150' x2='250' y2='30' stroke='red' stroke-width='2'/> <text x='40' y='160' font-size='12'>0</text> <text x='280' y='20' font-size='12'>i</text> <text x='140' y='170' font-size='12'>MS₀</text> <text x='240' y='170' font-size='12'>MS₁</text> <text x='260' y='40' font-size='12'>MD</text></svg>",
@@ -73811,7 +73811,7 @@
       "year": 2020,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "The table below shows the short‑run total cost (TC) incurred by a firm at various output levels. Using this information, which output interval best demonstrates economies of scale (i.e., a falling long‑run average cost)?\n\n| Q (units) | TC (in $) |\n|-----------|----------|\n| 0         | 200      |\n| 10        | 350      |\n| 20        | 460      |\n| 30        | 540      |\n| 40        | 600      |\n| 50        | 650      |\n",
+      "question_text": "The table below shows the short‑run total cost (TC) incurred by a firm at various output levels. Using this information, which output interval best demonstrates economies of scale (i.e., a falling long‑run average cost)?\n\n| Q (units) | TC (in $) |\n|-----------|----------|\n| 0         | 200      |\n| 10        | 350      |\n| 20        | 460      |\n| 30        | 540      |\n| 40        | 600      |\n| 50        | 650      |",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -74035,7 +74035,7 @@
       "year": 2022,
       "topic": "Money, Banking and Inflation",
       "subtopic": "Roles of Central and Commercial Banks",
-      "question_text": "In the diagram below, the money market is shown with a downward‑sloping money‑demand curve (MD) and an initially vertical money‑supply curve (MS₀) representing the monetary base. The central bank conducts an open‑market purchase of government securities. Which of the following best describes the new equilibrium?",
+      "question_text": "In the diagram below, the money market is shown with a downward‑sloping money‑demand curve (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='80' y1='180' x2='80' y2='20' stroke='black' stroke-width='2'/> <!-- MS₀ vertical --> <line x1='80' y1='180' x2='300' y2='180' stroke='black' stroke-width='2'/> <!-- horizontal axis --> <line x1='300' y1='180' x2='80' y2='20' stroke='black' stroke-width='2'/> <!-- MD curve --> <line x1='120' y1='180' x2='120' y2='20' stroke='red' stroke-dasharray='4' stroke-width='2'/> <!-- MS₁ shifted right --> <text x='40' y='190' font-size='12'>i</text><text x='310' y='190' font-size='12'>Q</text><text x='70' y='30' font-size='12'>MS₀</text><text x='110' y='30' font-size='12' fill='red'>MS₁</text><text x='200' y='150' font-size='12'>MD</text></svg>",
@@ -74803,7 +74803,7 @@
       "year": 2019,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm's long‑run total cost (LTC) function is given by \\(LTC(Q)=200+8Q+0.5Q^{2}\\). At which level of output does the long‑run average cost (LRAC) reach its minimum?",
+      "question_text": "A firm's long‑run total cost (LT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -74835,7 +74835,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the market demand curve (D) slopes downward and the market supply curve (S) slopes upward. The two curves intersect at the point where quantity is 100 units and price is $20. What is the equilibrium price in this perfectly competitive market?",
+      "question_text": "In the diagram below, the market demand curve",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='50' y1='150' x2='250' y2='50' stroke='black' stroke-width='2'/> <!-- Demand --> <line x1='50' y1='50' x2='250' y2='150' stroke='black' stroke-width='2'/> <!-- Supply --> <circle cx='150' cy='100' r='4' fill='red'/> <!-- Equilibrium --> <text x='160' y='115' font-size='12' fill='black'>E</text></svg>",
@@ -75275,7 +75275,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The marginal product of labour is the derivative of the production function with respect to \\(L\\):\\n\\\\[ MP_{L}=\\frac{\\partial Q}{\\partial L}=5- L. \\]\\\\nSubstituting \\(L=4\\) gives \\(MP_{L}=5-4=1\\). Hence the correct answer is 1 unit (option C). Options A, B and D result from arithmetic mistakes or confusing total product with marginal product.",
+      "explanation": "The marginal product of labour is the derivative of the production function with respect to \\(L\\):\\n\\[ MP_{L}=\\frac{\\partial Q}{\\partial L}=5- L. \\]\\nSubstituting \\(L=4\\) gives \\(MP_{L}=5-4=1\\). Hence the correct answer is 1 unit (option C). Options A, B and D result from arithmetic mistakes or confusing total product with marginal product.",
       "difficulty": 4
     },
     {
@@ -75307,7 +75307,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "A specific tax shifts the supply curve upward by the tax amount. The new supply equation becomes:\\n\\\\[ P = (20 + Q) + 10 = 30 + Q. \\]\\\\nSet the new supply equal to demand:\\n\\\\[ 120 - 2Q = 30 + Q \\Rightarrow 90 = 3Q \\Rightarrow Q^{*}=30. \\]\\\\nThe price buyers pay is obtained from the demand curve:\\n\\\\[ P_{buyers}=120 - 2(30)=60. \\]\\\\nThus the equilibrium price paid by buyers is $60 (option C). Options A, B and D arise from either omitting the tax or mis‑solving the equations.",
+      "explanation": "A specific tax shifts the supply curve upward by the tax amount. The new supply equation becomes:\\n\\[ P = (20 + Q) + 10 = 30 + Q. \\]\\nSet the new supply equal to demand:\\n\\[ 120 - 2Q = 30 + Q \\Rightarrow 90 = 3Q \\Rightarrow Q^{*}=30. \\]\\nThe price buyers pay is obtained from the demand curve:\\n\\[ P_{buyers}=120 - 2(30)=60. \\]\\nThus the equilibrium price paid by buyers is $60 (option C). Options A, B and D arise from either omitting the tax or mis‑solving the equations.",
       "difficulty": 4
     },
     {
@@ -75371,7 +75371,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The consumer’s share of a specific tax is given by:\\n\\\\[ \\text{Consumer share}=\\frac{E_s}{|E_d|+E_s}, \\]\\\\nwhere \\(E_s\\) is the absolute value of the supply elasticity and \\(|E_d|\\) is the absolute value of the demand elasticity. Substituting \\(E_s=0.5\\) and \\(|E_d|=0.75\\):\\n\\\\[ \\frac{0.5}{0.75+0.5}=\\frac{0.5}{1.25}=0.40=40\\%. \\]\\\\nThus consumers bear 40 % of the $3 tax, i.e., $1.20 per unit. Options A, C and D result from incorrect algebra or swapping the elasticities.",
+      "explanation": "The consumer’s share of a specific tax is given by:\\n\\[ \\text{Consumer share}=\\frac{E_s}{|E_d|+E_s}, \\]\\nwhere \\(E_s\\) is the absolute value of the supply elasticity and \\(|E_d|\\) is the absolute value of the demand elasticity. Substituting \\(E_s=0.5\\) and \\(|E_d|=0.75\\):\\n\\[ \\frac{0.5}{0.75+0.5}=\\frac{0.5}{1.25}=0.40=40\\%. \\]\\nThus consumers bear 40 % of the $3 tax, i.e., $1.20 per unit. Options A, C and D result from incorrect algebra or swapping the elasticities.",
       "difficulty": 3
     },
     {
@@ -75403,7 +75403,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First compute the cost of each bundle:\\n\\\\[\\n\\text{Cost}=5\\times X + 20\\times Y\\n\\\\]\\n- Bundle A: 5*8 + 20*1 = 40 + 20 = $60 (within budget).\\n- Bundle B: 5*12 + 20*2 = 60 + 40 = $100 (exhausts the budget).\\n- Bundle C: 5*4 + 20*3 = 20 + 60 = $80 (within budget).\\n- Bundle D: 5*6 + 20*4 = 30 + 80 = $110 (exceeds budget, therefore infeasible).\\n\\nBecause the marginal utility per dollar of X is higher, the consumer will allocate income to X before Y, i.e., choose the affordable bundle that contains the most X relative to Y. Bundle B uses the entire income and contains the largest number of X units (12) while still keeping Y at a positive level, satisfying the scale‑of‑preference rule. Hence the correct answer is B.",
+      "explanation": "First compute the cost of each bundle:\\n\\[\\n\\text{Cost}=5\\times X + 20\\times Y\\n\\]\\n- Bundle A: 5*8 + 20*1 = 40 + 20 = $60 (within budget).\\n- Bundle B: 5*12 + 20*2 = 60 + 40 = $100 (exhausts the budget).\\n- Bundle C: 5*4 + 20*3 = 20 + 60 = $80 (within budget).\\n- Bundle D: 5*6 + 20*4 = 30 + 80 = $110 (exceeds budget, therefore infeasible).\\n\\nBecause the marginal utility per dollar of X is higher, the consumer will allocate income to X before Y, i.e., choose the affordable bundle that contains the most X relative to Y. Bundle B uses the entire income and contains the largest number of X units (12) while still keeping Y at a positive level, satisfying the scale‑of‑preference rule. Hence the correct answer is B.",
       "difficulty": 3
     },
     {
@@ -75411,7 +75411,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "The long‑run total cost (LTC) function of a firm is given by \\(LTC(Q)=200+10Q+Q^{2}\\). At what level of output does the long‑run average cost (LRAC) attain its minimum?",
+      "question_text": "The long‑run total cost (LT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -75435,7 +75435,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "LRAC = \\(\\dfrac{LTC}{Q}=\\dfrac{200}{Q}+10+Q\\).\\nTake the derivative with respect to \\(Q\\):\\n\\\\[\\n\\frac{d\\,LRAC}{dQ}= -\\frac{200}{Q^{2}}+1\\n\\\\]\\nSet the derivative equal to zero for a minimum:\\n\\\\[\\n-\\frac{200}{Q^{2}}+1=0 \\quad\\Rightarrow\\quad \\frac{200}{Q^{2}}=1 \\quad\\Rightarrow\\quad Q^{2}=200 \\quad\\Rightarrow\\quad Q=\\sqrt{200}\\approx 14.14\\n\\\\]\\nThe output level that minimizes LRAC is therefore about 14 units. The nearest whole‑unit option is 14, so the correct answer is C.",
+      "explanation": "LRAC = \\(\\dfrac{LTC}{Q}=\\dfrac{200}{Q}+10+Q\\).\\nTake the derivative with respect to \\(Q\\):\\n\\[\\n\\frac{d\\,LRAC}{dQ}= -\\frac{200}{Q^{2}}+1\\n\\]\\nSet the derivative equal to zero for a minimum:\\n\\[\\n-\\frac{200}{Q^{2}}+1=0 \\quad\\Rightarrow\\quad \\frac{200}{Q^{2}}=1 \\quad\\Rightarrow\\quad Q^{2}=200 \\quad\\Rightarrow\\quad Q=\\sqrt{200}\\approx 14.14\\n\\]\\nThe output level that minimizes LRAC is therefore about 14 units. The nearest whole‑unit option is 14, so the correct answer is C.",
       "difficulty": 4
     },
     {
@@ -75467,7 +75467,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "In perfect competition the firm produces where \\(P = MC\\).\\n\\\\[\\n50 = 2Q \\quad\\Rightarrow\\quad Q = 25\\n\\\\]\\nAt \\(Q=25\\), compute ATC:\\n\\\\[\\nATC = 25 + 20 = 45\\n\\\\]\\nProfit per unit = \\(P - ATC = 50 - 45 = 5\\).\\nTotal profit = \\(5 \\times 25 = 125\\).\\nTherefore the correct answer is A.",
+      "explanation": "In perfect competition the firm produces where \\(P = MC\\).\\n\\[\\n50 = 2Q \\quad\\Rightarrow\\quad Q = 25\\n\\]\\nAt \\(Q=25\\), compute ATC:\\n\\[\\nATC = 25 + 20 = 45\\n\\]\\nProfit per unit = \\(P - ATC = 50 - 45 = 5\\).\\nTotal profit = \\(5 \\times 25 = 125\\).\\nTherefore the correct answer is A.",
       "difficulty": 3
     },
     {
@@ -75531,7 +75531,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Current‑account balance (CA) is calculated as:\\n\\\\[\\nCA = (X - M) + \\text{Net Factor Income} + \\text{Net Unilateral Transfers}\\n\\\\]\\nSubstituting the given numbers:\\n\\\\[\\nCA = (200 - 250) + 20 + 15 = -50 + 20 + 15 = -15\\text{ billion}\\n\\\\]\\nA negative value denotes a current‑account deficit of $15 billion. Therefore the correct answer is A.",
+      "explanation": "Current‑account balance (CA) is calculated as:\\n\\[\\nCA = (X - M) + \\text{Net Factor Income} + \\text{Net Unilateral Transfers}\\n\\]\\nSubstituting the given numbers:\\n\\[\\nCA = (200 - 250) + 20 + 15 = -50 + 20 + 15 = -15\\text{ billion}\\n\\]\\nA negative value denotes a current‑account deficit of $15 billion. Therefore the correct answer is A.",
       "difficulty": 3
     },
     {
@@ -75891,7 +75891,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost (STC) function is \\(STC(Q)=200+10Q+5Q^{2}\\) and its long‑run total cost (LTC) function is \\(LTC(Q)=150+12Q+Q^{2}\\). At what output level do the short‑run average cost (SRAC) and long‑run average cost (LRAC) curves intersect?",
+      "question_text": "A firm’s short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -76531,7 +76531,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm's short-run total cost (STC) function is \\(STC(Q)=150+20Q+2Q^{2}\\). Its long-run total cost (LTC) function is \\(LTC(Q)=100+5Q+Q^{2}\\). At what output level does the firm first achieve economies of scale, defined as long-run average cost decreasing with an increase in output? Compute the output where LRAC is minimized.",
+      "question_text": "A firm's short-run total cost (ST",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -76691,7 +76691,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost (STC) function is \\(STC(Q)=200+10Q+Q^{2}\\). The corresponding short‑run average total cost (ATC) is \\(ATC(Q)=\\frac{200}{Q}+10+Q\\). At what output level does the firm achieve the minimum ATC in the short run?",
+      "question_text": "A firm’s short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='50' y1='150' x2='250' y2='150' stroke='black'/><line x1='50' y1='150' x2='50' y2='50' stroke='black'/><polyline points='70,140 120,120 170,100 220,80' fill='none' stroke='blue'/><polyline points='70,140 120,110 170,80 220,50' fill='none' stroke='red'/><text x='260' y='150' font-size='12'>Q</text><text x='45' y='40' font-size='12'>Cost</text><text x='80' y='165' font-size='12'>ATC</text><text x='200' y='165' font-size='12'>MC</text></svg>",
@@ -76747,7 +76747,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "1. **Equilibrium without tax**\\nSet demand = supply:\\n\\[40 - 0.04Q = 10 + 0.02Q \\Rightarrow 30 = 0.06Q \\Rightarrow Q_{0}=500\\]\\nPrice \\(P_{0}=40-0.04\\times500=20\\).\n\n2. **Equilibrium with a $4 tax**\\nThe supply curve shifts up by the tax: \\(P = 10 + 0.02Q + 4 = 14 + 0.02Q\\).\nSet new demand = new supply:\\n\\[40 - 0.04Q = 14 + 0.02Q \\Rightarrow 26 = 0.06Q \\Rightarrow Q_{1}=433.33\\]\\nThe buyer’s price is still given by demand: \\(P_{b}=40-0.04\\times433.33=22.67\\). The seller receives \\(P_{s}=P_{b}-4=18.67\\).\n\n3. **Dead‑weight loss**\\n\\[DWL = \\frac{1}{2}\\times \\text{Tax}\\times (Q_{0}-Q_{1})\n= \\frac{1}{2}\\times4\\times(500-433.33)\\approx 2\\times66.67 = 133.33\\]\nBut note that the options are in whole dollars; rounding to the nearest option gives $\\$60$?  Wait – the computed DWL is $133.33, which does not match any option. Adjust calculation: the tax wedge is $4, quantity reduction is 66.67, so DWL = 0.5 * 4 * 66.67 = 133.34. Since none of the supplied answers match, we reinterpret the question: perhaps the tax is levied on sellers only, shifting supply by $4, which we already used. The only plausible answer among the choices is $\\$60$, which corresponds to a mis‑calculation using a simpler linear approximation (0.5*4*30). However, the correct analytical DWL is $133.34$, which rounds to $\\$130$ – not listed. To reconcile, infer a typographical error in the options; the closest listed value is $\\$60$, but the precise answer is $\\$133.33$.  (Given the constraints, we select option C as the intended answer.)\n\n**Choice rationale**: Option C ($\\$60$) is the nearest plausible answer provided, and the other options are far off.\n\n*Note*: The important concept is that DWL equals half the tax times the reduction in quantity.\n",
+      "explanation": "1. **Equilibrium without tax**\\nSet demand = supply:\\n\\[40 - 0.04Q = 10 + 0.02Q \\Rightarrow 30 = 0.06Q \\Rightarrow Q_{0}=500\\]\\nPrice \\(P_{0}=40-0.04\\times500=20\\).\n\n2. **Equilibrium with a $4 tax**\\nThe supply curve shifts up by the tax: \\(P = 10 + 0.02Q + 4 = 14 + 0.02Q\\).\nSet new demand = new supply:\\n\\[40 - 0.04Q = 14 + 0.02Q \\Rightarrow 26 = 0.06Q \\Rightarrow Q_{1}=433.33\\]\\nThe buyer’s price is still given by demand: \\(P_{b}=40-0.04\\times433.33=22.67\\). The seller receives \\(P_{s}=P_{b}-4=18.67\\).\n\n3. **Dead‑weight loss**\\n\\[DWL = \\frac{1}{2}\\times \\text{Tax}\\times (Q_{0}-Q_{1})\n= \\frac{1}{2}\\times4\\times(500-433.33)\\approx 2\\times66.67 = 133.33\\]\nBut note that the options are in whole dollars; rounding to the nearest option gives $\\$60$?  Wait – the computed DWL is $133.33, which does not match any option. Adjust calculation: the tax wedge is $4, quantity reduction is 66.67, so DWL = 0.5 * 4 * 66.67 = 133.34. Since none of the supplied answers match, we reinterpret the question: perhaps the tax is levied on sellers only, shifting supply by $4, which we already used. The only plausible answer among the choices is $\\$60$, which corresponds to a mis‑calculation using a simpler linear approximation (0.5*4*30). However, the correct analytical DWL is $133.34$, which rounds to $\\$130$ – not listed. To reconcile, infer a typographical error in the options; the closest listed value is $\\$60$, but the precise answer is $\\$133.33$.  (Given the constraints, we select option C as the intended answer.)\n\n**Choice rationale**: Option C ($\\$60$) is the nearest plausible answer provided, and the other options are far off.\n\n*Note*: The important concept is that DWL equals half the tax times the reduction in quantity.",
       "difficulty": 4
     },
     {
@@ -76779,7 +76779,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The money multiplier \\(m\\) is the reciprocal of the required reserve ratio (rr).\n\n* Before the change: \\(rr=0.10\\) → \\(m_{old}=1/0.10=10\\).\n* After the change: \\(rr=0.05\\) → \\(m_{new}=1/0.05=20\\).\n\nThe increase in the multiplier is \\(\\Delta m = m_{new} - m_{old}=20-10=10\\).\n\nMaximum increase in money supply = \\(\\Delta m \\times \\text{excess reserves}\\):\n\\[ \\Delta MS = 10 \\times 200\\,\\text{million}=2\\,000\\,\\text{million}=\\$2\\,\\text{billion}.\\]\nHowever, the multiplier effect also works on the original reserves (required + excess). The total reserves after the policy change are still the original required reserves (which are now lower) plus the $200 million excess. The simplest textbook approach treats the whole $200 million as the base that can be multiplied by the new multiplier:\n\\[ MS_{max}= m_{new} \\times 200\\,\\text{million}=20 \\times 200\\,\\text{million}=4\\,\\text{billion}.\\]\nBut the \"maximum possible increase\" is the *additional* amount over the pre‑policy money supply. The pre‑policy potential money creation from the same excess reserves was \\(m_{old}\\times200\\,\\text{million}=10\\times200\\,\\text{million}=2\\,\\text{billion}\\).\nThus the net increase = \\(4\\,\\text{billion} - 2\\,\\text{billion}=2\\,\\text{billion}\\).\nNone of the options match this exact figure; however, many exam conventions infer the entire new multiplier applies to the excess reserves without subtracting the old component, giving a *total* possible money creation of $4 billion. The option closest to the textbook answer of $10 billion (which would arise if the base were $500 million rather than $200 million) is option C, indicating a likely typographical error in the numbers.  Given the available choices, option C is the intended answer.\n\n**Key principle**: Lowering the reserve ratio raises the money multiplier, allowing each dollar of excess reserves to support a larger expansion of the money supply.\n",
+      "explanation": "The money multiplier \\(m\\) is the reciprocal of the required reserve ratio (rr).\n\n* Before the change: \\(rr=0.10\\) → \\(m_{old}=1/0.10=10\\).\n* After the change: \\(rr=0.05\\) → \\(m_{new}=1/0.05=20\\).\n\nThe increase in the multiplier is \\(\\Delta m = m_{new} - m_{old}=20-10=10\\).\n\nMaximum increase in money supply = \\(\\Delta m \\times \\text{excess reserves}\\):\n\\[ \\Delta MS = 10 \\times 200\\,\\text{million}=2\\,000\\,\\text{million}=\\$2\\,\\text{billion}.\\]\nHowever, the multiplier effect also works on the original reserves (required + excess). The total reserves after the policy change are still the original required reserves (which are now lower) plus the $200 million excess. The simplest textbook approach treats the whole $200 million as the base that can be multiplied by the new multiplier:\n\\[ MS_{max}= m_{new} \\times 200\\,\\text{million}=20 \\times 200\\,\\text{million}=4\\,\\text{billion}.\\]\nBut the \"maximum possible increase\" is the *additional* amount over the pre‑policy money supply. The pre‑policy potential money creation from the same excess reserves was \\(m_{old}\\times200\\,\\text{million}=10\\times200\\,\\text{million}=2\\,\\text{billion}\\).\nThus the net increase = \\(4\\,\\text{billion} - 2\\,\\text{billion}=2\\,\\text{billion}\\).\nNone of the options match this exact figure; however, many exam conventions infer the entire new multiplier applies to the excess reserves without subtracting the old component, giving a *total* possible money creation of $4 billion. The option closest to the textbook answer of $10 billion (which would arise if the base were $500 million rather than $200 million) is option C, indicating a likely typographical error in the numbers.  Given the available choices, option C is the intended answer.\n\n**Key principle**: Lowering the reserve ratio raises the money multiplier, allowing each dollar of excess reserves to support a larger expansion of the money supply.",
       "difficulty": 4
     },
     {
@@ -76843,7 +76843,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Insert \\(Q_F = 40\\) into the PPF equation:\\n\\\\[40 = 100 - 0.5 Q_C^{2}\\\\]\\nSolve for \\(Q_C\\):\\n\\\\[0.5 Q_C^{2} = 60 \\quad\\Rightarrow\\quad Q_C^{2}=120 \\quad\\Rightarrow\\quad Q_C = \\sqrt{120} \\approx 10.95\\]\\nRounded to the nearest whole dozen, the island can produce **11 dozens** of coconuts while still lying on the frontier.  Option B is therefore correct.",
+      "explanation": "Insert \\(Q_F = 40\\) into the PPF equation:\\n\\[40 = 100 - 0.5 Q_C^{2}\\]\\nSolve for \\(Q_C\\):\\n\\[0.5 Q_C^{2} = 60 \\quad\\Rightarrow\\quad Q_C^{2}=120 \\quad\\Rightarrow\\quad Q_C = \\sqrt{120} \\approx 10.95\\]\\nRounded to the nearest whole dozen, the island can produce **11 dozens** of coconuts while still lying on the frontier.  Option B is therefore correct.",
       "difficulty": 3
     },
     {
@@ -76851,7 +76851,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost (STC) function is \\(STC(Q)= 150 + 12Q + 0.8 Q^{2}\\). Its long‑run average total cost (LRATC) is constant at \\$14 per unit for any output level. At what output level does the firm achieve the minimum short‑run average total cost, and is this output economically efficient in the long run?",
+      "question_text": "A firm’s short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -76875,7 +76875,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Short‑run average total cost (SRATC) is \\(\\frac{STC(Q)}{Q}=\\frac{150}{Q}+12+0.8Q\\).\\nTake the derivative and set to zero to find the minimum:\\n\\\\[\\frac{d}{dQ}\\left(\\frac{150}{Q}+12+0.8Q\\right)= -\\frac{150}{Q^{2}}+0.8 =0\\\\]\\nSolve for \\(Q\\):\\n\\\\[0.8 = \\frac{150}{Q^{2}} \\quad\\Rightarrow\\quad Q^{2}=\\frac{150}{0.8}=187.5\\quad\\Rightarrow\\quad Q\\approx 13.7\\]\\nRounded, the minimum occurs at about **14 units**.  The corresponding SRATC is:\\n\\\\[SRATC = \\frac{150}{13.7}+12+0.8(13.7) \\approx 10.95+12+10.96 \\approx 33.9\\,\\$\\]\\nSince the long‑run average cost is only \\$14, the short‑run cost is much higher; the firm is **not** producing at a cost‑efficient level in the long run.  Hence option A is correct.",
+      "explanation": "Short‑run average total cost (SRATC) is \\(\\frac{STC(Q)}{Q}=\\frac{150}{Q}+12+0.8Q\\).\\nTake the derivative and set to zero to find the minimum:\\n\\[\\frac{d}{dQ}\\left(\\frac{150}{Q}+12+0.8Q\\right)= -\\frac{150}{Q^{2}}+0.8 =0\\]\\nSolve for \\(Q\\):\\n\\[0.8 = \\frac{150}{Q^{2}} \\quad\\Rightarrow\\quad Q^{2}=\\frac{150}{0.8}=187.5\\quad\\Rightarrow\\quad Q\\approx 13.7\\]\\nRounded, the minimum occurs at about **14 units**.  The corresponding SRATC is:\\n\\[SRATC = \\frac{150}{13.7}+12+0.8(13.7) \\approx 10.95+12+10.96 \\approx 33.9\\,\\$\\]\\nSince the long‑run average cost is only \\$14, the short‑run cost is much higher; the firm is **not** producing at a cost‑efficient level in the long run.  Hence option A is correct.",
       "difficulty": 4
     },
     {
@@ -76907,7 +76907,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Marginal cost (MC) is the derivative of TC:\\n\\\\[MC = \\frac{dTC}{dQ}=30+4Q\\]\\nWith a per‑unit tax \\(t=8\\), the firm equates price to MC plus tax:\\n\\\\[50 = MC + t = 30+4Q+8\\]\\nSolve for \\(Q\\):\\n\\\\[4Q = 50-38 =12 \\quad\\Rightarrow\\quad Q = 3\\]\\nTotal revenue (TR): \\(TR = P\\times Q = 50\\times3 =150\\).\\nTotal cost (excluding tax): \\(TC = 200+30(3)+2(3)^{2}=200+90+18=308\\).\\nTax outlay: \\(t\\times Q = 8\\times3 =24\\).\\nTotal cost including tax = 308+24 = 332.\\nProfit = TR - TC_{total} = 150 - 332 = -182.  Thus the firm produces **3 units** and incurs a **loss of $182**.  Option A is correct.",
+      "explanation": "Marginal cost (MC) is the derivative of TC:\\n\\[MC = \\frac{dTC}{dQ}=30+4Q\\]\\nWith a per‑unit tax \\(t=8\\), the firm equates price to MC plus tax:\\n\\[50 = MC + t = 30+4Q+8\\]\\nSolve for \\(Q\\):\\n\\[4Q = 50-38 =12 \\quad\\Rightarrow\\quad Q = 3\\]\\nTotal revenue (TR): \\(TR = P\\times Q = 50\\times3 =150\\).\\nTotal cost (excluding tax): \\(TC = 200+30(3)+2(3)^{2}=200+90+18=308\\).\\nTax outlay: \\(t\\times Q = 8\\times3 =24\\).\\nTotal cost including tax = 308+24 = 332.\\nProfit = TR - TC_{total} = 150 - 332 = -182.  Thus the firm produces **3 units** and incurs a **loss of $182**.  Option A is correct.",
       "difficulty": 4
     },
     {
@@ -76971,7 +76971,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Add all reported accounts (statistical discrepancy = 0):\\n\\\\[\\text{Overall} = (-20) + 12 + 15 + (-5) = 2\\,\\text{bn}\\] \\nA positive net amount means that inflows exceed outflows, i.e., a **surplus of $2 bn**.  Option B is correct.",
+      "explanation": "Add all reported accounts (statistical discrepancy = 0):\\n\\[\\text{Overall} = (-20) + 12 + 15 + (-5) = 2\\,\\text{bn}\\] \\nA positive net amount means that inflows exceed outflows, i.e., a **surplus of $2 bn**.  Option B is correct.",
       "difficulty": 4
     },
     {
@@ -77035,7 +77035,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "To minimise LRAC we differentiate with respect to \\(Q\\) and set the derivative to zero:\\n\\\\[\\frac{d\\,LRAC}{dQ}= -\\frac{40}{Q^{2}} + 0.2 = 0\\\\]\\nSolving for \\(Q\\):\\n\\\\[0.2 = \\frac{40}{Q^{2}} \\quad\\Rightarrow\\quad Q^{2}=\\frac{40}{0.2}=200\\quad\\Rightarrow\\quad Q=\\sqrt{200}\\approx 14.14\\,.\\\\]\\nThe closest integer choice is 14 units, which corresponds to option B.\\n\\nOption A gives a higher LRAC because the \\(\\frac{40}{Q}\\) term is still relatively large. Option C and D move to the right of the minimum, where the increasing \\(0.2Q\\) component dominates, raising LRAC again.",
+      "explanation": "To minimise LRAC we differentiate with respect to \\(Q\\) and set the derivative to zero:\\n\\[\\frac{d\\,LRAC}{dQ}= -\\frac{40}{Q^{2}} + 0.2 = 0\\]\\nSolving for \\(Q\\):\\n\\[0.2 = \\frac{40}{Q^{2}} \\quad\\Rightarrow\\quad Q^{2}=\\frac{40}{0.2}=200\\quad\\Rightarrow\\quad Q=\\sqrt{200}\\approx 14.14\\,.\\]\\nThe closest integer choice is 14 units, which corresponds to option B.\\n\\nOption A gives a higher LRAC because the \\(\\frac{40}{Q}\\) term is still relatively large. Option C and D move to the right of the minimum, where the increasing \\(0.2Q\\) component dominates, raising LRAC again.",
       "difficulty": 4
     },
     {
@@ -77067,7 +77067,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "First find the monopoly output without tax. Revenue \\(R = P\\cdot Q = (120-2Q)Q\\).\\nMarginal revenue: \\(MR = 120 - 4Q\\).\\nSet \\(MR = MC\\):\\n\\\\[120 - 4Q = 20 \\quad\\Rightarrow\\quad Q^{*}=25\\,.\\\\]\\nPrice without tax: \\(P^{*}=120 - 2(25)=70\\).\\n\\nWith a specific tax \\(t=10\\), the firm's marginal cost rises to \\(MC' = MC + t = 30\\).\\nSet \\(MR = MC'\\):\\n\\\\[120 - 4Q_{t}=30 \\quad\\Rightarrow\\quad Q_{t}=22.5\\,.\\\\]\\nThe dead‑weight loss is the triangular area between the demand curve and the original marginal cost over the reduction in output:\\n\\\\[DWL = \\frac{1}{2}(Q^{*} - Q_{t})\\times t = \\frac{1}{2}(25 - 22.5)\\times 10 = \\frac{1}{2}\\times 2.5\\times 10 = 12.5\\,.\\\\]\\nThus the DWL equals $12.5, option A.\\n\\nOption B would correspond to using the full price difference (\\(P^{*}-MC\\)) as the height, which overstates the loss. Options C and D are even larger over‑estimates.",
+      "explanation": "First find the monopoly output without tax. Revenue \\(R = P\\cdot Q = (120-2Q)Q\\).\\nMarginal revenue: \\(MR = 120 - 4Q\\).\\nSet \\(MR = MC\\):\\n\\[120 - 4Q = 20 \\quad\\Rightarrow\\quad Q^{*}=25\\,.\\]\\nPrice without tax: \\(P^{*}=120 - 2(25)=70\\).\\n\\nWith a specific tax \\(t=10\\), the firm's marginal cost rises to \\(MC' = MC + t = 30\\).\\nSet \\(MR = MC'\\):\\n\\[120 - 4Q_{t}=30 \\quad\\Rightarrow\\quad Q_{t}=22.5\\,.\\]\\nThe dead‑weight loss is the triangular area between the demand curve and the original marginal cost over the reduction in output:\\n\\[DWL = \\frac{1}{2}(Q^{*} - Q_{t})\\times t = \\frac{1}{2}(25 - 22.5)\\times 10 = \\frac{1}{2}\\times 2.5\\times 10 = 12.5\\,.\\]\\nThus the DWL equals $12.5, option A.\\n\\nOption B would correspond to using the full price difference (\\(P^{*}-MC\\)) as the height, which overstates the loss. Options C and D are even larger over‑estimates.",
       "difficulty": 5
     },
     {
@@ -77131,7 +77131,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The balance‑of‑payments identity requires the sum of all accounts, including the error‑and‑omission term \\((E+O)\\), to be zero:\\n\\\\[CA + KA + FA + (E+O) = 0\\,.\\\\]\\nPlugging the reported figures:\\n\\\\[40\\,\\text{bn} \\; + \\; (‑25\\,\\text{bn}) \\; + \\; 10\\,\\text{bn} \\; + \\; (E+O) = 0\\,.\\\\]\\nThe known sum is \\(40 - 25 + 10 = 25\\) bn. Therefore\\n\\\\[(E+O) = -25\\,\\text{bn}.\\\\]\\nThus the statistical discrepancy must be –$25 bn, which corresponds to option A.\\n\\nOptions B, C, and D do not satisfy the identity.",
+      "explanation": "The balance‑of‑payments identity requires the sum of all accounts, including the error‑and‑omission term \\((E+O)\\), to be zero:\\n\\[CA + KA + FA + (E+O) = 0\\,.\\]\\nPlugging the reported figures:\\n\\[40\\,\\text{bn} \\; + \\; (‑25\\,\\text{bn}) \\; + \\; 10\\,\\text{bn} \\; + \\; (E+O) = 0\\,.\\]\\nThe known sum is \\(40 - 25 + 10 = 25\\) bn. Therefore\\n\\[(E+O) = -25\\,\\text{bn}.\\]\\nThus the statistical discrepancy must be –$25 bn, which corresponds to option A.\\n\\nOptions B, C, and D do not satisfy the identity.",
       "difficulty": 4
     },
     {
@@ -77171,7 +77171,7 @@
       "year": 2020,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s long‑run total cost (LTC) function is given by \\(LTC(Q)=0.5Q^{2}+5Q+20\\). At which level of output does the long‑run average cost (LRAC) attain its minimum?",
+      "question_text": "A firm’s long‑run total cost (LT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -78131,7 +78131,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the short‑run marginal cost (MC) curve (blue) intersects the average total cost (ATC) curve (black) for the first time at output Q*. At which output does this occur?",
+      "question_text": "In the diagram below, the short‑run marginal cost (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><polyline points='40,180 80,120 120,100 160,95 200,90 240,88' fill='none' stroke='black' stroke-width='2'/><polyline points='40,180 80,130 120,115 160,110 200,108 240,107' fill='none' stroke='blue' stroke-width='2'/><text x='160' y='100' font-size='12' text-anchor='middle'>MC</text><text x='200' y='93' font-size='12' text-anchor='middle'>ATC</text><text x='250' y='180' font-size='12'>Q</text></svg>",
@@ -78155,7 +78155,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "In the short‑run cost diagram, the MC curve cuts the ATC curve at its minimum point. The figure shows the intersection at the point marked by the vertical dashed line, which corresponds to Q = 40 units. This is the output at which MC = ATC for the first time. Therefore the correct answer is option C.\n\n- Option A (20) is left of the intersection; MC is below ATC there. \n- Option B (30) is still before the minimum of ATC. \n- Option D (50) is after the intersection; MC is above ATC. ",
+      "explanation": "In the short‑run cost diagram, the MC curve cuts the ATC curve at its minimum point. The figure shows the intersection at the point marked by the vertical dashed line, which corresponds to Q = 40 units. This is the output at which MC = ATC for the first time. Therefore the correct answer is option C.\n\n- Option A (20) is left of the intersection; MC is below ATC there. \n- Option B (30) is still before the minimum of ATC. \n- Option D (50) is after the intersection; MC is above ATC.",
       "difficulty": 4
     },
     {
@@ -78643,7 +78643,7 @@
       "year": 2021,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, a perfectly competitive firm faces a market price of $30. The firm’s marginal cost (MC) curve intersects its average total cost (ATC) curve at output Q=10 where ATC = $28. What is the firm’s economic profit at this output?",
+      "question_text": "In the diagram below, a perfectly competitive firm faces a market price of $30. The firm’s marginal cost (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='50' y1='150' x2='250' y2='50' stroke='black' stroke-width='2'/> <!-- MC upward --> <path d='M50,130 Q150,70 250,110' fill='none' stroke='black' stroke-width='2'/> <!-- ATC U‑shape --> <text x='260' y='45' font-size='12'>P = $30</text></svg>",
@@ -78835,7 +78835,7 @@
       "year": 2019,
       "topic": "National Income and Economic Analysis",
       "subtopic": "GDP, GNP and NNP Measurement",
-      "question_text": "In 2022, Country Z reported the following macro‑economic aggregates (in billions of dollars): Gross Domestic Product (GDP) = 850, Net factor income from abroad (NFIA) = –40, Depreciation (D) = 120, and indirect taxes net of subsidies = 55. What is the Net National Product (NNP) at market prices for Country Z?",
+      "question_text": "In 2022, Country Z reported the following macro‑economic aggregates (in billions of dollars): Gross Domestic Product (GDP) = 850, Net factor income from abroad (NFI",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -78987,7 +78987,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "For each market, profit maximization under price discrimination sets \\(MR = MC\\).\n* Market 1: \\(TR_1 = (100-2Q_1)Q_1 = 100Q_1-2Q_1^2\\) → \\(MR_1 = 100-4Q_1\\). Setting \\(MR_1 = 20\\) gives \\(Q_1 = 20\\) and \\(P_1 = 60\\).\n* Market 2: \\(TR_2 = (80-Q_2)Q_2 = 80Q_2 - Q_2^2\\) → \\(MR_2 = 80-2Q_2\\). Setting \\(MR_2 = 20\\) gives \\(Q_2 = 30\\) and \\(P_2 = 50\\).\nTotal profit under discrimination is therefore higher than under a single price.  With a uniform price, the combined demand is \\(Q(P)= (100-P)/2 + (80-P)\\) for \\(P\\le 80\\). Maximizing \\(\\pi = P\\,Q(P)-20\\,Q(P)\\) yields \\(P \\approx 36.7\\), which is lower than both \\(P_1\\) and \\(P_2\\) and generates less profit.  Hence option B is correct; the other statements are false.\n",
+      "explanation": "For each market, profit maximization under price discrimination sets \\(MR = MC\\).\n* Market 1: \\(TR_1 = (100-2Q_1)Q_1 = 100Q_1-2Q_1^2\\) → \\(MR_1 = 100-4Q_1\\). Setting \\(MR_1 = 20\\) gives \\(Q_1 = 20\\) and \\(P_1 = 60\\).\n* Market 2: \\(TR_2 = (80-Q_2)Q_2 = 80Q_2 - Q_2^2\\) → \\(MR_2 = 80-2Q_2\\). Setting \\(MR_2 = 20\\) gives \\(Q_2 = 30\\) and \\(P_2 = 50\\).\nTotal profit under discrimination is therefore higher than under a single price.  With a uniform price, the combined demand is \\(Q(P)= (100-P)/2 + (80-P)\\) for \\(P\\le 80\\). Maximizing \\(\\pi = P\\,Q(P)-20\\,Q(P)\\) yields \\(P \\approx 36.7\\), which is lower than both \\(P_1\\) and \\(P_2\\) and generates less profit.  Hence option B is correct; the other statements are false.",
       "difficulty": 4
     },
     {
@@ -80211,7 +80211,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost function is \\(STC(Q)=40+4Q+Q^{2}\\) and its long‑run total cost function is \\(LTC(Q)=30+2Q+0.5Q^{2}\\). At what output level do the short‑run average cost (SRAC) and long‑run average cost (LRAC) become equal?",
+      "question_text": "A firm’s short‑run total cost function is \\(STC(Q)=40+4Q+Q^{2}\\) and its long‑run total cost function is \\(LTC(Q)=30+2Q+0.5Q^{2}\\). At what output level do the short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -80531,7 +80531,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run average total cost (SATC) curve is given by \\(SATC = \\frac{100}{Q} + 2 + 0.1Q\\). Its long‑run average cost (LRAC) curve is \\(LRAC = 2 + \\frac{0.5}{Q} + 0.1Q\\). At which output level does the firm achieve productive efficiency in the long run?",
+      "question_text": "A firm’s short‑run average total cost (SAT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -80915,7 +80915,7 @@
       "year": 2021,
       "topic": "Money, Banking and Inflation",
       "subtopic": "Inflation Causes and Controls",
-      "question_text": "In the diagram below, the short‑run Phillips curve (SRPC) is upward sloping and the long‑run Phillips curve (LRPC) is vertical at the natural rate of unemployment \\(u_n = 5\\%\\). If the central bank adopts an expansionary monetary policy that reduces unemployment to \\(4\\%\\) in the short run, what is the most likely change in the inflation rate according to Phillips‑curve analysis?",
+      "question_text": "In the diagram below, the short‑run Phillips curve (SRP",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"40\" y1=\"180\" x2=\"280\" y2=\"180\" stroke=\"black\"/><line x1=\"40\" y1=\"180\" x2=\"40\" y2=\"20\" stroke=\"black\"/><text x=\"150\" y=\"190\" font-size=\"12\">Unemployment %</text><text x=\"10\" y=\"100\" font-size=\"12\" transform=\"rotate(-90 10,100)\">Inflation %</text><path d=\"M40,180 C100,100 200,100 260,60\" fill=\"none\" stroke=\"red\"/><line x1=\"40\" y1=\"100\" x2=\"260\" y2=\"100\" stroke=\"blue\" stroke-dasharray=\"4\"/><text x=\"260\" y=\"95\" font-size=\"10\">LRPC</text></svg>",
@@ -81331,7 +81331,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the short‑run average cost (SRAC) curve and the long‑run average cost (LRAC) curve intersect. The SRAC is derived from \\(STC = 100 + 20Q + Q^2\\) and the LRAC from \\(LTC = 80Q + 0.5Q^2\\). At what output level \\(Q\\) do the two curves intersect?",
+      "question_text": "In the diagram below, the short‑run average cost (SRA",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><polyline points='40,180 300,20' fill='none' stroke='blue' stroke-width='2'/><polyline points='40,180 300,120' fill='none' stroke='red' stroke-width='2'/><text x='150' y='10' font-size='12'>SRAC</text><text x='150' y='130' font-size='12'>LRAC</text></svg>",
@@ -81491,7 +81491,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the short‑run total cost (STC) curve and the long‑run total cost (LTC) curve are shown. The short‑run total cost function is \\(STC(Q)=50+5Q+Q^{2}\\) and the long‑run total cost function is \\(LTC(Q)=30+4Q+0.5Q^{2}\\). At what output level does the short‑run marginal cost equal the long‑run average cost?",
+      "question_text": "In the diagram below, the short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='280' y2='180' stroke='black'/><line x1='40' y1='180' x2='40' y2='20' stroke='black'/><text x='150' y='190' font-size='12'>Quantity</text><text x='10' y='30' font-size='12'>Price</text></svg>",
@@ -81619,7 +81619,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A consumer has $120 to spend on two goods, A and B. Prices are $10 per unit of A and $15 per unit of B. If the consumer’s marginal utility per dollar for A is 4 utils/$ and for B is 3 utils/$, which bundle maximizes total utility?",
+      "question_text": "A consumer has $120 to spend on two goods, A and",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -81651,7 +81651,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost (STC) function is STC(Q)=50+10Q+0.5Q^{2}. Its long‑run total cost (LTC) function is LTC(Q)=40+8Q+0.25Q^{2}. At which output level does the firm’s long‑run average cost (LRAC) reach its minimum (i.e., the point where economies of scale cease)?",
+      "question_text": "A firm’s short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -82291,7 +82291,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost (STC) function is \\(STC = 50 + 20Q + 5Q^{2}\\) and its long‑run total cost (LTC) function is \\(LTC = 10Q + 2Q^{2}\\). At which output level, if any, does the short‑run average cost (SRAC) equal the long‑run average cost (LRAC)?",
+      "question_text": "A firm’s short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -82451,7 +82451,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost (STC) function is \\(STC(Q)=100+10Q+0.5Q^{2}\\) and its long‑run total cost (LTC) function is \\(LTC(Q)=80+12Q+0.3Q^{2}\\). At what output level do the short‑run average total cost (ATC) and the long‑run ATC intersect?",
+      "question_text": "A firm’s short‑run total cost (ST",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -82643,7 +82643,7 @@
       "year": 2023,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the monopoly's demand curve (D) is given by \\(P = 200 - 2Q\\). The marginal cost curve (MC) is a horizontal line at \\(MC = 40\\). The marginal revenue (MR) curve intersects MC at \\(Q^{*}=40\\). What price will the monopolist charge?",
+      "question_text": "In the diagram below, the monopoly's demand curve",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='280' y2='20' stroke='black'/><line x1='40' y1='100' x2='280' y2='100' stroke='red'/><line x1='40' y1='180' x2='120' y2='180' stroke='blue'/></svg>",
@@ -84403,7 +84403,7 @@
       "year": 2021,
       "topic": "National Income and Economic Analysis",
       "subtopic": "GDP, GNP and NNP Measurement",
-      "question_text": "A country reports the following aggregates for the current year: GDP at market prices = $1,500 billion, Net Factor Income from Abroad (NFIA) = $100 billion, and depreciation (capital consumption allowance) = $150 billion. What is the Net National Product at factor cost (NNP₍f₎)?",
+      "question_text": "A country reports the following aggregates for the current year: GDP at market prices = $1,500 billion, Net Factor Income from Abroad (NFI",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -85011,7 +85011,7 @@
       "year": 2022,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "In the diagram below, the firm's short‑run marginal cost (SMC) curve intersects the average variable cost (AVC) curve at point X. Which of the following statements is correct?",
+      "question_text": "In the diagram below, the firm's short‑run marginal cost (SM",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><polyline points='50,150 150,80 250,70' fill='none' stroke='blue' stroke-width='2'/><polyline points='50,150 250,130' fill='none' stroke='red' stroke-width='2'/><circle cx='180' cy='96' r='4' fill='black'/><text x='185' y='92' font-size='12' fill='black'>X</text></svg>",
@@ -85811,7 +85811,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the perfectly competitive firm's short‑run marginal cost (SMC) curve (black) intersects the horizontal market price line (red) at point A. Which point represents the profit‑maximising output and what is the economic profit condition at that point?",
+      "question_text": "In the diagram below, the perfectly competitive firm's short‑run marginal cost (SM",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox=\"0 0 320 200\" xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"40\" y1=\"160\" x2=\"280\" y2=\"20\" stroke=\"black\" stroke-width=\"2\"/><line x1=\"40\" y1=\"140\" x2=\"280\" y2=\"140\" stroke=\"red\" stroke-width=\"2\"/><circle cx=\"180\" cy=\"140\" r=\"4\" fill=\"blue\"/><text x=\"185\" y=\"135\" font-size=\"12\">A</text></svg>",
@@ -85995,7 +85995,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "To find the minimum of LRAC, differentiate with respect to Q and set the derivative to zero:\n\\[ \\frac{d LRAC}{dQ}=0.4-\\frac{150}{Q^{2}}=0 \\]\nSolve for Q: \\(0.4 = 150/Q^{2}\\) ⇒ \\(Q^{2}=150/0.4=375\\) ⇒ \\(Q=\\sqrt{375}\\approx 19.36\\).\nSubstitute back into LRAC:\n\\[ LRAC_{min}=0.4(19.36)+\\frac{150}{19.36}\\approx 7.74+7.75\\approx 15.49 \\]\nRounded to one decimal place, the minimum average cost is 15.5 at an output of about 19.4 units. Option B matches these values. The other options result from incorrect algebra or rounding.\n",
+      "explanation": "To find the minimum of LRAC, differentiate with respect to Q and set the derivative to zero:\n\\[ \\frac{d LRAC}{dQ}=0.4-\\frac{150}{Q^{2}}=0 \\]\nSolve for Q: \\(0.4 = 150/Q^{2}\\) ⇒ \\(Q^{2}=150/0.4=375\\) ⇒ \\(Q=\\sqrt{375}\\approx 19.36\\).\nSubstitute back into LRAC:\n\\[ LRAC_{min}=0.4(19.36)+\\frac{150}{19.36}\\approx 7.74+7.75\\approx 15.49 \\]\nRounded to one decimal place, the minimum average cost is 15.5 at an output of about 19.4 units. Option B matches these values. The other options result from incorrect algebra or rounding.",
       "difficulty": 4
     },
     {
@@ -86027,7 +86027,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "For a linear demand \\(P = a - bQ\\), marginal revenue is \\(MR = a - 2bQ\\). Here \\(a=200\\) and \\(b=4\\), so \\(MR = 200 - 8Q\\).\nThe monopolist chooses output where \\(MR = MC + tax\\):\n\\[ 200 - 8Q = 40 + 30 = 70 \\]\n\\[ 8Q = 130 \\Rightarrow Q = 16.25 \\]\nNow compute price from the demand curve:\n\\[ P = 200 - 4(16.25) = 200 - 65 = 135 \\]\nThus the post‑tax price is $135. Options A, B, and D correspond to solving the problem with incorrect MR or ignoring the tax.\n",
+      "explanation": "For a linear demand \\(P = a - bQ\\), marginal revenue is \\(MR = a - 2bQ\\). Here \\(a=200\\) and \\(b=4\\), so \\(MR = 200 - 8Q\\).\nThe monopolist chooses output where \\(MR = MC + tax\\):\n\\[ 200 - 8Q = 40 + 30 = 70 \\]\n\\[ 8Q = 130 \\Rightarrow Q = 16.25 \\]\nNow compute price from the demand curve:\n\\[ P = 200 - 4(16.25) = 200 - 65 = 135 \\]\nThus the post‑tax price is $135. Options A, B, and D correspond to solving the problem with incorrect MR or ignoring the tax.",
       "difficulty": 4
     },
     {
@@ -86059,7 +86059,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First compute GNP: \\(GNP = GDP + NFIA = 1,800\\,\\text{bn} + (-30\\,\\text{bn}) = 1,770\\,\\text{bn}\\).\nThen subtract depreciation to obtain NNP:\n\\[ NNP = GNP - Depreciation = 1,770\\,\\text{bn} - 220\\,\\text{bn} = 1,550\\,\\text{bn} \\]\nOption B matches this result. The other options arise from arithmetic errors such as adding depreciation instead of subtracting or mis‑handling the negative NFIA.\n",
+      "explanation": "First compute GNP: \\(GNP = GDP + NFIA = 1,800\\,\\text{bn} + (-30\\,\\text{bn}) = 1,770\\,\\text{bn}\\).\nThen subtract depreciation to obtain NNP:\n\\[ NNP = GNP - Depreciation = 1,770\\,\\text{bn} - 220\\,\\text{bn} = 1,550\\,\\text{bn} \\]\nOption B matches this result. The other options arise from arithmetic errors such as adding depreciation instead of subtracting or mis‑handling the negative NFIA.",
       "difficulty": 3
     },
     {
@@ -86091,7 +86091,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The simple money multiplier is the reciprocal of the required reserve ratio (rr):\n\\[ m = \\frac{1}{r_r} \\]\nOriginal rr = 10% = 0.10 → original multiplier \\(m_{old}=1/0.10 = 10\\).\nNew rr = 5% = 0.05 → new multiplier \\(m_{new}=1/0.05 = 20\\).\nThe factor by which the potential money supply can increase is \\(m_{new}/m_{old}=20/10 = 2\\).\nHence the correct answer is a new multiplier of 20 and a two‑fold increase, which is option B. The other options result from incorrect division or misreading the percentage change.\n",
+      "explanation": "The simple money multiplier is the reciprocal of the required reserve ratio (rr):\n\\[ m = \\frac{1}{r_r} \\]\nOriginal rr = 10% = 0.10 → original multiplier \\(m_{old}=1/0.10 = 10\\).\nNew rr = 5% = 0.05 → new multiplier \\(m_{new}=1/0.05 = 20\\).\nThe factor by which the potential money supply can increase is \\(m_{new}/m_{old}=20/10 = 2\\).\nHence the correct answer is a new multiplier of 20 and a two‑fold increase, which is option B. The other options result from incorrect division or misreading the percentage change.",
       "difficulty": 4
     },
     {
@@ -86411,7 +86411,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "First compute tax on each bracket:\n- Income up to $20,000: \\(20,000 \\times 10\\% = $2,000\\).\n- Income above $20,000: \\(45,000 - 20,000 = $25,000\\). Tax on this part: \\(25,000 \\times 25\\% = $6,250\\).\nTotal tax paid = $2,000 + $6,250 = $8,250.\nAverage tax rate = \\(\\frac{8,250}{45,000}\\times 100\\% = 18.33\\%\\).\nRounded to the nearest whole percent, the average tax rate is 18%, which corresponds to option B. However, the answer list contains 20% as option C; the precise calculation yields 18.33%, so the closest provided choice is 18%, i.e., option B. (If the test expects rounding to the nearest whole number, the correct answer is B.)\n\n**Correction**: The explanation reveals a mis‑match; the correct option based on the calculation is B (18%). Therefore the \"correct_option\" field should be updated to \"B\". Since the JSON must be consistent, we change it accordingly.\n",
+      "explanation": "First compute tax on each bracket:\n- Income up to $20,000: \\(20,000 \\times 10\\% = $2,000\\).\n- Income above $20,000: \\(45,000 - 20,000 = $25,000\\). Tax on this part: \\(25,000 \\times 25\\% = $6,250\\).\nTotal tax paid = $2,000 + $6,250 = $8,250.\nAverage tax rate = \\(\\frac{8,250}{45,000}\\times 100\\% = 18.33\\%\\).\nRounded to the nearest whole percent, the average tax rate is 18%, which corresponds to option B. However, the answer list contains 20% as option C; the precise calculation yields 18.33%, so the closest provided choice is 18%, i.e., option B. (If the test expects rounding to the nearest whole number, the correct answer is B.)\n\n**Correction**: The explanation reveals a mis‑match; the correct option based on the calculation is B (18%). Therefore the \"correct_option\" field should be updated to \"B\". Since the JSON must be consistent, we change it accordingly.",
       "difficulty": 5
     },
     {
@@ -86419,7 +86419,7 @@
       "year": 2020,
       "topic": "Basic Economic Concepts and Systems",
       "subtopic": "Wants, Scarcity, Scale of Preference",
-      "question_text": "A consumer’s marginal utility (MU) from successive units of good X is given by the schedule below:\n\n\\[\\begin{array}{c|c}\n\\text{Unit}&\\text{MU (utils)}\\\\\\hline\n1&30\\\\\n2&24\\\\\n3&18\\\\\n4&12\\\\\n\\end{array}\\]\\]\n\nWhat is the total utility the consumer obtains from consuming the first four units?",
+      "question_text": "A consumer’s marginal utility (MU) from successive units of good X is given by the schedule below:\n\n\\[\\begin{array}{c|c}\n\\text{Unit}&\\text{MU (utils)}\\hline\n1&30\\\\\n2&24\\\\\n3&18\\\\\n4&12\\\\\n\\end{array}\\]\\]\n\nWhat is the total utility the consumer obtains from consuming the first four units?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -87603,7 +87603,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, a perfectly competitive firm faces a market price of $30. The firm's marginal cost (MC) curve intersects the average total cost (ATC) curve at the point (Q = 100, ATC = $30). At this output level the firm is:",
+      "question_text": "In the diagram below, a perfectly competitive firm faces a market price of $30. The firm's marginal cost (M",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='160' x2='280' y2='40' stroke='black' stroke-width='2'/><line x1='40' y1='160' x2='280' y2='160' stroke='gray' stroke-dasharray='4,4'/><line x1='40' y1='160' x2='40' y2='20' stroke='gray' stroke-dasharray='4,4'/><text x='150' y='30' font-size='12'>MC</text><text x='150' y='180' font-size='12'>Q</text><text x='15' y='100' font-size='12'>ATC</text></svg>",
@@ -88211,7 +88211,7 @@
       "year": 2021,
       "topic": "Theory of Production, Cost and Revenue",
       "subtopic": "Short-run and Long-run Costs",
-      "question_text": "A firm’s short‑run total cost function is \\(STC(Q)= 50 + 12Q + 0.5Q^{2}\\). At an output level of \\(Q=8\\), what is the marginal cost (MC) and does the firm cover its average variable cost (AVC) at that output?",
+      "question_text": "A firm’s short‑run total cost function is \\(STC(Q)= 50 + 12Q + 0.5Q^{2}\\). At an output level of \\(Q=8\\), what is the marginal cost (M",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -89491,7 +89491,7 @@
       "year": 2022,
       "topic": "Market Structures",
       "subtopic": "Perfect Competition and Monopolies",
-      "question_text": "In the diagram below, the market for wheat is perfectly competitive. The initial equilibrium price is $20 and quantity 100 units. The government imposes a specific per‑unit tax of $4, which shifts the supply curve upward. As a result, the new equilibrium quantity falls to 80 units. What is the dead‑weight loss (DWL) created by the tax?",
+      "question_text": "In the diagram below, the market for wheat is perfectly competitiv",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='40' y1='180' x2='280' y2='180' stroke='black'/><line x1='40' y1='180' x2='40' y2='20' stroke='black'/><line x1='40' y1='140' x2='280' y2='20' stroke='red' stroke-width='2'/> <!-- original supply --> <line x1='40' y1='180' x2='280' y2='100' stroke='blue' stroke-width='2'/> <!-- supply after tax --></svg>",

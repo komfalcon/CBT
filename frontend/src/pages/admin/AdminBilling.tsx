@@ -91,15 +91,15 @@ export default function AdminBilling() {
             <Sparkles className="h-5 w-5" />
           </div>
           <div>
-            <div className="text-xs sm:text-sm font-bold text-amber-300">
+            <div className="text-xs sm:text-sm font-bold text-amber-800 dark:text-amber-300">
               Free Public Beta Active — Paywalls Paused
             </div>
-            <div className="text-xs text-slate-300 mt-0.5">
+            <div className="text-xs text-text-secondary mt-0.5">
               All students have full mock exam access and 20 daily Falke AI messages free of charge. Subscriptions will activate upon commercial launch.
             </div>
           </div>
         </div>
-        <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0">
+        <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 shrink-0">
           Beta Guarantee
         </span>
       </div>

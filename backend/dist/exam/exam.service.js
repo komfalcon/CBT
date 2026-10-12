@@ -52,6 +52,7 @@ const database_module_1 = require("../db/database.module");
 const schema = __importStar(require("../db/schema"));
 const postgres_js_1 = require("drizzle-orm/postgres-js");
 const drizzle_orm_1 = require("drizzle-orm");
+const question_sanitizer_1 = require("../questions/utils/question-sanitizer");
 let ExamService = class ExamService {
     constructor(db) {
         this.db = db;
@@ -144,7 +145,40 @@ let ExamService = class ExamService {
         if (!session) {
             throw new common_1.NotFoundException('Exam session not found.');
         }
-        return session;
+        if (session.status === 'completed') {
+            const [existingResult] = await this.db.select({ id: schema.exam_results.id })
+                .from(schema.exam_results)
+                .where((0, drizzle_orm_1.eq)(schema.exam_results.sessionId, session.id))
+                .limit(1);
+            return {
+                ...this.sanitizeSession(session),
+                resultId: existingResult?.id,
+                isExpired: true,
+            };
+        }
+        const sessionQuestions = session.questions || [];
+        const durationLimit = session.type === 'mock' ? 7200 : sessionQuestions.length * 60;
+        const startedAtTime = session.startedAt ? new Date(session.startedAt).getTime() : Date.now();
+        const elapsedSeconds = Math.max(0, Math.floor((Date.now() - startedAtTime) / 1000));
+        if (elapsedSeconds >= durationLimit || session.timeRemaining <= 0) {
+            const submitted = await this.submitSession(sessionId, userId);
+            return {
+                ...this.sanitizeSession(session),
+                status: 'completed',
+                timeRemaining: 0,
+                resultId: submitted.resultId || submitted.id,
+                isExpired: true,
+            };
+        }
+        const trueTimeRemaining = Math.max(0, durationLimit - elapsedSeconds);
+        if (trueTimeRemaining !== session.timeRemaining) {
+            await this.db.update(schema.exam_sessions).set({
+                timeRemaining: trueTimeRemaining,
+                updatedAt: new Date()
+            }).where((0, drizzle_orm_1.eq)(schema.exam_sessions.id, session.id));
+            session.timeRemaining = trueTimeRemaining;
+        }
+        return this.sanitizeSession(session);
     }
     async saveAnswers(sessionId, userId, answers, timeRemaining) {
         const [session] = await this.db.select().from(schema.exam_sessions)
@@ -152,7 +186,21 @@ let ExamService = class ExamService {
         if (!session) {
             throw new common_1.NotFoundException('Active exam session not found.');
         }
-        const newTimeRemaining = Math.max(0, timeRemaining);
+        const sessionQuestions = session.questions || [];
+        const durationLimit = session.type === 'mock' ? 7200 : sessionQuestions.length * 60;
+        const startedAtTime = session.startedAt ? new Date(session.startedAt).getTime() : Date.now();
+        const elapsedSeconds = Math.max(0, Math.floor((Date.now() - startedAtTime) / 1000));
+        if (elapsedSeconds >= durationLimit) {
+            const submitted = await this.submitSession(sessionId, userId);
+            return {
+                ...session,
+                status: 'completed',
+                timeRemaining: 0,
+                resultId: submitted.resultId || submitted.id,
+                isExpired: true,
+            };
+        }
+        const trueTimeRemaining = Math.max(0, Math.min(timeRemaining, durationLimit - elapsedSeconds));
         let newAnswers = session.answers || {};
         if (answers) {
             const answersMap = {};
@@ -164,7 +212,7 @@ let ExamService = class ExamService {
             newAnswers = answersMap;
         }
         const [updatedSession] = await this.db.update(schema.exam_sessions).set({
-            timeRemaining: newTimeRemaining,
+            timeRemaining: trueTimeRemaining,
             answers: newAnswers,
             updatedAt: new Date()
         }).where((0, drizzle_orm_1.eq)(schema.exam_sessions.id, session.id)).returning();
@@ -257,7 +305,18 @@ let ExamService = class ExamService {
         if (plain.questions && Array.isArray(plain.questions)) {
             plain.questions = plain.questions.map((q) => {
                 const { correct_option, explanation, embedding_vector, versions, ...rest } = q;
-                return rest;
+                const sanitizedStem = (0, question_sanitizer_1.sanitizeQuestionText)(rest.question_text);
+                const cleanedOptions = Array.isArray(rest.options)
+                    ? rest.options.map((opt) => ({
+                        ...opt,
+                        text: (0, question_sanitizer_1.cleanOptionText)(opt.text),
+                    }))
+                    : rest.options;
+                return {
+                    ...rest,
+                    question_text: sanitizedStem,
+                    options: cleanedOptions,
+                };
             });
         }
         return plain;
@@ -281,10 +340,26 @@ let ExamService = class ExamService {
         const seenTexts = new Set();
         let result = [];
         for (const q of candidates) {
-            const normalized = (q.question_text || '').trim().toLowerCase();
+            if ((0, question_sanitizer_1.isIncompleteQuestion)(q.question_text))
+                continue;
+            const sanitizedText = (0, question_sanitizer_1.sanitizeQuestionText)(q.question_text);
+            if (!sanitizedText || sanitizedText.length < 10)
+                continue;
+            const normalized = sanitizedText.trim().toLowerCase();
             if (!seenTexts.has(normalized)) {
                 seenTexts.add(normalized);
-                result.push(q);
+                const cleanedOptions = Array.isArray(q.options)
+                    ? q.options.map((opt) => ({
+                        ...opt,
+                        text: (0, question_sanitizer_1.cleanOptionText)(opt.text),
+                    }))
+                    : q.options;
+                result.push({
+                    ...q,
+                    question_text: sanitizedText,
+                    options: cleanedOptions,
+                    explanation: q.explanation ? (0, question_sanitizer_1.sanitizeExplanation)(q.explanation) : null,
+                });
                 if (result.length >= targetCount)
                     break;
             }
@@ -308,10 +383,26 @@ let ExamService = class ExamService {
                 .limit(remainingCount * 3);
             const fallbackQuestions = [];
             for (const q of fallbackCandidates) {
-                const normalized = (q.question_text || '').trim().toLowerCase();
+                if ((0, question_sanitizer_1.isIncompleteQuestion)(q.question_text))
+                    continue;
+                const sanitizedText = (0, question_sanitizer_1.sanitizeQuestionText)(q.question_text);
+                if (!sanitizedText || sanitizedText.length < 10)
+                    continue;
+                const normalized = sanitizedText.trim().toLowerCase();
                 if (!seenTexts.has(normalized)) {
                     seenTexts.add(normalized);
-                    fallbackQuestions.push(q);
+                    const cleanedOptions = Array.isArray(q.options)
+                        ? q.options.map((opt) => ({
+                            ...opt,
+                            text: (0, question_sanitizer_1.cleanOptionText)(opt.text),
+                        }))
+                        : q.options;
+                    fallbackQuestions.push({
+                        ...q,
+                        question_text: sanitizedText,
+                        options: cleanedOptions,
+                        explanation: q.explanation ? (0, question_sanitizer_1.sanitizeExplanation)(q.explanation) : null,
+                    });
                     if (fallbackQuestions.length >= remainingCount)
                         break;
                 }

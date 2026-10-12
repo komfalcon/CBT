@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Button, Badge } from '../components';
-import { Book, Calendar, CheckSquare, Clock } from 'lucide-react';
-import { ThemeToggle } from '../components/ThemeToggle';
+import { Card, Button, Badge, AppNavbar } from '../components';
+import { Calendar, CheckSquare, Clock } from 'lucide-react';
 
 const JAMB_SYLLABUS: Record<string, string[]> = {
   physics: ['Motion', 'Energy', 'Waves', 'Thermodynamics', 'Electricity', 'Magnetism', 'Modern Physics', 'Optics'],
@@ -119,21 +118,8 @@ export default function ExamHub() {
 
   return (
     <div className="min-h-screen bg-bg-primary text-text-primary font-sans overflow-auto relative">
-      <header className="border-b border-border bg-bg-primary/80 backdrop-blur-md sticky top-0 z-40">
-        <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-bold tracking-tight bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent">
-              CBT Exam Hub
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <Button onClick={() => navigate('/dashboard')} variant="ghost" size="sm">
-              Back to Dashboard
-            </Button>
-          </div>
-        </div>
-      </header>
+      {/* Unified Ecosystem Top Bar */}
+      <AppNavbar titleBadge="Exam Hub" />
 
       <main className="mx-auto max-w-7xl px-6 py-8 grid gap-8 md:grid-cols-2">
         <Card className="space-y-4">
@@ -154,13 +140,13 @@ export default function ExamHub() {
                   className="flex justify-between items-center mb-2 cursor-pointer"
                   onClick={() => setExpandedSubject(isExpanded ? null : subjectKey)}
                 >
-                  <span className="text-xs font-bold text-slate-200 capitalize">{subjectKey}</span>
+                  <span className="text-xs font-bold text-text-primary capitalize">{subjectKey}</span>
                   <div className="flex items-center gap-2">
                     <Badge variant="primary">{progressPct}% Mastered</Badge>
                     <span className="text-xs text-text-muted">{isExpanded ? '▲' : '▼'}</span>
                   </div>
                 </div>
-                <div className="w-full bg-slate-900 h-2 rounded-full overflow-hidden mb-2">
+                <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden mb-2">
                   <div className="bg-primary h-full transition-all" style={{ width: `${progressPct}%` }} />
                 </div>
 
@@ -177,7 +163,7 @@ export default function ExamHub() {
                             onChange={() => handleToggleTopic(subjectKey, topic, isCompleted)}
                             className="cursor-pointer h-3 w-3 accent-primary"
                           />
-                          <span className={`text-xs ${isCompleted ? 'text-text-muted line-through' : 'text-slate-300'}`}>
+                          <span className={`text-xs ${isCompleted ? 'text-text-muted line-through' : 'text-text-primary'}`}>
                             {topic}
                           </span>
                         </div>
@@ -224,7 +210,7 @@ export default function ExamHub() {
               <div>
                 <label className="text-xs text-text-secondary block mb-1">Subject</label>
                 <select
-                  className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"
+                  className="w-full bg-surface-container-high border border-border rounded px-2 py-1 text-xs text-text-primary"
                   value={newSession.subject}
                   onChange={(e) => setNewSession({...newSession, subject: e.target.value})}
                 >
@@ -240,17 +226,17 @@ export default function ExamHub() {
                 <input
                   type="text"
                   placeholder="e.g. Motion"
-                  className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"
+                  className="w-full bg-surface-container-high border border-border rounded px-2 py-1 text-xs text-text-primary placeholder:text-text-muted"
                   value={newSession.topic}
                   onChange={(e) => setNewSession({...newSession, topic: e.target.value})}
                 />
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <div className="flex-1">
                   <label className="text-xs text-text-secondary block mb-1">Start Time</label>
                   <input
                     type="datetime-local"
-                    className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"
+                    className="w-full bg-surface-container-high border border-border rounded px-2 py-1 text-xs text-text-primary"
                     value={newSession.startTime}
                     onChange={(e) => setNewSession({...newSession, startTime: e.target.value})}
                   />
@@ -259,7 +245,7 @@ export default function ExamHub() {
                   <label className="text-xs text-text-secondary block mb-1">End Time</label>
                   <input
                     type="datetime-local"
-                    className="w-full bg-slate-900 border border-border rounded px-2 py-1 text-xs text-white"
+                    className="w-full bg-surface-container-high border border-border rounded px-2 py-1 text-xs text-text-primary"
                     value={newSession.endTime}
                     onChange={(e) => setNewSession({...newSession, endTime: e.target.value})}
                   />

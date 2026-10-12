@@ -40,12 +40,12 @@ export function SupportPageShell({ children }: SupportPageShellProps) {
   return (
     <div className="support-page min-h-screen overflow-x-hidden bg-bg-primary font-body text-text-primary selection:bg-primary/30">
       <header className="support-header sticky top-0 z-50 border-b border-border/80 backdrop-blur-xl">
-        <div className="support-header-inner mx-auto flex h-[76px] max-w-7xl items-center justify-between px-8">
-          <Link to="/" className="support-brand flex min-w-0 items-center gap-3" aria-label="Aurikrex Exam Arena home">
-            <img src="/favicon.svg" alt="" className="h-10 w-10 shrink-0 rounded-xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
+        <div className="support-header-inner mx-auto flex h-[64px] sm:h-[76px] max-w-7xl items-center justify-between px-4 sm:px-8">
+          <Link to="/" className="support-brand flex min-w-0 items-center gap-2.5 sm:gap-3" aria-label="Aurikrex Exam Arena home">
+            <img src="/favicon.svg" alt="" className="h-8 w-8 sm:h-10 sm:w-10 shrink-0 rounded-xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
             <span className="min-w-0 leading-tight">
-              <span className="block truncate font-display text-[15px] font-semibold tracking-[-0.02em] text-text-primary">Aurikrex Exam Arena</span>
-              <span className="mt-1 block text-[10px] font-semibold uppercase tracking-[0.18em] text-blue-300">by Aurikrex</span>
+              <span className="block truncate font-display text-[14px] sm:text-[15px] font-semibold tracking-[-0.02em] text-text-primary">Aurikrex Exam Arena</span>
+              <span className="mt-0.5 sm:mt-1 block text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-royal-blue dark:text-blue-300">by Aurikrex</span>
             </span>
           </Link>
 
@@ -56,11 +56,11 @@ export function SupportPageShell({ children }: SupportPageShellProps) {
             })}
           </nav>
 
-          <div className="support-header-actions flex shrink-0 items-center gap-3">
+          <div className="support-header-actions flex shrink-0 items-center gap-2 sm:gap-3">
             <ThemeToggle />
-            <Link to="/" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-border bg-bg-secondary/60 px-3.5 text-[13px] font-semibold text-text-secondary transition hover:border-border-hover hover:bg-bg-card hover:text-text-primary">
+            <Link to="/" className="inline-flex min-h-9 sm:min-h-10 items-center gap-1.5 sm:gap-2 rounded-lg border border-border bg-bg-secondary/60 px-2.5 sm:px-3.5 text-[12px] sm:text-[13px] font-semibold text-text-secondary transition hover:border-border-hover hover:bg-bg-card hover:text-text-primary">
               <ArrowLeft className="h-4 w-4" />
-              <span className="support-back-label">Back to prep</span>
+              <span className="support-back-label hidden sm:inline">Back to prep</span>
             </Link>
           </div>
         </div>
@@ -68,10 +68,10 @@ export function SupportPageShell({ children }: SupportPageShellProps) {
 
       {children}
 
-      <footer className="border-t border-border/80 bg-bg-secondary/35 px-8 py-8">
-        <div className="support-footer-inner mx-auto flex max-w-7xl items-center justify-between gap-8">
+      <footer className="border-t border-border/80 bg-bg-secondary/35 px-4 sm:px-8 py-8">
+        <div className="support-footer-inner mx-auto flex flex-col md:flex-row max-w-7xl items-start md:items-center justify-between gap-6 md:gap-8">
           <p className="text-xs leading-5 text-text-muted">© {new Date().getFullYear()} Aurikrex Exam Arena by Aurikrex. Study support for focused UTME preparation.</p>
-          <div className="support-footer-links flex items-center gap-5 text-xs font-medium text-text-secondary">
+          <div className="support-footer-links flex flex-wrap items-center gap-4 sm:gap-5 text-xs font-medium text-text-secondary">
             <a href={`mailto:${SUPPORT_EMAIL}`} className="inline-flex items-center gap-1.5 transition hover:text-primary"><Mail className="h-3.5 w-3.5" />{SUPPORT_EMAIL}</a>
             <a href={`tel:${SUPPORT_PHONE_LINK}`} className="inline-flex items-center gap-1.5 transition hover:text-primary"><Phone className="h-3.5 w-3.5" />{SUPPORT_PHONE_DISPLAY}</a>
             <a href="https://www.aurikrex.com" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 transition hover:text-primary"><Globe2 className="h-3.5 w-3.5" />Aurikrex <ExternalLink className="h-3 w-3" /></a>
@@ -84,23 +84,23 @@ export function SupportPageShell({ children }: SupportPageShellProps) {
 
 export function SupportHero({ eyebrow, title, description, icon: Icon, meta }: SupportHeroProps) {
   return (
-    <section className="relative overflow-hidden border-b border-border/70 px-8 py-20">
+    <section className="relative overflow-hidden border-b border-border/70 px-4 sm:px-8 py-10 sm:py-20">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_74%_22%,rgba(74,91,255,0.16),transparent_30%),radial-gradient(circle_at_16%_0%,rgba(56,189,248,0.07),transparent_25%)]" />
-      <div className="relative mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_260px] items-end gap-16">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 md:grid-cols-[minmax(0,1fr)_260px] items-start md:items-end gap-8 md:gap-16">
         <div className="max-w-3xl min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">{eyebrow}</p>
-          <h1 className="mt-5 font-display text-[54px] font-semibold leading-[1.02] tracking-[-0.065em] text-text-primary">{title}</h1>
-          <p className="mt-6 max-w-2xl text-[17px] leading-8 text-text-secondary">{description}</p>
-          {meta && <div className="mt-8">{meta}</div>}
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-royal-blue dark:text-blue-300">{eyebrow}</p>
+          <h1 className="mt-4 sm:mt-5 font-display text-3xl sm:text-5xl lg:text-[54px] font-semibold leading-[1.08] sm:leading-[1.02] tracking-[-0.04em] sm:tracking-[-0.065em] text-text-primary">{title}</h1>
+          <p className="mt-4 sm:mt-6 max-w-2xl text-sm sm:text-[17px] leading-relaxed sm:leading-8 text-text-secondary">{description}</p>
+          {meta && <div className="mt-6 sm:mt-8">{meta}</div>}
         </div>
-        <div className="support-hero-mark relative ml-auto flex h-40 w-40 shrink-0 items-center justify-center rounded-[32px] border border-primary/20 bg-primary/[0.08] text-primary shadow-[0_24px_70px_rgba(49,73,190,0.22)]"><Icon className="h-16 w-16" /></div>
+        <div className="support-hero-mark relative md:ml-auto flex h-24 w-24 sm:h-36 sm:w-36 md:h-40 md:w-40 shrink-0 items-center justify-center rounded-2xl sm:rounded-[32px] border border-primary/20 bg-primary/[0.08] text-primary shadow-[0_24px_70px_rgba(49,73,190,0.22)]"><Icon className="h-10 w-10 sm:h-14 sm:w-14 md:h-16 md:w-16" /></div>
       </div>
     </section>
   );
 }
 
 export function SupportSection({ id, eyebrow, title, children, className = '' }: SupportSectionProps) {
-  return <section id={id} className={`scroll-mt-28 ${className}`}>{eyebrow && <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">{eyebrow}</p>}<h2 className="mt-3 font-display text-[28px] font-semibold tracking-[-0.045em] text-text-primary">{title}</h2><div className="mt-6">{children}</div></section>;
+  return <section id={id} className={`scroll-mt-28 ${className}`}>{eyebrow && <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-royal-blue dark:text-blue-300">{eyebrow}</p>}<h2 className="mt-3 font-display text-[28px] font-semibold tracking-[-0.045em] text-text-primary">{title}</h2><div className="mt-6">{children}</div></section>;
 }
 
 export function SupportContents({ sections }: SupportContentsProps) {

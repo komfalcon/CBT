@@ -393,7 +393,7 @@
       "year": 2022,
       "topic": "Stoichiometry",
       "subtopic": "Stoichiometric Calculations",
-      "question_text": "For the reaction \\( 2\\\\mathrm{Al}(s) + 3\\\\mathrm{Cl_2}(g) \\\\rightarrow 2\\\\mathrm{AlCl_3}(s) \\), 5.40 g of Al and 7.10 g of Cl₂ are allowed to react. What is the theoretical yield of AlCl₃ in grams? (Molar masses: Al = 27.0 g/mol, Cl₂ = 71.0 g/mol, AlCl₃ = 133.5 g/mol)",
+      "question_text": "For the reaction \\( 2\\mathrm{Al}(s) + 3\\mathrm{Cl_2}(g) \\rightarrow 2\\mathrm{AlCl_3}(s) \\), 5.40 g of Al and 7.10 g of Cl₂ are allowed to react. What is the theoretical yield of AlCl₃ in grams? (Molar masses: Al = 27.0 g/mol, Cl₂ = 71.0 g/mol, AlCl₃ = 133.5 g/mol)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -417,7 +417,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "First, calculate moles of each reactant: \\( n_{\\\\mathrm{Al}} = 5.40\\\\text{ g} / 27.0\\\\text{ g/mol} = 0.200\\\\text{ mol} \\); \\( n_{\\\\mathrm{Cl_2}} = 7.10\\\\text{ g} / 71.0\\\\text{ g/mol} = 0.100\\\\text{ mol} \\). The stoichiometric ratio requires 2 mol Al per 3 mol Cl₂, i.e., 0.200 mol Al would need \\( (3/2) \\\\times 0.200 = 0.300\\\\text{ mol Cl_2} \\). Since only 0.100 mol Cl₂ is present, Cl₂ is the limiting reagent. From the balanced equation, 3 mol Cl₂ produce 2 mol AlCl₃, so 0.100 mol Cl₂ yields \\( (2/3) \\\\times 0.100 = 0.0667\\\\text{ mol AlCl_3} \\). Mass of AlCl₃ = 0.0667 mol × 133.5 g/mol = 8.90 g. Hence, the correct choice is B.",
+      "explanation": "First, calculate moles of each reactant: \\( n_{\\mathrm{Al}} = 5.40\\text{ g} / 27.0\\text{ g/mol} = 0.200\\text{ mol} \\); \\( n_{\\mathrm{Cl_2}} = 7.10\\text{ g} / 71.0\\text{ g/mol} = 0.100\\text{ mol} \\). The stoichiometric ratio requires 2 mol Al per 3 mol Cl₂, i.e., 0.200 mol Al would need \\( (3/2) \\times 0.200 = 0.300\\text{ mol Cl_2} \\). Since only 0.100 mol Cl₂ is present, Cl₂ is the limiting reagent. From the balanced equation, 3 mol Cl₂ produce 2 mol AlCl₃, so 0.100 mol Cl₂ yields \\( (2/3) \\times 0.100 = 0.0667\\text{ mol AlCl_3} \\). Mass of AlCl₃ = 0.0667 mol × 133.5 g/mol = 8.90 g. Hence, the correct choice is B.",
       "difficulty": 4
     },
     {
@@ -425,7 +425,7 @@
       "year": 2020,
       "topic": "Thermochemistry",
       "subtopic": "Hess's Law",
-      "question_text": "Given the following thermochemical equations:\n1) \\( \\\\mathrm{C(s) + O_2(g) \\\\rightarrow CO_2(g)} \\) \\( \\\\Delta H_1 = -393.5\\\\text{ kJ/mol} \\)\n2) \\( \\\\mathrm{2CO(g) + O_2(g) \\\\rightarrow 2CO_2(g)} \\) \\( \\\\Delta H_2 = -566.0\\\\text{ kJ/mol} \\)\nDetermine the enthalpy change for the reaction:\n\\( \\\\mathrm{C(s) + \\\\frac{1}{2} O_2(g) \\\\rightarrow CO(g)} \\)",
+      "question_text": "Given the following thermochemical equations:\n1) \\( \\mathrm{C(s) + O_2(g) \\rightarrow CO_2(g)} \\) \\( \\Delta H_1 = -393.5\\text{ kJ/mol} \\)\n2) \\( \\mathrm{2CO(g) + O_2(g) \\rightarrow 2CO_2(g)} \\) \\( \\Delta H_2 = -566.0\\text{ kJ/mol} \\)\nDetermine the enthalpy change for the reaction:\n\\( \\mathrm{C(s) + \\frac{1}{2} O_2(g) \\rightarrow CO(g)} \\)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -449,7 +449,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "We apply Hess's Law. The target reaction can be obtained by: (1) minus one-half of (2).\n\\[ \\\\Delta H_{\\\\text{target}} = \\\\Delta H_1 - \\\\frac{1}{2} \\\\Delta H_2 \\]\n\\[ = (-393.5) - \\\\frac{1}{2}(-566.0) = -393.5 + 283.0 = -110.5\\\\text{ kJ/mol} \\]\nThus, the enthalpy change is -110.5 kJ/mol, corresponding to option A.",
+      "explanation": "We apply Hess's Law. The target reaction can be obtained by: (1) minus one-half of (2).\n\\[ \\Delta H_{\\text{target}} = \\Delta H_1 - \\frac{1}{2} \\Delta H_2 \\]\n\\[ = (-393.5) - \\frac{1}{2}(-566.0) = -393.5 + 283.0 = -110.5\\text{ kJ/mol} \\]\nThus, the enthalpy change is -110.5 kJ/mol, corresponding to option A.",
       "difficulty": 4
     },
     {
@@ -457,7 +457,7 @@
       "year": 2023,
       "topic": "Electrochemistry",
       "subtopic": "Electrochemical Cells",
-      "question_text": "In the diagram below, a galvanic cell is constructed with a zinc electrode in 0.10 M Zn²⁺ solution and a copper electrode in 1.0 M Cu²⁺ solution at 298 K. Standard reduction potentials: \\( E^\\\\circ_{\\\\mathrm{Zn^{2+}/Zn}} = -0.76\\\\text{ V} \\), \\( E^\\\\circ_{\\\\mathrm{Cu^{2+}/Cu}} = +0.34\\\\text{ V} \\). Using the Nernst equation, calculate the cell potential \\( E_{\\\\text{cell}} \\).",
+      "question_text": "In the diagram below, a galvanic cell is constructed with a zinc electrode in 0.10 M Zn²⁺ solution and a copper electrode in 1.0 M Cu²⁺ solution at 298 K. Standard reduction potentials: \\( E^\\circ_{\\mathrm{Zn^{2+}/Zn}} = -0.76\\text{ V} \\), \\( E^\\circ_{\\mathrm{Cu^{2+}/Cu}} = +0.34\\text{ V} \\). Using the Nernst equation, calculate the cell potential \\( E_{\\text{cell}} \\).",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='130' height='180' fill='none' stroke='black'/><rect x='180' y='10' width='130' height='180' fill='none' stroke='black'/><line x1='140' y1='100' x2='180' y2='100' stroke='black' stroke-width='2'/><text x='75' y='10' text-anchor='middle' font-size='12'>Anode (Zn)</text><text x='245' y='10' text-anchor='middle' font-size='12'>Cathode (Cu)</text><rect x='30' y='50' width='60' height='100' fill='grey'/><rect x='230' y='50' width='60' height='100' fill='orange'/><text x='60' y='160' text-anchor='middle' font-size='10'>Zn(s)</text><text x='260' y='160' text-anchor='middle' font-size='10'>Cu(s)</text><text x='60' y='30' text-anchor='middle' font-size='10'>0.10 M Zn²⁺</text><text x='260' y='30' text-anchor='middle' font-size='10'>1.0 M Cu²⁺</text><line x1='140' y1='80' x2='140' y2='120' stroke='green' stroke-width='3'/><text x='140' y='70' text-anchor='middle' font-size='10' fill='green'>Salt Bridge</text></svg>",
@@ -481,7 +481,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "The standard cell potential is \\( E^\\\\circ_{\\\\text{cell}} = E^\\\\circ_{\\\\text{cathode}} - E^\\\\circ_{\\\\text{anode}} = 0.34 - (-0.76) = 1.10\\\\text{ V} \\). For the reaction \\( \\\\mathrm{Zn(s) + Cu^{2+}(aq) \\\\rightarrow Zn^{2+}(aq) + Cu(s)} \\), \\( n = 2 \\). The Nernst equation at 298 K: \\( E = E^\\\\circ - \\\\frac{0.0592}{2} \\\\log \\\\frac{[Zn^{2+}]}{[Cu^{2+}]} \\). Substituting concentrations: \\( \\\\frac{[Zn^{2+}]}{[Cu^{2+}]} = \\\\frac{0.10}{1.0} = 0.10 \\), \\( \\\\log(0.10) = -1 \\). Thus, \\( E = 1.10 - 0.0296 \\\\times (-1) = 1.10 + 0.0296 = 1.1296\\\\text{ V} \\\\approx 1.13\\\\text{ V} \\). Option B matches.",
+      "explanation": "The standard cell potential is \\( E^\\circ_{\\text{cell}} = E^\\circ_{\\text{cathode}} - E^\\circ_{\\text{anode}} = 0.34 - (-0.76) = 1.10\\text{ V} \\). For the reaction \\( \\mathrm{Zn(s) + Cu^{2+}(aq) \\rightarrow Zn^{2+}(aq) + Cu(s)} \\), \\( n = 2 \\). The Nernst equation at 298 K: \\( E = E^\\circ - \\frac{0.0592}{2} \\log \\frac{[Zn^{2+}]}{[Cu^{2+}]} \\). Substituting concentrations: \\( \\frac{[Zn^{2+}]}{[Cu^{2+}]} = \\frac{0.10}{1.0} = 0.10 \\), \\( \\log(0.10) = -1 \\). Thus, \\( E = 1.10 - 0.0296 \\times (-1) = 1.10 + 0.0296 = 1.1296\\text{ V} \\approx 1.13\\text{ V} \\). Option B matches.",
       "difficulty": 4
     },
     {
@@ -489,7 +489,7 @@
       "year": 2020,
       "topic": "Chemical Kinetics and Equilibrium",
       "subtopic": "Reaction Rates",
-      "question_text": "For the reaction \\( 2\\\\mathrm{N_2O_5(g)} \\\\rightarrow 4\\\\mathrm{NO_2(g)} + \\\\mathrm{O_2(g)} \\), the rate of disappearance of \\( \\\\mathrm{N_2O_5} \\) is \\( 1.2 \\\\times 10^{-4} \\\\,\\\\mathrm{M\\\\,s^{-1}} \\) at a certain time. What is the rate of appearance of \\( \\\\mathrm{NO_2} \\) at the same time?",
+      "question_text": "For the reaction \\( 2\\mathrm{N_2O_5(g)} \\rightarrow 4\\mathrm{NO_2(g)} + \\mathrm{O_2(g)} \\), the rate of disappearance of \\( \\mathrm{N_2O_5} \\) is \\( 1.2 \\times 10^{-4} \\,\\mathrm{M\\,s^{-1}} \\) at a certain time. What is the rate of appearance of \\( \\mathrm{NO_2} \\) at the same time?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -497,23 +497,23 @@
       "options": [
         {
           "id": "A",
-          "text": "\\( 2.4 \\\\times 10^{-4} \\\\,\\\\mathrm{M\\\\,s^{-1}} \\)"
+          "text": "\\( 2.4 \\times 10^{-4} \\,\\mathrm{M\\,s^{-1}} \\)"
         },
         {
           "id": "B",
-          "text": "\\( 1.2 \\\\times 10^{-4} \\\\,\\\\mathrm{M\\\\,s^{-1}} \\)"
+          "text": "\\( 1.2 \\times 10^{-4} \\,\\mathrm{M\\,s^{-1}} \\)"
         },
         {
           "id": "C",
-          "text": "\\( 4.8 \\\\times 10^{-4} \\\\,\\\\mathrm{M\\\\,s^{-1}} \\)"
+          "text": "\\( 4.8 \\times 10^{-4} \\,\\mathrm{M\\,s^{-1}} \\)"
         },
         {
           "id": "D",
-          "text": "\\( 6.0 \\\\times 10^{-5} \\\\,\\\\mathrm{M\\\\,s^{-1}} \\)"
+          "text": "\\( 6.0 \\times 10^{-5} \\,\\mathrm{M\\,s^{-1}} \\)"
         }
       ],
       "correct_option": "A",
-      "explanation": "The stoichiometry shows 2 moles of \\(\\\\mathrm{N_2O_5}\\) produce 4 moles of \\(\\\\mathrm{NO_2}\\). The rate of reaction is defined as \\( r = -\\\\frac{1}{2}\\\\frac{d[\\\\mathrm{N_2O_5}]}{dt} = \\\\frac{1}{4}\\\\frac{d[\\\\mathrm{NO_2}]}{dt} \\). Given the rate of disappearance of \\(\\\\mathrm{N_2O_5}\\) is \\( -\\\\frac{d[\\\\mathrm{N_2O_5}]}{dt} = 1.2 \\\\times 10^{-4} \\\\,\\\\mathrm{M\\\\,s^{-1}} \\), then \\( \\\\frac{d[\\\\mathrm{NO_2}]}{dt} = 4r = 4 \\\\times \\\\frac{1}{2} \\\\times (1.2 \\\\times 10^{-4}) = 2.4 \\\\times 10^{-4} \\\\,\\\\mathrm{M\\\\,s^{-1}} \\). Option A matches. Option B incorrectly uses the same rate. Option C doubles the correct factor. Option D is half the disappearance rate.",
+      "explanation": "The stoichiometry shows 2 moles of \\(\\mathrm{N_2O_5}\\) produce 4 moles of \\(\\mathrm{NO_2}\\). The rate of reaction is defined as \\( r = -\\frac{1}{2}\\frac{d[\\mathrm{N_2O_5}]}{dt} = \\frac{1}{4}\\frac{d[\\mathrm{NO_2}]}{dt} \\). Given the rate of disappearance of \\(\\mathrm{N_2O_5}\\) is \\( -\\frac{d[\\mathrm{N_2O_5}]}{dt} = 1.2 \\times 10^{-4} \\,\\mathrm{M\\,s^{-1}} \\), then \\( \\frac{d[\\mathrm{NO_2}]}{dt} = 4r = 4 \\times \\frac{1}{2} \\times (1.2 \\times 10^{-4}) = 2.4 \\times 10^{-4} \\,\\mathrm{M\\,s^{-1}} \\). Option A matches. Option B incorrectly uses the same rate. Option C doubles the correct factor. Option D is half the disappearance rate.",
       "difficulty": 3
     },
     {
@@ -521,7 +521,7 @@
       "year": 2019,
       "topic": "Electrochemistry",
       "subtopic": "Electrochemical Cells",
-      "question_text": "In the diagram below, a galvanic cell is constructed with a silver electrode in 0.10 M Ag⁺ solution and a copper electrode in 0.010 M Cu²⁺ solution at 298 K. The standard reduction potentials are \\( E^\\\\circ_{\\\\mathrm{Ag^+/Ag}} = +0.80 \\\\,\\\\mathrm{V} \\) and \\( E^\\\\circ_{\\\\mathrm{Cu^{2+}/Cu}} = +0.34 \\\\,\\\\mathrm{V} \\). What is the cell potential \\( E_{\\\\mathrm{cell}} \\) under these non-standard conditions?",
+      "question_text": "In the diagram below, a galvanic cell is constructed with a silver electrode in 0.10 M Ag⁺ solution and a copper electrode in 0.010 M Cu²⁺ solution at 298 K. The standard reduction potentials are \\( E^\\circ_{\\mathrm{Ag^+/Ag}} = +0.80 \\,\\mathrm{V} \\) and \\( E^\\circ_{\\mathrm{Cu^{2+}/Cu}} = +0.34 \\,\\mathrm{V} \\). What is the cell potential \\( E_{\\mathrm{cell}} \\) under these non-standard conditions?",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 200'><rect x='20' y='50' width='100' height='100' fill='none' stroke='black'/><line x1='70' y1='30' x2='70' y2='150' stroke='black'/><text x='70' y='20' text-anchor='middle'>Ag</text><rect x='200' y='50' width='100' height='100' fill='none' stroke='black'/><line x1='250' y1='30' x2='250' y2='150' stroke='black'/><text x='250' y='20' text-anchor='middle'>Cu</text><path d='M120 100 Q160 50 200 100' fill='none' stroke='black'/><text x='160' y='40' text-anchor='middle'>Salt bridge</text><line x1='70' y1='30' x2='160' y2='30' stroke='black'/><line x1='250' y1='30' x2='160' y2='30' stroke='black'/><circle cx='160' cy='30' r='10' stroke='black' fill='none'/><text x='160' y='35' text-anchor='middle'>V</text></svg>",
@@ -545,7 +545,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The half-reaction with higher reduction potential (Ag⁺/Ag) acts as cathode. Standard cell potential \\( E^\\\\circ_{\\\\mathrm{cell}} = 0.80 - 0.34 = 0.46 \\\\,\\\\mathrm{V} \\). The overall reaction: \\( 2\\\\mathrm{Ag^+} + \\\\mathrm{Cu} \\\\rightarrow 2\\\\mathrm{Ag} + \\\\mathrm{Cu^{2+}} \\), so \\( n = 2 \\). Reaction quotient \\( Q = \\\\frac{[\\\\mathrm{Cu^{2+}}]}{[\\\\mathrm{Ag^+}]^2} = \\\\frac{0.010}{(0.10)^2} = 1 \\). Using Nernst equation at 298 K: \\( E_{\\\\mathrm{cell}} = E^\\\\circ_{\\\\mathrm{cell}} - \\\\frac{0.0592}{2} \\\\log Q = 0.46 - 0.0296 \\\\times 0 = 0.46 \\\\,\\\\mathrm{V} \\). Thus option A is correct. Options B, C, D result from miscalculating \\( E^\\\\circ \\) or \\( Q \\).",
+      "explanation": "The half-reaction with higher reduction potential (Ag⁺/Ag) acts as cathode. Standard cell potential \\( E^\\circ_{\\mathrm{cell}} = 0.80 - 0.34 = 0.46 \\,\\mathrm{V} \\). The overall reaction: \\( 2\\mathrm{Ag^+} + \\mathrm{Cu} \\rightarrow 2\\mathrm{Ag} + \\mathrm{Cu^{2+}} \\), so \\( n = 2 \\). Reaction quotient \\( Q = \\frac{[\\mathrm{Cu^{2+}}]}{[\\mathrm{Ag^+}]^2} = \\frac{0.010}{(0.10)^2} = 1 \\). Using Nernst equation at 298 K: \\( E_{\\mathrm{cell}} = E^\\circ_{\\mathrm{cell}} - \\frac{0.0592}{2} \\log Q = 0.46 - 0.0296 \\times 0 = 0.46 \\,\\mathrm{V} \\). Thus option A is correct. Options B, C, D result from miscalculating \\( E^\\circ \\) or \\( Q \\).",
       "difficulty": 3
     },
     {
@@ -553,7 +553,7 @@
       "year": 2021,
       "topic": "Organic Chemistry",
       "subtopic": "Functional Groups",
-      "question_text": "An unknown organic compound \\( \\\\mathrm{C_4H_8O_2} \\) gives a positive iodoform test and does not react with Tollens' reagent. Which of the following could be the structure of the compound?",
+      "question_text": "An unknown organic compound \\( \\mathrm{C_4H_8O_2} \\) gives a positive iodoform test and does not react with Tollens' reagent. Which of the following could be the structure of the compound?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -561,23 +561,23 @@
       "options": [
         {
           "id": "A",
-          "text": "Butan-2-one \\( \\\\mathrm{CH_3COCH_2CH_3} \\)"
+          "text": "Butan-2-one \\( \\mathrm{CH_3COCH_2CH_3} \\)"
         },
         {
           "id": "B",
-          "text": "Butanal \\( \\\\mathrm{CH_3CH_2CH_2CHO} \\)"
+          "text": "Butanal \\( \\mathrm{CH_3CH_2CH_2CHO} \\)"
         },
         {
           "id": "C",
-          "text": "Ethyl acetate \\( \\\\mathrm{CH_3COOCH_2CH_3} \\)"
+          "text": "Ethyl acetate \\( \\mathrm{CH_3COOCH_2CH_3} \\)"
         },
         {
           "id": "D",
-          "text": "2-Methylpropanal \\( \\\\mathrm{(CH_3)_2CHCHO} \\)"
+          "text": "2-Methylpropanal \\( \\mathrm{(CH_3)_2CHCHO} \\)"
         }
       ],
       "correct_option": "A",
-      "explanation": "A positive iodoform test indicates a methyl ketone (\\(\\\\mathrm{CH_3CO-}\\)) or a secondary alcohol with \\(\\\\mathrm{CH_3CH(OH)-}\\) group. Tollens' reagent tests for aldehydes (positive for aldehydes). The compound does not react with Tollens', so it is not an aldehyde. Among the choices, only butan-2-one is a methyl ketone. Butanal and 2-methylpropanal are aldehydes (would give Tollens' positive). Ethyl acetate is an ester and does not give iodoform test. Therefore, the structure is butan-2-one (option A).",
+      "explanation": "A positive iodoform test indicates a methyl ketone (\\(\\mathrm{CH_3CO-}\\)) or a secondary alcohol with \\(\\mathrm{CH_3CH(OH)-}\\) group. Tollens' reagent tests for aldehydes (positive for aldehydes). The compound does not react with Tollens', so it is not an aldehyde. Among the choices, only butan-2-one is a methyl ketone. Butanal and 2-methylpropanal are aldehydes (would give Tollens' positive). Ethyl acetate is an ester and does not give iodoform test. Therefore, the structure is butan-2-one (option A).",
       "difficulty": 3
     },
     {
@@ -585,7 +585,7 @@
       "year": 2018,
       "topic": "Thermochemistry",
       "subtopic": "Hess's Law",
-      "question_text": "Given the following thermochemical equations:\n1) \\( \\\\mathrm{C(s) + O_2(g) \\\\rightarrow CO_2(g)} \\) \\( \\\\Delta H_1 = -393.5 \\\\,\\\\mathrm{kJ/mol} \\)\n2) \\( \\\\mathrm{H_2(g) + \\\\frac{1}{2} O_2(g) \\\\rightarrow H_2O(l)} \\) \\( \\\\Delta H_2 = -285.8 \\\\,\\\\mathrm{kJ/mol} \\)\n3) \\( \\\\mathrm{C_2H_6(g) + \\\\frac{7}{2} O_2(g) \\\\rightarrow 2 CO_2(g) + 3 H_2O(l)} \\) \\( \\\\Delta H_3 = -1560.0 \\\\,\\\\mathrm{kJ/mol} \\)\nCalculate the standard enthalpy of formation \\( \\\\Delta H_f^\\\\circ \\) of ethane \\( \\\\mathrm{C_2H_6(g)} \\).",
+      "question_text": "Given the following thermochemical equations:\n1) \\( \\mathrm{C(s) + O_2(g) \\rightarrow CO_2(g)} \\) \\( \\Delta H_1 = -393.5 \\,\\mathrm{kJ/mol} \\)\n2) \\( \\mathrm{H_2(g) + \\frac{1}{2} O_2(g) \\rightarrow H_2O(l)} \\) \\( \\Delta H_2 = -285.8 \\,\\mathrm{kJ/mol} \\)\n3) \\( \\mathrm{C_2H_6(g) + \\frac{7}{2} O_2(g) \\rightarrow 2 CO_2(g) + 3 H_2O(l)} \\) \\( \\Delta H_3 = -1560.0 \\,\\mathrm{kJ/mol} \\)\nCalculate the standard enthalpy of formation \\( \\Delta H_f^\\circ \\) of ethane \\( \\mathrm{C_2H_6(g)} \\).",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -609,7 +609,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The enthalpy of formation of \\(\\\\mathrm{CO_2(g)}\\) and \\(\\\\mathrm{H_2O(l)}\\) are given by equations 1 and 2: \\( \\\\Delta H_f^\\\\circ(\\\\mathrm{CO_2}) = -393.5 \\\\,\\\\mathrm{kJ/mol} \\), \\( \\\\Delta H_f^\\\\circ(\\\\mathrm{H_2O}) = -285.8 \\\\,\\\\mathrm{kJ/mol} \\). For the combustion of ethane (equation 3), \\( \\\\Delta H_{\\\\mathrm{comb}}^\\\\circ = \\\\sum n \\\\Delta H_f^\\\\circ(\\\\text{products}) - \\\\sum m \\\\Delta H_f^\\\\circ(\\\\text{reactants}) \\). Thus \\( -1560.0 = [2(-393.5) + 3(-285.8)] - [\\\\Delta H_f^\\\\circ(\\\\mathrm{C_2H_6}) + 0] \\). Compute: \\( 2(-393.5) = -787.0 \\), \\( 3(-285.8) = -857.4 \\), sum = -1644.4 kJ. Then \\( -1560.0 = -1644.4 - \\\\Delta H_f^\\\\circ(\\\\mathrm{C_2H_6}) \\), so \\( \\\\Delta H_f^\\\\circ(\\\\mathrm{C_2H_6}) = -1644.4 + 1560.0 = -84.4 \\\\,\\\\mathrm{kJ/mol} \\), which rounds to -84.7 kJ/mol (option A). Other options arise from arithmetic errors.",
+      "explanation": "The enthalpy of formation of \\(\\mathrm{CO_2(g)}\\) and \\(\\mathrm{H_2O(l)}\\) are given by equations 1 and 2: \\( \\Delta H_f^\\circ(\\mathrm{CO_2}) = -393.5 \\,\\mathrm{kJ/mol} \\), \\( \\Delta H_f^\\circ(\\mathrm{H_2O}) = -285.8 \\,\\mathrm{kJ/mol} \\). For the combustion of ethane (equation 3), \\( \\Delta H_{\\mathrm{comb}}^\\circ = \\sum n \\Delta H_f^\\circ(\\text{products}) - \\sum m \\Delta H_f^\\circ(\\text{reactants}) \\). Thus \\( -1560.0 = [2(-393.5) + 3(-285.8)] - [\\Delta H_f^\\circ(\\mathrm{C_2H_6}) + 0] \\). Compute: \\( 2(-393.5) = -787.0 \\), \\( 3(-285.8) = -857.4 \\), sum = -1644.4 kJ. Then \\( -1560.0 = -1644.4 - \\Delta H_f^\\circ(\\mathrm{C_2H_6}) \\), so \\( \\Delta H_f^\\circ(\\mathrm{C_2H_6}) = -1644.4 + 1560.0 = -84.4 \\,\\mathrm{kJ/mol} \\), which rounds to -84.7 kJ/mol (option A). Other options arise from arithmetic errors.",
       "difficulty": 4
     },
     {
@@ -641,7 +641,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Dalton's law: total pressure \\( P_{\\\\mathrm{total}} = P_{\\\\mathrm{He}} + P_{\\\\mathrm{Ne}} \\). Given \\( P_{\\\\mathrm{total}} = 1.20 \\\\,\\\\mathrm{atm} \\) and \\( P_{\\\\mathrm{He}} = 0.75 \\\\,\\\\mathrm{atm} \\), then \\( P_{\\\\mathrm{Ne}} = 1.20 - 0.75 = 0.45 \\\\,\\\\mathrm{atm} \\). Mole fraction of neon \\( X_{\\\\mathrm{Ne}} = P_{\\\\mathrm{Ne}} / P_{\\\\mathrm{total}} = 0.45 / 1.20 = 0.375 \\). Option A matches. Option B is the mole fraction of helium. Options C and D are incorrect calculations.",
+      "explanation": "Dalton's law: total pressure \\( P_{\\mathrm{total}} = P_{\\mathrm{He}} + P_{\\mathrm{Ne}} \\). Given \\( P_{\\mathrm{total}} = 1.20 \\,\\mathrm{atm} \\) and \\( P_{\\mathrm{He}} = 0.75 \\,\\mathrm{atm} \\), then \\( P_{\\mathrm{Ne}} = 1.20 - 0.75 = 0.45 \\,\\mathrm{atm} \\). Mole fraction of neon \\( X_{\\mathrm{Ne}} = P_{\\mathrm{Ne}} / P_{\\mathrm{total}} = 0.45 / 1.20 = 0.375 \\). Option A matches. Option B is the mole fraction of helium. Options C and D are incorrect calculations.",
       "difficulty": 3
     },
     {
@@ -649,7 +649,7 @@
       "year": 2020,
       "topic": "Chemical Kinetics and Equilibrium",
       "subtopic": "Reaction Rates",
-      "question_text": "For the reaction \\( 2\\\\mathrm{N_2O_5(g)} \\\\rightarrow 4\\\\mathrm{NO_2(g)} + \\\\mathrm{O_2(g)} \\), the rate of disappearance of \\( \\\\mathrm{N_2O_5} \\) is \\( 1.2 \\\\times 10^{-3} \\\\, \\\\mathrm{M\\\\,s^{-1}} \\) at a certain temperature. What is the rate of appearance of \\( \\\\mathrm{NO_2} \\) at the same moment?",
+      "question_text": "For the reaction \\( 2\\mathrm{N_2O_5(g)} \\rightarrow 4\\mathrm{NO_2(g)} + \\mathrm{O_2(g)} \\), the rate of disappearance of \\( \\mathrm{N_2O_5} \\) is \\( 1.2 \\times 10^{-3} \\, \\mathrm{M\\,s^{-1}} \\) at a certain temperature. What is the rate of appearance of \\( \\mathrm{NO_2} \\) at the same moment?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -673,7 +673,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "The stoichiometry shows 2 mol N₂O₅ produce 4 mol NO₂, so the rate of appearance of NO₂ is twice the rate of disappearance of N₂O₅: \\( \\\\frac{1}{4}\\\\frac{d[NO_2]}{dt} = -\\\\frac{1}{2}\\\\frac{d[N_2O_5]}{dt} \\\\Rightarrow \\\\frac{d[NO_2]}{dt} = 2 \\\\times 1.2 \\\\times 10^{-3} = 2.4 \\\\times 10^{-3} \\\\, \\\\mathrm{M\\\\,s^{-1}} \\). Option A is half the correct value, B equals the disappearance rate, D is four times.",
+      "explanation": "The stoichiometry shows 2 mol N₂O₅ produce 4 mol NO₂, so the rate of appearance of NO₂ is twice the rate of disappearance of N₂O₅: \\( \\frac{1}{4}\\frac{d[NO_2]}{dt} = -\\frac{1}{2}\\frac{d[N_2O_5]}{dt} \\Rightarrow \\frac{d[NO_2]}{dt} = 2 \\times 1.2 \\times 10^{-3} = 2.4 \\times 10^{-3} \\, \\mathrm{M\\,s^{-1}} \\). Option A is half the correct value, B equals the disappearance rate, D is four times.",
       "difficulty": 3
     },
     {
@@ -681,7 +681,7 @@
       "year": 2019,
       "topic": "Electrochemistry",
       "subtopic": "Electrochemical Cells",
-      "question_text": "In the diagram below, a galvanic cell is constructed with a zinc electrode in 0.10 M Zn²⁺ solution and a copper electrode in 1.0 M Cu²⁺ solution at 298 K. The standard reduction potentials are \\( E^\\\\circ(\\\\mathrm{Zn^{2+}/Zn}) = -0.76 \\\\, \\\\mathrm{V} \\) and \\( E^\\\\circ(\\\\mathrm{Cu^{2+}/Cu}) = +0.34 \\\\, \\\\mathrm{V} \\). Using the Nernst equation, calculate the cell potential \\( E_{\\\\mathrm{cell}} \\).",
+      "question_text": "In the diagram below, a galvanic cell is constructed with a zinc electrode in 0.10 M Zn²⁺ solution and a copper electrode in 1.0 M Cu²⁺ solution at 298 K. The standard reduction potentials are \\( E^\\circ(\\mathrm{Zn^{2+}/Zn}) = -0.76 \\, \\mathrm{V} \\) and \\( E^\\circ(\\mathrm{Cu^{2+}/Cu}) = +0.34 \\, \\mathrm{V} \\). Using the Nernst equation, calculate the cell potential \\( E_{\\mathrm{cell}} \\).",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 200'><rect x='20' y='50' width='100' height='100' fill='none' stroke='black'/><line x1='70' y1='40' x2='70' y2='30' stroke='black'/><text x='70' y='25' text-anchor='middle' font-size='12'>Zn</text><text x='70' y='160' text-anchor='middle' font-size='10'>Zn²⁺ (aq)</text><rect x='200' y='50' width='100' height='100' fill='none' stroke='black'/><line x1='250' y1='40' x2='250' y2='30' stroke='black'/><text x='250' y='25' text-anchor='middle' font-size='12'>Cu</text><text x='250' y='160' text-anchor='middle' font-size='10'>Cu²⁺ (aq)</text><rect x='130' y='90' width='60' height='20' fill='#ddd' stroke='black'/><text x='160' y='105' text-anchor='middle' font-size='10'>Salt Bridge</text><circle cx='160' cy='30' r='15' fill='none' stroke='black'/><text x='160' y='35' text-anchor='middle' font-size='10'>V</text><line x1='70' y1='30' x2='145' y2='30' stroke='black'/><line x1='175' y1='30' x2='250' y2='30' stroke='black'/></svg>",
@@ -705,7 +705,7 @@
         }
       ],
       "correct_option": "B",
-      "explanation": "Standard cell potential: \\( E^\\\\circ_{\\\\mathrm{cell}} = 0.34 - (-0.76) = 1.10 \\\\, \\\\mathrm{V} \\). Reaction: Zn(s) + Cu²⁺(aq) → Zn²⁺(aq) + Cu(s), n = 2. Reaction quotient Q = [Zn²⁺]/[Cu²⁺] = 0.10/1.0 = 0.10. At 298 K, \\( E = 1.10 - \\\\frac{0.0592}{2} \\\\log(0.10) = 1.10 - 0.0296(-1) = 1.10 + 0.0296 = 1.1296 \\\\, \\\\mathrm{V} \\approx 1.13 \\\\, \\\\mathrm{V} \\). Option A ignores concentration effect, C subtracts incorrectly, D overestimates.",
+      "explanation": "Standard cell potential: \\( E^\\circ_{\\mathrm{cell}} = 0.34 - (-0.76) = 1.10 \\, \\mathrm{V} \\). Reaction: Zn(s) + Cu²⁺(aq) → Zn²⁺(aq) + Cu(s), n = 2. Reaction quotient Q = [Zn²⁺]/[Cu²⁺] = 0.10/1.0 = 0.10. At 298 K, \\( E = 1.10 - \\frac{0.0592}{2} \\log(0.10) = 1.10 - 0.0296(-1) = 1.10 + 0.0296 = 1.1296 \\, \\mathrm{V} \\approx 1.13 \\, \\mathrm{V} \\). Option A ignores concentration effect, C subtracts incorrectly, D overestimates.",
       "difficulty": 4
     },
     {
@@ -713,7 +713,7 @@
       "year": 2021,
       "topic": "Acids, Bases and Salts",
       "subtopic": "Buffer Solutions",
-      "question_text": "A buffer solution is prepared by mixing 0.20 mol of acetic acid (CH₃COOH, \\( K_a = 1.8 \\\\times 10^{-5} \\)) and 0.15 mol of sodium acetate (CH₃COONa) in enough water to make 1.0 L of solution. What is the pH of this buffer?",
+      "question_text": "A buffer solution is prepared by mixing 0.20 mol of acetic acid (CH₃COOH, \\( K_a = 1.8 \\times 10^{-5} \\)) and 0.15 mol of sodium acetate (CH₃COONa) in enough water to make 1.0 L of solution. What is the pH of this buffer?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -2993,19 +2993,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{NH_4Cl} \\) "
+          "text": "\\( \\mathrm{NH_4Cl} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{KNO_3} \\) "
+          "text": "\\( \\mathrm{KNO_3} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{CH_3COONa} \\) "
+          "text": "\\( \\mathrm{CH_3COONa} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{AlCl_3} \\) "
+          "text": "\\( \\mathrm{AlCl_3} \\)"
         }
       ],
       "correct_option": "C",
@@ -3025,19 +3025,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{ [Ar] 3d^4 4s^2} \\); due to the stability of the 4s orbital."
+          "text": "\\( \\mathrm{ [Ar] 3d^4 4s^2} \\); due to the stability of the 4s orbital."
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{ [Ar] 3d^5 4s^1} \\); due to the extra stability of half-filled d-orbitals."
+          "text": "\\( \\mathrm{ [Ar] 3d^5 4s^1} \\); due to the extra stability of half-filled d-orbitals."
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{ [Ar] 3d^6 4s^0} \\); due to the maximization of exchange energy."
+          "text": "\\( \\mathrm{ [Ar] 3d^6 4s^0} \\); due to the maximization of exchange energy."
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{ [Ar] 3d^5 4s^1} \\); due to the higher electronegativity of Cr."
+          "text": "\\( \\mathrm{ [Ar] 3d^5 4s^1} \\); due to the higher electronegativity of Cr."
         }
       ],
       "correct_option": "B",
@@ -3857,19 +3857,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{0.693}{k} \\) "
+          "text": "\\( \\frac{0.693}{k} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1.386}{k} \\) "
+          "text": "\\( \\frac{1.386}{k} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{2.079}{k} \\) "
+          "text": "\\( \\frac{2.079}{k} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{0.346}{k} \\) "
+          "text": "\\( \\frac{0.346}{k} \\)"
         }
       ],
       "correct_option": "B",
@@ -3889,19 +3889,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{H_2O} \\) "
+          "text": "\\( \\mathrm{H_2O} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{BeCl_2} \\) "
+          "text": "\\( \\mathrm{BeCl_2} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{SO_2} \\) "
+          "text": "\\( \\mathrm{SO_2} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{NO_2} \\) "
+          "text": "\\( \\mathrm{NO_2} \\)"
         }
       ],
       "correct_option": "B",
@@ -3921,19 +3921,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1.10 \\mathrm{V} \\) "
+          "text": "\\( 1.10 \\mathrm{V} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1.07 \\mathrm{V} \\) "
+          "text": "\\( 1.07 \\mathrm{V} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 0.77 \\mathrm{V} \\) "
+          "text": "\\( 0.77 \\mathrm{V} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1.13 \\mathrm{V} \\) "
+          "text": "\\( 1.13 \\mathrm{V} \\)"
         }
       ],
       "correct_option": "B",
@@ -3953,19 +3953,19 @@
       "options": [
         {
           "id": "A",
-          "text": " 2-bromopropane "
+          "text": "2-bromopropane"
         },
         {
           "id": "B",
-          "text": " 1-bromopropane "
+          "text": "1-bromopropane"
         },
         {
           "id": "C",
-          "text": " 1,2-dibromopropane "
+          "text": "1,2-dibromopropane"
         },
         {
           "id": "D",
-          "text": " 2,2-dibromopropane "
+          "text": "2,2-dibromopropane"
         }
       ],
       "correct_option": "B",
@@ -3985,19 +3985,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( -110.5 \\mathrm{kJ/mol} \\) "
+          "text": "\\( -110.5 \\mathrm{kJ/mol} \\)"
         },
         {
           "id": "B",
-          "text": " \\( -283.5 \\mathrm{kJ/mol} \\) "
+          "text": "\\( -283.5 \\mathrm{kJ/mol} \\)"
         },
         {
           "id": "C",
-          "text": " \\( +110.5 \\mathrm{kJ/mol} \\) "
+          "text": "\\( +110.5 \\mathrm{kJ/mol} \\)"
         },
         {
           "id": "D",
-          "text": " \\( -248.5 \\mathrm{kJ/mol} \\) "
+          "text": "\\( -248.5 \\mathrm{kJ/mol} \\)"
         }
       ],
       "correct_option": "A",
@@ -4753,19 +4753,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{I^-} \\) "
+          "text": "\\( \\mathrm{I^-} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{Cs^+} \\) "
+          "text": "\\( \\mathrm{Cs^+} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{Ba^{2+}} \\) "
+          "text": "\\( \\mathrm{Ba^{2+}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{La^{3+}} \\) "
+          "text": "\\( \\mathrm{La^{3+}} \\)"
         }
       ],
       "correct_option": "D",
@@ -5169,19 +5169,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0.0296\\text{ V} \\) "
+          "text": "\\( 0.0296\\text{ V} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 0.118\\text{ V} \\) "
+          "text": "\\( 0.118\\text{ V} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 0.0591\\text{ V} \\) "
+          "text": "\\( 0.0591\\text{ V} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.000\\text{ V} \\) "
+          "text": "\\( 0.000\\text{ V} \\)"
         }
       ],
       "correct_option": "B",
@@ -5233,19 +5233,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{CH_2O} \\) "
+          "text": "\\( \\mathrm{CH_2O} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{C_6H_{12}O_6} \\) "
+          "text": "\\( \\mathrm{C_6H_{12}O_6} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{C_3H_6O_3} \\) "
+          "text": "\\( \\mathrm{C_3H_6O_3} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{C_2H_4O_2} \\) "
+          "text": "\\( \\mathrm{C_2H_4O_2} \\)"
         }
       ],
       "correct_option": "B",
@@ -5769,7 +5769,7 @@
       "year": 2021,
       "topic": "Chemical Kinetics and Equilibrium",
       "subtopic": "Reaction Rates",
-      "question_text": "For a certain reaction, the rate of reaction doubles when the concentration of reactant A is doubled, but the rate quadruples when the concentration of reactant B is doubled. If the initial rate of reaction is \\( r_0 \\) when both [A] and [B] are \\( 1.0 \\text{ M} \\), what will be the new rate if [A] is increased to \\( 3.0 \\text{ M} \\) and [B] is decreased to \\( 0.5 \\text{ M} \\)?",
+      "question_text": "For a certain reaction, the rate of reaction doubles when the concentration of reactant A is doubled, but the rate quadruples when the concentration of reactant B is doubled. If the initial rate of reaction is \\( r_0 \\) when both",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -6673,19 +6673,19 @@
       "options": [
         {
           "id": "A",
-          "text": " Approximately \\( 1.5 \\times 10^2 \\) "
+          "text": "Approximately \\( 1.5 \\times 10^2 \\)"
         },
         {
           "id": "B",
-          "text": " Approximately \\( 4.2 \\times 10^8 \\) "
+          "text": "Approximately \\( 4.2 \\times 10^8 \\)"
         },
         {
           "id": "C",
-          "text": " Approximately \\( 1.1 \\times 10^{12} \\) "
+          "text": "Approximately \\( 1.1 \\times 10^{12} \\)"
         },
         {
           "id": "D",
-          "text": " Approximately \\( 2.7 \\times 10^{-5} \\) "
+          "text": "Approximately \\( 2.7 \\times 10^{-5} \\)"
         }
       ],
       "correct_option": "B",
@@ -11057,19 +11057,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{Li < Be < B < C} \\)"
+          "text": "\\( \\mathrm{Li < Be < B < C} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{Be < B < Li < C} \\)"
+          "text": "\\( \\mathrm{Be < B < Li < C} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{B < Be < Li < C} \\)"
+          "text": "\\( \\mathrm{B < Be < Li < C} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{B < Li < Be < C} \\)"
+          "text": "\\( \\mathrm{B < Li < Be < C} \\)"
         }
       ],
       "correct_option": "C",
@@ -11121,19 +11121,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( -110.5\\text{ kJ/mol} \\)"
+          "text": "\\( -110.5\\text{ kJ/mol} \\)"
         },
         {
           "id": "B",
-          "text": " \\( -283.5\\text{ kJ/mol} \\)"
+          "text": "\\( -283.5\\text{ kJ/mol} \\)"
         },
         {
           "id": "C",
-          "text": " \\( -186.5\\text{ kJ/mol} \\)"
+          "text": "\\( -186.5\\text{ kJ/mol} \\)"
         },
         {
           "id": "D",
-          "text": " \\( -479.5\\text{ kJ/mol} \\)"
+          "text": "\\( -479.5\\text{ kJ/mol} \\)"
         }
       ],
       "correct_option": "A",
@@ -11153,19 +11153,19 @@
       "options": [
         {
           "id": "A",
-          "text": " 2-bromo-2-methylbutane "
+          "text": "2-bromo-2-methylbutane"
         },
         {
           "id": "B",
-          "text": " 1-bromo-2-methylbutane "
+          "text": "1-bromo-2-methylbutane"
         },
         {
           "id": "C",
-          "text": " 2-bromo-3-methylbutane "
+          "text": "2-bromo-3-methylbutane"
         },
         {
           "id": "D",
-          "text": " 3-bromo-2-methylbutane "
+          "text": "3-bromo-2-methylbutane"
         }
       ],
       "correct_option": "B",
@@ -11185,19 +11185,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0.0591\\text{ V} \\)"
+          "text": "\\( 0.0591\\text{ V} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 0.0295\\text{ V} \\)"
+          "text": "\\( 0.0295\\text{ V} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 0.1182\\text{ V} \\)"
+          "text": "\\( 0.1182\\text{ V} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.0000\\text{ V} \\)"
+          "text": "\\( 0.0000\\text{ V} \\)"
         }
       ],
       "correct_option": "A",
@@ -11377,19 +11377,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0.0173\\text{ min}^{-1} \\) "
+          "text": "\\( 0.0173\\text{ min}^{-1} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 0.0347\\text{ min}^{-1} \\) "
+          "text": "\\( 0.0347\\text{ min}^{-1} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 0.0693\\text{ min}^{-1} \\) "
+          "text": "\\( 0.0693\\text{ min}^{-1} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.1386\\text{ min}^{-1} \\) "
+          "text": "\\( 0.1386\\text{ min}^{-1} \\)"
         }
       ],
       "correct_option": "B",
@@ -11409,19 +11409,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( P_2 = P_1 \\frac{V_1}{V_2} \\) "
+          "text": "\\( P_2 = P_1 \\frac{V_1}{V_2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( P_2 = P_1 \\frac{V_2}{V_1} \\) "
+          "text": "\\( P_2 = P_1 \\frac{V_2}{V_1} \\)"
         },
         {
           "id": "C",
-          "text": " \\( P_2 = P_1 (V_1 - V_2) \\) "
+          "text": "\\( P_2 = P_1 (V_1 - V_2) \\)"
         },
         {
           "id": "D",
-          "text": " \\( P_2 = P_1 + \\frac{V_1}{V_2} \\) "
+          "text": "\\( P_2 = P_1 + \\frac{V_1}{V_2} \\)"
         }
       ],
       "correct_option": "A",
@@ -11441,19 +11441,19 @@
       "options": [
         {
           "id": "A",
-          "text": " 2-chloropropane "
+          "text": "2-chloropropane"
         },
         {
           "id": "B",
-          "text": " 2-chlorobutane "
+          "text": "2-chlorobutane"
         },
         {
           "id": "C",
-          "text": " 1-chlorobutane "
+          "text": "1-chlorobutane"
         },
         {
           "id": "D",
-          "text": " 2,2-dichloropropane "
+          "text": "2,2-dichloropropane"
         }
       ],
       "correct_option": "B",
@@ -11473,19 +11473,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{H_2(g)} \\) "
+          "text": "\\( \\mathrm{H_2(g)} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{O_2(g)} \\) "
+          "text": "\\( \\mathrm{O_2(g)} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{Cl_2(g)} \\) "
+          "text": "\\( \\mathrm{Cl_2(g)} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{Na(s)} \\) "
+          "text": "\\( \\mathrm{Na(s)} \\)"
         }
       ],
       "correct_option": "C",
@@ -11505,19 +11505,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 4.46 \\) "
+          "text": "\\( 4.46 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4.76 \\) "
+          "text": "\\( 4.76 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 5.06 \\) "
+          "text": "\\( 5.06 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 5.36 \\) "
+          "text": "\\( 5.36 \\)"
         }
       ],
       "correct_option": "C",
@@ -12145,19 +12145,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{C_3H_6O_3} \\) "
+          "text": "\\( \\mathrm{C_3H_6O_3} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{C_4H_8O_4} \\) "
+          "text": "\\( \\mathrm{C_4H_8O_4} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{C_5H_{10}O_5} \\) "
+          "text": "\\( \\mathrm{C_5H_{10}O_5} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{C_6H_{12}O_6} \\) "
+          "text": "\\( \\mathrm{C_6H_{12}O_6} \\)"
         }
       ],
       "correct_option": "D",
@@ -12885,15 +12885,15 @@
         },
         {
           "id": "B",
-          "text": " \\( -283.5\\text{ kJ} \\)"
+          "text": "\\( -283.5\\text{ kJ} \\)"
         },
         {
           "id": "C",
-          "text": " \\( +114.7\\text{ kJ} \\)"
+          "text": "\\( +114.7\\text{ kJ} \\)"
         },
         {
           "id": "D",
-          "text": " \\( +283.5\\text{ kJ} \\)"
+          "text": "\\( +283.5\\text{ kJ} \\)"
         }
       ],
       "correct_option": "C",
@@ -12913,19 +12913,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2.01\\text{ g} \\)"
+          "text": "\\( 2.01\\text{ g} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 3.45\\text{ g} \\)"
+          "text": "\\( 3.45\\text{ g} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 5.21\\text{ g} \\)"
+          "text": "\\( 5.21\\text{ g} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 10.79\\text{ g} \\)"
+          "text": "\\( 10.79\\text{ g} \\)"
         }
       ],
       "correct_option": "B",
@@ -13745,19 +13745,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 12.31\\text{ atm} \\)"
+          "text": "\\( 12.31\\text{ atm} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 13.12\\text{ atm} \\)"
+          "text": "\\( 13.12\\text{ atm} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 14.33\\text{ atm} \\)"
+          "text": "\\( 14.33\\text{ atm} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 15.45\\text{ atm} \\)"
+          "text": "\\( 15.45\\text{ atm} \\)"
         }
       ],
       "correct_option": "B",
@@ -15977,7 +15977,7 @@
       "year": 2023,
       "topic": "Thermochemistry",
       "subtopic": "Hess's Law",
-      "question_text": "Given the following enthalpies of combustion: \\( \\mathrm{C(graphite) + O_2(g) \\longrightarrow CO_2(g)} \\quad \\Delta H_1 = -393.5\\text{ kJ/mol} \\) and \\( \\mathrm{CO(g) + \\frac{1}{2}O_2(g) \\longrightarrow CO_2(g)} \\quad \\Delta H_2 = -283.0\\text{ kJ/mol} \\). Calculate the enthalpy change for the reaction: \\( \\mathrm{C(graphite) + \\frac{1}{2}O_2(g) \\longrightarrow CO(g)} \\)",
+      "question_text": "Given the following enthalpies of combustion: \\( \\mathrm{C(graphit",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -17553,19 +17553,19 @@
       "options": [
         {
           "id": "A",
-          "text": "A: Planar Pentagon"
+          "text": "Planar Pentagon"
         },
         {
           "id": "B",
-          "text": "B: Envelope"
+          "text": "Envelope"
         },
         {
           "id": "C",
-          "text": "C: Half-chair"
+          "text": "Half-chair"
         },
         {
           "id": "D",
-          "text": "D: Twisted"
+          "text": "Twisted"
         }
       ],
       "correct_option": "B",
@@ -18001,19 +18001,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0.0295\\text{ V} \\) "
+          "text": "\\( 0.0295\\text{ V} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 0.0591\\text{ V} \\) "
+          "text": "\\( 0.0591\\text{ V} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 0.1182\\text{ V} \\) "
+          "text": "\\( 0.1182\\text{ V} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.0000\\text{ V} \\) "
+          "text": "\\( 0.0000\\text{ V} \\)"
         }
       ],
       "correct_option": "B",
@@ -18065,19 +18065,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( -114.7\\text{ kJ} \\) "
+          "text": "\\( -114.7\\text{ kJ} \\)"
         },
         {
           "id": "B",
-          "text": " \\( -283.5\\text{ kJ} \\) "
+          "text": "\\( -283.5\\text{ kJ} \\)"
         },
         {
           "id": "C",
-          "text": " \\( +114.7\\text{ kJ} \\) "
+          "text": "\\( +114.7\\text{ kJ} \\)"
         },
         {
           "id": "D",
-          "text": " \\( -479.8\\text{ kJ} \\) "
+          "text": "\\( -479.8\\text{ kJ} \\)"
         }
       ],
       "correct_option": "A",
@@ -18097,19 +18097,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 4.58 \\) "
+          "text": "\\( 4.58 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4.76 \\) "
+          "text": "\\( 4.76 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 4.99 \\) "
+          "text": "\\( 4.99 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 5.12 \\) "
+          "text": "\\( 5.12 \\)"
         }
       ],
       "correct_option": "C",
@@ -19125,7 +19125,7 @@
         },
         {
           "id": "B",
-          "text": " (R)-2-chlorobutane and (S)-2-chlorobutane"
+          "text": "(R)-2-chlorobutane and (S)-2-chlorobutane"
         },
         {
           "id": "C",
@@ -19153,19 +19153,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 30 \\text{ kJ/mol} \\) "
+          "text": "\\( 30 \\text{ kJ/mol} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 130 \\text{ kJ/mol} \\) "
+          "text": "\\( 130 \\text{ kJ/mol} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 80 \\text{ kJ/mol} \\) "
+          "text": "\\( 80 \\text{ kJ/mol} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 100 \\text{ kJ/mol} \\) "
+          "text": "\\( 100 \\text{ kJ/mol} \\)"
         }
       ],
       "correct_option": "B",
@@ -19185,19 +19185,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2.12 \\text{ g} \\) "
+          "text": "\\( 2.12 \\text{ g} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4.24 \\text{ g} \\) "
+          "text": "\\( 4.24 \\text{ g} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1.06 \\text{ g} \\) "
+          "text": "\\( 1.06 \\text{ g} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 8.48 \\text{ g} \\) "
+          "text": "\\( 8.48 \\text{ g} \\)"
         }
       ],
       "correct_option": "A",
@@ -19217,19 +19217,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{Na < Mg < Al < Si} \\) "
+          "text": "\\( \\mathrm{Na < Mg < Al < Si} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{Mg < Na < Al < Si} \\) "
+          "text": "\\( \\mathrm{Mg < Na < Al < Si} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{Na < Al < Mg < Si} \\) "
+          "text": "\\( \\mathrm{Na < Al < Mg < Si} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{Al < Mg < Na < Si} \\) "
+          "text": "\\( \\mathrm{Al < Mg < Na < Si} \\)"
         }
       ],
       "correct_option": "B",
@@ -19377,19 +19377,19 @@
       "options": [
         {
           "id": "A",
-          "text": "Manganese, \\( [ \\mathrm{Ar} ] \\) "
+          "text": "Manganese, \\( [ \\mathrm{Ar} ] \\)"
         },
         {
           "id": "B",
-          "text": "Chromium, \\( [ \\mathrm{Ar} ] 3\\mathrm{d}^3 \\) "
+          "text": "Chromium, \\( [ \\mathrm{Ar} ] 3\\mathrm{d}^3 \\)"
         },
         {
           "id": "C",
-          "text": "Vanadium, \\( [ \\mathrm{Ar} ] \\) "
+          "text": "Vanadium, \\( [ \\mathrm{Ar} ] \\)"
         },
         {
           "id": "D",
-          "text": "Iron, \\( [ \\mathrm{Ar} ] 3\\mathrm{d}^5 \\) "
+          "text": "Iron, \\( [ \\mathrm{Ar} ] 3\\mathrm{d}^5 \\)"
         }
       ],
       "correct_option": "A",
@@ -21969,19 +21969,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( t_{1/2} = \\frac{0.693}{k} \\) "
+          "text": "\\( t_{1/2} = \\frac{0.693}{k} \\)"
         },
         {
           "id": "B",
-          "text": " \\( t_{1/2} = \\frac{1}{k[\\mathrm{A}]_0} \\) "
+          "text": "\\( t_{1/2} = \\frac{1}{k[\\mathrm{A}]_0} \\)"
         },
         {
           "id": "C",
-          "text": " \\( t_{1/2} = \\frac{[\\mathrm{A}]_0}{k} \\) "
+          "text": "\\( t_{1/2} = \\frac{[\\mathrm{A}]_0}{k} \\)"
         },
         {
           "id": "D",
-          "text": " \\( t_{1/2} = \\frac{k}{[\\mathrm{A}]_0} \\) "
+          "text": "\\( t_{1/2} = \\frac{k}{[\\mathrm{A}]_0} \\)"
         }
       ],
       "correct_option": "B",
@@ -22001,19 +22001,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( sp^3 \\), Tetrahedral "
+          "text": "\\( sp^3 \\), Tetrahedral"
         },
         {
           "id": "B",
-          "text": " \\( sp^3d \\), Trigonal Bipyramidal "
+          "text": "\\( sp^3d \\), Trigonal Bipyramidal"
         },
         {
           "id": "C",
-          "text": " \\( sp^3d \\), See-saw "
+          "text": "\\( sp^3d \\), See-saw"
         },
         {
           "id": "D",
-          "text": " \\( sp^3d \\), Square Planar "
+          "text": "\\( sp^3d \\), Square Planar"
         }
       ],
       "correct_option": "D",
@@ -22065,19 +22065,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{C_2H_6} \\) "
+          "text": "\\( \\mathrm{C_2H_6} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{C_3H_6} \\) "
+          "text": "\\( \\mathrm{C_3H_6} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{C_3H_8} \\) "
+          "text": "\\( \\mathrm{C_3H_8} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{C_4H_{10}} \\) "
+          "text": "\\( \\mathrm{C_4H_{10}} \\)"
         }
       ],
       "correct_option": "B",
@@ -22097,19 +22097,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( -110.5\\text{ kJ} \\) "
+          "text": "\\( -110.5\\text{ kJ} \\)"
         },
         {
           "id": "B",
-          "text": " \\( +110.5\\text{ kJ} \\) "
+          "text": "\\( +110.5\\text{ kJ} \\)"
         },
         {
           "id": "C",
-          "text": " \\( -676.5\\text{ kJ} \\) "
+          "text": "\\( -676.5\\text{ kJ} \\)"
         },
         {
           "id": "D",
-          "text": " \\( +676.5\\text{ kJ} \\) "
+          "text": "\\( +676.5\\text{ kJ} \\)"
         }
       ],
       "correct_option": "A",
@@ -23409,19 +23409,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0.0173 \\text{ min}^{-1} \\) "
+          "text": "\\( 0.0173 \\text{ min}^{-1} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 0.0347 \\text{ min}^{-1} \\) "
+          "text": "\\( 0.0347 \\text{ min}^{-1} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 0.0693 \\text{ min}^{-1} \\) "
+          "text": "\\( 0.0693 \\text{ min}^{-1} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.1386 \\text{ min}^{-1} \\) "
+          "text": "\\( 0.1386 \\text{ min}^{-1} \\)"
         }
       ],
       "correct_option": "B",
@@ -23473,19 +23473,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{H_2O / H_2SO_4} \\) "
+          "text": "\\( \\mathrm{H_2O / H_2SO_4} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{BH_3 \\cdot THF} \\) followed by \\( \\mathrm{H_2O_2 / NaOH} \\) "
+          "text": "\\( \\mathrm{BH_3 \\cdot THF} \\) followed by \\( \\mathrm{H_2O_2 / NaOH} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{Hg(OAc)_2} \\) followed by \\( \\mathrm{NaBH_4} \\) "
+          "text": "\\( \\mathrm{Hg(OAc)_2} \\) followed by \\( \\mathrm{NaBH_4} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{HCl} \\) "
+          "text": "\\( \\mathrm{HCl} \\)"
         }
       ],
       "correct_option": "B",
@@ -23505,19 +23505,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{Ag} \\) and \\( \\mathrm{Cu} \\) "
+          "text": "\\( \\mathrm{Ag} \\) and \\( \\mathrm{Cu} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{Cu} \\) and \\( \\mathrm{Zn} \\) "
+          "text": "\\( \\mathrm{Cu} \\) and \\( \\mathrm{Zn} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{Ag} \\) and \\( \\mathrm{Zn} \\) "
+          "text": "\\( \\mathrm{Ag} \\) and \\( \\mathrm{Zn} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{Ag} \\) and \\( \\mathrm{Cu} \\) as anode "
+          "text": "\\( \\mathrm{Ag} \\) and \\( \\mathrm{Cu} \\) as anode"
         }
       ],
       "correct_option": "C",
@@ -23537,19 +23537,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{Li < Be < B < C} \\) "
+          "text": "\\( \\mathrm{Li < Be < B < C} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{Na < Mg < Al < Si} \\) "
+          "text": "\\( \\mathrm{Na < Mg < Al < Si} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{K < Ca < Sc < Ti} \\) "
+          "text": "\\( \\mathrm{K < Ca < Sc < Ti} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{F < Cl < Br < I} \\) "
+          "text": "\\( \\mathrm{F < Cl < Br < I} \\)"
         }
       ],
       "correct_option": "B",
@@ -23697,19 +23697,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{IE_2} \\) of Mg is significantly higher than \\( \\mathrm{IE_2} \\) of Al because Mg becomes isoelectronic with Neon."
+          "text": "\\( \\mathrm{IE_2} \\) of Mg is significantly higher than \\( \\mathrm{IE_2} \\) of Al because Mg becomes isoelectronic with Neon."
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{IE_2} \\) of Al is higher than \\( \\mathrm{IE_2} \\) of Mg due to increased nuclear charge."
+          "text": "\\( \\mathrm{IE_2} \\) of Al is higher than \\( \\mathrm{IE_2} \\) of Mg due to increased nuclear charge."
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{IE_2} \\) of Mg and Al are approximately equal as they are in the same period."
+          "text": "\\( \\mathrm{IE_2} \\) of Mg and Al are approximately equal as they are in the same period."
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{IE_2} \\) of Al is significantly lower than \\( \\mathrm{IE_2} \\) of Mg because Al has a larger radius."
+          "text": "\\( \\mathrm{IE_2} \\) of Al is significantly lower than \\( \\mathrm{IE_2} \\) of Mg because Al has a larger radius."
         }
       ],
       "correct_option": "B",
@@ -26537,7 +26537,7 @@
       "year": 2020,
       "topic": "Organic Chemistry",
       "subtopic": "Functional Groups",
-      "question_text": "An organic compound \\( \\mathrm{X} \\) with molecular formula \\( \\mathrm{C_4H_8O_2} \\) reacts with sodium bicarbonate (\\( \\mathrm{NaHCO_3} \\)) to evolve carbon dioxide. Upon hydrolysis with dilute \\( \\mathrm{NaOH} \\), it yields an alcohol and a salt of a carboxylic acid. Which of the following is the most likely structure for \\( \\mathrm{X} \\)?",
+      "question_text": "An organic compound \\( \\mathrm{X} \\) with molecular formula \\( \\mathrm{C_4H_8O_2} \\) reacts with sodium bicarbonate (\\( \\mathrm{NaHCO_3} \\)) to evolve carbon dioxid",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -27569,19 +27569,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( t_{1/2} = \\frac{0.693}{k} \\) "
+          "text": "\\( t_{1/2} = \\frac{0.693}{k} \\)"
         },
         {
           "id": "B",
-          "text": " \\( t_{1/2} = \\frac{1}{k[A]_0} \\) "
+          "text": "\\( t_{1/2} = \\frac{1}{k[A]_0} \\)"
         },
         {
           "id": "C",
-          "text": " \\( t_{1/2} = \\frac{k}{[A]_0} \\) "
+          "text": "\\( t_{1/2} = \\frac{k}{[A]_0} \\)"
         },
         {
           "id": "D",
-          "text": " \\( t_{1/2} = \\frac{2}{k[A]_0} \\) "
+          "text": "\\( t_{1/2} = \\frac{2}{k[A]_0} \\)"
         }
       ],
       "correct_option": "B",
@@ -27601,19 +27601,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( sp^3 \\), Tetrahedral "
+          "text": "\\( sp^3 \\), Tetrahedral"
         },
         {
           "id": "B",
-          "text": " \\( sp^3d \\), See-saw "
+          "text": "\\( sp^3d \\), See-saw"
         },
         {
           "id": "C",
-          "text": " \\( sp^3d \\), Square Planar "
+          "text": "\\( sp^3d \\), Square Planar"
         },
         {
           "id": "D",
-          "text": " \\( sp^3 \\), Square Planar "
+          "text": "\\( sp^3 \\), Square Planar"
         }
       ],
       "correct_option": "C",
@@ -27633,19 +27633,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{2NO_3^-(aq) \to 2NO_2(g) + O_2(g) + 2e^-} \\) "
+          "text": "\\( \\mathrm{2NO_3^-(aq) \to 2NO_2(g) + O_2(g) + 2e^-} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{2H_2O(l) \to O_2(g) + 4H^+(aq) + 4e^-} \\) "
+          "text": "\\( \\mathrm{2H_2O(l) \to O_2(g) + 4H^+(aq) + 4e^-} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{Ag^+(aq) + e^- \to Ag(s)} \\) "
+          "text": "\\( \\mathrm{Ag^+(aq) + e^- \to Ag(s)} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{2H_2O(l) + 2e^- \to H_2(g) + 2OH^-(aq)} \\) "
+          "text": "\\( \\mathrm{2H_2O(l) + 2e^- \to H_2(g) + 2OH^-(aq)} \\)"
         }
       ],
       "correct_option": "C",
@@ -27665,19 +27665,19 @@
       "options": [
         {
           "id": "A",
-          "text": " 1-bromobutane "
+          "text": "1-bromobutane"
         },
         {
           "id": "B",
-          "text": " 2-bromobutane "
+          "text": "2-bromobutane"
         },
         {
           "id": "C",
-          "text": " 1-bromo-2-methylpropane "
+          "text": "1-bromo-2-methylpropane"
         },
         {
           "id": "D",
-          "text": " 2-bromo-2-methylpropane "
+          "text": "2-bromo-2-methylpropane"
         }
       ],
       "correct_option": "B",
@@ -27697,19 +27697,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1.41 \\) "
+          "text": "\\( 1.41 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2.24 \\) "
+          "text": "\\( 2.24 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 0.45 \\) "
+          "text": "\\( 0.45 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 3.16 \\) "
+          "text": "\\( 3.16 \\)"
         }
       ],
       "correct_option": "B",
@@ -31033,7 +31033,7 @@
         },
         {
           "id": "C",
-          "text": " (R)-2-chlorobutane and (S)-2-chlorobutane"
+          "text": "(R)-2-chlorobutane and (S)-2-chlorobutane"
         },
         {
           "id": "D",
@@ -31121,19 +31121,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{sp^3} \\) hybridization, tetrahedral geometry"
+          "text": "\\( \\mathrm{sp^3} \\) hybridization, tetrahedral geometry"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{sp^3d} \\) hybridization, trigonal bipyramidal geometry"
+          "text": "\\( \\mathrm{sp^3d} \\) hybridization, trigonal bipyramidal geometry"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{sp^3d^2} \\) hybridization, square planar geometry"
+          "text": "\\( \\mathrm{sp^3d^2} \\) hybridization, square planar geometry"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{sp^3d^2} \\) hybridization, octahedral geometry"
+          "text": "\\( \\mathrm{sp^3d^2} \\) hybridization, octahedral geometry"
         }
       ],
       "correct_option": "C",
@@ -31249,19 +31249,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{Li} \\) "
+          "text": "\\( \\mathrm{Li} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{Be} \\) "
+          "text": "\\( \\mathrm{Be} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{B} \\) "
+          "text": "\\( \\mathrm{B} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{C} \\) "
+          "text": "\\( \\mathrm{C} \\)"
         }
       ],
       "correct_option": "A",
@@ -31625,7 +31625,7 @@
       "year": 2019,
       "topic": "Electrochemistry",
       "subtopic": "Electrochemical Cells",
-      "question_text": "In the diagram below, a concentration cell is constructed with two silver electrodes immersed in \\( \\mathrm{AgNO_3} \\) solutions of different molarities. If the left compartment (anode) has \\( 0.01 \\mathrm{M} \\) and the right compartment (cathode) has \\( 1.0 \\mathrm{M} \\), what is the cell potential at \\( 298 \\mathrm{K} \\)? (infer \\( \\mathrm{R = 8.314 \\mathrm{J\\cdot mol^{-1}K^{-1}}} \\), \\( \\mathrm{F = 96485 \\mathrm{C\\cdot mol^{-1}}} \\))",
+      "question_text": "In the diagram below, a concentration cell is constructed with two silver electrodes immersed in \\( \\mathrm{AgNO_3} \\) solutions of different molarities. If the left compartment (anod",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='40' y='100' width='100' height='60' fill='none' stroke='black' stroke-width='2'/><rect x='180' y='100' width='100' height='60' fill='none' stroke='black' stroke-width='2'/><line x1='90' y1='100' x2='90' y2='60' stroke='black' stroke-width='4'/><line x1='230' y1='100' x2='230' y2='60' stroke='black' stroke-width='4'/><path d='M 90 60 L 230 60' fill='none' stroke='black' stroke-width='2'/><line x1='140' y1='130' x2='180' y2='130' stroke='black' stroke-width='2'/><text x='60' y='140' font-size='12'>0.01 M</text><text x='200' y='140' font-size='12'>1.0 M</text><text x='80' y='50' font-size='12'>Ag</text><text x='220' y='50' font-size='12'>Ag</text></svg>",
@@ -33041,19 +33041,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0.05 \\text{ L mol}^{-1} \\text{ s}^{-1} \\) "
+          "text": "\\( 0.05 \\text{ L mol}^{-1} \\text{ s}^{-1} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 0.10 \\text{ L mol}^{-1} \\text{ s}^{-1} \\) "
+          "text": "\\( 0.10 \\text{ L mol}^{-1} \\text{ s}^{-1} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 0.20 \\text{ L mol}^{-1} \\text{ s}^{-1} \\) "
+          "text": "\\( 0.20 \\text{ L mol}^{-1} \\text{ s}^{-1} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.40 \\text{ L mol}^{-1} \\text{ s}^{-1} \\) "
+          "text": "\\( 0.40 \\text{ L mol}^{-1} \\text{ s}^{-1} \\)"
         }
       ],
       "correct_option": "B",
@@ -33073,19 +33073,19 @@
       "options": [
         {
           "id": "A",
-          "text": "Tetrahedral, \\( sp^3 \\) "
+          "text": "Tetrahedral, \\( sp^3 \\)"
         },
         {
           "id": "B",
-          "text": "Square Planar, \\( sp^3d \\) "
+          "text": "Square Planar, \\( sp^3d \\)"
         },
         {
           "id": "C",
-          "text": "See-saw, \\( sp^3d \\) "
+          "text": "See-saw, \\( sp^3d \\)"
         },
         {
           "id": "D",
-          "text": "Trigonal Bipyramidal, \\( sp^3d \\) "
+          "text": "Trigonal Bipyramidal, \\( sp^3d \\)"
         }
       ],
       "correct_option": "C",
@@ -33105,19 +33105,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1.2 \\times 10^{12} \\) "
+          "text": "\\( 1.2 \\times 10^{12} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 3.5 \\times 10^{15} \\) "
+          "text": "\\( 3.5 \\times 10^{15} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 8.3 \\times 10^{16} \\) "
+          "text": "\\( 8.3 \\times 10^{16} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2.1 \\times 10^{18} \\) "
+          "text": "\\( 2.1 \\times 10^{18} \\)"
         }
       ],
       "correct_option": "C",
@@ -33145,7 +33145,7 @@
         },
         {
           "id": "C",
-          "text": " (2R, 3R)-2,3-dichlorobutane "
+          "text": "(2R, 3R)-2,3-dichlorobutane"
         },
         {
           "id": "D",
@@ -33169,19 +33169,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 4.46 \\) "
+          "text": "\\( 4.46 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4.76 \\) "
+          "text": "\\( 4.76 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 5.06 \\) "
+          "text": "\\( 5.06 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 5.36 \\) "
+          "text": "\\( 5.36 \\)"
         }
       ],
       "correct_option": "C",
@@ -36041,7 +36041,7 @@
       "year": 2023,
       "topic": "Stoichiometry",
       "subtopic": "Stoichiometric Calculations",
-      "question_text": "A sample of an unknown metal oxide is analyzed. When \\( 2.00\\text{ g} \\) of the oxide is reacted completely with excess HCl, \\( 0.40\\text{ g} \\) of the metal is recovered. If the metal is Magnesium (\\( \\mathrm{At. mass = 24.3\\text{ g/mol}} \\)), what is the formula of the oxide?",
+      "question_text": "A sample of an unknown metal oxide is analyze",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -37297,19 +37297,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{C_3H_6O_3} \\) "
+          "text": "\\( \\mathrm{C_3H_6O_3} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{C_6H_{12}O_6} \\) "
+          "text": "\\( \\mathrm{C_6H_{12}O_6} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{C_4H_8O_4} \\) "
+          "text": "\\( \\mathrm{C_4H_8O_4} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{C_5H_{10}O_5} \\) "
+          "text": "\\( \\mathrm{C_5H_{10}O_5} \\)"
         }
       ],
       "correct_option": "B",
@@ -37329,19 +37329,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( n=3, l=2, m_l=-1, m_s=+1/2 \\) "
+          "text": "\\( n=3, l=2, m_l=-1, m_s=+1/2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( n=2, l=1, m_l=0, m_s=-1/2 \\) "
+          "text": "\\( n=2, l=1, m_l=0, m_s=-1/2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( n=1, l=1, m_l=0, m_s=+1/2 \\) "
+          "text": "\\( n=1, l=1, m_l=0, m_s=+1/2 \\)"
         },
         {
           "id": "D",
-          "text": " \\( n=4, l=0, m_l=0, m_s=-1/2 \\) "
+          "text": "\\( n=4, l=0, m_l=0, m_s=-1/2 \\)"
         }
       ],
       "correct_option": "C",
@@ -39697,19 +39697,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\mathrm{K^+} \\)"
+          "text": "\\(\\mathrm{K^+} \\)"
         },
         {
           "id": "B",
-          "text": " \\(\\mathrm{Mg^{2+}} \\)"
+          "text": "\\(\\mathrm{Mg^{2+}} \\)"
         },
         {
           "id": "C",
-          "text": " \\(\\mathrm{Na^+} \\)"
+          "text": "\\(\\mathrm{Na^+} \\)"
         },
         {
           "id": "D",
-          "text": " \\(\\mathrm{Li^+} \\)"
+          "text": "\\(\\mathrm{Li^+} \\)"
         }
       ],
       "correct_option": "A",
@@ -39721,7 +39721,7 @@
       "year": 2023,
       "topic": "Thermochemistry",
       "subtopic": "Hess's Law",
-      "question_text": "Given the standard enthalpies of combustion: \\( \\mathrm{C(graphite) + O_2(g) \\longrightarrow CO_2(g) \\quad \\Delta H = -393.5 \\text{ kJ/mol}} \\) and \\( \\mathrm{CO(g) + \\frac{1}{2}O_2(g) \\longrightarrow CO_2(g) \\quad \\Delta H = -283.0 \\text{ kJ/mol}} \\). Calculate the enthalpy of the reaction \\( \\mathrm{C(graphite) + \\frac{1}{2}O_2(g) \\longrightarrow CO(g)} \\).",
+      "question_text": "Given the standard enthalpies of combustion: \\( \\mathrm{C(graphit",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -40785,19 +40785,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( -0.42 \\text{ V} \\) "
+          "text": "\\( -0.42 \\text{ V} \\)"
         },
         {
           "id": "B",
-          "text": " \\( +0.42 \\text{ V} \\) "
+          "text": "\\( +0.42 \\text{ V} \\)"
         },
         {
           "id": "C",
-          "text": " \\( +1.10 \\text{ V} \\) "
+          "text": "\\( +1.10 \\text{ V} \\)"
         },
         {
           "id": "D",
-          "text": " \\( -1.10 \\text{ V} \\) "
+          "text": "\\( -1.10 \\text{ V} \\)"
         }
       ],
       "correct_option": "C",
@@ -40817,19 +40817,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{B < Be < C < N} \\) "
+          "text": "\\( \\mathrm{B < Be < C < N} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{Be < B < C < N} \\) "
+          "text": "\\( \\mathrm{Be < B < C < N} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{B < C < Be < N} \\) "
+          "text": "\\( \\mathrm{B < C < Be < N} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{N < C < B < Be} \\) "
+          "text": "\\( \\mathrm{N < C < B < Be} \\)"
         }
       ],
       "correct_option": "A",
@@ -40849,19 +40849,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 6.57 \\text{ atm} \\) "
+          "text": "\\( 6.57 \\text{ atm} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 8.21 \\text{ atm} \\) "
+          "text": "\\( 8.21 \\text{ atm} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 16.42 \\text{ atm} \\) "
+          "text": "\\( 16.42 \\text{ atm} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 3.28 \\text{ atm} \\) "
+          "text": "\\( 3.28 \\text{ atm} \\)"
         }
       ],
       "correct_option": "B",
@@ -40977,19 +40977,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{Cu^+} \\) "
+          "text": "\\( \\mathrm{Cu^+} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{Ga^{3+}} \\) "
+          "text": "\\( \\mathrm{Ga^{3+}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{Fe^{2+}} \\) "
+          "text": "\\( \\mathrm{Fe^{2+}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{Ni^{2+}} \\) "
+          "text": "\\( \\mathrm{Ni^{2+}} \\)"
         }
       ],
       "correct_option": "B",
@@ -41009,19 +41009,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mathrm{NH_4Cl} \\) "
+          "text": "\\( \\mathrm{NH_4Cl} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mathrm{KNO_3} \\) "
+          "text": "\\( \\mathrm{KNO_3} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mathrm{CH_3COONa} \\) "
+          "text": "\\( \\mathrm{CH_3COONa} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mathrm{AlCl_3} \\) "
+          "text": "\\( \\mathrm{AlCl_3} \\)"
         }
       ],
       "correct_option": "C",

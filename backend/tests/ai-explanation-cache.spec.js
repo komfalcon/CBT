@@ -323,7 +323,7 @@ describe('AI provider key rotation', () => {
       getMistralKeys: () => [{ alias: 'key-one', key: 'mock-secret-one' }, { alias: 'key-two', key: 'mock-secret-two' }],
       reserveDailyKeyUse: jest.fn().mockResolvedValue(true),
     };
-    const service = new AiService({}, {}, {}, { get: () => undefined }, {}, manager);
+    const service = new AiService({}, {}, {}, {}, { get: () => undefined }, {}, manager);
     const completion = await service.callMistralApiWithMetadata([], 200, 'explanation', 'q-1', false);
     expect(axios.post).toHaveBeenCalledTimes(2);
     expect(axios.post.mock.calls[0][2].headers.Authorization).toBe('Bearer mock-secret-one');
@@ -337,7 +337,7 @@ describe('AI provider key rotation', () => {
     axios.post.mockRejectedValueOnce({ response: { status: 503 } }).mockResolvedValueOnce({ data: { model: 'mistral-small-latest', choices: [{ message: { content: validText } }], usage: {} } });
     const manager = { getMistralKeys: () => [{ alias: 'key-one', key: 'mock-secret-one' }], reserveDailyKeyUse: jest.fn().mockResolvedValue(true) };
     const config = { get: (key) => ({ AI_PROVIDER_RETRIES: '1', AI_RETRY_BASE_MS: '1', AI_PROVIDER_TIMEOUT_MS: '1000' }[key]) };
-    const service = new AiService({}, {}, {}, config, {}, manager);
+    const service = new AiService({}, {}, {}, {}, config, {}, manager);
     const completion = await service.callMistralApiWithMetadata([], 200, 'explanation', 'q-1', false);
     expect(completion.text).toBe(validText);
     expect(axios.post).toHaveBeenCalledTimes(2);

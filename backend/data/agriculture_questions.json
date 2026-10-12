@@ -1289,7 +1289,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "The diagram below illustrates the effect of a subsidy on the market for wheat. In the diagram below, if the initial equilibrium price is P1 and quantity is Q1, what will be the new equilibrium price and quantity after the government introduces a subsidy to farmers? ",
+      "question_text": "The diagram below illustrates the effect of a subsidy on the market for wheat. In the diagram below, if the initial equilibrium price is P1 and quantity is Q1, what will be the new equilibrium price and quantity after the government introduces a subsidy to farmers?",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='20' y='20' width='280' height='160' fill='none' stroke='black'/><path d='M 50 150 L 250 150' stroke='black'/><path d='M 50 150 L 50 50' stroke='black'/><text x='55' y='165'>P1</text><text x='150' y='165'>Q1</text></svg>",
@@ -4809,7 +4809,7 @@
       "year": 2020,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A farmer is growing maize on a field that has a soil nitrogen content of 60 kg/ha. The recommended nitrogen application rate for optimal maize growth is 200 kg/ha. How much nitrogen fertilizer should the farmer apply?",
+      "question_text": "A farmer is growing maize on a field that has a soil nitrogen content of 60 kg/h",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -15851,7 +15851,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is analyzing the cost of producing maize. The total fixed cost is \\( \\$1,000 \\) and the total variable cost is \\( \\$2,500 \\) for producing 1,000 kg of maize. What is the average total cost per kilogram?",
+      "question_text": "A farmer is analyzing the cost of producing maiz",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -16011,7 +16011,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is analyzing the cost of producing maize. The total fixed cost is \\( \\$1,000 \\) and the total variable cost is given by the equation \\( TVC = 2Q^2 + 500Q \\), where \\( Q \\) is the quantity of maize produced. What is the total cost of producing 100 units of maize?",
+      "question_text": "A farmer is analyzing the cost of producing maiz",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -16491,7 +16491,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is analyzing the cost of producing maize. The total fixed cost is $\\$1,000$ and the total variable cost is given by the equation $TVC = 50Q + 0.5Q^2$, where $Q$ is the quantity of maize produced. What is the total cost of producing 100 units of maize?",
+      "question_text": "A farmer is analyzing the cost of producing maiz",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -28483,7 +28483,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "To find the area covered per hour, we multiply the speed of the tractor by the width of the planter. First, convert the speed to meters per hour: $9 \\text{ km/h} = 9000 \\text{ m/h}$. The area covered per hour is $9000 \\text{ m/h} \\times 3 \\text{ m} = 27000 \\text{ m}^2$. Since $1 \\text{ hectare} = 10000 \\text{ m}^2$, the area covered is $\\frac{27000}{10000} = 2.7 \\text{ hectares}$. ",
+      "explanation": "To find the area covered per hour, we multiply the speed of the tractor by the width of the planter. First, convert the speed to meters per hour: $9 \\text{ km/h} = 9000 \\text{ m/h}$. The area covered per hour is $9000 \\text{ m/h} \\times 3 \\text{ m} = 27000 \\text{ m}^2$. Since $1 \\text{ hectare} = 10000 \\text{ m}^2$, the area covered is $\\frac{27000}{10000} = 2.7 \\text{ hectares}$.",
       "difficulty": 4
     },
     {
@@ -37299,11 +37299,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "C",
@@ -37779,11 +37779,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "C",
@@ -37939,11 +37939,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "C",
@@ -38099,11 +38099,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "C",
@@ -47859,11 +47859,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A has an ROI of 25%"
+          "text": "has an ROI of 25%"
         },
         {
           "id": "B",
-          "text": "Option B has an ROI of 33.33%"
+          "text": "has an ROI of 33.33%"
         },
         {
           "id": "C",
@@ -47871,7 +47871,7 @@
         },
         {
           "id": "D",
-          "text": "Option A has an ROI of 30%"
+          "text": "has an ROI of 30%"
         }
       ],
       "correct_option": "B",
@@ -50899,11 +50899,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more viable because it has a lower initial cost."
+          "text": "is more viable because it has a lower initial cost."
         },
         {
           "id": "B",
-          "text": "Option B is more viable because it has a higher annual return."
+          "text": "is more viable because it has a higher annual return."
         },
         {
           "id": "C",
@@ -54611,11 +54611,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A"
+          "text": ""
         },
         {
           "id": "B",
-          "text": "Option B"
+          "text": ""
         },
         {
           "id": "C",
@@ -65931,7 +65931,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating the profitability of two different crop enterprises: maize and cassava. The revenue from maize is ₦500,000 per hectare with a total cost of ₦350,000 per hectare, while the revenue from cassava is ₦600,000 per hectare with a total cost of ₦450,000 per hectare. Which crop enterprise is more profitable per hectare?",
+      "question_text": "A farmer is evaluating the profitability of two different crop enterprises: maize and cassav",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -71059,11 +71059,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective because it costs less"
+          "text": "is more cost-effective because it costs less"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective because it reduces losses more"
+          "text": "is more cost-effective because it reduces losses more"
         },
         {
           "id": "C",
@@ -72179,11 +72179,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A"
+          "text": ""
         },
         {
           "id": "B",
-          "text": "Option B"
+          "text": ""
         },
         {
           "id": "C",
@@ -72819,19 +72819,19 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A with $R = 12 - (0.6 \\times 5) = 9$"
+          "text": "with $R = 12 - (0.6 \\times 5) = 9$"
         },
         {
           "id": "B",
-          "text": "Option B with $R = 9 - (0.3 \\times 5) = 7.5$"
+          "text": "with $R = 9 - (0.3 \\times 5) = 7.5$"
         },
         {
           "id": "C",
-          "text": "Option A with $R = 12 - (0.6 \\times 5) = 10$"
+          "text": "with $R = 12 - (0.6 \\times 5) = 10$"
         },
         {
           "id": "D",
-          "text": "Option B with $R = 9 - (0.3 \\times 5) = 8$"
+          "text": "with $R = 9 - (0.3 \\times 5) = 8$"
         }
       ],
       "correct_option": "A",
@@ -73299,11 +73299,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective because it costs less"
+          "text": "is more cost-effective because it costs less"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective because it reduces losses more"
+          "text": "is more cost-effective because it reduces losses more"
         },
         {
           "id": "C",
@@ -75755,7 +75755,7 @@
       "year": 2021,
       "topic": "Agricultural Engineering and Technology",
       "subtopic": "Farm Mechanization, Tools and Structures",
-      "question_text": "In the diagram below, a component of a farm tractor's hydraulic system is shown. In the diagram below, the component labeled 'X' is most likely used for what purpose? ",
+      "question_text": "In the diagram below, a component of a farm tractor's hydraulic system is shown. In the diagram below, the component labeled 'X' is most likely used for what purpose?",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='50' y='50' width='100' height='50' fill='#ccc' stroke='black'/><text x='75' y='75' font-size='24'>X</text><line x1='100' y1='100' x2='150' y2='150' stroke='black'/></svg>",
@@ -76819,11 +76819,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective because it costs less."
+          "text": "is more cost-effective because it costs less."
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective because it reduces losses more."
+          "text": "is more cost-effective because it reduces losses more."
         },
         {
           "id": "C",
@@ -82099,11 +82099,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A has a higher NPV"
+          "text": "has a higher NPV"
         },
         {
           "id": "B",
-          "text": "Option B has a higher NPV"
+          "text": "has a higher NPV"
         },
         {
           "id": "C",
@@ -82259,11 +82259,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "B",
-          "text": "Option B is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "C",
@@ -83699,11 +83699,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more viable because it has a higher NPV"
+          "text": "is more viable because it has a higher NPV"
         },
         {
           "id": "B",
-          "text": "Option B is more viable because it has a higher NPV"
+          "text": "is more viable because it has a higher NPV"
         },
         {
           "id": "C",
@@ -84179,11 +84179,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A has a higher NPV"
+          "text": "has a higher NPV"
         },
         {
           "id": "B",
-          "text": "Option B has a higher NPV"
+          "text": "has a higher NPV"
         },
         {
           "id": "C",
@@ -84499,19 +84499,19 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A, with an expected revenue of \\$2,500"
+          "text": ", with an expected revenue of \\$2,500"
         },
         {
           "id": "B",
-          "text": "Option B, with an expected revenue of \\$2,320"
+          "text": ", with an expected revenue of \\$2,320"
         },
         {
           "id": "C",
-          "text": "Option A, with an expected revenue of \\$2,000"
+          "text": ", with an expected revenue of \\$2,000"
         },
         {
           "id": "D",
-          "text": "Option B, with an expected revenue of \\$2,560"
+          "text": ", with an expected revenue of \\$2,560"
         }
       ],
       "correct_option": "B",
@@ -84659,11 +84659,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "B",
-          "text": "Option B is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "C",
@@ -87699,15 +87699,15 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A because it has a lower initial investment"
+          "text": "because it has a lower initial investment"
         },
         {
           "id": "B",
-          "text": "Option B because it has a higher annual return"
+          "text": "because it has a higher annual return"
         },
         {
           "id": "C",
-          "text": "Option A if the NPV is positive and higher than Option B's NPV"
+          "text": "if the NPV is positive and higher than Option B's NPV"
         },
         {
           "id": "D",
@@ -90123,7 +90123,7 @@
       "year": 2019,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is considering diversifying his crop production to include cassava. The expected revenue from cassava production is ₦500,000 per hectare, with a production cost of ₦300,000 per hectare. What is the expected profit per hectare from cassava production?",
+      "question_text": "A farmer is considering diversifying his crop production to include cassav",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -96979,11 +96979,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "B",
-          "text": "Option B is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "C",
@@ -99051,7 +99051,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating the profitability of two different crop enterprises: maize and cassava. The revenue from maize is ₦800,000 per hectare with a total cost of ₦500,000 per hectare, while the revenue from cassava is ₦1,000,000 per hectare with a total cost of ₦700,000 per hectare. Which enterprise is more profitable per hectare?",
+      "question_text": "A farmer is evaluating the profitability of two different crop enterprises: maize and cassav",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -102419,11 +102419,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A"
+          "text": ""
         },
         {
           "id": "B",
-          "text": "Option B"
+          "text": ""
         },
         {
           "id": "C",
@@ -104499,11 +104499,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A has a higher rate of return"
+          "text": "has a higher rate of return"
         },
         {
           "id": "B",
-          "text": "Option B has a higher rate of return"
+          "text": "has a higher rate of return"
         },
         {
           "id": "C",
@@ -106579,11 +106579,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "B",
-          "text": "Option B is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "C",
@@ -109771,7 +109771,7 @@
       "year": 2022,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating two different storage facilities for his maize produce. Facility A charges ₦50,000 per month with a 2% loss rate, while Facility B charges ₦30,000 per month with a 5% loss rate. If the farmer has 1000 kg of maize valued at ₦200 per kg, which facility should he choose to minimize his total cost?",
+      "question_text": "A farmer is evaluating two different storage facilities for his maize produc",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -112011,7 +112011,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating the profitability of two different crops: Crop A and Crop B. Crop A has a production cost of ₦150,000 per hectare and is expected to yield ₦250,000 per hectare. Crop B has a production cost of ₦200,000 per hectare and is expected to yield ₦350,000 per hectare. Which crop is more profitable per hectare?",
+      "question_text": "A farmer is evaluating the profitability of two different crops: Crop A and Crop",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -113459,11 +113459,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more viable because it has a higher NPV"
+          "text": "is more viable because it has a higher NPV"
         },
         {
           "id": "B",
-          "text": "Option B is more viable because it has a higher NPV"
+          "text": "is more viable because it has a higher NPV"
         },
         {
           "id": "C",
@@ -113771,7 +113771,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating the profitability of two different crops: maize and soybeans. The production cost for maize is ₦120,000 per hectare, with an expected revenue of ₦250,000 per hectare. For soybeans, the production cost is ₦100,000 per hectare, with an expected revenue of ₦220,000 per hectare. Which crop should the farmer choose to maximize profit?",
+      "question_text": "A farmer is evaluating the profitability of two different crops: maize and soybeans. The production cost for maize is ₦120,000 per hectare, with an expected revenue of ₦250,000 per hectar",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -115531,7 +115531,7 @@
       "year": 2022,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating the profitability of two different crops for the upcoming season. Crop A has a production cost of ₦200,000 per hectare and is expected to yield ₦500,000 per hectare. Crop B has a production cost of ₦300,000 per hectare and is expected to yield ₦700,000 per hectare. Which crop is more profitable per hectare?",
+      "question_text": "A farmer is evaluating the profitability of two different crops for the upcoming season. Crop A has a production cost of ₦200,000 per hectare and is expected to yield ₦500,000 per hectar",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -115691,7 +115691,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating the profitability of two different crops for the upcoming season. Crop A has a production cost of ₦150,000 per hectare and is expected to yield ₦300,000 per hectare. Crop B has a production cost of ₦200,000 per hectare and is expected to yield ₦400,000 per hectare. Which crop is more profitable per hectare?",
+      "question_text": "A farmer is evaluating the profitability of two different crops for the upcoming season. Crop A has a production cost of ₦150,000 per hectare and is expected to yield ₦300,000 per hectar",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -115859,11 +115859,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "C",
@@ -116019,11 +116019,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A"
+          "text": ""
         },
         {
           "id": "B",
-          "text": "Option B"
+          "text": ""
         },
         {
           "id": "C",
@@ -118099,11 +118099,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A will yield ₦266,200"
+          "text": "will yield ₦266,200"
         },
         {
           "id": "B",
-          "text": "Option B will yield ₦280,986"
+          "text": "will yield ₦280,986"
         },
         {
           "id": "C",
@@ -118111,7 +118111,7 @@
         },
         {
           "id": "D",
-          "text": "Option A will yield ₦300,000"
+          "text": "will yield ₦300,000"
         }
       ],
       "correct_option": "B",
@@ -118419,19 +118419,19 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A yields ₦120,000, Option B yields ₦135,000, difference is ₦15,000"
+          "text": "yields ₦120,000, Option B yields ₦135,000, difference is ₦15,000"
         },
         {
           "id": "B",
-          "text": "Option A yields ₦129,712.80, Option B yields ₦145,682.50, difference is ₦15,969.70"
+          "text": "yields ₦129,712.80, Option B yields ₦145,682.50, difference is ₦15,969.70"
         },
         {
           "id": "C",
-          "text": "Option A yields ₦100,000, Option B yields ₦120,000, difference is ₦20,000"
+          "text": "yields ₦100,000, Option B yields ₦120,000, difference is ₦20,000"
         },
         {
           "id": "D",
-          "text": "Option A yields ₦150,000, Option B yields ₦160,000, difference is ₦10,000"
+          "text": "yields ₦150,000, Option B yields ₦160,000, difference is ₦10,000"
         }
       ],
       "correct_option": "B",
@@ -118763,7 +118763,7 @@
       "year": 2019,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A farmer applies a fertilizer with an NPK ratio of 15:10:20 at a rate of 300 kg/ha. How much potassium (K) is applied per hectare? ",
+      "question_text": "A farmer applies a fertilizer with an NPK ratio of 15:10:20 at a rate of 300 kg/ha. How much potassium (K) is applied per hectare?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -118827,7 +118827,7 @@
       "year": 2018,
       "topic": "Animal Science and Production",
       "subtopic": "Livestock Breeding and Health Management",
-      "question_text": "Which of the following livestock breeding methods involves selecting animals with desirable traits and breeding them to produce offspring with improved characteristics? ",
+      "question_text": "Which of the following livestock breeding methods involves selecting animals with desirable traits and breeding them to produce offspring with improved characteristics?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -118859,7 +118859,7 @@
       "year": 2022,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Weed and Pest Control Methods",
-      "question_text": "A farmer notices an infestation of aphids on his soybean crop. Which of the following control methods is most environmentally friendly? ",
+      "question_text": "A farmer notices an infestation of aphids on his soybean crop. Which of the following control methods is most environmentally friendly?",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -121619,11 +121619,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective because it costs less"
+          "text": "is more cost-effective because it costs less"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective because it reduces losses more"
+          "text": "is more cost-effective because it reduces losses more"
         },
         {
           "id": "C",
@@ -121779,11 +121779,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "B",
-          "text": "Option B is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "C",
@@ -122899,11 +122899,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective because it costs less"
+          "text": "is more cost-effective because it costs less"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective because it reduces losses more"
+          "text": "is more cost-effective because it reduces losses more"
         },
         {
           "id": "C",
@@ -137643,7 +137643,7 @@
       "year": 2019,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A soil test reveals that the available nitrogen is 40 mg/kg, phosphorus is 15 mg/kg, and potassium is 180 mg/kg. According to the soil test recommendations, if the available nitrogen is less than 50 mg/kg, an additional 100 kg/ha of nitrogenous fertilizer is required. If the available phosphorus is less than 20 mg/kg, an additional 60 kg/ha of phosphatic fertilizer is required. What fertilizers should the farmer apply?",
+      "question_text": "A soil test reveals that the available nitrogen is 40 mg/kg, phosphorus is 15 mg/kg, and potassium is 180 mg/kg. According to the soil test recommendations, if the available nitrogen is less than 50 mg/kg, an additional 100 kg/ha of nitrogenous fertilizer is require",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -138251,7 +138251,7 @@
       "year": 2020,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A soil test indicates that the available nitrogen is 25 mg/kg, phosphorus is 10 mg/kg, and potassium is 150 mg/kg. According to the soil test recommendations, if the available nitrogen is less than 30 mg/kg, a nitrogen-based fertilizer should be applied at the rate of 50 kg/ha. If the available phosphorus is less than 12 mg/kg, a phosphorus-based fertilizer should be applied at the rate of 30 kg/ha. What fertilizers should be applied?",
+      "question_text": "A soil test indicates that the available nitrogen is 25 mg/kg, phosphorus is 10 mg/kg, and potassium is 150 mg/kg. According to the soil test recommendations, if the available nitrogen is less than 30 mg/kg, a nitrogen-based fertilizer should be applied at the rate of 50 kg/h",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -138891,7 +138891,7 @@
       "year": 2020,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A soil test reveals that the available nitrogen is 40 mg/kg, phosphorus is 12 mg/kg, and potassium is 180 mg/kg. According to the soil test recommendations, if the available nitrogen is below 50 mg/kg, a nitrogen-based fertilizer should be applied at the rate of 100 kg/ha. If the available phosphorus is below 15 mg/kg, a phosphorus-based fertilizer should be applied at the rate of 60 kg/ha. What fertilizers should be applied and at what rates?",
+      "question_text": "A soil test reveals that the available nitrogen is 40 mg/kg, phosphorus is 12 mg/kg, and potassium is 180 mg/kg. According to the soil test recommendations, if the available nitrogen is below 50 mg/kg, a nitrogen-based fertilizer should be applied at the rate of 100 kg/h",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -140499,19 +140499,19 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A with a total cost of ₦7,500"
+          "text": "with a total cost of ₦7,500"
         },
         {
           "id": "B",
-          "text": "Option B with a total cost of ₦8,400"
+          "text": "with a total cost of ₦8,400"
         },
         {
           "id": "C",
-          "text": "Option A with a total cost of ₦10,000"
+          "text": "with a total cost of ₦10,000"
         },
         {
           "id": "D",
-          "text": "Option B with a total cost of ₦9,000"
+          "text": "with a total cost of ₦9,000"
         }
       ],
       "correct_option": "B",
@@ -142923,7 +142923,7 @@
       "year": 2021,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A soil test reveals that the available nitrogen is 30 mg/kg and phosphorus is 12 mg/kg. According to the soil test recommendations, if the available nitrogen is below 50 mg/kg, an additional 50 kg/ha of nitrogenous fertilizer should be applied. Similarly, if phosphorus is below 15 mg/kg, an additional 30 kg/ha of phosphatic fertilizer should be applied. How much nitrogenous fertilizer should be applied?",
+      "question_text": "A soil test reveals that the available nitrogen is 30 mg/kg and phosphorus is 12 mg/kg. According to the soil test recommendations, if the available nitrogen is below 50 mg/kg, an additional 50 kg/ha of nitrogenous fertilizer should be applie",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -143083,7 +143083,7 @@
       "year": 2019,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A soil test reveals that the available nitrogen is 25 mg/kg and phosphorus is 10 mg/kg. According to the soil test recommendations, if the available nitrogen is below 30 mg/kg, an additional 50 kg/ha of nitrogenous fertilizer is recommended. If the available phosphorus is below 15 mg/kg, an additional 30 kg/ha of phosphatic fertilizer is recommended. What is the total amount of nitrogenous and phosphatic fertilizers to be applied?",
+      "question_text": "A soil test reveals that the available nitrogen is 25 mg/kg and phosphorus is 10 mg/kg. According to the soil test recommendations, if the available nitrogen is below 30 mg/kg, an additional 50 kg/ha of nitrogenous fertilizer is recommende",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -143243,7 +143243,7 @@
       "year": 2019,
       "topic": "Agronomy (Crop Production)",
       "subtopic": "Soil Science and Plant Nutrition",
-      "question_text": "A soil test reveals that the available nitrogen is 40 mg/kg and phosphorus is 15 mg/kg. According to the soil test recommendations, if the available nitrogen is below 50 mg/kg, an additional 50 kg/ha of nitrogen fertilizer is recommended. If the available phosphorus is below 20 mg/kg, an additional 30 kg/ha of phosphorus fertilizer is recommended. What fertilizers should the farmer apply?",
+      "question_text": "A soil test reveals that the available nitrogen is 40 mg/kg and phosphorus is 15 mg/kg. According to the soil test recommendations, if the available nitrogen is below 50 mg/kg, an additional 50 kg/ha of nitrogen fertilizer is recommende",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -144019,11 +144019,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A"
+          "text": ""
         },
         {
           "id": "B",
-          "text": "Option B"
+          "text": ""
         },
         {
           "id": "C",
@@ -155212,7 +155212,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer's total cost (TC) of producing maize is given by the equation \\[ TC = 100 + 50Q \\], where \\( Q \\) is the quantity produced. If the total revenue (TR) is given by \\[ TR = 200Q - 0.5Q^2 \\], what is the quantity that maximizes profit?",
+      "question_text": "A farmer's total cost (T",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -155372,7 +155372,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer's total cost (TC) of producing maize is given by the equation \\[ TC = 150 + 30Q \\], where \\( Q \\) is the quantity of maize produced. If the farmer produces 100 units of maize, what is the total cost?",
+      "question_text": "A farmer's total cost (T",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -155692,7 +155692,7 @@
       "year": 2022,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer's total cost (TC) of producing cassava is given by the equation \\[ TC = 200 + 40Q \\], where \\( Q \\) is the quantity produced. If the farmer sells each unit of cassava at ₦60, what is the break-even quantity?",
+      "question_text": "A farmer's total cost (T",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -156332,7 +156332,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer's total cost (TC) of producing yams is given by the equation \\[ TC = 250 + 25Q \\], where \\( Q \\) is the quantity produced. If the farmer produces 100 units, what is the average total cost per unit?",
+      "question_text": "A farmer's total cost (T",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -156812,7 +156812,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer's total cost (TC) of producing cassava is given by the equation \\[ TC = 500 + 30Q \\], where \\( Q \\) is the quantity produced. If the farmer sells each unit of cassava at ₦50, what is the break-even quantity?",
+      "question_text": "A farmer's total cost (T",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -156972,7 +156972,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer's average total cost (ATC) of producing maize is given by the equation \\[ ATC = \\frac{500 + 20Q}{Q} \\], where \\( Q \\) is the quantity of maize produced. At what level of output does the farmer achieve the lowest average total cost?",
+      "question_text": "A farmer's average total cost (AT",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -157132,7 +157132,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer's total cost (TC) of producing cassava is given by the equation \\[ TC = 300 + 20Q \\], where \\( Q \\) is the quantity produced. If the farmer produces 100 units, what is the average total cost (ATC) per unit?",
+      "question_text": "A farmer's total cost (T",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -157932,7 +157932,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer's total cost (TC) of producing yam is given by the equation \\[ TC = 400 + 15Q \\], where \\( Q \\) is the quantity of yam produced. If the farmer produces 100 units of yam, what is the average total cost (ATC) per unit?",
+      "question_text": "A farmer's total cost (T",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -158252,7 +158252,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer's total cost (TC) of producing maize is given by the equation \\[ TC = 200 + 10Q \\], where \\( Q \\) is the quantity produced. If the farmer produces 100 units, what is the average total cost (ATC) per unit?",
+      "question_text": "A farmer's total cost (T",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -159532,7 +159532,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is evaluating two marketing channels for selling his produce. Channel A offers a fixed price of ₦200 per unit, while Channel B offers ₦250 per unit but with a 10% chance of not being paid. If the farmer produces 1000 units, which channel should he choose to maximize his expected revenue?",
+      "question_text": "A farmer is evaluating two marketing channels for selling his produc",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -160500,11 +160500,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective"
+          "text": "is more cost-effective"
         },
         {
           "id": "C",
@@ -161516,7 +161516,7 @@
       "year": 2019,
       "topic": "General Agriculture and Ecology",
       "subtopic": "Land Tenure Systems in Nigeria",
-      "question_text": "In the diagram below, a land tenure system is illustrated. In the diagram below, the part labeled 'X' represents a landowner, 'Y' represents a tenant, and 'Z' represents the land. Which of the following best describes the relationship between X, Y, and Z?",
+      "question_text": "In the diagram below, a land tenure system is illustrate",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='50' height='50' fill='#ccc' /><text x='30' y='40'>X</text><line x1='60' y1='35' x2='120' y2='35' stroke='#000' /><rect x='130' y='10' width='50' height='50' fill='#ccc' /><text x='150' y='40'>Y</text><rect x='60' y='80' width='100' height='50' fill='#ccc' /><text x='90' y='110'>Z</text></svg>",
@@ -162100,11 +162100,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "B",
-          "text": "Option B is more profitable"
+          "text": "is more profitable"
         },
         {
           "id": "C",
@@ -162580,11 +162580,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more profitable by ₦150,000"
+          "text": "is more profitable by ₦150,000"
         },
         {
           "id": "B",
-          "text": "Option B is more profitable by ₦200,000"
+          "text": "is more profitable by ₦200,000"
         },
         {
           "id": "C",
@@ -162592,7 +162592,7 @@
         },
         {
           "id": "D",
-          "text": "Option A is more profitable by ₦300,000"
+          "text": "is more profitable by ₦300,000"
         }
       ],
       "correct_option": "D",
@@ -168172,7 +168172,7 @@
       "year": 2020,
       "topic": "Agricultural Economics and Extension",
       "subtopic": "Agricultural Marketing and Finance",
-      "question_text": "A farmer is considering diversifying his crop production to include cassava. The expected revenue from cassava sales is ₦800,000 per hectare, with a production cost of ₦350,000 per hectare. If the farmer currently earns ₦500,000 per hectare from his existing crop, what is the opportunity cost of switching to cassava production?",
+      "question_text": "A farmer is considering diversifying his crop production to include cassav",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -169172,11 +169172,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A"
+          "text": ""
         },
         {
           "id": "B",
-          "text": "Option B"
+          "text": ""
         },
         {
           "id": "C",
@@ -169460,11 +169460,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective because it has a lower cost"
+          "text": "is more cost-effective because it has a lower cost"
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective because it reduces losses more"
+          "text": "is more cost-effective because it reduces losses more"
         },
         {
           "id": "C",
@@ -170740,11 +170740,11 @@
       "options": [
         {
           "id": "A",
-          "text": "Option A is more cost-effective because it costs less."
+          "text": "is more cost-effective because it costs less."
         },
         {
           "id": "B",
-          "text": "Option B is more cost-effective because it reduces losses more."
+          "text": "is more cost-effective because it reduces losses more."
         },
         {
           "id": "C",

@@ -133161,7 +133161,7 @@
       "year": 2019,
       "topic": "Trade (Home and Foreign)",
       "subtopic": "Balance of Trade and Payments",
-      "question_text": "In the diagram below, a country's export and import values are represented over time. What is the balance of trade when exports = $\\( 100 \\) million and imports = $\\( 80 \\) million? In the diagram, the export value is shown by the solid line and the import value by the dashed line. What does the shaded area represent?",
+      "question_text": "In the diagram below, a country's export and import values are represented over tim",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><path d='M0 100 L320 100' stroke='black' stroke-width='2'/><path d='M0 80 L160 120 L320 80' stroke='black' stroke-width='2' fill='none'/><path d='M0 120 L160 80 L320 120' stroke='black' stroke-width='2' stroke-dasharray='5 5' fill='none'/><rect x='160' y='80' width='160' height='40' fill='lightgray' opacity='0.5'/></svg>",

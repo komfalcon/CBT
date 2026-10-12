@@ -145,12 +145,12 @@ export default function AdminOverview() {
                 {maintenanceLoading ? (
                   <span className="text-xs text-text-muted animate-pulse">Checking status...</span>
                 ) : isMaintenance ? (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm shadow-amber-500/10">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 shadow-sm shadow-amber-500/10">
                     <span className="h-2 w-2 rounded-full bg-amber-400 animate-ping" />
                     Under Maintenance
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-800 dark:text-emerald-400 border border-emerald-500/30">
                     <span className="h-2 w-2 rounded-full bg-emerald-400" />
                     Platform Live
                   </span>

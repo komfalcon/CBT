@@ -521,17 +521,17 @@ export default function AdminCandidates() {
               {selectedUser.cbt_key && (
                 <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-between">
                   <div>
-                    <div className="text-[11px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <div className="text-[11px] font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                       <Key className="h-3.5 w-3.5" /> Assigned CBT Access Key
                     </div>
-                    <div className="font-mono text-sm font-bold text-amber-300 mt-1">
+                    <div className="font-mono text-sm font-bold text-amber-800 dark:text-amber-300 mt-1">
                       {selectedUser.cbt_key}
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => copyToClipboard(selectedUser.cbt_key!, 'CBT Key')}
-                    className="p-2 rounded-xl bg-amber-500/20 text-amber-300 hover:bg-amber-500 hover:text-slate-950 transition-colors cursor-pointer"
+                    className="p-2 rounded-xl bg-amber-500/20 text-amber-800 dark:text-amber-300 hover:bg-amber-500 hover:text-white dark:hover:text-slate-950 transition-colors cursor-pointer"
                   >
                     <Copy className="h-4 w-4" />
                   </button>

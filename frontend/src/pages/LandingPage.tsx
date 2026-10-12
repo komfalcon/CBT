@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   AlignLeft, ArrowRight, Award, BarChart3, BookOpen, Brain, BriefcaseBusiness, Calculator,
   Check, ChevronDown, Clock, CreditCard, Dna, FlaskConical, Globe, Handshake,
@@ -9,7 +9,6 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { AurikrexAppsSwitcher } from '../components/AurikrexAppsSwitcher';
-import { AuriCoinBadge } from '../components/AuriCoinBadge';
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -55,303 +54,1049 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }: { target: number;
   return <span ref={ref}>{prefix}{count.toLocaleString()}{suffix}</span>;
 }
 
-function BrandMark({ compact = false }: { compact?: boolean }) {
-  return (
-    <div className="flex items-center gap-2.5 sm:gap-3">
-      <img src="/favicon.svg" alt="" className="h-8 w-8 sm:h-9 sm:w-9 shrink-0 rounded-xl object-cover shadow-[0_8px_20px_rgba(74,91,255,0.25)]" />
-      {!compact && (
-        <div className="hidden flex-col xl:flex">
-          <span className="brand-name font-display text-[13px] sm:text-[15px] font-semibold leading-tight tracking-[-0.02em] text-white">Aurikrex Exam Arena</span>
-          <span className="brand-kicker mt-0.5 text-[9px] sm:text-[11px] font-medium uppercase leading-none tracking-[0.16em] text-blue-300">by Aurikrex</span>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ExamInterfaceVisual() {
-  const questionNumbers = Array.from({ length: 12 }, (_, index) => index + 1);
-  return (
-    <div className="landing-preview exam-preview relative mx-auto w-full max-w-[620px]">
-      <div className="pointer-events-none absolute -inset-4 sm:-inset-10 rounded-[40px] bg-[radial-gradient(circle_at_50%_50%,rgba(77,91,255,0.3),transparent_65%)] blur-2xl sm:blur-3xl" />
-      <div className="relative min-w-0 rounded-[28px] border border-white/10 bg-[#11172a] p-1.5 sm:p-2 shadow-[0_32px_90px_rgba(0,0,0,0.48)]">
-        <div className="overflow-hidden rounded-[21px] border border-white/[0.08] bg-[#f8faff]">
-          <div className="flex flex-wrap items-center justify-between gap-2 bg-[#17213b] px-4 py-3 text-white sm:flex-nowrap sm:px-5">
-            <div className="flex items-center gap-3">
-              <img src="/favicon.svg" alt="" className="h-7 w-7 shrink-0 rounded-lg object-cover" />
-              <div>
-                <p className="text-xs font-semibold tracking-wide text-white">JAMB UTME Mock Exam</p>
-                <p className="text-[12px] text-blue-200/70">Use of English · Question 12 of 60</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2">
-              <Clock className="h-3.5 w-3.5 text-blue-300" />
-              <span className="font-mono text-xs font-semibold tracking-wide">01:42:18</span>
-            </div>
-          </div>
-          <div className="grid min-w-0 grid-cols-1 gap-0 sm:grid-cols-[minmax(0,1fr)_154px]">
-            <div className="min-w-0 p-4 sm:p-7">
-              <div className="mb-5 flex items-center justify-between">
-                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">Comprehension</span>
-                <span className="text-xs font-medium text-slate-400">1 mark</span>
-              </div>
-              <h3 className="max-w-[360px] text-[17px] font-semibold leading-[1.45] tracking-[-0.02em] text-slate-900">
-                Choose the option that best completes the sentence below.
-              </h3>
-              <p className="mt-5 max-w-[370px] text-[14px] leading-7 text-slate-500">
-                The principal commended the students for their ______ approach to the science project.
-              </p>
-              <div className="mt-6 space-y-2.5">
-                {['methodical', 'methodic', 'methodically', 'methodism'].map((option, index) => (
-                  <div key={option} className={`flex items-center gap-3 rounded-xl border px-3.5 py-3 text-[14px] ${index === 0 ? 'border-blue-300 bg-blue-50 text-blue-800' : 'border-slate-200 bg-white text-slate-600'}`}>
-                    <span className={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold ${index === 0 ? 'border-blue-500 bg-blue-500 text-white' : 'border-slate-300 text-slate-400'}`}>
-                      {String.fromCharCode(65 + index)}
-                    </span>
-                    {option}
-                    {index === 0 && <Check className="ml-auto h-4 w-4 text-blue-600" />}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-7 flex items-center justify-between border-t border-slate-200 pt-5">
-                <button className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-500">Previous</button>
-                <button className="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-[0_8px_20px_rgba(37,99,235,0.25)]">Next question <span className="ml-1">→</span></button>
-              </div>
-            </div>
-            <div className="hidden border-l border-slate-200 bg-slate-50 p-4 sm:block">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-700">Questions</span>
-                <span className="text-[12px] text-slate-400">12/60</span>
-              </div>
-              <div className="mt-4 grid grid-cols-4 gap-2">
-                {questionNumbers.map((number) => (
-                  <div key={number} className={`flex h-7 items-center justify-center rounded-md text-[12px] font-semibold ${number === 12 ? 'bg-blue-600 text-white' : number < 10 ? 'bg-emerald-100 text-emerald-700' : 'border border-slate-200 bg-white text-slate-400'}`}>
-                    {number}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 space-y-2 border-t border-slate-200 pt-4 text-[12px] text-slate-500">
-                <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-emerald-500" /> Answered</div>
-                <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-blue-600" /> Current</div>
-                <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-slate-300" /> Unanswered</div>
-              </div>
-              <div className="mt-8 rounded-xl border border-blue-100 bg-blue-50 p-3">
-                <div className="flex items-center gap-2 text-xs font-semibold text-blue-800"><Shield className="h-3.5 w-3.5" /> Exam integrity</div>
-                <p className="mt-1.5 text-[12px] leading-5 text-blue-700/70">Your progress is saved automatically.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="absolute -right-5 top-10 hidden rounded-2xl border border-white/10 bg-[#19223a]/90 px-3.5 py-3 shadow-xl backdrop-blur md:block">
-        <div className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-emerald-400" /><span className="text-xs font-semibold text-emerald-200">Live exam mode</span></div>
-      </div>
-    </div>
-  );
-}
-
-function AssistantPanel() {
-  return (
-    <div className="landing-preview assistant-preview relative mx-auto w-full max-w-[540px]">
-      <div className="pointer-events-none absolute -inset-4 sm:-inset-12 rounded-full bg-[radial-gradient(circle,rgba(119,86,255,0.22),transparent_65%)] blur-2xl sm:blur-3xl" />
-      <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-[#11172a] p-2 shadow-[0_30px_80px_rgba(0,0,0,0.38)]">
-        <div className="rounded-[19px] border border-white/[0.07] bg-[#171e34] p-5">
-          <div className="flex items-center justify-between border-b border-white/[0.07] pb-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 text-white"><Brain className="h-4 w-4" /></div>
-              <div><p className="text-[14px] font-semibold text-white">Study assistant</p><p className="mt-0.5 text-xs text-slate-400">Curriculum-aligned guidance</p></div>
-            </div>
-            <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-1 text-[12px] font-semibold text-emerald-300">Online</span>
-          </div>
-          <div className="space-y-4 py-5">
-            <div className="ml-auto max-w-[82%] rounded-2xl rounded-tr-md bg-blue-600/90 px-4 py-3 text-[14px] leading-6 text-white">Can you explain why the answer is methodical?</div>
-            <div className="max-w-[88%] rounded-2xl rounded-tl-md border border-white/[0.07] bg-white/[0.045] px-4 py-3 text-[14px] leading-6 text-slate-300">
-              <p>“Methodical” describes an approach that is careful, organized, and systematic. It is the adjective that correctly modifies <span className="font-semibold text-blue-200">approach</span>.</p>
-              <div className="mt-3 flex items-center gap-2 text-xs font-medium text-violet-300"><Sparkles className="h-3.5 w-3.5" /> JAMB Use of English · Vocabulary</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-[#0f1527] px-3 py-2.5"><span className="flex-1 text-[14px] text-slate-500">Ask a follow-up question...</span><div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500 text-white"><ArrowIcon /></div></div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ArrowIcon() {
-  return <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" strokeLinecap="round" strokeLinejoin="round" /></svg>;
-}
-
-function AnalyticsPanel() {
-  return (
-    <div className="landing-preview analytics-preview relative mx-auto w-full max-w-[560px]">
-      <div className="pointer-events-none absolute -inset-4 sm:-inset-10 rounded-full bg-[radial-gradient(circle,rgba(25,191,154,0.16),transparent_65%)] blur-2xl sm:blur-3xl" />
-      <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-[#11172a] p-2 shadow-[0_30px_80px_rgba(0,0,0,0.38)]">
-        <div className="rounded-[19px] border border-white/[0.07] bg-[#171e34] p-3.5 sm:p-5">
-          <div className="flex items-center justify-between"><div><p className="text-[13px] sm:text-[14px] font-semibold text-white">Performance overview</p><p className="mt-0.5 text-[11px] sm:text-xs text-slate-400">Your last 30 days of practice</p></div><div className="rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 sm:px-3 sm:py-2 text-[11px] sm:text-xs text-slate-300">Last 30 days <ChevronDown className="ml-1 inline h-3 w-3" /></div></div>
-          <div className="mt-4 sm:mt-5 grid grid-cols-3 gap-2 sm:gap-3">
-            {[['Average score', '78%', '+12.4%', 'text-emerald-300'], ['Questions solved', '486', '+86 this week', 'text-blue-300'], ['Time accuracy', '92%', '+4.2%', 'text-violet-300']].map(([label, value, change, color]) => (
-              <div key={label} className="min-w-0 rounded-xl border border-white/[0.07] bg-white/[0.035] p-2 sm:p-3"><p className="truncate text-[10px] sm:text-xs text-slate-400">{label}</p><p className="mt-1.5 sm:mt-2 text-base sm:text-xl font-semibold tracking-tight text-white">{value}</p><p className={`mt-0.5 sm:mt-1 text-[10px] sm:text-[12px] font-medium ${color}`}>{change}</p></div>
-            ))}
-          </div>
-          <div className="mt-4 rounded-xl border border-white/[0.07] bg-white/[0.025] p-3 sm:p-4">
-            <div className="flex items-center justify-between"><p className="text-xs font-semibold text-slate-300">Score trend</p><p className="text-[12px] text-emerald-300">+18 points</p></div>
-            <svg viewBox="0 0 500 155" className="mt-4 h-auto w-full" role="img" aria-label="Rising score trend chart"><defs><linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#4f6cff" stopOpacity=".32" /><stop offset="1" stopColor="#4f6cff" stopOpacity="0" /></linearGradient></defs><path d="M0 130H500M0 90H500M0 50H500" stroke="rgba(148,163,184,.12)" strokeDasharray="4 6" /><path d="M0 125 C55 120, 70 112, 110 115 S170 105, 210 93 S255 102, 295 78 S350 90, 390 65 S440 63, 500 22 V155 H0Z" fill="url(#area)" /><path d="M0 125 C55 120, 70 112, 110 115 S170 105, 210 93 S255 102, 295 78 S350 90, 390 65 S440 63, 500 22" fill="none" stroke="#6b7dff" strokeLinecap="round" strokeWidth="3" /><circle cx="500" cy="22" r="5" fill="#9aa6ff" stroke="#171e34" strokeWidth="3" /></svg>
-            <div className="mt-1 flex justify-between text-[12px] text-slate-500"><span>Week 1</span><span>Week 2</span><span>Week 3</span><span>Week 4</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const ALL_SUBJECTS = [
-  { name: 'Use of English', topics: 'Comprehension, Lexis, Oral Forms', icon: AlignLeft, compulsory: true },
-  { name: 'Mathematics', topics: 'Algebra, Calculus, Statistics', icon: Calculator },
-  { name: 'Physics', topics: 'Mechanics, Waves, Electromagnetism', icon: Zap },
-  { name: 'Chemistry', topics: 'Organic, Inorganic, Physical', icon: FlaskConical },
-  { name: 'Biology', topics: 'Anatomy, Ecology, Genetics', icon: Dna },
-  { name: 'Geography', topics: 'Physical, Human, Map Reading', icon: Map },
-  { name: 'Economics', topics: 'Micro, Macro, Development', icon: BarChart3 },
-  { name: 'Government', topics: 'Constitution, Political Theory', icon: Landmark },
-  { name: 'Literature in English', topics: 'Drama, Prose, Poetry', icon: BookOpen },
-  { name: 'Commerce', topics: 'Trade, Banking, Insurance', icon: BriefcaseBusiness },
-  { name: 'Accounting', topics: 'Bookkeeping, Financial Statements', icon: NotebookTabs },
-  { name: 'Agricultural Science', topics: 'Agronomy, Livestock, Forestry', icon: Sprout },
-  { name: 'Civic Education', topics: 'Values, Rights, Governance', icon: Handshake },
-  { name: 'Christian Religious Knowledge', topics: 'Themes, Epistles, Gospels', icon: Plus },
-  { name: 'Islamic Religious Knowledge', topics: 'Quran, Hadith, Fiqh', icon: Globe },
-  { name: 'History', topics: 'Pre-Colonial, Colonial, Modern', icon: ScrollText },
-  { name: 'Further Mathematics', topics: 'Mechanics, Pure Maths, Stats', icon: Target },
+const ALL_17_SUBJECTS = [
+  { name: 'Use of English', topics: 'Comprehension, Lexis, Structure, Oral Forms', icon: 'record_voice_over', compulsory: true, tag: 'Mandatory · 60 Qs' },
+  { name: 'Mathematics', topics: 'Algebra, Calculus, Statistics, Geometry', icon: 'calculate', tag: 'Elective · 40 Qs' },
+  { name: 'Physics', topics: 'Mechanics, Waves, Optics, Electromagnetism', icon: 'bolt', tag: 'Elective · 40 Qs' },
+  { name: 'Chemistry', topics: 'Organic, Inorganic, Physical, Stoichiometry', icon: 'science', tag: 'Elective · 40 Qs' },
+  { name: 'Biology', topics: 'Anatomy, Ecology, Genetics, Physiology', icon: 'eco', tag: 'Elective · 40 Qs' },
+  { name: 'Economics', topics: 'Micro, Macro, Public Finance, Development', icon: 'trending_up', tag: 'Elective · 40 Qs' },
+  { name: 'Government', topics: 'Constitutional History, Political Thought, Institutions', icon: 'account_balance', tag: 'Elective · 40 Qs' },
+  { name: 'Literature in English', topics: 'Drama, African Prose, Poetic Devices', icon: 'auto_stories', tag: 'Elective · 40 Qs' },
+  { name: 'Geography', topics: 'Physical Geography, Map Reading, Climatology', icon: 'public', tag: 'Elective · 40 Qs' },
+  { name: 'Commerce', topics: 'Trade, Banking, Capital Market, Insurance', icon: 'payments', tag: 'Elective · 40 Qs' },
+  { name: 'Principles of Accounts', topics: 'Bookkeeping, Trial Balance, Company Accounts', icon: 'receipt_long', tag: 'Elective · 40 Qs' },
+  { name: 'Agricultural Science', topics: 'Agronomy, Animal Science, Soil Science, Forestry', icon: 'agriculture', tag: 'Elective · 40 Qs' },
+  { name: 'Civic Education', topics: 'Human Rights, Democratic Governance, Citizenship', icon: 'how_to_vote', tag: 'Elective · 40 Qs' },
+  { name: 'Christian Religious Knowledge', topics: 'Old Testament Themes, Epistles, Gospels', icon: 'church', tag: 'Elective · 40 Qs' },
+  { name: 'Islamic Religious Knowledge', topics: 'Quranic Exegesis, Hadith, Fiqh, Islamic History', icon: 'mosque', tag: 'Elective · 40 Qs' },
+  { name: 'History', topics: 'Pre-Colonial Kingdoms, 1914 Amalgamation, Modern Nigeria', icon: 'history_edu', tag: 'Elective · 40 Qs' },
+  { name: 'Further Mathematics', topics: 'Pure Maths, Coordinate Geometry, Mechanics, Vectors', icon: 'functions', tag: 'Elective · 40 Qs' },
 ];
 
-const sectionLabel = 'section-kicker text-[10px] sm:text-xs font-semibold uppercase tracking-[0.18em]';
-const sectionHeading = 'section-heading font-display text-xl sm:text-3xl lg:text-4xl font-semibold leading-tight tracking-tight text-white';
-
 export default function LandingPage() {
+  const navigate = useNavigate();
   const heroRef = useInView(0.1);
   const featuresRef = useInView();
   const subjectsRef = useInView();
   const pricingRef = useInView();
   const statsRef = useInView();
   const howItWorksRef = useInView();
-  const aiRef = useInView();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cbtKeyModalOpen, setCbtKeyModalOpen] = useState(false);
+  const [cbtKeyInput, setCbtKeyInput] = useState('');
+  const [falkeDrawerOpen, setFalkeDrawerOpen] = useState(true);
+  const [falkeLanguage, setFalkeLanguage] = useState<'english' | 'pidgin'>('english');
+  const [selectedOption, setSelectedOption] = useState<'A' | 'B' | 'C' | 'D'>('B');
+  const [activeSubjectTab, setActiveSubjectTab] = useState('english');
+  const [secondsRemaining, setSecondsRemaining] = useState(108 * 60 + 22); // 01:48:22
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = typeof window !== 'undefined' ? (localStorage.getItem('accessToken') || localStorage.getItem('token')) : null;
+    setIsLoggedIn(!!token);
+  }, []);
+
+  // Live countdown timer in hero console preview
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSecondsRemaining((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTimer = (secs: number) => {
+    const h = Math.floor(secs / 3600);
+    const m = Math.floor((secs % 3600) / 60);
+    const s = secs % 60;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  };
+
+  const handleCbtKeySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (cbtKeyInput.trim()) {
+      setCbtKeyModalOpen(false);
+      navigate(`/auth?mode=cbt_key&key=${encodeURIComponent(cbtKeyInput.trim())}`);
+    }
+  };
 
   return (
-    <div className="landing-page landing-shell min-h-screen w-full max-w-full overflow-x-hidden bg-bg-primary font-body text-text-primary selection:bg-blue-500/30 selection:text-white">
-      <header className="site-header fixed top-0 inset-x-0 z-50 border-b border-white/[0.08] bg-[#0a1020]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 sm:h-[76px] max-w-7xl items-center justify-between px-3 sm:px-6">
-          <Link to="/" aria-label="Aurikrex Exam Arena home" className="shrink-0"><BrandMark /></Link>
-          <nav className="hidden items-center gap-8 text-xs sm:text-sm font-medium text-slate-400 xl:flex">
-            <a href="#features" className="transition-colors hover:text-white">Features</a>
-            <a href="#subjects" className="transition-colors hover:text-white">Subjects</a>
-            <a href="#how-it-works" className="transition-colors hover:text-white">How it works</a>
-            <a href="#pricing" className="transition-colors hover:text-white">Pricing</a>
-          </nav>
-          <div className="flex min-w-0 items-center gap-1 sm:gap-3 xl:gap-4">
-            <AuriCoinBadge compact className="shrink-0 px-2 sm:px-2.5" />
-            <AurikrexAppsSwitcher />
-            <ThemeToggle className="hidden min-h-11 min-w-11 xl:flex" />
-            <Link to="/auth?mode=login" className="hidden text-xs sm:text-sm font-medium text-slate-300 transition-colors hover:text-white xl:inline-flex">Sign in</Link>
-            <Link to="/auth?mode=register" className="hidden min-h-11 items-center rounded-lg bg-white px-3 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-[0_8px_24px_rgba(255,255,255,0.08)] transition hover:bg-blue-50 active:scale-[0.98] xl:inline-flex xl:px-4">Get started</Link>
-            <button className="flex min-h-11 min-w-11 items-center justify-center rounded-lg p-2 text-slate-300 transition hover:bg-white/[0.06] hover:text-white xl:hidden" aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={mobileMenuOpen} aria-controls="mobile-navigation" onClick={() => setMobileMenuOpen((open) => !open)}>{mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
+    <div className="landing-page landing-shell min-h-screen w-full max-w-full overflow-x-hidden bg-bg-primary font-body-md text-text-primary antialiased selection:bg-accent-royal-blue selection:text-white">
+      {/* ========================================================================= */}
+      {/* 1. PUBLIC BETA ANNOUNCEMENT BANNER */}
+      {/* ========================================================================= */}
+      <div className="w-full bg-surface-container-low/90 border-b border-border-dark py-1.5 px-4 backdrop-blur-sm">
+        <div className="max-w-[1440px] mx-auto flex items-center justify-between text-xs text-text-secondary-dark gap-2">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-tertiary-container/30 text-tertiary border border-tertiary/40">
+              Public Beta
+            </span>
+            <span className="text-text-primary-dark font-medium">100% Free Full Access for Every UTME Candidate.</span>
+            <span className="text-text-muted-dark hidden lg:inline">— All 180Q full mocks, topic drills, and Falke AI tutor unlocked.</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-3 font-mono text-[11px] text-text-muted-dark">
+            <span className="flex items-center gap-1.5 text-primary">
+              <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse" />
+              2025/2026 JAMB Portal Synced
+            </span>
           </div>
         </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 2. TOP NAVIGATION BAR */}
+      {/* ========================================================================= */}
+      <header className="sticky top-0 z-50 bg-bg-secondary-dark/95 border-b border-border-dark shadow-sm backdrop-blur-md">
+        <div className="flex justify-between items-center w-full px-4 md:px-8 max-w-[1440px] mx-auto h-16">
+          {/* Logo + Brand */}
+          <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="relative w-9 h-9 rounded-xl overflow-hidden ring-1 ring-border-dark group-hover:ring-accent-royal-blue/60 transition-all flex items-center justify-center bg-surface-container shrink-0">
+                <img
+                  src="/favicon.svg"
+                  alt="Aurikrex Exam Arena Circular Emblem"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="text-headline-sm font-headline-sm font-bold text-text-primary-dark tracking-tight">Aurikrex Exam Arena</span>
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-accent-royal-blue/20 text-primary border border-accent-royal-blue/40">BETA</span>
+                </div>
+                <span className="text-[11px] text-text-muted-dark font-mono-data leading-tight">by Aurikrex</span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Clean Marketing Navigation Links (Scroll Anchors) */}
+          <nav className="hidden lg:flex items-center gap-8 text-label-md font-label-md text-text-secondary-dark">
+            <a href="#features" className="hover:text-text-primary-dark transition-colors duration-150">Features</a>
+            <a href="#subjects" className="hover:text-text-primary-dark transition-colors duration-150">17 Subjects</a>
+            <a href="#pricing" className="hover:text-text-primary-dark transition-colors duration-150">Free Beta</a>
+            <Link to="/auth?mode=cbt_key" className="hover:text-text-primary-dark transition-colors duration-150 flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[16px] text-accent-ai-gold">vpn_key</span>
+              <span>CBT Key</span>
+            </Link>
+          </nav>
+
+          {/* Trailing Action Controls */}
+          <div className="flex items-center gap-3">
+            <ThemeToggle className="min-h-9 min-w-9" />
+
+            {isLoggedIn ? (
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-variant text-text-primary-dark border border-border-dark text-label-md font-label-md font-semibold transition-all active:scale-[0.98]"
+              >
+                <span className="material-symbols-outlined text-[18px]">dashboard</span>
+                <span>Dashboard</span>
+              </Link>
+            ) : (
+              <>
+                <Link
+                  to="/auth?mode=login"
+                  className="hidden sm:inline-flex px-3.5 py-2 text-label-md font-label-md font-medium text-text-secondary-dark hover:text-text-primary-dark transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/mock-setup"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-royal-blue hover:bg-primary-container text-white text-label-md font-label-md font-semibold shadow-md active:scale-[0.98] transition-all"
+                >
+                  <span className="material-symbols-outlined text-[18px]">rocket_launch</span>
+                  <span>Start Free Mock</span>
+                </Link>
+              </>
+            )}
+
+            {/* Mobile Hamburger Menu */}
+            <button
+              className="lg:hidden p-2 rounded-lg text-text-secondary-dark hover:text-text-primary hover:bg-surface-container"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle navigation"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Dropdown */}
         {mobileMenuOpen && (
-          <div id="mobile-navigation" className="mobile-nav border-t border-white/[0.07] bg-[#0a1020] px-4 py-4 sm:px-6 xl:hidden">
-            <div className="mb-3 flex items-center justify-between">
-              <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Menu</span>
-              <button type="button" className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-xs sm:text-sm font-semibold text-slate-300 transition hover:bg-white/[0.06] hover:text-white" onClick={() => setMobileMenuOpen(false)}>
-                <X className="h-4 w-4" />Close
-              </button>
-            </div>
-            <div className="mb-2 flex min-h-11 items-center justify-between rounded-lg px-3 text-xs sm:text-sm font-medium text-slate-300">
-              <span>Dark mode</span>
-              <ThemeToggle className="min-h-11 min-w-11" />
-            </div>
-            <nav className="grid gap-1 text-xs sm:text-sm font-medium text-slate-300" aria-label="Mobile navigation">
-              <a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a>
-              <a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#subjects" onClick={() => setMobileMenuOpen(false)}>Subjects</a>
-              <a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>How it works</a>
-              <a className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-              <Link className="flex min-h-11 items-center rounded-lg px-3 transition hover:bg-white/[0.06] hover:text-white" to="/auth?mode=login" onClick={() => setMobileMenuOpen(false)}>Sign in</Link>
-              <Link className="mt-1 flex min-h-11 items-center justify-center rounded-lg bg-blue-600 px-3 font-semibold text-white transition hover:bg-blue-500 text-xs sm:text-sm" to="/auth?mode=register" onClick={() => setMobileMenuOpen(false)}>Get started</Link>
+          <div className="lg:hidden border-t border-border-dark bg-bg-secondary-dark px-4 py-4 space-y-3">
+            <nav className="grid gap-2 text-label-md font-label-md">
+              <a href="#features" className="p-2 rounded-lg hover:bg-surface-container text-text-secondary-dark" onClick={() => setMobileMenuOpen(false)}>Features</a>
+              <a href="#subjects" className="p-2 rounded-lg hover:bg-surface-container text-text-secondary-dark" onClick={() => setMobileMenuOpen(false)}>17 JAMB Subjects</a>
+              <a href="#pricing" className="p-2 rounded-lg hover:bg-surface-container text-text-secondary-dark" onClick={() => setMobileMenuOpen(false)}>Free Beta Pricing</a>
+              <Link to="/auth?mode=cbt_key" className="p-2 rounded-lg hover:bg-surface-container text-text-secondary-dark flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                <span className="material-symbols-outlined text-accent-ai-gold text-[18px]">vpn_key</span>
+                <span>CBT Key Access</span>
+              </Link>
+              {isLoggedIn ? (
+                <Link to="/dashboard" className="p-2 rounded-lg bg-surface-container text-text-primary-dark font-semibold flex items-center gap-2" onClick={() => setMobileMenuOpen(false)}>
+                  <span className="material-symbols-outlined text-[18px]">dashboard</span>
+                  <span>Go to Dashboard</span>
+                </Link>
+              ) : (
+                <>
+                  <Link to="/auth?mode=login" className="p-2 rounded-lg hover:bg-surface-container text-text-secondary-dark" onClick={() => setMobileMenuOpen(false)}>Sign In</Link>
+                  <Link to="/mock-setup" className="mt-2 text-center py-2.5 rounded-lg bg-accent-royal-blue text-white font-semibold" onClick={() => setMobileMenuOpen(false)}>Start Free Mock</Link>
+                </>
+              )}
             </nav>
           </div>
         )}
       </header>
 
-      <main className="pt-16 sm:pt-[76px]">
-        <section className="hero-section relative overflow-hidden border-b border-white/[0.06] px-4 pb-12 pt-8 sm:px-6 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20">
-          <div className="hero-glow pointer-events-none absolute inset-0 overflow-hidden bg-[radial-gradient(circle_at_72%_28%,rgba(72,83,255,0.2),transparent_33%),radial-gradient(circle_at_20%_0%,rgba(21,132,255,0.10),transparent_30%)]" />
-          <div className="hero-rule pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
-          <div ref={heroRef.ref} className="relative z-10 mx-auto grid min-w-0 max-w-7xl grid-cols-1 items-center gap-8 sm:gap-16 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className={`${heroRef.visible ? 'animate-slide-in-left' : 'opacity-0'}`}>
-              <div className="mb-4 sm:mb-6 inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-blue-400/20 bg-blue-400/[0.08] px-2.5 py-1 text-[11px] sm:text-xs font-semibold text-blue-200"><Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-blue-300" /> Nigeria's focused UTME practice platform</div>
-              <h1 className="hero-title max-w-2xl font-display text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-semibold leading-[1.15] sm:leading-[1.05] tracking-tight text-white">Practice with purpose. <span className="bg-gradient-to-r from-blue-300 via-indigo-300 to-violet-300 bg-clip-text text-transparent">Score with confidence.</span></h1>
-              <p className="hero-copy mt-3 sm:mt-6 max-w-xl text-xs sm:text-base leading-5 sm:leading-7 text-slate-400">A realistic JAMB CBT experience with curated questions, clear explanations, and progress insights that help you make every study session count.</p>
-              <div className="mt-6 sm:mt-9 flex flex-col items-stretch gap-2.5 sm:flex-row sm:flex-wrap sm:items-center">
-                <Link to="/auth?mode=register" className="group inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 sm:px-5 sm:py-3.5 text-xs sm:text-sm font-semibold text-white sm:w-auto shadow-[0_14px_30px_rgba(37,99,235,0.28)] transition hover:-translate-y-0.5 hover:bg-blue-500 active:scale-[0.98]">Start practicing <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" /></Link>
-                <a href="#how-it-works" className="secondary-cta inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.035] px-4 py-2.5 sm:px-5 sm:py-3.5 text-xs sm:text-sm font-semibold text-slate-200 sm:w-auto transition hover:border-white/20 hover:bg-white/[0.07]"><Play className="h-4 w-4 text-blue-300" /> See how it works</a>
+      {/* ========================================================================= */}
+      {/* 3. HERO SECTION */}
+      {/* ========================================================================= */}
+      <section className="relative pt-12 pb-20 px-4 md:px-8 max-w-[1440px] mx-auto hero-glow-radial overflow-hidden">
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-accent-royal-blue/15 blur-[120px] pointer-events-none rounded-full" />
+        <div className="flex flex-col items-center text-center max-w-4xl mx-auto space-y-6">
+          {/* Kicker Pill */}
+          <div className="inline-flex max-w-full items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full bg-surface-container border border-border-dark shadow-sm">
+            <span className="material-symbols-outlined text-accent-streak-rose text-[16px] shrink-0">local_fire_department</span>
+            <span className="text-xs sm:text-label-sm font-label-sm text-text-secondary-dark text-left truncate sm:overflow-visible">
+              <strong className="text-text-primary-dark">Nigeria's UTME Platform</strong><span className="hidden xs:inline"> · Built to guarantee 300+</span>
+            </span>
+            <span className="material-symbols-outlined text-text-muted-dark text-[14px] shrink-0 hidden xs:inline">arrow_forward</span>
+          </div>
+
+          {/* Main Headline */}
+          <h1 className="text-2xl xs:text-3xl sm:text-headline-xl font-headline-xl text-text-primary-dark tracking-tight max-w-3xl">
+            Practice with Purpose. <br className="hidden sm:inline" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-tertiary">
+              Score 300+ with Confidence.
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-body-lg font-body-lg text-text-secondary-dark max-w-2xl">
+            The cyber-precise CBT simulation engine engineered strictly for Nigerian UTME candidates. 1:1 JAMB interface replication, algorithmic deficit triage, and instant AI explanations in English &amp; Nigerian Pidgin.
+          </p>
+
+          {/* Primary Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-center gap-3.5 pt-2 w-full sm:w-auto">
+            <Link
+              to="/mock-setup"
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-accent-royal-blue hover:bg-primary-container text-white font-label-md text-label-md font-bold shadow-lg shadow-accent-royal-blue/25 active:scale-[0.98] transition-all"
+            >
+              <span className="material-symbols-outlined text-[20px]">quiz</span>
+              <span>Launch Full 4-Subject Mock (Free)</span>
+            </Link>
+            <Link
+              to="/questions"
+              className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-surface-container hover:bg-surface-variant text-text-primary-dark border border-border-dark font-label-md text-label-md font-semibold active:scale-[0.98] transition-all"
+            >
+              <span className="material-symbols-outlined text-tertiary text-[20px]">flash_on</span>
+              <span>Try 15m Deficit Drill</span>
+            </Link>
+          </div>
+
+          {/* Trust Micro-Badges */}
+          <div className="flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-label-sm font-label-sm text-text-muted-dark pt-1">
+            <span className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-tertiary text-[18px]">verified</span> Zero credit card required
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-secondary text-[18px]">offline_bolt</span> Cyber-cafe offline resilience
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-accent-ai-gold text-[18px]">history_edu</span> Complete accredited past questions (1983–2024)
+            </span>
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* 4. HERO INTERACTIVE CONSOLE PREVIEW (Live 1:1 JAMB CBT Replication) */}
+        {/* ========================================================================= */}
+        <div className="mt-12 rounded-2xl bg-bg-secondary-dark border border-border-dark shadow-2xl overflow-hidden ring-1 ring-border-dark" id="simulator-preview">
+          {/* Cockpit Bar */}
+          <div className="bg-surface-container-low px-4 py-3 border-b border-border-dark flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-accent-streak-rose/80 inline-block" />
+                <span className="w-3 h-3 rounded-full bg-warning-amber/80 inline-block" />
+                <span className="w-3 h-3 rounded-full bg-tertiary/80 inline-block" />
               </div>
-              <div className="mt-5 sm:mt-8 flex flex-wrap items-center gap-x-4 sm:gap-x-6 gap-y-2 text-[11px] sm:text-xs text-slate-500"><span className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-emerald-400" /> Secure & private</span><span className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5 text-blue-300" /> Beta Access</span><span className="flex items-center gap-1.5"><Star className="h-3.5 w-3.5 text-amber-300" /> Early Preview</span></div>
+              <span className="text-mono-data font-mono-data text-xs text-text-muted-dark hidden sm:inline">|</span>
+              <div className="flex items-center gap-2">
+                <span className="text-label-sm font-label-sm text-text-primary-dark font-semibold">2025 UTME CBT SIMULATOR ENGINE</span>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono-data bg-surface-container text-secondary border border-border-dark">EXAM ROOM AKX-702</span>
+              </div>
             </div>
-            <div className={`${heroRef.visible ? 'animate-slide-in-right' : 'opacity-0'}`} style={{ animationDelay: '0.15s' }}><ExamInterfaceVisual /></div>
-          </div>
-        </section>
 
-        <section className="stats-band border-b border-white/[0.06] bg-[#0d1426]/70 px-4 py-8 sm:py-10 sm:px-6">
-          <div ref={statsRef.ref} className={`mx-auto grid max-w-7xl grid-cols-2 divide-x divide-y divide-white/[0.08] md:grid-cols-4 md:divide-y-0 ${statsRef.visible ? 'animate-slide-up' : 'opacity-0'}`}>
-            {[
-              { value: 1000000, suffix: '+', label: 'Practice questions', icon: <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" /> },
-              { value: 17, label: 'JAMB subjects', icon: <Layers className="h-4 w-4 sm:h-5 sm:w-5" /> },
-              { value: 100000, suffix: '+', label: 'Students enrolled', icon: <Users className="h-4 w-4 sm:h-5 sm:w-5" /> },
-              { value: 300, suffix: '+', label: 'Average score boost', icon: <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" /> },
-            ].map((stat) => <div key={stat.label} className="flex min-w-0 flex-col items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-0 text-center first:border-l-0"><div className="stat-icon text-blue-300">{stat.icon}</div><div className="stat-value font-display text-xl sm:text-3xl font-semibold tracking-[-0.05em] text-white"> <AnimatedCounter target={stat.value} suffix={stat.suffix} /></div><div className="stat-label text-xs sm:text-[13px] font-medium text-slate-500">{stat.label}</div></div>)}
-          </div>
-        </section>
-
-        <section id="features" className="px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-          <div className="mx-auto max-w-7xl">
-            <div ref={featuresRef.ref} className={`mx-auto mb-10 sm:mb-14 max-w-2xl text-center ${featuresRef.visible ? 'animate-slide-up' : 'opacity-0'}`}><div className={`${sectionLabel} text-blue-300`}>Everything you need to improve</div><h2 className={`${sectionHeading} mt-3 sm:mt-5`}>Built for the way JAMB is actually taken.</h2><p className="mt-3 sm:mt-5 text-xs sm:text-base leading-5 sm:leading-7 text-slate-400">Focused tools, realistic practice, and feedback that moves you forward — without the noise.</p></div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {[
-                { icon: <Monitor className="h-5 w-5" />, title: 'Realistic exam simulator', text: 'Practice in a faithful CBT environment with the same pace, navigation, timer, and question flow you will meet on exam day.' },
-                { icon: <BookOpen className="h-5 w-5" />, title: 'Step-by-step explanations', text: 'Understand the method behind each answer with clear explanations, diagrams, and curriculum-aligned reasoning.' },
-                { icon: <Layers className="h-5 w-5" />, title: 'Fresh practice every time', text: 'Smart question selection keeps your mocks varied, balanced, and focused on the areas that need more work.' },
-                { icon: <BarChart3 className="h-5 w-5" />, title: 'Performance analytics', text: 'See how you are doing by subject, topic, and difficulty so revision becomes specific instead of stressful.' },
-                { icon: <Shield className="h-5 w-5" />, title: 'CBT key access', text: 'Use a unique access key to resume your preparation from any trusted cyber cafe or shared device.' },
-                { icon: <Brain className="h-5 w-5" />, title: 'Falke AI study assistant', text: 'Ask questions in simple English or Pidgin and get useful, focused support when you need another explanation.' },
-              ].map((feature) => <div key={feature.title} className="feature-card group rounded-2xl border border-white/[0.08] bg-white/[0.035] p-4 sm:p-6 shadow-[0_18px_45px_rgba(0,0,0,0.12)] transition duration-200 hover:-translate-y-1 hover:border-blue-400/30 hover:bg-white/[0.055]"><div className="mb-4 sm:mb-6 flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/[0.09] text-blue-300 transition group-hover:bg-blue-400/[0.15]">{feature.icon}</div><h3 className="feature-title font-display text-sm sm:text-base font-semibold tracking-tight text-white">{feature.title}</h3><p className="feature-copy mt-2 sm:mt-3 text-xs sm:text-sm leading-5 sm:leading-6 text-slate-400">{feature.text}</p></div>)}
+            {/* 120-minute Live Countdown timer */}
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 px-3 py-1 rounded bg-bg-primary-dark border border-border-dark">
+                <span className="material-symbols-outlined text-accent-streak-rose text-[18px]">timer</span>
+                <span className="text-mono-timer font-mono-timer text-lg text-primary tracking-widest">{formatTimer(secondsRemaining)}</span>
+                <span className="text-[10px] text-text-muted-dark font-mono-data uppercase">Remaining</span>
+              </div>
+              <Link
+                to="/mock-setup"
+                className="px-3 py-1 text-xs rounded bg-surface-container-high hover:bg-surface-variant text-text-secondary-dark hover:text-text-primary-dark border border-border-dark font-mono-data"
+              >
+                [S] Submit Exam
+              </Link>
             </div>
           </div>
-        </section>
 
-        <section className="section-band ai-band relative overflow-hidden border-y border-white/[0.06] bg-[#0d1426]/60 px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-          <div ref={aiRef.ref} className={`mx-auto grid max-w-7xl items-center gap-10 sm:gap-16 lg:grid-cols-[1.05fr_0.95fr] ${aiRef.visible ? '' : 'opacity-0'}`}><div className={`${aiRef.visible ? 'animate-slide-in-left' : ''}`}><AssistantPanel /></div><div className={`${aiRef.visible ? 'animate-slide-in-right' : ''}`} style={{ animationDelay: '0.15s' }}><div className={`${sectionLabel} text-violet-300`}>A little extra help, right when you need it</div><h2 className={`${sectionHeading} mt-3 sm:mt-5`}>Turn “I don’t get it” into a next step.</h2><p className="mt-3 sm:mt-5 max-w-xl text-xs sm:text-base leading-5 sm:leading-7 text-slate-400">The Falke AI study assistant is designed to help you understand difficult topics in the language and level that works for you — not to overwhelm you with more content.</p><ul className="mt-5 sm:mt-7 space-y-3 sm:space-y-4">{['Conversational tutoring in simple English and Pidgin', 'Explains JAMB topics across all 17 subjects', 'Identifies weak areas and creates targeted drills', 'Available 24/7 on the Max plan'].map((item) => <li key={item} className="feature-list-item flex items-start gap-2.5 sm:gap-3 text-xs sm:text-sm text-slate-300"><span className="mt-0.5 flex h-4 w-4 sm:h-5 sm:w-5 shrink-0 items-center justify-center rounded-full bg-emerald-400/15 text-emerald-300"><Check className="h-3 w-3 sm:h-3.5 sm:w-3.5" /></span>{item}</li>)}</ul><Link to="/auth?mode=register" className="ai-cta mt-6 sm:mt-8 inline-flex items-center gap-2 rounded-lg border border-violet-400/30 bg-violet-400/[0.09] px-3.5 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm font-semibold text-violet-200 transition hover:bg-violet-400/[0.15]">Explore the assistant <MessageSquare className="h-4 w-4" /></Link></div></div>
-        </section>
+          {/* Subject Tabs (4 Registered JAMB Combination) */}
+          <div className="bg-surface-container px-4 flex overflow-x-auto border-b border-border-dark custom-scroll">
+            <button
+              onClick={() => setActiveSubjectTab('english')}
+              className={`flex items-center gap-2 px-4 py-3 text-label-md font-label-md font-semibold whitespace-nowrap transition-colors ${activeSubjectTab === 'english' ? 'text-text-primary-dark border-b-2 border-accent-royal-blue bg-surface-container-high' : 'text-text-secondary-dark hover:text-text-primary-dark'}`}
+            >
+              <span>Use of English</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-surface-container text-tertiary font-mono-data">48/60</span>
+            </button>
+            <button
+              onClick={() => setActiveSubjectTab('maths')}
+              className={`flex items-center gap-2 px-4 py-3 text-label-md font-label-md font-semibold whitespace-nowrap transition-colors ${activeSubjectTab === 'maths' ? 'text-text-primary-dark border-b-2 border-accent-royal-blue bg-surface-container-high' : 'text-text-secondary-dark hover:text-text-primary-dark'}`}
+            >
+              <span>Mathematics</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-surface-container text-text-muted-dark font-mono-data">29/40</span>
+            </button>
+            <button
+              onClick={() => setActiveSubjectTab('physics')}
+              className={`flex items-center gap-2 px-4 py-3 text-label-md font-label-md font-semibold whitespace-nowrap transition-colors ${activeSubjectTab === 'physics' ? 'text-text-primary-dark border-b-2 border-accent-royal-blue bg-surface-container-high' : 'text-text-secondary-dark hover:text-text-primary-dark'}`}
+            >
+              <span>Physics</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-surface-container text-text-muted-dark font-mono-data">34/40</span>
+            </button>
+            <button
+              onClick={() => setActiveSubjectTab('chemistry')}
+              className={`flex items-center gap-2 px-4 py-3 text-label-md font-label-md font-semibold whitespace-nowrap transition-colors ${activeSubjectTab === 'chemistry' ? 'text-text-primary-dark border-b-2 border-accent-royal-blue bg-surface-container-high' : 'text-text-secondary-dark hover:text-text-primary-dark'}`}
+            >
+              <span>Chemistry</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-surface-container text-text-muted-dark font-mono-data">18/40</span>
+            </button>
+          </div>
 
-        <section id="subjects" className="px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-          <div className="mx-auto max-w-7xl"><div ref={subjectsRef.ref} className={`mx-auto mb-10 sm:mb-14 max-w-2xl text-center ${subjectsRef.visible ? 'animate-slide-up' : 'opacity-0'}`}><div className={`${sectionLabel} text-emerald-300`}>One platform, the full syllabus</div><h2 className={`${sectionHeading} mt-3 sm:mt-5`}>All 17 JAMB subjects covered.</h2><p className="mt-3 sm:mt-5 text-xs sm:text-base leading-5 sm:leading-7 text-slate-400">From Use of English to Further Mathematics, practice with updated questions mapped to the subjects that matter.</p></div><div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">{ALL_SUBJECTS.map((subject) => { const Icon = subject.icon; return <div key={subject.name} className={`subject-card group rounded-xl border p-3.5 sm:p-4 transition hover:-translate-y-0.5 hover:bg-white/[0.045] ${subject.compulsory ? 'subject-compulsory border-blue-400/30 bg-blue-400/[0.07] hover:border-blue-300/50' : 'border-white/[0.08] bg-white/[0.025] hover:border-white/[0.16]'}`}><div className="mb-3 sm:mb-4 flex items-start justify-between"><span className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg ${subject.compulsory ? 'bg-blue-400/15 text-blue-200' : 'bg-white/[0.06] text-slate-400'} transition group-hover:text-blue-200`}><Icon className="h-4 w-4 sm:h-[18px] sm:w-[18px]" /></span>{subject.compulsory && <span className="rounded-full bg-blue-400/15 px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-blue-200">Required</span>}</div><p className="subject-title text-xs sm:text-sm font-semibold leading-5 text-white">{subject.name}</p><p className="subject-copy mt-1 text-[11px] sm:text-xs leading-4 sm:leading-5 text-slate-500">{subject.topics}</p></div>})}</div></div>
-        </section>
+          {/* Console Body: 75% Question Canvas + 25% Palette & Diagnostics */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[460px]">
+            {/* Left: Question & Options Canvas (Cols 1-9) */}
+            <div className="lg:col-span-9 p-6 lg:p-8 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-border-dark bg-bg-primary-dark">
+              <div>
+                {/* Question Metadata Strip */}
+                <div className="flex items-center justify-between pb-4 mb-4 border-b border-border-dark">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-1 rounded bg-surface-container text-primary text-xs font-mono-data font-semibold border border-border-dark">Question 14 of 60</span>
+                    <span className="text-xs text-text-muted-dark font-mono-data">1 Mark · Lexis &amp; Structure</span>
+                    <span className="hidden sm:inline-flex items-center gap-1 text-[11px] text-tertiary bg-tertiary-container/20 px-2 py-0.5 rounded border border-tertiary/30">
+                      <span className="material-symbols-outlined text-[13px]">psychology</span> High Yield Deficit Area
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-text-muted-dark font-mono-data">
+                    <span>Subject Index: ENG-014</span>
+                  </div>
+                </div>
 
-        <section id="how-it-works" className="section-band process-band relative overflow-hidden border-y border-white/[0.06] bg-[#0d1426]/60 px-4 py-16 sm:px-6 sm:py-24 lg:py-28">
-          <div className="mx-auto max-w-7xl"><div ref={howItWorksRef.ref} className={`mx-auto mb-10 sm:mb-14 max-w-2xl text-center ${howItWorksRef.visible ? 'animate-slide-up' : 'opacity-0'}`}><div className={`${sectionLabel} text-blue-300`}>Simple, structured progress</div><h2 className={`${sectionHeading} mt-3 sm:mt-5`}>How it works.</h2><p className="mt-3 sm:mt-5 text-xs sm:text-base leading-5 sm:leading-7 text-slate-400">From registration to your first 300+ score, you can start with a clear plan in under five minutes.</p></div><div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-4">{[{ step: '01', title: 'Create your account', text: 'Sign up with email, Google, or a CBT Key from a partner center.', icon: <UserCheck className="h-5 w-5" /> }, { step: '02', title: 'Pick your subjects', text: 'Choose your four-subject UTME combination with English included.', icon: <Target className="h-5 w-5" /> }, { step: '03', title: 'Start practicing', text: 'Take mocks or quick drills and get instant, useful feedback.', icon: <Zap className="h-5 w-5" /> }, { step: '04', title: 'Track and improve', text: 'Use your insights to fix weak spots and watch your score climb.', icon: <TrendingUp className="h-5 w-5" /> }].map((item, index) => <div key={item.step} className="process-card relative rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4 sm:p-5"><div className="flex items-center justify-between"><div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/[0.08] text-blue-200">{item.icon}</div><span className="font-mono text-xs font-semibold tracking-[0.16em] text-blue-300/80">{item.step}</span></div><h3 className="process-title mt-4 sm:mt-6 font-display text-sm sm:text-base font-semibold tracking-tight text-white">{item.title}</h3><p className="process-copy mt-1.5 sm:mt-2 text-xs sm:text-sm leading-5 sm:leading-6 text-slate-400">{item.text}</p>{index < 3 && <div className="absolute -right-4 top-10 hidden h-px w-8 bg-gradient-to-r from-blue-400/40 to-transparent md:block" />}</div>)}</div></div>
-        </section>
+                {/* Stem Prompt */}
+                <div className="space-y-4">
+                  <p className="text-text-secondary-dark text-sm italic font-body-sm">
+                    In the following question, choose the option opposite in meaning to the word or phrase in bold.
+                  </p>
+                  <div className="p-4 rounded-xl bg-surface-container-low border border-border-dark text-headline-sm font-headline-sm text-text-primary-dark">
+                    The vice-chancellor’s address on financial austerity was greeted with <span className="text-primary underline decoration-accent-royal-blue decoration-2 font-bold">taciturn</span> disdain by the student union executives.
+                  </div>
+                </div>
 
-        <section className="performance-section relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24 lg:py-28"><div className="mx-auto grid max-w-7xl items-center gap-10 sm:gap-16 lg:grid-cols-[0.85fr_1.15fr]"><div><div className={`${sectionLabel} text-emerald-300`}>Make revision more specific</div><h2 className={`${sectionHeading} mt-3 sm:mt-5`}>Know exactly where you stand.</h2><p className="mt-3 sm:mt-5 max-w-xl text-xs sm:text-base leading-5 sm:leading-7 text-slate-400">See your performance by subject, topic, and difficulty after every test. The goal is not more data — it is knowing what to do next.</p><ul className="mt-5 sm:mt-7 space-y-3 sm:space-y-4">{['Per-subject score breakdowns', 'Time-per-question analysis', 'Difficulty-based performance trends', 'Progress tracking over time'].map((item) => <li key={item} className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-slate-300"><Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-300" />{item}</li>)}</ul></div><AnalyticsPanel /></div></section>
+                {/* Multiple Choice Option Cards (A, B, C, D) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-6">
+                  {/* Option A */}
+                  <label
+                    onClick={() => setSelectedOption('A')}
+                    className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${selectedOption === 'A' ? 'border-2 border-accent-royal-blue bg-accent-royal-blue/10 shadow-[0_0_16px_rgba(91,114,255,0.22)]' : 'border-border-dark bg-bg-card-dark hover:border-border-hover-dark'}`}
+                  >
+                    <span className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono-data text-xs font-bold shrink-0 ${selectedOption === 'A' ? 'bg-accent-royal-blue text-white' : 'bg-surface-container text-text-secondary-dark border border-border-dark'}`}>A</span>
+                    <div className="flex flex-col">
+                      <span className={`text-body-md font-body-md ${selectedOption === 'A' ? 'text-text-primary-dark font-semibold' : 'text-text-primary-dark'}`}>reticent</span>
+                      <span className="text-[11px] font-mono-data text-text-muted-dark">[Key: A]</span>
+                    </div>
+                  </label>
 
-        <section id="pricing" className="section-band pricing-band relative overflow-hidden border-t border-white/[0.06] bg-[#0d1426]/60 px-4 py-16 sm:px-6 sm:py-24 lg:py-28"><div className="mx-auto max-w-7xl"><div ref={pricingRef.ref} className={`mx-auto mb-10 sm:mb-14 max-w-2xl text-center ${pricingRef.visible ? 'animate-slide-up' : 'opacity-0'}`}><div className={`${sectionLabel} text-amber-300`}>Public Beta — Free Launch Access</div><h2 className={`${sectionHeading} mt-3 sm:mt-5`}>100% Free Full Access for Every Candidate.</h2><p className="mt-3 sm:mt-5 text-xs sm:text-base leading-5 sm:leading-7 text-slate-400">To celebrate our Public Beta launch, every feature is unlocked with zero charge. All students receive Max tier access. Complete subscription plans will be introduced upon our full version launch.</p></div><div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 lg:grid-cols-3">
+                  {/* Option B */}
+                  <label
+                    onClick={() => setSelectedOption('B')}
+                    className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${selectedOption === 'B' ? 'border-2 border-accent-royal-blue bg-accent-royal-blue/10 shadow-[0_0_16px_rgba(91,114,255,0.22)]' : 'border-border-dark bg-bg-card-dark hover:border-border-hover-dark'}`}
+                  >
+                    <span className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono-data text-xs font-bold shrink-0 ${selectedOption === 'B' ? 'bg-accent-royal-blue text-white' : 'bg-surface-container text-text-secondary-dark border border-border-dark'}`}>B</span>
+                    <div className="flex flex-col">
+                      <span className={`text-body-md font-body-md ${selectedOption === 'B' ? 'text-text-primary-dark font-semibold' : 'text-text-primary-dark'}`}>loquacious</span>
+                      <span className="text-[11px] font-mono-data text-primary">[Key: B · Selected]</span>
+                    </div>
+                  </label>
+
+                  {/* Option C */}
+                  <label
+                    onClick={() => setSelectedOption('C')}
+                    className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${selectedOption === 'C' ? 'border-2 border-accent-royal-blue bg-accent-royal-blue/10 shadow-[0_0_16px_rgba(91,114,255,0.22)]' : 'border-border-dark bg-bg-card-dark hover:border-border-hover-dark'}`}
+                  >
+                    <span className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono-data text-xs font-bold shrink-0 ${selectedOption === 'C' ? 'bg-accent-royal-blue text-white' : 'bg-surface-container text-text-secondary-dark border border-border-dark'}`}>C</span>
+                    <div className="flex flex-col">
+                      <span className={`text-body-md font-body-md ${selectedOption === 'C' ? 'text-text-primary-dark font-semibold' : 'text-text-primary-dark'}`}>indolent</span>
+                      <span className="text-[11px] font-mono-data text-text-muted-dark">[Key: C]</span>
+                    </div>
+                  </label>
+
+                  {/* Option D */}
+                  <label
+                    onClick={() => setSelectedOption('D')}
+                    className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${selectedOption === 'D' ? 'border-2 border-accent-royal-blue bg-accent-royal-blue/10 shadow-[0_0_16px_rgba(91,114,255,0.22)]' : 'border-border-dark bg-bg-card-dark hover:border-border-hover-dark'}`}
+                  >
+                    <span className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono-data text-xs font-bold shrink-0 ${selectedOption === 'D' ? 'bg-accent-royal-blue text-white' : 'bg-surface-container text-text-secondary-dark border border-border-dark'}`}>D</span>
+                    <div className="flex flex-col">
+                      <span className={`text-body-md font-body-md ${selectedOption === 'D' ? 'text-text-primary-dark font-semibold' : 'text-text-primary-dark'}`}>reclusive</span>
+                      <span className="text-[11px] font-mono-data text-text-muted-dark">[Key: D]</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              {/* Bottom Navigation Controls & Hotkeys */}
+              <div className="flex flex-wrap items-center justify-between gap-4 pt-6 mt-6 border-t border-border-dark">
+                <div className="flex items-center gap-2">
+                  <button className="px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-variant text-text-secondary-dark hover:text-text-primary-dark border border-border-dark text-label-sm font-label-sm flex items-center gap-1.5 active:scale-[0.98] transition-all">
+                    <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+                    <span>[P] Previous</span>
+                  </button>
+                  <button className="px-4 py-2 rounded-lg bg-accent-royal-blue hover:bg-primary-container text-white text-label-sm font-label-sm font-semibold flex items-center gap-1.5 active:scale-[0.98] transition-all">
+                    <span>[N] Next Question</span>
+                    <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  </button>
+                </div>
+
+                {/* Falke AI Drawer Trigger Button */}
+                <button
+                  onClick={() => setFalkeDrawerOpen(!falkeDrawerOpen)}
+                  className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-surface-container border border-accent-ai-gold/40 text-accent-ai-gold hover:bg-accent-ai-gold/10 text-label-sm font-label-sm transition-all"
+                >
+                  <span className="material-symbols-outlined text-[18px]">smart_toy</span>
+                  <span className="font-semibold">{falkeDrawerOpen ? 'Hide Falke AI Explainer' : 'Ask Falke AI (Instant)'}</span>
+                  <span className="text-[10px] font-mono-data bg-accent-ai-gold/20 text-accent-ai-gold px-1.5 py-0.5 rounded">0 Coins Hit</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Right: 4-Column Palette Grid & Live Readiness Telemetry (Cols 10-12) */}
+            <div className="lg:col-span-3 p-5 bg-bg-secondary-dark flex flex-col justify-between">
+              <div>
+                {/* Header */}
+                <div className="flex items-center justify-between pb-3 border-b border-border-dark">
+                  <span className="text-label-sm font-label-sm text-text-primary-dark font-semibold">Question Palette</span>
+                  <span className="text-xs font-mono-data text-tertiary">48/60 Done</span>
+                </div>
+
+                {/* Mini Legend */}
+                <div className="flex items-center justify-between py-2 text-[11px] font-mono-data text-text-muted-dark">
+                  <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-tertiary" /> Ans</span>
+                  <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-accent-royal-blue" /> Current</span>
+                  <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded bg-surface-container border border-border-dark" /> Left</span>
+                </div>
+
+                {/* 4-Column Matrix Grid (Sample 20 of 60 nodes) */}
+                <div className="grid grid-cols-4 gap-1.5 pt-2">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((num) => (
+                    <button key={num} className="h-8 rounded bg-tertiary/20 text-tertiary border border-tertiary/40 font-mono-data text-xs font-semibold">
+                      {num}
+                    </button>
+                  ))}
+                  {/* Active Node 14 */}
+                  <button className="h-8 rounded bg-accent-royal-blue text-white ring-2 ring-primary font-mono-data text-xs font-bold">
+                    14
+                  </button>
+                  {[15, 16, 17, 18, 19, 20].map((num) => (
+                    <button key={num} className="h-8 rounded bg-surface-container text-text-secondary-dark border border-border-dark font-mono-data text-xs hover:border-primary/40">
+                      {num}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Live Deficit Triage Diagnostic Mini Widget */}
+              <div className="mt-6 pt-4 border-t border-border-dark bg-surface-container-low p-3.5 rounded-xl">
+                <div className="flex items-center justify-between text-xs font-mono-data mb-2">
+                  <span className="text-text-muted-dark">Readiness Velocity Target</span>
+                  <span className="text-tertiary font-bold">320+ Target Index</span>
+                </div>
+                <div className="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-accent-royal-blue to-tertiary w-[80%]" />
+                </div>
+                <p className="text-[11px] text-text-muted-dark pt-2 leading-relaxed">
+                  Calibrated Target: <strong className="text-text-primary-dark">Competitive Merit Faculty</strong> cut-off safe zone.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Live Falke AI Drawer Preview Mock (Toggleable) */}
+          {falkeDrawerOpen && (
+            <div className="border-t border-border-dark bg-surface-container-high p-5 transition-all">
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-border-dark">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-accent-ai-gold text-[20px]">psychology</span>
+                  <span className="text-label-md font-label-md text-text-primary-dark font-semibold">Falke AI Explanation · Topic Breakdown</span>
+                  <span className="text-xs px-2 py-0.5 rounded bg-tertiary-container/30 text-tertiary font-mono-data">Instant Cache Hit (0 Coins)</span>
+                </div>
+                {/* Language Mode Toggle */}
+                <div className="flex items-center bg-surface-container-low rounded-lg p-0.5 border border-border-dark text-xs">
+                  <button
+                    onClick={() => setFalkeLanguage('english')}
+                    className={`px-2.5 py-1 rounded font-medium transition-all ${falkeLanguage === 'english' ? 'bg-accent-royal-blue text-white' : 'text-text-secondary-dark hover:text-text-primary-dark'}`}
+                  >
+                    Standard Academic English
+                  </button>
+                  <button
+                    onClick={() => setFalkeLanguage('pidgin')}
+                    className={`px-2.5 py-1 rounded font-medium transition-all ${falkeLanguage === 'pidgin' ? 'bg-accent-royal-blue text-white' : 'text-text-secondary-dark hover:text-text-primary-dark'}`}
+                  >
+                    Nigerian Pidgin
+                  </button>
+                </div>
+              </div>
+
+              <div className="text-body-sm font-body-sm text-text-secondary-dark space-y-2">
+                {falkeLanguage === 'english' ? (
+                  <p>
+                    <strong className="text-primary">Why (B) "loquacious" is the correct antonym:</strong> The word <em>taciturn</em> describes someone who is habitually reserved, quiet, or uncommunicative in speech. Its direct opposite is <em>loquacious</em>, meaning extremely talkative, garrulous, or expansive with words.
+                  </p>
+                ) : (
+                  <p>
+                    <strong className="text-primary">Why (B) "loquacious" na the correct answer:</strong> Person wey be <em>taciturn</em> na quiet person wey no dey like talk at all. The direct opposite na person wey dey talk plenty, mouth no dey stay one place — that na <em>loquacious</em>!
+                  </p>
+                )}
+                <div className="p-2.5 rounded-lg bg-surface-container border border-border-dark text-xs font-mono-data text-accent-ai-gold flex items-center justify-between">
+                  <span>Falke Memory Trace: Lexis Antonyms past JAMB patterns (1998, 2004, 2017).</span>
+                  <span className="text-text-muted-dark">Inference time: 4ms</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 5. QUANTOMETRICS & PROVEN RECORD TICKER */}
+      {/* ========================================================================= */}
+      <section className="border-y border-border-dark bg-bg-secondary-dark/60 py-10 px-4 md:px-8">
+        <div ref={statsRef.ref} className="max-w-[1440px] mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="flex flex-col p-5 rounded-2xl bg-bg-card-dark border border-border-dark hover:border-border-hover-dark transition-all">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-mono-timer font-mono-timer text-2xl lg:text-3xl text-primary font-bold">
+                <AnimatedCounter target={1000000} suffix="+" />
+              </span>
+              <span className="material-symbols-outlined text-primary text-[24px]">dataset</span>
+            </div>
+            <span className="text-label-md font-label-md text-text-primary-dark font-semibold">Verified Questions</span>
+            <span className="text-body-sm font-body-sm text-text-muted-dark mt-1">Authentic 1983–2024 JAMB test stems mapped to the 2025 syllabus.</span>
+          </div>
+
+          <div className="flex flex-col p-5 rounded-2xl bg-bg-card-dark border border-border-dark hover:border-border-hover-dark transition-all">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-mono-timer font-mono-timer text-2xl lg:text-3xl text-tertiary font-bold">17 Subjects</span>
+              <span className="material-symbols-outlined text-tertiary text-[24px]">verified_user</span>
+            </div>
+            <span className="text-label-md font-label-md text-text-primary-dark font-semibold">Full UTME Accreditation</span>
+            <span className="text-body-sm font-body-sm text-text-muted-dark mt-1">Science, Commercial &amp; Arts combinations with accurate formula support.</span>
+          </div>
+
+          <div className="flex flex-col p-5 rounded-2xl bg-bg-card-dark border border-border-dark hover:border-border-hover-dark transition-all">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-mono-timer font-mono-timer text-2xl lg:text-3xl text-accent-ai-gold font-bold">0ms Latency</span>
+              <span className="material-symbols-outlined text-accent-ai-gold text-[24px]">bolt</span>
+            </div>
+            <span className="text-label-md font-label-md text-text-primary-dark font-semibold">Instant Falke AI Cache</span>
+            <span className="text-body-sm font-body-sm text-text-muted-dark mt-1">Zero-wait step-by-step explanations cost 0 coins for all indexed queries.</span>
+          </div>
+
+          <div className="flex flex-col p-5 rounded-2xl bg-bg-card-dark border border-border-dark hover:border-border-hover-dark transition-all">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-mono-timer font-mono-timer text-2xl lg:text-3xl text-secondary font-bold">382 / 400</span>
+              <span className="material-symbols-outlined text-secondary text-[24px]">military_tech</span>
+            </div>
+            <span className="text-label-md font-label-md text-text-primary-dark font-semibold">Top Scholar Benchmark</span>
+            <span className="text-body-sm font-body-sm text-text-muted-dark mt-1">Candidates training with Aurikrex average a +68 point score enhancement.</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 6. CORE PLATFORM CAPABILITIES (BENTO GRID PATTERN) */}
+      {/* ========================================================================= */}
+      <section className="py-20 px-4 md:px-8 max-w-[1440px] mx-auto" id="features">
+        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+          <span className="text-label-sm font-label-sm text-primary uppercase tracking-wider font-semibold">Architecture &amp; Engineering</span>
+          <h2 className="text-headline-lg font-headline-lg text-text-primary-dark">Engineered to Eliminate UTME Exam Day Anxiety</h2>
+          <p className="text-body-md font-body-md text-text-secondary-dark">
+            High scores don't happen by accident. We built the exact high-stress ergonomics, key bindings, and algorithmic triage needed to reach 300+.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-6">
+          {/* Card 1: 1:1 CBT Simulator (Span 7) */}
+          <div className="lg:col-span-7 rounded-2xl bg-bg-card-dark border border-border-dark p-7 flex flex-col justify-between hover:border-border-hover-dark transition-all">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-10 h-10 rounded-xl bg-accent-royal-blue/20 text-primary flex items-center justify-center border border-accent-royal-blue/30">
+                  <span className="material-symbols-outlined text-[22px]">keyboard</span>
+                </span>
+                <span className="px-2.5 py-1 rounded bg-surface-container text-xs font-mono-data text-primary">Exact JAMB Key Bindings</span>
+              </div>
+              <h3 className="text-headline-md font-headline-md text-text-primary-dark mb-2">1:1 Official 120-Minute Exam Replica</h3>
+              <p className="text-body-md font-body-md text-text-secondary-dark mb-6">
+                Cyber-cafes often fail candidates with erratic interfaces. Aurikrex maps the authentic Joint Admissions Matriculation Board 8-key system. Train your muscle memory on raw keys:
+                {' '}<code className="text-mono-data font-mono-data text-primary bg-surface-container px-1.5 py-0.5 rounded">[A]</code>,
+                {' '}<code className="text-mono-data font-mono-data text-primary bg-surface-container px-1.5 py-0.5 rounded">[B]</code>,
+                {' '}<code className="text-mono-data font-mono-data text-primary bg-surface-container px-1.5 py-0.5 rounded">[C]</code>,
+                {' '}<code className="text-mono-data font-mono-data text-primary bg-surface-container px-1.5 py-0.5 rounded">[D]</code>,
+                {' '}<code className="text-mono-data font-mono-data text-primary bg-surface-container px-1.5 py-0.5 rounded">[P] Rev</code>,
+                {' '}<code className="text-mono-data font-mono-data text-primary bg-surface-container px-1.5 py-0.5 rounded">[N] Next</code>,
+                {' '}<code className="text-mono-data font-mono-data text-accent-streak-rose bg-surface-container px-1.5 py-0.5 rounded">[S] Submit</code>.
+              </p>
+            </div>
+            <div className="p-4 rounded-xl bg-surface-container-low border border-border-dark flex items-center justify-between text-xs font-mono-data text-text-muted-dark">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-tertiary" /> 180 Questions Mandatory Timer Lockdown
+              </span>
+              <span className="text-text-primary-dark">Instant Score Generation on 00:00:00</span>
+            </div>
+          </div>
+
+          {/* Card 2: 300+ Readiness Dial & Deficit Triage (Span 5) */}
+          <div className="lg:col-span-5 rounded-2xl bg-bg-card-dark border border-border-dark p-7 flex flex-col justify-between hover:border-border-hover-dark transition-all">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-10 h-10 rounded-xl bg-tertiary-container/30 text-tertiary flex items-center justify-center border border-tertiary/40">
+                  <span className="material-symbols-outlined text-[22px]">analytics</span>
+                </span>
+                <span className="px-2.5 py-1 rounded bg-surface-container text-xs font-mono-data text-tertiary">Probability Modeling</span>
+              </div>
+              <h3 className="text-headline-md font-headline-md text-text-primary-dark mb-2">Algorithmic Deficit Triage</h3>
+              <p className="text-body-md font-body-md text-text-secondary-dark mb-6">
+                Stop practicing questions you already know. The engine flags persistent concept blindspots across mechanics, organic chemistry, or lexis and forces high-yield reps until mastery is locked.
+              </p>
+            </div>
+            <div className="p-4 rounded-xl bg-surface-container-low border border-border-dark space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-label-sm font-label-sm text-text-secondary-dark">UNILAG Medicine &amp; Surgery</span>
+                <span className="text-xs font-mono-data text-tertiary font-bold">89% Admission Index</span>
+              </div>
+              <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+                <div className="bg-tertiary h-full w-[89%]" />
+              </div>
+              <div className="flex items-center justify-between text-[11px] text-text-muted-dark font-mono-data">
+                <span>Cut-Off: 315</span>
+                <span>Current Velocity: 328</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3: Falke AI Dual-Dialect Engine (Span 4) */}
+          <div className="lg:col-span-4 rounded-2xl bg-bg-card-dark border border-border-dark p-7 flex flex-col justify-between hover:border-border-hover-dark transition-all">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-10 h-10 rounded-xl bg-accent-ai-gold/20 text-accent-ai-gold flex items-center justify-center border border-accent-ai-gold/30">
+                  <span className="material-symbols-outlined text-[22px]">translate</span>
+                </span>
+                <span className="px-2.5 py-1 rounded bg-surface-container text-xs font-mono-data text-accent-ai-gold">Pidgin &amp; English</span>
+              </div>
+              <h3 className="text-headline-md font-headline-md text-text-primary-dark mb-2">Falke AI Dual-Dialect Tutor</h3>
+              <p className="text-body-md font-body-md text-text-secondary-dark mb-4">
+                Complex calculus or Shakespearean literature questions decoded in plain Queen's English or authentic Nigerian Pidgin ("Make we break this friction formula down sharp sharp").
+              </p>
+            </div>
+            <div className="p-3.5 rounded-xl bg-surface-container border border-border-dark text-xs space-y-2">
+              <div className="flex items-center justify-between font-mono-data text-text-muted-dark">
+                <span>Pidgin Sample:</span>
+                <span className="text-accent-ai-gold font-semibold">Active</span>
+              </div>
+              <p className="text-text-primary-dark italic">
+                "You see this Ohm's Law matter? Voltage na the force wey dey push current pass resistor. So if resistance double, current must drop!"
+              </p>
+            </div>
+          </div>
+
+          {/* Card 4: Cyber-Cafe & Lab CBT Key Authentication (Span 4) */}
+          <div className="lg:col-span-4 rounded-2xl bg-bg-card-dark border border-border-dark p-7 flex flex-col justify-between hover:border-border-hover-dark transition-all" id="cafe-mode">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-10 h-10 rounded-xl bg-secondary-container/20 text-secondary flex items-center justify-center border border-secondary/40">
+                  <span className="material-symbols-outlined text-[22px]">pin</span>
+                </span>
+                <span className="px-2.5 py-1 rounded bg-surface-container text-xs font-mono-data text-secondary">Passwordless Cafe Security</span>
+              </div>
+              <h3 className="text-headline-md font-headline-md text-text-primary-dark mb-2">Disposable CBT Key Login</h3>
+              <p className="text-body-md font-body-md text-text-secondary-dark mb-4">
+                Never type your private password on infected cyber-cafe computers. Generate a single-use 6-character session key from your mobile phone to begin your mock instantly.
+              </p>
+            </div>
+            <div className="flex items-center justify-center gap-2 p-3 bg-surface-container-low rounded-xl border border-border-dark font-mono-data text-primary text-base font-bold tracking-widest">
+              <span>CBT</span>
+              <span>-</span>
+              <span>7 4 8 2 9 1</span>
+            </div>
+          </div>
+
+          {/* Card 5: Complete 17-Subject Curriculum Matrix (Span 4) */}
+          <div className="lg:col-span-4 rounded-2xl bg-bg-card-dark border border-border-dark p-7 flex flex-col justify-between hover:border-border-hover-dark transition-all" id="syllabus">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-10 h-10 rounded-xl bg-accent-streak-rose/20 text-accent-streak-rose flex items-center justify-center border border-accent-streak-rose/30">
+                  <span className="material-symbols-outlined text-[22px]">auto_stories</span>
+                </span>
+                <span className="px-2.5 py-1 rounded bg-surface-container text-xs font-mono-data text-accent-streak-rose">Official 2025 Syllabus</span>
+              </div>
+              <h3 className="text-headline-md font-headline-md text-text-primary-dark mb-2">17 Accredited Subjects</h3>
+              <p className="text-body-md font-body-md text-text-secondary-dark mb-4">
+                From the mandatory Use of English to Government, CRK, IRK, Economics, and Further Maths. No missing topics.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5 text-xs">
+              <span className="px-2 py-1 rounded bg-surface-container text-text-secondary-dark border border-border-dark">English</span>
+              <span className="px-2 py-1 rounded bg-surface-container text-text-secondary-dark border border-border-dark">Maths</span>
+              <span className="px-2 py-1 rounded bg-surface-container text-text-secondary-dark border border-border-dark">Physics</span>
+              <span className="px-2 py-1 rounded bg-surface-container text-text-secondary-dark border border-border-dark">Chemistry</span>
+              <span className="px-2 py-1 rounded bg-surface-container text-text-secondary-dark border border-border-dark">Biology</span>
+              <span className="px-2 py-1 rounded bg-surface-container text-text-secondary-dark border border-border-dark">Economics</span>
+              <Link to="/syllabus" className="px-2 py-1 rounded bg-accent-royal-blue/20 text-primary border border-accent-royal-blue/30 font-semibold hover:underline">+11 more</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 7. 17 ACCREDITED SUBJECTS SHOWCASE */}
+      {/* ========================================================================= */}
+      <section className="py-16 px-4 md:px-8 border-t border-border-dark bg-bg-secondary-dark/40" id="subjects">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+            <span className="text-label-sm font-label-sm text-tertiary uppercase tracking-wider font-semibold">Curriculum Coverage</span>
+            <h2 className="text-headline-lg font-headline-lg text-text-primary-dark">All 17 JAMB UTME Accredited Subjects</h2>
+            <p className="text-body-md font-body-md text-text-secondary-dark">
+              Authentic past questions, KaTeX formula rendering, and syllabi from 1983 through 2024.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {ALL_17_SUBJECTS.map((sub) => (
+              <div
+                key={sub.name}
+                className={`p-4 rounded-xl border transition-all ${sub.compulsory ? 'bg-surface-container border-accent-royal-blue/40 shadow-sm' : 'bg-bg-card border-border hover:border-border-hover'}`}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="material-symbols-outlined text-primary text-[22px]">{sub.icon}</span>
+                  {sub.compulsory ? (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-accent-royal-blue/20 text-primary border border-accent-royal-blue/30">{sub.tag}</span>
+                  ) : (
+                    <span className="text-mono-data font-mono-data text-xs text-text-muted">{sub.tag}</span>
+                  )}
+                </div>
+                <h4 className="text-label-md font-label-md font-bold text-text-primary">{sub.name}</h4>
+                <p className="text-body-sm font-body-sm text-text-secondary mt-1 text-xs line-clamp-2">{sub.topics}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 8. HEAD-TO-HEAD COMPARISON (Old Past Books vs Aurikrex Arena) */}
+      {/* ========================================================================= */}
+      <section className="py-16 px-4 md:px-8 border-y border-border-dark bg-surface-container-low/50">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+            <span className="text-label-sm font-label-sm text-tertiary uppercase tracking-wider font-semibold">The Preparation Gap</span>
+            <h2 className="text-headline-lg font-headline-lg text-text-primary-dark">Why Traditional Past Question Books Fail in 2025</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* The Old Way: Paper Past Question Packs */}
+            <div className="p-7 rounded-2xl bg-bg-card-dark border border-border-dark opacity-75">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-8 h-8 rounded-full bg-error-container/30 text-error flex items-center justify-center">
+                  <span className="material-symbols-outlined text-[18px]">close</span>
+                </span>
+                <h3 className="text-headline-sm font-headline-sm text-text-secondary-dark">Old Paper Past Question Booklets</h3>
+              </div>
+              <ul className="space-y-4 text-body-sm font-body-sm text-text-muted-dark">
+                <li className="flex items-start gap-2.5">
+                  <span className="material-symbols-outlined text-error text-[18px] shrink-0 mt-0.5">cancel</span>
+                  <span>Zero timer pressure; candidate loses track of the 40-seconds-per-question deadline.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="material-symbols-outlined text-error text-[18px] shrink-0 mt-0.5">cancel</span>
+                  <span>Rife with uncorrected typographical errors and outdated answer keys.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="material-symbols-outlined text-error text-[18px] shrink-0 mt-0.5">cancel</span>
+                  <span>No feedback on weak areas; you waste hours repeating questions you already mastered.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="material-symbols-outlined text-error text-[18px] shrink-0 mt-0.5">cancel</span>
+                  <span>No simulation of mouse clicks, cyber-cafe keyboard hotkeys, or auto-submit logic.</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* The Aurikrex Way: Exam Arena */}
+            <div className="p-7 rounded-2xl bg-surface-container border-2 border-accent-royal-blue shadow-xl relative overflow-hidden">
+              <div className="absolute -right-12 -top-12 w-32 h-32 bg-accent-royal-blue/20 rounded-full blur-2xl" />
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="w-8 h-8 rounded-full bg-tertiary-container/40 text-tertiary flex items-center justify-center">
+                    <span className="material-symbols-outlined text-[18px]">check</span>
+                  </span>
+                  <h3 className="text-headline-sm font-headline-sm text-text-primary-dark">Aurikrex Exam Arena Cockpit</h3>
+                </div>
+                <span className="px-2 py-0.5 rounded text-[11px] font-mono-data bg-tertiary/10 text-tertiary border border-tertiary/30">Target: 300+</span>
+              </div>
+              <ul className="space-y-4 text-body-sm font-body-sm text-text-primary-dark">
+                <li className="flex items-start gap-2.5">
+                  <span className="material-symbols-outlined text-tertiary text-[18px] shrink-0 mt-0.5">check_circle</span>
+                  <span><strong>1:1 Authentic JAMB Timer:</strong> Trains strict pacing with red alert triggers below 5 minutes.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="material-symbols-outlined text-tertiary text-[18px] shrink-0 mt-0.5">check_circle</span>
+                  <span><strong>Falke AI Tutor in English &amp; Pidgin:</strong> Instant conceptual clarity with zero delay.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="material-symbols-outlined text-tertiary text-[18px] shrink-0 mt-0.5">check_circle</span>
+                  <span><strong>Deficit Triage Engine:</strong> Detects topic vulnerabilities in real-time and routes targeted drills.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="material-symbols-outlined text-tertiary text-[18px] shrink-0 mt-0.5">check_circle</span>
+                  <span><strong>100% Free Public Beta:</strong> All full mocks, topic drills, and diagnostic modules fully unlocked.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 9. PUBLIC BETA PRICING & GUARANTEE */}
+      {/* ========================================================================= */}
+      <section className="py-20 px-4 md:px-8 max-w-[1440px] mx-auto" id="pricing">
+        <div className="max-w-3xl mx-auto text-center mb-12 space-y-3">
+          <span className="text-label-sm font-label-sm text-warning-amber uppercase tracking-wider font-semibold">Public Beta Launch Pricing</span>
+          <h2 className="text-headline-lg font-headline-lg text-text-primary-dark">100% Free Full Access for Every Candidate.</h2>
+          <p className="text-body-md font-body-md text-text-secondary-dark">
+            To celebrate our Public Beta launch, every feature is unlocked with zero charge. All students receive Max tier access with 5,000 complimentary AuriCoins.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {[
-            { name: 'Practice Drills', price: '₦0', note: 'Free during Public Beta', icon: <Zap className="h-5 w-5" />, tone: 'blue', features: ['Custom topic & difficulty drills', 'Detailed answer explanations', 'Instant grading & score metrics', 'Full past question bank', 'Zero commitments'] },
-            { name: 'UTME Mock Exams', price: '₦0', note: 'Free during Public Beta', icon: <Award className="h-5 w-5" />, tone: 'violet', popular: true, features: ['10 full 4-subject mocks daily', 'Official JAMB-style timer & interface', 'Detailed performance analytics', 'Subject accuracy breakdown', 'CBT Key access'] },
-            { name: 'FalkeAI Smart Tutor', price: '₦0', note: 'Free during Public Beta', icon: <Brain className="h-5 w-5" />, tone: 'pink', features: ['20 free daily Falke AI messages', 'Conversational step-by-step explanations', 'Concept & formula clarifications', 'Diagram & graph assistance', 'Continuous learning support'] },
-          ].map((plan) => <div key={plan.name} className={`pricing-card relative flex min-w-0 flex-col justify-between rounded-2xl p-5 sm:p-6 ${plan.popular ? 'pricing-card-popular border border-blue-400/50 bg-blue-500/[0.08] shadow-[0_22px_60px_rgba(52,75,210,0.18)]' : 'border border-white/[0.08] bg-white/[0.03]'}`}>{plan.popular && <span className="absolute -top-3 left-6 whitespace-nowrap rounded-full bg-blue-500 px-2.5 py-0.5 text-[11px] sm:text-xs font-semibold text-white shadow-[0_8px_18px_rgba(37,99,235,0.25)]">Full Beta Access</span>}<div><div className="flex items-center gap-2.5 sm:gap-3"><div className={`flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl ${plan.tone === 'pink' ? 'bg-pink-400/10 text-pink-300' : plan.tone === 'violet' ? 'bg-violet-400/10 text-violet-200' : 'bg-blue-400/10 text-blue-200'}`}>{plan.icon}</div><h3 className="pricing-title font-display text-base sm:text-lg font-semibold tracking-tight text-white">{plan.name}</h3></div><div className="mt-5 sm:mt-7 flex flex-wrap items-end gap-x-2 gap-y-1"><span className="pricing-price font-display text-2xl sm:text-4xl font-semibold tracking-[-0.06em] text-white">{plan.price}</span><span className="pb-1 text-xs sm:text-sm text-emerald-400 font-semibold">/ free in beta</span></div><p className={`mt-1.5 sm:mt-2 text-xs sm:text-sm font-medium ${plan.tone === 'pink' ? 'text-pink-300' : plan.tone === 'violet' ? 'text-violet-300' : 'text-blue-300'}`}>{plan.note}</p><ul className="mt-5 sm:mt-7 space-y-2.5 sm:space-y-3">{plan.features.map((feature) => <li key={feature} className="pricing-feature flex items-start gap-2 text-xs sm:text-sm leading-5 text-slate-300"><Check className="mt-0.5 h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-emerald-300" />{feature}</li>)}</ul></div><Link to="/auth?mode=register" className={`mt-6 sm:mt-8 inline-flex w-full items-center justify-center rounded-lg px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold transition active:scale-[0.98] ${plan.popular ? 'bg-blue-600 text-white hover:bg-blue-500' : 'border border-white/[0.12] bg-white/[0.04] text-slate-200 hover:border-blue-400/30 hover:bg-blue-400/[0.08]'}`}>Start Free with {plan.name}</Link></div>)}
-        </div><div className="payg-panel mx-auto mt-6 max-w-3xl rounded-2xl border border-blue-500/20 bg-blue-500/[0.05] p-6 text-center"><div className="flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-300"><Sparkles className="h-4 w-4 text-amber-400" /> Public Beta Guarantee</div><h3 className="mt-3 font-display text-xl sm:text-2xl font-bold tracking-tight text-white">No payment required. No hidden fees.</h3><p className="mx-auto mt-2 max-w-lg text-xs sm:text-sm leading-6 text-slate-300">Create your free account in seconds and unlock the complete prep suite. All full mocks, topic drills, and 20 daily Falke AI messages are completely free during public beta.</p><div className="mt-5"><Link to="/auth?mode=register" className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition hover:bg-blue-500 active:scale-[0.98]">Get Started for Free <ArrowRight className="h-4 w-4" /></Link></div></div></div></section>
+            { name: 'Practice Drills', price: '₦0', note: 'Free during Public Beta', icon: 'flash_on', features: ['Custom topic & difficulty drills', 'Detailed answer explanations', 'Instant grading & score metrics', 'Full past question bank', 'Zero commitments'] },
+            { name: 'UTME Mock Exams', price: '₦0', note: 'Free during Public Beta', icon: 'military_tech', popular: true, features: ['Unlimited full 4-subject mocks', 'Official JAMB 8-key timer & UI', 'Detailed performance analytics', 'Subject accuracy breakdown', 'Cyber-cafe CBT Key access'] },
+            { name: 'Falke AI Smart Tutor', price: '₦0', note: 'Free during Public Beta', icon: 'smart_toy', features: ['5,000 free AuriCoins grant', '0 coins for indexed cached queries', 'English & Nigerian Pidgin tabs', 'Concept & formula clarifications', 'Continuous learning support'] },
+          ].map((plan) => (
+            <div
+              key={plan.name}
+              className={`relative flex flex-col justify-between rounded-2xl p-6 ${plan.popular ? 'border-2 border-accent-royal-blue bg-surface-container shadow-xl' : 'border border-border-dark bg-bg-card-dark'}`}
+            >
+              {plan.popular && (
+                <span className="absolute -top-3 left-6 whitespace-nowrap rounded-full bg-accent-royal-blue px-3 py-0.5 text-xs font-semibold text-white shadow-sm">
+                  Full Beta Access
+                </span>
+              )}
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="w-9 h-9 rounded-xl bg-accent-royal-blue/20 text-primary flex items-center justify-center">
+                    <span className="material-symbols-outlined text-[20px]">{plan.icon}</span>
+                  </span>
+                  <h3 className="text-headline-sm font-headline-sm text-text-primary-dark">{plan.name}</h3>
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-mono-timer font-mono-timer text-3xl font-bold text-text-primary-dark">{plan.price}</span>
+                  <span className="text-xs text-tertiary font-semibold">/ free in beta</span>
+                </div>
+                <p className="text-xs text-text-muted-dark mb-6">{plan.note}</p>
+                <ul className="space-y-3 mb-6">
+                  {plan.features.map((feat) => (
+                    <li key={feat} className="flex items-start gap-2.5 text-body-sm font-body-sm text-text-secondary-dark">
+                      <span className="material-symbols-outlined text-tertiary text-[18px] shrink-0 mt-0.5">check_circle</span>
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <Link
+                to="/mock-setup"
+                className={`w-full py-3 rounded-xl text-center text-label-md font-label-md font-semibold transition-all active:scale-[0.98] ${plan.popular ? 'bg-accent-royal-blue hover:bg-primary-container text-white shadow-md' : 'bg-surface-container hover:bg-surface-variant text-text-primary-dark border border-border-dark'}`}
+              >
+                Start Free with {plan.name}
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
 
-        <section className="cta-section relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24 lg:py-28"><div className="pointer-events-none absolute inset-x-0 top-1/2 mx-auto h-64 max-w-3xl -translate-y-1/2 rounded-full bg-blue-500/10 blur-3xl" /><div className="relative mx-auto max-w-3xl text-center"><div className={`${sectionLabel} text-blue-300`}>Ready when you are</div><h2 className="mt-3 sm:mt-5 font-display text-2xl sm:text-4xl lg:text-5xl font-semibold leading-tight tracking-tight text-white">Build the confidence to score <span className="bg-gradient-to-r from-blue-300 to-violet-300 bg-clip-text text-transparent">300+.</span></h2><p className="mx-auto mt-3 sm:mt-5 max-w-xl text-xs sm:text-sm leading-5 sm:leading-6 text-slate-400">Join more than 100,000 Nigerian students using a calmer, more focused way to prepare for UTME.</p><Link to="/auth?mode=register" className="mt-6 sm:mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2.5 sm:px-5 sm:py-3.5 text-xs sm:text-sm font-semibold text-slate-950 transition hover:bg-blue-50 active:scale-[0.98]">Start practicing for free <ArrowRight className="h-4 w-4" /></Link></div></section>
-      </main>
+      {/* ========================================================================= */}
+      {/* 10. FINAL CALL TO ACTION */}
+      {/* ========================================================================= */}
+      <section className="py-20 px-4 md:px-8 max-w-[1440px] mx-auto text-center relative">
+        <div className="max-w-3xl mx-auto space-y-6 p-10 rounded-3xl bg-gradient-to-b from-surface-container to-bg-card-dark border border-border-dark shadow-2xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-royal-blue/20 text-primary border border-accent-royal-blue/30 text-label-sm font-label-sm">
+            <span className="material-symbols-outlined text-[16px]">military_tech</span>
+            <span>Join 100,000+ Active Scholars Across Nigeria</span>
+          </div>
+          <h2 className="text-headline-xl font-headline-xl text-text-primary-dark">
+            Build the Confidence to Score 300+ in the 2025/2026 JAMB UTME.
+          </h2>
+          <p className="text-body-lg font-body-lg text-text-secondary-dark">
+            No payment required. No credit cards. No cyber-cafe setup charges. Jump directly into the full 4-subject exam cockpit right now.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <Link
+              to="/mock-setup"
+              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-accent-royal-blue hover:bg-primary-container text-white font-label-md text-label-md font-bold shadow-lg shadow-accent-royal-blue/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[20px]">rocket_launch</span>
+              <span>Launch Free CBT Mock Session</span>
+            </Link>
+            <button
+              onClick={() => setCbtKeyModalOpen(true)}
+              className="w-full sm:w-auto px-6 py-4 rounded-xl bg-surface-container-low hover:bg-surface-variant text-text-primary-dark border border-border-dark font-label-md text-label-md font-semibold active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[18px]">vpn_key</span>
+              <span>Enter CBT Access Key</span>
+            </button>
+          </div>
+          <p className="text-xs text-text-muted-dark font-mono-data pt-2">
+            Instant compatibility with Chrome, Firefox, Safari, Edge &amp; Cyber-Cafe Android Terminals.
+          </p>
+        </div>
+      </section>
 
-      <footer className="site-footer border-t border-white/[0.07] bg-[#080d19] px-4 sm:px-6 pb-8 pt-10 sm:pt-14"><div className="mx-auto max-w-7xl"><div className="grid gap-8 sm:gap-10 md:grid-cols-[1.4fr_0.8fr_0.8fr_1fr]"><div><BrandMark /><p className="mt-4 sm:mt-5 max-w-xs text-xs sm:text-sm leading-5 sm:leading-6 text-slate-500">Nigeria's focused Computer-Based Test simulator, built to help every student prepare with clarity.</p><div className="mt-4 sm:mt-5 flex items-center gap-2">{[{ icon: <Twitter className="h-4 w-4" />, href: 'https://x.com/aurikrex', label: 'Twitter / X' }, { icon: <Instagram className="h-4 w-4" />, href: 'https://www.instagram.com/falcon.omotosho', label: 'Instagram' }, { icon: <Linkedin className="h-4 w-4" />, href: 'https://linkedin.com/in/falcon-omotosho', label: 'LinkedIn' }, { icon: <Youtube className="h-4 w-4" />, href: 'https://www.youtube.com/@aurikrex', label: 'YouTube' }, { icon: <Globe className="h-4 w-4" />, href: 'https://www.tiktok.com/@aurikrexacademy', label: 'TikTok' }].map((social) => <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-slate-500 transition hover:border-blue-400/30 hover:bg-blue-400/[0.08] hover:text-blue-200">{social.icon}</a>)}</div></div><div><h4 className="text-[11px] sm:text-[13px] font-semibold uppercase tracking-[0.16em] text-slate-300">Product</h4><ul className="mt-3 sm:mt-5 space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-slate-500"><li><a href="#features" className="transition hover:text-white">Features</a></li><li><a href="#subjects" className="transition hover:text-white">Subjects</a></li><li><a href="#pricing" className="transition hover:text-white">Pricing</a></li><li><a href="#how-it-works" className="transition hover:text-white">How it works</a></li></ul></div><div><h4 className="text-[11px] sm:text-[13px] font-semibold uppercase tracking-[0.16em] text-slate-300">Support</h4><ul className="mt-3 sm:mt-5 space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-slate-500"><li><Link to="/help" className="transition hover:text-white">Help center</Link></li><li><Link to="/contact" className="transition hover:text-white">Contact us</Link></li><li><Link to="/privacy" className="transition hover:text-white">Privacy policy</Link></li><li><Link to="/terms" className="transition hover:text-white">Terms of service</Link></li></ul></div><div><h4 className="text-[11px] sm:text-[13px] font-semibold uppercase tracking-[0.16em] text-slate-300">Contact</h4><ul className="mt-3 sm:mt-5 space-y-2.5 sm:space-y-3 text-xs sm:text-sm text-slate-500"><li className="flex items-center gap-2"><Mail className="h-4 w-4" /><a href="mailto:info@aurikrex.com" className="transition hover:text-white">info@aurikrex.com</a></li><li className="flex items-center gap-2"><Phone className="h-4 w-4" /><a href="tel:+2349113683395" className="transition hover:text-white">+234 911 368 3395</a></li><li className="flex items-center gap-2"><Globe className="h-4 w-4" /><a href="https://www.aurikrex.com" target="_blank" rel="noopener noreferrer" className="transition hover:text-white">www.aurikrex.com</a></li></ul></div></div><div className="mt-8 sm:mt-12 flex flex-col gap-3 border-t border-white/[0.07] pt-6 text-[11px] sm:text-xs text-slate-600 md:flex-row md:items-center md:justify-between"><div><p>© {new Date().getFullYear()} Aurikrex Exam Arena. All rights reserved.</p><p className="mt-1">Founded by <span className="text-slate-400">Omotosho Korede Samuel</span> · A product of <span className="text-slate-400">Aurikrex</span></p></div><div className="flex items-center gap-4 sm:gap-5"><Link to="/privacy" className="transition hover:text-white">Privacy</Link><Link to="/terms" className="transition hover:text-white">Terms</Link><a href="#" className="transition hover:text-white">Cookies</a></div></div></div></footer>
+      {/* ========================================================================= */}
+      {/* 11. CBT KEY MODAL POPUP */}
+      {/* ========================================================================= */}
+      {cbtKeyModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-primary-dark/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-2xl bg-bg-card-dark border border-border-dark p-6 shadow-2xl relative">
+            <button
+              onClick={() => setCbtKeyModalOpen(false)}
+              className="absolute top-4 right-4 text-text-muted-dark hover:text-text-primary-dark"
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-accent-royal-blue/20 text-primary flex items-center justify-center border border-accent-royal-blue/30">
+                <span className="material-symbols-outlined text-[22px]">vpn_key</span>
+              </div>
+              <div>
+                <h4 className="text-headline-sm font-headline-sm text-text-primary-dark">Enter CBT Key</h4>
+                <p className="text-xs text-text-muted-dark font-mono-data">Cyber-Cafe Passwordless Verification</p>
+              </div>
+            </div>
+            <p className="text-body-sm font-body-sm text-text-secondary-dark mb-4">
+              Enter your candidate session key generated on your phone or provided by your exam tutor.
+            </p>
+            <form onSubmit={handleCbtKeySubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-mono-data text-text-muted-dark mb-1">CBT KEY CODE</label>
+                <input
+                  type="text"
+                  value={cbtKeyInput}
+                  onChange={(e) => setCbtKeyInput(e.target.value)}
+                  placeholder="CBT-XXXXXX"
+                  className="w-full bg-surface-container-low border border-border-dark rounded-xl px-4 py-3 font-mono-data text-center text-lg tracking-widest text-primary focus:outline-none focus:border-accent-royal-blue uppercase"
+                  autoFocus
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full py-3 rounded-xl bg-accent-royal-blue hover:bg-primary-container text-white font-label-md text-label-md font-semibold transition-all"
+              >
+                Authorize Session &amp; Launch
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 12. FOUNDER ATTRIBUTION & ECOSYSTEM FOOTER */}
+      {/* ========================================================================= */}
+      <footer className="border-t border-border-dark bg-bg-secondary-dark pt-16 pb-12 px-4 md:px-8 text-text-secondary-dark">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-border-dark">
+          {/* Brand & Founder Bio (Span 2) */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg overflow-hidden ring-1 ring-border-dark bg-surface-container flex items-center justify-center">
+                <img src="/favicon.svg" alt="Aurikrex Circular Emblem" className="w-full h-full object-cover" />
+              </div>
+              <span className="text-headline-sm font-headline-sm font-bold text-text-primary-dark">Aurikrex Exam Arena</span>
+            </div>
+            <p className="text-body-sm font-body-sm text-text-muted-dark max-w-sm">
+              Nigeria's cyber-precise UTME practice infrastructure. Designed to eliminate candidate score deficits through authentic CBT stress drills and localized AI tutoring.
+            </p>
+            <div className="pt-2">
+              <p className="text-xs font-mono-data text-text-primary-dark font-medium">
+                Founded by <span className="text-primary font-bold">Omotosho Korede Samuel</span>
+              </p>
+              <p className="text-[11px] text-text-muted-dark font-mono-data">
+                Built for the Next Generation of Nigerian Scholars.
+              </p>
+            </div>
+          </div>
+
+          {/* Links Column 1: Ecosystem */}
+          <div className="space-y-3 text-body-sm font-body-sm">
+            <h4 className="text-label-md font-label-md text-text-primary-dark font-semibold">Aurikrex Ecosystem</h4>
+            <ul className="space-y-2">
+              <li><Link to="/mock-setup" className="hover:text-text-primary-dark transition-colors">Aurikrex CBT Arena</Link></li>
+              <li><a href="https://library.aurikrex.com" target="_blank" rel="noopener noreferrer" className="hover:text-text-primary-dark transition-colors">Aurikrex Library</a></li>
+              <li><Link to="/falke-ai" className="hover:text-text-primary-dark transition-colors">Aurikrex Bytes &amp; AI</Link></li>
+              <li><Link to="/profile" className="hover:text-text-primary-dark transition-colors">Candidate Vault</Link></li>
+            </ul>
+          </div>
+
+          {/* Links Column 2: Academics */}
+          <div className="space-y-3 text-body-sm font-body-sm">
+            <h4 className="text-label-md font-label-md text-text-primary-dark font-semibold">JAMB 2025 Resources</h4>
+            <ul className="space-y-2">
+              <li><Link to="/syllabus" className="hover:text-text-primary-dark transition-colors">Official Syllabus Tracker</Link></li>
+              <li><Link to="/questions" className="hover:text-text-primary-dark transition-colors">17-Subject Question Bank</Link></li>
+              <li><Link to="/leaderboard" className="hover:text-text-primary-dark transition-colors">University Cut-Off Modeler</Link></li>
+              <li><Link to="/auth?mode=cbt_key" className="hover:text-text-primary-dark transition-colors">Cyber-Cafe Center Bulk Mode</Link></li>
+            </ul>
+          </div>
+
+          {/* Links Column 3: Support & Contact */}
+          <div className="space-y-3 text-body-sm font-body-sm">
+            <h4 className="text-label-md font-label-md text-text-primary-dark font-semibold">Candidate Support</h4>
+            <ul className="space-y-2">
+              <li className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary text-[16px]">call</span>
+                <a href="tel:+2349113683395" className="text-text-primary-dark font-mono-data text-xs hover:underline">+234 911 368 3395</a>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-tertiary text-[16px]">mail</span>
+                <a href="mailto:support@aurikrex.ng" className="font-mono-data text-xs hover:underline">support@aurikrex.ng</a>
+              </li>
+              <li><Link to="/help" className="hover:text-text-primary-dark transition-colors">System Status &amp; Latency</Link></li>
+              <li><Link to="/privacy" className="hover:text-text-primary-dark transition-colors">Privacy Policy &amp; Terms</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Copyright Sub-Footer */}
+        <div className="max-w-[1440px] mx-auto pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-text-muted-dark font-mono-data gap-4">
+          <div>
+            © 2025 Aurikrex Inc. All rights reserved. Not affiliated with or endorsed by JAMB official board.
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1.5 text-tertiary">
+              <span className="w-2 h-2 rounded-full bg-tertiary" /> 100% Beta Availability Online
+            </span>
+            <span>Build AKX-2025.2.14-PROD</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

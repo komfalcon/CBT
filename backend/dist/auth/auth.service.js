@@ -445,14 +445,21 @@ let AuthService = class AuthService {
             };
         }
         catch (error) {
+            console.warn('[AUTH] Google verifyIdToken failed:', error?.message || error);
             throw new common_1.UnauthorizedException('Failed to verify Google token.');
         }
         const normalizedEmail = googleUser.email.toLowerCase();
         let [user] = await this.db.select().from(schema.users).where((0, drizzle_orm_1.eq)(schema.users.email, normalizedEmail)).limit(1);
         if (!user) {
             const dummyPassword = await bcrypt.hash((0, uuid_1.v4)(), 10);
+            const newAurikrexId = (0, utils_1.generateAurikrexId)();
+            const plainCbtKey = (0, utils_1.generateCbtKey)();
+            const cbtKeyHash = (0, crypto_1.createHash)('sha256').update(plainCbtKey).digest('hex');
             const [newUser] = await this.db.insert(schema.users).values({
                 id: (0, uuid_1.v4)(),
+                aurikrex_id: newAurikrexId,
+                cbt_key: plainCbtKey,
+                cbt_key_hash: cbtKeyHash,
                 fullName: googleUser.name,
                 email: normalizedEmail,
                 passwordHash: dummyPassword,

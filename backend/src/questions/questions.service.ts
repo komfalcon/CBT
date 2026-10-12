@@ -32,6 +32,12 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { SearchService } from "./search/search.service";
 import { QUESTION_STATUSES, QUESTION_SUBJECTS } from "./types/question.types";
+import {
+  sanitizeQuestionText,
+  cleanOptionText,
+  sanitizeExplanation,
+  isIncompleteQuestion,
+} from "./utils/question-sanitizer";
 
 const duplicateStatuses = ["published", "approved", "under_review"];
 
@@ -252,7 +258,19 @@ export class QuestionsService {
       );
     }
 
-    const optionIds = payload.options.map((option) => option.id);
+    if (isIncompleteQuestion(payload.question_text)) {
+      throw new BadRequestException(
+        "Question text appears incomplete or truncated.",
+      );
+    }
+
+    const sanitizedQuestionText = sanitizeQuestionText(payload.question_text);
+    const sanitizedOptions = payload.options.map((option) => ({
+      ...option,
+      text: cleanOptionText(option.text),
+    }));
+
+    const optionIds = sanitizedOptions.map((option) => option.id);
     if (!optionIds.includes(payload.correct_option)) {
       throw new BadRequestException(
         "correct_option must match one of options[].id",
@@ -261,7 +279,7 @@ export class QuestionsService {
 
     const duplicate = await this.runDuplicateCheck({
       subject: payload.subject,
-      questionText: payload.question_text,
+      questionText: sanitizedQuestionText,
     });
 
     if (duplicate.blocked) {
@@ -277,7 +295,9 @@ export class QuestionsService {
       .values({
         id: uuidv4(),
         ...payload,
-        options: payload.options,
+        question_text: sanitizedQuestionText,
+        options: sanitizedOptions,
+        explanation: payload.explanation ? sanitizeExplanation(payload.explanation) : null,
         tags: this.normalizeTags(payload.tags),
         status: "draft",
         created_by: this.getActorId(user),
@@ -466,7 +486,16 @@ export class QuestionsService {
     const plain = question;
     const { correct_option, explanation, versions, embedding_vector, ...rest } =
       plain as any;
-    return rest;
+    return {
+      ...rest,
+      question_text: sanitizeQuestionText(rest.question_text),
+      options: Array.isArray(rest.options)
+        ? rest.options.map((opt: any) => ({
+            ...opt,
+            text: cleanOptionText(opt.text),
+          }))
+        : rest.options,
+    };
   }
 
   async getQuestionById(questionId: string, user?: CurrentUser) {

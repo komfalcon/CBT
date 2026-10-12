@@ -21,7 +21,7 @@ export class CoinsAuthGuard extends AuthGuard('jwt') {
   }
 }
 
-@Controller(['coins', 'api/v1/coins'])
+@Controller(['coins', 'api/v1/coins', 'v1/coins', 'api/coins'])
 @UseGuards(CoinsAuthGuard)
 export class CoinsController {
   constructor(

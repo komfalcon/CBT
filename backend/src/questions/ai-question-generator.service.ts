@@ -10,6 +10,12 @@ import {
   TECHNICAL_SUBJECTS,
   QuestionSourceType,
 } from './types/question.types';
+import {
+  sanitizeQuestionText,
+  cleanOptionText,
+  sanitizeExplanation,
+  isIncompleteQuestion,
+} from './utils/question-sanitizer';
 
 export type GenerationSourceType =
   | 'new_text'
@@ -255,7 +261,7 @@ export class AiQuestionGeneratorService {
     );
 
     const isCalculationHeavy = ['accounting', 'further_mathematics', 'mathematics', 'physics', 'chemistry'].includes(config.subject.toLowerCase());
-    const batchSize = config.sourceType === 'new_svg_diagram' ? 3 : isCalculationHeavy ? 4 : 8;
+    const batchSize = config.sourceType === 'new_svg_diagram' ? 3 : (isCalculationHeavy || config.sourceType === 'passage_comprehension') ? 4 : 6;
 
     // Launch 4 concurrent workers (one for each Mistral API key)
     const workers = this.mistralKeys.map((key, idx) =>
@@ -377,12 +383,17 @@ Output a raw JSON array containing objects with:
 Respond ONLY with the raw JSON array.`;
     } else if (sourceType === 'calculation_latex') {
       systemPrompt = `You are a STEM & Quantitative Reasoning expert for Nigerian UTME/JAMB.
-You create step-by-step calculation questions formatted with LaTeX mathematics ($...$) and detailed solutions.`;
+You create step-by-step calculation questions formatted with LaTeX mathematics ($...$) and detailed solutions.
+CRITICAL FORMAT RULES:
+- 'question_text' must NEVER contain the answer, correct option letter, hints, or the list of options.
+- Explanations belong strictly in the 'explanation' field.
+- Options belong strictly in the 'options' array.
+- Option texts must NOT have letter prefixes (e.g. write '25 cm', NOT 'A. 25 cm').
+- All equations must use clean LaTeX ($...$). Do NOT double-escape backslashes (use standard \\frac{a}{b}, not \\\\frac{a}{b}).`;
 
       userPrompt = `Generate EXACTLY ${count} calculation-based JAMB UTME questions for '${subject}'.
 Topics to cover: ${topicStr}.
 All mathematical equations must use LaTeX ($...$). Currency should use ₦ or N (Naira).
-Escape backslashes in LaTeX (e.g. \\\\frac{a}{b} or \\\\(x^2 + y^2 = r^2\\\\)).
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
@@ -399,7 +410,12 @@ Output a raw JSON array containing objects with:
 Respond ONLY with the raw JSON array.`;
     } else if (sourceType === 'passage_comprehension') {
       systemPrompt = `You are an expert reading comprehension and passage-based exam author for Nigerian UTME/JAMB.
-You create reading passages, excerpts, cloze tests, or scenario case studies followed by analytical multiple-choice questions.`;
+You create reading passages, excerpts, cloze tests, or scenario case studies followed by analytical multiple-choice questions.
+CRITICAL FORMAT RULES:
+- 'question_text' must contain the reading passage followed by the complete question stem.
+- 'question_text' must NEVER reveal the answer, correct option, hints, or duplicated options list.
+- Options belong strictly in the 'options' array, without letter prefixes.
+- Passages and questions must be complete and never truncated mid-sentence.`;
 
       userPrompt = `Generate EXACTLY ${count} passage-based questions for '${subject}'.
 Topics to cover: ${topicStr}.
@@ -420,7 +436,11 @@ Output a raw JSON array containing objects with:
 Respond ONLY with the raw JSON array.`;
     } else if (sourceType === 'mixed_curriculum') {
       systemPrompt = `You are a master curriculum examiner for Nigerian UTME/JAMB.
-You generate a rich, dynamic mix of conceptual theory, step-by-step calculation (LaTeX), responsive vector SVG diagrams, and reading comprehension passages.`;
+You generate a rich, dynamic mix of conceptual theory, step-by-step calculation (LaTeX), responsive vector SVG diagrams, and reading comprehension passages.
+CRITICAL FORMAT RULES:
+- 'question_text' must NEVER contain the answer, correct option, hints, or duplicate options list.
+- Options belong strictly in the 'options' array without letter prefixes.
+- All equations must use clean LaTeX ($...$). Do NOT double-escape backslashes.`;
 
       userPrompt = `Generate EXACTLY ${count} JAMB UTME standard questions for '${subject}'.
 Cover topics: ${topicStr}.
@@ -428,7 +448,6 @@ Cover topics: ${topicStr}.
 Dynamic Mix Rules:
 - Include a variety of question styles: conceptual theory, mathematical calculations with LaTeX ($...$), inline vector SVG diagrams (where appropriate), and scenario/passage questions.
 - For vector SVG diagrams (if any), use single quotes inside SVG tag attributes (<svg viewBox='0 0 400 300' fill='#3b82f6'>).
-- Escape backslashes in LaTeX (e.g. \\\\(3x^2 - 12x - 15 = 0\\\\) or \\\\frac{a}{b}).
 
 Output a raw JSON array containing objects with:
 - 'subject': "${subject}"
@@ -721,7 +740,14 @@ Respond ONLY with the raw JSON array.`;
         const items = JSON.parse(trimmed);
         if (Array.isArray(items)) {
           for (const item of items) {
-            if (item && item.question_text && item.options && Array.isArray(item.options)) {
+            if (
+              item &&
+              item.question_text &&
+              !isIncompleteQuestion(item.question_text) &&
+              item.options &&
+              Array.isArray(item.options) &&
+              item.options.length >= 2
+            ) {
               recovered.push(item);
             }
           }
@@ -739,7 +765,14 @@ Respond ONLY with the raw JSON array.`;
         try {
           const cleanObj = objStr.replace(/,\s*}/g, '}');
           const parsedObj = JSON.parse(cleanObj);
-          if (parsedObj && parsedObj.question_text && parsedObj.options && Array.isArray(parsedObj.options)) {
+          if (
+            parsedObj &&
+            parsedObj.question_text &&
+            !isIncompleteQuestion(parsedObj.question_text) &&
+            parsedObj.options &&
+            Array.isArray(parsedObj.options) &&
+            parsedObj.options.length >= 2
+          ) {
             recovered.push(parsedObj);
           }
         } catch {
@@ -758,11 +791,20 @@ Respond ONLY with the raw JSON array.`;
         continue;
       }
 
+      if (isIncompleteQuestion(q.question_text)) {
+        this.logger.warn(`Discarded incomplete/truncated question stem for ${subject}: "${String(q.question_text).substring(0, 60)}..."`);
+        continue;
+      }
+
+      const sanitizedStem = sanitizeQuestionText(q.question_text);
+      if (!sanitizedStem || sanitizedStem.length < 10) {
+        continue;
+      }
+
       const formattedOptions = q.options.map((opt: any, idx: number) => {
         const optionId = (opt.id || ['A', 'B', 'C', 'D', 'E'][idx] || 'A').toUpperCase().trim();
         let optionText = typeof opt === 'string' ? opt : String(opt.text || opt);
-        // Strip duplicate option label prefixes (e.g. "A. 25 cm" -> "25 cm")
-        optionText = optionText.replace(/^(?:[A-Ea-e][\.\):]\s*|\([A-Ea-e]\)\s*|Option\s+[A-Ea-e][:\.]?\s*)/i, '').trim();
+        optionText = cleanOptionText(optionText);
         return { id: optionId, text: optionText };
       });
 
@@ -781,10 +823,10 @@ Respond ONLY with the raw JSON array.`;
         id,
         subject: (q.subject || subject).toLowerCase().trim(),
         topic: q.topic || 'General',
-        question_text: q.question_text,
+        question_text: sanitizedStem,
         options: formattedOptions,
         correct_option: validCorrect,
-        explanation: q.explanation || null,
+        explanation: q.explanation ? sanitizeExplanation(q.explanation) : null,
         question_type: questionType,
         difficulty_level: Math.min(5, Math.max(1, Number(q.difficulty_level) || 3)),
         has_diagram: Boolean(q.has_diagram || cleanSvg),

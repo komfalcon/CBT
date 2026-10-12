@@ -133,7 +133,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CoinsController.prototype, "deductCoins", null);
 exports.CoinsController = CoinsController = __decorate([
-    (0, common_1.Controller)(['coins', 'api/v1/coins']),
+    (0, common_1.Controller)(['coins', 'api/v1/coins', 'v1/coins', 'api/coins']),
     (0, common_1.UseGuards)(CoinsAuthGuard),
     __metadata("design:paramtypes", [coins_service_1.CoinsService,
         central_service_1.CentralService])

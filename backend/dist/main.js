@@ -13,9 +13,28 @@ const admin_service_1 = require("./admin/admin.service");
 const express_1 = require("express");
 let serverListening = false;
 process.on('unhandledRejection', (reason) => {
+    if (reason?.code === 'ECONNRESET' ||
+        reason?.code === 'EPIPE' ||
+        reason?.code === 'ETIMEDOUT' ||
+        reason?.message?.includes('ECONNRESET') ||
+        reason?.message?.includes('read ECONNRESET')) {
+        console.warn('[NETWORK WARNING] Non-fatal transient socket reset in unhandledRejection:', reason?.message || reason);
+        return;
+    }
     console.error('[CRITICAL SERVER ERROR] Unhandled Rejection:', reason);
 });
 process.on('uncaughtException', (err) => {
+    const isNetworkReset = err?.code === 'ECONNRESET' ||
+        err?.code === 'EPIPE' ||
+        err?.code === 'ETIMEDOUT' ||
+        err?.code === 'ECONNREFUSED' ||
+        err?.syscall === 'read' ||
+        err?.message?.includes('ECONNRESET') ||
+        err?.message?.includes('read ECONNRESET');
+    if (isNetworkReset) {
+        console.warn('[NETWORK WARNING] Non-fatal transient socket reset caught:', err?.message || err);
+        return;
+    }
     console.error('[CRITICAL SERVER ERROR] Uncaught Exception:', err);
     setTimeout(() => process.exit(1), 500);
 });

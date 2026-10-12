@@ -127,6 +127,68 @@ export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
   );
 };
 
+export const normalizeLatexBackslashes = (text: string | null | undefined): string => {
+  if (!text || typeof text !== 'string') return '';
+  let res = text;
+  // Multi-backslash before alphabetic LaTeX commands (e.g. \\frac -> \frac, \\\sqrt -> \sqrt)
+  res = res.replace(/\\{2,}([a-zA-Z]+)/g, '\\$1');
+  // Multi-backslash before single-character LaTeX commands & escapes (e.g. \\( -> \(, \\[ -> \[, \\, -> \,, \\{ -> \{)
+  res = res.replace(/\\{2,}([\(\)\[\]\{\}\,\;\:\!\%\&\_\$\^])/g, '\\$1');
+  // 3 or more backslashes elsewhere (e.g. matrix row break \\\\\\\\ -> \\\\)
+  res = res.replace(/\\{3,}/g, '\\\\');
+  return res;
+};
+
+export const sanitizeQuestionText = (rawText: string | null | undefined): string => {
+  if (!rawText || typeof rawText !== 'string') return '';
+  let text = normalizeLatexBackslashes(rawText.trim());
+
+  // 1. Remove leaked Explanations / Solutions appended to stem
+  text = text.replace(/(?:\r?\n|^|\s+)(?:\*\*|__|\*)?(?:Explanation|Solution|Answer Explanation|Detailed Solution)(?:\*\*|__|\*)?\s*:[\s\S]*$/i, '');
+
+  // 2. Remove leaked Correct Option / Answer appended to stem
+  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__|\*|\()?Correct\s*(?:Option|Answer)\s*(?:is\s*)?[:\-]?\s*(?:Option\s*)?\(?[A-Ea-e]\)?(?:\s*[\.\,\;\)]?\s*)?$/i, '');
+  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__|\*|\()?Ans(?:wer)?\s*(?:is\s*)?[:\-]?\s*(?:Option\s*)?\(?[A-Ea-e]\)?(?:\s*[\.\,\;\)]?\s*)?$/i, '');
+  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__|\*|\()?Key\s*[:\-]\s*\(?[A-Ea-e]\)?(?:\s*[\.\,\;\)]?\s*)?$/i, '');
+  text = text.replace(/(?:[\s\(\[])(?:Correct\s*(?:Option|Answer)|Ans(?:wer)?|Key)\s*(?:is\s*)?[:\-]?\s*(?:Option\s*)?\(?[A-Ea-e]\)?(?:[\)\]\.\,])?(?=\s*$)/gi, '');
+
+  // 3. Remove leaked Hints (e.g. "*(Hint: ...)*", "(Hint: ...)", "[Hint: ...]", "*Hint: ...*", "Hint: ...")
+  text = text.replace(/\s*\*?\s*[\(\[]\s*Hints?\s*:[\s\S]*?[\)\]]\s*\*?/gi, '');
+  text = text.replace(/\s*\*Hints?\s*:[\s\S]*?\*\s*/gi, '');
+  text = text.replace(/(?:\r?\n|^)\s*(?:\*\*|__|\*)?Hints?\s*:[\s\S]*?(?:\r?\n|$)/gi, '\n');
+
+  // 4. Remove leaked "Options:" list block (e.g. "Options:\nA) random\nB) planned\nC) impulsive\nD) hasty")
+  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__)?Options\s*:(?:\*\*|__)?\s*(?:\r?\n|\s+)(?:[•\-\*]\s*)?\(?[A-Ea-e][\.\)]\s*[\s\S]*$/i, '');
+
+  // 5. Remove bulleted or newline options list at the end of the stem
+  text = text.replace(/(?:\r?\n|\s*)(?:(?:[•\-\*]\s*)?\(?[A-Ea-e][\.\)]\s+[^\n\r]+(?:\r?\n|\s*)){2,}$/g, '');
+
+  // 6. Remove inline options at the end of stem
+  text = text.replace(/(?:\r?\n|\s+)(?:(?:[\[\(]?[A-Ea-e][\]\)\.]\s+[^\n\r]+?\s+){2,}(?:[\[\(]?[A-Ea-e][\]\)\.]\s+[^\n\r]+?\s*))$/g, '');
+
+  // 7. Remove stray markdown asterisk quotes like `* 'The company...` or `*'The company...`
+  text = text.replace(/^\s*\*\s*(['\"][A-Z])/gm, '$1');
+
+  // 8. Remove duplicate "Question:" label at start of stem if present
+  text = text.replace(/^(?:\*\*|__)?Question\s*:(?:\*\*|__)?\s*/i, '');
+
+  return text.trim();
+};
+
+export const cleanOptionText = (optText: string | null | undefined): string => {
+  if (!optText || typeof optText !== 'string') return '';
+  let text = normalizeLatexBackslashes(optText.trim());
+  text = text.replace(/^(?:[•\-\*]\s*)?(?:Option\s+[A-Ea-e][:\.]?\s*|[\[\(][A-Ea-e][\]\)]\s*|[A-Ea-e][\.\):]\s*)/i, '').trim();
+  return text.trim();
+};
+
+export const sanitizeExplanation = (expText: string | null | undefined): string => {
+  if (!expText || typeof expText !== 'string') return '';
+  let text = normalizeLatexBackslashes(expText.trim());
+  text = text.replace(/^(?:\*\*|__|\*)?Explanation\s*:(?:\*\*|__|\*)?\s*/i, '');
+  return text.trim();
+};
+
 export const addLatexDelimiters = (text: string): string => {
   if (!text) return text;
   
@@ -167,8 +229,7 @@ export const addLatexDelimiters = (text: string): string => {
   // 6. Convert LaTeX display \[ ... \] into double dollar sign $$ ... $$ (BLOCK MATH)
   result = result.replace(/\\\[\s*([\s\S]*?)\s*\\\]/g, (_m, g1) => `\n\n$$\n${g1.trim()}\n$$\n\n`);
 
-  // 7. Normalize unclosed dollar signs
-  result = result.replace(/\$\$(?=\s*[\.\,\;\:\)]|\s*$)/g, '');
+  // 7. Normalize multi-dollars beyond double (e.g. $$$ -> $$)
   result = result.replace(/\${3,}/g, '$$');
 
   // 8. SPLIT BY EXISTING MATH BLOCKS TO PROCESS ONLY NON-MATH TEXT OUTSIDE DOLLAR SIGNS:
@@ -176,12 +237,16 @@ export const addLatexDelimiters = (text: string): string => {
   const parts = result.split(mathBlockRegex);
 
   return parts.map((part, i) => {
-    // If i % 2 !== 0, this part is ALREADY inside $...$ or $$...$$. DO NOT MODIFY IT!
+    // If i % 2 !== 0, this part is ALREADY inside $...$ or $$...$$
     if (i % 2 !== 0) {
-      return part;
+      // Fix double-backslash LaTeX macros inside math blocks
+      let math = normalizeLatexBackslashes(part);
+      // Normalize whitespace immediately inside single-dollar math ($ \frac{1}{2} $ -> $\frac{1}{2}$)
+      math = math.replace(/^\$\s+/, '$').replace(/\s+\$$/, '$');
+      return math;
     }
 
-    let clean = part;
+    let clean = normalizeLatexBackslashes(part);
 
     // A. Repair single backslash row separators inside matrix / array / cases environments
     clean = clean.replace(/(\\begin\s*\{(?:matrix|bmatrix|pmatrix|vmatrix|Vmatrix|cases|align|array)\}[\s\S]*?\\end\s*\{(?:matrix|bmatrix|pmatrix|vmatrix|Vmatrix|cases|align|array)\})/gi, (matrixBlock) => {
@@ -253,11 +318,12 @@ const markdownComponents = {
   code: ({ children }: { children?: React.ReactNode }) => <code className="rounded bg-bg-secondary px-1.5 py-0.5 font-mono text-[0.9em] text-primary">{children}</code>,
 };
 
-export const SmartTextRenderer: React.FC<{ text: string }> = ({ text }) => {
+export const SmartTextRenderer: React.FC<{ text: string; sanitizeStem?: boolean }> = ({ text, sanitizeStem = false }) => {
   if (!text) return null;
+  const processed = sanitizeStem ? sanitizeQuestionText(text) : text;
   return (
     <div className="exam-markdown">
-      {splitTikz(text).map((part, index) => (
+      {splitTikz(processed).map((part, index) => (
         isTikz(part) ? (
           <div key={index} className="my-4 flex max-w-full justify-center overflow-auto rounded-2xl border border-border bg-bg-secondary/40 p-4">
             <TikzRenderer code={part} />
@@ -266,7 +332,7 @@ export const SmartTextRenderer: React.FC<{ text: string }> = ({ text }) => {
           <ReactMarkdown
             key={index}
             remarkPlugins={[[remarkMath, { singleDollarTextMath: true }]]}
-            rehypePlugins={[rehypeKatex]}
+            rehypePlugins={[[rehypeKatex, { throwOnError: false, strict: false }]]}
             components={markdownComponents}
           >
             {addLatexDelimiters(part)}
@@ -342,7 +408,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             </span>
             {totalCount && <span className="text-xs font-semibold text-text-muted">of {totalCount}</span>}
             {question.difficulty_level !== undefined && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1.5 text-xs font-bold text-amber-500">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1.5 text-xs font-bold text-warning-amber">
                 <Sparkles className="h-3 w-3" aria-hidden="true" />
                 Level {question.difficulty_level}
               </span>
@@ -355,7 +421,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             type="button"
             onClick={onToggleFlag}
             aria-pressed={isFlagged}
-            className={`inline-flex min-h-11 md:min-h-0 shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition-[background-color,border-color,color,transform] duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isFlagged ? 'border-amber-400/45 bg-amber-400/15 text-amber-500' : 'border-border bg-bg-secondary/55 text-text-secondary hover:border-amber-400/35 hover:text-amber-500'}`}
+            className={`inline-flex min-h-11 md:min-h-0 shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition-[background-color,border-color,color,transform] duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isFlagged ? 'border-amber-400/45 bg-amber-400/15 text-warning-amber' : 'border-border bg-bg-secondary/55 text-text-secondary hover:border-amber-400/35 hover:text-warning-amber'}`}
           >
             <Flag className="h-3.5 w-3.5" fill={isFlagged ? 'currentColor' : 'none'} aria-hidden="true" />
             {isFlagged ? 'Flagged' : 'Flag for review'}
@@ -364,7 +430,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       </div>
 
       <div className="mt-7 max-w-3xl text-[clamp(1.15rem,1.75vw,1.55rem)] font-semibold leading-[1.6] tracking-[-0.018em] text-text-primary">
-        <SmartTextRenderer text={question.question_text} />
+        <SmartTextRenderer text={question.question_text} sanitizeStem />
       </div>
 
       {isLoadingDiagram && (
@@ -381,8 +447,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           const isCorrect = showFeedback && (correctOption || question.correct_option) === option.id;
           const isWrongSelection = showFeedback && isOptionSelected && !isCorrect;
 
-          // Clean duplicate option label prefix if present (e.g. "A. 25 cm" -> "25 cm")
-          const cleanOptionText = (option.text || '').replace(/^(?:[A-Ea-e][\.\):]\s*|\([A-Ea-e]\)\s*|Option\s+[A-Ea-e][:\.]?\s*)/i, '');
+          // Clean duplicate option label prefix and LaTeX escapes
+          const optionTextClean = cleanOptionText(option.text);
 
           const stateClass = isCorrect
             ? 'border-success/70 bg-success/10 text-text-primary shadow-[0_10px_28px_rgba(52,211,153,0.12)]'
@@ -404,7 +470,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border text-sm font-black transition-[background-color,border-color,box-shadow,color,transform] duration-200 ${badgeClass}`}>
                 {isCorrect ? <Check className="h-4 w-4" strokeWidth={3} /> : isWrongSelection ? <CircleAlert className="h-4 w-4" /> : option.id}
               </span>
-              <span className="min-w-0 flex-1 text-[15px] font-semibold leading-7"><SmartTextRenderer text={cleanOptionText} /></span>
+              <span className="min-w-0 flex-1 text-[15px] font-semibold leading-7"><SmartTextRenderer text={optionTextClean} /></span>
             </>
           );
 
@@ -437,7 +503,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             <BookOpen className="h-4 w-4" aria-hidden="true" /> Solution explanation
           </div>
           <div className="mt-3 rounded-2xl border border-border bg-bg-secondary/35 p-5 text-sm leading-7 text-text-secondary">
-            <SmartTextRenderer text={question.explanation} />
+            <SmartTextRenderer text={sanitizeExplanation(question.explanation)} />
           </div>
         </div>
       )}

@@ -1,3 +1,9 @@
+jest.mock('otplib', () => ({
+  generateSecret: jest.fn(),
+  generateURI: jest.fn(),
+  verifySync: jest.fn(),
+}));
+
 const { AuthService } = require('../dist/auth/auth.service');
 
 describe('AuthService Google login verification', () => {

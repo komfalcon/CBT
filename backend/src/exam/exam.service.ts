@@ -1,9 +1,16 @@
 import { BadRequestException, Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
 import { v4 as uuidv4 } from 'uuid';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { eq, and, inArray, notInArray, sql, count, gte } from 'drizzle-orm';
+import {
+  sanitizeQuestionText,
+  cleanOptionText,
+  sanitizeExplanation,
+  isIncompleteQuestion,
+} from '../questions/utils/question-sanitizer';
 
 @Injectable()
 export class ExamService {
@@ -133,7 +140,47 @@ export class ExamService {
     if (!session) {
       throw new NotFoundException('Exam session not found.');
     }
-    return session;
+
+    if (session.status === 'completed') {
+      const [existingResult] = await this.db.select({ id: schema.exam_results.id })
+        .from(schema.exam_results)
+        .where(eq(schema.exam_results.sessionId, session.id))
+        .limit(1);
+      return {
+        ...this.sanitizeSession(session),
+        resultId: existingResult?.id,
+        isExpired: true,
+      };
+    }
+
+    const sessionQuestions = (session.questions as any[]) || [];
+    const durationLimit = session.type === 'mock' ? 7200 : sessionQuestions.length * 60;
+    const startedAtTime = session.startedAt ? new Date(session.startedAt).getTime() : Date.now();
+    const elapsedSeconds = Math.max(0, Math.floor((Date.now() - startedAtTime) / 1000));
+
+    // If time exceeded duration limit or already elapsed, auto-submit and complete session
+    if (elapsedSeconds >= durationLimit || session.timeRemaining <= 0) {
+      const submitted = await this.submitSession(sessionId, userId);
+      return {
+        ...this.sanitizeSession(session),
+        status: 'completed',
+        timeRemaining: 0,
+        resultId: submitted.resultId || submitted.id,
+        isExpired: true,
+      };
+    }
+
+    // Recalculate true time remaining based on absolute server clock
+    const trueTimeRemaining = Math.max(0, durationLimit - elapsedSeconds);
+    if (trueTimeRemaining !== session.timeRemaining) {
+      await this.db.update(schema.exam_sessions).set({
+        timeRemaining: trueTimeRemaining,
+        updatedAt: new Date()
+      }).where(eq(schema.exam_sessions.id, session.id));
+      session.timeRemaining = trueTimeRemaining;
+    }
+
+    return this.sanitizeSession(session);
   }
 
   async saveAnswers(
@@ -153,8 +200,25 @@ export class ExamService {
       throw new NotFoundException('Active exam session not found.');
     }
 
-    // Update time remaining
-    const newTimeRemaining = Math.max(0, timeRemaining);
+    const sessionQuestions = (session.questions as any[]) || [];
+    const durationLimit = session.type === 'mock' ? 7200 : sessionQuestions.length * 60;
+    const startedAtTime = session.startedAt ? new Date(session.startedAt).getTime() : Date.now();
+    const elapsedSeconds = Math.max(0, Math.floor((Date.now() - startedAtTime) / 1000));
+
+    // If user attempted to save answers after time has fully elapsed, auto-submit immediately
+    if (elapsedSeconds >= durationLimit) {
+      const submitted = await this.submitSession(sessionId, userId);
+      return {
+        ...session,
+        status: 'completed',
+        timeRemaining: 0,
+        resultId: submitted.resultId || submitted.id,
+        isExpired: true,
+      };
+    }
+
+    // Update time remaining based on server clock bounded by client report
+    const trueTimeRemaining = Math.max(0, Math.min(timeRemaining, durationLimit - elapsedSeconds));
     let newAnswers: Record<string, string> = (session.answers as Record<string, string>) || {};
 
     // Update answers
@@ -169,7 +233,7 @@ export class ExamService {
     }
 
     const [updatedSession] = await this.db.update(schema.exam_sessions).set({
-      timeRemaining: newTimeRemaining,
+      timeRemaining: trueTimeRemaining,
       answers: newAnswers,
       updatedAt: new Date()
     }).where(eq(schema.exam_sessions.id, session.id)).returning();
@@ -298,7 +362,18 @@ export class ExamService {
     if (plain.questions && Array.isArray(plain.questions)) {
       plain.questions = plain.questions.map((q: any) => {
         const { correct_option, explanation, embedding_vector, versions, ...rest } = q;
-        return rest;
+        const sanitizedStem = sanitizeQuestionText(rest.question_text);
+        const cleanedOptions = Array.isArray(rest.options)
+          ? rest.options.map((opt: any) => ({
+              ...opt,
+              text: cleanOptionText(opt.text),
+            }))
+          : rest.options;
+        return {
+          ...rest,
+          question_text: sanitizedStem,
+          options: cleanedOptions,
+        };
       });
     }
     return plain;
@@ -328,10 +403,24 @@ export class ExamService {
     const seenTexts = new Set<string>();
     let result: any[] = [];
     for (const q of candidates) {
-      const normalized = (q.question_text || '').trim().toLowerCase();
+      if (isIncompleteQuestion(q.question_text)) continue;
+      const sanitizedText = sanitizeQuestionText(q.question_text);
+      if (!sanitizedText || sanitizedText.length < 10) continue;
+      const normalized = sanitizedText.trim().toLowerCase();
       if (!seenTexts.has(normalized)) {
         seenTexts.add(normalized);
-        result.push(q);
+        const cleanedOptions = Array.isArray(q.options)
+          ? q.options.map((opt: any) => ({
+              ...opt,
+              text: cleanOptionText(opt.text),
+            }))
+          : q.options;
+        result.push({
+          ...q,
+          question_text: sanitizedText,
+          options: cleanedOptions,
+          explanation: q.explanation ? sanitizeExplanation(q.explanation) : null,
+        });
         if (result.length >= targetCount) break;
       }
     }
@@ -361,10 +450,24 @@ export class ExamService {
 
       const fallbackQuestions: any[] = [];
       for (const q of fallbackCandidates) {
-        const normalized = (q.question_text || '').trim().toLowerCase();
+        if (isIncompleteQuestion(q.question_text)) continue;
+        const sanitizedText = sanitizeQuestionText(q.question_text);
+        if (!sanitizedText || sanitizedText.length < 10) continue;
+        const normalized = sanitizedText.trim().toLowerCase();
         if (!seenTexts.has(normalized)) {
           seenTexts.add(normalized);
-          fallbackQuestions.push(q);
+          const cleanedOptions = Array.isArray(q.options)
+            ? q.options.map((opt: any) => ({
+                ...opt,
+                text: cleanOptionText(opt.text),
+              }))
+            : q.options;
+          fallbackQuestions.push({
+            ...q,
+            question_text: sanitizedText,
+            options: cleanedOptions,
+            explanation: q.explanation ? sanitizeExplanation(q.explanation) : null,
+          });
           if (fallbackQuestions.length >= remainingCount) break;
         }
       }

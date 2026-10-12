@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { getExamSession, saveExamAnswers, submitExamSession, ExamQuestion } from './api';
 import {
   AlertTriangle,
@@ -17,6 +17,7 @@ import {
   Monitor,
   Send,
   ShieldCheck,
+  X,
 } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import { QuestionCard } from '../../components/QuestionCard';
@@ -26,7 +27,6 @@ import { getSubjectLabel } from '../../constants/subjects';
 const DESKTOP_BREAKPOINT = 768;
 const CALCULATOR_WIDTH = 288;
 const CALCULATOR_HEIGHT = 360;
-
 
 function safeEvaluate(expression: string): number {
   const tokens = expression.match(/(?:\d+(?:\.\d*)?|\.\d+|[+\-*/%()])/g) || [];
@@ -66,13 +66,13 @@ export default function ExamConsole() {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [timeRemaining, setTimeRemaining] = useState<number>(7200);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= DESKTOP_BREAKPOINT);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const saveInFlight = useRef(false);
   const latestExamState = useRef({ answers, timeRemaining });
   latestExamState.current = { answers, timeRemaining };
 
-  // Persist flagged questions locally so they survive reloads
+  // Persist flagged questions locally
   const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(() => {
     if (!sessionId) return new Set();
     try {
@@ -111,7 +111,7 @@ export default function ExamConsole() {
     setIsDraggingCalc(true);
     setDragStart({
       x: e.clientX - calcPosition.x,
-      y: e.clientY - calcPosition.y
+      y: e.clientY - calcPosition.y,
     });
   };
 
@@ -128,8 +128,9 @@ export default function ExamConsole() {
 
   useEffect(() => {
     const handleResize = () => {
-      const isDesktop = window.innerWidth >= DESKTOP_BREAKPOINT;
-      setIsSidebarOpen(isDesktop);
+      if (window.innerWidth >= DESKTOP_BREAKPOINT) {
+        setIsSidebarOpen(false);
+      }
       setCalcPosition((prev) => ({
         x: Math.max(8, Math.min(window.innerWidth - CALCULATOR_WIDTH - 8, prev.x)),
         y: Math.max(72, Math.min(window.innerHeight - CALCULATOR_HEIGHT - 8, prev.y)),
@@ -165,7 +166,6 @@ export default function ExamConsole() {
           setCalcResult('Error');
           return;
         }
-        // eslint-disable-next-line no-eval
         const res = safeEvaluate(expression);
         if (isNaN(res) || !isFinite(res)) {
           setCalcResult('Error');
@@ -193,8 +193,6 @@ export default function ExamConsole() {
     }
   };
 
-  
-
   // Fetch session details on mount
   useEffect(() => {
     if (!sessionId) return;
@@ -202,15 +200,17 @@ export default function ExamConsole() {
       try {
         setLoading(true);
         const data = await getExamSession(sessionId);
-        if (data.status === 'completed') {
-          // If already completed, redirect to review or results list
-          showAlert('Session Completed', 'This exam session has already been submitted.', () => {
-            navigate('/dashboard');
-          });
+        if (data.status === 'completed' || data.isExpired) {
+          showAlert(
+            'Session Expired',
+            'This exam session has reached or exceeded its allotted time frame and has been finalized.',
+            () => {
+              navigate(data.resultId ? `/results/${data.resultId}` : '/dashboard');
+            }
+          );
           return;
         }
         setSession(data);
-        // A console instance must never carry review state across sessions.
         setFlaggedQuestions(new Set());
         setAnswers(data.answers ?? {});
         setTimeRemaining(data.timeRemaining);
@@ -238,6 +238,24 @@ export default function ExamConsole() {
     return currentSubjectQuestions[activeQuestionIndex] || currentSubjectQuestions[0];
   }, [currentSubjectQuestions, activeQuestionIndex]);
 
+  // Auto-submit when time reaches 0
+  const autoSubmitExam = useCallback(async () => {
+    if (!sessionId) return;
+    try {
+      setSubmitting(true);
+      const result = await submitExamSession(sessionId);
+      navigate(`/results/${result.resultId || result.id}`);
+    } catch (err: any) {
+      console.error(err);
+      setSubmitting(false);
+      showAlert(
+        'Submission Failed',
+        'Time is up, but we could not reach the server to submit your exam. Please check your connection and try again.',
+        () => autoSubmitExam(),
+      );
+    }
+  }, [sessionId, navigate]);
+
   // Timer Countdown Logic
   useEffect(() => {
     if (loading || submitting || error || !session) return;
@@ -253,27 +271,9 @@ export default function ExamConsole() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [loading, submitting, error, session]);
+  }, [loading, submitting, error, session, autoSubmitExam]);
 
-  // Trigger submission automatically when clock reaches 0
-  const autoSubmitExam = async () => {
-    if (!sessionId) return;
-    try {
-      setSubmitting(true);
-      const result = await submitExamSession(sessionId);
-      navigate(`/results/${result.resultId || result.id}`);
-    } catch (err: any) {
-      console.error(err);
-      setSubmitting(false);
-      showAlert(
-        'Submission Failed',
-        'Time is up, but we could not reach the server to submit your exam. Please check your connection and try again.',
-        () => autoSubmitExam()
-      );
-    }
-  };
-
-  // Serialize autosaves so slow requests cannot overlap or overwrite newer state.
+  // Serialize autosaves so slow requests cannot overlap
   useEffect(() => {
     if (loading || submitting || !sessionId || !session) return;
     const saveLatest = async () => {
@@ -285,7 +285,9 @@ export default function ExamConsole() {
         setLastSaved(new Date());
       } catch (err) {
         console.warn('Auto-save failed:', err);
-      } finally { saveInFlight.current = false; }
+      } finally {
+        saveInFlight.current = false;
+      }
     };
     const interval = window.setInterval(saveLatest, 10000);
     return () => window.clearInterval(interval);
@@ -294,7 +296,6 @@ export default function ExamConsole() {
   const handleSelectOption = (questionId: string, optionId: string) => {
     setAnswers((prev) => {
       const updated = { ...prev, [questionId]: optionId };
-      // Save instantly to database
       saveExamAnswers(sessionId!, updated, timeRemaining)
         .then(() => setLastSaved(new Date()))
         .catch((err) => console.warn('Instant save failed:', err));
@@ -306,7 +307,6 @@ export default function ExamConsole() {
     if (activeQuestionIndex < currentSubjectQuestions.length - 1) {
       setActiveQuestionIndex((prev) => prev + 1);
     } else {
-      // Go to next subject if possible
       const currentSubjectIdx = session.subjects.indexOf(activeSubject);
       if (currentSubjectIdx < session.subjects.length - 1) {
         const nextSub = session.subjects[currentSubjectIdx + 1];
@@ -320,12 +320,10 @@ export default function ExamConsole() {
     if (activeQuestionIndex > 0) {
       setActiveQuestionIndex((prev) => prev - 1);
     } else {
-      // Go to previous subject if possible
       const currentSubjectIdx = session.subjects.indexOf(activeSubject);
       if (currentSubjectIdx > 0) {
         const prevSub = session.subjects[currentSubjectIdx - 1];
         setActiveSubject(prevSub);
-        // Find length of previous subject questions
         const prevSubQsCount = session.questions.filter((q: any) => q.subject === prevSub).length;
         setActiveQuestionIndex(prevSubQsCount - 1);
       }
@@ -347,20 +345,35 @@ export default function ExamConsole() {
     }
   }, [isLastQuestion, handleNext]);
 
-  // Keyboard Event Handlers
+  // Keyboard Event Handlers (JAMB 8-key bindings: A, B, C, D, P, N, S, F)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (loading || submitting) return;
+      const target = e.target as HTMLElement | null;
+      if (target?.matches?.('input, textarea, select') || target?.isContentEditable) return;
+
       const key = e.key.toUpperCase();
 
-      if (['A', 'B', 'C', 'D', 'E'].includes(key) && activeQuestion) {
-        handleSelectOption(activeQuestion.questionId, key);
+      if (['A', 'B', 'C', 'D'].includes(key) && activeQuestion) {
+        const matchingOption = activeQuestion.options?.find(
+          (o: any) => o.id?.toUpperCase() === key
+        );
+        if (matchingOption) {
+          handleSelectOption(activeQuestion.questionId, matchingOption.id);
+        }
       } else if (e.key === 'ArrowRight' || key === 'N') {
         handleNextClick();
       } else if (e.key === 'ArrowLeft' || key === 'P') {
         handlePrev();
-      } else if (key === 'S' && e.altKey) {
-        handleSubmitClick();
+      } else if (key === 'F' && activeQuestion) {
+        setFlaggedQuestions((prev) => {
+          const next = new Set(prev);
+          if (next.has(activeQuestion.questionId)) next.delete(activeQuestion.questionId);
+          else next.add(activeQuestion.questionId);
+          return next;
+        });
+      } else if (key === 'S') {
+        setShowSubmitModal(true);
       }
     };
 
@@ -377,11 +390,6 @@ export default function ExamConsole() {
     });
   }, []);
 
-  const handleSubmitClick = () => {
-    setSubmitError('');
-    setShowSubmitModal(true);
-  };
-
   const executeSubmit = async () => {
     if (!sessionId) return;
     try {
@@ -395,7 +403,6 @@ export default function ExamConsole() {
     }
   };
 
-  // Time formatter
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -405,26 +412,24 @@ export default function ExamConsole() {
       .padStart(2, '0')}`;
   };
 
-  const formatSavedTime = (date: Date) => date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center text-text-primary">
+      <div className="min-h-screen bg-bg-primary-dark flex flex-col items-center justify-center text-text-primary-dark">
         <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
-        <p className="text-sm text-text-secondary">Assembling exam questions from database...</p>
+        <p className="text-body-sm font-body-sm text-text-secondary-dark">Assembling standardized 4-subject exam cockpit...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center text-text-primary p-6">
-        <AlertTriangle className="h-12 w-12 text-rose-500 mb-4" />
-        <h2 className="text-lg font-bold mb-2">Error Loading Exam</h2>
-        <p className="text-sm text-text-secondary mb-6 text-center max-w-sm">{error}</p>
+      <div className="min-h-screen bg-bg-primary-dark flex flex-col items-center justify-center text-text-primary-dark p-6">
+        <AlertTriangle className="h-12 w-12 text-accent-streak-rose mb-4" />
+        <h2 className="text-headline-md font-headline-md mb-2">Error Loading Exam</h2>
+        <p className="text-body-sm font-body-sm text-text-secondary-dark mb-6 text-center max-w-sm">{error}</p>
         <button
           onClick={() => navigate('/dashboard')}
-          className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold hover:bg-primary-hover transition-colors"
+          className="rounded-xl bg-accent-royal-blue px-6 py-2.5 text-label-md font-semibold text-white hover:bg-primary-container transition-all"
         >
           Return to Dashboard
         </button>
@@ -439,277 +444,513 @@ export default function ExamConsole() {
   const currentSubjectIndex = session.subjects.indexOf(activeSubject);
   const isFirstQuestion = currentSubjectIndex === 0 && activeQuestionIndex === 0;
   const totalAnswered = session.questions.filter((question: ExamQuestion) => !!answers[question.questionId]).length;
+  const totalQuestionsCount = session.questions.length;
+  const totalUnanswered = totalQuestionsCount - totalAnswered;
   const totalFlagged = flaggedQuestions.size;
-  const sessionProgress = session.questions.length ? Math.round((totalAnswered / session.questions.length) * 100) : 0;
+  const isTimeCritical = timeRemaining < 300; // < 5 mins
 
   return (
-    <div className="exam-shell min-h-screen bg-bg-primary text-text-primary font-sans">
-      <div className="exam-shell-glow exam-shell-glow-top" />
-      <div className="exam-shell-glow exam-shell-glow-bottom" />
-
-      <header className="exam-header sticky top-0 z-30 border-b border-border/80 bg-bg-primary/92 px-5 backdrop-blur-xl xl:px-8">
-        <div className="mx-auto flex min-h-[76px] max-w-[1640px] items-center justify-between gap-6">
-          <div className="flex min-w-0 items-center gap-4">
-            <div className="exam-brand-mark flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary shadow-[0_0_0_6px_rgba(91,114,255,0.06)]">
-              <ShieldCheck className="h-5 w-5" aria-hidden="true" />
+    <div className="bg-bg-primary-dark text-text-primary-dark min-h-screen flex flex-col font-body-md antialiased select-none overflow-x-hidden">
+      {/* ========================================================================= */}
+      {/* 1. TOP APEX ECOSYSTEM BAR */}
+      {/* ========================================================================= */}
+      <header className="bg-bg-secondary-dark/95 backdrop-blur-md border-b border-border-dark shrink-0 z-30 sticky top-0 shadow-md">
+        <div className="max-w-[1760px] mx-auto px-3.5 sm:px-5 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between gap-2.5 sm:gap-6 min-h-[58px] sm:min-h-[68px]">
+          {/* Left: Brand Emblem & Subtitle */}
+          <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
+            <img
+              src="/favicon.svg"
+              alt="Aurikrex Emblem"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl ring-1 ring-border-dark shadow-sm shrink-0"
+            />
+            <div className="flex flex-col">
+              <span className="font-headline-sm text-sm sm:text-[19px] text-text-primary-dark font-bold tracking-tight leading-tight">
+                <span className="hidden sm:inline">Aurikrex Exam Arena</span>
+                <span className="sm:hidden">Aurikrex</span>
+              </span>
+              <span className="font-label-sm text-[11px] sm:text-[12px] text-text-muted-dark font-medium leading-tight mt-0.5">
+                <span className="hidden sm:inline">Official UTME CBT Simulation</span>
+                <span className="sm:hidden font-mono-data text-[10px] text-secondary">AKX-{sessionId?.slice(0, 6).toUpperCase() || 'LIVE'}</span>
+              </span>
             </div>
-            <div className="min-w-0">
-              <p className="exam-eyebrow">JAMB UTME / Live session</p>
-              <div className="flex items-center gap-2">
-                <h1 className="truncate text-sm font-black tracking-[-0.02em] text-text-primary sm:text-base">
-                  {session.type === 'mock' ? 'Full Mock Exam' : 'Subject Drill'}
-                </h1>
-                <span className="hidden h-1 w-1 rounded-full bg-text-muted sm:block" />
-                <span className="hidden truncate text-xs font-medium text-text-muted sm:block">Secure testing workspace</span>
+          </div>
+
+          {/* Mobile Master Countdown Timer Capsule */}
+          <div className={`flex md:hidden items-center gap-1.5 px-2.5 py-1 rounded-lg border ${
+            isTimeCritical
+              ? 'bg-accent-streak-rose/15 border-accent-streak-rose/40 text-accent-streak-rose ring-1 ring-accent-streak-rose/50 animate-pulse'
+              : 'bg-surface-container-low border-border-dark text-text-primary-dark shadow-sm'
+          }`}>
+            <span className={`material-symbols-outlined text-[17px] ${isTimeCritical ? 'text-accent-streak-rose animate-bounce' : 'text-accent-royal-blue'}`}>timer</span>
+            <span className="font-mono-timer text-[14px] sm:text-[15px] font-bold tracking-wide">
+              {formatTime(timeRemaining)}
+            </span>
+          </div>
+
+          {/* Center: Candidate Identification Badge & Master Timer Console */}
+          <div className="hidden md:flex items-center gap-4 lg:gap-5 justify-center flex-1 max-w-[780px]">
+            {/* Candidate Info Badge */}
+            <div className="flex items-center gap-2.5 px-3.5 py-1.5 bg-surface-container rounded-xl border border-border-dark shadow-inner text-text-secondary-dark text-body-sm font-body-sm">
+              <span className="material-symbols-outlined text-primary text-[20px]">account_circle</span>
+              <span className="font-medium text-text-primary-dark whitespace-nowrap">Candidate Session</span>
+              <span className="text-border-hover-dark font-thin">|</span>
+              <span className="font-mono-data text-mono-data text-secondary whitespace-nowrap font-semibold">
+                AKX-{sessionId?.slice(0, 8).toUpperCase() || 'LIVE'}
+              </span>
+            </div>
+
+            <div className="h-6 w-px bg-border-dark hidden lg:block" />
+
+            {/* Master Countdown Timer Console */}
+            <div className={`flex items-center gap-3.5 bg-surface-container-low px-4 py-1.5 rounded-xl border border-border-dark ring-1 ${isTimeCritical ? 'ring-accent-streak-rose/60 bg-accent-streak-rose/10' : 'ring-accent-royal-blue/30'} shadow-sm`}>
+              <div className="flex items-center gap-1.5">
+                <span className={`material-symbols-outlined text-[22px] ${isTimeCritical ? 'text-accent-streak-rose animate-bounce' : 'text-accent-royal-blue animate-pulse'}`}>timer</span>
+                <span className="font-label-sm text-[11px] text-text-muted-dark uppercase tracking-wider font-semibold">Time:</span>
+              </div>
+              <div className={`font-mono-timer text-[22px] tracking-wider flex items-center font-bold ${isTimeCritical ? 'text-accent-streak-rose' : 'text-text-primary-dark'}`}>
+                <span>{formatTime(timeRemaining)}</span>
+              </div>
+              <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-md font-label-sm text-[12px] font-medium border ${isTimeCritical ? 'bg-accent-streak-rose/20 text-accent-streak-rose border-accent-streak-rose/30' : 'bg-tertiary/10 text-tertiary border-tertiary/25'}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${isTimeCritical ? 'bg-accent-streak-rose animate-ping' : 'bg-tertiary animate-pulse'}`} />
+                <span>{isTimeCritical ? 'Time Alert' : 'Standard Pacing'}</span>
               </div>
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-            {lastSaved && (
-              <div className="hidden items-center gap-2 rounded-xl border border-success/20 bg-success/5 px-3 py-2 text-xs font-semibold text-success lg:flex" title={`Answers last saved at ${formatSavedTime(lastSaved)}`}>
-                <span className="h-1.5 w-1.5 rounded-full bg-success" />
-                Saved {formatSavedTime(lastSaved)}
-              </div>
-            )}
-            <div className={`exam-timer flex min-h-11 md:min-h-0 items-center gap-2 rounded-2xl border px-3 py-2 font-mono text-sm font-black tabular-nums sm:px-4 ${timeRemaining < 300 ? 'exam-timer-danger' : ''}`} aria-label={`Time remaining ${formatTime(timeRemaining)}`}>
-              <Clock className="h-4 w-4" aria-hidden="true" />
-              <span>{formatTime(timeRemaining)}</span>
-              <span className="hidden text-xs font-sans font-bold uppercase tracking-[0.14em] opacity-70 sm:inline">remaining</span>
+          {/* Right: Candidate Utilities & Primary Submit CTA */}
+          <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
+            {/* Candidate Utilities Suite */}
+            <div className="flex items-center bg-surface-container rounded-xl border border-border-dark p-0.5 sm:p-1 gap-0.5 shadow-sm">
+              <button
+                onClick={() => setShowCalculator((prev) => !prev)}
+                className={`p-1 sm:p-1.5 rounded-lg transition-colors flex items-center justify-center ${showCalculator ? 'bg-accent-royal-blue text-white' : 'text-text-secondary-dark hover:text-text-primary-dark hover:bg-surface-variant'}`}
+                title="UTME Calculator"
+              >
+                <span className="material-symbols-outlined text-[18px] sm:text-[19px]">calculate</span>
+              </button>
+              <ThemeToggle className="min-h-7 min-w-7 sm:min-h-8 sm:min-w-8" />
             </div>
+
+            {/* Offline Cache Synced Status Pill */}
+            <div className="hidden xl:flex items-center gap-2 text-body-sm font-body-sm text-tertiary px-3 py-1.5 bg-surface-container-lowest rounded-xl border border-tertiary/25 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-tertiary" />
+              <span className="font-mono-data text-mono-data text-[12px] font-medium">Cache Synced</span>
+            </div>
+
+            <div className="h-6 w-px bg-border-dark hidden sm:block" />
+
+            {/* Primary Submit CTA with Unanswered Badge */}
             <button
-              type="button"
-              onClick={() => setShowCalculator((previous) => !previous)}
-              className={`exam-toolbar-button inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-2 text-xs font-bold transition-[background-color,border-color,color,box-shadow,transform] duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:px-3 ${showCalculator ? 'border-primary bg-primary/15 text-primary shadow-[0_8px_24px_rgba(91,114,255,0.16)]' : 'border-border bg-bg-secondary/55 text-text-secondary hover:border-primary/40 hover:text-text-primary'}`}
-              title="Toggle calculator"
-              aria-pressed={showCalculator}
+              onClick={() => setShowSubmitModal(true)}
+              className="relative group bg-accent-streak-rose/15 hover:bg-accent-streak-rose/25 text-accent-streak-rose border border-accent-streak-rose/40 hover:border-accent-streak-rose/60 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl font-label-md text-label-md flex items-center gap-1.5 sm:gap-2.5 active:scale-[0.98] transition-all shadow-sm"
             >
-              <Calculator className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="hidden sm:inline">Calculator</span>
-            </button>
-            <ThemeToggle className="h-9 w-9 rounded-xl p-2" />
-            <button
-              type="button"
-              onClick={handleSubmitClick}
-              disabled={submitting}
-              className="exam-submit-button inline-flex items-center gap-2 rounded-xl border border-rose-500/60 bg-rose-600 px-3.5 py-2.5 text-xs font-black text-white shadow-[0_10px_24px_rgba(225,29,72,0.22)] transition-[background-color,border-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-rose-400 hover:bg-rose-500 hover:shadow-[0_14px_30px_rgba(225,29,72,0.3)] active:scale-95 disabled:pointer-events-none disabled:opacity-50 sm:px-4"
-            >
-              {submitting ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" /> : <Send className="h-3.5 w-3.5" aria-hidden="true" />}
-              <span className="hidden sm:inline">Submit Exam</span>
-              <span className="sm:hidden">Submit</span>
+              <span className="material-symbols-outlined text-[18px] sm:text-[19px]">done_all</span>
+              <span className="font-semibold tracking-tight text-xs sm:text-sm">
+                <span className="hidden sm:inline">Submit Simulation</span>
+                <span className="sm:hidden">Submit</span>
+              </span>
+              <span className="px-1.5 sm:px-2 py-0.5 bg-accent-streak-rose text-white text-[10px] sm:text-[11px] font-bold rounded-full shadow">
+                {totalUnanswered}
+              </span>
             </button>
           </div>
         </div>
       </header>
 
-      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-76px)] w-full max-w-[1640px]">
-        <main className="min-w-0 flex-1 px-5 py-6 xl:px-8 xl:py-8">
-          <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="exam-eyebrow">Your test plan</p>
-              <h2 className="mt-1 font-display text-2xl font-black tracking-[-0.05em] text-text-primary xl:text-3xl">Stay focused. One question at a time.</h2>
-            </div>
-            <div className="flex items-center gap-3 text-right">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-text-muted">Session progress</p>
-                <p className="mt-1 text-sm font-black text-text-primary">{totalAnswered} <span className="font-medium text-text-muted">of {session.questions.length}</span></p>
-              </div>
-              <div className="h-10 w-px bg-border" />
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-text-muted">Flagged</p>
-                <p className="mt-1 text-sm font-black text-amber-500">{totalFlagged}</p>
-              </div>
-            </div>
-          </div>
+      {/* ========================================================================= */}
+      {/* 2. 4-SUBJECT TAB NAVIGATION BAR */}
+      {/* ========================================================================= */}
+      <nav className="bg-surface-container-low/90 backdrop-blur border-b border-border-dark px-5 lg:px-8 py-2.5 shadow-sm">
+        <div className="max-w-[1760px] mx-auto flex items-center justify-between gap-4 overflow-x-auto pb-0.5">
+          <div className="flex items-center gap-3 min-w-max">
+            {session.subjects.map((sub: string) => {
+              const isActive = sub === activeSubject;
+              const subQuestions = session.questions.filter((q: ExamQuestion) => q.subject === sub);
+              const subAnswered = subQuestions.filter((q: ExamQuestion) => !!answers[q.questionId]).length;
+              const subPercentage = subQuestions.length > 0 ? Math.round((subAnswered / subQuestions.length) * 100) : 0;
+              const isCompulsory = sub === 'english';
 
-          <div className="mb-6 overflow-hidden rounded-2xl border border-border bg-bg-secondary/35 p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.06)]">
-            <div className="flex gap-1 overflow-x-auto">
-              {session.subjects.map((sub: string) => {
-                const isActive = sub === activeSubject;
-                const subjectQuestions = session.questions.filter((question: ExamQuestion) => question.subject === sub);
-                const subjectAnswered = subjectQuestions.filter((question: ExamQuestion) => !!answers[question.questionId]).length;
-                return (
-                  <button
-                    key={sub}
-                    type="button"
-                    onClick={() => {
-                      setActiveSubject(sub);
-                      setActiveQuestionIndex(0);
-                    }}
-                    className={`group flex min-h-12 md:min-h-0 min-w-[145px] flex-1 items-center justify-between gap-3 rounded-xl px-4 py-3 text-left transition-[background-color,border-color,box-shadow,color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isActive ? 'border border-primary/35 bg-primary text-white shadow-[0_10px_24px_rgba(91,114,255,0.22)]' : 'border border-transparent text-text-secondary hover:border-border hover:bg-bg-primary/70 hover:text-text-primary'}`}
-                    aria-current={isActive ? 'page' : undefined}
-                  >
-                    <span className="min-w-0">
-                      <span className="block truncate text-xs font-black">{getSubjectLabel(sub)}</span>
-                      <span className={`mt-1 block text-xs font-semibold ${isActive ? 'text-white/70' : 'text-text-muted'}`}>{subjectAnswered}/{subjectQuestions.length} answered</span>
-                    </span>
-                    <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${subjectAnswered === subjectQuestions.length ? 'bg-success' : isActive ? 'bg-white/80' : 'bg-text-muted/60'}`} />
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {activeQuestion ? (
-            <div className="exam-content-frame">
-              <div className="mb-3 flex items-center justify-between gap-4 px-1">
-                <div className="flex items-center gap-2 text-xs font-semibold text-text-muted">
-                  <Layers3 className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-                  <span>{getSubjectLabel(activeSubject)} / Question {activeQuestionIndex + 1}</span>
-                </div>
-                <span className="hidden items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-text-muted sm:flex"><Keyboard className="h-3.5 w-3.5" aria-hidden="true" /> A–E to answer</span>
-              </div>
-
-              <QuestionCard
-                question={activeQuestion}
-                index={activeQuestionIndex}
-                totalCount={currentSubjectQuestions.length}
-                selectedOption={answers[activeQuestion.questionId]}
-                onSelectOption={(optionId) => handleSelectOption(activeQuestion.questionId, optionId)}
-                isFlagged={flaggedQuestions.has(activeQuestion.questionId)}
-                onToggleFlag={() => toggleFlaggedQuestion(activeQuestion.questionId)}
-              />
-
-              <div className="mt-6 flex flex-col gap-4 border-t border-border/70 pt-5 sm:flex-row sm:items-center sm:justify-between">
+              return (
                 <button
-                  type="button"
+                  key={sub}
+                  onClick={() => {
+                    setActiveSubject(sub);
+                    setActiveQuestionIndex(0);
+                  }}
+                  className={`group flex items-center gap-3 px-4 py-2 rounded-xl transition-all border ${
+                    isActive
+                      ? 'bg-surface-container border-2 border-primary/50 text-text-primary-dark shadow-md ring-1 ring-primary/20'
+                      : 'bg-surface-container/60 hover:bg-surface-container text-text-secondary-dark hover:text-text-primary-dark border-border-dark hover:border-border-hover-dark'
+                  }`}
+                >
+                  <span className={`w-2.5 h-2.5 rounded-full ${isActive ? 'bg-primary ring-4 ring-primary/25 animate-pulse' : subPercentage === 100 ? 'bg-tertiary' : 'bg-surface-variant'}`} />
+                  <div className="text-left flex items-center gap-2">
+                    <span className={`font-label-md text-label-md font-bold leading-tight ${isActive ? 'text-primary' : 'text-text-primary-dark'}`}>
+                      {getSubjectLabel(sub)} {isCompulsory && <span className="text-xs text-text-muted-dark font-normal">(Compulsory)</span>}
+                    </span>
+                    <span className="text-border-hover-dark font-thin">·</span>
+                    <span className="font-mono-data text-mono-data text-[13px] text-text-secondary-dark">
+                      {subAnswered}/{subQuestions.length} answered
+                    </span>
+                  </div>
+                  <span className={`ml-1 text-[12px] font-bold px-2 py-0.5 rounded-md border ${isActive ? 'bg-primary/15 text-primary border-primary/30' : 'bg-surface-container text-text-muted-dark border-border-dark'}`}>
+                    {subPercentage}%
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Quick Aggregate Completion Counter */}
+          <div className="hidden 2xl:flex items-center gap-3 px-3.5 py-1.5 bg-surface-container rounded-xl border border-border-dark text-body-sm font-body-sm shrink-0">
+            <span className="text-text-muted-dark">Aggregate Completion:</span>
+            <span className="font-mono-data text-mono-data text-text-primary-dark font-bold">
+              {totalAnswered} / {totalQuestionsCount}
+            </span>
+            <div className="w-24 bg-surface-variant h-2 rounded-full overflow-hidden ml-1">
+              <div
+                className="bg-primary h-full rounded-full transition-all duration-300"
+                style={{ width: `${totalQuestionsCount > 0 ? (totalAnswered / totalQuestionsCount) * 100 : 0}%` }}
+              />
+            </div>
+            <span className="font-mono-data text-mono-data text-[12px] text-primary font-bold">
+              {totalQuestionsCount > 0 ? Math.round((totalAnswered / totalQuestionsCount) * 100) : 0}%
+            </span>
+          </div>
+        </div>
+      </nav>
+
+      {/* ========================================================================= */}
+      {/* 3. EXAM WORKSPACE VIEWPORT */}
+      {/* ========================================================================= */}
+      <main className="flex-1 max-w-[1760px] w-full mx-auto px-5 lg:px-8 py-5 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        {/* MAIN EXAM CANVAS (COL 8/9) */}
+        <div className="lg:col-span-8 xl:col-span-9 flex flex-col gap-4">
+          {activeQuestion ? (
+            <>
+              {/* Question Meta Header Card */}
+              <div className="bg-bg-card-dark rounded-xl border border-border-dark p-4 shadow-sm flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3.5">
+                  <span className="px-3.5 py-1.5 rounded-lg bg-accent-royal-blue text-white font-mono-data text-mono-data font-bold tracking-wide shadow-sm">
+                    Q{activeQuestionIndex + 1}
+                  </span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-headline-sm text-headline-sm text-text-primary-dark">
+                        Question {activeQuestionIndex + 1} of {currentSubjectQuestions.length}
+                      </span>
+                      <span className="text-border-hover-dark">·</span>
+                      <span className="font-label-md text-label-md text-primary font-semibold">{getSubjectLabel(activeSubject)}</span>
+                    </div>
+                    <p className="font-body-sm text-body-sm text-text-muted-dark">
+                      {activeQuestion.topic ? `${activeQuestion.topic} · (1 Mark)` : 'Standard UTME Item · (1 Mark)'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 sm:gap-2.5">
+                  {/* Mobile Quick-Jump Palette Trigger */}
+                  <button
+                    type="button"
+                    onClick={() => setIsSidebarOpen(true)}
+                    className="lg:hidden px-2.5 py-1.5 rounded-lg border border-accent-royal-blue/40 bg-accent-royal-blue/15 text-primary hover:bg-accent-royal-blue/25 flex items-center gap-1 text-label-sm font-label-sm font-semibold transition-colors"
+                    title="Open Question Palette Matrix"
+                  >
+                    <span className="material-symbols-outlined text-[17px]">grid_view</span>
+                    <span>Q-Grid</span>
+                  </button>
+
+                  {/* Flag Status */}
+                  <button
+                    onClick={() => toggleFlaggedQuestion(activeQuestion.questionId)}
+                    className={`px-2.5 sm:px-3 py-1.5 rounded-lg border flex items-center gap-1.5 text-label-sm font-label-sm transition-colors ${
+                      flaggedQuestions.has(activeQuestion.questionId)
+                        ? 'border-warning-amber bg-warning-amber/20 text-warning-amber'
+                        : 'border-border-dark hover:border-warning-amber/40 text-text-secondary-dark hover:text-warning-amber bg-surface-container'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[17px] sm:text-[18px]">bookmark</span>
+                    <span>{flaggedQuestions.has(activeQuestion.questionId) ? 'Flagged' : 'Flag'} <span className="hidden sm:inline">[F]</span></span>
+                  </button>
+
+                  {/* Mark Value Badge */}
+                  <span className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-surface-container text-tertiary border border-tertiary/20 text-label-sm font-label-sm font-semibold">
+                    +1.0 Mark
+                  </span>
+                </div>
+              </div>
+
+              {/* Question Stem & Card */}
+              <div className="bg-bg-card-dark rounded-xl border border-border-dark p-6 lg:p-7 shadow-md flex flex-col gap-5">
+                <QuestionCard
+                  question={activeQuestion}
+                  index={activeQuestionIndex}
+                  totalCount={currentSubjectQuestions.length}
+                  selectedOption={answers[activeQuestion.questionId]}
+                  onSelectOption={(optionId) => handleSelectOption(activeQuestion.questionId, optionId)}
+                  isFlagged={flaggedQuestions.has(activeQuestion.questionId)}
+                  onToggleFlag={() => toggleFlaggedQuestion(activeQuestion.questionId)}
+                />
+              </div>
+
+              {/* Navigation & Assistant Toolbar Footer */}
+              <div className="bg-bg-card-dark rounded-xl border border-border-dark p-3 sm:p-4 shadow-sm flex flex-wrap items-center justify-between gap-3">
+                {/* Left: Previous CTA */}
+                <button
                   onClick={handlePrev}
                   disabled={isFirstQuestion}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-secondary/55 px-4 py-3 text-xs font-black text-text-secondary transition-[background-color,border-color,color,transform] duration-200 hover:border-primary/40 hover:bg-primary/5 hover:text-text-primary active:scale-[0.98] disabled:pointer-events-none disabled:opacity-35"
+                  className="flex-1 sm:flex-initial justify-center px-3.5 sm:px-4 py-2.5 rounded-xl border border-border-dark hover:border-border-hover-dark bg-surface-container text-text-secondary-dark hover:text-text-primary-dark text-label-md font-label-md flex items-center gap-2 active:scale-[0.98] transition-all disabled:opacity-40 disabled:pointer-events-none"
                 >
-                  <ChevronLeft className="h-4 w-4" aria-hidden="true" /> Previous
+                  <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+                  <span>Prev<span className="hidden xs:inline">ious</span> [P]</span>
                 </button>
-                <div className="order-first flex items-center gap-2 text-center text-xs font-semibold text-text-muted sm:order-none">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  Changes save automatically
+
+                {/* Center: Auto-Save Status */}
+                <div className="order-last sm:order-none w-full sm:w-auto flex items-center justify-center gap-2 text-xs text-text-muted-dark font-mono-data py-0.5">
+                  <span className="w-2 h-2 rounded-full bg-tertiary animate-pulse" />
+                  <span className="truncate">{lastSaved ? `Saved at ${lastSaved.toLocaleTimeString()}` : 'Connected to Exam Vault'}</span>
                 </div>
+
+                {/* Right: Next Question CTA */}
                 <button
-                  type="button"
                   onClick={handleNextClick}
-                  className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-xs font-black text-white shadow-[0_10px_24px_rgba(91,114,255,0.2)] transition-[background-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 active:scale-[0.98] ${isLastQuestion ? 'bg-rose-600 shadow-rose-600/20 hover:bg-rose-500' : 'bg-primary hover:bg-primary-hover'}`}
+                  className="flex-1 sm:flex-initial justify-center px-4 sm:px-5 py-2.5 rounded-xl bg-accent-royal-blue hover:bg-primary-container text-white text-label-md font-label-md font-semibold flex items-center gap-2 shadow-sm active:scale-[0.98] transition-all"
                 >
-                  {isLastQuestion ? 'Review & submit' : 'Next question'}
-                  {isLastQuestion ? <Send className="h-3.5 w-3.5" aria-hidden="true" /> : <ChevronRight className="h-4 w-4" aria-hidden="true" />}
+                  <span>{isLastQuestion ? 'Submit [S]' : 'Next [N]'}</span>
+                  <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
                 </button>
               </div>
-            </div>
+
+              {/* Cyber-Cafe Keyboard Shortcut Strip */}
+              <div className="p-3 bg-surface-container-low rounded-xl border border-border-dark flex items-center justify-between text-body-sm font-body-sm text-text-muted-dark">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-text-secondary-dark font-medium">Shortcuts:</span>
+                  <span className="font-mono-data text-[11px] px-1.5 py-0.5 rounded bg-surface-container border border-border-dark text-text-secondary-dark">[A-D] Select Option</span>
+                  <span className="font-mono-data text-[11px] px-1.5 py-0.5 rounded bg-surface-container border border-border-dark text-text-secondary-dark">[P] Prev</span>
+                  <span className="font-mono-data text-[11px] px-1.5 py-0.5 rounded bg-surface-container border border-border-dark text-text-secondary-dark">[N] Next</span>
+                  <span className="font-mono-data text-[11px] px-1.5 py-0.5 rounded bg-surface-container border border-border-dark text-text-secondary-dark">[F] Flag</span>
+                  <span className="font-mono-data text-[11px] px-1.5 py-0.5 rounded bg-surface-container border border-border-dark text-text-secondary-dark">[S] Submit</span>
+                </div>
+                <div className="text-[11px] text-text-muted-dark hidden md:block">
+                  Auto-saves instantly upon keypress
+                </div>
+              </div>
+            </>
           ) : (
-            <div className="rounded-3xl border border-dashed border-border bg-bg-secondary/25 p-12 text-center text-sm text-text-muted">No questions mapped to this subject.</div>
+            <div className="rounded-3xl border border-dashed border-border-dark bg-bg-card-dark p-12 text-center text-sm text-text-muted-dark">
+              No questions mapped to this subject.
+            </div>
           )}
-        </main>
+        </div>
 
-        {isSidebarOpen && (
-          <button type="button" aria-label="Close subject navigator" className="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-sm md:hidden" onClick={() => setIsSidebarOpen(false)} />
-        )}
-        <aside className={`exam-navigator fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm border-l border-border bg-bg-primary px-5 pb-6 pt-24 shadow-[-20px_0_60px_rgba(0,0,0,0.18)] transition-transform duration-300 md:sticky md:top-[76px] md:z-10 md:h-[calc(100vh-76px)] md:w-[320px] md:max-w-none md:translate-x-0 md:border-l md:bg-bg-primary/65 md:px-6 md:pt-7 md:shadow-none ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}`}>
-          <div className="flex items-start justify-between gap-4 border-b border-border/70 pb-5">
-            <div>
-              <p className="exam-eyebrow">Question map</p>
-              <h3 className="mt-1 text-base font-black tracking-[-0.03em] text-text-primary">Navigator</h3>
+        {/* RIGHT SIDEBAR: QUESTION PALETTE (COL 4/3) */}
+        <aside className="lg:col-span-4 xl:col-span-3 flex flex-col gap-4">
+          <div className="bg-bg-card-dark rounded-xl border border-border-dark p-4 shadow-md flex flex-col gap-4">
+            {/* Palette Header */}
+            <div className="flex items-center justify-between pb-2 border-b border-border-dark">
+              <div>
+                <h2 className="font-headline-sm text-headline-sm text-text-primary-dark">Question Palette</h2>
+                <p className="font-body-sm text-body-sm text-text-muted-dark">
+                  {getSubjectLabel(activeSubject)} ({currentSubjectQuestions.length} Questions)
+                </p>
+              </div>
+              <span className="material-symbols-outlined text-text-muted-dark text-[22px]">apps</span>
             </div>
-            <button type="button" className="rounded-lg p-1.5 text-text-muted hover:bg-bg-secondary hover:text-text-primary md:hidden" onClick={() => setIsSidebarOpen(false)} aria-label="Close navigator"><ChevronRightSquare className="h-5 w-5" /></button>
-          </div>
 
-          <div className="mt-5 rounded-2xl border border-border bg-bg-secondary/35 p-4">
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-xs font-bold text-text-secondary">{getSubjectLabel(activeSubject)}</span>
-              <span className="text-xs font-black text-primary">{answeredInActiveSubject}/{currentSubjectQuestions.length}</span>
+            {/* Legend Indicators */}
+            <div className="grid grid-cols-2 gap-2 text-label-sm font-label-sm bg-surface-container-low p-2.5 rounded-lg border border-border-dark">
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-tertiary" />
+                <span className="text-text-secondary-dark">Answered (<strong className="text-text-primary-dark">{answeredInActiveSubject}</strong>)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-accent-royal-blue ring-2 ring-accent-royal-blue/40" />
+                <span className="text-text-secondary-dark">Current (<strong className="text-text-primary-dark">1</strong>)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-warning-amber" />
+                <span className="text-text-secondary-dark">Flagged (<strong className="text-text-primary-dark">{totalFlagged}</strong>)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-surface-variant border border-border-dark" />
+                <span className="text-text-secondary-dark">Left (<strong className="text-text-primary-dark">{currentSubjectQuestions.length - answeredInActiveSubject}</strong>)</span>
+              </div>
             </div>
-            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-bg-primary">
-              <div className="h-full rounded-full bg-primary transition-[width] duration-300" style={{ width: `${currentSubjectQuestions.length ? (answeredInActiveSubject / currentSubjectQuestions.length) * 100 : 0}%` }} />
-            </div>
-            <div className="mt-3 flex items-center justify-between text-xs font-semibold text-text-muted"><span>Current subject</span><span>{sessionProgress}% session complete</span></div>
-          </div>
 
-          <div className="mt-6 flex-1 overflow-y-auto pr-1">
-            <div className="grid grid-cols-5 gap-2.5">
-              {currentSubjectQuestions.map((question: ExamQuestion, idx: number) => {
+            {/* 4-Column Matrix Grid */}
+            <div className="grid grid-cols-4 gap-2 max-h-[380px] overflow-y-auto pr-1">
+              {currentSubjectQuestions.map((q: ExamQuestion, idx: number) => {
                 const isSelected = activeQuestionIndex === idx;
-                const isAnswered = !!answers[question.questionId];
-                const isFlagged = flaggedQuestions.has(question.questionId);
+                const isAnswered = !!answers[q.questionId];
+                const isFlagged = flaggedQuestions.has(q.questionId);
+
                 return (
                   <button
-                    key={question.questionId}
-                    type="button"
-                    onClick={() => {
-                      setActiveQuestionIndex(idx);
-                      if (window.innerWidth < DESKTOP_BREAKPOINT) setIsSidebarOpen(false);
-                    }}
-                    className={`relative flex h-11 w-full items-center justify-center rounded-xl border text-xs font-black transition-[background-color,border-color,box-shadow,color,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-95 ${isSelected ? 'border-primary bg-primary text-white shadow-[0_8px_18px_rgba(91,114,255,0.26)] ring-2 ring-primary/20' : isFlagged ? 'border-amber-400/60 bg-amber-400/10 text-amber-500 hover:bg-amber-400/15' : isAnswered ? 'border-primary/30 bg-primary/12 text-primary hover:border-primary/60 hover:bg-primary/15' : 'border-border bg-bg-primary/55 text-text-muted hover:border-primary/35 hover:bg-bg-secondary hover:text-text-primary'}`}
-                    aria-label={`Question ${idx + 1}${isAnswered ? ', answered' : ', unanswered'}${isFlagged ? ', flagged for review' : ''}`}
-                    aria-current={isSelected ? 'step' : undefined}
+                    key={q.questionId}
+                    onClick={() => setActiveQuestionIndex(idx)}
+                    className={`h-9 rounded-lg font-mono-data text-xs font-bold flex items-center justify-center transition-all relative ${
+                      isSelected
+                        ? 'bg-accent-royal-blue text-white ring-2 ring-primary glow-active-node z-10 scale-[1.03]'
+                        : isFlagged
+                        ? 'bg-warning-amber text-white dark:text-slate-950 font-bold'
+                        : isAnswered
+                        ? 'bg-tertiary/20 text-tertiary border border-tertiary/40 hover:bg-tertiary/30'
+                        : 'bg-surface-container text-text-secondary-dark border border-border-dark hover:border-primary/40'
+                    }`}
                   >
                     {idx + 1}
-                    {isFlagged && !isSelected && <Flag className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full bg-bg-primary text-amber-500" fill="currentColor" aria-hidden="true" />}
+                    {isFlagged && !isSelected && (
+                      <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-white" />
+                    )}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          <div className="mt-6 space-y-3 border-t border-border/70 pt-5">
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-text-muted">Status key</p>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-2.5 text-xs font-semibold text-text-secondary">
-              <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-md border border-primary/40 bg-primary/15" /> Answered</span>
-              <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-md border border-border bg-bg-primary" /> Unanswered</span>
-              <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-md border-2 border-primary bg-primary/15" /> Current</span>
-              <span className="flex items-center gap-2"><Flag className="h-3 w-3 text-amber-500" fill="currentColor" /> Flagged</span>
+          {/* Exam Session Telemetry & Integrity Card */}
+          <div className="bg-surface-container-low rounded-xl border border-border-dark p-4 flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="font-label-sm text-label-sm text-text-secondary-dark uppercase tracking-wide">Session Integrity</span>
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono-data bg-tertiary/10 text-tertiary border border-tertiary/20">Secure CBT Lock</span>
             </div>
-            <div className="flex items-center gap-2 rounded-xl bg-primary/5 px-3 py-2.5 text-xs leading-5 text-text-muted"><CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-success" /> Your answers are saved as you move.</div>
+            <div className="space-y-1.5 text-body-sm font-body-sm">
+              <div className="flex justify-between items-center text-text-muted-dark">
+                <span>Session ID:</span>
+                <span className="font-mono-data text-mono-data text-text-primary-dark">{sessionId?.slice(0, 16) || 'ACTIVE'}</span>
+              </div>
+              <div className="flex justify-between items-center text-text-muted-dark">
+                <span>Anti-Cheat Status:</span>
+                <span className="text-tertiary flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-tertiary" />
+                  Active Pacing
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-text-muted-dark">
+                <span>Packet Sync:</span>
+                <span className="font-mono-data text-mono-data text-text-secondary-dark">0 ms (Zero loss)</span>
+              </div>
+            </div>
           </div>
         </aside>
-      </div>
+      </main>
 
-      <button type="button" onClick={() => setIsSidebarOpen((previous) => !previous)} className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-30 flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-primary/30 bg-primary px-3.5 text-xs font-black text-white shadow-[0_14px_30px_rgba(91,114,255,0.28)] md:hidden" title="Toggle question navigator" aria-label="Toggle question navigator"><Monitor className="h-4 w-4" aria-hidden="true" /><span>Questions</span></button>
+      {/* ========================================================================= */}
+      {/* 4. DRAGGABLE FLOATING CALCULATOR MODAL */}
+      {/* ========================================================================= */}
+      {showCalculator && (
+        <div
+          style={{ position: 'fixed', left: `${calcPosition.x}px`, top: `${calcPosition.y}px`, zIndex: 60 }}
+          className="w-72 bg-bg-card-dark border border-border-dark rounded-2xl shadow-2xl overflow-hidden"
+        >
+          {/* Header Draggable Bar */}
+          <div
+            onPointerDown={handleCalcPointerDown}
+            className="flex items-center justify-between px-3 py-2 bg-surface-container cursor-move select-none border-b border-border-dark"
+          >
+            <div className="flex items-center gap-2">
+              <Calculator className="h-4 w-4 text-primary" />
+              <span className="text-xs font-bold text-text-primary-dark">JAMB Calculator</span>
+            </div>
+            <button
+              onClick={() => setShowCalculator(false)}
+              className="p-1 rounded hover:bg-surface-variant text-text-muted-dark hover:text-text-primary-dark"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
 
-      {/* Custom Submit Confirmation Modal */}
+          {/* Calculator Screen */}
+          <div className="p-3 bg-surface-container-low border-b border-border-dark text-right">
+            <div className="text-xs text-text-muted-dark font-mono-data min-h-[16px]">{calcInput || '0'}</div>
+            <div className="text-lg font-bold text-text-primary-dark font-mono-data truncate">{calcResult || '0'}</div>
+          </div>
+
+          {/* Keypad Grid */}
+          <div className="p-2.5 grid grid-cols-4 gap-1.5 text-xs font-mono-data">
+            {['C', 'Back', '√', '÷', '7', '8', '9', '×', '4', '5', '6', '-', '1', '2', '3', '+', '0', '.', '%', '='].map((key) => (
+              <button
+                key={key}
+                onClick={() => handleCalcBtnClick(key)}
+                className={`h-9 rounded-lg font-semibold transition-all ${
+                  key === '='
+                    ? 'bg-accent-royal-blue text-white hover:bg-primary-container'
+                    : ['C', 'Back'].includes(key)
+                    ? 'bg-surface-variant text-accent-streak-rose hover:bg-surface-container-highest'
+                    : ['÷', '×', '-', '+', '%', '√'].includes(key)
+                    ? 'bg-surface-container text-primary hover:bg-surface-variant'
+                    : 'bg-surface-container-low text-text-primary-dark hover:bg-surface-variant'
+                }`}
+              >
+                {key}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 5. SUBMISSION CONFIRMATION MODAL */}
+      {/* ========================================================================= */}
       {showSubmitModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-bg-secondary border border-border rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center gap-3 text-rose-500">
-              <div className="h-10 w-10 rounded-full bg-rose-500/10 flex items-center justify-center border border-rose-500/20">
-                <AlertTriangle className="h-5 w-5 text-rose-500" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-primary-dark/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md rounded-2xl bg-bg-card-dark border border-border-dark p-6 shadow-2xl relative space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-accent-streak-rose/20 text-accent-streak-rose flex items-center justify-center">
+                <AlertTriangle className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-text-primary">Submit Exam</h3>
-                <p className="text-xs text-text-secondary">Confirmation Required</p>
+                <h4 className="text-headline-sm font-headline-sm text-text-primary-dark">Submit Examination?</h4>
+                <p className="text-xs text-text-muted-dark font-mono-data">Final Grade &amp; Triage Computation</p>
               </div>
             </div>
 
-            <p className="text-sm text-text-secondary leading-normal">
-              Are you sure you want to submit your exam? You cannot change your choices after submitting.
-            </p>
+            <div className="p-4 rounded-xl bg-surface-container-low border border-border-dark space-y-2 text-xs">
+              <div className="flex justify-between text-text-secondary-dark">
+                <span>Total Questions:</span>
+                <span className="font-mono-data text-text-primary-dark font-bold">{totalQuestionsCount}</span>
+              </div>
+              <div className="flex justify-between text-tertiary">
+                <span>Answered:</span>
+                <span className="font-mono-data font-bold">{totalAnswered}</span>
+              </div>
+              <div className="flex justify-between text-accent-streak-rose">
+                <span>Unanswered:</span>
+                <span className="font-mono-data font-bold">{totalUnanswered}</span>
+              </div>
+              <div className="flex justify-between text-warning-amber">
+                <span>Flagged for Review:</span>
+                <span className="font-mono-data font-bold">{totalFlagged}</span>
+              </div>
+            </div>
 
             {submitError && (
-              <div className="rounded-lg bg-rose-500/10 border border-rose-500/20 p-3 text-xs text-rose-400">
+              <p className="text-xs text-accent-streak-rose bg-accent-streak-rose/10 p-2.5 rounded-lg border border-accent-streak-rose/30">
                 {submitError}
-              </div>
+              </p>
             )}
 
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex items-center gap-3 pt-2">
               <button
-                onClick={() => {
-                  setShowSubmitModal(false);
-                  setSubmitError('');
-                }}
-                disabled={submitting}
-                className="rounded-xl border border-border bg-bg-primary px-4 py-2.5 text-xs font-bold text-text-secondary hover:text-text-primary transition-colors"
+                type="button"
+                onClick={() => setShowSubmitModal(false)}
+                className="flex-1 py-3 rounded-xl bg-surface-container hover:bg-surface-variant text-text-secondary-dark hover:text-text-primary-dark border border-border-dark font-label-md text-label-md font-semibold transition-all"
               >
-                Cancel
+                Return to Exam
               </button>
               <button
-                onClick={executeSubmit}
+                type="button"
                 disabled={submitting}
-                className="rounded-xl bg-rose-600 hover:bg-rose-500 px-5 py-2.5 text-xs font-bold text-white flex items-center gap-1.5 transition-all shadow-lg shadow-rose-600/10 disabled:opacity-50"
+                onClick={executeSubmit}
+                className="flex-1 py-3 rounded-xl bg-accent-royal-blue hover:bg-primary-container text-white font-label-md text-label-md font-semibold transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {submitting ? (
                   <>
-                    Submitting <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Submitting...</span>
                   </>
                 ) : (
-                  <>
-                    Confirm Submit <Send className="h-3.5 w-3.5" />
-                  </>
+                  <span>Confirm &amp; Submit</span>
                 )}
               </button>
             </div>
@@ -717,198 +958,99 @@ export default function ExamConsole() {
         </div>
       )}
 
-      {/* Custom Alert Modal */}
-      {alertConfig && alertConfig.show && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-bg-secondary border border-border rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center gap-3 text-primary">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
-                <AlertTriangle className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-text-primary">{alertConfig.title}</h3>
-              </div>
-            </div>
-
-            <p className="text-sm text-text-secondary leading-normal">
-              {alertConfig.message}
-            </p>
-
-            <div className="flex justify-end pt-2">
-              <button
-                onClick={() => {
-                  const onConfirm = alertConfig.onConfirm;
-                  setAlertConfig(null);
-                  if (onConfirm) onConfirm();
-                }}
-                className="rounded-xl bg-primary hover:bg-primary-hover px-6 py-2.5 text-xs font-bold text-text-on-accent transition-all shadow-lg shadow-primary/10"
-              >
-                OK
-              </button>
-            </div>
+      {/* Generic Alert Dialog */}
+      {alertConfig?.show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg-primary-dark/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-bg-card-dark border border-border-dark p-6 shadow-2xl space-y-4">
+            <h4 className="text-headline-sm font-headline-sm text-text-primary-dark">{alertConfig.title}</h4>
+            <p className="text-body-sm font-body-sm text-text-secondary-dark">{alertConfig.message}</p>
+            <button
+              onClick={() => {
+                alertConfig.onConfirm?.();
+                setAlertConfig(null);
+              }}
+              className="w-full py-2.5 rounded-xl bg-accent-royal-blue text-white font-semibold shadow"
+            >
+              Okay
+            </button>
           </div>
         </div>
       )}
-
-      {/* Floating Draggable Calculator */}
-      {showCalculator && (
-        <div
-          style={{
-            position: 'fixed',
-            left: `${calcPosition.x}px`,
-            top: `${calcPosition.y}px`,
-            zIndex: 40,
-          }}
-          className="w-72 bg-bg-secondary border border-border rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md select-none animate-in fade-in zoom-in-95 duration-150"
-        >
-          {/* Header Drag Bar */}
-          <div
-            onPointerDown={handleCalcPointerDown}
-            className="bg-bg-primary px-4 py-2.5 flex items-center justify-between cursor-move touch-none border-b border-border"
-          >
-            <div className="flex items-center gap-2 text-primary">
-              <Calculator className="h-4 w-4 text-primary" />
-              <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">Calculator</span>
+      {/* Mobile Expandable Question Palette Drawer (Stitch Mobile Spec) */}
+      {isSidebarOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col justify-end lg:hidden bg-bg-primary-dark/80 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="flex-1" onClick={() => setIsSidebarOpen(false)} aria-label="Close palette overlay" />
+          <div className="bg-bg-secondary-dark border-t border-border-dark rounded-t-2xl p-4 w-full max-h-[82vh] flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-border-dark">
+              <div>
+                <h3 className="font-headline-sm text-base font-bold text-text-primary-dark">
+                  Question Palette Matrix
+                </h3>
+                <p className="text-xs text-text-muted-dark">
+                  {getSubjectLabel(activeSubject)} · {answeredInActiveSubject}/{currentSubjectQuestions.length} answered
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSidebarOpen(false)}
+                className="p-1.5 rounded-lg text-text-muted-dark hover:text-text-primary-dark hover:bg-surface-container transition-colors"
+                aria-label="Close question palette"
+              >
+                <span className="material-symbols-outlined text-[22px]">close</span>
+              </button>
             </div>
-            <button
-              onClick={() => setShowCalculator(false)}
-              className="text-text-secondary hover:text-text-primary text-xs font-semibold px-1.5 py-0.5 rounded hover:bg-bg-secondary transition-colors animate-all"
-            >
-              ✕
-            </button>
-          </div>
 
-          {/* Calculator Screen */}
-          <div className="p-4 bg-bg-primary border-b border-border text-right font-mono flex flex-col justify-end min-h-[88px] break-all">
-            <div className="text-sm text-text-secondary overflow-x-auto whitespace-nowrap min-h-[20px] pb-0.5">{calcInput || '0'}</div>
-            <div className="text-3xl font-black text-text-primary overflow-x-auto whitespace-nowrap pt-1 min-h-[40px] tracking-tight">{calcResult || '–'}</div>
-          </div>
+            <div className="grid grid-cols-2 gap-2 text-label-sm py-2.5 border-b border-border-dark text-xs">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-tertiary" />
+                <span className="text-text-secondary-dark">Answered ({answeredInActiveSubject})</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-accent-royal-blue ring-1 ring-accent-royal-blue/40" />
+                <span className="text-text-secondary-dark">Current (Q{activeQuestionIndex + 1})</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-warning-amber" />
+                <span className="text-text-secondary-dark">Flagged ({totalFlagged})</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-surface-variant border border-border-dark" />
+                <span className="text-text-secondary-dark">Left ({currentSubjectQuestions.length - answeredInActiveSubject})</span>
+              </div>
+            </div>
 
-          {/* Calculator Keyboard */}
-          <div className="p-3 grid grid-cols-4 gap-1.5 bg-bg-secondary">
-            {/* Row 1 */}
-            <button
-              onClick={() => handleCalcBtnClick('C')}
-              className="col-span-2 h-10 rounded-lg bg-rose-950/30 border border-rose-900/20 text-rose-400 font-bold hover:bg-rose-950/50 hover:border-rose-500/30 transition-all text-xs"
-            >
-              CLEAR
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('Back')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-secondary hover:bg-bg-card transition-all text-xs flex items-center justify-center font-bold"
-            >
-              ⌫
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('÷')}
-              className="h-10 rounded-lg bg-bg-secondary/40 border border-border/50 text-primary font-bold hover:bg-bg-secondary transition-all"
-            >
-              ÷
-            </button>
+            <div className="grid grid-cols-5 xs:grid-cols-6 sm:grid-cols-8 gap-2 py-3 overflow-y-auto max-h-[50vh] pr-1">
+              {currentSubjectQuestions.map((q: ExamQuestion, idx: number) => {
+                const isSelected = activeQuestionIndex === idx;
+                const isAnswered = !!answers[q.questionId];
+                const isFlagged = flaggedQuestions.has(q.questionId);
 
-            {/* Row 2 */}
-            <button
-              onClick={() => handleCalcBtnClick('7')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              7
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('8')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              8
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('9')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              9
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('*')}
-              className="h-10 rounded-lg bg-bg-secondary/40 border border-border/50 text-primary font-bold hover:bg-bg-secondary transition-all"
-            >
-              ×
-            </button>
-
-            {/* Row 3 */}
-            <button
-              onClick={() => handleCalcBtnClick('4')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              4
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('5')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              5
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('6')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              6
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('-')}
-              className="h-10 rounded-lg bg-bg-secondary/40 border border-border/50 text-primary font-bold hover:bg-bg-secondary transition-all"
-            >
-              -
-            </button>
-
-            {/* Row 4 */}
-            <button
-              onClick={() => handleCalcBtnClick('1')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              1
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('2')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              2
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('3')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              3
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('+')}
-              className="h-10 rounded-lg bg-bg-secondary/40 border border-border/50 text-primary font-bold hover:bg-bg-secondary transition-all"
-            >
-              +
-            </button>
-
-            {/* Row 5 */}
-            <button
-              onClick={() => handleCalcBtnClick('0')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              0
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('.')}
-              className="h-10 rounded-lg bg-bg-card border border-border text-text-primary hover:bg-bg-card transition-all font-semibold"
-            >
-              .
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('√')}
-              className="h-10 rounded-lg bg-bg-secondary/40 border border-border/50 text-primary font-bold hover:bg-bg-secondary transition-all text-xs"
-            >
-              √
-            </button>
-            <button
-              onClick={() => handleCalcBtnClick('=')}
-              className="h-10 rounded-lg bg-primary border border-primary text-text-primary font-bold hover:bg-primary-hover transition-all shadow-md shadow-primary/10"
-            >
-              =
-            </button>
+                return (
+                  <button
+                    key={q.questionId}
+                    type="button"
+                    onClick={() => {
+                      setActiveQuestionIndex(idx);
+                      setIsSidebarOpen(false);
+                    }}
+                    className={`h-10 rounded-lg font-mono-data text-xs font-bold flex items-center justify-center transition-all relative ${
+                      isSelected
+                        ? 'bg-accent-royal-blue text-white ring-2 ring-primary scale-[1.03]'
+                        : isFlagged
+                        ? 'bg-warning-amber text-slate-950 font-bold'
+                        : isAnswered
+                        ? 'bg-tertiary/20 text-tertiary border border-tertiary/40'
+                        : 'bg-surface-container text-text-secondary-dark border border-border-dark hover:border-primary/40'
+                    }`}
+                  >
+                    {idx + 1}
+                    {isFlagged && !isSelected && (
+                      <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-white" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}

@@ -70,10 +70,17 @@ export class CentralService {
     }
   }
 
+  private lastCentralFailure = 0;
+
   /**
    * Server-to-Server AuriCoin Balance Check
    */
   public async getBalance(userIdOrAurikrexId: string) {
+    // If Central is currently unreachable or DNS is failing, use fast fallback for 30s
+    if (Date.now() - this.lastCentralFailure < 30000) {
+      return null;
+    }
+
     try {
       const response = await axios.get(
         `${this.centralUrl}/api/v1/coins/balance?userId=${encodeURIComponent(userIdOrAurikrexId)}`,
@@ -82,11 +89,12 @@ export class CentralService {
             'X-Central-Api-Key': this.s2sSecret,
             'Content-Type': 'application/json',
           },
-          timeout: 5000,
+          timeout: 2500,
         },
       );
       return response.data;
     } catch (err: any) {
+      this.lastCentralFailure = Date.now();
       this.logger.warn(`Failed to fetch AuriCoin balance for user ${userIdOrAurikrexId}: ${err?.message}`);
       return null;
     }

@@ -517,7 +517,8 @@ export class AuthService implements OnModuleInit {
         name: payload.name || [payload.given_name, payload.family_name].filter(Boolean).join(' ') || payload.email.split('@')[0],
         picture: payload.picture,
       };
-    } catch (error) {
+    } catch (error: any) {
+      console.warn('[AUTH] Google verifyIdToken failed:', error?.message || error);
       throw new UnauthorizedException('Failed to verify Google token.');
     }
 
@@ -526,9 +527,15 @@ export class AuthService implements OnModuleInit {
 
     if (!user) {
       const dummyPassword = await bcrypt.hash(uuidv4(), 10);
+      const newAurikrexId = generateAurikrexId();
+      const plainCbtKey = generateCbtKey();
+      const cbtKeyHash = createHash('sha256').update(plainCbtKey).digest('hex');
 
       const [newUser] = await this.db.insert(schema.users).values({
         id: uuidv4(),
+        aurikrex_id: newAurikrexId,
+        cbt_key: plainCbtKey,
+        cbt_key_hash: cbtKeyHash,
         fullName: googleUser.name,
         email: normalizedEmail,
         passwordHash: dummyPassword,

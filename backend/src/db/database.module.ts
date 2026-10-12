@@ -19,7 +19,13 @@ export const DRIZZLE = Symbol('DRIZZLE_CONNECTION');
           throw new Error('DATABASE_URL must be defined');
         }
 
-        const client = postgres(url, { ssl: 'require', max: 10 });
+        const client = postgres(url, {
+          ssl: 'require',
+          max: 10,
+          idle_timeout: 30,
+          connect_timeout: 10,
+          onnotice: () => {},
+        });
 
         try {
           await client`ALTER TABLE users ADD COLUMN IF NOT EXISTS aurikrex_id text UNIQUE;`;

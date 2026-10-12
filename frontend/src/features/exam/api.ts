@@ -45,6 +45,8 @@ export type ExamSessionRecord = {
   status: 'active' | 'completed' | 'expired';
   startedAt: string;
   warnings?: string[];
+  isExpired?: boolean;
+  resultId?: string;
 };
 
 export async function createExamSession(

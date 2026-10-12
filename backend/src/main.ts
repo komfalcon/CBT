@@ -10,13 +10,40 @@ import { json, urlencoded } from 'express';
 
 let serverListening = false;
 
-process.on('unhandledRejection', (reason) => {
+process.on('unhandledRejection', (reason: any) => {
+  if (
+    reason?.code === 'ECONNRESET' ||
+    reason?.code === 'EPIPE' ||
+    reason?.code === 'ETIMEDOUT' ||
+    reason?.message?.includes('ECONNRESET') ||
+    reason?.message?.includes('read ECONNRESET')
+  ) {
+    console.warn('[NETWORK WARNING] Non-fatal transient socket reset in unhandledRejection:', reason?.message || reason);
+    return;
+  }
   console.error('[CRITICAL SERVER ERROR] Unhandled Rejection:', reason);
 });
 
-process.on('uncaughtException', (err) => {
+process.on('uncaughtException', (err: any) => {
+  // Transient network socket resets (ECONNRESET, EPIPE, etc.) are normal I/O stream drops
+  // when idle connections are closed by load balancers or remote databases.
+  // They do NOT corrupt memory state and must NOT kill the process in dev or prod.
+  const isNetworkReset =
+    err?.code === 'ECONNRESET' ||
+    err?.code === 'EPIPE' ||
+    err?.code === 'ETIMEDOUT' ||
+    err?.code === 'ECONNREFUSED' ||
+    err?.syscall === 'read' ||
+    err?.message?.includes('ECONNRESET') ||
+    err?.message?.includes('read ECONNRESET');
+
+  if (isNetworkReset) {
+    console.warn('[NETWORK WARNING] Non-fatal transient socket reset caught:', err?.message || err);
+    return;
+  }
+
   console.error('[CRITICAL SERVER ERROR] Uncaught Exception:', err);
-  // A process that threw an uncaught exception is in an undefined state.
+  // A process that threw an unhandled runtime error is in an undefined state.
   // Exit so the hosting platform restarts a clean container instead of serving 502s.
   setTimeout(() => process.exit(1), 500);
 });

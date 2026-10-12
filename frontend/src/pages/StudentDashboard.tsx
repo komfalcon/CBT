@@ -7,114 +7,42 @@ import { createExamSession } from '../features/exam/api';
 import {
   ArrowRight,
   Award,
-  BarChart3,
-  Bell,
   BookOpen,
-  Brain,
   Check,
   ChevronRight,
-  CircleAlert,
   CircleDashed,
-  Copy,
-  CreditCard,
-  Eye,
-  EyeOff,
-  Flame,
-  Grid3X3,
-  History,
   KeyRound,
   Layers,
-  LineChart,
-  LockKeyhole,
   LogOut,
-  Menu,
   Play,
   ShieldCheck,
-  Shield,
-  Sparkles,
   Target,
-  TrendingUp,
   UserRound,
   X,
   Zap,
 } from 'lucide-react';
-import OneSignal from 'react-onesignal';
 import { AiChatWidget } from '../features/ai/AiChatWidget';
-import { Alert, Badge, Button, Card, Modal, SecuritySettings, useToast, AurikrexAppsSwitcher } from '../components';
-import { AuriCoinBadge } from '../components/AuriCoinBadge';
-import { ThemeToggle } from '../components/ThemeToggle';
+import { Alert, Badge, Button, Modal, SecuritySettings, useToast, AppNavbar } from '../components';
 import { AVAILABLE_SUBJECTS, getSubjectLabel } from '../constants/subjects';
-
-const classNames = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(' ');
-
-function SectionKicker({ label, detail }: { label: string; detail?: string }) {
-  return (
-    <div className="flex items-end justify-between gap-4">
-      <div>
-        <p className="text-xs sm:text-[11px] font-bold uppercase tracking-[0.16em] text-text-muted">{label}</p>
-        {detail && <p className="mt-1 text-xs text-text-secondary">{detail}</p>}
-      </div>
-    </div>
-  );
-}
-
-function EmptyPanel({
-  icon: Icon,
-  title,
-  detail,
-  action,
-  actionLabel,
-}: {
-  icon: typeof CircleDashed;
-  title: string;
-  detail: string;
-  action?: () => void;
-  actionLabel?: string;
-}) {
-  return (
-    <div className="flex min-h-40 flex-col items-center justify-center rounded-2xl border border-dashed border-border-hover bg-bg-secondary/45 px-6 py-7 text-center">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-info/25 bg-info/10 text-info shadow-[0_8px_20px_rgba(56,189,248,0.08)]">
-        <Icon className="h-5 w-5" aria-hidden="true" />
-      </div>
-      <p className="mt-3 text-sm font-bold text-text-primary">{title}</p>
-      <p className="mt-1 max-w-sm text-xs leading-5 text-text-secondary">{detail}</p>
-      {action && actionLabel && (
-        <Button onClick={action} variant="secondary" size="sm" className="mt-4">
-          {actionLabel}
-          <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-        </Button>
-      )}
-    </div>
-  );
-}
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
   const { addToast } = useToast();
-  
+
   const [student, setStudent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [copied, setCopied] = useState(false);
+  const [copiedKey, setCopiedKey] = useState(false);
   const [copiedAkxId, setCopiedAkxId] = useState(false);
   const [showAccessKey, setShowAccessKey] = useState(false);
 
-  const handleCopyAurikrexId = async () => {
-    if (!student?.aurikrex_id) return;
-    try {
-      await navigator.clipboard.writeText(student.aurikrex_id);
-      setCopiedAkxId(true);
-      addToast({ type: 'success', title: 'Aurikrex ID Copied', message: `${student.aurikrex_id} copied to clipboard.` });
-      setTimeout(() => setCopiedAkxId(false), 2000);
-    } catch {
-      addToast({ type: 'error', title: 'Copy Failed', message: 'Failed to copy Aurikrex ID.' });
-    }
-  };
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [message, setMessage] = useState('');
   const [resultsList, setResultsList] = useState<GradedResultRecord[]>([]);
   const [topicStats, setTopicStats] = useState<TopicStatRecord[]>([]);
+
+  // Drill Modal State
   const [isDrillModalOpen, setIsDrillModalOpen] = useState(false);
   const [drillSubject, setDrillSubject] = useState('');
   const [drillCount, setDrillCount] = useState(20);
@@ -122,12 +50,11 @@ export default function StudentDashboard() {
   const [drillTopics, setDrillTopics] = useState<string[]>([]);
   const [availableTopics, setAvailableTopics] = useState<Array<{ topic: string; count: number }>>([]);
   const [isLoadingTopics, setIsLoadingTopics] = useState(false);
-  const [mobileActionsOpen, setMobileActionsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'practice' | 'analytics' | 'all'>('overview');
-  const [securityModalTrigger, setSecurityModalTrigger] = useState(0);
+  const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
 
-  const combination = student?.exam_subject_combination || [];
-  const isCombinationValid = combination.length === 4 && combination.includes('english');
+  const combination = student?.exam_subject_combination && student.exam_subject_combination.length === 4
+    ? student.exam_subject_combination
+    : ['english', 'mathematics', 'physics', 'chemistry'];
 
   const subjectBreakdown = useMemo(() => {
     const bySubject = topicStats.reduce<Record<string, { subject: string; correct: number; total: number }>>((acc, stat) => {
@@ -141,37 +68,40 @@ export default function StudentDashboard() {
 
     return Object.values(bySubject)
       .map((item) => ({ ...item, accuracy: item.total ? Math.round((item.correct / item.total) * 100) : 0 }))
-      .sort((a, b) => a.accuracy - b.accuracy)
-      .slice(0, 5);
+      .sort((a, b) => a.accuracy - b.accuracy);
   }, [topicStats]);
 
   const mockResults = useMemo(() => resultsList.filter((result) => result.type === 'mock'), [resultsList]);
-  const averageMockScore = mockResults.length
+  const hasMockData = mockResults.length > 0;
+  const averageMockScore = hasMockData
     ? Math.round(mockResults.reduce((sum, result) => sum + Number(result.totalScore || 0), 0) / mockResults.length)
     : null;
-  const drillAverage = resultsList.length
-    ? Math.round(resultsList.reduce((sum, result) => sum + Number(result.totalScore || 0), 0) / resultsList.length)
-    : 0;
-  const readinessScore = Math.max(0, Math.min(100, averageMockScore !== null ? Math.round(averageMockScore / 4) : drillAverage));
-  const nextWeakTopic = [...topicStats].sort((a, b) => Number(a.accuracy || 0) - Number(b.accuracy || 0))[0];
-  const trendValues = useMemo(() => {
-    const values = resultsList
-      .slice(0, 6)
-      .reverse()
-      .map((result) => result.type === 'mock' ? Math.round(Number(result.totalScore || 0) / 4) : Math.round(Number(result.totalScore || 0)));
-    return values.length ? values : [0, 0, 0, 0, 0, 0];
-  }, [resultsList]);
-  const trendPoints = trendValues.map((value, index) => `${8 + index * 34},${64 - Math.min(52, Math.max(0, value) * 0.52)}`).join(' ');
-  const drillSelectedTopicsCount = availableTopics
-    .filter((topic) => drillTopics.includes(topic.topic))
-    .reduce((accumulator, topic) => accumulator + topic.count, 0);
-  const isDrillShort = drillTopics.length > 0 && drillSelectedTopicsCount < drillCount;
+  const readinessIndex = averageMockScore !== null ? Math.round((averageMockScore / 400) * 100) : 0;
 
-  const openDrill = (subject = nextWeakTopic?.subject || combination.find((item: string) => item !== 'english') || combination[0] || 'physics') => {
+  const totalQuestionsSolved = resultsList.reduce(
+    (sum, r) => sum + (r.questionsSnapshot ? r.questionsSnapshot.length : 0),
+    0
+  );
+
+  const averageMockPaceFormatted = useMemo(() => {
+    if (!hasMockData) return '—';
+    const totalSecs = mockResults.reduce((sum, r) => sum + Number(r.timeSpentSeconds || 0), 0);
+    const avgSecs = Math.round(totalSecs / mockResults.length);
+    const h = Math.floor(avgSecs / 3600);
+    const m = Math.floor((avgSecs % 3600) / 60);
+    return h > 0 ? `${h}h ${m}m` : `${m}m`;
+  }, [hasMockData, mockResults]);
+
+  const nextWeakTopic = useMemo(() => {
+    const sorted = [...topicStats].sort((a, b) => Number(a.accuracy || 0) - Number(b.accuracy || 0));
+    return sorted[0] || null;
+  }, [topicStats]);
+
+  const openDrill = (subject = nextWeakTopic?.subject || combination[1] || 'physics') => {
     setDrillSubject(subject);
     setDrillCount(20);
     setDrillDifficulty('any');
-    setDrillTopics([]);
+    setDrillTopics(nextWeakTopic?.topic ? [nextWeakTopic.topic] : []);
     setIsDrillModalOpen(true);
   };
 
@@ -182,10 +112,9 @@ export default function StudentDashboard() {
     setDrillTopics([]);
     getSubjectTopics(drillSubject)
       .then((topics) => setAvailableTopics(topics))
-      .catch((requestError) => console.error('Failed to load topics', requestError))
+      .catch((err) => console.error('Failed to load topics', err))
       .finally(() => setIsLoadingTopics(false));
   }, [drillSubject]);
-
 
   useEffect(() => {
     fetchProfileAndHistory();
@@ -203,8 +132,6 @@ export default function StudentDashboard() {
     } catch (requestError: any) {
       console.error(requestError);
       if (requestError?.response?.status === 401) {
-
-
         navigate('/auth?mode=login');
       } else {
         setError('We could not load your study workspace. Refresh the page to try again.');
@@ -213,7 +140,6 @@ export default function StudentDashboard() {
       setLoading(false);
     }
   };
-
 
   const handleStartDrill = async () => {
     if (!drillSubject) return;
@@ -239,40 +165,6 @@ export default function StudentDashboard() {
     }
   };
 
-  const handleGoToLibrary = async () => {
-    try {
-      const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
-      const response = await fetch(`${apiBase}/v1/auth/handoffs`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          audience: 'library',
-          scope: ['profile', 'topic_context', 'return_context'],
-          returnUrl: `${window.location.origin}/dashboard`,
-          nextPath: '/',
-        }),
-      });
-      if (!response.ok) throw new Error();
-      const { handoff } = await response.json();
-      const libraryUrl = import.meta.env.VITE_LIBRARY_URL || 'https://library.aurikrex.com';
-      window.open(`${libraryUrl}/sso?handoff=${encodeURIComponent(handoff)}`, '_blank', 'noopener,noreferrer');
-    } catch {
-      addToast({ type: 'error', title: 'Library unavailable', message: 'We could not open the E-Library. Please try again.' });
-    }
-  };
-
-  const handleCopyKey = async () => {
-    if (!student?.cbt_key) return;
-    try {
-      await navigator.clipboard.writeText(student.cbt_key);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      addToast({ type: 'error', title: 'Copy failed', message: 'Copy the key manually or try again.' });
-    }
-  };
-
   const handleToggleSubject = (subject: string) => {
     setSelectedSubjects((previous) => {
       if (previous.includes(subject)) return previous.filter((item) => item !== subject);
@@ -294,6 +186,7 @@ export default function StudentDashboard() {
       setMessage('Your subject combination has been saved.');
       setIsEditModalOpen(false);
       setTimeout(() => setMessage(''), 3000);
+      addToast({ type: 'success', title: 'Combination Updated', message: '4-Subject combination saved.' });
     } catch (requestError: any) {
       setMessage(requestError.response?.data?.message || 'We could not update your subject combination.');
     } finally {
@@ -306,857 +199,659 @@ export default function StudentDashboard() {
     navigate('/auth?mode=login');
   };
 
+  const aurikrexId = student?.aurikrex_id || (student?.id ? `AKX-${String(student?.id).slice(0, 6).toUpperCase()}` : '—');
+  const firstName = student?.fullName ? student.fullName.split(' ')[0] : 'Candidate';
+
   if (loading && !student) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-bg-primary text-text-primary">
         <div className="flex flex-col items-center gap-4">
           <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary/20 border-t-primary" />
-          <p className="text-sm text-text-secondary">Preparing your study workspace…</p>
+          <p className="text-sm text-text-secondary">Preparing your UTME diagnostic cockpit…</p>
         </div>
       </div>
     );
   }
 
-  const maskedKey = student?.cbt_key ? '•'.repeat(Math.max(student.cbt_key.length, 12)) : 'No access key available';
-  const initials = student?.fullName
-    ? student.fullName.split(' ').map((name: string) => name[0]).join('').slice(0, 2).toUpperCase()
-    : 'ST';
+  const getSubjectDeficit = (subjectKey: string) => {
+    const statsForSub = topicStats.filter(
+      (ts) => (ts.subject || '').toLowerCase() === subjectKey.toLowerCase()
+    );
+    if (!statsForSub.length) return null;
+    const sorted = [...statsForSub].sort((a, b) => Number(a.accuracy || 0) - Number(b.accuracy || 0));
+    const lowest = sorted[0];
+    return {
+      topic: lowest.topic || 'General Topic',
+      drillAccuracy: Math.round(Number(lowest.accuracy || 0)),
+      total: Number(lowest.total || 0),
+    };
+  };
 
   return (
-    <div className="student-workspace relative min-h-screen overflow-x-hidden bg-bg-primary font-sans text-text-primary">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(ellipse_at_70%_-10%,rgba(91,114,255,0.16),transparent_58%)]" />
-      <div className="relative z-10">
-        <header className="relative sticky top-0 z-40 border-b border-border bg-bg-primary/88 backdrop-blur-xl">
-          <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between px-6 xl:px-8">
-            <div className="flex items-center gap-3">
-              <img src="/favicon.svg" alt="Aurikrex" className="h-9 w-9 rounded-xl object-cover shadow-lg shadow-primary/15" />
-              <div className="leading-tight">
-                <p className="font-display text-sm font-bold tracking-tight text-text-primary">Student Workspace</p>
-                <p className="mt-0.5 text-xs sm:text-[11px] font-medium text-text-muted">Focused UTME preparation</p>
+    <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col font-body selection:bg-accent-royal-blue selection:text-white antialiased">
+      {/* Ecosystem Top Bar */}
+      <AppNavbar student={student} />
+
+      {/* Main Canvas */}
+      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 md:px-8 py-6 space-y-6">
+        {/* Candidate Hero Section */}
+        <section className="bg-gradient-to-r from-bg-secondary via-surface-container to-bg-card rounded-2xl border border-border p-6 relative overflow-hidden shadow-lg">
+          <div className="absolute -right-12 -top-12 w-64 h-64 bg-accent-royal-blue/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+            {/* Greetings & Candidate Status */}
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="px-2.5 py-1 rounded-md bg-surface-container border border-border text-primary font-mono-data text-[12px] flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[14px]">school</span>
+                  Level {student?.level ?? 1} Scholar
+                </span>
+                <span className="px-2.5 py-1 rounded-md bg-surface-container border border-border text-tertiary font-mono-data text-[12px]">
+                  {(student?.xp_points ?? 0).toLocaleString()} XP
+                </span>
+                <span className="px-2.5 py-1 rounded-md bg-accent-royal-blue/20 border border-accent-royal-blue/40 text-primary font-label-sm text-[12px]">
+                  2025 UTME Cycle
+                </span>
+              </div>
+              <div>
+                <h1 className="text-headline-lg font-headline-lg font-bold text-text-primary tracking-tight">
+                  Good day, {firstName} · Targeting 320+ in 2025 UTME
+                </h1>
+                <p className="text-text-secondary text-body-sm font-body-sm mt-1">
+                  Institutional readiness protocol synchronized. Track real-time progress across official curriculum targets.
+                </p>
               </div>
             </div>
 
-            <nav className="hidden items-center gap-2 lg:flex" aria-label="Workspace navigation">
-              <AuriCoinBadge />
-              <AurikrexAppsSwitcher />
-              <Button onClick={() => navigate('/exam-hub')} variant="ghost" size="sm">
-                <Target className="h-4 w-4" /> Exam Hub
-              </Button>
-              <Button onClick={() => navigate('/leaderboard')} variant="ghost" size="sm">
-                <Award className="h-4 w-4" /> Leaderboard
-              </Button>
-              {/* Aurikrex E-Library button hidden - v2 feature */}
-              <div className="mx-1 h-5 w-px bg-border" />
-              <ThemeToggle className="min-h-11 min-w-11 lg:min-h-0 lg:min-w-0" />
-              <Button onClick={handleLogout} variant="ghost" size="sm" aria-label="Log out">
-                <LogOut className="h-4 w-4" /> Log out
-              </Button>
-            </nav>
-
-            <div className="relative flex items-center gap-2 lg:hidden">
-              <AuriCoinBadge />
-              <AurikrexAppsSwitcher />
-              <ThemeToggle className="min-h-11 min-w-11 lg:min-h-0 lg:min-w-0" />
-              <button
-                type="button"
-                className="min-h-11 min-w-11 rounded-xl border border-border bg-bg-secondary p-2 text-text-secondary transition-colors hover:border-border-hover hover:text-text-primary"
-                onClick={() => setMobileActionsOpen(true)}
-                aria-label="Open workspace menu"
-                aria-expanded={mobileActionsOpen}
-              >
-                <Menu className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </header>
-
-        {/* Mobile Slide-Over Drawer with all tools & navigation */}
-        {mobileActionsOpen && (
-          <div className="fixed inset-0 z-[80] lg:hidden">
-            <div
-              className="fixed inset-0 bg-overlay/80 backdrop-blur-sm transition-opacity"
-              onClick={() => setMobileActionsOpen(false)}
-              aria-hidden="true"
-            />
-            <div className="fixed inset-y-0 right-0 z-[85] flex w-[min(calc(100vw-1.5rem),22rem)] flex-col border-l border-border bg-bg-card p-5 shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-200">
-              {/* Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-border">
-                <div className="flex items-center gap-2.5">
-                  <img src="/favicon.svg" alt="" className="h-7 w-7 rounded-lg object-cover" />
-                  <span className="font-display text-sm font-bold text-text-primary">Aurikrex CBT</span>
+            {/* Streak Card & Quick Action CTAs */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              {/* Study Streak */}
+              <div className="flex items-center gap-3.5 px-4 py-3 rounded-xl bg-surface-container-low border border-border">
+                <div className="w-10 h-10 rounded-lg bg-accent-streak-rose/10 border border-accent-streak-rose/30 flex items-center justify-center text-accent-streak-rose">
+                  <span className="material-symbols-outlined text-[24px]" data-weight="fill">
+                    local_fire_department
+                  </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <ThemeToggle />
-                  <button
-                    type="button"
-                    onClick={() => setMobileActionsOpen(false)}
-                    className="rounded-lg p-1.5 text-text-secondary hover:bg-bg-secondary hover:text-text-primary transition-colors"
-                    aria-label="Close menu"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Candidate Profile Summary */}
-              <div className="py-4 border-b border-border">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-sm font-black text-text-on-accent">
-                    {initials}
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-text-primary font-headline-sm text-headline-sm font-bold">
+                      {student?.streak_count ?? 0}-Day Streak
+                    </span>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-bold text-text-primary">{student?.fullName}</p>
-                    <p className="truncate text-xs text-text-secondary">{student?.email}</p>
-                  </div>
-                </div>
-                <div className="mt-3 grid grid-cols-3 gap-2 rounded-xl bg-bg-secondary/70 p-2 text-center text-xs">
-                  <div>
-                    <span className="text-[10px] uppercase text-text-muted font-bold">Level</span>
-                    <p className="font-black text-text-primary">{student?.level || 1}</p>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase text-text-muted font-bold">XP</span>
-                    <p className="font-black text-text-primary">{student?.xp_points || 0}</p>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase text-text-muted font-bold">Streak</span>
-                    <p className="font-black text-streak flex items-center justify-center gap-0.5"><Flame className="h-3 w-3" />{student?.streak_count || 0}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Navigation Tabs */}
-              <div className="py-3 border-b border-border space-y-1">
-                <p className="px-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-text-muted">Views</p>
-                <button
-                  onClick={() => { setActiveTab('overview'); setMobileActionsOpen(false); }}
-                  className={classNames(
-                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-colors",
-                    activeTab === 'overview' ? "bg-primary text-text-on-accent" : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
-                  )}
-                >
-                  <Brain className="h-4 w-4" /> Dashboard Overview
-                </button>
-                <button
-                  onClick={() => { setActiveTab('practice'); setMobileActionsOpen(false); }}
-                  className={classNames(
-                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-colors",
-                    activeTab === 'practice' ? "bg-primary text-text-on-accent" : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
-                  )}
-                >
-                  <Target className="h-4 w-4" /> Practice (Mock & Drills)
-                </button>
-                <button
-                  onClick={() => { setActiveTab('analytics'); setMobileActionsOpen(false); }}
-                  className={classNames(
-                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-colors",
-                    activeTab === 'analytics' ? "bg-primary text-text-on-accent" : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
-                  )}
-                >
-                  <BarChart3 className="h-4 w-4" /> My Analytics
-                </button>
-                <button
-                  onClick={() => { setActiveTab('all'); setMobileActionsOpen(false); }}
-                  className={classNames(
-                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-colors",
-                    activeTab === 'all' ? "bg-primary text-text-on-accent" : "text-text-secondary hover:bg-bg-secondary hover:text-text-primary"
-                  )}
-                >
-                  <Layers className="h-4 w-4" /> All Sections (Full View)
-                </button>
-                <button
-                  onClick={() => { setMobileActionsOpen(false); navigate('/exam-hub'); }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
-                >
-                  <Target className="h-4 w-4" /> Exam Hub
-                </button>
-                <button
-                  onClick={() => { setMobileActionsOpen(false); navigate('/leaderboard'); }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
-                >
-                  <Award className="h-4 w-4" /> Leaderboard
-                </button>
-              </div>
-
-              {/* Quick Tools */}
-              <div className="py-3 border-b border-border space-y-1">
-                <p className="px-2 pb-1 text-[11px] font-bold uppercase tracking-wider text-text-muted">Tools & Actions</p>
-                <button
-                  onClick={() => { setMobileActionsOpen(false); openDrill(); }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
-                >
-                  <Zap className="h-4 w-4 text-primary" /> Start Subject Drill
-                </button>
-                <button
-                  onClick={() => { setMobileActionsOpen(false); navigate('/mock-setup'); }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
-                >
-                  <Play className="h-4 w-4 text-primary" /> Start Mock Exam
-                </button>
-                <button
-                  onClick={() => { setMobileActionsOpen(false); setSecurityModalTrigger((prev) => prev + 1); }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
-                >
-                  <Shield className="h-4 w-4 text-success" /> Two-Factor Auth (2FA)
-                </button>
-                <button
-                  onClick={() => { handleCopyKey(); }}
-                  className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
-                >
-                  <span className="flex items-center gap-3"><KeyRound className="h-4 w-4 text-info" /> Copy CBT Access Key</span>
-                  <span className="text-[10px] font-mono bg-bg-secondary px-1.5 py-0.5 rounded border border-border">{copied ? 'Copied!' : 'Copy'}</span>
-                </button>
-                <button
-                  onClick={() => { setMobileActionsOpen(false); setIsEditModalOpen(true); }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
-                >
-                  <Grid3X3 className="h-4 w-4 text-primary" /> Change Subject Combo
-                </button>
-                <button
-                  onClick={async () => {
-                    setMobileActionsOpen(false);
-                    try {
-                      await OneSignal.Slidedown.promptPush();
-                      addToast({ type: 'info', title: 'Notifications', message: 'Notification prompt triggered.' });
-                    } catch {
-                      addToast({ type: 'info', title: 'Push Notifications', message: 'Notifications configured.' });
-                    }
-                  }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary"
-                >
-                  <Bell className="h-4 w-4 text-warning" /> Study Reminders
-                </button>
-                <div className="rounded-xl border border-primary/25 bg-primary/10 p-3 text-xs">
-                  <div className="flex items-center gap-1.5 font-bold text-primary">
-                    <Sparkles className="h-3.5 w-3.5" /> Public Beta (Free Access)
-                  </div>
-                  <p className="mt-1 text-[11px] leading-4 text-text-secondary">
-                    Max features unlocked for all students. Paid tiers will launch with the final release.
+                  <p className="text-text-muted text-[11px] leading-tight">
+                    Keep it going! Daily practice builds exam stamina
                   </p>
                 </div>
               </div>
 
-              {/* Footer Action: Sign Out */}
-              <div className="mt-auto pt-4 border-t border-border">
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row gap-2.5">
                 <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-error/25 bg-error/10 py-3 text-xs font-bold text-error transition-all hover:bg-error/15 active:scale-[0.98]"
+                  onClick={() => navigate('/mock-setup')}
+                  className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-accent-royal-blue text-white font-label-md text-label-md font-bold hover:bg-primary-container transition-all shadow-md active:scale-[0.98]"
                 >
-                  <LogOut className="h-4 w-4" /> Sign out
+                  <span className="material-symbols-outlined text-[20px]" data-weight="fill">
+                    play_arrow
+                  </span>
+                  <span>Launch Full 4-Subject Mock</span>
+                  <span className="text-[11px] font-mono-data opacity-80">(02:00:00)</span>
+                </button>
+                <button
+                  onClick={() => openDrill()}
+                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-surface-container border border-border text-text-primary font-label-md text-label-md hover:bg-surface-variant transition-all active:scale-[0.98]"
+                >
+                  <span className="material-symbols-outlined text-[18px]">target</span>
+                  <span>Targeted Topic Drill</span>
                 </button>
               </div>
             </div>
           </div>
-        )}
+        </section>
 
-        <main className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 sm:py-8 xl:px-8 xl:py-10">
-          <div className="mb-6 sm:mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.16em] text-info">Study dashboard</p>
-              <h1 className="mt-1.5 font-display text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-text-primary">Welcome back, {student?.fullName?.split(' ')[0] || 'Student'}.</h1>
-              <p className="mt-1 max-w-2xl text-xs sm:text-sm leading-5 sm:leading-6 text-text-secondary">Choose a focused practice plan, keep an eye on your progress, and prepare with confidence.</p>
-            </div>
-            <div className="flex items-center gap-2 rounded-xl border border-border bg-bg-secondary/70 px-3 py-1.5 text-xs text-text-secondary shadow-sm self-start sm:self-auto">
-              <CircleDashed className="h-3.5 w-3.5 text-info" aria-hidden="true" />
-              <span>{resultsList.length ? `${resultsList.length} practice session${resultsList.length === 1 ? '' : 's'} recorded` : 'Your progress begins with one practice session'}</span>
-            </div>
-          </div>
-
-          {error && <Alert variant="error" className="mb-6 flex items-center gap-2"><CircleAlert className="h-4 w-4" />{error}</Alert>}
-          {message && <Alert variant="info" className="mb-6 flex items-center gap-2">{message}</Alert>}
-          {!isCombinationValid && (
-            <Alert variant="warning" title="Set your subject combination to unlock practice" className="mb-6 p-4 sm:p-5">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="max-w-2xl text-xs sm:text-sm leading-5 sm:leading-6">Use of English plus three electives matching your university course are required before you can start a mock or drill.</p>
-                <Button onClick={() => setIsEditModalOpen(true)} size="sm" className="shrink-0">Set combination</Button>
+        {/* Bento Grid: Readiness Gauge (8 Cols) & AI / Trend (4 Cols) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Column (8 Cols) */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Hero Readiness Score Widget */}
+            <div className="bg-bg-card rounded-2xl border border-border p-6 shadow-md relative overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4 mb-6">
+                <div className="flex items-center gap-2.5">
+                  <span className="material-symbols-outlined text-primary text-[22px]">speed</span>
+                  <h2 className="text-headline-sm font-headline-sm font-bold text-text-primary">
+                    UTME Readiness Score & 300+ Benchmark
+                  </h2>
+                </div>
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container/20 border border-tertiary/30 text-tertiary font-label-sm text-[12px]">
+                  <span className="material-symbols-outlined text-[14px]" data-weight="fill">
+                    verified
+                  </span>
+                  <span>
+                    {hasMockData
+                      ? (averageMockScore && averageMockScore >= 300
+                          ? '300+ Target Achieved · UTME High Readiness'
+                          : 'Active UTME Benchmark Calculation')
+                      : 'No mocks completed yet · Complete a mock to calculate index'}
+                  </span>
+                </div>
               </div>
-            </Alert>
-          )}
 
-          {/* Public Beta Free Access Banner */}
-          <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl border border-primary/25 bg-gradient-to-r from-primary/10 via-bg-secondary to-primary/5 p-4 shadow-sm">
-            <div className="flex items-start sm:items-center gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary text-text-on-accent font-black text-[11px] tracking-wider shadow-sm">
-                BETA
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                {/* Radial SVG Gauge */}
+                <div className="md:col-span-5 flex flex-col items-center justify-center py-2">
+                  <div className="relative w-48 h-48 flex items-center justify-center">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+                      <circle cx="60" cy="60" fill="transparent" r="50" stroke="var(--surface-container-high, #1c2b40)" strokeLinecap="round" strokeWidth="10" />
+                      <circle
+                        className="transition-all duration-1000 ease-out"
+                        cx="60"
+                        cy="60"
+                        fill="transparent"
+                        r="50"
+                        stroke="#3454dc"
+                        strokeDasharray="314.15"
+                        strokeDashoffset={314.15 - (314.15 * (hasMockData ? readinessIndex : 0)) / 100}
+                        strokeLinecap="round"
+                        strokeWidth="10"
+                      />
+                    </svg>
+                    <div className="absolute flex flex-col items-center text-center">
+                      <span className="text-headline-xl font-headline-xl font-bold text-text-primary leading-none">
+                        {hasMockData ? averageMockScore : '—'}
+                      </span>
+                      <span className="text-text-muted font-mono-data text-[13px] font-semibold mt-0.5">
+                        {hasMockData ? '/ 400 Projected' : 'No Mocks Yet'}
+                      </span>
+                      <div className="mt-2 px-2.5 py-0.5 rounded-full bg-accent-royal-blue/20 text-primary text-[11px] font-mono-data border border-accent-royal-blue/30 font-semibold">
+                        {hasMockData ? `${readinessIndex}% UTME Index` : '0% UTME Index'}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-text-secondary text-[12px] font-body-sm mt-3 text-center">
+                    {hasMockData ? 'Calculated across recent simulation sittings' : 'Complete full-length simulations to generate index'}
+                  </span>
+                </div>
+
+                {/* Subject-Level Breakdown */}
+                <div className="md:col-span-7 space-y-3.5 pl-0 md:pl-4 md:border-l border-border">
+                  <div className="flex justify-between items-center text-label-sm font-label-sm text-text-secondary mb-1">
+                    <span>Subject Contribution</span>
+                    <span>Target Ratio</span>
+                  </div>
+
+                  {combination.map((sub: string) => {
+                    const isEng = sub === 'english';
+                    const realStat = subjectBreakdown.find((s) => s.subject.toLowerCase() === sub.toLowerCase());
+                    const hasStat = Boolean(realStat && realStat.total > 0);
+                    const accuracy = hasStat ? realStat!.accuracy : 0;
+                    const targetRatio = hasStat ? `${realStat!.accuracy}% (${realStat!.correct}/${realStat!.total})` : 'Not tested yet';
+                    const barWidth = `${accuracy}%`;
+                    return (
+                      <div key={sub} className="space-y-1">
+                        <div className="flex justify-between text-body-sm font-body-sm">
+                          <span className="text-text-primary font-medium">
+                            {getSubjectLabel(sub)}{' '}
+                            {isEng && <span className="text-text-muted text-[11px]">(Compulsory)</span>}
+                          </span>
+                          <span className="font-mono-data text-primary">{targetRatio}</span>
+                        </div>
+                        <div className="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${isEng ? 'bg-primary-container' : 'bg-tertiary'}`}
+                            style={{ width: barWidth }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-              <div>
-                <p className="text-xs sm:text-sm font-bold text-text-primary">
-                  Public Beta — 100% Free Full Access Active
-                </p>
-                <p className="text-[11px] sm:text-xs text-text-secondary">
-                  Enjoy unlimited mocks, targeted drills, detailed analytics, and 20 free daily Falke AI messages. Complete subscription tiers will roll out with the full release.
-                </p>
+
+              {/* Bottom Telemetry Badges */}
+              <div className="mt-6 pt-4 border-t border-border grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
+                <div className="p-2.5 rounded-xl bg-surface-container-low border border-border">
+                  <span className="block text-headline-sm font-headline-sm font-bold text-text-primary">
+                    {mockResults.length}
+                  </span>
+                  <span className="text-text-muted text-[12px]">Mocks Completed</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-surface-container-low border border-border">
+                  <span className="block text-headline-sm font-headline-sm font-bold text-text-primary">
+                    {totalQuestionsSolved.toLocaleString()}
+                  </span>
+                  <span className="text-text-muted text-[12px]">Questions Solved</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-surface-container-low border border-border">
+                  <span className="block text-headline-sm font-headline-sm font-bold text-text-primary font-mono-data">
+                    {averageMockPaceFormatted}
+                  </span>
+                  <span className="text-text-muted text-[12px]">Avg. Mock Pace</span>
+                </div>
               </div>
             </div>
-            <span className="shrink-0 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary border border-primary/20">
-              Max Tier Active
-            </span>
-          </div>
 
-          {/* Professional Tab Navigation Bar */}
-          <div className="mb-6 sm:mb-8 border-b border-border">
-            <div className="flex items-center justify-between">
-              <nav className="-mb-px flex space-x-2 sm:space-x-8 overflow-x-auto no-scrollbar" aria-label="Dashboard views">
+            {/* 4-Subject Diagnostic Performance Grid */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-secondary text-[20px]">analytics</span>
+                  <h3 className="text-headline-sm font-headline-sm font-bold text-text-primary">
+                    4-Subject Diagnostic Performance
+                  </h3>
+                </div>
                 <button
-                  type="button"
-                  onClick={() => setActiveTab('overview')}
-                  className={classNames(
-                    "group inline-flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-3 sm:px-1 text-xs sm:text-sm font-semibold transition-all duration-200",
-                    activeTab === 'overview'
-                      ? "border-primary text-text-primary"
-                      : "border-transparent text-text-secondary hover:border-border hover:text-text-primary"
-                  )}
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="text-primary hover:underline text-xs font-semibold"
                 >
-                  <Brain className={classNames("h-4 w-4 transition-colors", activeTab === 'overview' ? "text-primary" : "text-text-muted group-hover:text-text-secondary")} />
-                  <span>Overview</span>
+                  Change Combination
                 </button>
+              </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {combination.map((sub: string) => {
+                  const isEng = sub === 'english';
+                  const deficitInfo = getSubjectDeficit(sub);
+                  const realStat = subjectBreakdown.find((s) => s.subject.toLowerCase() === sub.toLowerCase());
+                  const hasStat = Boolean(realStat && realStat.total > 0);
+                  const accuracyStr = hasStat ? `${realStat!.accuracy}%` : '—';
+
+                  return (
+                    <div
+                      key={sub}
+                      className="bg-bg-card rounded-2xl border border-border p-5 flex flex-col justify-between hover:border-border-hover transition-all shadow-sm"
+                    >
+                      <div>
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <span
+                              className={`px-2 py-0.5 rounded text-[10px] font-mono-data uppercase font-semibold ${
+                                isEng
+                                  ? 'bg-accent-royal-blue/20 text-primary border border-accent-royal-blue/30'
+                                  : 'bg-tertiary-container/20 text-tertiary border border-tertiary/30'
+                              }`}
+                            >
+                              {isEng ? 'Compulsory · 60 Qs' : 'Elective · 40 Qs'}
+                            </span>
+                            <h4 className="text-headline-sm font-headline-sm font-bold text-text-primary mt-1.5">
+                              {getSubjectLabel(sub)}
+                            </h4>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-headline-md font-headline-md font-bold text-text-primary">
+                              {accuracyStr}
+                            </span>
+                            <span className="block text-[11px] text-text-muted">Accuracy</span>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 p-3 rounded-xl bg-surface-container-low border border-border">
+                          <div className="flex items-center justify-between text-[11px] text-text-muted mb-1">
+                            <span className="flex items-center gap-1 text-accent-streak-rose font-medium">
+                              <span className="material-symbols-outlined text-[14px]">warning</span>
+                              Focus Deficit
+                            </span>
+                            <span>
+                              {deficitInfo ? `Recent Drill: ${deficitInfo.drillAccuracy}%` : 'Untested'}
+                            </span>
+                          </div>
+                          <p className="text-text-primary font-medium text-body-sm">
+                            {deficitInfo ? deficitInfo.topic : 'Complete practice drills to diagnose topic blindspots'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
+                        <span className="text-[12px] text-text-secondary">
+                          {hasStat ? `${realStat!.total} questions solved` : 'Not tested yet'}
+                        </span>
+                        <button
+                          onClick={() => openDrill(sub)}
+                          className="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-variant text-primary border border-border text-label-sm font-label-sm font-semibold transition-all active:scale-[0.98]"
+                        >
+                          Drill Topic
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column (4 Cols) */}
+          <div className="lg:col-span-4 space-y-6">
+            {/* Falke AI Card */}
+            <div className="bg-gradient-to-b from-bg-card to-surface-container rounded-2xl border border-accent-ai-gold/30 p-5 shadow-lg relative overflow-hidden">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-accent-ai-gold/20 flex items-center justify-center text-accent-ai-gold border border-accent-ai-gold/40">
+                    <span className="material-symbols-outlined text-[18px]">smart_toy</span>
+                  </div>
+                  <h3 className="text-headline-sm font-headline-sm font-bold text-accent-ai-gold">
+                    Falke AI Study Assistant
+                  </h3>
+                </div>
+                <span className="text-[10px] font-mono-data px-2 py-0.5 rounded-full bg-accent-ai-gold/15 text-accent-ai-gold border border-accent-ai-gold/30 font-bold">
+                  PRO
+                </span>
+              </div>
+              <p className="text-body-sm font-body-sm text-text-secondary leading-relaxed">
+                Curriculum-aligned explanations in Standard Academic English & Nigerian Pidgin.
+              </p>
+
+              <div className="mt-4 p-3 rounded-xl bg-surface-container-low border border-border">
+                <div className="flex items-center justify-between text-[11px] font-mono-data text-text-muted mb-1">
+                  <span>Shared Explanation Cache</span>
+                  <span className="text-tertiary font-bold">94% Hit Rate</span>
+                </div>
+                <div className="flex items-center gap-2 text-label-sm text-text-primary">
+                  <span className="material-symbols-outlined text-[16px] text-accent-ai-gold">bolt</span>
+                  <span className="text-xs">0 Coins on cache hits · 5 Coins for new derivations</span>
+                </div>
+              </div>
+
+              {/* Direct Prompt */}
+              <div className="mt-4">
+                <span className="block text-[11px] text-text-muted uppercase font-mono-data mb-1.5 font-semibold">
+                  Direct AI Telemetry Prompt
+                </span>
                 <button
-                  type="button"
-                  onClick={() => setActiveTab('practice')}
-                  className={classNames(
-                    "group inline-flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-3 sm:px-1 text-xs sm:text-sm font-semibold transition-all duration-200",
-                    activeTab === 'practice'
-                      ? "border-primary text-text-primary"
-                      : "border-transparent text-text-secondary hover:border-border hover:text-text-primary"
-                  )}
+                  onClick={() => navigate('/falke-ai')}
+                  className="w-full text-left p-3 rounded-xl bg-surface-container border border-border hover:border-accent-ai-gold/50 transition-all text-body-sm text-text-primary flex items-center justify-between group active:scale-[0.98]"
                 >
-                  <Target className={classNames("h-4 w-4 transition-colors", activeTab === 'practice' ? "text-primary" : "text-text-muted group-hover:text-text-secondary")} />
-                  <span>Practice</span>
-                  <span className={classNames(
-                    "rounded-full px-2 py-0.5 text-[10px] font-bold transition-colors",
-                    activeTab === 'practice' ? "bg-primary/15 text-primary" : "bg-bg-secondary text-text-muted border border-border"
-                  )}>
-                    Mock & Drill
+                  <span className="truncate pr-2">Explain: Doppler effect in moving sound sources</span>
+                  <span className="material-symbols-outlined text-accent-ai-gold group-hover:translate-x-1 transition-transform text-[18px]">
+                    arrow_forward
                   </span>
                 </button>
+              </div>
 
+              <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-[12px] text-text-muted">
+                <div className="flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[16px]">translate</span>
+                  <span>Modes: English & Pidgin</span>
+                </div>
                 <button
-                  type="button"
-                  onClick={() => setActiveTab('analytics')}
-                  className={classNames(
-                    "group inline-flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-3 sm:px-1 text-xs sm:text-sm font-semibold transition-all duration-200",
-                    activeTab === 'analytics'
-                      ? "border-primary text-text-primary"
-                      : "border-transparent text-text-secondary hover:border-border hover:text-text-primary"
-                  )}
+                  onClick={() => navigate('/falke-ai')}
+                  className="text-accent-ai-gold hover:underline font-label-sm font-semibold"
                 >
-                  <BarChart3 className={classNames("h-4 w-4 transition-colors", activeTab === 'analytics' ? "text-primary" : "text-text-muted group-hover:text-text-secondary")} />
-                  <span>My Analytics</span>
-                  {resultsList.length > 0 && (
-                    <span className={classNames(
-                      "rounded-full px-2 py-0.5 text-[10px] font-bold transition-colors",
-                      activeTab === 'analytics' ? "bg-info/15 text-info" : "bg-bg-secondary text-text-muted border border-border"
-                    )}>
-                      {resultsList.length}
-                    </span>
-                  )}
+                  Open Studio
                 </button>
-
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('all')}
-                  className={classNames(
-                    "group inline-flex items-center gap-2 whitespace-nowrap border-b-2 py-3 px-3 sm:px-1 text-xs sm:text-sm font-semibold transition-all duration-200",
-                    activeTab === 'all'
-                      ? "border-primary text-text-primary"
-                      : "border-transparent text-text-secondary hover:border-border hover:text-text-primary"
-                  )}
-                >
-                  <Layers className={classNames("h-4 w-4 transition-colors", activeTab === 'all' ? "text-primary" : "text-text-muted group-hover:text-text-secondary")} />
-                  <span>All Sections</span>
-                </button>
-              </nav>
+              </div>
             </div>
-          </div>
 
-          <div className="grid min-w-0 items-start gap-8 xl:grid-cols-[340px,minmax(0,1fr)]">
-            <aside className="hidden xl:block min-w-0 space-y-4 xl:sticky xl:top-24">
-              <SectionKicker label="Account" detail="Your profile and secure access" />
-              <Card className="overflow-hidden border-border bg-bg-card p-0 shadow-[0_16px_36px_rgba(0,0,0,0.16)]">
-                <div className="border-b border-border bg-[linear-gradient(145deg,rgba(91,114,255,0.16),rgba(17,29,52,0)_70%)] p-5">
-                  <div className="flex flex-col items-start gap-4 xl:flex-row xl:gap-3">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-base font-black text-text-on-accent shadow-[0_10px_25px_rgba(91,114,255,0.3)]">{initials}</div>
-                    <div className="min-w-0 flex-1">
-                      <h2 className="break-words font-display text-base font-bold leading-5 text-text-primary">{student?.fullName}</h2>
-                      <p className="mt-1 break-all text-xs leading-5 text-text-secondary">{student?.email}</p>
-                      <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                        <Badge variant="info">Candidate</Badge>
-                        {student?.aurikrex_id && (
-                          <button
-                            type="button"
-                            onClick={handleCopyAurikrexId}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 text-[11px] font-mono font-bold text-primary transition-all hover:bg-primary/20 active:scale-95 shadow-sm"
-                            title="Click to copy your Aurikrex ID"
+            {/* Recent Mock Progression */}
+            <div className="bg-bg-card rounded-2xl border border-border p-5 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-headline-sm font-headline-sm font-bold text-text-primary">
+                    Recent Mock Progression
+                  </h3>
+                  <p className="text-text-muted text-[12px]">Last 5 Full-Length CBT Attempts</p>
+                </div>
+                {hasMockData && (
+                  <span className="px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary font-mono-data text-[12px] font-bold">
+                    {mockResults.length} Logged
+                  </span>
+                )}
+              </div>
+
+              {hasMockData ? (
+                <>
+                  <div className="h-28 w-full flex items-end justify-between gap-2 pt-4 px-2 pb-2 bg-surface-container-low rounded-xl border border-border">
+                    {mockResults.slice(-5).map((m, idx, arr) => {
+                      const score = Number(m.totalScore || 0);
+                      const isLatest = idx === arr.length - 1;
+                      const heightPercent = `${Math.min(100, Math.max(15, Math.round((score / 400) * 100)))}%`;
+                      return (
+                        <div key={m.resultId || idx} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                          <span
+                            className={`text-[11px] font-mono-data ${
+                              isLatest ? 'text-tertiary font-bold' : 'text-text-muted'
+                            }`}
                           >
-                            <Sparkles className="h-3 w-3 text-primary" />
-                            <span>{student.aurikrex_id}</span>
-                            {copiedAkxId ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3 opacity-70" />}
-                          </button>
-                        )}
-                        <Badge variant="ai-flag">
-                          Public Beta (Free Max Tier)
-                        </Badge>
-                      </div>
-                    </div>
+                            {score}
+                          </span>
+                          <div
+                            className={`w-full rounded-t-sm ${isLatest ? 'bg-tertiary' : 'bg-surface-container-high'}`}
+                            style={{ height: heightPercent }}
+                          />
+                          <span
+                            className={`text-[10px] font-mono-data ${
+                              isLatest ? 'text-tertiary font-bold' : 'text-text-muted'
+                            }`}
+                          >
+                            M-0{idx + 1}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
-                </div>
-                <div className="grid grid-cols-1 divide-y divide-border px-2 py-3 text-center xl:grid-cols-3 xl:divide-x xl:divide-y-0 xl:py-4">
-                  <div className="py-2 xl:py-0">
-                    <p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Level</p>
-                    <p className="mt-1 text-sm font-black text-text-primary">{student?.level || 1}</p>
-                  </div>
-                  <div className="py-2 xl:py-0">
-                    <p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Points</p>
-                    <p className="mt-1 text-sm font-black text-text-primary">{student?.xp_points || 0}</p>
-                  </div>
-                  <div className="py-2 xl:py-0">
-                    <p className="text-xs sm:text-[10px] font-semibold uppercase tracking-wide text-text-muted">Streak</p>
-                    <p className="mt-1 flex items-center justify-center gap-1 text-sm font-black text-streak"><Flame className="h-3.5 w-3.5" />{student?.streak_count || 0}</p>
-                  </div>
-                </div>
-                <div className="px-5 pb-5">
-                  <div className="rounded-xl border border-primary/25 bg-primary/10 px-3.5 py-3 text-xs leading-5 text-text-secondary">
-                    <p className="font-bold text-primary flex items-center gap-1.5">
-                      <Sparkles className="h-3.5 w-3.5" /> Free All-Access Pass (Beta)
-                    </p>
-                    <p className="mt-1 text-[11px] leading-4 text-text-secondary">
-                      Full Max features & 20 daily AI prompts unlocked. Flexible plans will be sorted upon full release.
-                    </p>
-                  </div>
-                </div>
-              </Card>
 
-              <Card variant="secondary" className="border-border p-5 shadow-sm">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex min-w-0 gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary"><Sparkles className="h-4 w-4" /></div>
-                    <div>
-                      <h2 className="text-sm font-bold text-text-primary">Aurikrex ID</h2>
-                      <p className="mt-1 text-xs leading-5 text-text-secondary">Your universal identity across all Aurikrex ecosystem apps.</p>
-                    </div>
+                  <div className="mt-4 flex items-center justify-between text-[12px] text-text-secondary">
+                    <span className="flex items-center gap-1 text-xs">
+                      <span className="w-2 h-2 rounded-full bg-accent-royal-blue" />
+                      Target 300+ Benchmark
+                    </span>
                   </div>
-                </div>
-                <div className="mt-4 flex items-center gap-2 rounded-xl border border-border bg-bg-primary px-3 py-2.5">
-                  <span className="min-w-0 flex-1 truncate font-mono text-xs tracking-[0.18em] text-text-primary" aria-label="Aurikrex ID">{student?.aurikrex_id || student?.cbt_key || '—'}</span>
-                  <button type="button" onClick={handleCopyAurikrexId} className="min-h-11 min-w-11 rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-bg-secondary hover:text-text-primary" aria-label={copiedAkxId ? 'Aurikrex ID copied' : 'Copy Aurikrex ID'} title="Copy Aurikrex ID">
-                    {copiedAkxId ? <Check className="h-4 w-4 text-success" /> : <Copy className="h-4 w-4" />}
+                </>
+              ) : (
+                <div className="p-6 bg-surface-container-low rounded-xl border border-border text-center space-y-3">
+                  <div className="w-10 h-10 rounded-full bg-surface-container mx-auto flex items-center justify-center text-text-muted">
+                    <span className="material-symbols-outlined text-[20px]">show_chart</span>
+                  </div>
+                  <p className="text-body-sm text-text-secondary">
+                    No mock attempts logged yet. Launch your first 120-minute mock exam to start charting your score progression.
+                  </p>
+                  <button
+                    onClick={() => navigate('/arena')}
+                    className="px-4 py-2 rounded-lg bg-primary text-text-on-primary text-label-sm font-semibold hover:bg-primary-hover transition-colors"
+                  >
+                    Take First Mock Exam
                   </button>
                 </div>
-              </Card>
+              )}
+            </div>
 
-              <Card variant="secondary" className="border-border p-5 shadow-sm">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex min-w-0 gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
-                      <Bell className="h-4 w-4" />
+            {/* Readiness Tools */}
+            <div className="bg-bg-card rounded-2xl border border-border p-5 shadow-sm space-y-3">
+              <h3 className="text-headline-sm font-headline-sm font-bold text-text-primary">
+                Readiness Tools
+              </h3>
+              <div className="space-y-2">
+                <a
+                  href="/study"
+                  className="p-3 rounded-xl bg-surface-container-low border border-border hover:border-border-hover flex items-center justify-between group transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+                      <span className="material-symbols-outlined text-[20px]">checklist</span>
                     </div>
                     <div>
-                      <p className="font-display text-sm font-bold text-text-primary">Study Reminders</p>
-                      <p className="mt-1 text-xs leading-5 text-text-secondary">Get daily practice alerts and stay consistent for JAMB.</p>
+                      <span className="text-body-sm font-medium text-text-primary block">
+                        Official JAMB Syllabus
+                      </span>
+                      <span className="text-[11px] text-text-muted">
+                        Track official syllabus coverage across all 4 subjects
+                      </span>
                     </div>
                   </div>
-                </div>
-                <div className="mt-4 flex gap-2">
-                  <Button
-                    onClick={async () => {
-                      try {
-                        await OneSignal.Slidedown.promptPush();
-                        addToast({ type: 'info', title: 'Notifications', message: 'Notification prompt triggered.' });
-                      } catch {
-                        addToast({ type: 'info', title: 'Push Notifications', message: 'Notifications configured.' });
-                      }
-                    }}
-                    variant="secondary"
-                    size="sm"
-                    fullWidth
-                  >
-                    <Bell className="h-3.5 w-3.5" /> Enable Reminders
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      try {
-                        const apiBase = import.meta.env.VITE_API_BASE_URL ?? '/api';
-                        const res = await fetch(`${apiBase}/notifications/test-push`, {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                        });
-                        const data = await res.json();
-                        addToast({ type: data.success ? 'success' : 'error', title: 'Test Push', message: data.message });
-                      } catch {
-                        addToast({ type: 'error', title: 'Test Failed', message: 'Could not trigger test push request.' });
-                      }
-                    }}
-                    variant="ghost"
-                    size="sm"
-                    className="shrink-0"
-                    title="Send a test push notification"
-                  >
-                    Send Test
-                  </Button>
-                </div>
-              </Card>
+                  <span className="material-symbols-outlined text-text-muted group-hover:text-text-primary transition-colors text-[20px]">
+                    chevron_right
+                  </span>
+                </a>
 
-              <SecuritySettings token="" mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory()} externalOpenTrigger={securityModalTrigger} />
-            </aside>
-
-            {/* Hidden mobile anchor for SecuritySettings so 2FA modals mount cleanly when triggered on mobile */}
-            <div className="xl:hidden">
-              <SecuritySettings token="" mfaEnabled={student?.mfa_enabled || false} onUpdate={() => fetchProfileAndHistory()} externalOpenTrigger={securityModalTrigger} hideCard={true} />
-            </div>
-
-            <div className="min-w-0 space-y-8">
-              {/* AI Preparation Outlook Hero Card */}
-              {(activeTab === 'overview' || activeTab === 'all') && (
-                <section className="relative overflow-hidden rounded-3xl border border-primary/25 bg-bg-card p-5 sm:p-6 lg:p-7 shadow-xl shadow-primary/5 animate-fade-in">
-                  <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-                  <div className="pointer-events-none absolute bottom-0 right-12 h-28 w-28 rounded-full border border-info/20" />
-                  <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-                    <div className="max-w-xl">
-                      <div className="flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] text-info">
-                        <TrendingUp className="h-3.5 w-3.5" /> Preparation outlook
-                      </div>
-                      <h2 className="mt-2.5 font-display text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-text-primary">
-                        Build readiness one focused session at a time.
-                      </h2>
-                      <p className="mt-1.5 text-xs sm:text-sm leading-5 sm:leading-6 text-text-secondary">
-                        {nextWeakTopic ? `Your next opportunity is ${nextWeakTopic.topic}. A short, targeted drill can turn a weak area into a confident one.` : 'Complete a practice session to reveal a personalized readiness signal and your next area of focus.'}
-                      </p>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        <span className="rounded-full border border-info/25 bg-info/10 px-2.5 py-1 text-[11px] font-medium text-info">
-                          {nextWeakTopic ? `Focus: ${nextWeakTopic.topic}` : 'Focus: establish a baseline'}
-                        </span>
-                        <span className="rounded-full border border-border bg-bg-secondary/70 px-2.5 py-1 text-[11px] text-text-secondary">
-                          Target UTME score: 300+
-                        </span>
-                      </div>
+                <a
+                  href="/questions"
+                  className="p-3 rounded-xl bg-surface-container-low border border-border hover:border-border-hover flex items-center justify-between group transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-warning-amber">
+                      <span className="material-symbols-outlined text-[20px]">quiz</span>
                     </div>
-                    <div className="flex items-center gap-4 rounded-2xl border border-border bg-bg-secondary/70 p-3.5 sm:p-4 backdrop-blur-sm shadow-sm">
-                      <div className="text-right">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-muted">Readiness</p>
-                        <p className="mt-0.5 font-display text-2xl sm:text-3xl font-black text-text-primary">
-                          {readinessScore}<span className="text-sm font-semibold text-text-muted">/100</span>
-                        </p>
-                      </div>
-                      <Button onClick={() => openDrill()} disabled={!isCombinationValid} size="sm" className="whitespace-nowrap">
-                        <Zap className="h-4 w-4" /> Start a drill
-                      </Button>
+                    <div>
+                      <span className="text-body-sm font-medium text-text-primary block">
+                        1983–2024 Past Questions
+                      </span>
+                      <span className="text-[11px] text-text-muted">
+                        1,000,000+ Verified JAMB Items
+                      </span>
                     </div>
                   </div>
-                </section>
-              )}
+                  <span className="material-symbols-outlined text-text-muted group-hover:text-text-primary transition-colors text-[20px]">
+                    chevron_right
+                  </span>
+                </a>
 
-              {/* Section: Mini Cards representing each tool/section (Quick navigation on Overview) */}
-              {activeTab === 'overview' && (
-                <section className="space-y-4 animate-fade-in">
-                  <SectionKicker label="Quick Launch & Features" detail="Tap any card to open the complete tool" />
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      {/* Mini Card 1: Practice Arena */}
-                      <Card
-                        hoverable
-                        onClick={() => setActiveTab('practice')}
-                        className="cursor-pointer border-border bg-bg-card p-4 sm:p-5 transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 group"
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary group-hover:scale-105 transition-transform">
-                            <Target className="h-4 w-4" />
-                          </div>
-                          <span className="text-xs font-bold text-primary flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                            Open Practice <ArrowRight className="h-3.5 w-3.5" />
-                          </span>
-                        </div>
-                        <h3 className="mt-3 font-display text-sm sm:text-base font-bold text-text-primary">Practice Arena</h3>
-                        <p className="mt-1 text-xs text-text-secondary leading-5">
-                          Full 180-question mock exams & targeted drills with immediate solutions.
-                        </p>
-                        <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs">
-                          <span className="text-text-muted">{isCombinationValid ? '4 subjects active' : 'Combo required'}</span>
-                          <div className="flex gap-2">
-                            <button
-                              type="button"
-                              onClick={(e) => { e.stopPropagation(); navigate('/mock-setup'); }}
-                              className="font-bold text-primary hover:underline"
-                            >
-                              Mock
-                            </button>
-                            <span className="text-border">·</span>
-                            <button
-                              type="button"
-                              onClick={(e) => { e.stopPropagation(); openDrill(); }}
-                              className="font-bold text-info hover:underline"
-                            >
-                              Drill
-                            </button>
-                          </div>
-                        </div>
-                      </Card>
-
-                      {/* Mini Card 2: My Analytics */}
-                      <Card
-                        hoverable
-                        onClick={() => setActiveTab('analytics')}
-                        className="cursor-pointer border-border bg-bg-card p-4 sm:p-5 transition-all hover:border-info/40 hover:shadow-lg hover:shadow-info/5 group"
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-info/25 bg-info/10 text-info group-hover:scale-105 transition-transform">
-                            <BarChart3 className="h-4 w-4" />
-                          </div>
-                          <span className="text-xs font-bold text-info flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                            Open Analytics <ArrowRight className="h-3.5 w-3.5" />
-                          </span>
-                        </div>
-                        <h3 className="mt-3 font-display text-sm sm:text-base font-bold text-text-primary">My Analytics & Review</h3>
-                        <p className="mt-1 text-xs text-text-secondary leading-5">
-                          Subject breakdown, score trends, and history of completed attempts.
-                        </p>
-                        <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs">
-                          <span className="text-text-muted">{resultsList.length} session{resultsList.length === 1 ? '' : 's'}</span>
-                          <span className="font-semibold text-info">Mock avg: {averageMockScore ?? '—'}</span>
-                        </div>
-                      </Card>
-
-                      {/* Mini Card 3: Subject Combination */}
-                      <Card className="border-border bg-bg-card p-4 sm:p-5">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
-                            <Grid3X3 className="h-4 w-4" />
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setIsEditModalOpen(true)}
-                            className="text-xs font-bold text-primary hover:underline"
-                          >
-                            Edit combo →
-                          </button>
-                        </div>
-                        <h3 className="mt-3 font-display text-sm sm:text-base font-bold text-text-primary">Subject Combination</h3>
-                        <p className="mt-1 text-xs text-text-secondary leading-5">
-                          4 examination subjects shaping your personalized drills and mocks.
-                        </p>
-                        <div className="mt-4 pt-3 border-t border-border flex flex-wrap gap-1.5">
-                          {combination.length ? combination.map((sub: string) => (
-                            <span key={sub} className="inline-flex items-center px-2 py-0.5 rounded-md bg-bg-secondary text-[11px] font-semibold text-text-primary border border-border">
-                              {getSubjectLabel(sub)}
-                            </span>
-                          )) : (
-                            <span className="text-xs text-warning">None selected yet</span>
-                          )}
-                        </div>
-                      </Card>
-
-                      {/* Mini Card 4: CBT Roaming Key & Security */}
-                      <Card className="border-border bg-bg-card p-4 sm:p-5">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary">
-                            <KeyRound className="h-4 w-4" />
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setSecurityModalTrigger((prev) => prev + 1)}
-                            className="text-xs font-bold text-primary hover:underline"
-                          >
-                            2FA settings →
-                          </button>
-                        </div>
-                        <h3 className="mt-3 font-display text-sm sm:text-base font-bold text-text-primary">Aurikrex ID & 2FA Security</h3>
-                        <p className="mt-1 text-xs text-text-secondary leading-5">
-                          Universal ecosystem identity and authenticator protection.
-                        </p>
-                        <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs">
-                          <span className="font-mono text-text-primary truncate max-w-[140px] text-xs">
-                            {student?.aurikrex_id || student?.cbt_key || '—'}
-                          </span>
-                          <div className="flex items-center gap-1.5">
-                            <button
-                              type="button"
-                              onClick={handleCopyAurikrexId}
-                              className="p-1 rounded text-text-secondary hover:text-text-primary hover:bg-bg-secondary"
-                              title="Copy Aurikrex ID"
-                            >
-                              {copiedAkxId ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
-                            </button>
-                          </div>
-                        </div>
-                      </Card>
+                <button
+                  onClick={() => navigate('/mock-setup')}
+                  className="w-full p-3 rounded-xl bg-surface-container-low border border-border hover:border-border-hover flex items-center justify-between group transition-all text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-tertiary">
+                      <span className="material-symbols-outlined text-[20px]">play_circle</span>
                     </div>
-                  </section>
-              )}
-
-              {/* TAB 2: PRACTICE */}
-              {(activeTab === 'practice' || activeTab === 'all') && (
-                <div className="space-y-8 animate-fade-in">
-                  <section className="space-y-4">
-                    <SectionKicker label="Practice Modes" detail="Choose the type of preparation that fits your next study block" />
-                    <div className="grid gap-4 lg:grid-cols-2">
-                      <Card hoverable className="mock-exam-card relative overflow-hidden border-primary/30 p-5 sm:p-6 shadow-[0_14px_30px_rgba(0,0,0,0.16)]">
-                        <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-primary/20 blur-2xl" />
-                        <div className="relative flex h-full flex-col">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/35 bg-primary/15 text-primary"><Play className="h-5 w-5" /></div>
-                          <p className="mt-4 text-[10px] sm:text-xs font-bold uppercase tracking-[0.14em] text-primary">Full simulation</p>
-                          <h3 className="mt-1 font-display text-lg sm:text-xl font-bold text-text-primary">Mock exam</h3>
-                          <p className="mt-2 max-w-md text-xs sm:text-sm leading-5 sm:leading-6 text-text-secondary">A realistic 180-question exam with the timing and structure of the UTME experience.</p>
-                          <div className="mt-6"><Button onClick={() => navigate('/mock-setup')} disabled={!isCombinationValid} className="w-full sm:w-auto"><Play className="h-4 w-4" />Start mock exam</Button></div>
-                        </div>
-                      </Card>
-                      <Card hoverable className="border-border bg-bg-card p-5 sm:p-6 shadow-[0_14px_30px_rgba(0,0,0,0.12)]">
-                        <div className="flex h-full flex-col">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-info/25 bg-info/10 text-info"><Target className="h-5 w-5" /></div>
-                          <p className="mt-4 text-[10px] sm:text-xs font-bold uppercase tracking-[0.14em] text-info">Targeted practice</p>
-                          <h3 className="mt-1 font-display text-lg sm:text-xl font-bold text-text-primary">Subject drill</h3>
-                          <p className="mt-2 max-w-md text-xs sm:text-sm leading-5 sm:leading-6 text-text-secondary">Choose a subject, topic, question count, and difficulty to practice with immediate feedback.</p>
-                          <div className="mt-6"><Button onClick={() => openDrill()} disabled={!isCombinationValid} variant="secondary" className="w-full sm:w-auto"><Target className="h-4 w-4" />Configure drill</Button></div>
-                        </div>
-                      </Card>
+                    <div>
+                      <span className="text-body-sm font-medium text-text-primary block">
+                        Full Mock Simulation
+                      </span>
+                      <span className="text-[11px] text-text-muted">
+                        120m Timed CBT Kiosk Mode
+                      </span>
                     </div>
-                  </section>
-
-                  <section className="space-y-4">
-                    <SectionKicker label="Exam Setup" detail="The subjects that shape your personalized mock and drill experience" />
-                    <Card className="border-border p-5 shadow-sm">
-                      <div className="mb-4 flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary"><Grid3X3 className="h-4 w-4" /></div>
-                          <div><h2 className="text-sm font-bold text-text-primary">Your subject combination</h2><p className="mt-0.5 text-xs text-text-secondary">Use of English plus three electives</p></div>
-                        </div>
-                        <Button onClick={() => setIsEditModalOpen(true)} variant="ghost" size="sm">{isCombinationValid ? 'Edit' : 'Set up'}<ChevronRight className="h-3.5 w-3.5" /></Button>
-                      </div>
-                      {isCombinationValid ? (
-                        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-                          {combination.map((subject: string) => (
-                            <div key={subject} className="flex items-center gap-3 rounded-xl border border-border bg-bg-secondary/65 px-3 py-2.5">
-                              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-[10px] font-black text-primary">{subject.slice(0, 3).toUpperCase()}</div>
-                              <p className="min-w-0 truncate text-xs font-semibold text-text-primary" title={getSubjectLabel(subject)}>{getSubjectLabel(subject)}</p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <EmptyPanel icon={Grid3X3} title="Your practice plan needs four subjects" detail="Set up Use of English and three electives to unlock mock exams and custom drills." action={() => setIsEditModalOpen(true)} actionLabel="Set combination" />
-                      )}
-                    </Card>
-                  </section>
-                </div>
-              )}
-
-              {/* TAB 3: MY ANALYTICS */}
-              {(activeTab === 'analytics' || activeTab === 'all') && (
-                <div className="space-y-8 animate-fade-in">
-                  {/* Performance Overview */}
-                  <section className="space-y-4">
-                    <SectionKicker label="Performance Overview" detail="A concise view of your readiness, trend, and streak" />
-                    <Card className="border-border p-5 sm:p-6 shadow-[0_14px_30px_rgba(0,0,0,0.12)]">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl border border-info/25 bg-info/10 text-info"><LineChart className="h-4 w-4" /></div><div><h2 className="text-sm font-bold text-text-primary">Performance overview</h2><p className="mt-0.5 text-xs text-text-secondary">Your session trend and readiness signal</p></div></div>
-                        <span className="rounded-full bg-info/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-info">{resultsList.length ? 'Live data' : 'Baseline'}</span>
-                      </div>
-                      <div className="mt-6 grid min-w-0 items-center gap-5 sm:grid-cols-[112px,minmax(0,1fr)]">
-                        <div className="relative mx-auto flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-full" style={{ background: `conic-gradient(var(--color-accent-info) ${readinessScore * 3.6}deg, rgba(148, 163, 184, 0.16) 0deg)` }} aria-label={`Readiness score: ${readinessScore} out of 100`} role="img">
-                          <div className="flex h-[76px] w-[76px] sm:h-[92px] sm:w-[92px] flex-col items-center justify-center rounded-full bg-bg-card"><span className="font-display text-xl sm:text-2xl font-black text-text-primary">{readinessScore}</span><span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wide text-text-muted">ready</span></div>
-                        </div>
-                        <div className="min-w-0">
-                          <div className="mb-2 flex items-center justify-between"><p className="text-xs font-semibold text-text-primary">Session trend</p><p className="text-[11px] text-text-muted">Last {trendValues.length} sessions</p></div>
-                          <div className="h-20 min-w-0 overflow-hidden rounded-xl border border-border bg-bg-secondary/55 px-2 py-2">
-                            <svg viewBox="0 0 190 72" className="h-full w-full" preserveAspectRatio="none" aria-label="Practice score trend" role="img">
-                              <line x1="8" x2="178" y1="64" y2="64" stroke="currentColor" className="text-text-muted" strokeOpacity="0.22" strokeWidth="1" />
-                              <line x1="8" x2="178" y1="36" y2="36" stroke="currentColor" className="text-text-muted" strokeOpacity="0.12" strokeWidth="1" strokeDasharray="3 4" />
-                              <polyline points={trendPoints} fill="none" stroke="var(--color-accent-info)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" strokeDasharray={resultsList.length ? undefined : '5 5'} />
-                              {trendValues.map((value, index) => <circle key={`${value}-${index}`} cx={8 + index * 34} cy={64 - Math.min(52, Math.max(0, value) * 0.52)} r="3" fill="var(--color-bg-card)" stroke="var(--color-accent-info)" strokeWidth="2" />)}
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-6 grid grid-cols-3 divide-x divide-border rounded-xl border border-border bg-bg-secondary/45 py-2 text-center">
-                        <div><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Sessions</p><p className="mt-0.5 text-base sm:text-lg font-black text-text-primary">{resultsList.length}</p></div>
-                        <div><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Mock avg</p><p className="mt-0.5 text-base sm:text-lg font-black text-primary">{averageMockScore ?? '—'}</p></div>
-                        <div><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Streak</p><p className="mt-0.5 text-base sm:text-lg font-black text-streak">{student?.streak_count || 0}d</p></div>
-                      </div>
-                      {!resultsList.length && <p className="mt-3 text-center text-xs leading-5 text-text-secondary">Your first completed session will turn this baseline into a personalized trend.</p>}
-                    </Card>
-                  </section>
-
-                  {/* Subject Breakdown */}
-                  <section className="space-y-4">
-                    <SectionKicker label="Subject Breakdown" detail="Accuracy across the topics you have practiced" />
-                    <Card className="border-border p-5 sm:p-6 shadow-sm">
-                      <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary"><BarChart3 className="h-4 w-4" /></div><div><h2 className="text-sm font-bold text-text-primary">Subject accuracy</h2><p className="mt-0.5 text-xs text-text-secondary">Track your strongest and weakest areas</p></div></div>
-                      {subjectBreakdown.length ? (
-                        <div className="mt-6 space-y-4">
-                          {subjectBreakdown.map((subject) => (
-                            <div key={subject.subject}>
-                              <div className="mb-1.5 flex items-center justify-between gap-3 text-xs"><span className="truncate font-semibold text-text-primary">{getSubjectLabel(subject.subject)}</span><span className={classNames('font-bold tabular-nums', subject.accuracy >= 70 ? 'text-success' : subject.accuracy >= 40 ? 'text-warning' : 'text-error')}>{subject.accuracy}%</span></div>
-                              <div className="h-2 overflow-hidden rounded-full bg-bg-secondary"><div className={classNames('h-full rounded-full transition-[width] duration-500', subject.accuracy >= 70 ? 'bg-success' : subject.accuracy >= 40 ? 'bg-warning' : 'bg-error')} style={{ width: `${subject.accuracy}%` }} /></div>
-                              <p className="mt-1 text-[11px] text-text-muted">{subject.correct} of {subject.total} correct</p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <EmptyPanel icon={BarChart3} title="Your subject breakdown will appear here" detail="Complete a drill or mock exam to see the topics that need more attention." action={() => openDrill()} actionLabel="Start a drill" />
-                      )}
-                    </Card>
-                  </section>
-
-                  {/* Recent Attempts */}
-                  <section className="space-y-4 pb-8">
-                    <SectionKicker label="Recent Attempts" detail="Review answers, scores, and feedback from your latest sessions" />
-                    <Card className="border-border p-5 sm:p-6 shadow-sm">
-                      <div className="flex items-center gap-3"><div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/25 bg-primary/10 text-primary"><History className="h-4 w-4" /></div><div><h2 className="text-sm font-bold text-text-primary">Attempt history</h2><p className="mt-0.5 text-xs text-text-secondary">Return to a completed practice session to learn from mistakes</p></div></div>
-                      {resultsList.length ? (
-                        <div className="mt-5 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-bg-secondary/35">
-                          {resultsList.slice(0, 8).map((result) => (
-                            <div key={result.resultId || (result as any).id} className="flex flex-col gap-3 px-4 py-3 transition-colors hover:bg-bg-secondary sm:flex-row sm:items-center sm:justify-between">
-                              <div className="flex min-w-0 items-center gap-3"><div className={classNames('flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border', result.type === 'mock' ? 'border-primary/25 bg-primary/10 text-primary' : 'border-info/25 bg-info/10 text-info')}><Play className="h-3.5 w-3.5" /></div><div className="min-w-0"><p className="truncate text-xs sm:text-sm font-bold text-text-primary">{result.type === 'mock' ? 'Mock exam' : 'Subject drill'}</p><p className="mt-0.5 text-[11px] text-text-secondary">{new Date(result.completedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })} · {new Date(result.completedAt).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}</p></div></div>
-                              <div className="flex items-center justify-between gap-4 sm:justify-end"><div className="text-left sm:text-right"><p className="text-xs sm:text-sm font-black text-text-primary">{result.type === 'mock' ? result.totalScore : `${result.totalScore}%`}</p><p className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">{result.type === 'mock' ? 'score' : 'accuracy'}</p></div><Button onClick={() => navigate(`/results/${result.resultId || (result as any).id}`)} variant="secondary" size="sm">Review</Button></div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="mt-5"><EmptyPanel icon={History} title="No completed attempts yet" detail="Your completed mocks and drills will be saved here for review." action={() => openDrill()} actionLabel="Start a drill" /></div>
-                      )}
-                    </Card>
-                  </section>
-                </div>
-              )}
+                  </div>
+                  <span className="material-symbols-outlined text-text-muted group-hover:text-text-primary transition-colors text-[20px]">
+                    chevron_right
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
 
-      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} title="Set your subject combination" maxWidth="xl">
-        <div className="space-y-6">
-          <p className="text-sm leading-6 text-text-secondary">Use of English is required. Select three electives to complete your four-subject UTME combination.</p>
-          <div className="grid max-h-72 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
-            <div className="flex items-center gap-3 rounded-xl border border-primary/25 bg-primary/10 p-3 text-text-primary"><Check className="h-4 w-4 text-primary" /><span className="text-sm font-semibold">Use of English <span className="font-normal text-text-secondary">(required)</span></span></div>
-            {AVAILABLE_SUBJECTS.map((subject) => {
-              const isSelected = selectedSubjects.includes(subject);
+      {/* Subject Combination Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title="Edit 4-Subject UTME Combination"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-text-secondary">
+            Use of English is compulsory. Select exactly 3 additional electives for your target faculty.
+          </p>
+
+          <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto custom-scroll p-1">
+            {AVAILABLE_SUBJECTS.map((sub: string) => {
+              const isSelected = selectedSubjects.includes(sub);
+              const isEnglish = sub === 'english';
               return (
-                <button key={subject} type="button" onClick={() => handleToggleSubject(subject)} className={classNames('flex items-center gap-3 rounded-xl border p-3 text-left text-sm transition-[background-color,border-color,color,transform] duration-200 active:scale-[0.99]', isSelected ? 'border-primary bg-primary/10 text-text-primary' : 'border-border bg-bg-secondary text-text-secondary hover:border-border-hover hover:text-text-primary')} aria-pressed={isSelected}>
-                  <span className={classNames('flex h-4 w-4 items-center justify-center rounded border text-xs sm:text-[10px] font-black', isSelected ? 'border-primary bg-primary text-text-on-accent' : 'border-border bg-bg-primary')}>{isSelected && '✓'}</span>
-                  <span className="font-medium">{getSubjectLabel(subject)}</span>
+                <button
+                  key={sub}
+                  type="button"
+                  disabled={isEnglish}
+                  onClick={() => handleToggleSubject(sub)}
+                  className={`p-2.5 rounded-xl border text-left text-xs font-semibold flex items-center justify-between transition-all ${
+                    isEnglish
+                      ? 'border-accent-royal-blue/40 bg-accent-royal-blue/15 text-primary opacity-90'
+                      : isSelected
+                      ? 'border-accent-royal-blue bg-accent-royal-blue/20 text-primary'
+                      : 'border-border bg-surface-container-low text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  <span>{getSubjectLabel(sub)}</span>
+                  {isSelected && <span className="text-xs">✓</span>}
                 </button>
               );
             })}
           </div>
-          <div className="flex flex-col gap-4 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs text-text-secondary">Selected: <strong className="text-primary">{selectedSubjects.filter((subject) => subject !== 'english').length + 1} of 4</strong> subjects</p>
-            <div className="flex gap-2"><Button onClick={() => setIsEditModalOpen(false)} variant="secondary" size="sm">Cancel</Button><Button onClick={handleSaveCombination} size="sm">Save combination</Button></div>
+
+          <div className="flex justify-between items-center pt-2 border-t border-border">
+            <span className="text-xs font-mono-data text-text-muted">
+              {selectedSubjects.length} / 4 Selected
+            </span>
+            <div className="flex gap-2">
+              <Button variant="ghost" size="sm" onClick={() => setIsEditModalOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                disabled={selectedSubjects.length !== 4}
+                onClick={handleSaveCombination}
+              >
+                Save Combination
+              </Button>
+            </div>
           </div>
         </div>
       </Modal>
 
-      <Modal isOpen={isDrillModalOpen} onClose={() => setIsDrillModalOpen(false)} title="Configure a subject drill" maxWidth="sm">
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <div className="space-y-1.5"><label htmlFor="drill-subject" className="text-xs font-bold uppercase tracking-wide text-text-secondary">Subject</label><select id="drill-subject" value={drillSubject} onChange={(event) => setDrillSubject(event.target.value)} className="w-full rounded-xl border border-border bg-bg-secondary p-3 text-sm text-text-primary transition-colors"><option value="" disabled>Select a subject</option>{combination.map((subject: string) => <option key={subject} value={subject}>{getSubjectLabel(subject)}</option>)}</select></div>
-            <div className="space-y-1.5"><span className="text-xs font-bold uppercase tracking-wide text-text-secondary">Question count</span><div className="grid grid-cols-3 gap-2">{[10, 20, 40].map((count) => <button key={count} type="button" onClick={() => setDrillCount(count)} className={classNames('rounded-xl border p-3 text-xs font-bold transition-[background-color,border-color,color,transform] duration-200 active:scale-[0.98]', drillCount === count ? 'border-primary bg-primary/10 text-text-primary' : 'border-border bg-bg-secondary text-text-secondary hover:border-border-hover hover:text-text-primary')} aria-pressed={drillCount === count}>{count} questions</button>)}</div></div>
-            <div className="space-y-1.5"><label htmlFor="drill-difficulty" className="text-xs font-bold uppercase tracking-wide text-text-secondary">Difficulty</label><select id="drill-difficulty" value={drillDifficulty} onChange={(event) => setDrillDifficulty(event.target.value)} className="w-full rounded-xl border border-border bg-bg-secondary p-3 text-sm text-text-primary transition-colors"><option value="any">Any difficulty</option><option value="1">Easy</option><option value="2">Easy–medium</option><option value="3">Medium</option><option value="4">Medium–hard</option><option value="5">Hard</option></select></div>
-            <div className="space-y-2"><div className="flex items-center justify-between gap-3"><span className="text-xs font-bold uppercase tracking-wide text-text-secondary">Topics <span className="font-normal normal-case">(optional)</span></span>{availableTopics.length > 0 && <button type="button" onClick={() => { const random = availableTopics[Math.floor(Math.random() * availableTopics.length)]; setDrillTopics([random.topic]); }} className="inline-flex items-center gap-1 rounded-lg border border-primary/25 bg-primary/10 px-2 py-1 text-xs sm:text-[11px] font-bold text-primary transition-colors hover:bg-primary/15"><Sparkles className="h-3 w-3" />Choose one for me</button>}</div><div className="max-h-36 space-y-1 overflow-y-auto rounded-xl border border-border bg-bg-secondary p-2">{isLoadingTopics ? <div className="p-2 text-xs text-text-muted">Loading topics…</div> : availableTopics.length === 0 ? <div className="p-2 text-xs text-text-muted">No specific topics are available for this subject.</div> : availableTopics.map((topic) => <label key={topic.topic} className="flex cursor-pointer items-center gap-2 rounded-lg p-2 text-xs text-text-primary transition-colors hover:bg-bg-primary"><input type="checkbox" checked={drillTopics.includes(topic.topic)} onChange={(event) => setDrillTopics((previous) => event.target.checked ? [...previous, topic.topic] : previous.filter((item) => item !== topic.topic))} className="rounded border-border text-primary focus:ring-primary" /><span className="flex-1">{topic.topic}</span><span className="text-text-muted">{topic.count}</span></label>)}</div>{isDrillShort && <p className="text-xs text-warning">Selected topics have fewer than {drillCount} available questions; the drill may contain fewer questions.</p>}</div>
+      {/* Targeted Drill Modal */}
+      <Modal
+        isOpen={isDrillModalOpen}
+        onClose={() => setIsDrillModalOpen(false)}
+        title={`Configure Targeted Drill · ${getSubjectLabel(drillSubject)}`}
+      >
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-text-secondary uppercase">Subject</label>
+            <select
+              value={drillSubject}
+              onChange={(e) => setDrillSubject(e.target.value)}
+              className="w-full p-2.5 rounded-xl border border-border bg-surface-container-low text-text-primary text-sm outline-none focus:border-accent-royal-blue"
+            >
+              {combination.map((sub: string) => (
+                <option key={sub} value={sub}>
+                  {getSubjectLabel(sub)}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="flex justify-end gap-2 border-t border-border pt-4"><Button onClick={() => setIsDrillModalOpen(false)} variant="secondary" size="sm">Cancel</Button><Button onClick={handleStartDrill} disabled={!drillSubject} size="sm"><Zap className="h-4 w-4" />Start drill</Button></div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-text-secondary uppercase">
+                Questions Count
+              </label>
+              <select
+                value={drillCount}
+                onChange={(e) => setDrillCount(Number(e.target.value))}
+                className="w-full p-2.5 rounded-xl border border-border bg-surface-container-low text-text-primary text-sm outline-none focus:border-accent-royal-blue"
+              >
+                <option value={10}>10 Questions (Quick)</option>
+                <option value={20}>20 Questions (Standard)</option>
+                <option value={40}>40 Questions (Full Subject)</option>
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-text-secondary uppercase">Difficulty</label>
+              <select
+                value={drillDifficulty}
+                onChange={(e) => setDrillDifficulty(e.target.value)}
+                className="w-full p-2.5 rounded-xl border border-border bg-surface-container-low text-text-primary text-sm outline-none focus:border-accent-royal-blue"
+              >
+                <option value="any">Standard JAMB Mix</option>
+                <option value="3">Foundation</option>
+                <option value="5">Challenge Mode</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-3 border-t border-border">
+            <Button variant="ghost" size="sm" onClick={() => setIsDrillModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" size="sm" onClick={handleStartDrill}>
+              Start Drill Now
+            </Button>
+          </div>
         </div>
       </Modal>
 
-
-      <AiChatWidget hidden={mobileActionsOpen} />
+      <footer className="w-full py-4 text-center text-xs text-text-muted border-t border-border mt-10">
+        Aurikrex Exam Arena · © 2025/2026 Aurikrex. All rights reserved.
+      </footer>
     </div>
   );
 }

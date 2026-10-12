@@ -60,6 +60,7 @@ const drizzle_orm_1 = require("drizzle-orm");
 const uuid_1 = require("uuid");
 const search_service_1 = require("./search/search.service");
 const question_types_1 = require("./types/question.types");
+const question_sanitizer_1 = require("./utils/question-sanitizer");
 const duplicateStatuses = ["published", "approved", "under_review"];
 const createQuestionSchema = zod_1.z.object({
     subject: zod_1.z.string(),
@@ -220,13 +221,21 @@ let QuestionsService = QuestionsService_1 = class QuestionsService {
         if (!parsed.success) {
             throw new common_1.BadRequestException(parsed.error.issues.map((issue) => issue.message).join(", "));
         }
-        const optionIds = payload.options.map((option) => option.id);
+        if ((0, question_sanitizer_1.isIncompleteQuestion)(payload.question_text)) {
+            throw new common_1.BadRequestException("Question text appears incomplete or truncated.");
+        }
+        const sanitizedQuestionText = (0, question_sanitizer_1.sanitizeQuestionText)(payload.question_text);
+        const sanitizedOptions = payload.options.map((option) => ({
+            ...option,
+            text: (0, question_sanitizer_1.cleanOptionText)(option.text),
+        }));
+        const optionIds = sanitizedOptions.map((option) => option.id);
         if (!optionIds.includes(payload.correct_option)) {
             throw new common_1.BadRequestException("correct_option must match one of options[].id");
         }
         const duplicate = await this.runDuplicateCheck({
             subject: payload.subject,
-            questionText: payload.question_text,
+            questionText: sanitizedQuestionText,
         });
         if (duplicate.blocked) {
             throw new common_1.ConflictException({
@@ -240,7 +249,9 @@ let QuestionsService = QuestionsService_1 = class QuestionsService {
             .values({
             id: (0, uuid_1.v4)(),
             ...payload,
-            options: payload.options,
+            question_text: sanitizedQuestionText,
+            options: sanitizedOptions,
+            explanation: payload.explanation ? (0, question_sanitizer_1.sanitizeExplanation)(payload.explanation) : null,
             tags: this.normalizeTags(payload.tags),
             status: "draft",
             created_by: this.getActorId(user),
@@ -377,7 +388,16 @@ let QuestionsService = QuestionsService_1 = class QuestionsService {
     sanitizeForStudents(question) {
         const plain = question;
         const { correct_option, explanation, versions, embedding_vector, ...rest } = plain;
-        return rest;
+        return {
+            ...rest,
+            question_text: (0, question_sanitizer_1.sanitizeQuestionText)(rest.question_text),
+            options: Array.isArray(rest.options)
+                ? rest.options.map((opt) => ({
+                    ...opt,
+                    text: (0, question_sanitizer_1.cleanOptionText)(opt.text),
+                }))
+                : rest.options,
+        };
     }
     async getQuestionById(questionId, user) {
         const [question] = await this.db

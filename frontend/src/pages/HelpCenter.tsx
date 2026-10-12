@@ -148,11 +148,11 @@ export default function HelpCenter() {
         icon={CircleHelp}
       />
 
-      <main className="support-help-main mx-auto max-w-7xl px-8 py-16">
-        <section className="support-surface rounded-[24px] p-7">
-          <div className="support-help-search-header flex items-end justify-between gap-8">
-            <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Search support</p><h2 className="mt-3 font-display text-2xl font-semibold tracking-[-0.045em] text-text-primary">Start with the question you have.</h2></div>
-            <p className="max-w-sm text-right text-[13px] leading-6 text-text-muted">Search by feature, plan, issue, or a word from an on-screen error.</p>
+      <main className="support-help-main mx-auto max-w-7xl px-4 sm:px-8 py-10 sm:py-16">
+        <section className="support-surface rounded-[24px] p-5 sm:p-7">
+          <div className="support-help-search-header flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-8">
+            <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-royal-blue dark:text-blue-300">Search support</p><h2 className="mt-3 font-display text-xl sm:text-2xl font-semibold tracking-[-0.045em] text-text-primary">Start with the question you have.</h2></div>
+            <p className="max-w-sm text-left sm:text-right text-[13px] leading-6 text-text-muted">Search by feature, plan, issue, or a word from an on-screen error.</p>
           </div>
           <div className="relative mt-6">
             <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-text-muted" />
@@ -167,7 +167,7 @@ export default function HelpCenter() {
           </div>
         </section>
 
-        <section className="support-help-categories mt-8 grid grid-cols-4 gap-4" aria-label="Help categories">
+        <section className="support-help-categories mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Help categories">
           {categories.map((category) => {
             const Icon = category.icon;
             const active = selectedCategory === category.id;
@@ -187,10 +187,10 @@ export default function HelpCenter() {
           })}
         </section>
 
-        <section className="support-help-content mt-16 grid grid-cols-[minmax(0,1fr)_284px] gap-10">
+        <section className="support-help-content mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_284px] gap-8 lg:gap-10">
           <div>
             <div className="flex items-end justify-between border-b border-border pb-5">
-              <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">Common questions</p><h2 className="mt-3 font-display text-[30px] font-semibold tracking-[-0.045em] text-text-primary">{selectedCategory === 'all' ? 'Everything you need to know' : categories.find((category) => category.id === selectedCategory)?.label}</h2></div>
+              <div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-royal-blue dark:text-blue-300">Common questions</p><h2 className="mt-3 font-display text-[30px] font-semibold tracking-[-0.045em] text-text-primary">{selectedCategory === 'all' ? 'Everything you need to know' : categories.find((category) => category.id === selectedCategory)?.label}</h2></div>
               <p className="text-xs text-text-muted">{visibleFaqs.length} answer{visibleFaqs.length === 1 ? '' : 's'}</p>
             </div>
 

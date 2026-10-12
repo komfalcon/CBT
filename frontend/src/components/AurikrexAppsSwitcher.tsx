@@ -67,14 +67,19 @@ const AURIKREX_APPS: AppOption[] = [
 ];
 
 export function getSanitizedCbtBackendUrl() {
-  let url = (import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://cbt.pxxl.click').replace(/\/+$/, '');
-  if (!url) {
-    url = 'https://cbt.pxxl.click';
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL.replace(/\/+$/, '');
   }
-  return url;
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL.replace(/\/+$/, '');
+  }
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    return '/api';
+  }
+  return 'https://cbt.aurikrex.com';
 }
 
-export function AurikrexAppsSwitcher({ currentAppId = 'cbt' }: { currentAppId?: 'cbt' | 'library' | 'bytes' | 'vault' }) {
+export function AurikrexAppsSwitcher({ currentAppId = 'cbt', iconOnly = false }: { currentAppId?: 'cbt' | 'library' | 'bytes' | 'vault'; iconOnly?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -117,9 +122,11 @@ export function AurikrexAppsSwitcher({ currentAppId = 'cbt' }: { currentAppId?: 
         maxWidth: '340px',
         margin: '0 auto',
         borderRadius: '16px',
-        backgroundColor: '#0f172a',
-        border: '1px solid #334155',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.85)',
+        backgroundColor: 'var(--color-bg-card, #111d34)',
+        borderColor: 'var(--color-border, rgba(156, 172, 201, 0.14))',
+        borderStyle: 'solid',
+        borderWidth: '1px',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
         zIndex: 99999,
         overflow: 'hidden',
         textAlign: 'left',
@@ -130,9 +137,11 @@ export function AurikrexAppsSwitcher({ currentAppId = 'cbt' }: { currentAppId?: 
         top: 'calc(100% + 8px)',
         width: '280px',
         borderRadius: '12px',
-        backgroundColor: '#0f172a',
-        border: '1px solid #334155',
-        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'var(--color-bg-card, #111d34)',
+        borderColor: 'var(--color-border, rgba(156, 172, 201, 0.14))',
+        borderStyle: 'solid',
+        borderWidth: '1px',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
         zIndex: 9999,
         overflow: 'hidden',
         textAlign: 'left',
@@ -143,22 +152,28 @@ export function AurikrexAppsSwitcher({ currentAppId = 'cbt' }: { currentAppId?: 
       <button
         onClick={() => setIsOpen(!isOpen)}
         type="button"
-        className="flex items-center gap-2 px-2.5 py-1.5 text-sm font-medium text-text-secondary hover:text-text-primary bg-bg-secondary hover:bg-bg-card border border-border rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+        className={
+          iconOnly
+            ? "p-2 text-text-secondary hover:text-text-primary hover:bg-surface-container rounded-lg border border-border/50 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40 flex items-center justify-center shrink-0"
+            : "flex items-center gap-2 px-2.5 py-1.5 text-sm font-medium text-text-secondary hover:text-text-primary bg-bg-secondary hover:bg-bg-card border border-border rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+        }
         title="Aurikrex Ecosystem Apps"
       >
         <span className="inline-flex items-center justify-center shrink-0">
-          <img src="/aurikrex-logo.png" alt="Aurikrex Logo" className="w-5 h-5 object-contain rounded" style={{ width: '20px', height: '20px', minWidth: '20px', minHeight: '20px', objectFit: 'contain' }} />
+          <img src="/aurikrex-logo.png" alt="Aurikrex Logo" className="w-4 h-4 object-contain rounded" />
         </span>
-        <span className="whitespace-nowrap">
-          {isMobile ? 'Apps' : 'Aurikrex Apps'}
-        </span>
+        {!iconOnly && (
+          <span className="whitespace-nowrap">
+            {isMobile ? 'Apps' : 'Aurikrex Apps'}
+          </span>
+        )}
       </button>
 
       {isOpen && (
-        <div style={dropdownStyle}>
-          <div className="p-3 border-b border-slate-800 bg-slate-950/60">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Aurikrex Ecosystem</p>
-            <p className="text-[11px] text-slate-500 mt-0.5">One identity across all applications</p>
+        <div style={dropdownStyle} className="text-text-primary">
+          <div className="p-3 border-b border-border bg-surface-container-low">
+            <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">Aurikrex Ecosystem</p>
+            <p className="text-[11px] text-text-secondary mt-0.5">One identity across all applications</p>
           </div>
 
           <div className="p-1.5 space-y-1">
@@ -170,7 +185,7 @@ export function AurikrexAppsSwitcher({ currentAppId = 'cbt' }: { currentAppId?: 
                   href={getTargetUrl(app)}
                   target={isCurrent ? '_self' : '_blank'}
                   rel="noopener noreferrer"
-                  className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-slate-800/80 transition-colors group"
+                  className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-surface-container transition-colors group"
                   onClick={() => setIsOpen(false)}
                 >
                   <div className="shrink-0 mt-0.5">
@@ -178,17 +193,17 @@ export function AurikrexAppsSwitcher({ currentAppId = 'cbt' }: { currentAppId?: 
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-slate-200 group-hover:text-white flex items-center gap-1">
+                      <span className="text-sm font-medium text-text-primary group-hover:text-primary flex items-center gap-1">
                         {app.name}
-                        {!isCurrent && <ExternalLink className="w-3 h-3 text-slate-500 group-hover:text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />}
+                        {!isCurrent && <ExternalLink className="w-3 h-3 text-text-muted group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity" />}
                       </span>
                       {isCurrent && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-medium">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-tertiary border border-tertiary/30 font-medium">
                           Active
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-400 truncate mt-0.5">{app.description}</p>
+                    <p className="text-xs text-text-secondary truncate mt-0.5">{app.description}</p>
                   </div>
                 </a>
               );

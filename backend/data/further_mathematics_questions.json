@@ -169,7 +169,7 @@
       "year": 2018,
       "topic": "Pure Mathematics",
       "subtopic": "Binomial Theorem and Polynomials",
-      "question_text": "Find the coefficient of \\\\( x^3 \\\\) in the expansion of \\\\( \\\\left(2x - \\\\frac{1}{x}\\\\right)^7 \\\\)",
+      "question_text": "Find the coefficient of \\( x^3 \\) in the expansion of \\( \\left(2x - \\frac{1}{x}\\right)^7 \\)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -193,7 +193,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The general term in the binomial expansion is \\\\( T_{k+1} = \\\\binom{7}{k} (2x)^{7-k} \\\\left(-\\\\frac{1}{x}\\\\right)^k = \\\\binom{7}{k} 2^{7-k} (-1)^k x^{7-2k} \\\\) We require the exponent of \\\\( x \\\\) to be 3, so \\\\( 7-2k = 3 \\\\Rightarrow k = 2 \\\\) Substituting \\\\( k = 2 \\\\) gives coefficient \\\\( \\\\binom{7}{2} 2^{5} (-1)^2 = 21 \\\\times 32 = 672 \\)",
+      "explanation": "The general term in the binomial expansion is \\( T_{k+1} = \\binom{7}{k} (2x)^{7-k} \\left(-\\frac{1}{x}\\right)^k = \\binom{7}{k} 2^{7-k} (-1)^k x^{7-2k} \\) We require the exponent of \\( x \\) to be 3, so \\( 7-2k = 3 \\Rightarrow k = 2 \\) Substituting \\( k = 2 \\) gives coefficient \\( \\binom{7}{2} 2^{5} (-1)^2 = 21 \\times 32 = 672 \\)",
       "difficulty": 4
     },
     {
@@ -201,7 +201,7 @@
       "year": 2019,
       "topic": "Coordinate Geometry",
       "subtopic": "The Straight Line and Circle Equations",
-      "question_text": "In the diagram below, the line \\\\( y = 2x + 1 \\\\) intersects the circle \\\\( x^2 + y^2 = 10 \\\\) at two points. Find the length of the chord.",
+      "question_text": "In the diagram below, the line \\( y = 2x + 1 \\) intersects the circle \\( x^2 + y^2 = 10 \\) at two points. Find the length of the chord.",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 200'><line x1='0' y1='100' x2='320' y2='100' stroke='gray' stroke-width='1'/><line x1='160' y1='0' x2='160' y2='200' stroke='gray' stroke-width='1'/><circle cx='160' cy='100' r='80' fill='none' stroke='blue' stroke-width='2'/><line x1='0' y1='180' x2='320' y2='20' stroke='red' stroke-width='2'/></svg>",
@@ -209,23 +209,23 @@
       "options": [
         {
           "id": "A",
-          "text": "\\\\( \\\\frac{14\\\\sqrt{5}}{5} \\\\)"
+          "text": "\\( \\frac{14\\sqrt{5}}{5} \\)"
         },
         {
           "id": "B",
-          "text": "\\\\( \\\\frac{7\\\\sqrt{5}}{5} \\\\)"
+          "text": "\\( \\frac{7\\sqrt{5}}{5} \\)"
         },
         {
           "id": "C",
-          "text": "\\\\( \\\\frac{28\\\\sqrt{5}}{5} \\\\)"
+          "text": "\\( \\frac{28\\sqrt{5}}{5} \\)"
         },
         {
           "id": "D",
-          "text": "\\\\( \\\\frac{14}{5} \\\\)"
+          "text": "\\( \\frac{14}{5} \\)"
         }
       ],
       "correct_option": "A",
-      "explanation": "The perpendicular distance from the centre (0,0) to the line \\\\( 2x - y + 1 = 0 \\\\) is \\\\( d = \\\\frac{|1|}{\\\\sqrt{2^2+(-1)^2}} = \\\\frac{1}{\\\\sqrt{5}} \\\\) The radius \\\\( r = \\\\sqrt{10} \\\\) Chord length \\\\( = 2\\\\sqrt{r^2 - d^2} = 2\\\\sqrt{10 - \\\\frac{1}{5}} = 2\\\\sqrt{\\\\frac{49}{5}} = 2 \\\\cdot \\\\frac{7}{\\\\sqrt{5}} = \\\\frac{14}{\\\\sqrt{5}} = \\\\frac{14\\\\sqrt{5}}{5} \\)",
+      "explanation": "The perpendicular distance from the centre (0,0) to the line \\( 2x - y + 1 = 0 \\) is \\( d = \\frac{|1|}{\\sqrt{2^2+(-1)^2}} = \\frac{1}{\\sqrt{5}} \\) The radius \\( r = \\sqrt{10} \\) Chord length \\( = 2\\sqrt{r^2 - d^2} = 2\\sqrt{10 - \\frac{1}{5}} = 2\\sqrt{\\frac{49}{5}} = 2 \\cdot \\frac{7}{\\sqrt{5}} = \\frac{14}{\\sqrt{5}} = \\frac{14\\sqrt{5}}{5} \\)",
       "difficulty": 4
     },
     {
@@ -233,7 +233,7 @@
       "year": 2020,
       "topic": "Trigonometry",
       "subtopic": "Trigonometric Identities and Compound Angles",
-      "question_text": "Simplify \\\\( \\\\frac{\\\\sin 3\\\\theta}{\\\\sin \\\\theta} - \\\\frac{\\\\cos 3\\\\theta}{\\\\cos \\\\theta} \\\\)",
+      "question_text": "Simplify \\( \\frac{\\sin 3\\theta}{\\sin \\theta} - \\frac{\\cos 3\\theta}{\\cos \\theta} \\)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -257,7 +257,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Using triple-angle identities: \\\\( \\\\sin 3\\\\theta = 3\\\\sin\\\\theta - 4\\\\sin^3\\\\theta \\\\), \\\\( \\\\cos 3\\\\theta = 4\\\\cos^3\\\\theta - 3\\\\cos\\\\theta \\\\) Then \\\\( \\\\frac{\\\\sin 3\\\\theta}{\\\\sin\\\\theta} = 3 - 4\\\\sin^2\\\\theta \\) and \\\\( \\\\frac{\\\\cos 3\\\\theta}{\\\\cos\\\\theta} = 4\\\\cos^2\\\\theta - 3 \\) Subtracting gives \\\\( (3 - 4\\\\sin^2\\\\theta) - (4\\\\cos^2\\\\theta - 3) = 6 - 4(\\\\sin^2\\\\theta + \\\\cos^2\\\\theta) = 6 - 4 = 2 \\)",
+      "explanation": "Using triple-angle identities: \\( \\sin 3\\theta = 3\\sin\\theta - 4\\sin^3\\theta \\), \\( \\cos 3\\theta = 4\\cos^3\\theta - 3\\cos\\theta \\) Then \\( \\frac{\\sin 3\\theta}{\\sin\\theta} = 3 - 4\\sin^2\\theta \\) and \\( \\frac{\\cos 3\\theta}{\\cos\\theta} = 4\\cos^2\\theta - 3 \\) Subtracting gives \\( (3 - 4\\sin^2\\theta) - (4\\cos^2\\theta - 3) = 6 - 4(\\sin^2\\theta + \\cos^2\\theta) = 6 - 4 = 2 \\)",
       "difficulty": 3
     },
     {
@@ -265,7 +265,7 @@
       "year": 2021,
       "topic": "Calculus",
       "subtopic": "Differentiation and its Applications",
-      "question_text": "Find the derivative of \\\\( y = \\\\ln(\\\\tan x) \\\\) with respect to \\\\( x \\\\)",
+      "question_text": "Find the derivative of \\( y = \\ln(\\tan x) \\) with respect to \\( x \\)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -273,23 +273,23 @@
       "options": [
         {
           "id": "A",
-          "text": "\\\\( \\\\csc x \\\\sec x \\\\)"
+          "text": "\\( \\csc x \\sec x \\)"
         },
         {
           "id": "B",
-          "text": "\\\\( \\\\cot x \\\\csc x \\\\)"
+          "text": "\\( \\cot x \\csc x \\)"
         },
         {
           "id": "C",
-          "text": "\\\\( \\\\tan x \\\\sec x \\\\)"
+          "text": "\\( \\tan x \\sec x \\)"
         },
         {
           "id": "D",
-          "text": "\\\\( \\\\cot x \\\\sec x \\\\)"
+          "text": "\\( \\cot x \\sec x \\)"
         }
       ],
       "correct_option": "A",
-      "explanation": "Differentiate using chain rule: \\\\( \\\\frac{dy}{dx} = \\\\frac{1}{\\\\tan x} \\\\cdot \\\\sec^2 x = \\\\frac{\\\\sec^2 x}{\\\\tan x} = \\\\frac{1/\\\\cos^2 x}{\\\\sin x/\\\\cos x} = \\\\frac{1}{\\\\sin x \\\\cos x} = \\\\csc x \\\\sec x \\)",
+      "explanation": "Differentiate using chain rule: \\( \\frac{dy}{dx} = \\frac{1}{\\tan x} \\cdot \\sec^2 x = \\frac{\\sec^2 x}{\\tan x} = \\frac{1/\\cos^2 x}{\\sin x/\\cos x} = \\frac{1}{\\sin x \\cos x} = \\csc x \\sec x \\)",
       "difficulty": 4
     },
     {
@@ -297,7 +297,7 @@
       "year": 2022,
       "topic": "Vectors and Mechanics",
       "subtopic": "Vectors in 2D and 3D space",
-      "question_text": "Given vectors \\\\( \\\\vec{a} = 3\\\\vec{i} - 2\\\\vec{j} + \\\\vec{k} \\\\) and \\\\( \\\\vec{b} = \\\\vec{i} + 4\\\\vec{j} - 2\\\\vec{k} \\\\), find the magnitude of \\\\( \\\\vec{a} \\\\times \\\\vec{b} \\\\)",
+      "question_text": "Given vectors \\( \\vec{a} = 3\\vec{i} - 2\\vec{j} + \\vec{k} \\) and \\( \\vec{b} = \\vec{i} + 4\\vec{j} - 2\\vec{k} \\), find the magnitude of \\( \\vec{a} \\times \\vec{b} \\)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -305,11 +305,11 @@
       "options": [
         {
           "id": "A",
-          "text": "\\\\( 7\\\\sqrt{5} \\\\)"
+          "text": "\\( 7\\sqrt{5} \\)"
         },
         {
           "id": "B",
-          "text": "\\\\( 7\\\\sqrt{3} \\\\)"
+          "text": "\\( 7\\sqrt{3} \\)"
         },
         {
           "id": "C",
@@ -321,7 +321,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Compute cross product: \\\\( \\\\vec{a} \\\\times \\\\vec{b} = \\\\begin{vmatrix} \\\\vec{i} & \\\\vec{j} & \\\\vec{k} \\\\\\\\ 3 & -2 & 1 \\\\\\\\ 1 & 4 & -2 \\\\end{vmatrix} = \\\\vec{i}((-2)(-2)-1\\\\cdot4) - \\\\vec{j}(3(-2)-1\\\\cdot1) + \\\\vec{k}(3\\\\cdot4-(-2)\\\\cdot1) = \\\\vec{i}(4-4) - \\\\vec{j}(-6-1) + \\\\vec{k}(12+2) = 7\\\\vec{j} + 14\\\\vec{k} \\) Magnitude \\\\( = \\\\sqrt{0^2+7^2+14^2} = \\\\sqrt{49+196} = \\\\sqrt{245} = 7\\\\sqrt{5} \\)",
+      "explanation": "Compute cross product: \\( \\vec{a} \\times \\vec{b} = \\begin{vmatrix} \\vec{i} & \\vec{j} & \\vec{k} \\\\ 3 & -2 & 1 \\\\ 1 & 4 & -2 \\end{vmatrix} = \\vec{i}((-2)(-2)-1\\cdot4) - \\vec{j}(3(-2)-1\\cdot1) + \\vec{k}(3\\cdot4-(-2)\\cdot1) = \\vec{i}(4-4) - \\vec{j}(-6-1) + \\vec{k}(12+2) = 7\\vec{j} + 14\\vec{k} \\) Magnitude \\( = \\sqrt{0^2+7^2+14^2} = \\sqrt{49+196} = \\sqrt{245} = 7\\sqrt{5} \\)",
       "difficulty": 4
     },
     {
@@ -617,7 +617,7 @@
       "year": 2019,
       "topic": "Vectors and Mechanics",
       "subtopic": "Statics (Friction, Equilibrium and Moments)",
-      "question_text": "In the diagram below, a uniform rod AB of length 5 m and weight 100 N rests horizontally in equilibrium on two supports at A and B. A particle of weight 150 N is placed on the rod at a point 2 m from A. Find the reaction at support B.",
+      "question_text": "In the diagram below, a uniform rod AB of length 5 m and weight 100 N rests horizontally in equilibrium on two supports at A and",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='50' y1='100' x2='270' y2='100' stroke='black' stroke-width='4'/><line x1='50' y1='100' x2='50' y2='120' stroke='gray' stroke-width='2'/><line x1='270' y1='100' x2='270' y2='120' stroke='gray' stroke-width='2'/><line x1='160' y1='100' x2='160' y2='140' stroke='red' stroke-width='2' marker-end='url(#arrow)'/><text x='155' y='150' font-size='12'>100 N</text><line x1='138' y1='100' x2='138' y2='140' stroke='red' stroke-width='2' marker-end='url(#arrow)'/><text x='133' y='150' font-size='12'>150 N</text><line x1='50' y1='100' x2='50' y2='60' stroke='blue' stroke-width='2' marker-end='url(#arrow)'/><text x='40' y='50' font-size='12'>R_A</text><line x1='270' y1='100' x2='270' y2='60' stroke='blue' stroke-width='2' marker-end='url(#arrow)'/><text x='260' y='50' font-size='12'>R_B</text><defs><marker id='arrow' markerWidth='10' markerHeight='10' refX='8' refY='3' orient='auto' markerUnits='strokeWidth'><path d='M0,0 L0,6 L9,3 z' fill='black'/></marker></defs></svg>",
@@ -873,7 +873,7 @@
       "year": 2022,
       "topic": "Vectors and Mechanics",
       "subtopic": "Statics (Friction, Equilibrium and Moments)",
-      "question_text": "In the diagram below, a uniform lamina consists of a rectangle ABCD and an isosceles triangle CDE joined along side CD. AB = 4 m, BC = 6 m, and the perpendicular height of the triangle from CD to E is 3 m. The lamina is suspended freely from vertex A. Find the vertical distance of the center of mass from AB.",
+      "question_text": "In the diagram below, a uniform lamina consists of a rectangle ABCD and an isosceles triangle CDE joined along side C",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 200'><rect x='60' y='80' width='200' height='60' fill='none' stroke='black' stroke-width='2'/><polygon points='60,80 260,80 160,20' fill='none' stroke='black' stroke-width='2'/><line x1='160' y1='20' x2='160' y2='80' stroke='black' stroke-dasharray='4,2'/><text x='150' y='115' font-size='14'>Rectangle</text><text x='150' y='50' font-size='14'>Triangle</text><text x='40' y='85' font-size='12'>A</text><text x='265' y='85' font-size='12'>B</text><text x='40' y='145' font-size='12'>D</text><text x='265' y='145' font-size='12'>C</text><text x='160' y='15' font-size='12'>E</text><text x='100' y='150' font-size='10'>6 m</text><text x='160' y='60' font-size='10'>3 m</text><text x='270' y='110' font-size='10'>4 m</text></svg>",
@@ -3369,7 +3369,7 @@
       "year": 2019,
       "topic": "Pure Mathematics",
       "subtopic": "Matrices and Determinants",
-      "question_text": "The matrix \\( \\\\begin{pmatrix} a & 1 & 0 \\\\\\\\ 1 & a & 1 \\\\\\\\ 0 & 1 & a \\\\end{pmatrix} \\) has determinant zero. Find the possible values of \\( a \\).",
+      "question_text": "The matrix \\( \\begin{pmatrix} a & 1 & 0 \\\\ 1 & a & 1 \\\\ 0 & 1 & a \\end{pmatrix} \\) has determinant zero. Find the possible values of \\( a \\).",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -3377,7 +3377,7 @@
       "options": [
         {
           "id": "A",
-          "text": "{0, \\\\sqrt{2}, -\\\\sqrt{2}}"
+          "text": "{0, \\sqrt{2}, -\\sqrt{2}}"
         },
         {
           "id": "B",
@@ -3385,7 +3385,7 @@
         },
         {
           "id": "C",
-          "text": "{\\\\sqrt{2}, -\\\\sqrt{2}}"
+          "text": "{\\sqrt{2}, -\\sqrt{2}}"
         },
         {
           "id": "D",
@@ -3393,7 +3393,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The determinant of \\( M \\) is \\( \\\\det(M) = a(a^2 - 1) - 1(a - 0) + 0 = a^3 - a - a = a^3 - 2a = a(a^2 - 2) \\). Setting \\( \\\\det(M) = 0 \\) gives \\( a = 0 \\) or \\( a^2 = 2 \\), so \\( a = 0, \\\\sqrt{2}, -\\\\sqrt{2} \\).",
+      "explanation": "The determinant of \\( M \\) is \\( \\det(M) = a(a^2 - 1) - 1(a - 0) + 0 = a^3 - a - a = a^3 - 2a = a(a^2 - 2) \\). Setting \\( \\det(M) = 0 \\) gives \\( a = 0 \\) or \\( a^2 = 2 \\), so \\( a = 0, \\sqrt{2}, -\\sqrt{2} \\).",
       "difficulty": 4
     },
     {
@@ -3433,7 +3433,7 @@
       "year": 2021,
       "topic": "Trigonometry",
       "subtopic": "Trigonometric Identities and Compound Angles",
-      "question_text": "If \\( \\\\sin\\\\theta + \\\\cos\\\\theta = \\\\frac{1}{2} \\), find the value of \\( \\\\sin 2\\\\theta \\).",
+      "question_text": "If \\( \\sin\\theta + \\cos\\theta = \\frac{1}{2} \\), find the value of \\( \\sin 2\\theta \\).",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -3441,23 +3441,23 @@
       "options": [
         {
           "id": "A",
-          "text": "-\\\\frac{3}{4}"
+          "text": "-\\frac{3}{4}"
         },
         {
           "id": "B",
-          "text": "\\\\frac{3}{4}"
+          "text": "\\frac{3}{4}"
         },
         {
           "id": "C",
-          "text": "-\\\\frac{1}{4}"
+          "text": "-\\frac{1}{4}"
         },
         {
           "id": "D",
-          "text": "\\\\frac{1}{4}"
+          "text": "\\frac{1}{4}"
         }
       ],
       "correct_option": "A",
-      "explanation": "Square both sides: \\( (\\\\sin\\\\theta + \\\\cos\\\\theta)^2 = \\\\frac{1}{4} \\). Expand: \\( \\\\sin^2\\\\theta + \\\\cos^2\\\\theta + 2\\\\sin\\\\theta\\\\cos\\\\theta = 1 + \\\\sin 2\\\\theta = \\\\frac{1}{4} \\). Thus \\( \\\\sin 2\\\\theta = \\\\frac{1}{4} - 1 = -\\\\frac{3}{4} \\).",
+      "explanation": "Square both sides: \\( (\\sin\\theta + \\cos\\theta)^2 = \\frac{1}{4} \\). Expand: \\( \\sin^2\\theta + \\cos^2\\theta + 2\\sin\\theta\\cos\\theta = 1 + \\sin 2\\theta = \\frac{1}{4} \\). Thus \\( \\sin 2\\theta = \\frac{1}{4} - 1 = -\\frac{3}{4} \\).",
       "difficulty": 3
     },
     {
@@ -3465,7 +3465,7 @@
       "year": 2022,
       "topic": "Calculus",
       "subtopic": "Integration Methods and Applications",
-      "question_text": "Evaluate the definite integral \\( \\\\displaystyle \\\\int_0^{\\\\pi/2} \\\\frac{\\\\sin x}{1+\\\\cos^2 x} \\\\, dx \\).",
+      "question_text": "Evaluate the definite integral \\( \\displaystyle \\int_0^{\\pi/2} \\frac{\\sin x}{1+\\cos^2 x} \\, dx \\).",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -3473,23 +3473,23 @@
       "options": [
         {
           "id": "A",
-          "text": "\\\\frac{\\\\pi}{4}"
+          "text": "\\frac{\\pi}{4}"
         },
         {
           "id": "B",
-          "text": "\\\\frac{\\\\pi}{2}"
+          "text": "\\frac{\\pi}{2}"
         },
         {
           "id": "C",
-          "text": "\\\\frac{\\\\pi}{6}"
+          "text": "\\frac{\\pi}{6}"
         },
         {
           "id": "D",
-          "text": "\\\\frac{\\\\pi}{3}"
+          "text": "\\frac{\\pi}{3}"
         }
       ],
       "correct_option": "A",
-      "explanation": "Let \\( u = \\\\cos x \\), then \\( du = -\\\\sin x \\\\, dx \\). When \\( x = 0 \\), \\( u = 1 \\); when \\( x = \\\\pi/2 \\), \\( u = 0 \\). The integral becomes \\( \\\\int_1^0 \\\\frac{-du}{1+u^2} = \\\\int_0^1 \\\\frac{du}{1+u^2} = [\\\\arctan u]_0^1 = \\\\frac{\\\\pi}{4} \\).",
+      "explanation": "Let \\( u = \\cos x \\), then \\( du = -\\sin x \\, dx \\). When \\( x = 0 \\), \\( u = 1 \\); when \\( x = \\pi/2 \\), \\( u = 0 \\). The integral becomes \\( \\int_1^0 \\frac{-du}{1+u^2} = \\int_0^1 \\frac{du}{1+u^2} = [\\arctan u]_0^1 = \\frac{\\pi}{4} \\).",
       "difficulty": 4
     },
     {
@@ -3521,7 +3521,7 @@
         }
       ],
       "correct_option": "C",
-      "explanation": "\\( P(X > 0.5) = \\\\int_{0.5}^1 2x \\\\, dx = [x^2]_{0.5}^1 = 1^2 - (0.5)^2 = 1 - 0.25 = 0.75 \\).",
+      "explanation": "\\( P(X > 0.5) = \\int_{0.5}^1 2x \\, dx = [x^2]_{0.5}^1 = 1^2 - (0.5)^2 = 1 - 0.25 = 0.75 \\).",
       "difficulty": 3
     },
     {
@@ -3689,7 +3689,7 @@
       "year": 2020,
       "topic": "Pure Mathematics",
       "subtopic": "Surds, Indices and Logarithms",
-      "question_text": "Solve for \\\\( x \\\\): \\\\( \\\\log_2 (x+1) + \\\\log_2 (x-1) = 3 \\\\)",
+      "question_text": "Solve for \\( x \\): \\( \\log_2 (x+1) + \\log_2 (x-1) = 3 \\)",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -3713,7 +3713,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Using the logarithm product rule: \\\\( \\\\log_2[(x+1)(x-1)] = 3 \\\\)\\. Then \\\\( (x+1)(x-1) = 2^3 = 8 \\\\)\\, so \\\\( x^2 - 1 = 8 \\\\) giving \\\\( x^2 = 9 \\\\) and \\\\( x = \\\\pm 3 \\\\)\\. The domain requires \\\\( x+1>0 \\\\) and \\\\( x-1>0 \\\\)\\, i.e., \\\\( x>1 \\\\)\\. Hence only \\\\( x = 3 \\\\) is valid\\. Option A is correct; B and C are extraneous; D does not satisfy the equation\\.",
+      "explanation": "Using the logarithm product rule: \\( \\log_2[(x+1)(x-1)] = 3 \\)\\. Then \\( (x+1)(x-1) = 2^3 = 8 \\)\\, so \\( x^2 - 1 = 8 \\) giving \\( x^2 = 9 \\) and \\( x = \\pm 3 \\)\\. The domain requires \\( x+1>0 \\) and \\( x-1>0 \\)\\, i.e., \\( x>1 \\)\\. Hence only \\( x = 3 \\) is valid\\. Option A is correct; B and C are extraneous; D does not satisfy the equation\\.",
       "difficulty": 3
     },
     {
@@ -3721,7 +3721,7 @@
       "year": 2019,
       "topic": "Coordinate Geometry",
       "subtopic": "Parabola, Ellipse and Hyperbola",
-      "question_text": "Find the equation of the tangent to the ellipse \\\\( \\\\frac{x^2}{16} + \\\\frac{y^2}{9} = 1 \\\\) at the point \\\\( \\\\left(2, \\\\frac{3\\\\sqrt{3}}{2}\\\\right) \\\\)\\.",
+      "question_text": "Find the equation of the tangent to the ellipse \\( \\frac{x^2}{16} + \\frac{y^2}{9} = 1 \\) at the point \\( \\left(2, \\frac{3\\sqrt{3}}{2}\\right) \\)\\.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -3729,23 +3729,23 @@
       "options": [
         {
           "id": "A",
-          "text": "3x + 4\\\\sqrt{3} y = 24"
+          "text": "3x + 4\\sqrt{3} y = 24"
         },
         {
           "id": "B",
-          "text": "3x - 4\\\\sqrt{3} y = 24"
+          "text": "3x - 4\\sqrt{3} y = 24"
         },
         {
           "id": "C",
-          "text": "4x + 3\\\\sqrt{3} y = 24"
+          "text": "4x + 3\\sqrt{3} y = 24"
         },
         {
           "id": "D",
-          "text": "4x - 3\\\\sqrt{3} y = 24"
+          "text": "4x - 3\\sqrt{3} y = 24"
         }
       ],
       "correct_option": "A",
-      "explanation": "For an ellipse \\\\( \\\\frac{x^2}{a^2}+\\\\frac{y^2}{b^2}=1 \\\\)\\, the tangent at \\\\( (x_1,y_1) \\\\) is \\\\( \\\\frac{xx_1}{a^2}+\\\\frac{yy_1}{b^2}=1 \\\\)\\. Here \\\\( a^2=16, b^2=9, x_1=2, y_1=\\\\frac{3\\\\sqrt{3}}{2} \\\\)\\. Substituting: \\\\( \\\\frac{2x}{16}+\\\\frac{\\\\frac{3\\\\sqrt{3}}{2}y}{9}=1 \\\\Rightarrow \\\\frac{x}{8}+\\\\frac{3\\\\sqrt{3}y}{18}=1 \\\\Rightarrow \\\\frac{x}{8}+\\\\frac{\\\\sqrt{3}y}{6}=1 \\\\)\\. Multiply by 24: \\\\( 3x + 4\\\\sqrt{3} y = 24 \\\\)\\. Thus option A matches\\.",
+      "explanation": "For an ellipse \\( \\frac{x^2}{a^2}+\\frac{y^2}{b^2}=1 \\)\\, the tangent at \\( (x_1,y_1) \\) is \\( \\frac{xx_1}{a^2}+\\frac{yy_1}{b^2}=1 \\)\\. Here \\( a^2=16, b^2=9, x_1=2, y_1=\\frac{3\\sqrt{3}}{2} \\)\\. Substituting: \\( \\frac{2x}{16}+\\frac{\\frac{3\\sqrt{3}}{2}y}{9}=1 \\Rightarrow \\frac{x}{8}+\\frac{3\\sqrt{3}y}{18}=1 \\Rightarrow \\frac{x}{8}+\\frac{\\sqrt{3}y}{6}=1 \\)\\. Multiply by 24: \\( 3x + 4\\sqrt{3} y = 24 \\)\\. Thus option A matches\\.",
       "difficulty": 4
     },
     {
@@ -3777,7 +3777,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Let base side \\\\( x \\\\) and height \\\\( h \\\\)\\. Volume constraint: \\\\( x^2 h = 32 \\\\Rightarrow h = 32/x^2 \\\\)\\. Surface area (open top): \\\\( S = x^2 + 4xh = x^2 + 4x(32/x^2) = x^2 + 128/x \\\\)\\. Differentiate: \\\\( dS/dx = 2x - 128/x^2 \\\\)\\. Set to zero: \\\\( 2x = 128/x^2 \\\\Rightarrow 2x^3 = 128 \\\\Rightarrow x^3 = 64 \\\\Rightarrow x = 4 \\\\)\\. Then \\\\( h = 32/16 = 2 \\\\)\\. Second derivative \\\\( 2 + 256/x^3 > 0 \\\\) confirms minimum\\. Hence dimensions: base 4 m, height 2 m (Option A)\\.",
+      "explanation": "Let base side \\( x \\) and height \\( h \\)\\. Volume constraint: \\( x^2 h = 32 \\Rightarrow h = 32/x^2 \\)\\. Surface area (open top): \\( S = x^2 + 4xh = x^2 + 4x(32/x^2) = x^2 + 128/x \\)\\. Differentiate: \\( dS/dx = 2x - 128/x^2 \\)\\. Set to zero: \\( 2x = 128/x^2 \\Rightarrow 2x^3 = 128 \\Rightarrow x^3 = 64 \\Rightarrow x = 4 \\)\\. Then \\( h = 32/16 = 2 \\)\\. Second derivative \\( 2 + 256/x^3 > 0 \\) confirms minimum\\. Hence dimensions: base 4 m, height 2 m (Option A)\\.",
       "difficulty": 4
     },
     {
@@ -3785,7 +3785,7 @@
       "year": 2018,
       "topic": "Vectors and Mechanics",
       "subtopic": "Vectors in 2D and 3D space",
-      "question_text": "Given vectors \\\\( \\\\mathbf{a} = \\\\mathbf{i} + 2\\\\mathbf{j} + 3\\\\mathbf{k} \\\\)\\, \\\\( \\\\mathbf{b} = 2\\\\mathbf{i} - \\\\mathbf{j} + \\\\mathbf{k} \\\\)\\, \\\\( \\\\mathbf{c} = 3\\\\mathbf{i} + \\\\mathbf{j} - 2\\\\mathbf{k} \\\\)\\, compute the scalar triple product \\\\( [\\\\mathbf{a}\\\\,\\\\mathbf{b}\\\\,\\\\mathbf{c}] = \\\\mathbf{a} \\\\cdot (\\\\mathbf{b} \\\\times \\\\mathbf{c}) \\\\)\\.",
+      "question_text": "Given vectors \\( \\mathbf{a} = \\mathbf{i} + 2\\mathbf{j} + 3\\mathbf{k} \\)\\, \\( \\mathbf{b} = 2\\mathbf{i} - \\mathbf{j} + \\mathbf{k} \\)\\, \\( \\mathbf{c} = 3\\mathbf{i} + \\mathbf{j} - 2\\mathbf{k} \\)\\, compute the scalar triple product \\( [\\mathbf{a}\\,\\mathbf{b}\\,\\mathbf{c}] = \\mathbf{a} \\cdot (\\mathbf{b} \\times \\mathbf{c}) \\)\\.",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -3809,7 +3809,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Compute \\\\( \\\\mathbf{b} \\\\times \\\\mathbf{c} = \\\\begin{vmatrix} \\\\mathbf{i} & \\\\mathbf{j} & \\\\mathbf{k} \\\\\\\\ 2 & -1 & 1 \\\\\\\\ 3 & 1 & -2 \\\\end{vmatrix} = \\\\mathbf{i}((-1)(-2)-1\\\\cdot1) - \\\\mathbf{j}(2(-2)-1\\\\cdot3) + \\\\mathbf{k}(2\\\\cdot1-(-1)\\\\cdot3) = \\\\mathbf{i}(2-1) - \\\\mathbf{j}(-4-3) + \\\\mathbf{k}(2+3) = \\\\mathbf{i} + 7\\\\mathbf{j} + 5\\\\mathbf{k} \\\\)\\. Then \\\\( \\\\mathbf{a} \\\\cdot (\\\\mathbf{b} \\\\times \\\\mathbf{c}) = (1)(1) + (2)(7) + (3)(5) = 1 + 14 + 15 = 30 \\\\)\\. Hence option A\\.",
+      "explanation": "Compute \\( \\mathbf{b} \\times \\mathbf{c} = \\begin{vmatrix} \\mathbf{i} & \\mathbf{j} & \\mathbf{k} \\\\ 2 & -1 & 1 \\\\ 3 & 1 & -2 \\end{vmatrix} = \\mathbf{i}((-1)(-2)-1\\cdot1) - \\mathbf{j}(2(-2)-1\\cdot3) + \\mathbf{k}(2\\cdot1-(-1)\\cdot3) = \\mathbf{i}(2-1) - \\mathbf{j}(-4-3) + \\mathbf{k}(2+3) = \\mathbf{i} + 7\\mathbf{j} + 5\\mathbf{k} \\)\\. Then \\( \\mathbf{a} \\cdot (\\mathbf{b} \\times \\mathbf{c}) = (1)(1) + (2)(7) + (3)(5) = 1 + 14 + 15 = 30 \\)\\. Hence option A\\.",
       "difficulty": 3
     },
     {
@@ -3817,7 +3817,7 @@
       "year": 2022,
       "topic": "Statistics and Probability",
       "subtopic": "Probability and Probability Distributions",
-      "question_text": "In the diagram below, the normal distribution curve for \\\\( X \\\\sim N(100, 15^2) \\\\) is shown. Find \\\\( P(85 < X < 115) \\\\)\\.",
+      "question_text": "In the diagram below, the normal distribution curve for \\( X \\sim N(100, 15^2) \\) is shown. Find \\( P(85 < X < 115) \\)\\.",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 200'><rect width='320' height='200' fill='white'/><path d='M10,190 C50,10 270,10 310,190' stroke='blue' fill='none' stroke-width='2'/><line x1='160' y1='190' x2='160' y2='10' stroke='gray' stroke-dasharray='2,2' stroke-width='1'/><line x1='80' y1='190' x2='80' y2='50' stroke='red' stroke-width='1'/><line x1='240' y1='190' x2='240' y2='50' stroke='red' stroke-width='1'/><rect x='80' y='10' width='160' height='180' fill='rgba(255,0,0,0.2)'/><text x='160' y='195' font-size='10' text-anchor='middle'>μ=100</text><text x='80' y='195' font-size='10' text-anchor='middle'>85</text><text x='240' y='195' font-size='10' text-anchor='middle'>115</text></svg>",
@@ -3841,7 +3841,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "Standardize: \\\\( Z = \\\\frac{X-100}{15} \\\\)\\. Then \\\\( P(85 < X < 115) = P\\\\left(\\\\frac{85-100}{15} < Z < \\\\frac{115-100}{15}\\\\right) = P(-1 < Z < 1) \\\\)\\. For a standard normal distribution, \\\\( P(-1 < Z < 1) \\\\approx 0.6827 \\\\)\\. This corresponds to the empirical rule (68% within one standard deviation). Hence option A\\.",
+      "explanation": "Standardize: \\( Z = \\frac{X-100}{15} \\)\\. Then \\( P(85 < X < 115) = P\\left(\\frac{85-100}{15} < Z < \\frac{115-100}{15}\\right) = P(-1 < Z < 1) \\)\\. For a standard normal distribution, \\( P(-1 < Z < 1) \\approx 0.6827 \\)\\. This corresponds to the empirical rule (68% within one standard deviation). Hence option A\\.",
       "difficulty": 4
     },
     {
@@ -3849,7 +3849,7 @@
       "year": 2019,
       "topic": "Pure Mathematics",
       "subtopic": "Matrices and Determinants",
-      "question_text": "If the matrix \\\\( A = \\\\begin{pmatrix} 1 & 2 & 3 \\\\\\\\ 4 & k & 6 \\\\\\\\ 7 & 8 & 9 \\\\end{pmatrix} \\\\) is singular, find the value of \\\\( k \\\\).",
+      "question_text": "If the matrix \\( A = \\begin{pmatrix} 1 & 2 & 3 \\\\ 4 & k & 6 \\\\ 7 & 8 & 9 \\end{pmatrix} \\) is singular, find the value of \\( k \\).",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -3873,7 +3873,7 @@
         }
       ],
       "correct_option": "A",
-      "explanation": "The matrix is singular when its determinant is zero. Compute \\\\(\\\\det(A) = 1 \\\\cdot (k \\\\cdot 9 - 6 \\\\cdot 8) - 2 \\\\cdot (4 \\\\cdot 9 - 6 \\\\cdot 7) + 3 \\\\cdot (4 \\\\cdot 8 - k \\\\cdot 7) = 1(9k-48) -2(36-42) +3(32-7k) = 9k-48 -2(-6) +96-21k = -12k+60.\\\\) Set \\\\(-12k+60=0\\\\) gives \\\\(k=5\\\\)). Thus option A is correct.",
+      "explanation": "The matrix is singular when its determinant is zero. Compute \\(\\det(A) = 1 \\cdot (k \\cdot 9 - 6 \\cdot 8) - 2 \\cdot (4 \\cdot 9 - 6 \\cdot 7) + 3 \\cdot (4 \\cdot 8 - k \\cdot 7) = 1(9k-48) -2(36-42) +3(32-7k) = 9k-48 -2(-6) +96-21k = -12k+60.\\) Set \\(-12k+60=0\\) gives \\(k=5\\)). Thus option A is correct.",
       "difficulty": 3
     },
     {
@@ -3881,7 +3881,7 @@
       "year": 2020,
       "topic": "Calculus",
       "subtopic": "Integration Methods and Applications",
-      "question_text": "Evaluate the definite integral \\\\( \\\\displaystyle \\\\int_0^{\\\\pi/4} \\\\frac{\\\\sin x}{\\\\cos^3 x} \\\\, dx \\\\)\\).",
+      "question_text": "Evaluate the definite integral \\( \\displaystyle \\int_0^{\\pi/4} \\frac{\\sin x}{\\cos^3 x} \\, dx \\)\\).",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -3913,7 +3913,7 @@
       "year": 2021,
       "topic": "Vectors and Mechanics",
       "subtopic": "Vectors in 2D and 3D space",
-      "question_text": "Given vectors \\\\( \\\\mathbf{a} = 2\\\\mathbf{i} - \\\\mathbf{j} + 3\\\\mathbf{k} \\\\), \\\\( \\\\mathbf{b} = \\\\mathbf{i} + 2\\\\mathbf{j} - \\\\mathbf{k} \\\\), and \\\\( \\\\mathbf{c} = 3\\\\mathbf{i} - \\\\mathbf{j} + 2\\\\mathbf{k} \\\\), find the scalar triple product \\\\( \\\\mathbf{a} \\\\cdot (\\\\mathbf{b} \\\\times \\\\mathbf{c}) \\\\).",
+      "question_text": "Given vectors \\( \\mathbf{a} = 2\\mathbf{i} - \\mathbf{j} + 3\\mathbf{k} \\), \\( \\mathbf{b} = \\mathbf{i} + 2\\mathbf{j} - \\mathbf{k} \\), and \\( \\mathbf{c} = 3\\mathbf{i} - \\mathbf{j} + 2\\mathbf{k} \\), find the scalar triple product \\( \\mathbf{a} \\cdot (\\mathbf{b} \\times \\mathbf{c}) \\).",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -3977,7 +3977,7 @@
       "year": 2023,
       "topic": "Coordinate Geometry",
       "subtopic": "Parabola, Ellipse and Hyperbola",
-      "question_text": "In the diagram below, the ellipse has equation \\\\( \\\\frac{x^2}{16} + \\\\frac{y^2}{9} = 1 \\\\). The tangent at point \\\\( P(2, \\\\frac{3\\\\sqrt{3}}{2}) \\\\) meets the x-axis at \\\\( Q \\\\). Find the x-coordinate of \\\\( Q \\\\).",
+      "question_text": "In the diagram below, the ellipse has equation \\( \\frac{x^2}{16} + \\frac{y^2}{9} = 1 \\). The tangent at point \\( P(2, \\frac{3\\sqrt{3}}{2}) \\) meets the x-axis at \\( Q \\). Find the x-coordinate of \\( Q \\).",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><ellipse cx='160' cy='100' rx='80' ry='60' fill='none' stroke='black' stroke-width='2'/><line x1='160' y1='100' x2='240' y2='100' stroke='red' stroke-width='1' stroke-dasharray='4'/><line x1='80' y1='100' x2='240' y2='40' stroke='blue' stroke-width='1'/><circle cx='160' cy='100' r='3' fill='black'/><text x='160' y='90' font-size='12' text-anchor='middle'>Center</text></svg>",
@@ -5577,7 +5577,7 @@
       "year": 2023,
       "topic": "Coordinate Geometry",
       "subtopic": "Parabola, Ellipse and Hyperbola",
-      "question_text": "In the diagram below, the ellipse \\( \\frac{x^2}{25} + \\frac{y^2}{9} = 1 \\) is shown. The locus of the point of intersection of perpendicular tangents to this ellipse (the director circle) is a circle. Find the radius of this circle.",
+      "question_text": "In the diagram below, the ellipse \\( \\frac{x^2}{25} + \\frac{y^2}{9} = 1 \\) is shown. The locus of the point of intersection of perpendicular tangents to this ellipse (the director circl",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 200'><ellipse cx='160' cy='100' rx='100' ry='60' fill='none' stroke='#333' stroke-width='2'/><circle cx='160' cy='100' r='116.6' fill='none' stroke='#666' stroke-width='1' stroke-dasharray='4,2'/><line x1='60' y1='100' x2='260' y2='100' stroke='#ccc' stroke-width='1'/><line x1='160' y1='0' x2='160' y2='200' stroke='#ccc' stroke-width='1'/><text x='165' y='105' font-family='Arial' font-size='12' fill='#333'>O</text><text x='265' y='95' font-family='Arial' font-size='12' fill='#333'>a=5</text><text x='155' y='35' font-family='Arial' font-size='12' fill='#333'>b=3</text><text x='280' y='100' font-family='Arial' font-size='12' fill='#666'>Director Circle</text></svg>",
@@ -6665,7 +6665,7 @@
       "year": 2022,
       "topic": "Vectors and Mechanics",
       "subtopic": "Statics (Friction, Equilibrium and Moments)",
-      "question_text": "In the diagram below, a uniform rod AB of length 8 m and weight 30 N is hinged at A to a vertical wall. The rod is held in equilibrium in a horizontal position by a light string attached at B, making an angle of \\( 30^\\circ \\) with the rod. A load of weight 20 N is suspended from a point on the rod 5 m from A. Find the tension \\( T \\) in the string.",
+      "question_text": "In the diagram below, a uniform rod AB of length 8 m and weight 30 N is hinged at A to a vertical wall. The rod is held in equilibrium in a horizontal position by a light string attached at B, making an angle of \\( 30^\\circ \\) with the ro",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='50' y='20' width='12' height='160' fill='#e0e0e0' stroke='#666' stroke-width='1'/><line x1='62' y1='140' x2='262' y2='140' stroke='#333' stroke-width='3'/><circle cx='62' cy='140' r='4' fill='#000'/><line x1='262' y1='140' x2='62' y2='25' stroke='#0066cc' stroke-width='1.5'/><line x1='162' y1='140' x2='162' y2='165' stroke='#333' stroke-width='1'/><rect x='157' y='165' width='10' height='6' fill='#333'/><text x='173' y='172' font-size='9' font-family='sans-serif'>30 N</text><line x1='187' y1='140' x2='187' y2='170' stroke='#333' stroke-width='1'/><rect x='182' y='170' width='10' height='6' fill='#333'/><text x='198' y='177' font-size='9' font-family='sans-serif'>20 N</text><path d='M 242 140 A 20 20 0 0 0 245 130' fill='none' stroke='#009900' stroke-width='1'/><text x='228' y='132' font-size='9' font-family='sans-serif'>30°</text><text x='170' y='95' font-size='10' font-family='sans-serif' fill='#0066cc'>T</text><text x='52' y='155' font-size='10' font-family='sans-serif'>A</text><text x='260' y='155' font-size='10' font-family='sans-serif'>B</text><text x='140' y='158' font-size='9' font-family='sans-serif'>8 m</text></svg>",

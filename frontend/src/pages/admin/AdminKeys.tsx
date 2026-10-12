@@ -229,7 +229,7 @@ export default function AdminKeys() {
                     <div className="text-[11px] font-semibold text-text-muted uppercase tracking-wider">
                       Voucher Code
                     </div>
-                    <div className="font-mono text-base font-bold text-amber-400 mt-0.5">
+                    <div className="font-mono text-base font-bold text-warning-amber mt-0.5">
                       {voucher.cbt_key || voucher.email.split('@')[0]}
                     </div>
                   </div>
@@ -244,7 +244,7 @@ export default function AdminKeys() {
 
                 <div className="flex items-center justify-between text-xs pt-1 border-t border-border/50 text-text-muted">
                   <span>Created: {new Date(voucher.created_at).toLocaleDateString()}</span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
                     Unassigned
                   </span>
                 </div>
@@ -286,7 +286,7 @@ export default function AdminKeys() {
                     <tr key={voucher.userId} className="hover:bg-bg-secondary/40 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2.5">
-                          <Key className="h-4 w-4 text-amber-400" />
+                          <Key className="h-4 w-4 text-warning-amber" />
                           <span className="font-mono text-sm font-bold text-text-primary">
                             {keyString}
                           </span>
@@ -298,7 +298,7 @@ export default function AdminKeys() {
                       </td>
 
                       <td className="px-6 py-4">
-                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
                           Unassigned (Ready)
                         </span>
                       </td>

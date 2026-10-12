@@ -2185,7 +2185,7 @@
       "year": 2022,
       "topic": "Electricity and Magnetism",
       "subtopic": "Electromagnetic Induction",
-      "question_text": "A metallic rod of length $ L = 1 \\text{ m} $ rotates with an angular frequency $ \\omega = 100 \\text{ rad/s} $ about an axis perpendicular to the rod passing through one end. The other end of the rod is in contact with a circular metallic ring. A constant and uniform magnetic field $ B = 0.5 \\text{ T} $ parallel to the axis exists everywhere. The emf developed between the center and the ring is:",
+      "question_text": "A metallic rod of length $ L = 1 \\text{ m} $ rotates with an angular frequency $ \\omega = 100 \\text{ rad/s} $ about an axis perpendicular to the rod passing through one en",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -4013,19 +4013,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( x = \\frac{A}{2} \\)"
+          "text": "\\( x = \\frac{A}{2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( x = \\frac{A}{\\sqrt{2}} \\)"
+          "text": "\\( x = \\frac{A}{\\sqrt{2}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( x = \\frac{A}{\\sqrt{4}} \\)"
+          "text": "\\( x = \\frac{A}{\\sqrt{4}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( x = \\frac{A}{4} \\)"
+          "text": "\\( x = \\frac{A}{4} \\)"
         }
       ],
       "correct_option": "A",
@@ -4045,19 +4045,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 7.2 \\times 10^6 \\text{ N/C} \\)"
+          "text": "\\( 7.2 \\times 10^6 \\text{ N/C} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1.44 \\times 10^7 \\text{ N/C} \\)"
+          "text": "\\( 1.44 \\times 10^7 \\text{ N/C} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 3.6 \\times 10^6 \\text{ N/C} \\)"
+          "text": "\\( 3.6 \\times 10^6 \\text{ N/C} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0 \\text{ N/C} \\)"
+          "text": "\\( 0 \\text{ N/C} \\)"
         }
       ],
       "correct_option": "B",
@@ -4077,19 +4077,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1/3 \\)"
+          "text": "\\( 1/3 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1/6 \\)"
+          "text": "\\( 1/6 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1/8 \\)"
+          "text": "\\( 1/8 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1/9 \\)"
+          "text": "\\( 1/9 \\)"
         }
       ],
       "correct_option": "C",
@@ -4141,19 +4141,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1.5 \\)"
+          "text": "\\( 1.5 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1.732 \\)"
+          "text": "\\( 1.732 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2.0 \\)"
+          "text": "\\( 2.0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.577 \\)"
+          "text": "\\( 0.577 \\)"
         }
       ],
       "correct_option": "B",
@@ -4653,19 +4653,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mu mg \\) "
+          "text": "\\( \\mu mg \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{mg}{\\mu} \\) "
+          "text": "\\( \\frac{mg}{\\mu} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\mu}{mg} \\) "
+          "text": "\\( \\frac{\\mu}{mg} \\)"
         },
         {
           "id": "D",
-          "text": " \\( mg(1-\\mu) \\) "
+          "text": "\\( mg(1-\\mu) \\)"
         }
       ],
       "correct_option": "B",
@@ -4685,19 +4685,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( B_0 \\pi R^2 \\) "
+          "text": "\\( B_0 \\pi R^2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( B_0 \\alpha \\pi R^2 \\) "
+          "text": "\\( B_0 \\alpha \\pi R^2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2 B_0 \\alpha \\pi R \\) "
+          "text": "\\( 2 B_0 \\alpha \\pi R \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         }
       ],
       "correct_option": "B",
@@ -4717,19 +4717,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( T_{1/2} \\) "
+          "text": "\\( T_{1/2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2 T_{1/2} \\) "
+          "text": "\\( 2 T_{1/2} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 3 T_{1/2} \\) "
+          "text": "\\( 3 T_{1/2} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 4 T_{1/2} \\) "
+          "text": "\\( 4 T_{1/2} \\)"
         }
       ],
       "correct_option": "C",
@@ -4749,19 +4749,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0.63 \\) "
+          "text": "\\( 0.63 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 0.79 \\) "
+          "text": "\\( 0.79 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1.26 \\) "
+          "text": "\\( 1.26 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.50 \\) "
+          "text": "\\( 0.50 \\)"
         }
       ],
       "correct_option": "A",
@@ -4781,19 +4781,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( f \\) "
+          "text": "\\( f \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2f \\) "
+          "text": "\\( 2f \\)"
         },
         {
           "id": "C",
-          "text": " \\( f/2 \\) "
+          "text": "\\( f/2 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 4f \\) "
+          "text": "\\( 4f \\)"
         }
       ],
       "correct_option": "B",
@@ -4973,19 +4973,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( B \\omega l \\) "
+          "text": "\\( B \\omega l \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1}{2} B \\omega l^2 \\) "
+          "text": "\\( \\frac{1}{2} B \\omega l^2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( B \\omega l^2 \\) "
+          "text": "\\( B \\omega l^2 \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{1}{2} B \\omega l \\) "
+          "text": "\\( \\frac{1}{2} B \\omega l \\)"
         }
       ],
       "correct_option": "B",
@@ -5005,19 +5005,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( mg \\sin \\theta \\) "
+          "text": "\\( mg \\sin \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( mg \\cos \\theta \\) "
+          "text": "\\( mg \\cos \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( mg \tan \\theta \\) "
+          "text": "\\( mg \tan \\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( mg \\cot \\theta \\) "
+          "text": "\\( mg \\cot \\theta \\)"
         }
       ],
       "correct_option": "C",
@@ -5037,19 +5037,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( h \\Delta f \\) "
+          "text": "\\( h \\Delta f \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\Delta f / h \\) "
+          "text": "\\( \\Delta f / h \\)"
         },
         {
           "id": "C",
-          "text": " \\( h \\Delta f^2 \\) "
+          "text": "\\( h \\Delta f^2 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         }
       ],
       "correct_option": "A",
@@ -5069,19 +5069,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( P_1 / 2 \\) "
+          "text": "\\( P_1 / 2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( P_1 / 4 \\) "
+          "text": "\\( P_1 / 4 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2 P_1 \\) "
+          "text": "\\( 2 P_1 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 4 P_1 \\) "
+          "text": "\\( 4 P_1 \\)"
         }
       ],
       "correct_option": "B",
@@ -5101,19 +5101,19 @@
       "options": [
         {
           "id": "A",
-          "text": " Constructive interference "
+          "text": "Constructive interference"
         },
         {
           "id": "B",
-          "text": " Destructive interference "
+          "text": "Destructive interference"
         },
         {
           "id": "C",
-          "text": " Neither constructive nor destructive "
+          "text": "Neither constructive nor destructive"
         },
         {
           "id": "D",
-          "text": " Perfectly destructive "
+          "text": "Perfectly destructive"
         }
       ],
       "correct_option": "C",
@@ -5133,19 +5133,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\frac{B_0 \\pi R^2}{r}\\)"
+          "text": "\\(\\frac{B_0 \\pi R^2}{r}\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\frac{B_0 \\pi R^2 \tau}{r}\\)"
+          "text": "\\(\\frac{B_0 \\pi R^2 \tau}{r}\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\frac{B_0 \\pi R^2}{r \tau}\\)"
+          "text": "\\(\\frac{B_0 \\pi R^2}{r \tau}\\)"
         },
         {
           "id": "D",
-          "text": " Zero"
+          "text": "Zero"
         }
       ],
       "correct_option": "A",
@@ -5165,19 +5165,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\frac{F}{k}\\)"
+          "text": "\\(\\frac{F}{k}\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\frac{2F}{k}\\)"
+          "text": "\\(\\frac{2F}{k}\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\frac{F}{2k}\\)"
+          "text": "\\(\\frac{F}{2k}\\)"
         },
         {
           "id": "D",
-          "text": " \\(\\sqrt{\\frac{F}{k}}\\)"
+          "text": "\\(\\sqrt{\\frac{F}{k}}\\)"
         }
       ],
       "correct_option": "A",
@@ -5197,19 +5197,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\eta = 40\\%\\), \\(\\eta_{Carnot} = 40\\%\\)"
+          "text": "\\(\\eta = 40\\%\\), \\(\\eta_{Carnot} = 40\\%\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\eta = 40\\%\\), \\(\\eta_{Carnot} = 60\\%\\)"
+          "text": "\\(\\eta = 40\\%\\), \\(\\eta_{Carnot} = 60\\%\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\eta = 60\\%\\), \\(\\eta_{Carnot} = 40\\%\\)"
+          "text": "\\(\\eta = 60\\%\\), \\(\\eta_{Carnot} = 40\\%\\)"
         },
         {
           "id": "D",
-          "text": " \\(\\eta = 40\\%\\), \\(\\eta_{Carnot} = 50\\%\\)"
+          "text": "\\(\\eta = 40\\%\\), \\(\\eta_{Carnot} = 50\\%\\)"
         }
       ],
       "correct_option": "A",
@@ -5229,19 +5229,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(2K_{max}\\)"
+          "text": "\\(2K_{max}\\)"
         },
         {
           "id": "B",
-          "text": " \\(2K_{max} + \\Phi\\)"
+          "text": "\\(2K_{max} + \\Phi\\)"
         },
         {
           "id": "C",
-          "text": " \\(K_{max} + \\Phi\\)"
+          "text": "\\(K_{max} + \\Phi\\)"
         },
         {
           "id": "D",
-          "text": " \\(2K_{max} - \\Phi\\)"
+          "text": "\\(2K_{max} - \\Phi\\)"
         }
       ],
       "correct_option": "B",
@@ -5261,19 +5261,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(d = u + f\\)"
+          "text": "\\(d = u + f\\)"
         },
         {
           "id": "B",
-          "text": " \\(d = \\frac{uf}{u-f}\\)"
+          "text": "\\(d = \\frac{uf}{u-f}\\)"
         },
         {
           "id": "C",
-          "text": " \\(d = \\frac{uf}{u-f} + R\\)"
+          "text": "\\(d = \\frac{uf}{u-f} + R\\)"
         },
         {
           "id": "D",
-          "text": " \\(d = \\frac{uf}{u-f} + \\frac{f}{2}\\)"
+          "text": "\\(d = \\frac{uf}{u-f} + \\frac{f}{2}\\)"
         }
       ],
       "correct_option": "B",
@@ -5773,19 +5773,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\mu_s mg}{\\cos\\theta - \\mu_s \\sin\\theta} \\) "
+          "text": "\\( \\frac{\\mu_s mg}{\\cos\\theta - \\mu_s \\sin\\theta} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\mu_s mg}{\\cos\\theta + \\mu_s \\sin\\theta} \\) "
+          "text": "\\( \\frac{\\mu_s mg}{\\cos\\theta + \\mu_s \\sin\\theta} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mu_s mg \\cos\\theta \\) "
+          "text": "\\( \\mu_s mg \\cos\\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{mg}{\\mu_s \\cos\\theta} \\) "
+          "text": "\\( \\frac{mg}{\\mu_s \\cos\\theta} \\)"
         }
       ],
       "correct_option": "B",
@@ -5805,19 +5805,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{B_0 A \\alpha t}{R} \\) "
+          "text": "\\( \\frac{B_0 A \\alpha t}{R} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{2 B_0 A \\alpha t}{R} \\) "
+          "text": "\\( \\frac{2 B_0 A \\alpha t}{R} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{B_0 A \\alpha t^2}{R} \\) "
+          "text": "\\( \\frac{B_0 A \\alpha t^2}{R} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{2 B_0 A \\alpha}{R} \\) "
+          "text": "\\( \\frac{2 B_0 A \\alpha}{R} \\)"
         }
       ],
       "correct_option": "B",
@@ -5837,19 +5837,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 10(\\gamma-1)\\% \\) "
+          "text": "\\( 10(\\gamma-1)\\% \\)"
         },
         {
           "id": "B",
-          "text": " \\( 10\\gamma\\% \\) "
+          "text": "\\( 10\\gamma\\% \\)"
         },
         {
           "id": "C",
-          "text": " \\( 5(\\gamma-1)\\% \\) "
+          "text": "\\( 5(\\gamma-1)\\% \\)"
         },
         {
           "id": "D",
-          "text": " \\( 20(\\gamma-1)\\% \\) "
+          "text": "\\( 20(\\gamma-1)\\% \\)"
         }
       ],
       "correct_option": "A",
@@ -5869,19 +5869,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2^{t(\\frac{1}{T_A} - \\frac{1}{T_B})} \\) "
+          "text": "\\( 2^{t(\\frac{1}{T_A} - \\frac{1}{T_B})} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2^{t(\\frac{1}{T_B} - \\frac{1}{T_A})} \\) "
+          "text": "\\( 2^{t(\\frac{1}{T_B} - \\frac{1}{T_A})} \\)"
         },
         {
           "id": "C",
-          "text": " \\( e^{t(\\frac{1}{T_A} + \\frac{1}{T_B})} \\) "
+          "text": "\\( e^{t(\\frac{1}{T_A} + \\frac{1}{T_B})} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{T_A}{T_B} \\cdot 2^t \\) "
+          "text": "\\( \\frac{T_A}{T_B} \\cdot 2^t \\)"
         }
       ],
       "correct_option": "B",
@@ -5901,19 +5901,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( f \\) "
+          "text": "\\( f \\)"
         },
         {
           "id": "B",
-          "text": " \\( f/2 \\) "
+          "text": "\\( f/2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2f \\) "
+          "text": "\\( 2f \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\infty \\) "
+          "text": "\\( \\infty \\)"
         }
       ],
       "correct_option": "B",
@@ -6117,7 +6117,7 @@
       "year": 2019,
       "topic": "Electricity and Magnetism",
       "subtopic": "Electric Fields",
-      "question_text": "In the diagram below, two point charges \\( +q \\) and \\( -q \\) are placed at positions \\( (0, a) \\) and \\( (0, -a) \\) respectively. What is the magnitude of the electric field \\( E \\) at a point \\( P \\) located at \\( (x, 0) \\) where \\( x \\gg a \\)?",
+      "question_text": "In the diagram below, two point charges \\( +q \\) and \\( -q \\) are placed at positions \\( (0,",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='160' y1='40' x2='160' y2='160' stroke='black' stroke-dasharray='4'/><circle cx='160' cy='60' r='5' fill='red'/><text x='170' y='65' font-family='Arial' font-size='12'>+q</text><circle cx='160' cy='140' r='5' fill='blue'/><text x='170' y='145' font-family='Arial' font-size='12'>-q</text><circle cx='240' cy='100' r='3' fill='black'/><text x='245' y='105' font-family='Arial' font-size='12'>P(x,0)</text><line x1='160' y1='100' x2='240' y2='100' stroke='black' stroke-width='1'/><text x='190' y='95' font-family='Arial' font-size='12'>x</text></svg>",
@@ -7529,19 +7529,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\frac{B^2 a v^2}{R}\\)"
+          "text": "\\(\\frac{B^2 a v^2}{R}\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\frac{B^2 a^2 v^2}{R}\\)"
+          "text": "\\(\\frac{B^2 a^2 v^2}{R}\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\frac{B a^2 v}{R}\\)"
+          "text": "\\(\\frac{B a^2 v}{R}\\)"
         },
         {
           "id": "D",
-          "text": " \\(\\frac{B^2 a^3 v}{R}\\)"
+          "text": "\\(\\frac{B^2 a^3 v}{R}\\)"
         }
       ],
       "correct_option": "B",
@@ -7561,19 +7561,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\frac{1}{2\\pi} \\sqrt{\\frac{k}{m}}\\)"
+          "text": "\\(\\frac{1}{2\\pi} \\sqrt{\\frac{k}{m}}\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\frac{1}{2\\pi} \\sqrt{\\frac{2k}{m}}\\)"
+          "text": "\\(\\frac{1}{2\\pi} \\sqrt{\\frac{2k}{m}}\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\frac{1}{\\pi} \\sqrt{\\frac{k}{m}}\\)"
+          "text": "\\(\\frac{1}{\\pi} \\sqrt{\\frac{k}{m}}\\)"
         },
         {
           "id": "D",
-          "text": " \\(\\frac{1}{2\\pi} \\sqrt{\\frac{k}{2m}}\\)"
+          "text": "\\(\\frac{1}{2\\pi} \\sqrt{\\frac{k}{2m}}\\)"
         }
       ],
       "correct_option": "B",
@@ -7593,19 +7593,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(2^\\gamma\\)"
+          "text": "\\(2^\\gamma\\)"
         },
         {
           "id": "B",
-          "text": " \\(2^{\\gamma-1}\\)"
+          "text": "\\(2^{\\gamma-1}\\)"
         },
         {
           "id": "C",
-          "text": " \\(2^{1-\\gamma}\\)"
+          "text": "\\(2^{1-\\gamma}\\)"
         },
         {
           "id": "D",
-          "text": " \\(2\\gamma\\)"
+          "text": "\\(2\\gamma\\)"
         }
       ],
       "correct_option": "B",
@@ -7625,19 +7625,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(0.25 N_0\\)"
+          "text": "\\(0.25 N_0\\)"
         },
         {
           "id": "B",
-          "text": " \\(0.35 N_0\\)"
+          "text": "\\(0.35 N_0\\)"
         },
         {
           "id": "C",
-          "text": " \\(0.50 N_0\\)"
+          "text": "\\(0.50 N_0\\)"
         },
         {
           "id": "D",
-          "text": " \\(0.65 N_0\\)"
+          "text": "\\(0.65 N_0\\)"
         }
       ],
       "correct_option": "B",
@@ -7657,19 +7657,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(10\\text{ cm} \\) behind the concave lens"
+          "text": "\\(10\\text{ cm} \\) behind the concave lens"
         },
         {
           "id": "B",
-          "text": " \\(20\\text{ cm} \\) behind the concave lens"
+          "text": "\\(20\\text{ cm} \\) behind the concave lens"
         },
         {
           "id": "C",
-          "text": " \\(10\\text{ cm} \\) in front of the concave lens"
+          "text": "\\(10\\text{ cm} \\) in front of the concave lens"
         },
         {
           "id": "D",
-          "text": " \\(20\\text{ cm} \\) in front of the concave lens"
+          "text": "\\(20\\text{ cm} \\) in front of the concave lens"
         }
       ],
       "correct_option": "A",
@@ -8169,19 +8169,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( R \\) "
+          "text": "\\( R \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{R}{2} \\) "
+          "text": "\\( \\frac{R}{2} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{R}{4} \\) "
+          "text": "\\( \\frac{R}{4} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{3R}{4} \\) "
+          "text": "\\( \\frac{3R}{4} \\)"
         }
       ],
       "correct_option": "B",
@@ -8233,19 +8233,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 400\\text{ J} \\) "
+          "text": "\\( 400\\text{ J} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 600\\text{ J} \\) "
+          "text": "\\( 600\\text{ J} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1000\\text{ J} \\) "
+          "text": "\\( 1000\\text{ J} \\)"
         },
         {
           "id": "D",
-          "text": " Insufficient information to determine"
+          "text": "Insufficient information to determine"
         }
       ],
       "correct_option": "D",
@@ -8265,19 +8265,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2.07\\text{ eV} \\) "
+          "text": "\\( 2.07\\text{ eV} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4.14\\text{ eV} \\) "
+          "text": "\\( 4.14\\text{ eV} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2.31\\text{ eV} \\) "
+          "text": "\\( 2.31\\text{ eV} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1.85\\text{ eV} \\) "
+          "text": "\\( 1.85\\text{ eV} \\)"
         }
       ],
       "correct_option": "A",
@@ -8297,19 +8297,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( v_1 > v_2 \\) "
+          "text": "\\( v_1 > v_2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( v_1 < v_2 \\) "
+          "text": "\\( v_1 < v_2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( v_1 = v_2 \\) "
+          "text": "\\( v_1 = v_2 \\)"
         },
         {
           "id": "D",
-          "text": " Total internal reflection cannot occur for sound waves"
+          "text": "Total internal reflection cannot occur for sound waves"
         }
       ],
       "correct_option": "B",
@@ -8329,19 +8329,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\frac{2B_0 \\alpha a^2 t}{R}\\)"
+          "text": "\\(\\frac{2B_0 \\alpha a^2 t}{R}\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\frac{B_0 \\alpha a^2 t}{R}\\)"
+          "text": "\\(\\frac{B_0 \\alpha a^2 t}{R}\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\frac{2B_0 \\alpha a t}{R}\\)"
+          "text": "\\(\\frac{2B_0 \\alpha a t}{R}\\)"
         },
         {
           "id": "D",
-          "text": " \\(\\frac{B_0 \\alpha a^2 t^2}{R}\\)"
+          "text": "\\(\\frac{B_0 \\alpha a^2 t^2}{R}\\)"
         }
       ],
       "correct_option": "A",
@@ -8361,19 +8361,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(a = \\frac{m}{M+m}g\\)"
+          "text": "\\(a = \\frac{m}{M+m}g\\)"
         },
         {
           "id": "B",
-          "text": " \\(a = \\frac{M}{M+m}g\\)"
+          "text": "\\(a = \\frac{M}{M+m}g\\)"
         },
         {
           "id": "C",
-          "text": " \\(a = \\frac{M-m}{M+m}g\\)"
+          "text": "\\(a = \\frac{M-m}{M+m}g\\)"
         },
         {
           "id": "D",
-          "text": " \\(a = \\frac{M+m}{M}g\\)"
+          "text": "\\(a = \\frac{M+m}{M}g\\)"
         }
       ],
       "correct_option": "B",
@@ -8393,19 +8393,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(2K_{max}\\)"
+          "text": "\\(2K_{max}\\)"
         },
         {
           "id": "B",
-          "text": " \\(2K_{max} - \\Phi\\)"
+          "text": "\\(2K_{max} - \\Phi\\)"
         },
         {
           "id": "C",
-          "text": " \\(2K_{max} + \\Phi\\)"
+          "text": "\\(2K_{max} + \\Phi\\)"
         },
         {
           "id": "D",
-          "text": " \\(K_{max} + \\Phi\\)"
+          "text": "\\(K_{max} + \\Phi\\)"
         }
       ],
       "correct_option": "C",
@@ -8425,19 +8425,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(P_0 V_0 (1 + \\ln 2)\\)"
+          "text": "\\(P_0 V_0 (1 + \\ln 2)\\)"
         },
         {
           "id": "B",
-          "text": " \\(P_0 V_0 (1 - \\ln 2)\\)"
+          "text": "\\(P_0 V_0 (1 - \\ln 2)\\)"
         },
         {
           "id": "C",
-          "text": " \\(P_0 V_0 \\ln 2\\)"
+          "text": "\\(P_0 V_0 \\ln 2\\)"
         },
         {
           "id": "D",
-          "text": " \\(0\\)"
+          "text": "\\(0\\)"
         }
       ],
       "correct_option": "B",
@@ -8457,19 +8457,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(f\\)"
+          "text": "\\(f\\)"
         },
         {
           "id": "B",
-          "text": " \\(f/2\\)"
+          "text": "\\(f/2\\)"
         },
         {
           "id": "C",
-          "text": " \\(2f\\)"
+          "text": "\\(2f\\)"
         },
         {
           "id": "D",
-          "text": " \\(f/4\\)"
+          "text": "\\(f/4\\)"
         }
       ],
       "correct_option": "B",
@@ -8489,19 +8489,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( v_0 \\cos \\theta \\) "
+          "text": "\\( v_0 \\cos \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2 v_0 \\cos \\theta \\) "
+          "text": "\\( 2 v_0 \\cos \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{2} v_0 \\cos \\theta \\) "
+          "text": "\\( \\frac{1}{2} v_0 \\cos \\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         }
       ],
       "correct_option": "B",
@@ -8521,19 +8521,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1}{4\\pi\\epsilon_0} \\frac{Q+q}{r^2} \\) "
+          "text": "\\( \\frac{1}{4\\pi\\epsilon_0} \\frac{Q+q}{r^2} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} \\) "
+          "text": "\\( \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{1}{4\\pi\\epsilon_0} \\frac{Q}{R^2} \\) "
+          "text": "\\( \\frac{1}{4\\pi\\epsilon_0} \\frac{Q}{R^2} \\)"
         }
       ],
       "correct_option": "C",
@@ -8553,19 +8553,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2 \\) "
+          "text": "\\( 2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4 \\) "
+          "text": "\\( 4 \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\sqrt{2} \\) "
+          "text": "\\( \\sqrt{2} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 8 \\) "
+          "text": "\\( 8 \\)"
         }
       ],
       "correct_option": "A",
@@ -8585,19 +8585,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1.83\\text{ eV} \\) "
+          "text": "\\( 1.83\\text{ eV} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4.13\\text{ eV} \\) "
+          "text": "\\( 4.13\\text{ eV} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 0.47\\text{ eV} \\) "
+          "text": "\\( 0.47\\text{ eV} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2.13\\text{ eV} \\) "
+          "text": "\\( 2.13\\text{ eV} \\)"
         }
       ],
       "correct_option": "A",
@@ -8617,19 +8617,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 15\\text{ cm} \\) in front of the mirror "
+          "text": "\\( 15\\text{ cm} \\) in front of the mirror"
         },
         {
           "id": "B",
-          "text": " \\( 25\\text{ cm} \\) in front of the mirror "
+          "text": "\\( 25\\text{ cm} \\) in front of the mirror"
         },
         {
           "id": "C",
-          "text": " \\( 18.3\\text{ cm} \\) in front of the mirror "
+          "text": "\\( 18.3\\text{ cm} \\) in front of the mirror"
         },
         {
           "id": "D",
-          "text": " \\( 12.5\\text{ cm} \\) in front of the mirror "
+          "text": "\\( 12.5\\text{ cm} \\) in front of the mirror"
         }
       ],
       "correct_option": "C",
@@ -8969,19 +8969,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mu_s mg \\)"
+          "text": "\\( \\mu_s mg \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\mu_s mg}{\\omega} \\)"
+          "text": "\\( \\frac{\\mu_s mg}{\\omega} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mu_s mg \\sin(\\omega t) \\)"
+          "text": "\\( \\mu_s mg \\sin(\\omega t) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\sqrt{\\mu_s^2 m^2 g^2 + \\omega^2} \\)"
+          "text": "\\( \\sqrt{\\mu_s^2 m^2 g^2 + \\omega^2} \\)"
         }
       ],
       "correct_option": "A",
@@ -9001,19 +9001,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( R \\)"
+          "text": "\\( R \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2R \\)"
+          "text": "\\( 2R \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1.5R \\)"
+          "text": "\\( 1.5R \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2.5R \\)"
+          "text": "\\( 2.5R \\)"
         }
       ],
       "correct_option": "C",
@@ -9033,19 +9033,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1:2 \\)"
+          "text": "\\( 1:2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1:4 \\)"
+          "text": "\\( 1:4 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1: \\sqrt{2} \\)"
+          "text": "\\( 1: \\sqrt{2} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1: \\pi \\)"
+          "text": "\\( 1: \\pi \\)"
         }
       ],
       "correct_option": "A",
@@ -9065,19 +9065,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( P_2 = 4P_1 \\), \\( W = \\frac{1}{2} P_1 V_1 \\)"
+          "text": "\\( P_2 = 4P_1 \\), \\( W = \\frac{1}{2} P_1 V_1 \\)"
         },
         {
           "id": "B",
-          "text": " \\( P_2 = 4P_1 \\), \\( W = -\\frac{3}{2} P_1 V_1 \\)"
+          "text": "\\( P_2 = 4P_1 \\), \\( W = -\\frac{3}{2} P_1 V_1 \\)"
         },
         {
           "id": "C",
-          "text": " \\( P_2 = 2P_1 \\), \\( W = \\frac{1}{2} P_1 V_1 \\)"
+          "text": "\\( P_2 = 2P_1 \\), \\( W = \\frac{1}{2} P_1 V_1 \\)"
         },
         {
           "id": "D",
-          "text": " \\( P_2 = 4P_1 \\), \\( W = -\\frac{1}{2} P_1 V_1 \\)"
+          "text": "\\( P_2 = 4P_1 \\), \\( W = -\\frac{1}{2} P_1 V_1 \\)"
         }
       ],
       "correct_option": "D",
@@ -9129,19 +9129,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( g \tan \\theta \\) "
+          "text": "\\( g \tan \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( g \\cot \\theta \\) "
+          "text": "\\( g \\cot \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( g \\sin \\theta \\) "
+          "text": "\\( g \\sin \\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( g \\cos \\theta \\) "
+          "text": "\\( g \\cos \\theta \\)"
         }
       ],
       "correct_option": "A",
@@ -9160,19 +9160,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mu_0 n \\pi R^2 \\frac{\\Delta I}{\\Delta t} \\) "
+          "text": "\\( \\mu_0 n \\pi R^2 \\frac{\\Delta I}{\\Delta t} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mu_0 n^2 L \\pi R^2 \\frac{\\Delta I}{\\Delta t} \\) "
+          "text": "\\( \\mu_0 n^2 L \\pi R^2 \\frac{\\Delta I}{\\Delta t} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mu_0 n L \\frac{\\Delta I}{\\Delta t} \\) "
+          "text": "\\( \\mu_0 n L \\frac{\\Delta I}{\\Delta t} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         }
       ],
       "correct_option": "B",
@@ -9191,19 +9191,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\sqrt{P_1 P_2} \\) "
+          "text": "\\( \\sqrt{P_1 P_2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{2 P_1 P_2}{P_1 + P_2} \\) "
+          "text": "\\( \\frac{2 P_1 P_2}{P_1 + P_2} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{P_1 + P_2}{2} \\) "
+          "text": "\\( \\frac{P_1 + P_2}{2} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{P_1 + 2P_2}{3} \\) "
+          "text": "\\( \\frac{P_1 + 2P_2}{3} \\)"
         }
       ],
       "correct_option": "C",
@@ -9222,19 +9222,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{1}{\\lambda_X - \\lambda_Y} \\) "
+          "text": "\\( \\frac{1}{\\lambda_X - \\lambda_Y} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\ln(\\lambda_X / \\lambda_Y)}{\\lambda_X - \\lambda_Y} \\) "
+          "text": "\\( \\frac{\\ln(\\lambda_X / \\lambda_Y)}{\\lambda_X - \\lambda_Y} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\ln(\\lambda_Y / \\lambda_X)}{\\lambda_X - \\lambda_Y} \\) "
+          "text": "\\( \\frac{\\ln(\\lambda_Y / \\lambda_X)}{\\lambda_X - \\lambda_Y} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{1}{\\lambda_X + \\lambda_Y} \\) "
+          "text": "\\( \\frac{1}{\\lambda_X + \\lambda_Y} \\)"
         }
       ],
       "correct_option": "B",
@@ -9253,19 +9253,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{u^2}{v^2} \\delta x \\) "
+          "text": "\\( \\frac{u^2}{v^2} \\delta x \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{v^2}{u^2} \\delta x \\) "
+          "text": "\\( \\frac{v^2}{u^2} \\delta x \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{f^2}{u^2} \\delta x \\) "
+          "text": "\\( \\frac{f^2}{u^2} \\delta x \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\delta x \\) "
+          "text": "\\( \\delta x \\)"
         }
       ],
       "correct_option": "B",
@@ -9605,19 +9605,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{A}{2} \\) "
+          "text": "\\( \\frac{A}{2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{A}{\\sqrt{2}} \\) "
+          "text": "\\( \\frac{A}{\\sqrt{2}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{A}{4} \\) "
+          "text": "\\( \\frac{A}{4} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{A}{\\sqrt{4}} \\) "
+          "text": "\\( \\frac{A}{\\sqrt{4}} \\)"
         }
       ],
       "correct_option": "A",
@@ -9637,19 +9637,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{B l v}{R} \\) "
+          "text": "\\( \\frac{B l v}{R} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{B^2 l^2 v^2}{R} \\) "
+          "text": "\\( \\frac{B^2 l^2 v^2}{R} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{B^2 l^2 v}{R} \\) "
+          "text": "\\( \\frac{B^2 l^2 v}{R} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{B l^2 v^2}{R^2} \\) "
+          "text": "\\( \\frac{B l^2 v^2}{R^2} \\)"
         }
       ],
       "correct_option": "B",
@@ -9669,19 +9669,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2V_s \\) "
+          "text": "\\( 2V_s \\)"
         },
         {
           "id": "B",
-          "text": " \\( V_s + \\frac{hc}{2e\\lambda} \\) "
+          "text": "\\( V_s + \\frac{hc}{2e\\lambda} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{hc}{e\\lambda} - V_s \\) "
+          "text": "\\( \\frac{hc}{e\\lambda} - V_s \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2V_s + \\frac{\\phi}{e} \\) "
+          "text": "\\( 2V_s + \\frac{\\phi}{e} \\)"
         }
       ],
       "correct_option": "B",
@@ -9701,19 +9701,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2 \\) "
+          "text": "\\( 2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4 \\) "
+          "text": "\\( 4 \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\sqrt{8} \\) "
+          "text": "\\( \\sqrt{8} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1.5 \\) "
+          "text": "\\( 1.5 \\)"
         }
       ],
       "correct_option": "B",
@@ -9733,19 +9733,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 10\\text{ cm} \\) in front of the mirror "
+          "text": "\\( 10\\text{ cm} \\) in front of the mirror"
         },
         {
           "id": "B",
-          "text": " \\( 20\\text{ cm} \\) behind the mirror "
+          "text": "\\( 20\\text{ cm} \\) behind the mirror"
         },
         {
           "id": "C",
-          "text": " \\( 15\\text{ cm} \\) in front of the lens "
+          "text": "\\( 15\\text{ cm} \\) in front of the lens"
         },
         {
           "id": "D",
-          "text": " \\( 10\\text{ cm} \\) behind the mirror "
+          "text": "\\( 10\\text{ cm} \\) behind the mirror"
         }
       ],
       "correct_option": "A",
@@ -10269,7 +10269,7 @@
       "year": 2019,
       "topic": "Electricity and Magnetism",
       "subtopic": "Electric Fields",
-      "question_text": "In the diagram below, two point charges \\( +q \\) and \\( -q \\) are placed at positions \\( (0, a) \\) and \\( (0, -a) \\) respectively. What is the magnitude of the electric field at a point \\( (x, 0) \\) where \\( x \\gg a \\)?",
+      "question_text": "In the diagram below, two point charges \\( +q \\) and \\( -q \\) are placed at positions \\( (0,",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='160' y1='20' x2='160' y2='180' stroke='black' stroke-width='1'/><line x1='40' y1='100' x2='280' y2='100' stroke='black' stroke-width='1'/><circle cx='160' cy='60' r='5' fill='red'/><text x='170' y='65' font-size='12'>+q</text><circle cx='160' cy='140' r='5' fill='blue'/><text x='170' y='145' font-size='12'>-q</text><circle cx='240' cy='100' r='3' fill='black'/><text x='245' y='95' font-size='12'>P(x,0)</text></svg>",
@@ -10721,19 +10721,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( B \\omega L^2\\) "
+          "text": "\\( B \\omega L^2\\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1}{2} B \\omega L^2\\) "
+          "text": "\\( \\frac{1}{2} B \\omega L^2\\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{2} B \\omega L\\) "
+          "text": "\\( \\frac{1}{2} B \\omega L\\)"
         },
         {
           "id": "D",
-          "text": " \\( B \\omega L\\) "
+          "text": "\\( B \\omega L\\)"
         }
       ],
       "correct_option": "B",
@@ -10753,19 +10753,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2\\pi \\sqrt{\\frac{m}{k}} \\) "
+          "text": "\\( 2\\pi \\sqrt{\\frac{m}{k}} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2\\pi \\sqrt{\\frac{2m}{k}} \\) "
+          "text": "\\( 2\\pi \\sqrt{\\frac{2m}{k}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2\\pi \\sqrt{\\frac{m}{2k}} \\) "
+          "text": "\\( 2\\pi \\sqrt{\\frac{m}{2k}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\pi \\sqrt{\\frac{m}{k}} \\) "
+          "text": "\\( \\pi \\sqrt{\\frac{m}{k}} \\)"
         }
       ],
       "correct_option": "C",
@@ -10785,19 +10785,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1/2 \\) "
+          "text": "\\( 1/2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2 \\) "
+          "text": "\\( 2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 3 \\) "
+          "text": "\\( 3 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1/3 \\) "
+          "text": "\\( 1/3 \\)"
         }
       ],
       "correct_option": "B",
@@ -10817,19 +10817,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1 \\) "
+          "text": "\\( 1 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\gamma \\) "
+          "text": "\\( \\gamma \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1/\\gamma \\) "
+          "text": "\\( 1/\\gamma \\)"
         }
       ],
       "correct_option": "C",
@@ -10849,19 +10849,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\pi h^2 \\mu^2 \\) "
+          "text": "\\( \\pi h^2 \\mu^2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\pi h^2}{\\mu^2 - 1} \\) "
+          "text": "\\( \\frac{\\pi h^2}{\\mu^2 - 1} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\pi h^2 (\\mu^2 - 1) \\) "
+          "text": "\\( \\pi h^2 (\\mu^2 - 1) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{\\pi h^2}{\\mu} \\) "
+          "text": "\\( \\frac{\\pi h^2}{\\mu} \\)"
         }
       ],
       "correct_option": "B",
@@ -12481,19 +12481,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{4}{3}K \\) "
+          "text": "\\( \\frac{4}{3}K \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{3}{2}K \\) "
+          "text": "\\( \\frac{3}{2}K \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{4}{3}K \\) "
+          "text": "\\( \\frac{4}{3}K \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{2}{3}K \\) "
+          "text": "\\( \\frac{2}{3}K \\)"
         }
       ],
       "correct_option": "A",
@@ -12513,19 +12513,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{B_0 \\pi r^2}{R} \\) "
+          "text": "\\( \\frac{B_0 \\pi r^2}{R} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{B_0 \\pi r^2}{Rt} \\) "
+          "text": "\\( \\frac{B_0 \\pi r^2}{Rt} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{B_0 \\pi r^2 t}{R} \\) "
+          "text": "\\( \\frac{B_0 \\pi r^2 t}{R} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{2 B_0 \\pi r^2}{R} \\) "
+          "text": "\\( \\frac{2 B_0 \\pi r^2}{R} \\)"
         }
       ],
       "correct_option": "A",
@@ -12545,19 +12545,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2K_{max} \\) "
+          "text": "\\( 2K_{max} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2K_{max} + \\Phi_0 \\) "
+          "text": "\\( 2K_{max} + \\Phi_0 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2K_{max} - \\Phi_0 \\) "
+          "text": "\\( 2K_{max} - \\Phi_0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( K_{max} + \\Phi_0 \\) "
+          "text": "\\( K_{max} + \\Phi_0 \\)"
         }
       ],
       "correct_option": "B",
@@ -12577,19 +12577,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( Q_1 - Q_2 \\) "
+          "text": "\\( Q_1 - Q_2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( Q_1 + Q_2 \\) "
+          "text": "\\( Q_1 + Q_2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( Q_2 - Q_1 \\) "
+          "text": "\\( Q_2 - Q_1 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         }
       ],
       "correct_option": "A",
@@ -12609,19 +12609,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\sqrt{3} \\) "
+          "text": "\\( \\sqrt{3} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1/\\sqrt{3} \\) "
+          "text": "\\( 1/\\sqrt{3} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 3 \\) "
+          "text": "\\( 3 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1/3 \\) "
+          "text": "\\( 1/3 \\)"
         }
       ],
       "correct_option": "A",
@@ -12961,19 +12961,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( K \\cos^2 \\theta \\) "
+          "text": "\\( K \\cos^2 \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( K \\sin^2 \\theta \\) "
+          "text": "\\( K \\sin^2 \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{K}{\\cos^2 \\theta} \\) "
+          "text": "\\( \\frac{K}{\\cos^2 \\theta} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{K}{\\sin^2 \\theta} \\) "
+          "text": "\\( \\frac{K}{\\sin^2 \\theta} \\)"
         }
       ],
       "correct_option": "C",
@@ -12993,19 +12993,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{B w v}{R} \\) "
+          "text": "\\( \\frac{B w v}{R} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{B h v}{R} \\) "
+          "text": "\\( \\frac{B h v}{R} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{B w h v}{R} \\) "
+          "text": "\\( \\frac{B w h v}{R} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{R}{B h v} \\) "
+          "text": "\\( \\frac{R}{B h v} \\)"
         }
       ],
       "correct_option": "B",
@@ -13025,19 +13025,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0.25 \\) "
+          "text": "\\( 0.25 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 0.50 \\) "
+          "text": "\\( 0.50 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1.00 \\) "
+          "text": "\\( 1.00 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2.00 \\) "
+          "text": "\\( 2.00 \\)"
         }
       ],
       "correct_option": "B",
@@ -13057,19 +13057,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1/2 \\) "
+          "text": "\\( 1/2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1/3.17 \\) "
+          "text": "\\( 1/3.17 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1/4 \\) "
+          "text": "\\( 1/4 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1/3.17 \\) "
+          "text": "\\( 1/3.17 \\)"
         }
       ],
       "correct_option": "B",
@@ -13089,19 +13089,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 10 \\text{ cm} \\) behind the second lens "
+          "text": "\\( 10 \\text{ cm} \\) behind the second lens"
         },
         {
           "id": "B",
-          "text": " \\( 20 \\text{ cm} \\) behind the second lens "
+          "text": "\\( 20 \\text{ cm} \\) behind the second lens"
         },
         {
           "id": "C",
-          "text": " \\( 5 \\text{ cm} \\) behind the second lens "
+          "text": "\\( 5 \\text{ cm} \\) behind the second lens"
         },
         {
           "id": "D",
-          "text": " \\( 15 \\text{ cm} \\) in front of the second lens "
+          "text": "\\( 15 \\text{ cm} \\) in front of the second lens"
         }
       ],
       "correct_option": "A",
@@ -13281,19 +13281,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mu_0 n \\pi r^2 I_0 \\omega \\cos(\\omega t) \\) "
+          "text": "\\( \\mu_0 n \\pi r^2 I_0 \\omega \\cos(\\omega t) \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mu_0 n \\pi R^2 I_0 \\omega \\cos(\\omega t) \\) "
+          "text": "\\( \\mu_0 n \\pi R^2 I_0 \\omega \\cos(\\omega t) \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\mu_0 n \\pi r^2 I_0}{\\omega} \\sin(\\omega t) \\) "
+          "text": "\\( \\frac{\\mu_0 n \\pi r^2 I_0}{\\omega} \\sin(\\omega t) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mu_0 n \\pi r^2 I_0 \\omega \\sin(\\omega t) \\) "
+          "text": "\\( \\mu_0 n \\pi r^2 I_0 \\omega \\sin(\\omega t) \\)"
         }
       ],
       "correct_option": "A",
@@ -13313,19 +13313,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mu_s = \tan \\theta \\) "
+          "text": "\\( \\mu_s = \tan \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mu_s = \\cot \\theta \\) "
+          "text": "\\( \\mu_s = \\cot \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mu_s = \\sin \\theta \\) "
+          "text": "\\( \\mu_s = \\sin \\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mu_s = \\cos \\theta \\) "
+          "text": "\\( \\mu_s = \\cos \\theta \\)"
         }
       ],
       "correct_option": "A",
@@ -13345,19 +13345,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2^{\\gamma-1} \\) "
+          "text": "\\( 2^{\\gamma-1} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2^{1-\\gamma} \\) "
+          "text": "\\( 2^{1-\\gamma} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2^\\gamma \\) "
+          "text": "\\( 2^\\gamma \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\sqrt{2} \\) "
+          "text": "\\( \\sqrt{2} \\)"
         }
       ],
       "correct_option": "A",
@@ -13377,19 +13377,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( t = T_{1/2} \\) "
+          "text": "\\( t = T_{1/2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( t = 2 T_{1/2} \\) "
+          "text": "\\( t = 2 T_{1/2} \\)"
         },
         {
           "id": "C",
-          "text": " \\( t = 4 T_{1/2} \\) "
+          "text": "\\( t = 4 T_{1/2} \\)"
         },
         {
           "id": "D",
-          "text": " \\( t = \\frac{1}{2} T_{1/2} \\) "
+          "text": "\\( t = \\frac{1}{2} T_{1/2} \\)"
         }
       ],
       "correct_option": "B",
@@ -13409,19 +13409,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( f \\) "
+          "text": "\\( f \\)"
         },
         {
           "id": "B",
-          "text": " \\( f/2 \\) "
+          "text": "\\( f/2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2f \\) "
+          "text": "\\( 2f \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\infty \\) "
+          "text": "\\( \\infty \\)"
         }
       ],
       "correct_option": "C",
@@ -13441,19 +13441,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\frac{B_0 \\alpha \\pi r^2}{R}\\)"
+          "text": "\\(\\frac{B_0 \\alpha \\pi r^2}{R}\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\frac{B_0 \\pi r^2 (1 + \\alpha t)}{R}\\)"
+          "text": "\\(\\frac{B_0 \\pi r^2 (1 + \\alpha t)}{R}\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\frac{B_0 \\alpha \\pi r}{R}\\)"
+          "text": "\\(\\frac{B_0 \\alpha \\pi r}{R}\\)"
         },
         {
           "id": "D",
-          "text": " \\(\\frac{B_0 \\pi r^2}{R \\alpha}\\)"
+          "text": "\\(\\frac{B_0 \\pi r^2}{R \\alpha}\\)"
         }
       ],
       "correct_option": "A",
@@ -13473,19 +13473,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\frac{F}{k}\\)"
+          "text": "\\(\\frac{F}{k}\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\frac{2F}{k}\\)"
+          "text": "\\(\\frac{2F}{k}\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\frac{F}{2k}\\)"
+          "text": "\\(\\frac{F}{2k}\\)"
         },
         {
           "id": "D",
-          "text": " \\(\\sqrt{\\frac{F}{k}}\\)"
+          "text": "\\(\\sqrt{\\frac{F}{k}}\\)"
         }
       ],
       "correct_option": "B",
@@ -13505,19 +13505,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(250 \\text{ J}\\)"
+          "text": "\\(250 \\text{ J}\\)"
         },
         {
           "id": "B",
-          "text": " \\(150 \\text{ J}\\)"
+          "text": "\\(150 \\text{ J}\\)"
         },
         {
           "id": "C",
-          "text": " \\(300 \\text{ J}\\)"
+          "text": "\\(300 \\text{ J}\\)"
         },
         {
           "id": "D",
-          "text": " \\(100 \\text{ J}\\)"
+          "text": "\\(100 \\text{ J}\\)"
         }
       ],
       "correct_option": "A",
@@ -13537,19 +13537,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(V_1 = 2V_0\\)"
+          "text": "\\(V_1 = 2V_0\\)"
         },
         {
           "id": "B",
-          "text": " \\(V_1 > 2V_0\\)"
+          "text": "\\(V_1 > 2V_0\\)"
         },
         {
           "id": "C",
-          "text": " \\(V_1 < 2V_0\\)"
+          "text": "\\(V_1 < 2V_0\\)"
         },
         {
           "id": "D",
-          "text": " \\(V_1 = V_0\\)"
+          "text": "\\(V_1 = V_0\\)"
         }
       ],
       "correct_option": "B",
@@ -13569,19 +13569,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\frac{2d}{3}\\)"
+          "text": "\\(\\frac{2d}{3}\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\frac{3d}{2}\\)"
+          "text": "\\(\\frac{3d}{2}\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\frac{d}{3}\\)"
+          "text": "\\(\\frac{d}{3}\\)"
         },
         {
           "id": "D",
-          "text": " \\(\\frac{d}{2}\\)"
+          "text": "\\(\\frac{d}{2}\\)"
         }
       ],
       "correct_option": "A",
@@ -13601,19 +13601,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{B_0 a^2 \\alpha v}{R} \\) "
+          "text": "\\( \\frac{B_0 a^2 \\alpha v}{R} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{B_0 a v}{R} \\) "
+          "text": "\\( \\frac{B_0 a v}{R} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{B_0 a^3 \\alpha v}{R} \\) "
+          "text": "\\( \\frac{B_0 a^3 \\alpha v}{R} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{B_0 \\alpha v}{R} \\) "
+          "text": "\\( \\frac{B_0 \\alpha v}{R} \\)"
         }
       ],
       "correct_option": "A",
@@ -13633,19 +13633,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 300 \\text{ J} \\) "
+          "text": "\\( 300 \\text{ J} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 360 \\text{ J} \\) "
+          "text": "\\( 360 \\text{ J} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 600 \\text{ J} \\) "
+          "text": "\\( 600 \\text{ J} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 420 \\text{ J} \\) "
+          "text": "\\( 420 \\text{ J} \\)"
         }
       ],
       "correct_option": "B",
@@ -13665,19 +13665,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{F}{k} \\) "
+          "text": "\\( \\frac{F}{k} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{2F}{k} \\) "
+          "text": "\\( \\frac{2F}{k} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{F}{2k} \\) "
+          "text": "\\( \\frac{F}{2k} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\sqrt{\\frac{2F}{k}} \\) "
+          "text": "\\( \\sqrt{\\frac{2F}{k}} \\)"
         }
       ],
       "correct_option": "B",
@@ -13697,19 +13697,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( t = \\frac{\\ln(\\lambda_2/\\lambda_1)}{\\lambda_2 - \\lambda_1} \\) "
+          "text": "\\( t = \\frac{\\ln(\\lambda_2/\\lambda_1)}{\\lambda_2 - \\lambda_1} \\)"
         },
         {
           "id": "B",
-          "text": " \\( t = \\frac{\\ln(\\lambda_1/\\lambda_2)}{\\lambda_1 - \\lambda_2} \\) "
+          "text": "\\( t = \\frac{\\ln(\\lambda_1/\\lambda_2)}{\\lambda_1 - \\lambda_2} \\)"
         },
         {
           "id": "C",
-          "text": " \\( t = \\frac{1}{\\lambda_1 + \\lambda_2} \\) "
+          "text": "\\( t = \\frac{1}{\\lambda_1 + \\lambda_2} \\)"
         },
         {
           "id": "D",
-          "text": " \\( t = \\frac{\\lambda_1}{\\lambda_2 - \\lambda_1} \\) "
+          "text": "\\( t = \\frac{\\lambda_1}{\\lambda_2 - \\lambda_1} \\)"
         }
       ],
       "correct_option": "A",
@@ -13729,19 +13729,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\pi d^2 (n^2 - 1) \\) "
+          "text": "\\( \\pi d^2 (n^2 - 1) \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\pi d^2 n^2 \\) "
+          "text": "\\( \\pi d^2 n^2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\pi d^2 (1 - \\frac{1}{n^2}) \\) "
+          "text": "\\( \\pi d^2 (1 - \\frac{1}{n^2}) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\pi d^2 \\sqrt{n^2 - 1} \\) "
+          "text": "\\( \\pi d^2 \\sqrt{n^2 - 1} \\)"
         }
       ],
       "correct_option": "A",
@@ -13753,7 +13753,7 @@
       "year": 2021,
       "topic": "Mechanics",
       "subtopic": "Simple Harmonic Motion",
-      "question_text": "A mass \\( m \\) is attached to a spring with spring constant \\( k \\), and the system is placed on a frictionless horizontal surface. The mass is displaced by an amplitude \\( A \\) and released. At what displacement \\( x \\) from the equilibrium position is the kinetic energy of the mass equal to three times its potential energy?",
+      "question_text": "A mass \\( m \\) is attached to a spring with spring constant \\( k \\), and the system is placed on a frictionless horizontal surfac",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -14081,19 +14081,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{1}{4} k A^2 \\) "
+          "text": "\\( \\frac{1}{4} k A^2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{3}{8} k A^2 \\) "
+          "text": "\\( \\frac{3}{8} k A^2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{2} k A^2 \\) "
+          "text": "\\( \\frac{1}{2} k A^2 \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{3}{4} k A^2 \\) "
+          "text": "\\( \\frac{3}{4} k A^2 \\)"
         }
       ],
       "correct_option": "B",
@@ -14113,19 +14113,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( B h v \\) "
+          "text": "\\( B h v \\)"
         },
         {
           "id": "B",
-          "text": " \\( B w v \\) "
+          "text": "\\( B w v \\)"
         },
         {
           "id": "C",
-          "text": " \\( B h w v \\) "
+          "text": "\\( B h w v \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         }
       ],
       "correct_option": "A",
@@ -14145,19 +14145,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2 K_{max} \\) "
+          "text": "\\( 2 K_{max} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2 K_{max} + \\Phi_0 \\) "
+          "text": "\\( 2 K_{max} + \\Phi_0 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2 K_{max} - \\Phi_0 \\) "
+          "text": "\\( 2 K_{max} - \\Phi_0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( K_{max} + \\Phi_0 \\) "
+          "text": "\\( K_{max} + \\Phi_0 \\)"
         }
       ],
       "correct_option": "B",
@@ -14177,19 +14177,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( P_1 V_1 \\ln(P_1/P_2) \\) "
+          "text": "\\( P_1 V_1 \\ln(P_1/P_2) \\)"
         },
         {
           "id": "B",
-          "text": " \\( P_2 V_2 \\ln(V_2/V_1) \\) "
+          "text": "\\( P_2 V_2 \\ln(V_2/V_1) \\)"
         },
         {
           "id": "C",
-          "text": " \\( P_1 V_1 (V_2/V_1 - 1) \\) "
+          "text": "\\( P_1 V_1 (V_2/V_1 - 1) \\)"
         },
         {
           "id": "D",
-          "text": " \\( (P_1 + P_2)(V_2 - V_1)/2 \\) "
+          "text": "\\( (P_1 + P_2)(V_2 - V_1)/2 \\)"
         }
       ],
       "correct_option": "A",
@@ -14209,19 +14209,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\Delta x \\) "
+          "text": "\\( \\Delta x \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{v^2}{u^2} \\Delta x \\) "
+          "text": "\\( \\frac{v^2}{u^2} \\Delta x \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{u^2}{v^2} \\Delta x \\) "
+          "text": "\\( \\frac{u^2}{v^2} \\Delta x \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{f^2}{u^2} \\Delta x \\) "
+          "text": "\\( \\frac{f^2}{u^2} \\Delta x \\)"
         }
       ],
       "correct_option": "B",
@@ -14401,19 +14401,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{5}{3}R \\) "
+          "text": "\\( \\frac{5}{3}R \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{7}{4}R \\) "
+          "text": "\\( \\frac{7}{4}R \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{11}{6}R \\) "
+          "text": "\\( \\frac{11}{6}R \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2R \\) "
+          "text": "\\( 2R \\)"
         }
       ],
       "correct_option": "C",
@@ -14433,19 +14433,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\sin\\theta \\) "
+          "text": "\\( \\sin\\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\cos\\theta \\) "
+          "text": "\\( \\cos\\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( \tan\\theta \\) "
+          "text": "\\( \tan\\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1 \\) "
+          "text": "\\( 1 \\)"
         }
       ],
       "correct_option": "B",
@@ -14465,19 +14465,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2 \\) "
+          "text": "\\( 2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 3.17 \\) "
+          "text": "\\( 3.17 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2.50 \\) "
+          "text": "\\( 2.50 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 4.00 \\) "
+          "text": "\\( 4.00 \\)"
         }
       ],
       "correct_option": "B",
@@ -14497,19 +14497,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1:2 \\) "
+          "text": "\\( 1:2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1:4 \\) "
+          "text": "\\( 1:4 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1:1 \\) "
+          "text": "\\( 1:1 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1:8 \\) "
+          "text": "\\( 1:8 \\)"
         }
       ],
       "correct_option": "A",
@@ -14529,19 +14529,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( f/2 \\) "
+          "text": "\\( f/2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( -2f \\) "
+          "text": "\\( -2f \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2f \\) "
+          "text": "\\( 2f \\)"
         },
         {
           "id": "D",
-          "text": " \\( -f \\) "
+          "text": "\\( -f \\)"
         }
       ],
       "correct_option": "C",
@@ -15201,19 +15201,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{kx_0^2}{2\\mu mg} \\) "
+          "text": "\\( \\frac{kx_0^2}{2\\mu mg} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{kx_0^2}{\\mu mg} \\) "
+          "text": "\\( \\frac{kx_0^2}{\\mu mg} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{kx_0}{\\mu mg} \\) "
+          "text": "\\( \\frac{kx_0}{\\mu mg} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{kx_0^2}{4\\mu mg} \\) "
+          "text": "\\( \\frac{kx_0^2}{4\\mu mg} \\)"
         }
       ],
       "correct_option": "A",
@@ -15233,19 +15233,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\alpha \\pi R^2}{R_{res}} \\) "
+          "text": "\\( \\frac{\\alpha \\pi R^2}{R_{res}} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{B_0 \\pi R^2}{R_{res}} \\) "
+          "text": "\\( \\frac{B_0 \\pi R^2}{R_{res}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\alpha R^2}{R_{res}} \\) "
+          "text": "\\( \\frac{\\alpha R^2}{R_{res}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{\\alpha \\pi R}{R_{res}} \\) "
+          "text": "\\( \\frac{\\alpha \\pi R}{R_{res}} \\)"
         }
       ],
       "correct_option": "A",
@@ -15265,19 +15265,19 @@
       "options": [
         {
           "id": "A",
-          "text": "It increases by \\( \\frac{hc}{2\\lambda} \\) "
+          "text": "It increases by \\( \\frac{hc}{2\\lambda} \\)"
         },
         {
           "id": "B",
-          "text": "It increases by \\( \\frac{hc}{\\lambda} \\) "
+          "text": "It increases by \\( \\frac{hc}{\\lambda} \\)"
         },
         {
           "id": "C",
-          "text": "It increases by \\( \\frac{3hc}{2\\lambda} \\) "
+          "text": "It increases by \\( \\frac{3hc}{2\\lambda} \\)"
         },
         {
           "id": "D",
-          "text": "It doubles "
+          "text": "It doubles"
         }
       ],
       "correct_option": "B",
@@ -15297,19 +15297,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( Q_{net} > 0 \\) and \\( W_{net} > 0 \\) "
+          "text": "\\( Q_{net} > 0 \\) and \\( W_{net} > 0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( Q_{net} < 0 \\) and \\( W_{net} < 0 \\) "
+          "text": "\\( Q_{net} < 0 \\) and \\( W_{net} < 0 \\)"
         },
         {
           "id": "C",
-          "text": " \\( Q_{net} = 0 \\) and \\( W_{net} = 0 \\) "
+          "text": "\\( Q_{net} = 0 \\) and \\( W_{net} = 0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( Q_{net} > 0 \\) and \\( W_{net} < 0 \\) "
+          "text": "\\( Q_{net} > 0 \\) and \\( W_{net} < 0 \\)"
         }
       ],
       "correct_option": "A",
@@ -15329,19 +15329,19 @@
       "options": [
         {
           "id": "A",
-          "text": "At the focal plane of the lens "
+          "text": "At the focal plane of the lens"
         },
         {
           "id": "B",
-          "text": "At a distance of \\( 0.5f \\) in front of the lens "
+          "text": "At a distance of \\( 0.5f \\) in front of the lens"
         },
         {
           "id": "C",
-          "text": "At a distance of \\( 1.5f \\) in front of the lens "
+          "text": "At a distance of \\( 1.5f \\) in front of the lens"
         },
         {
           "id": "D",
-          "text": "At a distance of \\( 2f \\) in front of the lens "
+          "text": "At a distance of \\( 2f \\) in front of the lens"
         }
       ],
       "correct_option": "B",
@@ -15361,19 +15361,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\mu_0 n I r}{2 \\Delta t} \\) "
+          "text": "\\( \\frac{\\mu_0 n I r}{2 \\Delta t} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\mu_0 n I R}{2 \\Delta t} \\) "
+          "text": "\\( \\frac{\\mu_0 n I R}{2 \\Delta t} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\mu_0 n I r^2}{R \\Delta t} \\) "
+          "text": "\\( \\frac{\\mu_0 n I r^2}{R \\Delta t} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{\\mu_0 n I}{2 \\Delta t} \\) "
+          "text": "\\( \\frac{\\mu_0 n I}{2 \\Delta t} \\)"
         }
       ],
       "correct_option": "A",
@@ -15393,19 +15393,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2\\pi \\sqrt{\\frac{m}{k}} \\) "
+          "text": "\\( 2\\pi \\sqrt{\\frac{m}{k}} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2\\pi \\sqrt{\\frac{m}{2k}} \\) "
+          "text": "\\( 2\\pi \\sqrt{\\frac{m}{2k}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2\\pi \\sqrt{\\frac{2m}{k}} \\) "
+          "text": "\\( 2\\pi \\sqrt{\\frac{2m}{k}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\pi \\sqrt{\\frac{m}{k}} \\) "
+          "text": "\\( \\pi \\sqrt{\\frac{m}{k}} \\)"
         }
       ],
       "correct_option": "B",
@@ -15425,19 +15425,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 200 \\text{ J} \\) "
+          "text": "\\( 200 \\text{ J} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 400 \\text{ J} \\) "
+          "text": "\\( 400 \\text{ J} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 600 \\text{ J} \\) "
+          "text": "\\( 600 \\text{ J} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 800 \\text{ J} \\) "
+          "text": "\\( 800 \\text{ J} \\)"
         }
       ],
       "correct_option": "B",
@@ -15457,19 +15457,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{eV}{hc} \\) "
+          "text": "\\( \\frac{eV}{hc} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{h}{eV} \\) "
+          "text": "\\( \\frac{h}{eV} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{hc}{eV} \\) "
+          "text": "\\( \\frac{hc}{eV} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{hc}{2eV} \\) "
+          "text": "\\( \\frac{hc}{2eV} \\)"
         }
       ],
       "correct_option": "C",
@@ -15489,19 +15489,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( A \\) "
+          "text": "\\( A \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\sqrt{3}A \\) "
+          "text": "\\( \\sqrt{3}A \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2A \\) "
+          "text": "\\( 2A \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{\\sqrt{3}}{2}A \\) "
+          "text": "\\( \\frac{\\sqrt{3}}{2}A \\)"
         }
       ],
       "correct_option": "B",
@@ -16001,19 +16001,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( g \\sin \\theta\\) "
+          "text": "\\( g \\sin \\theta\\)"
         },
         {
           "id": "B",
-          "text": " \\( g \\cos \\theta\\) "
+          "text": "\\( g \\cos \\theta\\)"
         },
         {
           "id": "C",
-          "text": " \\( g \tan \\theta\\) "
+          "text": "\\( g \tan \\theta\\)"
         },
         {
           "id": "D",
-          "text": " \\( g \\cot \\theta\\) "
+          "text": "\\( g \\cot \\theta\\)"
         }
       ],
       "correct_option": "C",
@@ -16033,19 +16033,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} \\) "
+          "text": "\\( \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1}{4\\pi\\epsilon_0} \\frac{2qd}{(r^2 + (d/2)^2)^{3/2}} \\) "
+          "text": "\\( \\frac{1}{4\\pi\\epsilon_0} \\frac{2qd}{(r^2 + (d/2)^2)^{3/2}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{ (r^2 + (d/2)^2) } \\) "
+          "text": "\\( \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{ (r^2 + (d/2)^2) } \\)"
         },
         {
           "id": "D",
-          "text": " Zero "
+          "text": "Zero"
         }
       ],
       "correct_option": "B",
@@ -16065,19 +16065,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2V_0 \\) "
+          "text": "\\( 2V_0 \\)"
         },
         {
           "id": "B",
-          "text": " More than \\( 2V_0 \\) "
+          "text": "More than \\( 2V_0 \\)"
         },
         {
           "id": "C",
-          "text": " Less than \\( 2V_0 \\) "
+          "text": "Less than \\( 2V_0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( V_0/2 \\) "
+          "text": "\\( V_0/2 \\)"
         }
       ],
       "correct_option": "B",
@@ -16097,19 +16097,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2 P_1 \\) "
+          "text": "\\( 2 P_1 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2.64 P_1 \\) "
+          "text": "\\( 2.64 P_1 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 3.12 P_1 \\) "
+          "text": "\\( 3.12 P_1 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 4 P_1 \\) "
+          "text": "\\( 4 P_1 \\)"
         }
       ],
       "correct_option": "B",
@@ -16129,19 +16129,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\pi h^2 n^2 \\) "
+          "text": "\\( \\pi h^2 n^2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\pi h^2 (n^2 - 1) \\) "
+          "text": "\\( \\pi h^2 (n^2 - 1) \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\pi h^2 \\frac{n^2}{n^2-1} \\) "
+          "text": "\\( \\pi h^2 \\frac{n^2}{n^2-1} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\pi h^2 n \\) "
+          "text": "\\( \\pi h^2 n \\)"
         }
       ],
       "correct_option": "C",
@@ -16481,19 +16481,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{B a v}{R} \\) "
+          "text": "\\( \\frac{B a v}{R} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{B a^2}{R} \\) "
+          "text": "\\( \\frac{B a^2}{R} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{B a^2 v}{R} \\) "
+          "text": "\\( \\frac{B a^2 v}{R} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{B a}{R v} \\) "
+          "text": "\\( \\frac{B a}{R v} \\)"
         }
       ],
       "correct_option": "B",
@@ -16513,19 +16513,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\sqrt{\\frac{k}{m}} \\) "
+          "text": "\\( \\sqrt{\\frac{k}{m}} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\sqrt{\\frac{2k}{m}} \\) "
+          "text": "\\( \\sqrt{\\frac{2k}{m}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\sqrt{\\frac{k}{2m}} \\) "
+          "text": "\\( \\sqrt{\\frac{k}{2m}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{2k}{m} \\) "
+          "text": "\\( \\frac{2k}{m} \\)"
         }
       ],
       "correct_option": "B",
@@ -16545,19 +16545,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( K_{max} \\) is doubled. "
+          "text": "\\( K_{max} \\) is doubled."
         },
         {
           "id": "B",
-          "text": " \\( K_{max} \\) is halved. "
+          "text": "\\( K_{max} \\) is halved."
         },
         {
           "id": "C",
-          "text": " \\( K_{max} \\) remains unchanged. "
+          "text": "\\( K_{max} \\) remains unchanged."
         },
         {
           "id": "D",
-          "text": " \\( K_{max} \\) increases by a factor of \\( \\sqrt{2} \\). "
+          "text": "\\( K_{max} \\) increases by a factor of \\( \\sqrt{2} \\)."
         }
       ],
       "correct_option": "C",
@@ -16577,19 +16577,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( W \\) "
+          "text": "\\( W \\)"
         },
         {
           "id": "C",
-          "text": " \\( -W \\) "
+          "text": "\\( -W \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2W \\) "
+          "text": "\\( 2W \\)"
         }
       ],
       "correct_option": "B",
@@ -16609,19 +16609,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( -2f \\) "
+          "text": "\\( -2f \\)"
         },
         {
           "id": "B",
-          "text": " \\( -f \\) "
+          "text": "\\( -f \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2f \\) "
+          "text": "\\( 2f \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{f}{2} \\) "
+          "text": "\\( \\frac{f}{2} \\)"
         }
       ],
       "correct_option": "A",
@@ -16633,7 +16633,7 @@
       "year": 2021,
       "topic": "Electricity and Magnetism",
       "subtopic": "Electric Fields",
-      "question_text": "In the diagram below, two point charges \\( +Q \\) and \\( -Q \\) are fixed at positions \\( (0, a) \\) and \\( (0, -a) \\) respectively. Find the magnitude of the electric field \\( \\vec{E} \\) at a point \\( P(x, 0) \\) on the x-axis.",
+      "question_text": "In the diagram below, two point charges \\( +Q \\) and \\( -Q \\) are fixed at positions \\( (0,",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='160' y1='40' x2='160' y2='160' stroke='black' stroke-width='2'/><circle cx='160' cy='60' r='5' fill='red'/><text x='170' y='65' font-family='Arial' font-size='12'>+Q</text><circle cx='160' cy='140' r='5' fill='blue'/><text x='170' y='145' font-family='Arial' font-size='12'>-Q</text><circle cx='240' cy='100' r='3' fill='black'/><text x='245' y='95' font-family='Arial' font-size='12'>P(x,0)</text><text x='155' y='50' font-family='Arial' font-size='10'>a</text><text x='155' y='155' font-family='Arial' font-size='10'>a</text></svg>",
@@ -16801,19 +16801,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( x = \\sqrt{\\frac{\\alpha}{2\\beta}} \\) "
+          "text": "\\( x = \\sqrt{\\frac{\\alpha}{2\\beta}} \\)"
         },
         {
           "id": "B",
-          "text": " \\( x = \\sqrt{\\frac{\\alpha}{\\beta}} \\) "
+          "text": "\\( x = \\sqrt{\\frac{\\alpha}{\\beta}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( x = \\sqrt{\\frac{2\\alpha}{\\beta}} \\) "
+          "text": "\\( x = \\sqrt{\\frac{2\\alpha}{\\beta}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( x = \\sqrt{\\frac{\\alpha}{4\\beta}} \\) "
+          "text": "\\( x = \\sqrt{\\frac{\\alpha}{4\\beta}} \\)"
         }
       ],
       "correct_option": "A",
@@ -16833,19 +16833,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( B \\omega L \\) "
+          "text": "\\( B \\omega L \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1}{2} B \\omega L^2 \\) "
+          "text": "\\( \\frac{1}{2} B \\omega L^2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( B \\omega L^2 \\) "
+          "text": "\\( B \\omega L^2 \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{1}{4} B \\omega L^2 \\) "
+          "text": "\\( \\frac{1}{4} B \\omega L^2 \\)"
         }
       ],
       "correct_option": "B",
@@ -16865,19 +16865,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1.83 \\text{ eV} \\) "
+          "text": "\\( 1.83 \\text{ eV} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2.13 \\text{ eV} \\) "
+          "text": "\\( 2.13 \\text{ eV} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 4.13 \\text{ eV} \\) "
+          "text": "\\( 4.13 \\text{ eV} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.83 \\text{ eV} \\) "
+          "text": "\\( 0.83 \\text{ eV} \\)"
         }
       ],
       "correct_option": "A",
@@ -16897,19 +16897,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 160 \\text{ J} \\) "
+          "text": "\\( 160 \\text{ J} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 400 \\text{ J} \\) "
+          "text": "\\( 400 \\text{ J} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 200 \\text{ J} \\) "
+          "text": "\\( 200 \\text{ J} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 80 \\text{ J} \\) "
+          "text": "\\( 80 \\text{ J} \\)"
         }
       ],
       "correct_option": "A",
@@ -16929,19 +16929,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 10 \\text{ cm} \\) behind the diverging lens "
+          "text": "\\( 10 \\text{ cm} \\) behind the diverging lens"
         },
         {
           "id": "B",
-          "text": " \\( 10 \\text{ cm} \\) in front of the diverging lens "
+          "text": "\\( 10 \\text{ cm} \\) in front of the diverging lens"
         },
         {
           "id": "C",
-          "text": " \\( 20 \\text{ cm} \\) in front of the diverging lens "
+          "text": "\\( 20 \\text{ cm} \\) in front of the diverging lens"
         },
         {
           "id": "D",
-          "text": " \\( 5 \\text{ cm} \\) behind the diverging lens "
+          "text": "\\( 5 \\text{ cm} \\) behind the diverging lens"
         }
       ],
       "correct_option": "B",
@@ -17121,19 +17121,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( g \\tan \\theta \\)"
+          "text": "\\( g \\tan \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( g \\cot \\theta \\)"
+          "text": "\\( g \\cot \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( g \\sin \\theta \\)"
+          "text": "\\( g \\sin \\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( g \\cos \\theta \\)"
+          "text": "\\( g \\cos \\theta \\)"
         }
       ],
       "correct_option": "A",
@@ -17153,19 +17153,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( R \\)"
+          "text": "\\( R \\)"
         },
         {
           "id": "B",
-          "text": " \\( R/2 \\)"
+          "text": "\\( R/2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( R/4 \\)"
+          "text": "\\( R/4 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2R \\)"
+          "text": "\\( 2R \\)"
         }
       ],
       "correct_option": "B",
@@ -17185,19 +17185,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( V_1 = 2V_0 \\)"
+          "text": "\\( V_1 = 2V_0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( V_1 = 2V_0 + \\frac{\\Phi}{e} \\)"
+          "text": "\\( V_1 = 2V_0 + \\frac{\\Phi}{e} \\)"
         },
         {
           "id": "C",
-          "text": " \\( V_1 = 2V_0 - \\frac{\\Phi}{e} \\)"
+          "text": "\\( V_1 = 2V_0 - \\frac{\\Phi}{e} \\)"
         },
         {
           "id": "D",
-          "text": " \\( V_1 = V_0 + \\frac{hc}{2e\\lambda} \\)"
+          "text": "\\( V_1 = V_0 + \\frac{hc}{2e\\lambda} \\)"
         }
       ],
       "correct_option": "B",
@@ -17217,19 +17217,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( P_1 V_1 \\ln 3 \\)"
+          "text": "\\( P_1 V_1 \\ln 3 \\)"
         },
         {
           "id": "B",
-          "text": " \\( -P_1 V_1 \\ln 3 \\)"
+          "text": "\\( -P_1 V_1 \\ln 3 \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{2}{3} P_1 V_1 \\)"
+          "text": "\\( \\frac{2}{3} P_1 V_1 \\)"
         },
         {
           "id": "D",
-          "text": " \\( - \\frac{2}{3} P_1 V_1 \\)"
+          "text": "\\( - \\frac{2}{3} P_1 V_1 \\)"
         }
       ],
       "correct_option": "B",
@@ -17249,19 +17249,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 10 \\text{ cm} \\)"
+          "text": "\\( 10 \\text{ cm} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 20 \\text{ cm} \\)"
+          "text": "\\( 20 \\text{ cm} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 30 \\text{ cm} \\)"
+          "text": "\\( 30 \\text{ cm} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 40 \\text{ cm} \\)"
+          "text": "\\( 40 \\text{ cm} \\)"
         }
       ],
       "correct_option": "B",
@@ -17441,19 +17441,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( R = 4H \\cot \\theta \\) "
+          "text": "\\( R = 4H \\cot \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( R = 2H \tan \\theta \\) "
+          "text": "\\( R = 2H \tan \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( R = H \tan \\theta \\) "
+          "text": "\\( R = H \tan \\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( R = 4H \tan \\theta \\) "
+          "text": "\\( R = 4H \tan \\theta \\)"
         }
       ],
       "correct_option": "A",
@@ -17473,19 +17473,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\pi a^2 \\mu_0 n I}{\\Delta t} \\) "
+          "text": "\\( \\frac{\\pi a^2 \\mu_0 n I}{\\Delta t} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\pi r^2 \\mu_0 n I}{\\Delta t} \\) "
+          "text": "\\( \\frac{\\pi r^2 \\mu_0 n I}{\\Delta t} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{2\\pi r \\mu_0 n I}{\\Delta t} \\) "
+          "text": "\\( \\frac{2\\pi r \\mu_0 n I}{\\Delta t} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{\\pi r^2 \\mu_0 n I}{2\\Delta t} \\) "
+          "text": "\\( \\frac{\\pi r^2 \\mu_0 n I}{2\\Delta t} \\)"
         }
       ],
       "correct_option": "B",
@@ -17505,19 +17505,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2K_{max} \\) "
+          "text": "\\( 2K_{max} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\text{More than } 2K_{max} \\) "
+          "text": "\\( \\text{More than } 2K_{max} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\text{Less than } 2K_{max} \\) "
+          "text": "\\( \\text{Less than } 2K_{max} \\)"
         },
         {
           "id": "D",
-          "text": " \\( K_{max} + \\Phi \\) "
+          "text": "\\( K_{max} + \\Phi \\)"
         }
       ],
       "correct_option": "B",
@@ -17537,19 +17537,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{1}{2} P_0 V_0 \\) "
+          "text": "\\( \\frac{1}{2} P_0 V_0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{3}{2} P_0 V_0 \\) "
+          "text": "\\( \\frac{3}{2} P_0 V_0 \\)"
         },
         {
           "id": "C",
-          "text": " \\( P_0 V_0 \\) "
+          "text": "\\( P_0 V_0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{1}{4} P_0 V_0 \\) "
+          "text": "\\( \\frac{1}{4} P_0 V_0 \\)"
         }
       ],
       "correct_option": "A",
@@ -17569,19 +17569,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\pi d^2 (n^2 - 1) \\) "
+          "text": "\\( \\pi d^2 (n^2 - 1) \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\pi d^2 (n^2 + 1) \\) "
+          "text": "\\( \\pi d^2 (n^2 + 1) \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2\\pi d^2 n \\) "
+          "text": "\\( 2\\pi d^2 n \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\pi d^2 n^2 \\) "
+          "text": "\\( \\pi d^2 n^2 \\)"
         }
       ],
       "correct_option": "A",
@@ -17921,19 +17921,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{2\\pi mv \\sin\\theta}{qB} \\)"
+          "text": "\\( \\frac{2\\pi mv \\sin\\theta}{qB} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{2\\pi mv \\cos\\theta}{qB} \\)"
+          "text": "\\( \\frac{2\\pi mv \\cos\\theta}{qB} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\pi mv \\cos\\theta}{qB} \\)"
+          "text": "\\( \\frac{\\pi mv \\cos\\theta}{qB} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{mv \\cos\\theta}{qB} \\)"
+          "text": "\\( \\frac{mv \\cos\\theta}{qB} \\)"
         }
       ],
       "correct_option": "B",
@@ -17953,19 +17953,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\sqrt{\\frac{k}{2m}} \\)"
+          "text": "\\( \\sqrt{\\frac{k}{2m}} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\sqrt{\\frac{k}{m}} \\)"
+          "text": "\\( \\sqrt{\\frac{k}{m}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\sqrt{\\frac{2k}{m}} \\)"
+          "text": "\\( \\sqrt{\\frac{2k}{m}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\sqrt{\\frac{3k}{m}} \\)"
+          "text": "\\( \\sqrt{\\frac{3k}{m}} \\)"
         }
       ],
       "correct_option": "C",
@@ -17985,19 +17985,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\lambda_1 N_0}{\\lambda_2 - \\lambda_1} (e^{-\\lambda_1 t} - e^{-\\lambda_2 t}) \\)"
+          "text": "\\( \\frac{\\lambda_1 N_0}{\\lambda_2 - \\lambda_1} (e^{-\\lambda_1 t} - e^{-\\lambda_2 t}) \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\lambda_2 N_0}{\\lambda_2 - \\lambda_1} (e^{-\\lambda_1 t} - e^{-\\lambda_2 t}) \\)"
+          "text": "\\( \\frac{\\lambda_2 N_0}{\\lambda_2 - \\lambda_1} (e^{-\\lambda_1 t} - e^{-\\lambda_2 t}) \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\lambda_1 N_0}{\\lambda_1 - \\lambda_2} (e^{-\\lambda_1 t} + e^{-\\lambda_2 t}) \\)"
+          "text": "\\( \\frac{\\lambda_1 N_0}{\\lambda_1 - \\lambda_2} (e^{-\\lambda_1 t} + e^{-\\lambda_2 t}) \\)"
         },
         {
           "id": "D",
-          "text": " \\( N_0 (e^{-\\lambda_1 t} - e^{-\\lambda_2 t}) \\)"
+          "text": "\\( N_0 (e^{-\\lambda_1 t} - e^{-\\lambda_2 t}) \\)"
         }
       ],
       "correct_option": "A",
@@ -18017,19 +18017,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 300 \\text{ J} \\)"
+          "text": "\\( 300 \\text{ J} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 600 \\text{ J} \\)"
+          "text": "\\( 600 \\text{ J} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 900 \\text{ J} \\)"
+          "text": "\\( 900 \\text{ J} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1200 \\text{ J} \\)"
+          "text": "\\( 1200 \\text{ J} \\)"
         }
       ],
       "correct_option": "B",
@@ -18049,19 +18049,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{f}{m-1} \\)"
+          "text": "\\( \\frac{f}{m-1} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{f}{m+1} \\)"
+          "text": "\\( \\frac{f}{m+1} \\)"
         },
         {
           "id": "C",
-          "text": " \\( f(m+1) \\)"
+          "text": "\\( f(m+1) \\)"
         },
         {
           "id": "D",
-          "text": " \\( f(m-1) \\)"
+          "text": "\\( f(m-1) \\)"
         }
       ],
       "correct_option": "B",
@@ -18721,19 +18721,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( x = \\frac{2a}{b} \\), \\( F = \\frac{2b^3}{a^2} \\delta x \\) "
+          "text": "\\( x = \\frac{2a}{b} \\), \\( F = \\frac{2b^3}{a^2} \\delta x \\)"
         },
         {
           "id": "B",
-          "text": " \\( x = \\frac{a}{b} \\), \\( F = \\frac{b^3}{a^2} \\delta x \\) "
+          "text": "\\( x = \\frac{a}{b} \\), \\( F = \\frac{b^3}{a^2} \\delta x \\)"
         },
         {
           "id": "C",
-          "text": " \\( x = \\frac{2a}{b} \\), \\( F = \\frac{b^3}{a^2} \\delta x \\) "
+          "text": "\\( x = \\frac{2a}{b} \\), \\( F = \\frac{b^3}{a^2} \\delta x \\)"
         },
         {
           "id": "D",
-          "text": " \\( x = \\frac{b}{a} \\), \\( F = \\frac{a^3}{b^2} \\delta x \\) "
+          "text": "\\( x = \\frac{b}{a} \\), \\( F = \\frac{a^3}{b^2} \\delta x \\)"
         }
       ],
       "correct_option": "A",
@@ -18753,19 +18753,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{R_1(R_2 + R_3)}{R_1 + R_2 + R_3} \\) "
+          "text": "\\( \\frac{R_1(R_2 + R_3)}{R_1 + R_2 + R_3} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{R_1 + R_2 + R_3}{R_1 R_2 + R_2 R_3 + R_3 R_1} \\) "
+          "text": "\\( \\frac{R_1 + R_2 + R_3}{R_1 R_2 + R_2 R_3 + R_3 R_1} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{R_2 R_3}{R_1 + R_2 + R_3} \\) "
+          "text": "\\( \\frac{R_2 R_3}{R_1 + R_2 + R_3} \\)"
         },
         {
           "id": "D",
-          "text": " \\( R_1 + \\frac{R_2 R_3}{R_2 + R_3} \\) "
+          "text": "\\( R_1 + \\frac{R_2 R_3}{R_2 + R_3} \\)"
         }
       ],
       "correct_option": "A",
@@ -18785,19 +18785,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2 \\) "
+          "text": "\\( 2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 3 \\) "
+          "text": "\\( 3 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1.5 \\) "
+          "text": "\\( 1.5 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 4 \\) "
+          "text": "\\( 4 \\)"
         }
       ],
       "correct_option": "B",
@@ -18817,19 +18817,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{1}{2} P_0 V_0 \\) "
+          "text": "\\( \\frac{1}{2} P_0 V_0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( P_0 V_0 \\) "
+          "text": "\\( P_0 V_0 \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{4} P_0 V_0 \\) "
+          "text": "\\( \\frac{1}{4} P_0 V_0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{3}{4} P_0 V_0 \\) "
+          "text": "\\( \\frac{3}{4} P_0 V_0 \\)"
         }
       ],
       "correct_option": "A",
@@ -18849,19 +18849,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\pi/3 \\) "
+          "text": "\\( \\pi/3 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2\\pi/3 \\) "
+          "text": "\\( 2\\pi/3 \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\pi/2 \\) "
+          "text": "\\( \\pi/2 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 3\\pi/4 \\) "
+          "text": "\\( 3\\pi/4 \\)"
         }
       ],
       "correct_option": "B",
@@ -19357,19 +19357,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( v_0 \\cos \\theta \\) "
+          "text": "\\( v_0 \\cos \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2v_0 \\cos \\theta \\) "
+          "text": "\\( 2v_0 \\cos \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{2} v_0 \\cos \\theta \\) "
+          "text": "\\( \\frac{1}{2} v_0 \\cos \\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         }
       ],
       "correct_option": "B",
@@ -19421,19 +19421,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\Phi = hc \\left( \\frac{V_1}{\\lambda_1} - \\frac{V_2}{\\lambda_2} \right) / e \\) "
+          "text": "\\( \\Phi = hc \\left( \\frac{V_1}{\\lambda_1} - \\frac{V_2}{\\lambda_2} \right) / e \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\Phi = hc \\left( \\frac{1}{\\lambda_1} - \\frac{1}{\\lambda_2} \right) / (V_1 - V_2) \\) "
+          "text": "\\( \\Phi = hc \\left( \\frac{1}{\\lambda_1} - \\frac{1}{\\lambda_2} \right) / (V_1 - V_2) \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\Phi = \\frac{hc}{e} \\left( \\frac{V_2}{\\lambda_2} - \\frac{V_1}{\\lambda_1} \right) \\) "
+          "text": "\\( \\Phi = \\frac{hc}{e} \\left( \\frac{V_2}{\\lambda_2} - \\frac{V_1}{\\lambda_1} \right) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\Phi = hc \\left( \\frac{V_1 \\lambda_2 - V_2 \\lambda_1}{e \\lambda_1 \\lambda_2} \right) \\) "
+          "text": "\\( \\Phi = hc \\left( \\frac{V_1 \\lambda_2 - V_2 \\lambda_1}{e \\lambda_1 \\lambda_2} \right) \\)"
         }
       ],
       "correct_option": "A",
@@ -19453,19 +19453,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( Q_1(1 - \\eta) \\) "
+          "text": "\\( Q_1(1 - \\eta) \\)"
         },
         {
           "id": "B",
-          "text": " \\( Q_1 \\eta \\) "
+          "text": "\\( Q_1 \\eta \\)"
         },
         {
           "id": "C",
-          "text": " \\( Q_1 / (1 - \\eta) \\) "
+          "text": "\\( Q_1 / (1 - \\eta) \\)"
         },
         {
           "id": "D",
-          "text": " \\( Q_1 \\frac{T_2}{T} \\) "
+          "text": "\\( Q_1 \\frac{T_2}{T} \\)"
         }
       ],
       "correct_option": "A",
@@ -19485,19 +19485,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( f \\) "
+          "text": "\\( f \\)"
         },
         {
           "id": "B",
-          "text": " \\( v \\) "
+          "text": "\\( v \\)"
         },
         {
           "id": "C",
-          "text": " \\( v - f \\) "
+          "text": "\\( v - f \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2f \\) "
+          "text": "\\( 2f \\)"
         }
       ],
       "correct_option": "B",
@@ -19517,19 +19517,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( B \\omega L^2\\) "
+          "text": "\\( B \\omega L^2\\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1}{2} B \\omega L^2\\) "
+          "text": "\\( \\frac{1}{2} B \\omega L^2\\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{4} B \\omega L^2\\) "
+          "text": "\\( \\frac{1}{4} B \\omega L^2\\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{2}{3} B \\omega L^2\\) "
+          "text": "\\( \\frac{2}{3} B \\omega L^2\\)"
         }
       ],
       "correct_option": "B",
@@ -19549,19 +19549,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2\\pi \\sqrt{\\frac{m}{k}} \\) "
+          "text": "\\( 2\\pi \\sqrt{\\frac{m}{k}} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2\\pi \\sqrt{\\frac{2m}{k}} \\) "
+          "text": "\\( 2\\pi \\sqrt{\\frac{2m}{k}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2\\pi \\sqrt{\\frac{m}{2k}} \\) "
+          "text": "\\( 2\\pi \\sqrt{\\frac{m}{2k}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\pi \\sqrt{\\frac{m}{k}} \\) "
+          "text": "\\( \\pi \\sqrt{\\frac{m}{k}} \\)"
         }
       ],
       "correct_option": "C",
@@ -19581,19 +19581,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2.64 P_1 \\) "
+          "text": "\\( 2.64 P_1 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2.00 P_1 \\) "
+          "text": "\\( 2.00 P_1 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1.75 P_1 \\) "
+          "text": "\\( 1.75 P_1 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 3.12 P_1 \\) "
+          "text": "\\( 3.12 P_1 \\)"
         }
       ],
       "correct_option": "A",
@@ -19613,19 +19613,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\ln(2)}{\\lambda} \\) "
+          "text": "\\( \\frac{\\ln(2)}{\\lambda} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{2 \\ln(2)}{\\lambda} \\) "
+          "text": "\\( \\frac{2 \\ln(2)}{\\lambda} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\ln(4)}{2\\lambda} \\) "
+          "text": "\\( \\frac{\\ln(4)}{2\\lambda} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{1}{\\lambda} \\) "
+          "text": "\\( \\frac{1}{\\lambda} \\)"
         }
       ],
       "correct_option": "B",
@@ -19645,19 +19645,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 28.1^\\circ \\) "
+          "text": "\\( 28.1^\\circ \\)"
         },
         {
           "id": "B",
-          "text": " \\( 30.0^\\circ \\) "
+          "text": "\\( 30.0^\\circ \\)"
         },
         {
           "id": "C",
-          "text": " \\( 35.3^\\circ \\) "
+          "text": "\\( 35.3^\\circ \\)"
         },
         {
           "id": "D",
-          "text": " \\( 42.5^\\circ \\) "
+          "text": "\\( 42.5^\\circ \\)"
         }
       ],
       "correct_option": "A",
@@ -20477,19 +20477,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( g \\sin \\theta \\) "
+          "text": "\\( g \\sin \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( g \\tan \\theta \\) "
+          "text": "\\( g \\tan \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( g \\cot \\theta \\) "
+          "text": "\\( g \\cot \\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( g / \\tan \\theta \\) "
+          "text": "\\( g / \\tan \\theta \\)"
         }
       ],
       "correct_option": "B",
@@ -20509,19 +20509,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1.5\\Omega \\) "
+          "text": "\\( 1.5\\Omega \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2.2\\Omega \\) "
+          "text": "\\( 2.2\\Omega \\)"
         },
         {
           "id": "C",
-          "text": " \\( 3.33\\Omega \\) "
+          "text": "\\( 3.33\\Omega \\)"
         },
         {
           "id": "D",
-          "text": " \\( 4.0\\Omega \\) "
+          "text": "\\( 4.0\\Omega \\)"
         }
       ],
       "correct_option": "C",
@@ -20541,19 +20541,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2 \\) "
+          "text": "\\( 2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( > 2 \\) "
+          "text": "\\( > 2 \\)"
         },
         {
           "id": "C",
-          "text": " \\( < 2 \\) "
+          "text": "\\( < 2 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 4 \\) "
+          "text": "\\( 4 \\)"
         }
       ],
       "correct_option": "B",
@@ -20573,19 +20573,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( P_0 V_0 (1 - \\ln 2) \\) "
+          "text": "\\( P_0 V_0 (1 - \\ln 2) \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1}{2} P_0 V_0 (1 - 2^{-1}) \\) "
+          "text": "\\( \\frac{1}{2} P_0 V_0 (1 - 2^{-1}) \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{2} P_0 V_0 \\) "
+          "text": "\\( \\frac{1}{2} P_0 V_0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{1}{2} P_0 V_0 (1 - 0.5) = 0.25 P_0 V_0 \\) "
+          "text": "\\( \\frac{1}{2} P_0 V_0 (1 - 0.5) = 0.25 P_0 V_0 \\)"
         }
       ],
       "correct_option": "D",
@@ -20605,19 +20605,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 10 \\text{ cm} \\) behind the mirror "
+          "text": "\\( 10 \\text{ cm} \\) behind the mirror"
         },
         {
           "id": "B",
-          "text": " \\( 10 \\text{ cm} \\) in front of the mirror "
+          "text": "\\( 10 \\text{ cm} \\) in front of the mirror"
         },
         {
           "id": "C",
-          "text": " \\( 5 \\text{ cm} \\) behind the mirror "
+          "text": "\\( 5 \\text{ cm} \\) behind the mirror"
         },
         {
           "id": "D",
-          "text": " \\( 20 \\text{ cm} \\) in front of the mirror "
+          "text": "\\( 20 \\text{ cm} \\) in front of the mirror"
         }
       ],
       "correct_option": "B",
@@ -21597,19 +21597,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mu_s mg \\)"
+          "text": "\\( \\mu_s mg \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\mu_s mg}{\\omega} \\)"
+          "text": "\\( \\frac{\\mu_s mg}{\\omega} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mu_s mg \\omega \\)"
+          "text": "\\( \\mu_s mg \\omega \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2\\mu_s mg \\)"
+          "text": "\\( 2\\mu_s mg \\)"
         }
       ],
       "correct_option": "A",
@@ -21629,19 +21629,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{B_0 \\alpha \\pi R^2}{r} \\)"
+          "text": "\\( \\frac{B_0 \\alpha \\pi R^2}{r} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{B_0 \\pi R^2}{r \\alpha} \\)"
+          "text": "\\( \\frac{B_0 \\pi R^2}{r \\alpha} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{B_0 \\alpha R^2}{r} \\)"
+          "text": "\\( \\frac{B_0 \\alpha R^2}{r} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{2 B_0 \\alpha \\pi R}{r} \\)"
+          "text": "\\( \\frac{2 B_0 \\alpha \\pi R}{r} \\)"
         }
       ],
       "correct_option": "A",
@@ -21661,19 +21661,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( P_0 V_0 \\ln 2 \\)"
+          "text": "\\( P_0 V_0 \\ln 2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( P_0 V_0 (1 - \\ln 2) \\)"
+          "text": "\\( P_0 V_0 (1 - \\ln 2) \\)"
         },
         {
           "id": "C",
-          "text": " \\( P_0 V_0 (2 - \\ln 2) \\)"
+          "text": "\\( P_0 V_0 (2 - \\ln 2) \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0 \\)"
+          "text": "\\( 0 \\)"
         }
       ],
       "correct_option": "B",
@@ -21693,19 +21693,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2.13 \\text{ eV} \\)"
+          "text": "\\( 2.13 \\text{ eV} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4.13 \\text{ eV} \\)"
+          "text": "\\( 4.13 \\text{ eV} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1.13 \\text{ eV} \\)"
+          "text": "\\( 1.13 \\text{ eV} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.87 \\text{ eV} \\)"
+          "text": "\\( 0.87 \\text{ eV} \\)"
         }
       ],
       "correct_option": "A",
@@ -21725,19 +21725,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{f}{2} \\)"
+          "text": "\\( \\frac{f}{2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{f}{2(1 - \\frac{d}{f})} \\)"
+          "text": "\\( \\frac{f}{2(1 - \\frac{d}{f})} \\)"
         },
         {
           "id": "C",
-          "text": " \\( f(1 - \\frac{d}{f}) \\)"
+          "text": "\\( f(1 - \\frac{d}{f}) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{f}{2} + d(\\mu - 1) \\)"
+          "text": "\\( \\frac{f}{2} + d(\\mu - 1) \\)"
         }
       ],
       "correct_option": "B",
@@ -22393,19 +22393,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\frac{GMm}{2R}\\)"
+          "text": "\\(\\frac{GMm}{2R}\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\frac{GMm}{4R}\\)"
+          "text": "\\(\\frac{GMm}{4R}\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\frac{GMm}{8R}\\)"
+          "text": "\\(\\frac{GMm}{8R}\\)"
         },
         {
           "id": "D",
-          "text": " \\(\\frac{3GMm}{8R}\\)"
+          "text": "\\(\\frac{3GMm}{8R}\\)"
         }
       ],
       "correct_option": "B",
@@ -22425,19 +22425,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(\\frac{2kqd}{(r^2 + (d/2)^2)^{3/2}}\\)"
+          "text": "\\(\\frac{2kqd}{(r^2 + (d/2)^2)^{3/2}}\\)"
         },
         {
           "id": "B",
-          "text": " \\(\\frac{kqd}{(r^2 + (d/2)^2)^{3/2}}\\)"
+          "text": "\\(\\frac{kqd}{(r^2 + (d/2)^2)^{3/2}}\\)"
         },
         {
           "id": "C",
-          "text": " \\(\\frac{kq}{(r^2 + (d/2)^2)}\\)"
+          "text": "\\(\\frac{kq}{(r^2 + (d/2)^2)}\\)"
         },
         {
           "id": "D",
-          "text": " \\(\\frac{2kq}{r^2}\\)"
+          "text": "\\(\\frac{2kq}{r^2}\\)"
         }
       ],
       "correct_option": "A",
@@ -22489,19 +22489,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(300 \\text{ J}\\)"
+          "text": "\\(300 \\text{ J}\\)"
         },
         {
           "id": "B",
-          "text": " \\(600 \\text{ J}\\)"
+          "text": "\\(600 \\text{ J}\\)"
         },
         {
           "id": "C",
-          "text": " \\(900 \\text{ J}\\)"
+          "text": "\\(900 \\text{ J}\\)"
         },
         {
           "id": "D",
-          "text": " \\(1200 \\text{ J}\\)"
+          "text": "\\(1200 \\text{ J}\\)"
         }
       ],
       "correct_option": "B",
@@ -22521,19 +22521,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\(30^\\circ\\)"
+          "text": "\\(30^\\circ\\)"
         },
         {
           "id": "B",
-          "text": " \\(45^\\circ\\)"
+          "text": "\\(45^\\circ\\)"
         },
         {
           "id": "C",
-          "text": " \\(60^\\circ\\)"
+          "text": "\\(60^\\circ\\)"
         },
         {
           "id": "D",
-          "text": " \\(35.3^\\circ\\)"
+          "text": "\\(35.3^\\circ\\)"
         }
       ],
       "correct_option": "D",
@@ -22609,7 +22609,7 @@
       "year": 2022,
       "topic": "Mechanics",
       "subtopic": "Simple Harmonic Motion",
-      "question_text": "A mass \\( m \\) is attached to a spring with spring constant \\( k \\) and placed on a frictionless horizontal surface. The mass is displaced by a distance \\( A \\) and released. What is the maximum acceleration of the mass during its motion?",
+      "question_text": "A mass \\( m \\) is attached to a spring with spring constant \\( k \\) and placed on a frictionless horizontal surfac",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -23313,7 +23313,7 @@
       "year": 2020,
       "topic": "Modern Physics",
       "subtopic": "Radioactivity",
-      "question_text": "A sample contains two radioactive isotopes, A and B. The half-life of A is \\( 10 \\) days and the half-life of B is \\( 20 \\) days. Initially, the activity of A is equal to the activity of B. What is the ratio of the activity of A to the activity of B after \\( 20 \\) days?",
+      "question_text": "A sample contains two radioactive isotopes, A and",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -24185,19 +24185,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\pi R^2 B_0}{r} \\) "
+          "text": "\\( \\frac{\\pi R^2 B_0}{r} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\pi R^2 B_0 \\Delta t}{r} \\) "
+          "text": "\\( \\frac{\\pi R^2 B_0 \\Delta t}{r} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\pi R^2 B_0}{r \\Delta t} \\) "
+          "text": "\\( \\frac{\\pi R^2 B_0}{r \\Delta t} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{2\\pi R^2 B_0}{r} \\) "
+          "text": "\\( \\frac{2\\pi R^2 B_0}{r} \\)"
         }
       ],
       "correct_option": "A",
@@ -24217,19 +24217,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\mu_s mg}{\\cos\\theta - \\mu_s\\sin\\theta} \\) "
+          "text": "\\( \\frac{\\mu_s mg}{\\cos\\theta - \\mu_s\\sin\\theta} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\mu_s mg}{\\cos\\theta + \\mu_s\\sin\\theta} \\) "
+          "text": "\\( \\frac{\\mu_s mg}{\\cos\\theta + \\mu_s\\sin\\theta} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\mu_s mg \\cos\\theta \\) "
+          "text": "\\( \\mu_s mg \\cos\\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mu_s mg \tan\\theta \\) "
+          "text": "\\( \\mu_s mg \tan\\theta \\)"
         }
       ],
       "correct_option": "B",
@@ -24249,19 +24249,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 5\\text{ hours} \\) "
+          "text": "\\( 5\\text{ hours} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 10\\text{ hours} \\) "
+          "text": "\\( 10\\text{ hours} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 20\\text{ hours} \\) "
+          "text": "\\( 20\\text{ hours} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 15\\text{ hours} \\) "
+          "text": "\\( 15\\text{ hours} \\)"
         }
       ],
       "correct_option": "B",
@@ -24281,19 +24281,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2 \\) "
+          "text": "\\( 2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4 \\) "
+          "text": "\\( 4 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 8 \\) "
+          "text": "\\( 8 \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\sqrt{8} \\) "
+          "text": "\\( \\sqrt{8} \\)"
         }
       ],
       "correct_option": "B",
@@ -24313,19 +24313,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( A\\omega \\) "
+          "text": "\\( A\\omega \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2A\\omega \\) "
+          "text": "\\( 2A\\omega \\)"
         },
         {
           "id": "D",
-          "text": " \\( A\\omega / 2 \\) "
+          "text": "\\( A\\omega / 2 \\)"
         }
       ],
       "correct_option": "B",
@@ -25177,19 +25177,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{r}{4} \\)"
+          "text": "\\( \\frac{r}{4} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{r}{2} \\)"
+          "text": "\\( \\frac{r}{2} \\)"
         },
         {
           "id": "C",
-          "text": " \\( r \\)"
+          "text": "\\( r \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2r \\)"
+          "text": "\\( 2r \\)"
         }
       ],
       "correct_option": "A",
@@ -25209,19 +25209,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( T_{1/2} \\)"
+          "text": "\\( T_{1/2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1.5 T_{1/2} \\)"
+          "text": "\\( 1.5 T_{1/2} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2 T_{1/2} \\)"
+          "text": "\\( 2 T_{1/2} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 3 T_{1/2} \\)"
+          "text": "\\( 3 T_{1/2} \\)"
         }
       ],
       "correct_option": "C",
@@ -25241,19 +25241,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( a \\left( \\frac{1}{V_1} - \\frac{1}{V_2} \right) \\)"
+          "text": "\\( a \\left( \\frac{1}{V_1} - \\frac{1}{V_2} \right) \\)"
         },
         {
           "id": "B",
-          "text": " \\( a \\left( \\frac{1}{V_2} - \\frac{1}{V_1} \right) \\)"
+          "text": "\\( a \\left( \\frac{1}{V_2} - \\frac{1}{V_1} \right) \\)"
         },
         {
           "id": "C",
-          "text": " \\( a (V_2 - V_1) \\)"
+          "text": "\\( a (V_2 - V_1) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{a}{2} \\left( \\frac{1}{V_1^2} - \\frac{1}{V_2^2} \right) \\)"
+          "text": "\\( \\frac{a}{2} \\left( \\frac{1}{V_1^2} - \\frac{1}{V_2^2} \right) \\)"
         }
       ],
       "correct_option": "A",
@@ -25273,19 +25273,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\pi h^2 (n^2 - 1) \\)"
+          "text": "\\( \\pi h^2 (n^2 - 1) \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\pi h^2 (n^2 + 1) \\)"
+          "text": "\\( \\pi h^2 (n^2 + 1) \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\pi h^2 (1 - n^2) \\)"
+          "text": "\\( \\pi h^2 (1 - n^2) \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2\\pi h n \\)"
+          "text": "\\( 2\\pi h n \\)"
         }
       ],
       "correct_option": "A",
@@ -25425,7 +25425,7 @@
       "year": 2023,
       "topic": "Waves and Optics",
       "subtopic": "Lenses and Mirrors",
-      "question_text": "A point object is placed at a distance \\( u \\) from a thin converging lens of focal length \\( f \\). A screen is placed at a distance \\( d \\) from the lens on the other side. For a fixed \\( u \\) and \\( d \\), the condition for a sharp image to be formed on the screen is given by the lens formula. If the lens is replaced by a diverging lens of the same focal length \\( f \\), the distance of the image from the lens becomes:",
+      "question_text": "A point object is placed at a distance \\( u \\) from a thin converging lens of focal length \\( f \\). A screen is placed at a distance \\( d \\) from the lens on the other sid",
       "question_type": "mcq",
       "has_diagram": false,
       "diagram_svg": null,
@@ -25625,19 +25625,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( v_0 \\cos \\theta \\) "
+          "text": "\\( v_0 \\cos \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2v_0 \\cos \\theta \\) "
+          "text": "\\( 2v_0 \\cos \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( 0.5v_0 \\cos \\theta \\) "
+          "text": "\\( 0.5v_0 \\cos \\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\sqrt{2} v_0 \\cos \\theta \\) "
+          "text": "\\( \\sqrt{2} v_0 \\cos \\theta \\)"
         }
       ],
       "correct_option": "B",
@@ -25657,19 +25657,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} \\) "
+          "text": "\\( \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1}{4\\pi\\epsilon_0} \\frac{qd}{(r^2 + (d/2)^2)^{3/2}} \\) "
+          "text": "\\( \\frac{1}{4\\pi\\epsilon_0} \\frac{qd}{(r^2 + (d/2)^2)^{3/2}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{4\\pi\\epsilon_0} \\frac{2q}{r^2 + (d/2)^2} \\) "
+          "text": "\\( \\frac{1}{4\\pi\\epsilon_0} \\frac{2q}{r^2 + (d/2)^2} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{1}{4\\pi\\epsilon_0} \\frac{qd}{r^3} \\) "
+          "text": "\\( \\frac{1}{4\\pi\\epsilon_0} \\frac{qd}{r^3} \\)"
         }
       ],
       "correct_option": "B",
@@ -25689,19 +25689,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2^{2/3} \\) "
+          "text": "\\( 2^{2/3} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2^{5/3} \\) "
+          "text": "\\( 2^{5/3} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2^{1/3} \\) "
+          "text": "\\( 2^{1/3} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 1.5 \\) "
+          "text": "\\( 1.5 \\)"
         }
       ],
       "correct_option": "A",
@@ -25721,19 +25721,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1.8 \\text{ eV} \\) "
+          "text": "\\( 1.8 \\text{ eV} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2.0 \\text{ eV} \\) "
+          "text": "\\( 2.0 \\text{ eV} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1.83 \\text{ eV} \\) "
+          "text": "\\( 1.83 \\text{ eV} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 4.13 \\text{ eV} \\) "
+          "text": "\\( 4.13 \\text{ eV} \\)"
         }
       ],
       "correct_option": "C",
@@ -25753,19 +25753,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( F = 2f \\), Converging "
+          "text": "\\( F = 2f \\), Converging"
         },
         {
           "id": "B",
-          "text": " \\( F = -2f \\), Diverging "
+          "text": "\\( F = -2f \\), Diverging"
         },
         {
           "id": "C",
-          "text": " \\( F = f/2 \\), Converging "
+          "text": "\\( F = f/2 \\), Converging"
         },
         {
           "id": "D",
-          "text": " \\( F = -f \\), Diverging "
+          "text": "\\( F = -f \\), Diverging"
         }
       ],
       "correct_option": "B",
@@ -25785,19 +25785,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( d = \\frac{kx_0^2}{2f_r} \\)"
+          "text": "\\( d = \\frac{kx_0^2}{2f_r} \\)"
         },
         {
           "id": "B",
-          "text": " \\( d = \\frac{kx_0}{2f_r} \\)"
+          "text": "\\( d = \\frac{kx_0}{2f_r} \\)"
         },
         {
           "id": "C",
-          "text": " \\( d = \\frac{kx_0^2}{f_r} \\)"
+          "text": "\\( d = \\frac{kx_0^2}{f_r} \\)"
         },
         {
           "id": "D",
-          "text": " \\( d = \\frac{1}{2}kx_0^2 f_r \\)"
+          "text": "\\( d = \\frac{1}{2}kx_0^2 f_r \\)"
         }
       ],
       "correct_option": "A",
@@ -25817,19 +25817,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( I = \\frac{Bv}{R} \\)"
+          "text": "\\( I = \\frac{Bv}{R} \\)"
         },
         {
           "id": "B",
-          "text": " \\( I = \\frac{Bav}{R} \\)"
+          "text": "\\( I = \\frac{Bav}{R} \\)"
         },
         {
           "id": "C",
-          "text": " \\( I = \\frac{Ba^2v}{R} \\)"
+          "text": "\\( I = \\frac{Ba^2v}{R} \\)"
         },
         {
           "id": "D",
-          "text": " \\( I = \\frac{Bv}{aR} \\)"
+          "text": "\\( I = \\frac{Bv}{aR} \\)"
         }
       ],
       "correct_option": "B",
@@ -25881,19 +25881,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1/2 \\)"
+          "text": "\\( 1/2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1/4 \\)"
+          "text": "\\( 1/4 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1 \\)"
+          "text": "\\( 1 \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2 \\)"
+          "text": "\\( 2 \\)"
         }
       ],
       "correct_option": "A",
@@ -25913,19 +25913,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( f_{\\text{avg}} = f_1 - \\frac{f_b}{2} \\)"
+          "text": "\\( f_{\\text{avg}} = f_1 - \\frac{f_b}{2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( f_{\\text{avg}} = f_1 + \\frac{f_b}{2} \\)"
+          "text": "\\( f_{\\text{avg}} = f_1 + \\frac{f_b}{2} \\)"
         },
         {
           "id": "C",
-          "text": " \\( f_{\\text{avg}} = f_1 - f_b \\)"
+          "text": "\\( f_{\\text{avg}} = f_1 - f_b \\)"
         },
         {
           "id": "D",
-          "text": " \\( f_{\\text{avg}} = \\frac{f_1 + f_b}{2} \\)"
+          "text": "\\( f_{\\text{avg}} = \\frac{f_1 + f_b}{2} \\)"
         }
       ],
       "correct_option": "A",
@@ -26905,19 +26905,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( kA\\) "
+          "text": "\\( kA\\)"
         },
         {
           "id": "B",
-          "text": " \\( k^2 A\\) "
+          "text": "\\( k^2 A\\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{A}{k} \\) "
+          "text": "\\( \\frac{A}{k} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{1}{2} kA \\) "
+          "text": "\\( \\frac{1}{2} kA \\)"
         }
       ],
       "correct_option": "A",
@@ -26937,19 +26937,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\mu_0 I a v}{2\\pi} \\ln(\\frac{d+a}{d}) \\) "
+          "text": "\\( \\frac{\\mu_0 I a v}{2\\pi} \\ln(\\frac{d+a}{d}) \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\mu_0 I v}{2\\pi} \\ln(\\frac{d+a}{d}) \\) "
+          "text": "\\( \\frac{\\mu_0 I v}{2\\pi} \\ln(\\frac{d+a}{d}) \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\mu_0 I a^2 v}{2\\pi d} \\) "
+          "text": "\\( \\frac{\\mu_0 I a^2 v}{2\\pi d} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{\\mu_0 I v}{2\\pi a} \\ln(\\frac{d+a}{d}) \\) "
+          "text": "\\( \\frac{\\mu_0 I v}{2\\pi a} \\ln(\\frac{d+a}{d}) \\)"
         }
       ],
       "correct_option": "A",
@@ -26969,19 +26969,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\ln(\\lambda_X / \\lambda_Y)}{\\lambda_X - \\lambda_Y} \\) "
+          "text": "\\( \\frac{\\ln(\\lambda_X / \\lambda_Y)}{\\lambda_X - \\lambda_Y} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\ln(\\lambda_Y / \\lambda_X)}{\\lambda_Y - \\lambda_X} \\) "
+          "text": "\\( \\frac{\\ln(\\lambda_Y / \\lambda_X)}{\\lambda_Y - \\lambda_X} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{\\lambda_X + \\lambda_Y} \\) "
+          "text": "\\( \\frac{1}{\\lambda_X + \\lambda_Y} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{\\lambda_X \\lambda_Y}{\\lambda_X - \\lambda_Y} \\) "
+          "text": "\\( \\frac{\\lambda_X \\lambda_Y}{\\lambda_X - \\lambda_Y} \\)"
         }
       ],
       "correct_option": "B",
@@ -27001,19 +27001,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{1}{2} P_0 V_0 \\) "
+          "text": "\\( \\frac{1}{2} P_0 V_0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{3}{4} P_0 V_0 \\) "
+          "text": "\\( \\frac{3}{4} P_0 V_0 \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{4} P_0 V_0 \\) "
+          "text": "\\( \\frac{1}{4} P_0 V_0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( P_0 V_0 \\) "
+          "text": "\\( P_0 V_0 \\)"
         }
       ],
       "correct_option": "C",
@@ -27033,19 +27033,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{2d}{2d-R} \\) "
+          "text": "\\( \\frac{2d}{2d-R} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{2d}{R} \\) "
+          "text": "\\( \\frac{2d}{R} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{d}{2d-R} \\) "
+          "text": "\\( \\frac{d}{2d-R} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{2d}{2d+R} \\) "
+          "text": "\\( \\frac{2d}{2d+R} \\)"
         }
       ],
       "correct_option": "A",
@@ -27545,19 +27545,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\mu_s mg / 2 \\) "
+          "text": "\\( \\mu_s mg / 2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\mu_s mg \\) "
+          "text": "\\( \\mu_s mg \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2\\mu_s mg \\) "
+          "text": "\\( 2\\mu_s mg \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\mu_s mg / \\sin(\\omega t) \\) "
+          "text": "\\( \\mu_s mg / \\sin(\\omega t) \\)"
         }
       ],
       "correct_option": "B",
@@ -27577,19 +27577,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{qB}{mv} \\) "
+          "text": "\\( \\frac{qB}{mv} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{mv}{qB} \\) "
+          "text": "\\( \\frac{mv}{qB} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{mB}{qv} \\) "
+          "text": "\\( \\frac{mB}{qv} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{qB}{mv^2} \\) "
+          "text": "\\( \\frac{qB}{mv^2} \\)"
         }
       ],
       "correct_option": "B",
@@ -27609,19 +27609,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2V_0 \\) "
+          "text": "\\( 2V_0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( V_0 + \\frac{h\nu}{e} \\) "
+          "text": "\\( V_0 + \\frac{h\nu}{e} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2V_0 + \\frac{\\Phi}{e} \\) "
+          "text": "\\( 2V_0 + \\frac{\\Phi}{e} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{h\nu}{e} \\) "
+          "text": "\\( \\frac{h\nu}{e} \\)"
         }
       ],
       "correct_option": "B",
@@ -27641,19 +27641,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\alpha}{3} (V_2^3 - V_1^3) \\) "
+          "text": "\\( \\frac{\\alpha}{3} (V_2^3 - V_1^3) \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\alpha (V_2^2 - V_1^2) \\) "
+          "text": "\\( \\alpha (V_2^2 - V_1^2) \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\alpha}{2} (V_2^2 - V_1^2) \\) "
+          "text": "\\( \\frac{\\alpha}{2} (V_2^2 - V_1^2) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\alpha V_2^3 - \\alpha V_1^3 \\) "
+          "text": "\\( \\alpha V_2^3 - \\alpha V_1^3 \\)"
         }
       ],
       "correct_option": "A",
@@ -27673,19 +27673,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( t \\sin i \\left( 1 - \\frac{\\cos i}{n} \right) \\) "
+          "text": "\\( t \\sin i \\left( 1 - \\frac{\\cos i}{n} \right) \\)"
         },
         {
           "id": "B",
-          "text": " \\( t \tan i \\left( 1 - \\frac{\\cos i}{n} \right) \\) "
+          "text": "\\( t \tan i \\left( 1 - \\frac{\\cos i}{n} \right) \\)"
         },
         {
           "id": "C",
-          "text": " \\( t \\sin i \\left( 1 - \\frac{\\cos i}{\\sqrt{n^2 - \\sin^2 i}} \right) \\) "
+          "text": "\\( t \\sin i \\left( 1 - \\frac{\\cos i}{\\sqrt{n^2 - \\sin^2 i}} \right) \\)"
         },
         {
           "id": "D",
-          "text": " \\( t \\cos i \\left( 1 - \\frac{\\sin i}{n} \right) \\) "
+          "text": "\\( t \\cos i \\left( 1 - \\frac{\\sin i}{n} \right) \\)"
         }
       ],
       "correct_option": "C",
@@ -28185,19 +28185,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\pi R^2 B_0 \\alpha e^{-\\alpha t}}{r} \\) "
+          "text": "\\( \\frac{\\pi R^2 B_0 \\alpha e^{-\\alpha t}}{r} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\pi R^2 B_0 (1 - e^{-\\alpha t})}{r} \\) "
+          "text": "\\( \\frac{\\pi R^2 B_0 (1 - e^{-\\alpha t})}{r} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\pi R^2 B_0 \\alpha}{r} \\) "
+          "text": "\\( \\frac{\\pi R^2 B_0 \\alpha}{r} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{\\pi R^2 B_0 e^{-\\alpha t}}{r} \\) "
+          "text": "\\( \\frac{\\pi R^2 B_0 e^{-\\alpha t}}{r} \\)"
         }
       ],
       "correct_option": "A",
@@ -28217,19 +28217,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{L}{\\sqrt{M_1/M_2} + 1} \\) "
+          "text": "\\( \\frac{L}{\\sqrt{M_1/M_2} + 1} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{L}{M_1/M_2 + 1} \\) "
+          "text": "\\( \\frac{L}{M_1/M_2 + 1} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{L \\sqrt{M_2}}{\\sqrt{M_1} + \\sqrt{M_2}} \\) "
+          "text": "\\( \\frac{L \\sqrt{M_2}}{\\sqrt{M_1} + \\sqrt{M_2}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{L \\sqrt{M_1}}{\\sqrt{M_1} + \\sqrt{M_2}} \\) "
+          "text": "\\( \\frac{L \\sqrt{M_1}}{\\sqrt{M_1} + \\sqrt{M_2}} \\)"
         }
       ],
       "correct_option": "C",
@@ -28249,19 +28249,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( V_1 = 2V_0 \\) "
+          "text": "\\( V_1 = 2V_0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( V_1 = 2V_0 + \\frac{\\Phi}{e} \\) "
+          "text": "\\( V_1 = 2V_0 + \\frac{\\Phi}{e} \\)"
         },
         {
           "id": "C",
-          "text": " \\( V_1 = 2V_0 - \\frac{\\Phi}{e} \\) "
+          "text": "\\( V_1 = 2V_0 - \\frac{\\Phi}{e} \\)"
         },
         {
           "id": "D",
-          "text": " \\( V_1 = V_0 + \\frac{hc}{2e\\lambda} \\) "
+          "text": "\\( V_1 = V_0 + \\frac{hc}{2e\\lambda} \\)"
         }
       ],
       "correct_option": "B",
@@ -28281,19 +28281,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( a (\\frac{1}{V_1} - \\frac{1}{V_2}) \\) "
+          "text": "\\( a (\\frac{1}{V_1} - \\frac{1}{V_2}) \\)"
         },
         {
           "id": "B",
-          "text": " \\( a (\\frac{1}{V_2} - \\frac{1}{V_1}) \\) "
+          "text": "\\( a (\\frac{1}{V_2} - \\frac{1}{V_1}) \\)"
         },
         {
           "id": "C",
-          "text": " \\( a \\ln(\\frac{V_2}{V_1}) \\) "
+          "text": "\\( a \\ln(\\frac{V_2}{V_1}) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{a}{2} (\\frac{1}{V_1^2} - \\frac{1}{V_2^2}) \\) "
+          "text": "\\( \\frac{a}{2} (\\frac{1}{V_1^2} - \\frac{1}{V_2^2}) \\)"
         }
       ],
       "correct_option": "A",
@@ -28313,19 +28313,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\pi h^2 (n^2 - 1) \\) "
+          "text": "\\( \\pi h^2 (n^2 - 1) \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\pi h^2 (n^2 + 1) \\) "
+          "text": "\\( \\pi h^2 (n^2 + 1) \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\pi h^2 (1 - \\frac{1}{n^2}) \\) "
+          "text": "\\( \\pi h^2 (1 - \\frac{1}{n^2}) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\pi h^2 \\frac{1}{n^2} \\) "
+          "text": "\\( \\pi h^2 \\frac{1}{n^2} \\)"
         }
       ],
       "correct_option": "A",
@@ -28665,19 +28665,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{A}{2} \\)"
+          "text": "\\( \\frac{A}{2} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{A}{\\sqrt{2}} \\)"
+          "text": "\\( \\frac{A}{\\sqrt{2}} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{A}{2\\sqrt{2}} \\)"
+          "text": "\\( \\frac{A}{2\\sqrt{2}} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{A}{4} \\)"
+          "text": "\\( \\frac{A}{4} \\)"
         }
       ],
       "correct_option": "A",
@@ -28697,19 +28697,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( Bwv \\)"
+          "text": "\\( Bwv \\)"
         },
         {
           "id": "B",
-          "text": " \\( Bhv \\)"
+          "text": "\\( Bhv \\)"
         },
         {
           "id": "C",
-          "text": " \\( Bwhv \\)"
+          "text": "\\( Bwhv \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0 \\)"
+          "text": "\\( 0 \\)"
         }
       ],
       "correct_option": "A",
@@ -28761,19 +28761,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2494.2 \\text{ J} \\)"
+          "text": "\\( 2494.2 \\text{ J} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 4988.4 \\text{ J} \\)"
+          "text": "\\( 4988.4 \\text{ J} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1247.1 \\text{ J} \\)"
+          "text": "\\( 1247.1 \\text{ J} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 7482.6 \\text{ J} \\)"
+          "text": "\\( 7482.6 \\text{ J} \\)"
         }
       ],
       "correct_option": "B",
@@ -28793,19 +28793,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1.2 \\text{ m} \\)"
+          "text": "\\( 1.2 \\text{ m} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 1.6 \\text{ m} \\)"
+          "text": "\\( 1.6 \\text{ m} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 1.5 \\text{ m} \\)"
+          "text": "\\( 1.5 \\text{ m} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2.0 \\text{ m} \\)"
+          "text": "\\( 2.0 \\text{ m} \\)"
         }
       ],
       "correct_option": "B",
@@ -29169,7 +29169,7 @@
       "year": 2019,
       "topic": "Electricity and Magnetism",
       "subtopic": "Electric Fields",
-      "question_text": "In the diagram below, two point charges \\( q \\) and \\( -q \\) are fixed at positions \\( (0, a) \\) and \\( (0, -a) \\) respectively. A third charge \\( Q \\) is placed at \\( (x, 0) \\). If \\( x \\ll a \\), the net force on charge \\( Q \\) is approximately:",
+      "question_text": "In the diagram below, two point charges \\( q \\) and \\( -q \\) are fixed at positions \\( (0,",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><line x1='160' y1='40' x2='160' y2='160' stroke='black' stroke-width='2'/><circle cx='160' cy='60' r='5' fill='red'/><circle cx='160' cy='140' r='5' fill='blue'/><circle cx='180' cy='100' r='5' fill='green'/><text x='170' y='65'>+q</text><text x='170' y='145'>-q</text><text x='190' y='105'>Q</text><text x='155' y='95'>0</text><path d='M 160 100 L 200 100' stroke='black' marker-end='url(#arrow)'/><text x='210' y='105'>x</text></svg>",
@@ -30745,19 +30745,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( g \\sin \\theta \\) "
+          "text": "\\( g \\sin \\theta \\)"
         },
         {
           "id": "B",
-          "text": " \\( g \\cos \\theta \\) "
+          "text": "\\( g \\cos \\theta \\)"
         },
         {
           "id": "C",
-          "text": " \\( g \tan \\theta \\) "
+          "text": "\\( g \tan \\theta \\)"
         },
         {
           "id": "D",
-          "text": " \\( g \\cot \\theta \\) "
+          "text": "\\( g \\cot \\theta \\)"
         }
       ],
       "correct_option": "C",
@@ -30777,19 +30777,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{\\pi R^2 B_0 e^{-\\alpha t}}{R_0} \\) "
+          "text": "\\( \\frac{\\pi R^2 B_0 e^{-\\alpha t}}{R_0} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{\\pi R^2 B_0 \\alpha e^{-\\alpha t}}{R_0} \\) "
+          "text": "\\( \\frac{\\pi R^2 B_0 \\alpha e^{-\\alpha t}}{R_0} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{\\pi R^2 B_0 \\alpha e^{\\alpha t}}{R_0} \\) "
+          "text": "\\( \\frac{\\pi R^2 B_0 \\alpha e^{\\alpha t}}{R_0} \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{B_0 \\alpha e^{-\\alpha t}}{R_0} \\) "
+          "text": "\\( \\frac{B_0 \\alpha e^{-\\alpha t}}{R_0} \\)"
         }
       ],
       "correct_option": "B",
@@ -30809,19 +30809,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 2K_{max} \\) "
+          "text": "\\( 2K_{max} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2K_{max} + \\Phi_0 \\) "
+          "text": "\\( 2K_{max} + \\Phi_0 \\)"
         },
         {
           "id": "C",
-          "text": " \\( 2K_{max} - \\Phi_0 \\) "
+          "text": "\\( 2K_{max} - \\Phi_0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( K_{max} + \\Phi_0 \\) "
+          "text": "\\( K_{max} + \\Phi_0 \\)"
         }
       ],
       "correct_option": "B",
@@ -30841,19 +30841,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\frac{P_2 V_2 - P_1 V_1}{n} \\) "
+          "text": "\\( \\frac{P_2 V_2 - P_1 V_1}{n} \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{P_1 V_1 - P_2 V_2}{n-1} \\) "
+          "text": "\\( \\frac{P_1 V_1 - P_2 V_2}{n-1} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{P_2 V_2 - P_1 V_1}{n+1} \\) "
+          "text": "\\( \\frac{P_2 V_2 - P_1 V_1}{n+1} \\)"
         },
         {
           "id": "D",
-          "text": " \\( P_1 V_1 \\ln(V_2/V_1) \\) "
+          "text": "\\( P_1 V_1 \\ln(V_2/V_1) \\)"
         }
       ],
       "correct_option": "C",
@@ -30873,19 +30873,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 0 \\) "
+          "text": "\\( 0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( R(1 - \\frac{1}{n}) \\) "
+          "text": "\\( R(1 - \\frac{1}{n}) \\)"
         },
         {
           "id": "C",
-          "text": " \\( R(1 + \\frac{1}{n}) \\) "
+          "text": "\\( R(1 + \\frac{1}{n}) \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{R}{n} \\) "
+          "text": "\\( \\frac{R}{n} \\)"
         }
       ],
       "correct_option": "A",
@@ -31225,19 +31225,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( B \\omega L^2\\) "
+          "text": "\\( B \\omega L^2\\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1}{2} B \\omega L^2\\) "
+          "text": "\\( \\frac{1}{2} B \\omega L^2\\)"
         },
         {
           "id": "C",
-          "text": " \\( \\frac{1}{4} B \\omega L^2\\) "
+          "text": "\\( \\frac{1}{4} B \\omega L^2\\)"
         },
         {
           "id": "D",
-          "text": " \\( B \\omega L\\) "
+          "text": "\\( B \\omega L\\)"
         }
       ],
       "correct_option": "B",
@@ -31257,19 +31257,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\sqrt{\\frac{m}{k}} x_0 \\) "
+          "text": "\\( \\sqrt{\\frac{m}{k}} x_0 \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\frac{1}{2} \\sqrt{\\frac{k}{m}} x_0 \\) "
+          "text": "\\( \\frac{1}{2} \\sqrt{\\frac{k}{m}} x_0 \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\sqrt{\\frac{k}{m}} x_0 \\) "
+          "text": "\\( \\sqrt{\\frac{k}{m}} x_0 \\)"
         },
         {
           "id": "D",
-          "text": " \\( \\frac{k}{m} x_0 \\) "
+          "text": "\\( \\frac{k}{m} x_0 \\)"
         }
       ],
       "correct_option": "C",
@@ -31289,19 +31289,19 @@
       "options": [
         {
           "id": "A",
-          "text": " 2 "
+          "text": "2"
         },
         {
           "id": "B",
-          "text": " 4 "
+          "text": "4"
         },
         {
           "id": "C",
-          "text": " 8 "
+          "text": "8"
         },
         {
           "id": "D",
-          "text": " 16 "
+          "text": "16"
         }
       ],
       "correct_option": "B",
@@ -31321,19 +31321,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( 1.8 \\text{ eV} \\) "
+          "text": "\\( 1.8 \\text{ eV} \\)"
         },
         {
           "id": "B",
-          "text": " \\( 2.1 \\text{ eV} \\) "
+          "text": "\\( 2.1 \\text{ eV} \\)"
         },
         {
           "id": "C",
-          "text": " \\( 4.1 \\text{ eV} \\) "
+          "text": "\\( 4.1 \\text{ eV} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 0.5 \\text{ eV} \\) "
+          "text": "\\( 0.5 \\text{ eV} \\)"
         }
       ],
       "correct_option": "A",
@@ -31353,19 +31353,19 @@
       "options": [
         {
           "id": "A",
-          "text": " \\( \\pi h^2 \\mu^2 \\) "
+          "text": "\\( \\pi h^2 \\mu^2 \\)"
         },
         {
           "id": "B",
-          "text": " \\( \\pi h^2 \\frac{\\mu^2}{\\mu^2-1} \\) "
+          "text": "\\( \\pi h^2 \\frac{\\mu^2}{\\mu^2-1} \\)"
         },
         {
           "id": "C",
-          "text": " \\( \\pi h^2 \\frac{1}{\\mu^2-1} \\) "
+          "text": "\\( \\pi h^2 \\frac{1}{\\mu^2-1} \\)"
         },
         {
           "id": "D",
-          "text": " \\( 2\\pi h^2 \\mu \\) "
+          "text": "\\( 2\\pi h^2 \\mu \\)"
         }
       ],
       "correct_option": "B",
@@ -31441,7 +31441,7 @@
       "year": 2022,
       "topic": "Mechanics",
       "subtopic": "Simple Harmonic Motion",
-      "question_text": "In the diagram below, a mass \\( m \\) is attached to a spring with constant \\( k \\) on a frictionless horizontal surface. The mass is displaced by \\( x_0 \\) and released. If the spring constant is increased to \\( 2k \\) and the displacement is increased to \\( 2x_0 \\), what is the ratio of the new maximum velocity to the original maximum velocity?",
+      "question_text": "In the diagram below, a mass \\( m \\) is attached to a spring with constant \\( k \\) on a frictionless horizontal surfac",
       "question_type": "mcq",
       "has_diagram": true,
       "diagram_svg": "<svg viewBox='0 0 320 200' xmlns='http://www.w3.org/2000/svg'><rect x='50' y='150' width='220' height='10' fill='gray' /><line x1='50' y1='150' x2='50' y2='120' stroke='black' stroke-width='2' /><path d='M 50 135 Q 70 120 90 135 T 130 135 T 170 135 T 210 135' fill='none' stroke='blue' stroke-width='2' /><rect x='210' y='125' width='30' height='20' fill='red' /><text x='215' y='138' fill='white' font-size='12'>m</text><text x='80' y='110' font-size='12'>k</text></svg>",

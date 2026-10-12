@@ -56,6 +56,7 @@ let CentralService = CentralService_1 = class CentralService {
         this.configService = configService;
         this.logger = new common_1.Logger(CentralService_1.name);
         this.jwksCache = null;
+        this.lastCentralFailure = 0;
     }
     get centralUrl() {
         return (this.configService.get('CENTRAL_API_URL') ||
@@ -100,17 +101,21 @@ let CentralService = CentralService_1 = class CentralService {
         }
     }
     async getBalance(userIdOrAurikrexId) {
+        if (Date.now() - this.lastCentralFailure < 30000) {
+            return null;
+        }
         try {
             const response = await axios_1.default.get(`${this.centralUrl}/api/v1/coins/balance?userId=${encodeURIComponent(userIdOrAurikrexId)}`, {
                 headers: {
                     'X-Central-Api-Key': this.s2sSecret,
                     'Content-Type': 'application/json',
                 },
-                timeout: 5000,
+                timeout: 2500,
             });
             return response.data;
         }
         catch (err) {
+            this.lastCentralFailure = Date.now();
             this.logger.warn(`Failed to fetch AuriCoin balance for user ${userIdOrAurikrexId}: ${err?.message}`);
             return null;
         }

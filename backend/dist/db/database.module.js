@@ -64,7 +64,13 @@ exports.DatabaseModule = DatabaseModule = __decorate([
                     if (!url) {
                         throw new Error('DATABASE_URL must be defined');
                     }
-                    const client = (0, postgres_1.default)(url, { ssl: 'require', max: 10 });
+                    const client = (0, postgres_1.default)(url, {
+                        ssl: 'require',
+                        max: 10,
+                        idle_timeout: 30,
+                        connect_timeout: 10,
+                        onnotice: () => { },
+                    });
                     try {
                         await client `ALTER TABLE users ADD COLUMN IF NOT EXISTS aurikrex_id text UNIQUE;`;
                         await client `ALTER TABLE users ADD COLUMN IF NOT EXISTS auri_coins_balance integer DEFAULT 5000;`;
