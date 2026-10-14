@@ -16,6 +16,7 @@ import {
   sanitizeExplanation,
   isIncompleteQuestion,
 } from './utils/question-sanitizer';
+import { ClefDecisionService } from '../ai/clef-decision.service';
 
 export type GenerationSourceType =
   | 'new_text'
@@ -214,6 +215,7 @@ export class AiQuestionGeneratorService {
 
   constructor(
     @Inject(DRIZZLE) private readonly db: PostgresJsDatabase<typeof schema>,
+    private readonly clefDecisionService: ClefDecisionService,
   ) {}
 
   public isNonTechnicalSubject(subject: string): boolean {
@@ -791,13 +793,35 @@ Respond ONLY with the raw JSON array.`;
         continue;
       }
 
-      if (isIncompleteQuestion(q.question_text)) {
-        this.logger.warn(`Discarded incomplete/truncated question stem for ${subject}: "${String(q.question_text).substring(0, 60)}..."`);
+      let sanitizedStem = sanitizeQuestionText(q.question_text);
+      if (!sanitizedStem || sanitizedStem.length < 10) {
         continue;
       }
 
-      const sanitizedStem = sanitizeQuestionText(q.question_text);
-      if (!sanitizedStem || sanitizedStem.length < 10) {
+      // Feature 3: Real-Time Auto-Healing Ingestion Gatekeeper using Clef
+      try {
+        const audit = await this.clefDecisionService.auditQuestion({
+          questionText: sanitizedStem,
+          options: q.options.map((o: any) => typeof o === 'string' ? o : o.text || ''),
+          subject,
+        });
+
+        if (audit.flaggedForReview) {
+          this.logger.warn(`Clef detected flaw in generated question for ${subject} (${audit.reasons.join(', ')}). Auto-healing instead of discarding...`);
+          const healed = await this.clefDecisionService.healQuestion({
+            questionText: sanitizedStem,
+            options: q.options.map((o: any) => typeof o === 'string' ? o : o.text || ''),
+            flaw: audit.reasons.join(', '),
+          });
+          sanitizedStem = healed.healedText;
+          this.logger.log(`Question auto-healed successfully for ${subject}. Final leak score: ${(healed.finalScore * 100).toFixed(1)}%`);
+        }
+      } catch (err: any) {
+        this.logger.warn(`Clef audit/heal fallback: ${err.message}`);
+      }
+
+      if (isIncompleteQuestion(sanitizedStem)) {
+        this.logger.warn(`Discarded unrecoverable question stem for ${subject}: "${sanitizedStem.substring(0, 60)}..."`);
         continue;
       }
 

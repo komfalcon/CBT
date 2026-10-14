@@ -5,6 +5,7 @@ import { QuestionsModule } from '../questions/questions.module';
 import { AiGeneratorTask } from './ai-generator.task';
 import { ExplanationCacheService } from './explanation-cache.service';
 import { AiKeyManagerService } from './ai-key-manager.service';
+import { ClefDecisionService } from './clef-decision.service';
 
 import { CoinsModule } from '../coins/coins.module';
 
@@ -14,7 +15,7 @@ import { CoinsModule } from '../coins/coins.module';
     CoinsModule,
   ],
   controllers: [AiController],
-  providers: [AiService, AiGeneratorTask, ExplanationCacheService, AiKeyManagerService],
-  exports: [AiService],
+  providers: [AiService, AiGeneratorTask, ExplanationCacheService, AiKeyManagerService, ClefDecisionService],
+  exports: [AiService, ClefDecisionService],
 })
 export class AiModule {}

@@ -4,11 +4,15 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { ExamService } from './exam.service';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { SaveAnswersDto } from './dto/save-answers.dto';
+import { ClefDecisionService } from '../ai/clef-decision.service';
 
 @Controller('exam')
 @UseGuards(JwtAuthGuard)
 export class ExamController {
-  constructor(private readonly examService: ExamService) { }
+  constructor(
+    private readonly examService: ExamService,
+    private readonly clefDecisionService: ClefDecisionService,
+  ) { }
 
   @Post('sessions')
   async createSession(
@@ -56,7 +60,66 @@ export class ExamController {
   }
 
   @Post('sessions/:sessionId/submit')
-  async submitSession(@CurrentUser() user: any, @Param('sessionId') sessionId: string) {
-    return this.examService.submitSession(sessionId, user.sub);
+  async submitSession(
+    @CurrentUser() user: any,
+    @Param('sessionId') sessionId: string,
+    @Body() body?: { reason?: 'time_expired' | 'tab_switch' | 'cheating_disqualification' | 'user_submitted' },
+  ) {
+    return this.examService.submitSession(sessionId, user.sub, body?.reason);
+  }
+
+  /**
+   * Feature 2: Visual AI Proctoring with Clef & Strike Enforcement
+   * Evaluates webcam frame snapshots for multiple people, cell phones, or looking away.
+   * Enforces 3-strike disqualification rule.
+   */
+  @Post('sessions/:sessionId/proctor')
+  async evaluateProctoring(
+    @CurrentUser() user: any,
+    @Param('sessionId') sessionId: string,
+    @Body() body: { image: string },
+  ) {
+    if (!body?.image) {
+      const strikes = await this.examService.getSessionStrikes(sessionId, user.sub);
+      return { violationFlagged: false, strikes, disqualified: false };
+    }
+    const result = await this.clefDecisionService.evaluateProctoringFrame(body.image);
+    if (result.violationFlagged) {
+      const strikeData = await this.examService.recordProctorViolation(sessionId, user.sub, result.reasons);
+      return {
+        ...result,
+        ...strikeData,
+      };
+    }
+    const strikes = await this.examService.getSessionStrikes(sessionId, user.sub);
+    return {
+      ...result,
+      strikes,
+      disqualified: false,
+    };
+  }
+
+  /**
+   * Feature 4: Adaptive Exam Routing with Clef
+   * Dynamically evaluates candidate performance metrics and recommends difficulty progression.
+   */
+  @Post('sessions/:sessionId/adaptive-evaluate')
+  async evaluateAdaptive(
+    @CurrentUser() _user: any,
+    @Param('sessionId') _sessionId: string,
+    @Body() body: {
+      recentAccuracyPercent: number;
+      avgTimeSeconds: number;
+      currentDifficulty: string;
+      unansweredStreak: number;
+    },
+  ) {
+    return this.clefDecisionService.evaluateAdaptiveRouting({
+      recentAccuracyPercent: body.recentAccuracyPercent ?? 50,
+      avgTimeSeconds: body.avgTimeSeconds ?? 45,
+      currentDifficulty: body.currentDifficulty ?? 'medium',
+      unansweredStreak: body.unansweredStreak ?? 0,
+    });
   }
 }
+

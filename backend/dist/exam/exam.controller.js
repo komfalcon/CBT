@@ -19,9 +19,11 @@ const current_user_decorator_1 = require("../auth/decorators/current-user.decora
 const exam_service_1 = require("./exam.service");
 const create_session_dto_1 = require("./dto/create-session.dto");
 const save_answers_dto_1 = require("./dto/save-answers.dto");
+const clef_decision_service_1 = require("../ai/clef-decision.service");
 let ExamController = class ExamController {
-    constructor(examService) {
+    constructor(examService, clefDecisionService) {
         this.examService = examService;
+        this.clefDecisionService = clefDecisionService;
     }
     async createSession(user, body) {
         const session = await this.examService.createSession(user.sub, body.type, body.subject, body.subjects, body.subjectConfigs, body.count, body.difficultyLevel, body.topics);
@@ -38,8 +40,36 @@ let ExamController = class ExamController {
         const session = await this.examService.saveAnswers(sessionId, user.sub, body.answers, body.timeRemaining);
         return this.examService.sanitizeSession(session);
     }
-    async submitSession(user, sessionId) {
-        return this.examService.submitSession(sessionId, user.sub);
+    async submitSession(user, sessionId, body) {
+        return this.examService.submitSession(sessionId, user.sub, body?.reason);
+    }
+    async evaluateProctoring(user, sessionId, body) {
+        if (!body?.image) {
+            const strikes = await this.examService.getSessionStrikes(sessionId, user.sub);
+            return { violationFlagged: false, strikes, disqualified: false };
+        }
+        const result = await this.clefDecisionService.evaluateProctoringFrame(body.image);
+        if (result.violationFlagged) {
+            const strikeData = await this.examService.recordProctorViolation(sessionId, user.sub, result.reasons);
+            return {
+                ...result,
+                ...strikeData,
+            };
+        }
+        const strikes = await this.examService.getSessionStrikes(sessionId, user.sub);
+        return {
+            ...result,
+            strikes,
+            disqualified: false,
+        };
+    }
+    async evaluateAdaptive(_user, _sessionId, body) {
+        return this.clefDecisionService.evaluateAdaptiveRouting({
+            recentAccuracyPercent: body.recentAccuracyPercent ?? 50,
+            avgTimeSeconds: body.avgTimeSeconds ?? 45,
+            currentDifficulty: body.currentDifficulty ?? 'medium',
+            unansweredStreak: body.unansweredStreak ?? 0,
+        });
     }
 };
 exports.ExamController = ExamController;
@@ -72,13 +102,33 @@ __decorate([
     (0, common_1.Post)('sessions/:sessionId/submit'),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Param)('sessionId')),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)
 ], ExamController.prototype, "submitSession", null);
+__decorate([
+    (0, common_1.Post)('sessions/:sessionId/proctor'),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Param)('sessionId')),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ExamController.prototype, "evaluateProctoring", null);
+__decorate([
+    (0, common_1.Post)('sessions/:sessionId/adaptive-evaluate'),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Param)('sessionId')),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ExamController.prototype, "evaluateAdaptive", null);
 exports.ExamController = ExamController = __decorate([
     (0, common_1.Controller)('exam'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __metadata("design:paramtypes", [exam_service_1.ExamService])
+    __metadata("design:paramtypes", [exam_service_1.ExamService,
+        clef_decision_service_1.ClefDecisionService])
 ], ExamController);
 //# sourceMappingURL=exam.controller.js.map

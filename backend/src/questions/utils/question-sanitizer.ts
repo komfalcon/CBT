@@ -35,10 +35,13 @@ export function sanitizeQuestionText(rawText: string | null | undefined): string
   // 1. Remove leaked Explanations / Solutions appended to stem
   text = text.replace(/(?:\r?\n|^|\s+)(?:\*\*|__|\*)?(?:Explanation|Solution|Answer Explanation|Detailed Solution)(?:\*\*|__|\*)?\s*:[\s\S]*$/i, '');
 
+  // 1b. Remove leaked Difficulty Level tags (e.g. "**Difficulty Level:** 2")
+  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__|\*)?Difficulty\s*Level\s*(?:\*\*|__|\*)?\s*:\s*\d+[\s\S]*$/i, '');
+
   // 2. Remove leaked Correct Option / Answer appended to stem
-  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__|\*|\()?Correct\s*(?:Option|Answer)\s*(?:is\s*)?[:\-]?\s*(?:Option\s*)?\(?[A-Ea-e]\)?(?:\s*[\.\,\;\)]?\s*)?$/i, '');
-  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__|\*|\()?Ans(?:wer)?\s*(?:is\s*)?[:\-]?\s*(?:Option\s*)?\(?[A-Ea-e]\)?(?:\s*[\.\,\;\)]?\s*)?$/i, '');
-  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__|\*|\()?Key\s*[:\-]\s*\(?[A-Ea-e]\)?(?:\s*[\.\,\;\)]?\s*)?$/i, '');
+  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__|\*|\()?Correct\s*(?:Option|Answer)\s*(?:is\s*)?[:\-]?\s*(?:Option\s*)?\(?[A-Ea-e]\)?(?:\s*[\.\,\;\)]?\s*)?[\s\r\n]*$/i, '');
+  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__|\*|\()?Ans(?:wer)?\s*(?:is\s*)?[:\-]?\s*(?:Option\s*)?\(?[A-Ea-e]\)?(?:\s*[\.\,\;\)]?\s*)?[\s\r\n]*$/i, '');
+  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__|\*|\()?Key\s*[:\-]\s*\(?[A-Ea-e]\)?(?:\s*[\.\,\;\)]?\s*)?[\s\r\n]*$/i, '');
   text = text.replace(/(?:[\s\(\[])(?:Correct\s*(?:Option|Answer)|Ans(?:wer)?|Key)\s*(?:is\s*)?[:\-]?\s*(?:Option\s*)?\(?[A-Ea-e]\)?(?:[\)\]\.\,])?(?=\s*$)/gi, '');
 
   // 3. Remove leaked Hints (e.g. "*(Hint: ...)*", "(Hint: ...)", "[Hint: ...]", "*Hint: ...*", "Hint: ...")
@@ -46,8 +49,9 @@ export function sanitizeQuestionText(rawText: string | null | undefined): string
   text = text.replace(/\s*\*Hints?\s*:[\s\S]*?\*\s*/gi, '');
   text = text.replace(/(?:\r?\n|^)\s*(?:\*\*|__|\*)?Hints?\s*:[\s\S]*?(?:\r?\n|$)/gi, '\n');
 
-  // 4. Remove leaked "Options:" list block (e.g. "Options:\nA) random\nB) planned\nC) impulsive\nD) hasty")
-  text = text.replace(/(?:\r?\n|\s+)(?:\*\*|__)?Options\s*:(?:\*\*|__)?\s*(?:\r?\n|\s+)(?:[•\-\*]\s*)?\(?[A-Ea-e][\.\)]\s*[\s\S]*$/i, '');
+  // 4. Remove leaked "Options:" or "The options are:" list block
+  text = text.replace(/(?:\r?\n|\s+)(?:The\s+)?(?:\*\*|__)?Options\s*(?:are\s*)?:(?:\*\*|__)?\s*(?:\r?\n|\s+)(?:[•\-\*]\s*)?\(?[A-Ea-e][\.\)]\s*[\s\S]*$/i, '');
+  text = text.replace(/(?:\r?\n|\s+)(?:The\s+)?(?:\*\*|__)?Options\s*(?:are\s*)?:(?:\*\*|__)?[\s\S]*$/i, '');
 
   // 5. Remove bulleted or newline options list at the end of the stem (e.g. "• A. prolific\n• B. lazy\n• C. unproductive\n• D. diligent")
   text = text.replace(/(?:\r?\n|\s*)(?:(?:[•\-\*]\s*)?\(?[A-Ea-e][\.\)]\s+[^\n\r]+(?:\r?\n|\s*)){2,}$/g, '');
