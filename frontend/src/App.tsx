@@ -5,6 +5,7 @@ import { PwaInstallPrompt } from './components/PwaInstallPrompt';
 import { Sabilytics } from './components/Sabilytics';
 import UnderMaintenance from './pages/UnderMaintenance';
 import AuthPage from './features/auth/AuthPage';
+import RegisterPage from './pages/RegisterPage';
 import QuestionBankPage from './features/questions/QuestionBankPage';
 import ExamArenaLanding from './pages/ExamArenaLanding';
 import LandingPage from './pages/LandingPage';
@@ -34,6 +35,7 @@ const SecureAccess = React.lazy(() => import('./pages/admin/SecureAccess'));
 const routeMetadata: Record<string, { title: string; description: string }> = {
   '/': { title: 'Aurikrex Exam Arena — JAMB UTME Practice', description: 'Realistic JAMB UTME mocks, focused drills, explanations, and progress insights.' },
   '/arena': { title: 'Exam Arena — Aurikrex Exam Arena', description: 'Prepare with focused practice sessions and realistic exam simulations.' },
+  '/register': { title: 'Register — Aurikrex Exam Arena', description: 'Create your candidate profile for JAMB UTME practice.' },
   '/auth': { title: 'Sign in — Aurikrex Exam Arena', description: 'Sign in or create your Aurikrex Exam Arena candidate profile.' },
   '/help': { title: 'Help Center — Aurikrex Exam Arena', description: 'Find answers and support for your Aurikrex Exam Arena account and exams.' },
   '/contact': { title: 'Contact — Aurikrex Exam Arena', description: 'Contact the Aurikrex Exam Arena support team.' },
@@ -131,7 +133,8 @@ function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/arena" element={<ExamArenaLanding />} />
+          <Route path="/arena" element={<LandingPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
           <Route path="/exam-hub" element={<ProtectedRoute><ExamHub /></ProtectedRoute>} />
