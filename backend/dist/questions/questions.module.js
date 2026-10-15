@@ -19,6 +19,7 @@ const import_service_1 = require("./import/import.service");
 const import_processor_1 = require("./import/import.processor");
 const ai_question_generator_service_1 = require("./ai-question-generator.service");
 const pdf_scanner_service_1 = require("./pdf-scanner.service");
+const clef_decision_service_1 = require("../ai/clef-decision.service");
 let QuestionsModule = class QuestionsModule {
 };
 exports.QuestionsModule = QuestionsModule;
@@ -37,8 +38,9 @@ exports.QuestionsModule = QuestionsModule = __decorate([
             import_processor_1.ImportProcessor,
             ai_question_generator_service_1.AiQuestionGeneratorService,
             pdf_scanner_service_1.PdfScannerService,
+            clef_decision_service_1.ClefDecisionService,
         ],
-        exports: [questions_service_1.QuestionsService, search_service_1.SearchService, ai_question_generator_service_1.AiQuestionGeneratorService, pdf_scanner_service_1.PdfScannerService],
+        exports: [questions_service_1.QuestionsService, search_service_1.SearchService, ai_question_generator_service_1.AiQuestionGeneratorService, pdf_scanner_service_1.PdfScannerService, clef_decision_service_1.ClefDecisionService],
     })
 ], QuestionsModule);
 //# sourceMappingURL=questions.module.js.map

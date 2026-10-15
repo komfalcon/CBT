@@ -14,6 +14,7 @@ const questions_module_1 = require("../questions/questions.module");
 const ai_generator_task_1 = require("./ai-generator.task");
 const explanation_cache_service_1 = require("./explanation-cache.service");
 const ai_key_manager_service_1 = require("./ai-key-manager.service");
+const clef_decision_service_1 = require("./clef-decision.service");
 const coins_module_1 = require("../coins/coins.module");
 let AiModule = class AiModule {
 };
@@ -25,8 +26,8 @@ exports.AiModule = AiModule = __decorate([
             coins_module_1.CoinsModule,
         ],
         controllers: [ai_controller_1.AiController],
-        providers: [ai_service_1.AiService, ai_generator_task_1.AiGeneratorTask, explanation_cache_service_1.ExplanationCacheService, ai_key_manager_service_1.AiKeyManagerService],
-        exports: [ai_service_1.AiService],
+        providers: [ai_service_1.AiService, ai_generator_task_1.AiGeneratorTask, explanation_cache_service_1.ExplanationCacheService, ai_key_manager_service_1.AiKeyManagerService, clef_decision_service_1.ClefDecisionService],
+        exports: [ai_service_1.AiService, clef_decision_service_1.ClefDecisionService],
     })
 ], AiModule);
 //# sourceMappingURL=ai.module.js.map

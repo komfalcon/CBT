@@ -8,16 +8,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExamModule = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const exam_controller_1 = require("./exam.controller");
 const exam_service_1 = require("./exam.service");
+const clef_decision_service_1 = require("../ai/clef-decision.service");
 let ExamModule = class ExamModule {
 };
 exports.ExamModule = ExamModule;
 exports.ExamModule = ExamModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
+        imports: [
+            config_1.ConfigModule,
+        ],
         controllers: [exam_controller_1.ExamController],
-        providers: [exam_service_1.ExamService],
+        providers: [exam_service_1.ExamService, clef_decision_service_1.ClefDecisionService],
         exports: [exam_service_1.ExamService],
     })
 ], ExamModule);

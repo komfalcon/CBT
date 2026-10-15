@@ -92,7 +92,33 @@ export async function saveExamAnswers(
   return normalizeExamSession(data);
 }
 
-export async function submitExamSession(sessionId: string) {
-  const { data } = await examApi.post<any>(`/sessions/${sessionId}/submit`, {});
+export async function submitExamSession(
+  sessionId: string,
+  reason?: 'time_expired' | 'tab_switch' | 'cheating_disqualification' | 'user_submitted' | string,
+) {
+  const { data } = await examApi.post<any>(`/sessions/${sessionId}/submit`, { reason });
+  return data;
+}
+
+export type ProctorCheckResponse = {
+  violationFlagged: boolean;
+  strikes: number;
+  disqualified: boolean;
+  message?: string;
+  reasons?: string[];
+  violationType?: 'multiple_people' | 'cell_phone' | 'looking_away';
+  resultId?: string;
+  multiplePeopleProbability?: number;
+  cellPhoneProbability?: number;
+  lookingAwayProbability?: number;
+};
+
+export async function evaluateExamProctoring(
+  sessionId: string,
+  imageBase64: string,
+): Promise<ProctorCheckResponse> {
+  const { data } = await examApi.post<ProctorCheckResponse>(`/sessions/${sessionId}/proctor`, {
+    image: imageBase64,
+  });
   return data;
 }

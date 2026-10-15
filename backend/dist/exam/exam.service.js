@@ -145,7 +145,7 @@ let ExamService = class ExamService {
         if (!session) {
             throw new common_1.NotFoundException('Exam session not found.');
         }
-        if (session.status === 'completed') {
+        if (session.status !== 'active') {
             const [existingResult] = await this.db.select({ id: schema.exam_results.id })
                 .from(schema.exam_results)
                 .where((0, drizzle_orm_1.eq)(schema.exam_results.sessionId, session.id))
@@ -161,7 +161,7 @@ let ExamService = class ExamService {
         const startedAtTime = session.startedAt ? new Date(session.startedAt).getTime() : Date.now();
         const elapsedSeconds = Math.max(0, Math.floor((Date.now() - startedAtTime) / 1000));
         if (elapsedSeconds >= durationLimit || session.timeRemaining <= 0) {
-            const submitted = await this.submitSession(sessionId, userId);
+            const submitted = await this.submitSession(sessionId, userId, 'time_expired');
             return {
                 ...this.sanitizeSession(session),
                 status: 'completed',
@@ -182,16 +182,27 @@ let ExamService = class ExamService {
     }
     async saveAnswers(sessionId, userId, answers, timeRemaining) {
         const [session] = await this.db.select().from(schema.exam_sessions)
-            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema.exam_sessions.id, sessionId), (0, drizzle_orm_1.eq)(schema.exam_sessions.userId, userId), (0, drizzle_orm_1.eq)(schema.exam_sessions.status, 'active'))).limit(1);
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema.exam_sessions.id, sessionId), (0, drizzle_orm_1.eq)(schema.exam_sessions.userId, userId))).limit(1);
         if (!session) {
-            throw new common_1.NotFoundException('Active exam session not found.');
+            throw new common_1.NotFoundException('Exam session not found.');
+        }
+        if (session.status !== 'active') {
+            const [existingResult] = await this.db.select({ id: schema.exam_results.id })
+                .from(schema.exam_results)
+                .where((0, drizzle_orm_1.eq)(schema.exam_results.sessionId, session.id))
+                .limit(1);
+            return {
+                ...this.sanitizeSession(session),
+                resultId: existingResult?.id,
+                isExpired: true,
+            };
         }
         const sessionQuestions = session.questions || [];
         const durationLimit = session.type === 'mock' ? 7200 : sessionQuestions.length * 60;
         const startedAtTime = session.startedAt ? new Date(session.startedAt).getTime() : Date.now();
         const elapsedSeconds = Math.max(0, Math.floor((Date.now() - startedAtTime) / 1000));
         if (elapsedSeconds >= durationLimit) {
-            const submitted = await this.submitSession(sessionId, userId);
+            const submitted = await this.submitSession(sessionId, userId, 'time_expired');
             return {
                 ...session,
                 status: 'completed',
@@ -218,11 +229,22 @@ let ExamService = class ExamService {
         }).where((0, drizzle_orm_1.eq)(schema.exam_sessions.id, session.id)).returning();
         return updatedSession;
     }
-    async submitSession(sessionId, userId) {
+    async submitSession(sessionId, userId, terminationReason) {
         const [session] = await this.db.select().from(schema.exam_sessions)
-            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema.exam_sessions.id, sessionId), (0, drizzle_orm_1.eq)(schema.exam_sessions.userId, userId), (0, drizzle_orm_1.eq)(schema.exam_sessions.status, 'active'))).limit(1);
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema.exam_sessions.id, sessionId), (0, drizzle_orm_1.eq)(schema.exam_sessions.userId, userId))).limit(1);
         if (!session) {
-            throw new common_1.NotFoundException('Active exam session not found or already submitted.');
+            throw new common_1.NotFoundException('Exam session not found.');
+        }
+        if (session.status !== 'active') {
+            const [existingResult] = await this.db.select({ id: schema.exam_results.id })
+                .from(schema.exam_results)
+                .where((0, drizzle_orm_1.eq)(schema.exam_results.sessionId, session.id))
+                .limit(1);
+            return {
+                resultId: existingResult?.id,
+                id: existingResult?.id,
+                status: session.status,
+            };
         }
         const sessionQuestions = session.questions;
         const sessionSubjects = session.subjects;
@@ -230,6 +252,7 @@ let ExamService = class ExamService {
         const durationLimit = session.type === 'mock' ? 7200 : sessionQuestions.length * 60;
         const timeSpentSeconds = Math.max(0, durationLimit - session.timeRemaining);
         const subjectScoresList = [];
+        const isDisqualifiedCheating = terminationReason === 'cheating_disqualification';
         for (const sub of sessionSubjects) {
             const subQuestions = sessionQuestions.filter((q) => q.subject === sub);
             const totalInSub = subQuestions.length;
@@ -249,21 +272,36 @@ let ExamService = class ExamService {
                     incorrect += 1;
                 }
             }
-            const standardizedScore = totalInSub > 0 ? Math.round((correct / totalInSub) * 100) : 0;
+            const standardizedScore = isDisqualifiedCheating
+                ? 0
+                : totalInSub > 0
+                    ? Math.round((correct / totalInSub) * 100)
+                    : 0;
             subjectScoresList.push({
                 subject: sub,
                 score: standardizedScore,
-                correctCount: correct,
-                incorrectCount: incorrect,
-                unansweredCount: unanswered,
+                correctCount: isDisqualifiedCheating ? 0 : correct,
+                incorrectCount: isDisqualifiedCheating ? totalInSub : incorrect,
+                unansweredCount: isDisqualifiedCheating ? 0 : unanswered,
+                ...(isDisqualifiedCheating ? { disqualified: true, note: 'Disqualified for malpractice (3 strikes)' } : {}),
             });
         }
         let totalScore = 0;
-        if (session.type === 'mock') {
+        if (isDisqualifiedCheating) {
+            totalScore = 0;
+        }
+        else if (session.type === 'mock') {
             totalScore = subjectScoresList.reduce((acc, val) => acc + val.score, 0);
         }
         else {
             totalScore = subjectScoresList[0]?.score || 0;
+        }
+        let finalStatus = 'completed';
+        if (terminationReason === 'cheating_disqualification') {
+            finalStatus = 'terminated_cheating';
+        }
+        else if (terminationReason === 'tab_switch') {
+            finalStatus = 'terminated_tab_switch';
         }
         const [result] = await this.db.insert(schema.exam_results).values({
             id: (0, uuid_1.v4)(),
@@ -277,28 +315,86 @@ let ExamService = class ExamService {
             questionsSnapshot: sessionQuestions,
             completedAt: new Date(),
         }).returning();
+        const currentWarnings = Array.isArray(session.warnings) ? session.warnings : [];
+        if (terminationReason === 'cheating_disqualification') {
+            currentWarnings.push('Candidate disqualified: 3 proctoring strikes recorded for malpractice.');
+        }
+        else if (terminationReason === 'tab_switch') {
+            currentWarnings.push('Exam terminated immediately: Candidate switched away from the exam tab/window.');
+        }
         await this.db.update(schema.exam_sessions).set({
-            status: 'completed',
+            status: finalStatus,
+            warnings: currentWarnings,
             completedAt: new Date(),
             updatedAt: new Date()
         }).where((0, drizzle_orm_1.eq)(schema.exam_sessions.id, session.id));
-        const xpReward = session.type === 'mock' ? 150 : 35;
-        const [user] = await this.db.select().from(schema.users).where((0, drizzle_orm_1.eq)(schema.users.id, userId)).limit(1);
-        if (user) {
-            let currentXp = (user.xp_points || 0) + xpReward;
-            let currentLevel = user.level || 1;
-            let currentStreak = (user.streak_count || 0) + 1;
-            while (currentXp >= currentLevel * 400) {
-                currentLevel += 1;
+        if (finalStatus === 'completed') {
+            const xpReward = session.type === 'mock' ? 150 : 35;
+            const [user] = await this.db.select().from(schema.users).where((0, drizzle_orm_1.eq)(schema.users.id, userId)).limit(1);
+            if (user) {
+                let currentXp = (user.xp_points || 0) + xpReward;
+                let currentLevel = user.level || 1;
+                let currentStreak = (user.streak_count || 0) + 1;
+                while (currentXp >= currentLevel * 400) {
+                    currentLevel += 1;
+                }
+                await this.db.update(schema.users).set({
+                    xp_points: currentXp,
+                    level: currentLevel,
+                    streak_count: currentStreak,
+                    updatedAt: new Date()
+                }).where((0, drizzle_orm_1.eq)(schema.users.id, user.id));
             }
-            await this.db.update(schema.users).set({
-                xp_points: currentXp,
-                level: currentLevel,
-                streak_count: currentStreak,
-                updatedAt: new Date()
-            }).where((0, drizzle_orm_1.eq)(schema.users.id, user.id));
         }
-        return { ...result, resultId: result.id };
+        return { ...result, resultId: result.id, status: finalStatus };
+    }
+    async recordProctorViolation(sessionId, userId, reasons) {
+        const [session] = await this.db.select().from(schema.exam_sessions)
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema.exam_sessions.id, sessionId), (0, drizzle_orm_1.eq)(schema.exam_sessions.userId, userId))).limit(1);
+        if (!session) {
+            throw new common_1.NotFoundException('Exam session not found.');
+        }
+        const existingWarnings = Array.isArray(session.warnings) ? session.warnings : [];
+        const proctorStrikes = existingWarnings.filter((w) => typeof w === 'object' ? w.type === 'proctor_violation' : typeof w === 'string' && w.includes('Proctor Strike')).length;
+        const currentStrike = proctorStrikes + 1;
+        const strikeEntry = {
+            type: 'proctor_violation',
+            strike: currentStrike,
+            reasons,
+            timestamp: new Date().toISOString(),
+        };
+        const updatedWarnings = [...existingWarnings, strikeEntry];
+        if (currentStrike >= 3) {
+            await this.db.update(schema.exam_sessions).set({
+                warnings: updatedWarnings,
+                updatedAt: new Date(),
+            }).where((0, drizzle_orm_1.eq)(schema.exam_sessions.id, sessionId));
+            const submitted = await this.submitSession(sessionId, userId, 'cheating_disqualification');
+            return {
+                strikes: 3,
+                disqualified: true,
+                message: 'Disqualified: You have received 3 proctoring strikes for suspected malpractice. Your exam has ended and failed.',
+                resultId: submitted.resultId || submitted.id,
+            };
+        }
+        await this.db.update(schema.exam_sessions).set({
+            warnings: updatedWarnings,
+            updatedAt: new Date(),
+        }).where((0, drizzle_orm_1.eq)(schema.exam_sessions.id, sessionId));
+        return {
+            strikes: currentStrike,
+            disqualified: false,
+            message: currentStrike === 1
+                ? `Warning 1 of 3: Suspicious activity detected (${reasons.join(', ')}). Please face your screen alone with no unauthorized devices.`
+                : `FINAL WARNING (Strike 2 of 3): Suspicious activity detected (${reasons.join(', ')}). One more violation will immediately fail and terminate your exam!`,
+        };
+    }
+    async getSessionStrikes(sessionId, userId) {
+        const [session] = await this.db.select().from(schema.exam_sessions)
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema.exam_sessions.id, sessionId), (0, drizzle_orm_1.eq)(schema.exam_sessions.userId, userId))).limit(1);
+        if (!session || !Array.isArray(session.warnings))
+            return 0;
+        return session.warnings.filter((w) => typeof w === 'object' ? w.type === 'proctor_violation' : typeof w === 'string' && w.includes('Proctor Strike')).length;
     }
     sanitizeSession(session) {
         const plain = { ...session };

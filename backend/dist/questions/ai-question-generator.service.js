@@ -59,6 +59,7 @@ const uuid_1 = require("uuid");
 const axios_1 = __importDefault(require("axios"));
 const question_types_1 = require("./types/question.types");
 const question_sanitizer_1 = require("./utils/question-sanitizer");
+const clef_decision_service_1 = require("../ai/clef-decision.service");
 exports.SUBJECT_SYLLABUS_MAP = {
     mathematics: [
         'Algebra & Quadratic Equations',
@@ -207,8 +208,9 @@ exports.SUBJECT_SYLLABUS_MAP = {
     ],
 };
 let AiQuestionGeneratorService = AiQuestionGeneratorService_1 = class AiQuestionGeneratorService {
-    constructor(db) {
+    constructor(db, clefDecisionService) {
         this.db = db;
+        this.clefDecisionService = clefDecisionService;
         this.logger = new common_1.Logger(AiQuestionGeneratorService_1.name);
         this.nvidiaKey = process.env.NVIDIA_API_KEY || '';
         this.mistralKeys = [
@@ -722,12 +724,32 @@ Respond ONLY with the raw JSON array.`;
             if (!q.question_text || !q.options || !Array.isArray(q.options) || q.options.length < 2) {
                 continue;
             }
-            if ((0, question_sanitizer_1.isIncompleteQuestion)(q.question_text)) {
-                this.logger.warn(`Discarded incomplete/truncated question stem for ${subject}: "${String(q.question_text).substring(0, 60)}..."`);
+            let sanitizedStem = (0, question_sanitizer_1.sanitizeQuestionText)(q.question_text);
+            if (!sanitizedStem || sanitizedStem.length < 10) {
                 continue;
             }
-            const sanitizedStem = (0, question_sanitizer_1.sanitizeQuestionText)(q.question_text);
-            if (!sanitizedStem || sanitizedStem.length < 10) {
+            try {
+                const audit = await this.clefDecisionService.auditQuestion({
+                    questionText: sanitizedStem,
+                    options: q.options.map((o) => typeof o === 'string' ? o : o.text || ''),
+                    subject,
+                });
+                if (audit.flaggedForReview) {
+                    this.logger.warn(`Clef detected flaw in generated question for ${subject} (${audit.reasons.join(', ')}). Auto-healing instead of discarding...`);
+                    const healed = await this.clefDecisionService.healQuestion({
+                        questionText: sanitizedStem,
+                        options: q.options.map((o) => typeof o === 'string' ? o : o.text || ''),
+                        flaw: audit.reasons.join(', '),
+                    });
+                    sanitizedStem = healed.healedText;
+                    this.logger.log(`Question auto-healed successfully for ${subject}. Final leak score: ${(healed.finalScore * 100).toFixed(1)}%`);
+                }
+            }
+            catch (err) {
+                this.logger.warn(`Clef audit/heal fallback: ${err.message}`);
+            }
+            if ((0, question_sanitizer_1.isIncompleteQuestion)(sanitizedStem)) {
+                this.logger.warn(`Discarded unrecoverable question stem for ${subject}: "${sanitizedStem.substring(0, 60)}..."`);
                 continue;
             }
             const formattedOptions = q.options.map((opt, idx) => {
@@ -835,6 +857,7 @@ exports.AiQuestionGeneratorService = AiQuestionGeneratorService;
 exports.AiQuestionGeneratorService = AiQuestionGeneratorService = AiQuestionGeneratorService_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(database_module_1.DRIZZLE)),
-    __metadata("design:paramtypes", [postgres_js_1.PostgresJsDatabase])
+    __metadata("design:paramtypes", [postgres_js_1.PostgresJsDatabase,
+        clef_decision_service_1.ClefDecisionService])
 ], AiQuestionGeneratorService);
 //# sourceMappingURL=ai-question-generator.service.js.map

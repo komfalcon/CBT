@@ -141,7 +141,7 @@ export class ExamService {
       throw new NotFoundException('Exam session not found.');
     }
 
-    if (session.status === 'completed') {
+    if (session.status !== 'active') {
       const [existingResult] = await this.db.select({ id: schema.exam_results.id })
         .from(schema.exam_results)
         .where(eq(schema.exam_results.sessionId, session.id))
@@ -160,7 +160,7 @@ export class ExamService {
 
     // If time exceeded duration limit or already elapsed, auto-submit and complete session
     if (elapsedSeconds >= durationLimit || session.timeRemaining <= 0) {
-      const submitted = await this.submitSession(sessionId, userId);
+      const submitted = await this.submitSession(sessionId, userId, 'time_expired');
       return {
         ...this.sanitizeSession(session),
         status: 'completed',
@@ -193,11 +193,22 @@ export class ExamService {
       .where(and(
         eq(schema.exam_sessions.id, sessionId), 
         eq(schema.exam_sessions.userId, userId),
-        eq(schema.exam_sessions.status, 'active')
       )).limit(1);
       
     if (!session) {
-      throw new NotFoundException('Active exam session not found.');
+      throw new NotFoundException('Exam session not found.');
+    }
+
+    if (session.status !== 'active') {
+      const [existingResult] = await this.db.select({ id: schema.exam_results.id })
+        .from(schema.exam_results)
+        .where(eq(schema.exam_results.sessionId, session.id))
+        .limit(1);
+      return {
+        ...this.sanitizeSession(session),
+        resultId: existingResult?.id,
+        isExpired: true,
+      };
     }
 
     const sessionQuestions = (session.questions as any[]) || [];
@@ -207,7 +218,7 @@ export class ExamService {
 
     // If user attempted to save answers after time has fully elapsed, auto-submit immediately
     if (elapsedSeconds >= durationLimit) {
-      const submitted = await this.submitSession(sessionId, userId);
+      const submitted = await this.submitSession(sessionId, userId, 'time_expired');
       return {
         ...session,
         status: 'completed',
@@ -241,16 +252,31 @@ export class ExamService {
     return updatedSession;
   }
 
-  async submitSession(sessionId: string, userId: string): Promise<any> {
+  async submitSession(
+    sessionId: string,
+    userId: string,
+    terminationReason?: 'time_expired' | 'tab_switch' | 'cheating_disqualification' | 'user_submitted'
+  ): Promise<any> {
     const [session] = await this.db.select().from(schema.exam_sessions)
       .where(and(
         eq(schema.exam_sessions.id, sessionId), 
         eq(schema.exam_sessions.userId, userId),
-        eq(schema.exam_sessions.status, 'active')
       )).limit(1);
       
     if (!session) {
-      throw new NotFoundException('Active exam session not found or already submitted.');
+      throw new NotFoundException('Exam session not found.');
+    }
+
+    if (session.status !== 'active') {
+      const [existingResult] = await this.db.select({ id: schema.exam_results.id })
+        .from(schema.exam_results)
+        .where(eq(schema.exam_results.sessionId, session.id))
+        .limit(1);
+      return {
+        resultId: existingResult?.id,
+        id: existingResult?.id,
+        status: session.status,
+      };
     }
     
     const sessionQuestions = session.questions as any[];
@@ -266,7 +292,11 @@ export class ExamService {
       correctCount: number;
       incorrectCount: number;
       unansweredCount: number;
+      disqualified?: boolean;
+      note?: string;
     }> = [];
+
+    const isDisqualifiedCheating = terminationReason === 'cheating_disqualification';
 
     // Calculate score per subject
     for (const sub of sessionSubjects) {
@@ -290,25 +320,41 @@ export class ExamService {
       }
 
       // JAMB standard mock score is standardized out of 100 points
-      const standardizedScore = totalInSub > 0 ? Math.round((correct / totalInSub) * 100) : 0;
+      // If disqualified for cheating, score is 0
+      const standardizedScore = isDisqualifiedCheating
+        ? 0
+        : totalInSub > 0
+        ? Math.round((correct / totalInSub) * 100)
+        : 0;
 
       subjectScoresList.push({
         subject: sub,
         score: standardizedScore,
-        correctCount: correct,
-        incorrectCount: incorrect,
-        unansweredCount: unanswered,
+        correctCount: isDisqualifiedCheating ? 0 : correct,
+        incorrectCount: isDisqualifiedCheating ? totalInSub : incorrect,
+        unansweredCount: isDisqualifiedCheating ? 0 : unanswered,
+        ...(isDisqualifiedCheating ? { disqualified: true, note: 'Disqualified for malpractice (3 strikes)' } : {}),
       });
     }
 
     // Overall Score
     let totalScore = 0;
-    if (session.type === 'mock') {
+    if (isDisqualifiedCheating) {
+      totalScore = 0; // Immediate failure
+    } else if (session.type === 'mock') {
       // Mock score is sum of standardized subject scores (0 - 400 scale)
       totalScore = subjectScoresList.reduce((acc, val) => acc + val.score, 0);
     } else {
       // Drill score is out of 100
       totalScore = subjectScoresList[0]?.score || 0;
+    }
+
+    // Determine final session status
+    let finalStatus = 'completed';
+    if (terminationReason === 'cheating_disqualification') {
+      finalStatus = 'terminated_cheating';
+    } else if (terminationReason === 'tab_switch') {
+      finalStatus = 'terminated_tab_switch';
     }
 
     // Create Result Snapshot
@@ -326,35 +372,125 @@ export class ExamService {
     }).returning();
 
     // Close session
+    const currentWarnings = Array.isArray(session.warnings) ? (session.warnings as any[]) : [];
+    if (terminationReason === 'cheating_disqualification') {
+      currentWarnings.push('Candidate disqualified: 3 proctoring strikes recorded for malpractice.');
+    } else if (terminationReason === 'tab_switch') {
+      currentWarnings.push('Exam terminated immediately: Candidate switched away from the exam tab/window.');
+    }
+
     await this.db.update(schema.exam_sessions).set({
-      status: 'completed',
+      status: finalStatus,
+      warnings: currentWarnings,
       completedAt: new Date(),
       updatedAt: new Date()
     }).where(eq(schema.exam_sessions.id, session.id));
 
-    // Award progression points to Candidate
-    const xpReward = session.type === 'mock' ? 150 : 35;
-    const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
-    
-    if (user) {
-      let currentXp = (user.xp_points || 0) + xpReward;
-      let currentLevel = user.level || 1;
-      let currentStreak = (user.streak_count || 0) + 1;
-
-      // Simple levelling formula
-      while (currentXp >= currentLevel * 400) {
-        currentLevel += 1;
-      }
+    // Award progression points to Candidate (Zero XP for cheating or tab switch termination)
+    if (finalStatus === 'completed') {
+      const xpReward = session.type === 'mock' ? 150 : 35;
+      const [user] = await this.db.select().from(schema.users).where(eq(schema.users.id, userId)).limit(1);
       
-      await this.db.update(schema.users).set({
-        xp_points: currentXp,
-        level: currentLevel,
-        streak_count: currentStreak,
-        updatedAt: new Date()
-      }).where(eq(schema.users.id, user.id));
+      if (user) {
+        let currentXp = (user.xp_points || 0) + xpReward;
+        let currentLevel = user.level || 1;
+        let currentStreak = (user.streak_count || 0) + 1;
+
+        // Simple levelling formula
+        while (currentXp >= currentLevel * 400) {
+          currentLevel += 1;
+        }
+        
+        await this.db.update(schema.users).set({
+          xp_points: currentXp,
+          level: currentLevel,
+          streak_count: currentStreak,
+          updatedAt: new Date()
+        }).where(eq(schema.users.id, user.id));
+      }
     }
 
-    return { ...result, resultId: result.id };
+    return { ...result, resultId: result.id, status: finalStatus };
+  }
+
+  /**
+   * Feature 2: Proctor Violation & Strike Tracking
+   * Strike 1: Warning 1
+   * Strike 2: Final Warning 2
+   * Strike 3: Automatic Immediate Disqualification & Failure
+   */
+  async recordProctorViolation(
+    sessionId: string,
+    userId: string,
+    reasons: string[]
+  ): Promise<{ strikes: number; disqualified: boolean; message: string; resultId?: string }> {
+    const [session] = await this.db.select().from(schema.exam_sessions)
+      .where(and(
+        eq(schema.exam_sessions.id, sessionId),
+        eq(schema.exam_sessions.userId, userId),
+      )).limit(1);
+
+    if (!session) {
+      throw new NotFoundException('Exam session not found.');
+    }
+
+    const existingWarnings = Array.isArray(session.warnings) ? (session.warnings as any[]) : [];
+    const proctorStrikes = existingWarnings.filter((w: any) =>
+      typeof w === 'object' ? w.type === 'proctor_violation' : typeof w === 'string' && w.includes('Proctor Strike')
+    ).length;
+
+    const currentStrike = proctorStrikes + 1;
+    const strikeEntry = {
+      type: 'proctor_violation',
+      strike: currentStrike,
+      reasons,
+      timestamp: new Date().toISOString(),
+    };
+
+    const updatedWarnings = [...existingWarnings, strikeEntry];
+
+    if (currentStrike >= 3) {
+      // 3 strikes: Disqualify and fail exam immediately!
+      await this.db.update(schema.exam_sessions).set({
+        warnings: updatedWarnings,
+        updatedAt: new Date(),
+      }).where(eq(schema.exam_sessions.id, sessionId));
+
+      const submitted = await this.submitSession(sessionId, userId, 'cheating_disqualification');
+      return {
+        strikes: 3,
+        disqualified: true,
+        message: 'Disqualified: You have received 3 proctoring strikes for suspected malpractice. Your exam has ended and failed.',
+        resultId: submitted.resultId || submitted.id,
+      };
+    }
+
+    // 1 or 2 strikes: Record warning
+    await this.db.update(schema.exam_sessions).set({
+      warnings: updatedWarnings,
+      updatedAt: new Date(),
+    }).where(eq(schema.exam_sessions.id, sessionId));
+
+    return {
+      strikes: currentStrike,
+      disqualified: false,
+      message: currentStrike === 1
+        ? `Warning 1 of 3: Suspicious activity detected (${reasons.join(', ')}). Please face your screen alone with no unauthorized devices.`
+        : `FINAL WARNING (Strike 2 of 3): Suspicious activity detected (${reasons.join(', ')}). One more violation will immediately fail and terminate your exam!`,
+    };
+  }
+
+  async getSessionStrikes(sessionId: string, userId: string): Promise<number> {
+    const [session] = await this.db.select().from(schema.exam_sessions)
+      .where(and(
+        eq(schema.exam_sessions.id, sessionId),
+        eq(schema.exam_sessions.userId, userId),
+      )).limit(1);
+
+    if (!session || !Array.isArray(session.warnings)) return 0;
+    return (session.warnings as any[]).filter((w: any) =>
+      typeof w === 'object' ? w.type === 'proctor_violation' : typeof w === 'string' && w.includes('Proctor Strike')
+    ).length;
   }
 
   sanitizeSession(session: any) {

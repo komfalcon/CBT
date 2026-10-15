@@ -11,6 +11,7 @@ import { ImportProcessor } from './import/import.processor';
 
 import { AiQuestionGeneratorService } from './ai-question-generator.service';
 import { PdfScannerService } from './pdf-scanner.service';
+import { ClefDecisionService } from '../ai/clef-decision.service';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { PdfScannerService } from './pdf-scanner.service';
     ImportProcessor,
     AiQuestionGeneratorService,
     PdfScannerService,
+    ClefDecisionService,
   ],
-  exports: [QuestionsService, SearchService, AiQuestionGeneratorService, PdfScannerService],
+  exports: [QuestionsService, SearchService, AiQuestionGeneratorService, PdfScannerService, ClefDecisionService],
 })
 export class QuestionsModule {}

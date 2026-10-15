@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { getExamSession, saveExamAnswers, submitExamSession, ExamQuestion } from './api';
+import { getExamSession, saveExamAnswers, submitExamSession, evaluateExamProctoring, ExamQuestion } from './api';
 import {
   AlertTriangle,
   Calculator,
@@ -17,6 +17,7 @@ import {
   Monitor,
   Send,
   ShieldCheck,
+  ShieldAlert,
   X,
 } from 'lucide-react';
 import 'katex/dist/katex.min.css';
@@ -60,6 +61,36 @@ export default function ExamConsole() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [session, setSession] = useState<any>(null);
+
+  // Expired or Terminated state
+  const [expiredState, setExpiredState] = useState<{
+    isExpired: boolean;
+    status: string;
+    resultId?: string;
+  } | null>(null);
+
+  const [terminatedState, setTerminatedState] = useState<{
+    reason: 'tab_switch' | 'cheating_disqualification';
+    title: string;
+    message: string;
+    resultId?: string;
+  } | null>(null);
+
+  // Feature 2: AI Proctoring & Strike state
+  const [proctorStrikes, setProctorStrikes] = useState<number>(0);
+  const [proctorWarningModal, setProctorWarningModal] = useState<{
+    strike: number;
+    title: string;
+    message: string;
+    reasons?: string[];
+  } | null>(null);
+  const [cameraActive, setCameraActive] = useState<boolean>(false);
+  const [isProctorChecking, setIsProctorChecking] = useState<boolean>(false);
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const isTerminatedRef = useRef<boolean>(false);
 
   // Active state
   const [activeSubject, setActiveSubject] = useState<string>('');
@@ -193,6 +224,37 @@ export default function ExamConsole() {
     }
   };
 
+  const handleImmediateTermination = useCallback(
+    async (reason: 'tab_switch' | 'cheating_disqualification', message: string, strikeResultId?: string) => {
+      if (isTerminatedRef.current || !sessionId) return;
+      isTerminatedRef.current = true;
+
+      // Stop camera stream immediately
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
+      }
+      setCameraActive(false);
+
+      setTerminatedState({
+        reason,
+        title: reason === 'cheating_disqualification' ? 'Exam Disqualified & Failed' : 'Exam Terminated Immediately',
+        message,
+        resultId: strikeResultId,
+      });
+
+      try {
+        const result = await submitExamSession(sessionId, reason);
+        if (result?.resultId || result?.id) {
+          setTerminatedState((prev) => (prev ? { ...prev, resultId: result.resultId || result.id } : null));
+        }
+      } catch (err) {
+        console.error('Failed to submit immediate termination:', err);
+      }
+    },
+    [sessionId],
+  );
+
   // Fetch session details on mount
   useEffect(() => {
     if (!sessionId) return;
@@ -200,14 +262,13 @@ export default function ExamConsole() {
       try {
         setLoading(true);
         const data = await getExamSession(sessionId);
-        if (data.status === 'completed' || data.isExpired) {
-          showAlert(
-            'Session Expired',
-            'This exam session has reached or exceeded its allotted time frame and has been finalized.',
-            () => {
-              navigate(data.resultId ? `/results/${data.resultId}` : '/dashboard');
-            }
-          );
+        if (data.status !== 'active' || data.isExpired) {
+          setSession(data);
+          setExpiredState({
+            isExpired: true,
+            status: data.status,
+            resultId: data.resultId,
+          });
           return;
         }
         setSession(data);
@@ -217,6 +278,12 @@ export default function ExamConsole() {
         if (data.subjects && data.subjects.length > 0) {
           setActiveSubject(data.subjects[0]);
         }
+        if (Array.isArray(data.warnings)) {
+          const strikes = data.warnings.filter((w: any) =>
+            typeof w === 'object' ? w.type === 'proctor_violation' : typeof w === 'string' && w.includes('Proctor Strike')
+          ).length;
+          setProctorStrikes(strikes);
+        }
       } catch (err: any) {
         console.error(err);
         setError('Failed to load active exam session.');
@@ -225,7 +292,139 @@ export default function ExamConsole() {
       }
     };
     fetchSession();
-  }, [sessionId, navigate]);
+  }, [sessionId]);
+
+  // Tab Switch / Page Visibility Immediate Termination
+  useEffect(() => {
+    if (loading || submitting || !session || session.status !== 'active' || expiredState || terminatedState) return;
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden' && !isTerminatedRef.current) {
+        handleImmediateTermination(
+          'tab_switch',
+          'You switched away or navigated to another tab/window. In accordance with examination regulations, your exam has ended immediately.',
+        );
+      }
+    };
+
+    const onPageHide = () => {
+      if (!isTerminatedRef.current) {
+        handleImmediateTermination(
+          'tab_switch',
+          'Exam window was closed or navigated away. Exam terminated immediately.',
+        );
+      }
+    };
+
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    window.addEventListener('pagehide', onPageHide);
+
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.removeEventListener('pagehide', onPageHide);
+    };
+  }, [loading, submitting, session, expiredState, terminatedState, handleImmediateTermination]);
+
+  // Initialize Webcam for AI Proctoring
+  useEffect(() => {
+    if (loading || !session || session.status !== 'active' || expiredState || terminatedState) return;
+
+    let isMounted = true;
+    async function initCamera() {
+      try {
+        if (!navigator.mediaDevices?.getUserMedia) return;
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 320, height: 240, facingMode: 'user' },
+          audio: false,
+        });
+        if (!isMounted) {
+          stream.getTracks().forEach((t) => t.stop());
+          return;
+        }
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play().catch(() => {});
+        }
+        setCameraActive(true);
+      } catch (err) {
+        console.warn('Proctor webcam not available:', err);
+        setCameraActive(false);
+      }
+    }
+
+    initCamera();
+
+    return () => {
+      isMounted = false;
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+      }
+    };
+  }, [loading, session, expiredState, terminatedState]);
+
+  // Periodic AI Proctoring Check Loop (every 18 seconds)
+  useEffect(() => {
+    if (loading || !session || session.status !== 'active' || expiredState || terminatedState || !sessionId) return;
+
+    const runProctorCheck = async () => {
+      if (!videoRef.current || !canvasRef.current || isTerminatedRef.current) return;
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+
+      if (video.videoWidth === 0 || video.videoHeight === 0) return;
+
+      canvas.width = 320;
+      canvas.height = 240;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      ctx.drawImage(video, 0, 0, 320, 240);
+      const frameBase64 = canvas.toDataURL('image/jpeg', 0.6);
+
+      try {
+        setIsProctorChecking(true);
+        const res = await evaluateExamProctoring(sessionId, frameBase64);
+        setIsProctorChecking(false);
+
+        if (res.violationFlagged) {
+          setProctorStrikes(res.strikes);
+          if (res.strikes >= 3 || res.disqualified) {
+            handleImmediateTermination(
+              'cheating_disqualification',
+              'You have been flagged 3 times by the AI Proctoring system for suspected cheating/malpractice. Your exam has ended immediately and recorded as a failure (0 score).',
+              res.resultId,
+            );
+          } else if (res.strikes === 2) {
+            setProctorWarningModal({
+              strike: 2,
+              title: '🚨 FINAL WARNING (STRIKE 2 OF 3)',
+              message: res.message || 'Suspicious activity detected. One more violation will immediately fail and terminate your exam!',
+              reasons: res.reasons,
+            });
+          } else if (res.strikes === 1) {
+            setProctorWarningModal({
+              strike: 1,
+              title: '⚠️ PROCTORING WARNING 1 OF 3',
+              message: res.message || 'Potential cheating activity detected. Please face your screen alone with no unauthorized devices.',
+              reasons: res.reasons,
+            });
+          }
+        }
+      } catch {
+        setIsProctorChecking(false);
+      }
+    };
+
+    const interval = setInterval(runProctorCheck, 18000);
+    const timeout = setTimeout(runProctorCheck, 5000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [loading, session, expiredState, terminatedState, sessionId, handleImmediateTermination]);
 
   // Filtered questions list for the active subject
   const currentSubjectQuestions = useMemo(() => {
@@ -437,6 +636,79 @@ export default function ExamConsole() {
     );
   }
 
+  if (expiredState || terminatedState) {
+    const isCheatDisqualified =
+      terminatedState?.reason === 'cheating_disqualification' ||
+      expiredState?.status === 'terminated_cheating';
+    const isTabSwitch =
+      terminatedState?.reason === 'tab_switch' ||
+      expiredState?.status === 'terminated_tab_switch';
+    const resultId = terminatedState?.resultId || expiredState?.resultId;
+
+    return (
+      <div className="min-h-screen bg-bg-primary-dark flex flex-col items-center justify-center text-text-primary-dark p-6">
+        <div className="max-w-md w-full bg-surface-container-low border border-border-dark rounded-2xl p-8 text-center shadow-2xl animate-in zoom-in-95 duration-200">
+          <div
+            className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5 border ${
+              isCheatDisqualified
+                ? 'bg-red-500/10 border-red-500/30 text-red-400'
+                : isTabSwitch
+                ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                : 'bg-accent-royal-blue/10 border-accent-royal-blue/30 text-accent-royal-blue'
+            }`}
+          >
+            {isCheatDisqualified ? (
+              <ShieldAlert className="w-8 h-8" />
+            ) : isTabSwitch ? (
+              <AlertTriangle className="w-8 h-8" />
+            ) : (
+              <Clock className="w-8 h-8" />
+            )}
+          </div>
+          <h2 className="text-2xl font-bold font-headline-md mb-2">
+            {isCheatDisqualified
+              ? 'Exam Disqualified & Failed'
+              : isTabSwitch
+              ? 'Exam Terminated (Tab Switch)'
+              : 'Exam Session Concluded'}
+          </h2>
+          <p className="text-sm text-text-secondary-dark mb-6 leading-relaxed">
+            {isCheatDisqualified
+              ? 'This exam session was terminated and recorded as a failure (0 score) due to receiving 3 proctoring strikes for suspected cheating/malpractice.'
+              : isTabSwitch
+              ? 'This exam session was terminated immediately because an unauthorized tab or window switch was detected during the exam.'
+              : 'This exam session has reached or exceeded its allotted time frame and has been finalized.'}
+          </p>
+          <div className="flex flex-col gap-3">
+            {resultId && (
+              <button
+                onClick={() => navigate(`/results/${resultId}`)}
+                className="w-full py-3 rounded-xl bg-accent-royal-blue text-white font-semibold hover:bg-primary-container transition-all shadow-md"
+              >
+                View Exam Results
+              </button>
+            )}
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="w-full py-3 rounded-xl bg-surface-container border border-border-dark text-text-primary-dark font-medium hover:bg-surface-container-high transition-all"
+            >
+              Return to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session || !session.subjects) {
+    return (
+      <div className="min-h-screen bg-bg-primary-dark flex flex-col items-center justify-center text-text-primary-dark p-6">
+        <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
+        <p className="text-body-sm text-text-secondary-dark">Loading examination cockpit...</p>
+      </div>
+    );
+  }
+
   const answeredInActiveSubject = currentSubjectQuestions.filter(
     (q: ExamQuestion) => !!answers[q.questionId],
   ).length;
@@ -531,6 +803,34 @@ export default function ExamConsole() {
               <ThemeToggle className="min-h-7 min-w-7 sm:min-h-8 sm:min-w-8" />
             </div>
 
+            {/* Feature 2: AI Proctor Live Status Pill */}
+            <div
+              className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border text-[11px] sm:text-[12px] font-medium transition-all ${
+                proctorStrikes >= 2
+                  ? 'bg-red-500/15 border-red-500/40 text-red-400 ring-1 ring-red-500/30 animate-pulse'
+                  : proctorStrikes === 1
+                  ? 'bg-amber-500/15 border-amber-500/40 text-amber-400 ring-1 ring-amber-500/30'
+                  : 'bg-surface-container-lowest border-emerald-500/30 text-emerald-400'
+              }`}
+              title={cameraActive ? 'AI Proctoring Active' : 'AI Proctoring Standby'}
+            >
+              <span
+                className={`w-2 h-2 rounded-full shrink-0 ${
+                  proctorStrikes >= 2
+                    ? 'bg-red-500 animate-ping'
+                    : proctorStrikes === 1
+                    ? 'bg-amber-500 animate-pulse'
+                    : cameraActive
+                    ? 'bg-emerald-400'
+                    : 'bg-slate-400'
+                }`}
+              />
+              <span className="font-semibold whitespace-nowrap">
+                {proctorStrikes === 0 ? 'AI Proctored' : `Strikes: ${proctorStrikes}/3`}
+              </span>
+              {isProctorChecking && <Loader2 className="w-3 h-3 animate-spin text-white/60 ml-0.5" />}
+            </div>
+
             {/* Offline Cache Synced Status Pill */}
             <div className="hidden xl:flex items-center gap-2 text-body-sm font-body-sm text-tertiary px-3 py-1.5 bg-surface-container-lowest rounded-xl border border-tertiary/25 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-tertiary" />
@@ -538,6 +838,10 @@ export default function ExamConsole() {
             </div>
 
             <div className="h-6 w-px bg-border-dark hidden sm:block" />
+
+            {/* Hidden Video & Canvas for Periodic Clef Frame Evaluation */}
+            <video ref={videoRef} autoPlay playsInline muted className="hidden" />
+            <canvas ref={canvasRef} className="hidden" />
 
             {/* Primary Submit CTA with Unanswered Badge */}
             <button
@@ -1051,6 +1355,77 @@ export default function ExamConsole() {
                 );
               })}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Miniature Floating Webcam Preview for Candidate Awareness */}
+      {cameraActive && (
+        <div className="fixed bottom-3 right-3 z-30 pointer-events-none rounded-xl overflow-hidden border border-emerald-500/40 bg-black/80 shadow-2xl flex flex-col items-center">
+          <video
+            ref={(node) => {
+              if (node && streamRef.current && node.srcObject !== streamRef.current) {
+                node.srcObject = streamRef.current;
+                node.play().catch(() => {});
+              }
+            }}
+            autoPlay
+            playsInline
+            muted
+            className="w-24 h-18 sm:w-28 sm:h-20 object-cover scale-x-[-1]"
+          />
+          <div className="w-full bg-emerald-950/80 px-1 py-0.5 text-center text-[9px] font-mono font-semibold text-emerald-300 uppercase tracking-wider">
+            Live AI Proctor
+          </div>
+        </div>
+      )}
+
+      {/* Proctoring Violation Strike Modal (Warnings 1 and 2) */}
+      {proctorWarningModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+          <div
+            className={`max-w-md w-full rounded-2xl p-6 sm:p-7 border shadow-2xl ${
+              proctorWarningModal.strike >= 2
+                ? 'bg-red-950/95 border-red-500/60 text-white ring-2 ring-red-500/40'
+                : 'bg-amber-950/95 border-amber-500/60 text-white ring-2 ring-amber-500/40'
+            }`}
+          >
+            <div className="flex items-center gap-3.5 mb-4">
+              <div
+                className={`p-3 rounded-2xl shrink-0 ${
+                  proctorWarningModal.strike >= 2 ? 'bg-red-500/25 text-red-400' : 'bg-amber-500/25 text-amber-400'
+                }`}
+              >
+                <AlertTriangle className="w-8 h-8" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg font-headline-sm">{proctorWarningModal.title}</h3>
+                <p className="text-xs text-white/70">Anti-Malpractice Security Detection</p>
+              </div>
+            </div>
+            <p className="text-sm text-white/90 mb-4 leading-relaxed font-body-sm">
+              {proctorWarningModal.message}
+            </p>
+            {proctorWarningModal.reasons && proctorWarningModal.reasons.length > 0 && (
+              <div className="mb-5 p-3 rounded-xl bg-black/50 border border-white/10">
+                <p className="text-xs font-semibold text-white/80 mb-1">Detected Violation Factors:</p>
+                <ul className="text-xs text-white/70 list-disc list-inside space-y-0.5">
+                  {proctorWarningModal.reasons.map((r, i) => (
+                    <li key={i}>{r}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <button
+              onClick={() => setProctorWarningModal(null)}
+              className={`w-full py-3 rounded-xl font-semibold transition-all shadow-lg text-sm ${
+                proctorWarningModal.strike >= 2
+                  ? 'bg-red-600 hover:bg-red-500 text-white shadow-red-900/50'
+                  : 'bg-amber-600 hover:bg-amber-500 text-white shadow-amber-900/50'
+              }`}
+            >
+              I Understand & Acknowledge
+            </button>
           </div>
         </div>
       )}
