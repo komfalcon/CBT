@@ -218,6 +218,7 @@ ${candidate}`;
                     violationType = violationType || 'looking_away';
                     reasons.push('Candidate turned away or looking off-camera');
                 }
+                this.logger.log(`[Falke AI Proctor - Clef] Evaluated -> violation: ${violationFlagged}, phoneProb: ${phoneProb.toFixed(2)}, multPeopleProb: ${multPeopleProb.toFixed(2)}, reasons: ${reasons.join(', ') || 'None'}`);
                 return {
                     multiplePeopleProbability: multPeopleProb,
                     cellPhoneProbability: phoneProb,
@@ -234,6 +235,7 @@ ${candidate}`;
         const nvidiaKey = this.config.get('NVIDIA_API_KEY') || process.env.NVIDIA_API_KEY;
         if (nvidiaKey && isBase64) {
             try {
+                this.logger.log('[Falke AI Proctor - NVIDIA Fallback] Analyzing base64 webcam frame...');
                 const normalizedDataUrl = imageBase64OrUrl.startsWith('data:image')
                     ? imageBase64OrUrl
                     : `data:image/jpeg;base64,${imageBase64OrUrl}`;
@@ -245,7 +247,7 @@ ${candidate}`;
                             content: [
                                 {
                                     type: 'text',
-                                    text: 'You are an expert AI exam proctor monitoring a candidate taking an examination via webcam. Analyze the image with extreme attention to exam integrity. Check carefully if the candidate is holding, checking, or looking at a smartphone, cell phone, mobile device, tablet, or unauthorized screen, or if another person is present in the frame, or if the candidate is looking completely away from the screen. Output ONLY a valid JSON object matching: {"candidate_present": boolean, "multiple_people": boolean, "cell_phone": boolean, "looking_away": boolean, "violation": boolean, "reasons": string[]}. Strict rule: If any phone, smartphone, mobile screen, or device is visible in the candidate\'s hand or in the background, set cell_phone=true, violation=true, and include an explanation in reasons.',
+                                    text: 'You are Falke AI Exam Proctor monitoring a candidate taking an examination via webcam. Analyze the image with extreme vigilance. Look closely at the candidate, their hands, the desk, and the camera viewpoint. Is there any smartphone, mobile phone, iPhone, Android, tablet, or handheld screen visible anywhere in the image (including held up to the camera or in candidate hands)? Is there more than one person? Is the candidate looking completely away? Respond with ONLY a valid JSON object matching: {"candidate_present": boolean, "multiple_people": boolean, "cell_phone": boolean, "looking_away": boolean, "violation": boolean, "reasons": string[]}. Strict rule: If any mobile phone, smartphone, or secondary screen is visible in the frame, you MUST set cell_phone=true, violation=true, and describe the device in reasons.',
                                 },
                                 {
                                     type: 'image_url',
@@ -289,6 +291,7 @@ ${candidate}`;
                     violationType = 'multiple_people';
                 else if (lookingAway)
                     violationType = 'looking_away';
+                this.logger.log(`[Falke AI Proctor - NVIDIA Fallback] Evaluated -> violation: ${violation}, phone: ${cellPhone}, multiple: ${multiplePeople}, away: ${lookingAway}, reasons: ${reasons.join(', ') || 'None'}`);
                 return {
                     multiplePeopleProbability: multiplePeople ? 0.95 : 0.05,
                     cellPhoneProbability: cellPhone ? 0.95 : 0.05,

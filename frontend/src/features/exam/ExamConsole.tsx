@@ -1411,7 +1411,7 @@ export default function ExamConsole() {
               Camera Access Required
             </h2>
             <p className="text-sm text-text-secondary-dark mb-5 leading-relaxed font-body-sm">
-              This CBT session is proctored by Aurikrex AI Proctoring to ensure examination integrity.
+              This CBT session is proctored by Falke AI Proctoring to ensure examination integrity.
               Candidates <strong className="text-red-400 font-semibold">cannot view questions or take this exam</strong> without allowing webcam access.
             </p>
 

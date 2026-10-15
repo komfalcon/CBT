@@ -49,12 +49,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UploadService = void 0;
 const common_1 = require("@nestjs/common");
 const axios_1 = __importDefault(require("axios"));
+const crypto_1 = require("crypto");
 let UploadService = UploadService_1 = class UploadService {
     constructor() {
         this.logger = new common_1.Logger(UploadService_1.name);
         this.byteshipClient = null;
         this.byteshipApiKey = process.env.BYTESHIP_API_KEY || '';
-        this.sendbytesApiKey = process.env.SENDBYTES_API_KEY || '';
         this.initByteshipClient();
     }
     async initByteshipClient() {
@@ -73,22 +73,34 @@ let UploadService = UploadService_1 = class UploadService {
     }
     async uploadFile(fileBuffer, filename, mimetype = 'image/png', folder = 'uploads') {
         const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-        const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET || 'unsigned_preset';
+        const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
+        const apiKey = process.env.CLOUDINARY_API_KEY;
+        const apiSecret = process.env.CLOUDINARY_API_SECRET;
         const uint8Array = new Uint8Array(fileBuffer);
         const year = new Date().getFullYear();
         const safeFilename = `${Date.now()}-${filename.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
         const path = `${folder}/${year}/${safeFilename}`;
-        if (cloudName) {
+        if (cloudName && (uploadPreset || (apiKey && apiSecret))) {
             try {
-                this.logger.log(`[Upload] Attempting primary upload to Cloudinary...`);
+                this.logger.log(`[Upload] Attempting primary upload to Cloudinary (${cloudName})...`);
                 const formData = new FormData();
                 const blob = new Blob([uint8Array], { type: mimetype });
                 formData.append('file', blob, filename);
-                formData.append('upload_preset', uploadPreset);
                 formData.append('folder', folder);
+                if (apiKey && apiSecret) {
+                    const timestamp = Math.round(Date.now() / 1000);
+                    const signatureStr = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
+                    const signature = (0, crypto_1.createHash)('sha1').update(signatureStr).digest('hex');
+                    formData.append('timestamp', timestamp.toString());
+                    formData.append('api_key', apiKey);
+                    formData.append('signature', signature);
+                }
+                else if (uploadPreset) {
+                    formData.append('upload_preset', uploadPreset);
+                }
                 const response = await axios_1.default.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
-                    timeout: 15000,
+                    timeout: 10000,
                 });
                 if (response.data?.secure_url || response.data?.url) {
                     const url = response.data.secure_url || response.data.url;
@@ -97,25 +109,18 @@ let UploadService = UploadService_1 = class UploadService {
                 }
             }
             catch (cloudinaryErr) {
-                this.logger.warn(`[Upload] Cloudinary upload failed: ${cloudinaryErr?.response?.data?.error?.message || cloudinaryErr.message}. Initiating fallback to Byteship backup uploader...`);
+                this.logger.warn(`[Upload] Cloudinary upload failed: ${cloudinaryErr?.response?.data?.error?.message || cloudinaryErr.message}.`);
             }
+        }
+        else if (cloudName) {
+            this.logger.warn('[Upload] CLOUDINARY_CLOUD_NAME is set, but neither CLOUDINARY_UPLOAD_PRESET nor CLOUDINARY_API_KEY / SECRET are provided in backend/.env.');
         }
         else {
-            this.logger.log('[Upload] Cloudinary not configured (CLOUDINARY_CLOUD_NAME missing). Routing directly to Byteship backup uploader...');
+            this.logger.log('[Upload] Cloudinary not configured (CLOUDINARY_CLOUD_NAME missing in backend/.env).');
         }
-        try {
-            this.logger.log(`[Upload] Attempting backup upload to Byteship...`);
-            if (this.byteshipClient && typeof this.byteshipClient.upload === 'function') {
-                const fileObj = new File([uint8Array], filename, { type: mimetype });
-                const result = await this.byteshipClient.upload(fileObj, {
-                    path,
-                    visibility: 'public',
-                });
-                const url = result?.url || result?.publicUrl || `https://cdn.byteship.com/${path}`;
-                this.logger.log(`[Upload] Backup upload to Byteship SDK succeeded: ${url}`);
-                return { url, provider: 'byteship' };
-            }
-            else {
+        if (this.byteshipApiKey && !this.byteshipApiKey.startsWith('bship_placeholder')) {
+            try {
+                this.logger.log(`[Upload] Attempting backup upload to Byteship...`);
                 const response = await axios_1.default.post(`https://api.byteship.com/v1/upload`, fileBuffer, {
                     headers: {
                         Authorization: `Bearer ${this.byteshipApiKey}`,
@@ -123,36 +128,17 @@ let UploadService = UploadService_1 = class UploadService {
                         'X-Byteship-Path': path,
                         'X-Byteship-Visibility': 'public',
                     },
-                    timeout: 20000,
+                    timeout: 8000,
                 });
                 const url = response.data?.url || response.data?.publicUrl || `https://cdn.byteship.com/${path}`;
                 this.logger.log(`[Upload] Backup upload to Byteship REST API succeeded: ${url}`);
                 return { url, provider: 'byteship' };
             }
+            catch (byteshipErr) {
+                this.logger.warn(`[Upload] Byteship backup upload failed: ${byteshipErr?.response?.data?.message || byteshipErr.message}`);
+            }
         }
-        catch (byteshipErr) {
-            this.logger.warn(`[Upload] Byteship backup upload failed: ${byteshipErr?.response?.data?.message || byteshipErr.message}. Routing to SendBytes backup uploader...`);
-        }
-        try {
-            this.logger.log(`[Upload] Attempting tertiary backup upload to SendBytes...`);
-            const formData = new FormData();
-            const blob = new Blob([uint8Array], { type: mimetype });
-            formData.append('file', blob, filename);
-            const response = await axios_1.default.post('https://api.sendbytes.io/v1/upload', formData, {
-                headers: {
-                    Authorization: `Bearer ${this.sendbytesApiKey}`,
-                    'Content-Type': 'multipart/form-data',
-                },
-                timeout: 20000,
-            });
-            const url = response.data?.url || response.data?.link || response.data?.data?.url || `https://sendbytes.io/f/${safeFilename}`;
-            this.logger.log(`[Upload] Backup upload to SendBytes succeeded: ${url}`);
-            return { url, provider: 'sendbytes' };
-        }
-        catch (sendbytesErr) {
-            this.logger.error(`[Upload] SendBytes backup upload failed: ${sendbytesErr?.response?.data?.message || sendbytesErr.message}`);
-            throw new Error(`All upload providers (Cloudinary, Byteship, & SendBytes) failed: ${sendbytesErr.message}`);
-        }
+        throw new Error('Storage upload unavailable (Cloudinary / Byteship unconfigured). Fast-failing to direct AI vision fallback.');
     }
 };
 exports.UploadService = UploadService;
