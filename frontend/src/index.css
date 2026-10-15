@@ -1172,6 +1172,85 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 
 
 /* Landing page: keep in-page anchors and focused elements clear of the sticky header. */
-html:has(.landing-root) {
+html:has(.landing-root), html:has(.arena-root) {
   scroll-padding-top: 5rem;
 }
+
+/* ==========================================================
+   AURIKREX EXAM ARENA - PDF DESIGN SYSTEM TOKENS (LIGHT & DARK)
+   ========================================================== */
+:root, [data-theme='light'], .light {
+  --arena-bg: #ffffff;
+  --arena-bg-subtle: #f8fafc;
+  --arena-surface: #ffffff;
+  --arena-surface-elevated: #ffffff;
+  --arena-border: #e2e8f0;
+  --arena-border-subtle: #edf2f7;
+  --arena-text-primary: #0f172a;
+  --arena-text-secondary: #475569;
+  --arena-text-muted: #64748b;
+  --arena-primary: #1d51ff;
+  --arena-primary-hover: #1541dc;
+  --arena-primary-fg: #ffffff;
+  --arena-primary-subtle: #eff6ff;
+  --arena-badge-bg: #f1f5f9;
+  --arena-badge-text: #334155;
+  --arena-badge-border: #e2e8f0;
+  --arena-amber: #d97706;
+  --arena-amber-bg: #fffbeb;
+  --arena-amber-border: #fef3c7;
+  --arena-green: #10b981;
+  --arena-green-bg: #ecfdf5;
+  --arena-green-border: #d1fae5;
+  --arena-red: #ef4444;
+  --arena-red-bg: #fef2f2;
+  --arena-red-border: #fee2e2;
+  --arena-grid-color: rgba(226, 232, 240, 0.7);
+  --arena-reg-left-bg: #edf2ff;
+  --arena-reg-right-bg: #f8faff;
+  --arena-input-bg: #ffffff;
+  --arena-input-border: #dbe2ee;
+  --arena-card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme='dark'], .dark {
+  --arena-bg: #030f27;
+  --arena-bg-subtle: #061536;
+  --arena-surface: #081b43;
+  --arena-surface-elevated: #0a2152;
+  --arena-border: #172a4d;
+  --arena-border-subtle: #132442;
+  --arena-text-primary: #f8fafc;
+  --arena-text-secondary: #94a3b8;
+  --arena-text-muted: #64748b;
+  --arena-primary: #3b82f6;
+  --arena-primary-hover: #2563eb;
+  --arena-primary-fg: #ffffff;
+  --arena-primary-subtle: rgba(59, 130, 246, 0.15);
+  --arena-badge-bg: #0b1a38;
+  --arena-badge-text: #94a3b8;
+  --arena-badge-border: #1e335a;
+  --arena-amber: #f59e0b;
+  --arena-amber-bg: rgba(245, 158, 11, 0.1);
+  --arena-amber-border: rgba(245, 158, 11, 0.25);
+  --arena-green: #22c55e;
+  --arena-green-bg: rgba(34, 197, 94, 0.1);
+  --arena-green-border: rgba(34, 197, 94, 0.25);
+  --arena-red: #f87171;
+  --arena-red-bg: rgba(248, 113, 113, 0.1);
+  --arena-red-border: rgba(248, 113, 113, 0.25);
+  --arena-grid-color: rgba(30, 48, 80, 0.4);
+  --arena-reg-left-bg: #000e2b;
+  --arena-reg-right-bg: #061536;
+  --arena-input-bg: #081b43;
+  --arena-input-border: #172a4d;
+  --arena-card-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4);
+}
+
+.arena-grid-bg {
+  background-image: 
+    linear-gradient(to right, var(--arena-grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--arena-grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+

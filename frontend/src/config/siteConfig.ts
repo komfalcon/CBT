@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: 'Aurikrex Exam Arena',
-  tagline: 'A serious computer-based test cockpit for Nigerian UTME candidates.',
+  tagline: 'A comprehensive computer-based test preparation platform for Nigerian UTME candidates.',
   operator: 'Korede Samuel Omotosho',
   legalNotice: 'Aurikrex Exam Arena is a product of Aurikrex, operated by Korede Samuel Omotosho.',
   founderNotice: 'Founder notice: this is a public beta — features may change.',
