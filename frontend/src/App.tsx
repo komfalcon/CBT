@@ -137,8 +137,10 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/arena" element={<LandingPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/register" element={<RegisterPage defaultTab="register" />} />
+          <Route path="/verify-email" element={<RegisterPage defaultTab="register" />} />
+          <Route path="/auth" element={<RegisterPage defaultTab="sign-in" />} />
+          <Route path="/login" element={<RegisterPage defaultTab="sign-in" />} />
           <Route path="/dashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />
           <Route path="/exam-hub" element={<ProtectedRoute><ExamHub /></ProtectedRoute>} />
           <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />

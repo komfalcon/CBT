@@ -2,6 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as amqp from 'amqplib';
 
+import { NotificationsProcessor } from './notifications.processor';
+
 type NotificationPayload = {
   email: string;
   fullName: string;
@@ -12,21 +14,34 @@ type NotificationPayload = {
 export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name);
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly notificationsProcessor: NotificationsProcessor,
+  ) {}
 
   async queueEmailVerification(payload: NotificationPayload): Promise<void> {
-    await this.publishToQueue('notifications.email.verification', payload);
+    const published = await this.publishToQueue('notifications.email.verification', payload);
+    if (!published) {
+      await this.notificationsProcessor.sendVerificationDirect(payload).catch((err) => {
+        this.logger.error('Failed direct fallback for email verification', err);
+      });
+    }
   }
 
   async queuePasswordReset(payload: NotificationPayload): Promise<void> {
-    await this.publishToQueue('notifications.email.password_reset', payload);
+    const published = await this.publishToQueue('notifications.email.password_reset', payload);
+    if (!published) {
+      await this.notificationsProcessor.sendPasswordResetDirect(payload).catch((err) => {
+        this.logger.error('Failed direct fallback for password reset', err);
+      });
+    }
   }
 
-  private async publishToQueue(queueName: string, payload: NotificationPayload): Promise<void> {
+  private async publishToQueue(queueName: string, payload: NotificationPayload): Promise<boolean> {
     const rabbitUrl = this.configService.get<string>('RABBITMQ_URL');
     if (!rabbitUrl) {
-      this.logger.warn('RABBITMQ_URL is not configured; notification was not queued.');
-      return;
+      this.logger.log('RABBITMQ_URL is not configured; sending email directly.');
+      return false;
     }
 
     let connection: amqp.ChannelModel | undefined;
@@ -40,8 +55,10 @@ export class NotificationsService {
       channel = await connection.createChannel();
       await channel.assertQueue(queueName, { durable: true });
       channel.sendToQueue(queueName, Buffer.from(JSON.stringify(payload)), { persistent: true });
+      return true;
     } catch (error) {
       this.logger.error(`Failed to publish to queue ${queueName}`, error as Error);
+      return false;
     } finally {
       await channel?.close().catch(() => undefined);
       await connection?.close().catch(() => undefined);

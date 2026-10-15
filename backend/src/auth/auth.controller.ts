@@ -10,8 +10,10 @@ import {
   Res,
   UseGuards,
   ValidationPipe,
+  Query,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
@@ -69,7 +71,10 @@ class MfaDto {
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post('register')
   @Throttle({ default: { limit: 5, ttl: 15 * 60_000 } })
@@ -82,6 +87,32 @@ export class AuthController {
   @Post('verify-email')
   verifyEmail(@Body(new ValidationPipe({ whitelist: true })) body: VerifyEmailDto) {
     return this.authService.verifyEmail(body.email, body.code);
+  }
+
+  @Get('verify-email')
+  async verifyEmailGet(
+    @Query('email') email: string,
+    @Query('code') code: string,
+    @Res() res: Response,
+  ) {
+    const frontendUrl = (this.configService.get<string>('FRONTEND_URL') || 'https://cbt.aurikrex.com').replace(/\/+$/, '');
+    if (!email || !code) {
+      return res.redirect(`${frontendUrl}/verify-email?status=error&message=missing_parameters`);
+    }
+    try {
+      await this.authService.verifyEmail(email, code);
+      return res.redirect(`${frontendUrl}/verify-email?status=success&email=${encodeURIComponent(email)}`);
+    } catch (err: any) {
+      const msg = encodeURIComponent(err?.message || 'verification_failed');
+      return res.redirect(`${frontendUrl}/verify-email?status=error&message=${msg}`);
+    }
+  }
+
+  @Post('resend-verification')
+  @Throttle({ default: { limit: 3, ttl: 15 * 60_000 } })
+  @HttpCode(200)
+  resendVerification(@Body(new ValidationPipe({ whitelist: true })) body: ForgotPasswordDto) {
+    return this.authService.resendVerification(body.email);
   }
 
   @Post('login')

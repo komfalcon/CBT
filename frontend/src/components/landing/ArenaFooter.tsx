@@ -1,6 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Globe, Instagram, Linkedin, MessageCircle, Twitter, type LucideIcon } from 'lucide-react';
 import { siteConfig } from '../../config/siteConfig';
+
+const SOCIAL_ICONS: Record<(typeof siteConfig.socials)[number]['key'], LucideIcon> = {
+  x: Twitter,
+  linkedin: Linkedin,
+  instagram: Instagram,
+  whatsapp: MessageCircle,
+  website: Globe,
+};
 
 export function ArenaFooter() {
   const currentYear = new Date().getFullYear();
@@ -68,6 +77,26 @@ export function ArenaFooter() {
                 </div>
               </div>
             </div>
+
+            <ul className="flex flex-wrap items-center gap-2 pt-2" aria-label="Aurikrex on social media">
+              {siteConfig.socials.map((social) => {
+                const Icon = SOCIAL_ICONS[social.key];
+                return (
+                  <li key={social.key}>
+                    <a
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${social.label} (opens in a new tab)`}
+                      title={social.label}
+                      className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--arena-border)] bg-[var(--arena-surface)] text-[var(--arena-text-secondary)] transition-colors hover:border-[var(--arena-primary)] hover:text-[var(--arena-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--arena-primary)]"
+                    >
+                      <Icon className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
 
           {/* Product Links */}
