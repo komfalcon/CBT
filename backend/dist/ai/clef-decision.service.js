@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -18,12 +21,15 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const axios_1 = __importDefault(require("axios"));
 const question_sanitizer_1 = require("../questions/utils/question-sanitizer");
+const upload_service_1 = require("../upload/upload.service");
 let ClefDecisionService = ClefDecisionService_1 = class ClefDecisionService {
-    constructor(config) {
+    constructor(config, uploadService) {
         this.config = config;
+        this.uploadService = uploadService;
         this.logger = new common_1.Logger(ClefDecisionService_1.name);
         this.baseUrl = 'https://api.cloudflare.com/client/v4/accounts';
         this.defaultModel = '@cf/cloudflare/clef-omni';
+        this.uploader = this.uploadService || new upload_service_1.UploadService();
     }
     getCredentials() {
         const accountId = this.config.get('CLOUDFLARE_ACCOUNT_ID') || process.env.CLOUDFLARE_ACCOUNT_ID;
@@ -159,52 +165,149 @@ ${candidate}`;
         };
     }
     async evaluateProctoringFrame(imageBase64OrUrl) {
-        const questions = {
-            multiple_people: {
-                type: 'noul',
-                instructions: 'Is more than one person visible in the image?',
-            },
-            cell_phone: {
-                type: 'noul',
-                instructions: 'Is a smartphone, mobile device, tablet, or unauthorized secondary screen visible?',
-            },
-            looking_away: {
-                type: 'noul',
-                instructions: 'Is the candidate turned completely away from the exam screen or looking off-camera continuously?',
-            },
-        };
-        const state = {
-            image: imageBase64OrUrl,
-        };
-        const answers = await this.runDecision(state, questions);
-        const multPeopleProb = answers.multiple_people?.noul ?? 0;
-        const phoneProb = answers.cell_phone?.noul ?? 0;
-        const awayProb = answers.looking_away?.noul ?? 0;
-        let violationFlagged = false;
-        let violationType;
-        const reasons = [];
-        if (phoneProb > 0.7) {
-            violationFlagged = true;
-            violationType = 'cell_phone';
-            reasons.push('Mobile phone or unauthorized device detected');
+        const isBase64 = imageBase64OrUrl.startsWith('data:image') || !imageBase64OrUrl.startsWith('http');
+        let frameUrl = isBase64 ? '' : imageBase64OrUrl;
+        if (isBase64) {
+            try {
+                const base64Clean = imageBase64OrUrl.replace(/^data:image\/\w+;base64,/, '');
+                const buffer = Buffer.from(base64Clean, 'base64');
+                const uploadResult = await this.uploader.uploadFile(buffer, `proctor_${Date.now()}.jpg`, 'image/jpeg', 'proctoring');
+                if (uploadResult?.url) {
+                    frameUrl = uploadResult.url;
+                }
+            }
+            catch (uploadErr) {
+                this.logger.warn(`Webcam frame upload to Cloudinary/storage failed: ${uploadErr.message}`);
+            }
         }
-        if (multPeopleProb > 0.75) {
-            violationFlagged = true;
-            violationType = violationType || 'multiple_people';
-            reasons.push('Multiple individuals detected in exam space');
+        if (frameUrl) {
+            try {
+                const questions = {
+                    multiple_people: {
+                        type: 'noul',
+                        instructions: 'Is more than one person visible in the image?',
+                    },
+                    cell_phone: {
+                        type: 'noul',
+                        instructions: 'Is a smartphone, mobile device, tablet, or unauthorized secondary screen visible?',
+                    },
+                    looking_away: {
+                        type: 'noul',
+                        instructions: 'Is the candidate turned completely away from the exam screen or looking off-camera continuously?',
+                    },
+                };
+                const answers = await this.runDecision({ image: frameUrl }, questions);
+                const multPeopleProb = answers.multiple_people?.noul ?? 0;
+                const phoneProb = answers.cell_phone?.noul ?? 0;
+                const awayProb = answers.looking_away?.noul ?? 0;
+                let violationFlagged = false;
+                let violationType;
+                const reasons = [];
+                if (phoneProb > 0.6) {
+                    violationFlagged = true;
+                    violationType = 'cell_phone';
+                    reasons.push('Mobile phone or unauthorized device detected');
+                }
+                if (multPeopleProb > 0.65) {
+                    violationFlagged = true;
+                    violationType = violationType || 'multiple_people';
+                    reasons.push('Multiple individuals detected in exam space');
+                }
+                if (awayProb > 0.75) {
+                    violationFlagged = true;
+                    violationType = violationType || 'looking_away';
+                    reasons.push('Candidate turned away or looking off-camera');
+                }
+                return {
+                    multiplePeopleProbability: multPeopleProb,
+                    cellPhoneProbability: phoneProb,
+                    lookingAwayProbability: awayProb,
+                    violationFlagged,
+                    violationType,
+                    reasons,
+                };
+            }
+            catch (clefErr) {
+                this.logger.warn(`Primary Cloudflare Clef proctoring failed (${clefErr.message}). Routing to NVIDIA Vision fallback...`);
+            }
         }
-        if (awayProb > 0.8) {
-            violationFlagged = true;
-            violationType = violationType || 'looking_away';
-            reasons.push('Candidate turned away or looking off-camera');
+        const nvidiaKey = this.config.get('NVIDIA_API_KEY') || process.env.NVIDIA_API_KEY;
+        if (nvidiaKey && isBase64) {
+            try {
+                const normalizedDataUrl = imageBase64OrUrl.startsWith('data:image')
+                    ? imageBase64OrUrl
+                    : `data:image/jpeg;base64,${imageBase64OrUrl}`;
+                const response = await axios_1.default.post('https://integrate.api.nvidia.com/v1/chat/completions', {
+                    model: 'meta/llama-3.2-11b-vision-instruct',
+                    messages: [
+                        {
+                            role: 'user',
+                            content: [
+                                {
+                                    type: 'text',
+                                    text: 'You are an expert AI exam proctor monitoring a candidate taking an examination via webcam. Analyze the image with extreme attention to exam integrity. Check carefully if the candidate is holding, checking, or looking at a smartphone, cell phone, mobile device, tablet, or unauthorized screen, or if another person is present in the frame, or if the candidate is looking completely away from the screen. Output ONLY a valid JSON object matching: {"candidate_present": boolean, "multiple_people": boolean, "cell_phone": boolean, "looking_away": boolean, "violation": boolean, "reasons": string[]}. Strict rule: If any phone, smartphone, mobile screen, or device is visible in the candidate\'s hand or in the background, set cell_phone=true, violation=true, and include an explanation in reasons.',
+                                },
+                                {
+                                    type: 'image_url',
+                                    image_url: {
+                                        url: normalizedDataUrl,
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                    temperature: 0.1,
+                    max_tokens: 300,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${nvidiaKey}`,
+                        'Content-Type': 'application/json',
+                    },
+                    timeout: 12000,
+                });
+                const content = response.data?.choices?.[0]?.message?.content || '{}';
+                const jsonMatch = content.match(/\{[\s\S]*\}/);
+                const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
+                const cellPhone = Boolean(parsed.cell_phone);
+                const multiplePeople = Boolean(parsed.multiple_people);
+                const lookingAway = Boolean(parsed.looking_away);
+                const violation = Boolean(parsed.violation || cellPhone || multiplePeople || lookingAway);
+                const reasons = Array.isArray(parsed.reasons) ? [...parsed.reasons] : [];
+                if (cellPhone && !reasons.some((r) => r.toLowerCase().includes('phone') || r.toLowerCase().includes('device'))) {
+                    reasons.push('Mobile phone or unauthorized secondary device detected');
+                }
+                if (multiplePeople && !reasons.some((r) => r.toLowerCase().includes('multiple') || r.toLowerCase().includes('person'))) {
+                    reasons.push('Multiple individuals detected in exam space');
+                }
+                if (lookingAway && !reasons.some((r) => r.toLowerCase().includes('look') || r.toLowerCase().includes('away'))) {
+                    reasons.push('Candidate turned away or looking off-camera');
+                }
+                let violationType;
+                if (cellPhone)
+                    violationType = 'cell_phone';
+                else if (multiplePeople)
+                    violationType = 'multiple_people';
+                else if (lookingAway)
+                    violationType = 'looking_away';
+                return {
+                    multiplePeopleProbability: multiplePeople ? 0.95 : 0.05,
+                    cellPhoneProbability: cellPhone ? 0.95 : 0.05,
+                    lookingAwayProbability: lookingAway ? 0.9 : 0.05,
+                    violationFlagged: violation,
+                    violationType,
+                    reasons,
+                };
+            }
+            catch (nvidiaErr) {
+                this.logger.error(`Fallback NVIDIA Vision proctoring failed: ${nvidiaErr.message}`);
+            }
         }
         return {
-            multiplePeopleProbability: multPeopleProb,
-            cellPhoneProbability: phoneProb,
-            lookingAwayProbability: awayProb,
-            violationFlagged,
-            violationType,
-            reasons,
+            multiplePeopleProbability: 0,
+            cellPhoneProbability: 0,
+            lookingAwayProbability: 0,
+            violationFlagged: false,
+            reasons: [],
         };
     }
     async evaluateAdaptiveRouting(metrics) {
@@ -257,6 +360,8 @@ ${candidate}`;
 exports.ClefDecisionService = ClefDecisionService;
 exports.ClefDecisionService = ClefDecisionService = ClefDecisionService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __param(1, (0, common_1.Optional)()),
+    __metadata("design:paramtypes", [config_1.ConfigService,
+        upload_service_1.UploadService])
 ], ClefDecisionService);
 //# sourceMappingURL=clef-decision.service.js.map

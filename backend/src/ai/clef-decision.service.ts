@@ -1,7 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { sanitizeQuestionText } from '../questions/utils/question-sanitizer';
+import { UploadService } from '../upload/upload.service';
 
 export interface ClefAuditResult {
   leaksAnswerProbability: number;
@@ -34,8 +35,14 @@ export class ClefDecisionService {
   private readonly logger = new Logger(ClefDecisionService.name);
   private readonly baseUrl = 'https://api.cloudflare.com/client/v4/accounts';
   private readonly defaultModel = '@cf/cloudflare/clef-omni';
+  private readonly uploader: UploadService;
 
-  constructor(private readonly config: ConfigService) {}
+  constructor(
+    private readonly config: ConfigService,
+    @Optional() private readonly uploadService?: UploadService,
+  ) {
+    this.uploader = this.uploadService || new UploadService();
+  }
 
   private getCredentials(): { accountId: string; apiToken: string } {
     const accountId = this.config.get<string>('CLOUDFLARE_ACCOUNT_ID') || process.env.CLOUDFLARE_ACCOUNT_ID;
@@ -217,60 +224,175 @@ ${candidate}`;
   /**
    * Feature 2: Visual AI Proctoring Evaluation
    * Evaluates webcam frame snapshots for multiple faces, mobile devices, and screen attentiveness.
+   * Primary: Cloudflare Clef (@cf/cloudflare/clef-omni) with Cloudinary storage for frame URLs.
+   * Fallback: NVIDIA Llama 3.2 Vision for native base64 evaluation if Clef or upload fails.
    */
   async evaluateProctoringFrame(imageBase64OrUrl: string): Promise<ClefProctoringResult> {
-    const questions = {
-      multiple_people: {
-        type: 'noul',
-        instructions: 'Is more than one person visible in the image?',
-      },
-      cell_phone: {
-        type: 'noul',
-        instructions: 'Is a smartphone, mobile device, tablet, or unauthorized secondary screen visible?',
-      },
-      looking_away: {
-        type: 'noul',
-        instructions: 'Is the candidate turned completely away from the exam screen or looking off-camera continuously?',
-      },
-    };
+    const isBase64 = imageBase64OrUrl.startsWith('data:image') || !imageBase64OrUrl.startsWith('http');
+    let frameUrl = isBase64 ? '' : imageBase64OrUrl;
 
-    const state = {
-      image: imageBase64OrUrl,
-    };
-
-    const answers = await this.runDecision(state, questions);
-
-    const multPeopleProb = answers.multiple_people?.noul ?? 0;
-    const phoneProb = answers.cell_phone?.noul ?? 0;
-    const awayProb = answers.looking_away?.noul ?? 0;
-
-    let violationFlagged = false;
-    let violationType: 'multiple_people' | 'cell_phone' | 'looking_away' | undefined;
-    const reasons: string[] = [];
-
-    if (phoneProb > 0.7) {
-      violationFlagged = true;
-      violationType = 'cell_phone';
-      reasons.push('Mobile phone or unauthorized device detected');
+    // 1. If frame is base64, upload to Cloudinary (with backup storage) to provide a public URL for Cloudflare Clef
+    if (isBase64) {
+      try {
+        const base64Clean = imageBase64OrUrl.replace(/^data:image\/\w+;base64,/, '');
+        const buffer = Buffer.from(base64Clean, 'base64');
+        const uploadResult = await this.uploader.uploadFile(
+          buffer,
+          `proctor_${Date.now()}.jpg`,
+          'image/jpeg',
+          'proctoring',
+        );
+        if (uploadResult?.url) {
+          frameUrl = uploadResult.url;
+        }
+      } catch (uploadErr: any) {
+        this.logger.warn(`Webcam frame upload to Cloudinary/storage failed: ${uploadErr.message}`);
+      }
     }
-    if (multPeopleProb > 0.75) {
-      violationFlagged = true;
-      violationType = violationType || 'multiple_people';
-      reasons.push('Multiple individuals detected in exam space');
+
+    // 2. PRIMARY: Cloudflare Clef (@cf/cloudflare/clef-omni)
+    if (frameUrl) {
+      try {
+        const questions = {
+          multiple_people: {
+            type: 'noul',
+            instructions: 'Is more than one person visible in the image?',
+          },
+          cell_phone: {
+            type: 'noul',
+            instructions: 'Is a smartphone, mobile device, tablet, or unauthorized secondary screen visible?',
+          },
+          looking_away: {
+            type: 'noul',
+            instructions: 'Is the candidate turned completely away from the exam screen or looking off-camera continuously?',
+          },
+        };
+
+        const answers = await this.runDecision({ image: frameUrl }, questions);
+
+        const multPeopleProb = answers.multiple_people?.noul ?? 0;
+        const phoneProb = answers.cell_phone?.noul ?? 0;
+        const awayProb = answers.looking_away?.noul ?? 0;
+
+        let violationFlagged = false;
+        let violationType: 'multiple_people' | 'cell_phone' | 'looking_away' | undefined;
+        const reasons: string[] = [];
+
+        if (phoneProb > 0.6) {
+          violationFlagged = true;
+          violationType = 'cell_phone';
+          reasons.push('Mobile phone or unauthorized device detected');
+        }
+        if (multPeopleProb > 0.65) {
+          violationFlagged = true;
+          violationType = violationType || 'multiple_people';
+          reasons.push('Multiple individuals detected in exam space');
+        }
+        if (awayProb > 0.75) {
+          violationFlagged = true;
+          violationType = violationType || 'looking_away';
+          reasons.push('Candidate turned away or looking off-camera');
+        }
+
+        return {
+          multiplePeopleProbability: multPeopleProb,
+          cellPhoneProbability: phoneProb,
+          lookingAwayProbability: awayProb,
+          violationFlagged,
+          violationType,
+          reasons,
+        };
+      } catch (clefErr: any) {
+        this.logger.warn(`Primary Cloudflare Clef proctoring failed (${clefErr.message}). Routing to NVIDIA Vision fallback...`);
+      }
     }
-    if (awayProb > 0.8) {
-      violationFlagged = true;
-      violationType = violationType || 'looking_away';
-      reasons.push('Candidate turned away or looking off-camera');
+
+    // 3. FALLBACK: NVIDIA Llama 3.2 Vision (handles raw base64 frame directly)
+    const nvidiaKey = this.config.get<string>('NVIDIA_API_KEY') || process.env.NVIDIA_API_KEY;
+    if (nvidiaKey && isBase64) {
+      try {
+        const normalizedDataUrl = imageBase64OrUrl.startsWith('data:image')
+          ? imageBase64OrUrl
+          : `data:image/jpeg;base64,${imageBase64OrUrl}`;
+
+        const response = await axios.post(
+          'https://integrate.api.nvidia.com/v1/chat/completions',
+          {
+            model: 'meta/llama-3.2-11b-vision-instruct',
+            messages: [
+              {
+                role: 'user',
+                content: [
+                  {
+                    type: 'text',
+                    text:
+                      'You are an expert AI exam proctor monitoring a candidate taking an examination via webcam. Analyze the image with extreme attention to exam integrity. Check carefully if the candidate is holding, checking, or looking at a smartphone, cell phone, mobile device, tablet, or unauthorized screen, or if another person is present in the frame, or if the candidate is looking completely away from the screen. Output ONLY a valid JSON object matching: {"candidate_present": boolean, "multiple_people": boolean, "cell_phone": boolean, "looking_away": boolean, "violation": boolean, "reasons": string[]}. Strict rule: If any phone, smartphone, mobile screen, or device is visible in the candidate\'s hand or in the background, set cell_phone=true, violation=true, and include an explanation in reasons.',
+                  },
+                  {
+                    type: 'image_url',
+                    image_url: {
+                      url: normalizedDataUrl,
+                    },
+                  },
+                ],
+              },
+            ],
+            temperature: 0.1,
+            max_tokens: 300,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${nvidiaKey}`,
+              'Content-Type': 'application/json',
+            },
+            timeout: 12000,
+          },
+        );
+
+        const content = response.data?.choices?.[0]?.message?.content || '{}';
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
+
+        const cellPhone = Boolean(parsed.cell_phone);
+        const multiplePeople = Boolean(parsed.multiple_people);
+        const lookingAway = Boolean(parsed.looking_away);
+        const violation = Boolean(parsed.violation || cellPhone || multiplePeople || lookingAway);
+
+        const reasons: string[] = Array.isArray(parsed.reasons) ? [...parsed.reasons] : [];
+        if (cellPhone && !reasons.some((r) => r.toLowerCase().includes('phone') || r.toLowerCase().includes('device'))) {
+          reasons.push('Mobile phone or unauthorized secondary device detected');
+        }
+        if (multiplePeople && !reasons.some((r) => r.toLowerCase().includes('multiple') || r.toLowerCase().includes('person'))) {
+          reasons.push('Multiple individuals detected in exam space');
+        }
+        if (lookingAway && !reasons.some((r) => r.toLowerCase().includes('look') || r.toLowerCase().includes('away'))) {
+          reasons.push('Candidate turned away or looking off-camera');
+        }
+
+        let violationType: 'multiple_people' | 'cell_phone' | 'looking_away' | undefined;
+        if (cellPhone) violationType = 'cell_phone';
+        else if (multiplePeople) violationType = 'multiple_people';
+        else if (lookingAway) violationType = 'looking_away';
+
+        return {
+          multiplePeopleProbability: multiplePeople ? 0.95 : 0.05,
+          cellPhoneProbability: cellPhone ? 0.95 : 0.05,
+          lookingAwayProbability: lookingAway ? 0.9 : 0.05,
+          violationFlagged: violation,
+          violationType,
+          reasons,
+        };
+      } catch (nvidiaErr: any) {
+        this.logger.error(`Fallback NVIDIA Vision proctoring failed: ${nvidiaErr.message}`);
+      }
     }
 
     return {
-      multiplePeopleProbability: multPeopleProb,
-      cellPhoneProbability: phoneProb,
-      lookingAwayProbability: awayProb,
-      violationFlagged,
-      violationType,
-      reasons,
+      multiplePeopleProbability: 0,
+      cellPhoneProbability: 0,
+      lookingAwayProbability: 0,
+      violationFlagged: false,
+      reasons: [],
     };
   }
 

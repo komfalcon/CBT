@@ -4,6 +4,7 @@ import { getExamSession, saveExamAnswers, submitExamSession, evaluateExamProctor
 import {
   AlertTriangle,
   Calculator,
+  Camera,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
@@ -85,6 +86,8 @@ export default function ExamConsole() {
     reasons?: string[];
   } | null>(null);
   const [cameraActive, setCameraActive] = useState<boolean>(false);
+  const [cameraPermissionError, setCameraPermissionError] = useState<string | null>(null);
+  const [isRequestingCamera, setIsRequestingCamera] = useState<boolean>(false);
   const [isProctorChecking, setIsProctorChecking] = useState<boolean>(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -325,44 +328,58 @@ export default function ExamConsole() {
     };
   }, [loading, submitting, session, expiredState, terminatedState, handleImmediateTermination]);
 
-  // Initialize Webcam for AI Proctoring
+  // Initialize Webcam for AI Proctoring (Mandatory Access Barrier)
+  const initCamera = useCallback(async () => {
+    try {
+      setIsRequestingCamera(true);
+      setCameraPermissionError(null);
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setCameraPermissionError('Your browser does not support webcam access. Please use modern Chrome, Edge, or Safari.');
+        setCameraActive(false);
+        setIsRequestingCamera(false);
+        return;
+      }
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: 320, height: 240, facingMode: 'user' },
+        audio: false,
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play().catch(() => {});
+      }
+      const track = stream.getVideoTracks()[0];
+      if (track) {
+        track.onended = () => {
+          setCameraActive(false);
+          setCameraPermissionError('Webcam disconnected. Continuous camera access is required to take the exam.');
+        };
+      }
+      setCameraActive(true);
+      setCameraPermissionError(null);
+    } catch (err: any) {
+      console.warn('Proctor webcam not available:', err);
+      setCameraActive(false);
+      setCameraPermissionError(
+        'Camera permission was blocked or denied. You cannot take or continue this examination without camera access enabled.',
+      );
+    } finally {
+      setIsRequestingCamera(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (loading || !session || session.status !== 'active' || expiredState || terminatedState) return;
-
-    let isMounted = true;
-    async function initCamera() {
-      try {
-        if (!navigator.mediaDevices?.getUserMedia) return;
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 320, height: 240, facingMode: 'user' },
-          audio: false,
-        });
-        if (!isMounted) {
-          stream.getTracks().forEach((t) => t.stop());
-          return;
-        }
-        streamRef.current = stream;
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play().catch(() => {});
-        }
-        setCameraActive(true);
-      } catch (err) {
-        console.warn('Proctor webcam not available:', err);
-        setCameraActive(false);
-      }
-    }
 
     initCamera();
 
     return () => {
-      isMounted = false;
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((t) => t.stop());
         streamRef.current = null;
       }
     };
-  }, [loading, session, expiredState, terminatedState]);
+  }, [loading, session, expiredState, terminatedState, initCamera]);
 
   // Periodic AI Proctoring Check Loop (every 18 seconds)
   useEffect(() => {
@@ -1376,6 +1393,58 @@ export default function ExamConsole() {
           />
           <div className="w-full bg-emerald-950/80 px-1 py-0.5 text-center text-[9px] font-mono font-semibold text-emerald-300 uppercase tracking-wider">
             Live AI Proctor
+          </div>
+        </div>
+      )}
+
+      {/* Mandatory Camera Access Restriction Barrier */}
+      {!cameraActive && !expiredState && !terminatedState && !loading && session?.status === 'active' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="max-w-md w-full bg-surface-container-high border-2 border-primary/50 rounded-3xl p-6 sm:p-8 shadow-2xl text-center">
+            <div className="mx-auto w-16 h-16 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary mb-4 animate-pulse">
+              <Camera className="w-8 h-8" />
+            </div>
+            <span className="inline-block px-3 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full bg-primary/20 text-primary border border-primary/30 mb-2">
+              Mandatory Exam Security
+            </span>
+            <h2 className="text-xl font-bold text-text-primary-dark font-headline-sm mb-2">
+              Camera Access Required
+            </h2>
+            <p className="text-sm text-text-secondary-dark mb-5 leading-relaxed font-body-sm">
+              This CBT session is proctored by Aurikrex AI Proctoring to ensure examination integrity.
+              Candidates <strong className="text-red-400 font-semibold">cannot view questions or take this exam</strong> without allowing webcam access.
+            </p>
+
+            {cameraPermissionError && (
+              <div className="mb-5 p-3.5 rounded-xl bg-red-500/15 border border-red-500/30 text-red-300 text-xs text-left">
+                <p className="font-semibold mb-1 flex items-center gap-1.5">
+                  <AlertTriangle className="w-4 h-4 shrink-0 text-red-400" />
+                  Camera Permission Blocked:
+                </p>
+                <p className="leading-relaxed">{cameraPermissionError}</p>
+                <p className="mt-2 text-[11px] text-white/70">
+                  👉 Click the camera or lock icon in your browser address bar, set Camera to <strong>Allow</strong>, and click below.
+                </p>
+              </div>
+            )}
+
+            <button
+              onClick={initCamera}
+              disabled={isRequestingCamera}
+              className="w-full py-3.5 px-4 rounded-xl bg-primary hover:bg-primary-container text-white font-semibold shadow-lg shadow-primary/25 transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+            >
+              {isRequestingCamera ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Requesting Camera Access...</span>
+                </>
+              ) : (
+                <>
+                  <Camera className="w-4 h-4" />
+                  <span>Enable &amp; Verify Camera</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
       )}

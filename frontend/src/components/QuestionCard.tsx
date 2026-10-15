@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import DOMPurify from 'dompurify';
 import { BookOpen, Check, CircleAlert, Flag, Sparkles } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -130,6 +130,15 @@ export const DiagramRenderer: React.FC<{ svg?: string | null }> = ({ svg }) => {
 export const normalizeLatexBackslashes = (text: string | null | undefined): string => {
   if (!text || typeof text !== 'string') return '';
   let res = text;
+  // Repair carriage-return (\r / \x0d) corruptions of \right, \rho, \root, \rangle
+  res = res.replace(/[\r\x0d]ight\b/g, '\\right');
+  res = res.replace(/\\r\s*ight\b/g, '\\right');
+  res = res.replace(/(?<=\\left[({[].*?)(?:\\?|\b)ight\b/g, '\\right');
+  res = res.replace(/(?<=\\left\s*[\(\[\{][\s\S]*?)(?<!\\)\bight(?=\s*[\)\]\}\^\_\s]|$)/g, '\\right');
+  res = res.replace(/[\r\x0d]ho\b/g, '\\rho');
+  res = res.replace(/[\r\x0d]oot\b/g, '\\root');
+  res = res.replace(/[\r\x0d]angle\b/g, '\\rangle');
+
   // Multi-backslash before alphabetic LaTeX commands (e.g. \\frac -> \frac, \\\sqrt -> \sqrt)
   res = res.replace(/\\{2,}([a-zA-Z]+)/g, '\\$1');
   // Multi-backslash before single-character LaTeX commands & escapes (e.g. \\( -> \(, \\[ -> \[, \\, -> \,, \\{ -> \{)
@@ -142,6 +151,13 @@ export const normalizeLatexBackslashes = (text: string | null | undefined): stri
 export const sanitizeQuestionText = (rawText: string | null | undefined): string => {
   if (!rawText || typeof rawText !== 'string') return '';
   let text = normalizeLatexBackslashes(rawText.trim());
+
+  // Prevent unwanted markdown indented code blocks (blue monospace text cutoff)
+  text = text.replace(/^[ \t]{4,}/gm, '');
+
+  // Strip embedded SVG from text stem so it never leaks as raw code in prose
+  text = text.replace(/<br\s*\/?>\s*<svg[\s\S]*?<\/svg>/gi, '');
+  text = text.replace(/<svg[\s\S]*?<\/svg>/gi, '');
 
   // 1. Remove leaked Explanations / Solutions appended to stem
   text = text.replace(/(?:\r?\n|^|\s+)(?:\*\*|__|\*)?(?:Explanation|Solution|Answer Explanation|Detailed Solution)(?:\*\*|__|\*)?\s*:[\s\S]*$/i, '');
@@ -179,6 +195,22 @@ export const cleanOptionText = (optText: string | null | undefined): string => {
   if (!optText || typeof optText !== 'string') return '';
   let text = normalizeLatexBackslashes(optText.trim());
   text = text.replace(/^(?:[•\-\*]\s*)?(?:Option\s+[A-Ea-e][:\.]?\s*|[\[\(][A-Ea-e][\]\)]\s*|[A-Ea-e][\.\):]\s*)/i, '').trim();
+
+  // Repair carriage return \right corruptions
+  text = text.replace(/[\r\x0d]ight\b/g, '\\right');
+  text = text.replace(/\\r\s*ight\b/g, '\\right');
+  text = text.replace(/(?<=\\left[({[].*?)(?:\\?|\b)ight\b/g, '\\right');
+  text = text.replace(/(?<=\\left\s*[\(\[\{][\s\S]*?)(?<!\\)\bight(?=\s*[\)\]\}\^\_\s]|$)/g, '\\right');
+
+  // If option has math markers (\frac, \left, \right, ^, _, \sqrt) and no $, wrap entire option in $
+  if (
+    !text.startsWith('$') &&
+    !text.includes('$$') &&
+    /(\\(?:frac|left|right|sqrt|times|pm|le|ge|neq|alpha|beta|theta|pi|cdot|text)|[a-zA-Z]_\{\d+\}|[a-zA-Z]\^\{|\bS_\{\d+\})/i.test(text)
+  ) {
+    text = `$${text}$`;
+  }
+
   return text.trim();
 };
 
@@ -218,6 +250,18 @@ export const addLatexDelimiters = (text: string): string => {
   // 4. Fix Backspace (\x08) control character corruptions
   result = result.replace(/[\x08]egin(?=\s*\{)/g, '\\begin');
   result = result.replace(/[\x08]end(?=\s*\{)/g, '\\end');
+  result = result.replace(/[\x08]matrix/g, '\\bmatrix');
+  result = result.replace(/[\x08]eta/g, '\\beta');
+  result = result.replace(/[\x08]ar\b/g, '\\bar');
+  result = result.replace(/[\x08]inom/g, '\\binom');
+
+  // 4b. Fix Carriage Return (\x0d / \r) control character corruptions from bad \r JSON escape
+  result = result.replace(/[\r\x0d]ight\b/g, '\\right');
+  result = result.replace(/\\r\s*ight\b/g, '\\right');
+  result = result.replace(/(?<=\\left\s*[\(\[\{][\s\S]*?)(?<!\\)\bight(?=\s*[\)\]\}\^\_\s]|$)/g, '\\right');
+  result = result.replace(/[\r\x0d]ho\b/g, '\\rho');
+  result = result.replace(/[\r\x0d]oot\b/g, '\\root');
+  result = result.replace(/[\r\x0d]angle\b/g, '\\rangle');
   result = result.replace(/[\x08]matrix/g, '\\bmatrix');
   result = result.replace(/[\x08]eta/g, '\\beta');
   result = result.replace(/[\x08]ar\b/g, '\\bar');
@@ -308,14 +352,21 @@ export const addLatexDelimiters = (text: string): string => {
 };
 
 const markdownComponents = {
-  p: ({ children }: { children?: React.ReactNode }) => <p className="exam-markdown-paragraph">{children}</p>,
+  p: ({ children }: { children?: React.ReactNode }) => <p className="exam-markdown-paragraph whitespace-normal leading-relaxed">{children}</p>,
   strong: ({ children }: { children?: React.ReactNode }) => <strong className="font-bold text-text-primary">{children}</strong>,
   em: ({ children }: { children?: React.ReactNode }) => <em className="text-primary">{children}</em>,
   ul: ({ children }: { children?: React.ReactNode }) => <ul className="exam-markdown-list list-disc">{children}</ul>,
   ol: ({ children }: { children?: React.ReactNode }) => <ol className="exam-markdown-list list-decimal">{children}</ol>,
   li: ({ children }: { children?: React.ReactNode }) => <li>{children}</li>,
-  blockquote: ({ children }: { children?: React.ReactNode }) => <blockquote className="exam-markdown-quote">{children}</blockquote>,
-  code: ({ children }: { children?: React.ReactNode }) => <code className="rounded bg-bg-secondary px-1.5 py-0.5 font-mono text-[0.9em] text-primary">{children}</code>,
+  blockquote: ({ children }: { children?: React.ReactNode }) => <blockquote className="exam-markdown-quote border-l-4 border-primary/40 pl-4 py-1 italic my-2">{children}</blockquote>,
+  pre: ({ children }: { children?: React.ReactNode }) => <div className="my-2 p-3 rounded-xl bg-bg-secondary/40 text-text-primary font-sans whitespace-pre-wrap break-words leading-relaxed">{children}</div>,
+  code: ({ children, inline }: { children?: React.ReactNode; inline?: boolean }) => (
+    inline ? (
+      <code className="rounded bg-bg-secondary px-1.5 py-0.5 font-sans text-[0.95em] text-text-primary">{children}</code>
+    ) : (
+      <div className="whitespace-pre-wrap break-words font-sans text-text-primary leading-relaxed">{children}</div>
+    )
+  ),
 };
 
 export const SmartTextRenderer: React.FC<{ text: string; sanitizeStem?: boolean }> = ({ text, sanitizeStem = false }) => {
@@ -386,16 +437,25 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const [diagramSvg, setDiagramSvg] = useState<string | null | undefined>(question.diagram_svg);
   const [isLoadingDiagram, setIsLoadingDiagram] = useState(false);
 
+  // Auto-detect and extract inline SVG from question_text if diagram_svg is not already provided
+  const embeddedSvg = useMemo(() => {
+    if (question.diagram_svg) return null;
+    const match = question.question_text?.match(/<svg[\s\S]*?<\/svg>/i);
+    return match ? match[0] : null;
+  }, [question.question_text, question.diagram_svg]);
+
+  const effectiveDiagramSvg = diagramSvg || question.diagram_svg || embeddedSvg;
+
   useEffect(() => {
-    setDiagramSvg(question.diagram_svg);
-    if (question.has_diagram && !question.diagram_svg) {
+    setDiagramSvg(question.diagram_svg || embeddedSvg);
+    if (question.has_diagram && !question.diagram_svg && !embeddedSvg) {
       setIsLoadingDiagram(true);
       generateQuestionDiagram(question.questionId)
         .then((res) => setDiagramSvg(res.svg))
         .catch((err) => console.error('Failed to generate diagram:', err))
         .finally(() => setIsLoadingDiagram(false));
     }
-  }, [question.questionId, question.has_diagram, question.diagram_svg]);
+  }, [question.questionId, question.has_diagram, question.diagram_svg, embeddedSvg]);
 
   return (
     <article className="exam-question-card">
@@ -439,7 +499,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           Preparing the supporting diagram…
         </div>
       )}
-      {!isLoadingDiagram && <DiagramRenderer svg={diagramSvg} />}
+      {!isLoadingDiagram && <DiagramRenderer svg={effectiveDiagramSvg} />}
 
       <div className="mt-8 grid max-w-3xl gap-3 sm:grid-cols-2" role="radiogroup" aria-label="Answer options">
         {question.options.map((option) => {
