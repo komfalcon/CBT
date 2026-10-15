@@ -1,25 +1,21 @@
-# Aurikrex Exam Arena
+# Falke AI CBT Exam Arena
 
-Production-grade Computer-Based Test platform scaffold for Nigerian JAMB UTME.
+Production-grade Computer-Based Test platform for Nigerian JAMB UTME.
 
 ## Prerequisites
 
-- Docker
-- Docker Compose plugin (`docker compose`)
+- Node.js >= 20.0.0
+- npm >= 9.0.0
 
 ## Run locally
 
-1. **Start the databases** (from the root directory):
-   ```bash
-   docker compose up -d
-   ```
-2. **Start the backend API** (in a new terminal):
+1. **Start the backend API** (in a terminal):
    ```bash
    cd backend
    npm install
    npm run start:dev
    ```
-3. **Start the frontend UI** (in another terminal):
+2. **Start the frontend UI** (in another terminal):
    ```bash
    cd frontend
    npm install
@@ -57,7 +53,6 @@ Expected shape:
 
 - `/frontend` — React + Vite + Tailwind scaffold
 - `/backend` — NestJS scaffold + `/health`
-- `/docker-compose.yml` — local multi-service stack
 - `/.do/app.yaml` — DigitalOcean App Platform spec
 - `/frontend/wrangler.toml` — Cloudflare Pages config
 

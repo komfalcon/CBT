@@ -1,13 +1,13 @@
-﻿{
+{
   "name": "cbt-deploy-proxy",
   "version": "1.0.0",
   "description": "Proxy package.json to deploy the backend subfolder on platforms that require root deployments.",
   "engines": {
-    "node": "20.x"
+    "node": ">=20.0.0"
   },
   "scripts": {
-    "postinstall": "cd backend && npm install",
-    "build": "cd backend && npm run build",
-    "start": "cd backend && npm start"
+    "build": "node scripts/deploy-root-build.js",
+    "start": "cd backend && node dist/main.js",
+    "start:prod": "cd backend && node dist/main.js"
   }
 }
