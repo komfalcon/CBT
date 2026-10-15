@@ -54,6 +54,11 @@ export async function verifyEmail(payload: { email: string; code: string }) {
   return data;
 }
 
+export async function resendVerification(email: string) {
+  const { data } = await api.post<{ message: string }>('/resend-verification', { email });
+  return data;
+}
+
 export async function login(payload: { email: string; password: string }) {
   const { data } = await api.post<LoginResponse>('/login', payload);
   persistAuthData(data);

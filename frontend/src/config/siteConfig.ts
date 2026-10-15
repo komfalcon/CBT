@@ -11,7 +11,7 @@ export const siteConfig = {
   urls: {
     dashboard: '/dashboard',
     register: '/register',
-    signIn: '/register?tab=sign-in',
+    signIn: '/auth',
     cbtKey: '/register?tab=cbt-key',
     helpCenter: '/help',
     contactUs: '/contact',
@@ -24,4 +24,11 @@ export const siteConfig = {
     examArena: '#',
     systemStatus: '#', // Not yet implemented in codebase
   },
+  socials: [
+    { label: 'X (Twitter)', href: 'https://x.com/aurikrex', key: 'x' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/falcon-omotosho', key: 'linkedin' },
+    { label: 'Instagram', href: 'https://www.instagram.com/falcon.omotosho', key: 'instagram' },
+    { label: 'WhatsApp', href: 'https://wa.me/2349113683395', key: 'whatsapp' },
+    { label: 'Website', href: 'https://www.aurikrex.com', key: 'website' },
+  ],
 } as const;

@@ -14,7 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcryptjs';
 import { createHmac, randomInt, createHash } from 'crypto';
-import { generateSecret, generateURI, verifySync } from 'otplib';
+import { authenticator } from 'otplib';
 import * as QRCode from 'qrcode';
 import { z } from 'zod';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -182,6 +182,35 @@ export class AuthService implements OnModuleInit {
     }).where(eq(schema.users.id, user.id));
 
     return { message: 'Email verified successfully.' };
+  }
+
+  async resendVerification(email: string) {
+    const normalizedEmail = email.toLowerCase().trim();
+    const [user] = await this.db.select().from(schema.users).where(
+      eq(schema.users.email, normalizedEmail)
+    ).limit(1);
+
+    if (!user) {
+      return { message: 'If this email is pending verification, a new link has been sent.' };
+    }
+
+    if (user.account_status === 'active') {
+      return { message: 'This account is already verified. Please sign in.' };
+    }
+
+    const code = randomInt(100000, 999999).toString();
+    await this.db.update(schema.users).set({
+      verification_code: code,
+      verification_code_expires: new Date(Date.now() + 24 * 3600 * 1000),
+    }).where(eq(schema.users.id, user.id));
+
+    await this.notificationsService.queueEmailVerification({
+      email: user.email,
+      fullName: user.fullName,
+      token: code,
+    });
+
+    return { message: 'Verification link has been resent. Please check your inbox.' };
   }
 
 
@@ -393,7 +422,7 @@ export class AuthService implements OnModuleInit {
     if (!secret || !/^\d{6}$/.test(otp)) {
       return false;
     }
-    return Boolean(verifySync({ token: otp, secret })?.valid);
+    return Boolean(authenticator.check(otp, secret));
   }
 
   async generateMfaSecret(userId: string) {
@@ -402,8 +431,8 @@ export class AuthService implements OnModuleInit {
       throw new NotFoundException('User not found.');
     }
 
-    const secret = generateSecret();
-    const otpauthUrl = generateURI({ secret, label: user.email, issuer: 'Aurikrex CBT' });
+    const secret = authenticator.generateSecret();
+    const otpauthUrl = authenticator.keyuri(user.email, 'Aurikrex CBT', secret);
     const qrCodeDataUrl = await QRCode.toDataURL(otpauthUrl);
 
     await this.db.update(schema.users).set({ mfa_secret: secret }).where(eq(schema.users.id, user.id));
