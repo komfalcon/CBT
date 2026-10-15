@@ -26,7 +26,7 @@ import { QuestionCard } from '../../components/QuestionCard';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import { getSubjectLabel } from '../../constants/subjects';
 
-const DESKTOP_BREAKPOINT = 768;
+const DESKTOP_BREAKPOINT = 1024;
 const CALCULATOR_WIDTH = 288;
 const CALCULATOR_HEIGHT = 360;
 

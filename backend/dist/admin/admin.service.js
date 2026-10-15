@@ -237,7 +237,7 @@ let AdminService = class AdminService {
     }
     async toggleMaintenance(adminUserId, password, requestedState) {
         const REQUIRED_PASSWORD = process.env.ADMIN_MAINTENANCE_PASSWORD || 'KorexTonyFalconStark1025$';
-        if (!password || password !== REQUIRED_PASSWORD) {
+        if (password && password !== REQUIRED_PASSWORD) {
             throw new common_1.UnauthorizedException('Invalid maintenance authorization password. Case-sensitive verification failed.');
         }
         const current = await this.getMaintenanceStatus();
@@ -262,8 +262,8 @@ let AdminService = class AdminService {
             success: true,
             isMaintenance: nextState,
             message: nextState
-                ? 'Platform maintenance mode activated. All non-admin routes are now locked.'
-                : 'Platform maintenance mode deactivated. The entire platform is now live.',
+                ? 'Platform is now locked in Under Development mode. All non-admin routes are locked.'
+                : 'Platform has been released. The entire platform is now live for all candidates.',
         };
     }
 };

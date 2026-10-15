@@ -45,11 +45,11 @@ export async function getMaintenanceStatus(): Promise<MaintenanceStatusResponse>
 }
 
 export async function toggleMaintenance(
-  password: string,
-  isMaintenance: boolean,
+  password?: string,
+  isMaintenance?: boolean,
 ): Promise<ToggleMaintenanceResponse> {
   const { data } = await adminClient.post<ToggleMaintenanceResponse>('/maintenance/toggle', {
-    password,
+    password: password || undefined,
     isMaintenance,
   });
   return data;

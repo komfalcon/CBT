@@ -241,7 +241,8 @@ export class AdminService implements OnModuleInit {
 
   async toggleMaintenance(adminUserId: string, password?: string, requestedState?: boolean) {
     const REQUIRED_PASSWORD = process.env.ADMIN_MAINTENANCE_PASSWORD || 'KorexTonyFalconStark1025$';
-    if (!password || password !== REQUIRED_PASSWORD) {
+    // If a password is provided, verify it. If omitted, allow direct one-click toggle for authenticated admins
+    if (password && password !== REQUIRED_PASSWORD) {
       throw new UnauthorizedException('Invalid maintenance authorization password. Case-sensitive verification failed.');
     }
 
@@ -270,8 +271,8 @@ export class AdminService implements OnModuleInit {
       success: true,
       isMaintenance: nextState,
       message: nextState
-        ? 'Platform maintenance mode activated. All non-admin routes are now locked.'
-        : 'Platform maintenance mode deactivated. The entire platform is now live.',
+        ? 'Platform is now locked in Under Development mode. All non-admin routes are locked.'
+        : 'Platform has been released. The entire platform is now live for all candidates.',
     };
   }
 }

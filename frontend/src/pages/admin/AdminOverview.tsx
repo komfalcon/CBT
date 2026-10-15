@@ -75,38 +75,37 @@ export default function AdminOverview() {
     }
   };
 
-  const handleToggleMaintenance = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (!passwordInput) {
-      setPasswordError('Please enter the master verification password.');
-      return;
-    }
+  const handleDirectToggleMaintenance = async () => {
     setToggling(true);
-    setPasswordError(null);
     try {
       const targetState = !isMaintenance;
-      const data = await toggleMaintenance(passwordInput, targetState);
+      const data = await toggleMaintenance(undefined, targetState);
 
       setIsMaintenance(data.isMaintenance);
       if (data.updatedAt) {
         setLastUpdated(new Date(data.updatedAt).toLocaleString());
       }
-      setShowPasswordModal(false);
-      setPasswordInput('');
       addToast({
         type: 'success',
-        title: data.isMaintenance ? 'Maintenance Mode Activated' : 'Maintenance Mode Deactivated',
+        title: data.isMaintenance ? 'Under Development Mode Activated' : 'Platform Is Now Live',
         message: data.isMaintenance
-          ? 'Platform is now locked in maintenance mode. Non-admin routes display the maintenance screen.'
-          : 'Platform is now LIVE and accessible to all students and visitors.',
+          ? 'Platform is locked. All non-admin visitors immediately see the Under Development screen.'
+          : 'Platform has been released and is LIVE for all candidates and visitors.',
       });
     } catch (err: any) {
-      setPasswordError(
-        err.response?.data?.message || err.message || 'Incorrect master password. Verification failed.',
-      );
+      addToast({
+        type: 'error',
+        title: 'Failed to toggle maintenance mode',
+        message: err.response?.data?.message || err.message || 'Operation failed.',
+      });
     } finally {
       setToggling(false);
     }
+  };
+
+  const handleToggleMaintenance = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    return handleDirectToggleMaintenance();
   };
 
   useEffect(() => {
@@ -140,14 +139,14 @@ export default function AdminOverview() {
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2.5">
                 <h2 className="text-base sm:text-lg font-bold text-text-primary">
-                  Platform Maintenance Control
+                  Platform Under Development Control
                 </h2>
                 {maintenanceLoading ? (
                   <span className="text-xs text-text-muted animate-pulse">Checking status...</span>
                 ) : isMaintenance ? (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40 shadow-sm shadow-amber-500/10">
                     <span className="h-2 w-2 rounded-full bg-amber-400 animate-ping" />
-                    Under Maintenance
+                    Under Development
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-800 dark:text-emerald-400 border border-emerald-500/30">
@@ -158,7 +157,7 @@ export default function AdminOverview() {
               </div>
               <p className="text-xs sm:text-sm text-text-secondary max-w-2xl leading-relaxed">
                 {isMaintenance
-                  ? 'Maintenance mode is ACTIVE. All public, candidate, and exam URLs display the Under Maintenance screen. Admin tools remain fully operational.'
+                  ? 'Platform is LOCKED. All candidate, exam, and public URLs display the Under Development screen. No one can use the app until released.'
                   : 'Platform is LIVE. Candidate mock exams, registration, login, and all student features are running normally across all URLs.'}
               </p>
               {lastUpdated && (
@@ -172,20 +171,25 @@ export default function AdminOverview() {
           <div className="flex items-center gap-3 shrink-0 w-full md:w-auto">
             <button
               type="button"
-              onClick={() => {
-                setPasswordInput('');
-                setPasswordError(null);
-                setShowPassword(false);
-                setShowPasswordModal(true);
-              }}
-              className={`w-full md:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all duration-200 cursor-pointer ${
+              disabled={toggling || maintenanceLoading}
+              onClick={handleDirectToggleMaintenance}
+              className={`w-full md:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all duration-200 cursor-pointer disabled:opacity-60 ${
                 isMaintenance
                   ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/25 active:scale-[0.98]'
                   : 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-amber-500/25 active:scale-[0.98]'
               }`}
             >
-              <Power className="h-4 w-4" />
-              <span>{isMaintenance ? 'Disable Maintenance (Go Live)' : 'Turn Maintenance ON'}</span>
+              {toggling ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>{isMaintenance ? 'Releasing Platform...' : 'Locking Platform...'}</span>
+                </>
+              ) : (
+                <>
+                  <Power className="h-4 w-4" />
+                  <span>{isMaintenance ? 'Release Platform (Go Live)' : 'Lock Platform (Under Development)'}</span>
+                </>
+              )}
             </button>
           </div>
         </div>

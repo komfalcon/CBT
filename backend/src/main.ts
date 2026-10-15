@@ -170,7 +170,7 @@ async function bootstrap() {
           return res.status(503).json({
             statusCode: 503,
             error: 'Service Unavailable',
-            message: 'The Aurikrex CBT platform is currently undergoing scheduled maintenance. Please check back shortly.',
+            message: 'The Falke AI CBT platform is currently under active development and scheduled maintenance. Please check back shortly.',
             isMaintenance: true,
           });
         }
