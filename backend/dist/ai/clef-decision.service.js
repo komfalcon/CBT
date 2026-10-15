@@ -167,17 +167,18 @@ ${candidate}`;
     async evaluateProctoringFrame(imageBase64OrUrl) {
         const isBase64 = imageBase64OrUrl.startsWith('data:image') || !imageBase64OrUrl.startsWith('http');
         let frameUrl = isBase64 ? '' : imageBase64OrUrl;
+        let uploadResult = null;
         if (isBase64) {
             try {
                 const base64Clean = imageBase64OrUrl.replace(/^data:image\/\w+;base64,/, '');
                 const buffer = Buffer.from(base64Clean, 'base64');
-                const uploadResult = await this.uploader.uploadFile(buffer, `proctor_${Date.now()}.jpg`, 'image/jpeg', 'proctoring');
+                uploadResult = await this.uploader.uploadFile(buffer, `proctor_${Date.now()}.jpg`, 'image/jpeg', 'proctoring');
                 if (uploadResult?.url) {
                     frameUrl = uploadResult.url;
                 }
             }
             catch (uploadErr) {
-                this.logger.warn(`Webcam frame upload to Cloudinary/storage failed: ${uploadErr.message}`);
+                this.logger.warn(`Webcam frame upload to Cloudinary/storage skipped: ${uploadErr.message}`);
             }
         }
         if (frameUrl) {
@@ -197,6 +198,11 @@ ${candidate}`;
                     },
                 };
                 const answers = await this.runDecision({ image: frameUrl }, questions);
+                if (uploadResult?.key) {
+                    this.uploader.deleteFile(uploadResult.key, uploadResult.provider).catch((delErr) => {
+                        this.logger.warn(`Failed to auto-delete proctoring frame from ${uploadResult?.provider}: ${delErr.message}`);
+                    });
+                }
                 const multPeopleProb = answers.multiple_people?.noul ?? 0;
                 const phoneProb = answers.cell_phone?.noul ?? 0;
                 const awayProb = answers.looking_away?.noul ?? 0;
@@ -230,6 +236,9 @@ ${candidate}`;
             }
             catch (clefErr) {
                 this.logger.warn(`Primary Cloudflare Clef proctoring failed (${clefErr.message}). Routing to NVIDIA Vision fallback...`);
+                if (uploadResult?.key) {
+                    this.uploader.deleteFile(uploadResult.key, uploadResult.provider).catch(() => { });
+                }
             }
         }
         const nvidiaKey = this.config.get('NVIDIA_API_KEY') || process.env.NVIDIA_API_KEY;

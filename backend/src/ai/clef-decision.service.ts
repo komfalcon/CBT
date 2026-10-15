@@ -232,11 +232,12 @@ ${candidate}`;
     let frameUrl = isBase64 ? '' : imageBase64OrUrl;
 
     // 1. If frame is base64, upload to Cloudinary (with backup storage) to provide a public URL for Cloudflare Clef
+    let uploadResult: { url: string; provider: 'cloudinary' | 'byteship'; key?: string } | null = null;
     if (isBase64) {
       try {
         const base64Clean = imageBase64OrUrl.replace(/^data:image\/\w+;base64,/, '');
         const buffer = Buffer.from(base64Clean, 'base64');
-        const uploadResult = await this.uploader.uploadFile(
+        uploadResult = await this.uploader.uploadFile(
           buffer,
           `proctor_${Date.now()}.jpg`,
           'image/jpeg',
@@ -246,7 +247,7 @@ ${candidate}`;
           frameUrl = uploadResult.url;
         }
       } catch (uploadErr: any) {
-        this.logger.warn(`Webcam frame upload to Cloudinary/storage failed: ${uploadErr.message}`);
+        this.logger.warn(`Webcam frame upload to Cloudinary/storage skipped: ${uploadErr.message}`);
       }
     }
 
@@ -269,6 +270,13 @@ ${candidate}`;
         };
 
         const answers = await this.runDecision({ image: frameUrl }, questions);
+
+        // Auto-purge the temporary image from Cloudinary / Byteship immediately after Clef evaluation
+        if (uploadResult?.key) {
+          this.uploader.deleteFile(uploadResult.key, uploadResult.provider).catch((delErr) => {
+            this.logger.warn(`Failed to auto-delete proctoring frame from ${uploadResult?.provider}: ${delErr.message}`);
+          });
+        }
 
         const multPeopleProb = answers.multiple_people?.noul ?? 0;
         const phoneProb = answers.cell_phone?.noul ?? 0;
@@ -308,6 +316,9 @@ ${candidate}`;
         };
       } catch (clefErr: any) {
         this.logger.warn(`Primary Cloudflare Clef proctoring failed (${clefErr.message}). Routing to NVIDIA Vision fallback...`);
+        if (uploadResult?.key) {
+          this.uploader.deleteFile(uploadResult.key, uploadResult.provider).catch(() => {});
+        }
       }
     }
 
