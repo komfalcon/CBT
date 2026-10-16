@@ -53,7 +53,7 @@ export function LandingHeader({ status, onOpenKey }: Props) {
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-3 px-4 sm:h-16 sm:px-6 lg:px-8">
         {/* Brand */}
         <Link to="/" className="flex min-w-0 items-center gap-2" aria-label={`${SITE_NAME} home`}>
-          <img src="/favicon.svg" alt="" width={26} height={26} className="h-6 w-6 shrink-0 sm:h-7 sm:w-7" />
+          <img src="/aurikrex-logo.png" onError={(e) => { (e.target as HTMLImageElement).src = '/favicon.svg'; }} alt="" width={26} height={26} className="h-6 w-6 shrink-0 rounded-lg object-cover sm:h-7 sm:w-7" />
           <span className="truncate font-display text-sm font-semibold text-text-primary sm:text-[15px]">{SITE_NAME}</span>
           <span className="rounded-full border border-border px-1.5 py-0.5 text-[11px] font-medium text-text-secondary sm:text-xs">Beta</span>
         </Link>
