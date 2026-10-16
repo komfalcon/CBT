@@ -460,7 +460,7 @@ export default function ExamConsole() {
     try {
       setSubmitting(true);
       const result = await submitExamSession(sessionId);
-      navigate(`/results/${result.resultId || result.id}`);
+      navigate(`/results/${result.resultId || result.id || sessionId}`);
     } catch (err: any) {
       console.error(err);
       setSubmitting(false);
@@ -612,7 +612,7 @@ export default function ExamConsole() {
       setSubmitting(true);
       setSubmitError('');
       const result = await submitExamSession(sessionId);
-      navigate(`/results/${result.resultId || result.id}`);
+      navigate(`/results/${result.resultId || result.id || sessionId}`);
     } catch (err: any) {
       setSubmitError(err.response?.data?.message || 'Submission failed.');
       setSubmitting(false);
@@ -660,7 +660,7 @@ export default function ExamConsole() {
     const isTabSwitch =
       terminatedState?.reason === 'tab_switch' ||
       expiredState?.status === 'terminated_tab_switch';
-    const resultId = terminatedState?.resultId || expiredState?.resultId;
+    const resultId = terminatedState?.resultId || expiredState?.resultId || sessionId;
 
     return (
       <div className="min-h-screen bg-bg-primary-dark flex flex-col items-center justify-center text-text-primary-dark p-6">

@@ -25,6 +25,14 @@ let ExamController = class ExamController {
         this.examService = examService;
         this.clefDecisionService = clefDecisionService;
     }
+    async createMockSession(user, body) {
+        const session = await this.examService.createSession(user.sub, 'mock', undefined, body.subjects, body.subjectConfigs, undefined, body.difficultyLevel, undefined);
+        return this.examService.sanitizeSession(session);
+    }
+    async createDrillSession(user, body) {
+        const session = await this.examService.createSession(user.sub, 'drill', body.subject, [body.subject], body.topics?.length ? { [body.subject]: { mode: 'specific', topics: body.topics } } : undefined, body.count || 20, body.difficultyLevel, body.topics);
+        return this.examService.sanitizeSession(session);
+    }
     async createSession(user, body) {
         const session = await this.examService.createSession(user.sub, body.type, body.subject, body.subjects, body.subjectConfigs, body.count, body.difficultyLevel, body.topics);
         return this.examService.sanitizeSession(session);
@@ -73,6 +81,22 @@ let ExamController = class ExamController {
     }
 };
 exports.ExamController = ExamController;
+__decorate([
+    (0, common_1.Post)('sessions/mock'),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, create_session_dto_1.CreateMockSessionDto]),
+    __metadata("design:returntype", Promise)
+], ExamController.prototype, "createMockSession", null);
+__decorate([
+    (0, common_1.Post)('sessions/drill'),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, create_session_dto_1.CreateDrillSessionDto]),
+    __metadata("design:returntype", Promise)
+], ExamController.prototype, "createDrillSession", null);
 __decorate([
     (0, common_1.Post)('sessions'),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),

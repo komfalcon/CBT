@@ -66,7 +66,7 @@ let ResultsService = class ResultsService {
         const [result] = await this.db
             .select()
             .from(schema.exam_results)
-            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.eq)(schema.exam_results.id, resultId), (0, drizzle_orm_1.eq)(schema.exam_results.userId, userId)))
+            .where((0, drizzle_orm_1.and)((0, drizzle_orm_1.or)((0, drizzle_orm_1.eq)(schema.exam_results.id, resultId), (0, drizzle_orm_1.eq)(schema.exam_results.sessionId, resultId)), (0, drizzle_orm_1.eq)(schema.exam_results.userId, userId)))
             .limit(1);
         if (!result) {
             throw new common_1.NotFoundException('Exam result not found.');

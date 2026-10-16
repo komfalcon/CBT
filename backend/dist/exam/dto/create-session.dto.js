@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateSessionDto = void 0;
+exports.CreateDrillSessionDto = exports.CreateMockSessionDto = exports.CreateSessionDto = void 0;
 const class_validator_1 = require("class-validator");
 class CreateSessionDto {
 }
@@ -51,4 +51,46 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)
 ], CreateSessionDto.prototype, "subjectConfigs", void 0);
+class CreateMockSessionDto {
+}
+exports.CreateMockSessionDto = CreateMockSessionDto;
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateMockSessionDto.prototype, "subjects", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateMockSessionDto.prototype, "difficultyLevel", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
+], CreateMockSessionDto.prototype, "subjectConfigs", void 0);
+class CreateDrillSessionDto {
+}
+exports.CreateDrillSessionDto = CreateDrillSessionDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateDrillSessionDto.prototype, "subject", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(5),
+    (0, class_validator_1.Max)(100),
+    __metadata("design:type", Number)
+], CreateDrillSessionDto.prototype, "count", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateDrillSessionDto.prototype, "difficultyLevel", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Array)
+], CreateDrillSessionDto.prototype, "topics", void 0);
 //# sourceMappingURL=create-session.dto.js.map

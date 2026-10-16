@@ -152,7 +152,7 @@ let ExamService = class ExamService {
                 .limit(1);
             return {
                 ...this.sanitizeSession(session),
-                resultId: existingResult?.id,
+                resultId: existingResult?.id || session.id,
                 isExpired: true,
             };
         }
@@ -193,7 +193,7 @@ let ExamService = class ExamService {
                 .limit(1);
             return {
                 ...this.sanitizeSession(session),
-                resultId: existingResult?.id,
+                resultId: existingResult?.id || session.id,
                 isExpired: true,
             };
         }
@@ -240,11 +240,13 @@ let ExamService = class ExamService {
                 .from(schema.exam_results)
                 .where((0, drizzle_orm_1.eq)(schema.exam_results.sessionId, session.id))
                 .limit(1);
-            return {
-                resultId: existingResult?.id,
-                id: existingResult?.id,
-                status: session.status,
-            };
+            if (existingResult) {
+                return {
+                    resultId: existingResult.id,
+                    id: existingResult.id,
+                    status: session.status,
+                };
+            }
         }
         const sessionQuestions = session.questions;
         const sessionSubjects = session.subjects;

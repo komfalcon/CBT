@@ -47,22 +47,34 @@ exports.NotificationsService = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const amqp = __importStar(require("amqplib"));
+const notifications_processor_1 = require("./notifications.processor");
 let NotificationsService = NotificationsService_1 = class NotificationsService {
-    constructor(configService) {
+    constructor(configService, notificationsProcessor) {
         this.configService = configService;
+        this.notificationsProcessor = notificationsProcessor;
         this.logger = new common_1.Logger(NotificationsService_1.name);
     }
     async queueEmailVerification(payload) {
-        await this.publishToQueue('notifications.email.verification', payload);
+        const published = await this.publishToQueue('notifications.email.verification', payload);
+        if (!published) {
+            await this.notificationsProcessor.sendVerificationDirect(payload).catch((err) => {
+                this.logger.error('Failed direct fallback for email verification', err);
+            });
+        }
     }
     async queuePasswordReset(payload) {
-        await this.publishToQueue('notifications.email.password_reset', payload);
+        const published = await this.publishToQueue('notifications.email.password_reset', payload);
+        if (!published) {
+            await this.notificationsProcessor.sendPasswordResetDirect(payload).catch((err) => {
+                this.logger.error('Failed direct fallback for password reset', err);
+            });
+        }
     }
     async publishToQueue(queueName, payload) {
         const rabbitUrl = this.configService.get('RABBITMQ_URL');
         if (!rabbitUrl) {
-            this.logger.warn('RABBITMQ_URL is not configured; notification was not queued.');
-            return;
+            this.logger.log('RABBITMQ_URL is not configured; sending email directly.');
+            return false;
         }
         let connection;
         let channel;
@@ -74,9 +86,11 @@ let NotificationsService = NotificationsService_1 = class NotificationsService {
             channel = await connection.createChannel();
             await channel.assertQueue(queueName, { durable: true });
             channel.sendToQueue(queueName, Buffer.from(JSON.stringify(payload)), { persistent: true });
+            return true;
         }
         catch (error) {
             this.logger.error(`Failed to publish to queue ${queueName}`, error);
+            return false;
         }
         finally {
             await channel?.close().catch(() => undefined);
@@ -128,6 +142,7 @@ let NotificationsService = NotificationsService_1 = class NotificationsService {
 exports.NotificationsService = NotificationsService;
 exports.NotificationsService = NotificationsService = NotificationsService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __metadata("design:paramtypes", [config_1.ConfigService,
+        notifications_processor_1.NotificationsProcessor])
 ], NotificationsService);
 //# sourceMappingURL=notifications.service.js.map

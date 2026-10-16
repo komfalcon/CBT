@@ -112,9 +112,11 @@ export function StudentLayout({ children, student: propStudent }: StudentLayoutP
           to="/dashboard"
           className="flex items-center gap-3 px-2 py-1 group"
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md shadow-primary/20 shrink-0 group-hover:scale-105 transition-transform">
-            <span className="font-display font-extrabold text-lg tracking-wider">A</span>
-          </div>
+          <img
+            src="/favicon.svg"
+            alt="Aurikrex Exam Arena"
+            className="w-10 h-10 rounded-xl object-contain shadow-sm shrink-0 group-hover:scale-105 transition-transform"
+          />
           <div className="flex flex-col">
             <span className="font-display font-bold text-base text-text-primary tracking-tight leading-tight">
               Aurikrex

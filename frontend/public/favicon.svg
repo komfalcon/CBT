@@ -6,16 +6,16 @@
       <stop offset="100%" stop-color="#0044ff"/>
     </linearGradient>
   </defs>
-  {/* Dark Circular Background */}
+  <!-- Dark Circular Background -->
   <circle cx="50" cy="50" r="49" fill="#07101e"/>
-  {/* Outer Slate Ring */}
+  <!-- Outer Slate Ring -->
   <circle cx="50" cy="50" r="46.5" fill="none" stroke="#1f2c42" stroke-width="3"/>
-  {/* Glowing Cyan/Blue Concentric Ring */}
+  <!-- Glowing Cyan/Blue Concentric Ring -->
   <circle cx="50" cy="50" r="35" fill="none" stroke="url(#cbt-blue-ring)" stroke-width="12"/>
-  {/* Inner Dark Island */}
+  <!-- Inner Dark Island -->
   <circle cx="50" cy="50" r="28" fill="#07101e"/>
-  {/* Upper-Left Interlocking Rounded Bracket */}
+  <!-- Upper-Left Interlocking Rounded Bracket -->
   <path d="M54 41 H38 A 4 4 0 0 0 34 45 V56" fill="none" stroke="#ffffff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
-  {/* Lower-Right Interlocking Rounded Bracket */}
+  <!-- Lower-Right Interlocking Rounded Bracket -->
   <path d="M46 59 H62 A 4 4 0 0 0 66 55 V44" fill="none" stroke="#ffffff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

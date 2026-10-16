@@ -192,6 +192,27 @@ let AuthService = class AuthService {
         }).where((0, drizzle_orm_1.eq)(schema.users.id, user.id));
         return { message: 'Email verified successfully.' };
     }
+    async resendVerification(email) {
+        const normalizedEmail = email.toLowerCase().trim();
+        const [user] = await this.db.select().from(schema.users).where((0, drizzle_orm_1.eq)(schema.users.email, normalizedEmail)).limit(1);
+        if (!user) {
+            return { message: 'If this email is pending verification, a new link has been sent.' };
+        }
+        if (user.account_status === 'active') {
+            return { message: 'This account is already verified. Please sign in.' };
+        }
+        const code = (0, crypto_1.randomInt)(100000, 999999).toString();
+        await this.db.update(schema.users).set({
+            verification_code: code,
+            verification_code_expires: new Date(Date.now() + 24 * 3600 * 1000),
+        }).where((0, drizzle_orm_1.eq)(schema.users.id, user.id));
+        await this.notificationsService.queueEmailVerification({
+            email: user.email,
+            fullName: user.fullName,
+            token: code,
+        });
+        return { message: 'Verification link has been resent. Please check your inbox.' };
+    }
     async validateUserCredentials(email, password) {
         const normalizedEmail = email.toLowerCase();
         const [user] = await this.db.select().from(schema.users).where((0, drizzle_orm_1.eq)(schema.users.email, normalizedEmail)).limit(1);
@@ -349,15 +370,15 @@ let AuthService = class AuthService {
         if (!secret || !/^\d{6}$/.test(otp)) {
             return false;
         }
-        return Boolean((0, otplib_1.verifySync)({ token: otp, secret })?.valid);
+        return Boolean(otplib_1.authenticator.check(otp, secret));
     }
     async generateMfaSecret(userId) {
         const [user] = await this.db.select().from(schema.users).where((0, drizzle_orm_1.eq)(schema.users.id, userId)).limit(1);
         if (!user) {
             throw new common_1.NotFoundException('User not found.');
         }
-        const secret = (0, otplib_1.generateSecret)();
-        const otpauthUrl = (0, otplib_1.generateURI)({ secret, label: user.email, issuer: 'Aurikrex CBT' });
+        const secret = otplib_1.authenticator.generateSecret();
+        const otpauthUrl = otplib_1.authenticator.keyuri(user.email, 'Aurikrex CBT', secret);
         const qrCodeDataUrl = await QRCode.toDataURL(otpauthUrl);
         await this.db.update(schema.users).set({ mfa_secret: secret }).where((0, drizzle_orm_1.eq)(schema.users.id, user.id));
         return { qrCode: qrCodeDataUrl, secret };
