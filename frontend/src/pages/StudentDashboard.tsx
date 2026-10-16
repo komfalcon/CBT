@@ -24,6 +24,8 @@ import {
   Flame,
   Search,
   CheckCircle2,
+  CircleDashed,
+  HelpCircle,
 } from 'lucide-react';
 import { StudentLayout } from '../components/StudentLayout';
 import { Alert, Badge, Button, Modal, useToast } from '../components';
@@ -78,8 +80,8 @@ export default function StudentDashboard() {
   const hasMockData = mockResults.length > 0;
   const averageMockScore = hasMockData
     ? Math.round(mockResults.reduce((sum, result) => sum + Number(result.totalScore || 0), 0) / mockResults.length)
-    : 68;
-  const readinessIndex = Math.min(100, Math.round((averageMockScore / 400) * 100));
+    : null;
+  const readinessIndex = averageMockScore !== null ? Math.min(100, Math.round((averageMockScore / 400) * 100)) : 0;
 
   const totalQuestionsSolved = resultsList.reduce(
     (sum, r) => sum + (r.questionsSnapshot ? r.questionsSnapshot.length : 0),
@@ -215,23 +217,17 @@ export default function StudentDashboard() {
   const strokeDashoffset = circumference - (circumference * readinessIndex) / 100;
 
   // Subject Contribution stats helper
-  const getSubjectContrib = (sub: string, index: number) => {
+  const getSubjectContrib = (sub: string) => {
     const realStat = subjectBreakdown.find((s) => s.subject.toLowerCase() === sub.toLowerCase());
     if (realStat && realStat.total > 0) {
       return {
         solved: realStat.correct,
         total: realStat.total,
         percentage: realStat.accuracy,
+        tested: true,
       };
     }
-    // Baseline representation matching default UTME initial cockpit
-    const mockDefaults = [
-      { solved: 17, total: 60, percentage: 28 },
-      { solved: 6, total: 60, percentage: 10 },
-      { solved: 6, total: 60, percentage: 10 },
-      { solved: 0, total: 60, percentage: 0 },
-    ];
-    return mockDefaults[index] || { solved: 0, total: 60, percentage: 0 };
+    return { solved: 0, total: 60, percentage: 0, tested: false };
   };
 
   // Helper for subject icons
@@ -314,9 +310,11 @@ export default function StudentDashboard() {
                   </div>
                   <div>
                     <span className="block text-sm font-bold text-text-primary">
-                      {student?.streak_count || 7} Day Streak
+                      {student?.streak_count ?? 0} Day Streak
                     </span>
-                    <span className="text-[11px] text-text-muted">Keep it going!</span>
+                    <span className="text-[11px] text-text-muted">
+                      {(student?.streak_count ?? 0) > 0 ? 'Keep it going!' : 'Start today!'}
+                    </span>
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
@@ -412,7 +410,7 @@ export default function StudentDashboard() {
                     {/* Central Score Text */}
                     <div className="absolute flex flex-col items-center text-center">
                       <span className="text-3xl font-display font-extrabold text-text-primary tracking-tight leading-none">
-                        {averageMockScore}
+                        {hasMockData && averageMockScore !== null ? averageMockScore : '—'}
                       </span>
                       <span className="text-xs text-text-muted font-medium mt-0.5">
                         / 400
@@ -420,9 +418,36 @@ export default function StudentDashboard() {
                       <span className="text-[11px] text-text-secondary mt-1">
                         Readiness Score
                       </span>
-                      <div className="mt-2 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border flex items-center gap-1 bg-amber-500/10 text-amber-500 border-amber-500/30">
-                        <AlertTriangle className="w-3 h-3" />
-                        <span>Needs Improvement</span>
+                      <div className={`mt-2 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border flex items-center gap-1 ${
+                        !hasMockData
+                          ? 'bg-surface-container-high text-text-muted border-border'
+                          : averageMockScore! >= 280
+                          ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30'
+                          : averageMockScore! >= 220
+                          ? 'bg-blue-500/10 text-blue-500 border-blue-500/30'
+                          : 'bg-amber-500/10 text-amber-500 border-amber-500/30'
+                      }`}>
+                        {!hasMockData ? (
+                          <>
+                            <CircleDashed className="w-3 h-3" />
+                            <span>Not Assessed Yet</span>
+                          </>
+                        ) : averageMockScore! >= 280 ? (
+                          <>
+                            <CheckCircle2 className="w-3 h-3" />
+                            <span>Exam Ready</span>
+                          </>
+                        ) : averageMockScore! >= 220 ? (
+                          <>
+                            <TrendingUp className="w-3 h-3" />
+                            <span>On Track</span>
+                          </>
+                        ) : (
+                          <>
+                            <AlertTriangle className="w-3 h-3" />
+                            <span>Needs Improvement</span>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -430,13 +455,18 @@ export default function StudentDashboard() {
 
                 {/* Subject Contribution Progress Bars */}
                 <div className="md:col-span-7 space-y-3.5 pl-0 md:pl-4 md:border-l border-border">
-                  <span className="block text-xs font-semibold text-text-secondary mb-2">
-                    Subject Contribution
-                  </span>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="block text-xs font-semibold text-text-secondary">
+                      Subject Contribution
+                    </span>
+                    <span className="text-[11px] text-text-muted">
+                      {subjectBreakdown.filter(s => s.total > 0).length} of 4 assessed
+                    </span>
+                  </div>
 
-                  {combination.map((sub: string, index: number) => {
+                  {combination.map((sub: string) => {
                     const { icon: SubIcon, bg: subBg } = getSubjectIcon(sub);
-                    const stats = getSubjectContrib(sub, index);
+                    const stats = getSubjectContrib(sub);
                     return (
                       <div key={sub} className="space-y-1.5">
                         <div className="flex items-center justify-between text-xs">
@@ -449,16 +479,22 @@ export default function StudentDashboard() {
                             </span>
                           </div>
                           <div className="flex items-center gap-2 font-mono text-[11px]">
-                            <span className="text-text-muted">{stats.solved} / {stats.total}</span>
-                            <span className="font-semibold text-text-primary">{stats.percentage}%</span>
+                            {stats.tested ? (
+                              <>
+                                <span className="text-text-muted">{stats.solved} / {stats.total}</span>
+                                <span className="font-semibold text-text-primary">{stats.percentage}%</span>
+                              </>
+                            ) : (
+                              <span className="text-text-muted text-[10px]">Not tested yet</span>
+                            )}
                           </div>
                         </div>
 
                         {/* Progress Bar */}
                         <div className="w-full h-2 rounded-full bg-surface-container overflow-hidden">
                           <div
-                            className="h-full rounded-full bg-primary transition-all duration-500"
-                            style={{ width: `${Math.max(4, stats.percentage)}%` }}
+                            className={`h-full rounded-full transition-all duration-500 ${stats.tested ? 'bg-primary' : 'bg-transparent'}`}
+                            style={{ width: stats.tested ? `${Math.max(4, stats.percentage)}%` : '0%' }}
                           />
                         </div>
                       </div>
@@ -585,9 +621,9 @@ export default function StudentDashboard() {
 
             {/* 4 Subject Performance Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
-              {combination.map((sub: string, idx: number) => {
-                const { icon: SubIcon, bg: subBg } = getSubjectIcon(sub);
-                const isNeedsAssessment = idx === 1; // Mathematics in screenshot
+              {combination.map((sub: string) => {
+                const { icon: SubIcon } = getSubjectIcon(sub);
+                const stats = getSubjectContrib(sub);
                 return (
                   <div
                     key={sub}
@@ -600,34 +636,51 @@ export default function StudentDashboard() {
                       <h4 className="text-sm font-bold text-text-primary truncate">
                         {getSubjectLabel(sub)}
                       </h4>
-                      <p className="text-[11px] text-text-muted mt-0.5">60 questions</p>
+                      <p className="text-[11px] text-text-muted mt-0.5 font-mono">
+                        {stats.tested ? `${stats.total} questions answered` : '60 questions target'}
+                      </p>
 
                       <div className="mt-3">
                         <span
                           className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                            isNeedsAssessment
-                              ? 'bg-amber-500/10 text-amber-500 border-amber-500/30'
-                              : 'bg-surface-container-high text-text-muted border-border'
+                            !stats.tested
+                              ? 'bg-surface-container-high text-text-muted border-border'
+                              : stats.percentage >= 70
+                              ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30'
+                              : stats.percentage >= 50
+                              ? 'bg-blue-500/10 text-blue-500 border-blue-500/30'
+                              : 'bg-amber-500/10 text-amber-500 border-amber-500/30'
                           }`}
                         >
-                          {isNeedsAssessment ? 'Needs Assessment' : 'Not Tested'}
+                          {!stats.tested
+                            ? 'Not Tested'
+                            : stats.percentage >= 70
+                            ? 'Mastered'
+                            : stats.percentage >= 50
+                            ? 'Progressing'
+                            : 'Needs Practice'}
                         </span>
                       </div>
                     </div>
 
                     <div className="space-y-2 pt-2 border-t border-border">
                       <div className="flex items-center justify-between text-[11px] text-text-muted">
-                        <span>Progress</span>
-                        <span className="font-mono">0%</span>
+                        <span>Accuracy</span>
+                        <span className="font-mono font-semibold text-text-primary">
+                          {stats.tested ? `${stats.percentage}%` : '—'}
+                        </span>
                       </div>
                       <div className="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
-                        <div className="h-full rounded-full bg-primary" style={{ width: '4%' }} />
+                        <div
+                          className={`h-full rounded-full ${stats.tested ? 'bg-primary' : 'bg-transparent'}`}
+                          style={{ width: stats.tested ? `${Math.max(4, stats.percentage)}%` : '0%' }}
+                        />
                       </div>
                       <button
                         onClick={() => openDrill(sub)}
                         className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 pt-1 transition-colors"
                       >
-                        <span>Start Practice</span>
+                        <span>{stats.tested ? 'Practice More' : 'Start Practice'}</span>
                         <ArrowRight className="w-3 h-3" />
                       </button>
                     </div>
@@ -739,6 +792,7 @@ export default function StudentDashboard() {
               {combination.map((sub: string) => {
                 const isEng = sub === 'english';
                 const { icon: SubIcon } = getSubjectIcon(sub);
+                const stats = getSubjectContrib(sub);
                 return (
                   <div
                     key={sub}
@@ -762,8 +816,12 @@ export default function StudentDashboard() {
                     </div>
 
                     <div className="mt-3 pt-2 border-t border-border flex items-center justify-between text-[11px]">
-                      <span className="text-text-muted font-mono">—</span>
-                      <span className="text-[10px] text-text-muted">Not tested yet</span>
+                      <span className="font-mono font-bold text-text-primary">
+                        {stats.tested ? `${stats.percentage}%` : '—'}
+                      </span>
+                      <span className="text-[10px] text-text-muted">
+                        {stats.tested ? `${stats.solved}/${stats.total} solved` : 'Not tested yet'}
+                      </span>
                     </div>
                   </div>
                 );

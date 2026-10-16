@@ -4,8 +4,7 @@ import { useToast } from '../components/ToastProvider';
 import { getSubjectTopics, getQuestionSubjects } from '../features/questions/api';
 import { createExamSession } from '../features/exam/api';
 import { getSubjectLabel, normalizeSubjectKey } from '../constants/subjects';
-import { ThemeToggle } from '../components/ThemeToggle';
-import { AppNavbar } from '../components/AppNavbar';
+import { StudentLayout } from '../components/StudentLayout';
 import { getMe } from '../features/auth/api';
 
 export default function MockSetupPage() {
@@ -187,12 +186,8 @@ export default function MockSetupPage() {
   const terminalNodeId = user?.aurikrex_id || (user?.id ? `AKX-${String(user.id).slice(0, 6).toUpperCase()}` : 'CBT-ALLOC-01');
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary antialiased flex flex-col font-body selection:bg-accent-royal-blue selection:text-white">
-      {/* Ecosystem Top Bar */}
-      <AppNavbar student={user} titleBadge="UTME Kiosk" />
-
-      {/* Main Workspace Canvas */}
-      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 md:px-8 py-6 pb-28 sm:pb-8 space-y-6">
+    <StudentLayout student={user}>
+      <div className="w-full space-y-6">
         {/* Top Mission Banner & Status */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-bg-card p-5 rounded-2xl border border-border shadow-sm">
           <div className="space-y-1">
@@ -618,11 +613,7 @@ export default function MockSetupPage() {
             </span>
           </button>
         </div>
-      </main>
-
-      <footer className="w-full py-4 text-center text-xs text-text-muted border-t border-border mt-10">
-        Aurikrex Exam Arena · © 2025/2026 Aurikrex. Standardized JAMB UTME Simulator Engine.
-      </footer>
-    </div>
+      </div>
+    </StudentLayout>
   );
 }
