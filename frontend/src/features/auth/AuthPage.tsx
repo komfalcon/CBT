@@ -317,7 +317,7 @@ export default function AuthPage() {
             <a href="/" className="flex items-center gap-3 group">
               <div className="w-8 h-8 rounded-full border border-primary-container overflow-hidden shadow-sm flex items-center justify-center bg-surface-container group-hover:scale-105 transition-transform">
                 <img
-                  src="https://cbt.aurikrex.com/pwa-192x192.png"
+                  src="/aurikrex-logo.png"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = '/favicon.svg';
                   }}

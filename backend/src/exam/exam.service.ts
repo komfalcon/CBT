@@ -148,7 +148,7 @@ export class ExamService {
         .limit(1);
       return {
         ...this.sanitizeSession(session),
-        resultId: existingResult?.id,
+        resultId: existingResult?.id || session.id,
         isExpired: true,
       };
     }
@@ -206,7 +206,7 @@ export class ExamService {
         .limit(1);
       return {
         ...this.sanitizeSession(session),
-        resultId: existingResult?.id,
+        resultId: existingResult?.id || session.id,
         isExpired: true,
       };
     }
@@ -272,11 +272,14 @@ export class ExamService {
         .from(schema.exam_results)
         .where(eq(schema.exam_results.sessionId, session.id))
         .limit(1);
-      return {
-        resultId: existingResult?.id,
-        id: existingResult?.id,
-        status: session.status,
-      };
+      if (existingResult) {
+        return {
+          resultId: existingResult.id,
+          id: existingResult.id,
+          status: session.status,
+        };
+      }
+      // If for any reason the result was not created, continue below to generate it
     }
     
     const sessionQuestions = session.questions as any[];

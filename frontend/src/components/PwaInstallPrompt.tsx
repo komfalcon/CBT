@@ -46,7 +46,7 @@ export function PwaInstallPrompt() {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Install Falke AI CBT Desktop App" maxWidth="sm">
+    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Install Aurikrex Exam Arena" maxWidth="sm">
       <div className="flex flex-col items-center text-center space-y-4">
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           <MonitorSmartphone className="h-8 w-8" />
@@ -55,7 +55,7 @@ export function PwaInstallPrompt() {
         <div>
           <h3 className="text-lg font-bold text-text-primary">Install Desktop App</h3>
           <p className="mt-2 text-sm text-text-secondary">
-            Install the Falke AI CBT Exam Arena app on your computer for instantaneous access, offline caching, and a distraction-free full-screen exam experience.
+            Install the Aurikrex Exam Arena app on your computer for instantaneous access, offline caching, and a distraction-free full-screen exam experience.
           </p>
         </div>
 

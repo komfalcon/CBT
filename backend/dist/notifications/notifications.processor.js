@@ -48,17 +48,13 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const amqp = __importStar(require("amqplib"));
 const resend_1 = require("resend");
+const email_templates_1 = require("./templates/email-templates");
 let NotificationsProcessor = NotificationsProcessor_1 = class NotificationsProcessor {
     constructor(configService) {
         this.configService = configService;
         this.logger = new common_1.Logger(NotificationsProcessor_1.name);
     }
     async onModuleInit() {
-        const rabbitUrl = this.configService.get('RABBITMQ_URL');
-        if (!rabbitUrl) {
-            this.logger.warn('RABBITMQ_URL is not configured. Notifications processor skipped.');
-            return;
-        }
         const apiKey = this.configService.get('RESEND_API_KEY');
         if (apiKey) {
             this.resend = new resend_1.Resend(apiKey);
@@ -66,6 +62,11 @@ let NotificationsProcessor = NotificationsProcessor_1 = class NotificationsProce
         }
         else {
             this.logger.warn('RESEND_API_KEY is not configured. Emails will be logged to console.');
+        }
+        const rabbitUrl = this.configService.get('RABBITMQ_URL');
+        if (!rabbitUrl) {
+            this.logger.warn('RABBITMQ_URL is not configured. Notifications processor running in direct mode.');
+            return;
         }
         try {
             this.connection = await amqp.connect(rabbitUrl, { timeout: 2000 });
@@ -76,7 +77,7 @@ let NotificationsProcessor = NotificationsProcessor_1 = class NotificationsProce
                     return;
                 try {
                     const payload = JSON.parse(msg.content.toString());
-                    await this.sendEmail(payload.email, 'Verify your email address - Aurikrex Exam Arena', `Hello ${payload.fullName},\n\nYour verification code is: ${payload.token}\n\nThis code will expire in 24 hours.`, `<strong>Hello ${payload.fullName}</strong>,<br><br>Your verification code is: <strong>${payload.token}</strong><br><br>This code will expire in 24 hours.`);
+                    await this.sendVerificationDirect(payload);
                     this.channel.ack(msg);
                 }
                 catch (error) {
@@ -90,7 +91,7 @@ let NotificationsProcessor = NotificationsProcessor_1 = class NotificationsProce
                     return;
                 try {
                     const payload = JSON.parse(msg.content.toString());
-                    await this.sendEmail(payload.email, 'Reset your password - Aurikrex Exam Arena', `Hello ${payload.fullName},\n\nYour password reset code is: ${payload.token}\n\nThis code will expire in 1 hour.`, `<strong>Hello ${payload.fullName}</strong>,<br><br>Your password reset code is: <strong>${payload.token}</strong><br><br>This code will expire in 1 hour.`);
+                    await this.sendPasswordResetDirect(payload);
                     this.channel.ack(msg);
                 }
                 catch (error) {
@@ -101,11 +102,33 @@ let NotificationsProcessor = NotificationsProcessor_1 = class NotificationsProce
             this.logger.log('Notifications processor successfully subscribed to queues.');
         }
         catch (error) {
-            this.logger.error(`Unable to start notifications processor: ${error.message}`);
+            this.logger.error(`Unable to start RabbitMQ consumer: ${error.message}`);
         }
     }
+    async sendVerificationDirect(payload) {
+        const frontendUrl = (this.configService.get('FRONTEND_URL') || 'https://cbt.aurikrex.com').replace(/\/+$/, '');
+        const verificationUrl = `${frontendUrl}/verify-email?email=${encodeURIComponent(payload.email)}&code=${encodeURIComponent(payload.token)}`;
+        const { text, html } = (0, email_templates_1.renderEmailVerificationTemplate)({
+            fullName: payload.fullName,
+            verificationUrl,
+            code: payload.token,
+            senderEmail: 'info@aurikrex.com',
+        });
+        await this.sendEmail(payload.email, 'Verify your email address - Aurikrex Exam Arena', text, html);
+    }
+    async sendPasswordResetDirect(payload) {
+        const frontendUrl = (this.configService.get('FRONTEND_URL') || 'https://cbt.aurikrex.com').replace(/\/+$/, '');
+        const resetUrl = `${frontendUrl}/register?tab=reset-password&email=${encodeURIComponent(payload.email)}&token=${encodeURIComponent(payload.token)}`;
+        const { text, html } = (0, email_templates_1.renderPasswordResetTemplate)({
+            fullName: payload.fullName,
+            resetUrl,
+            code: payload.token,
+            senderEmail: 'info@aurikrex.com',
+        });
+        await this.sendEmail(payload.email, 'Reset your password - Aurikrex Exam Arena', text, html);
+    }
     async sendEmail(to, subject, text, html) {
-        const fromEmail = this.configService.get('RESEND_FROM_EMAIL', 'noreply@aurikrex.com');
+        const fromEmail = this.configService.get('RESEND_FROM_EMAIL', 'Aurikrex <info@aurikrex.com>');
         if (this.resend) {
             try {
                 await this.resend.emails.send({
@@ -115,7 +138,7 @@ let NotificationsProcessor = NotificationsProcessor_1 = class NotificationsProce
                     text,
                     html,
                 });
-                this.logger.log(`Email successfully sent to ${to} via Resend.`);
+                this.logger.log(`Email successfully sent to ${to} from ${fromEmail} via Resend.`);
             }
             catch (error) {
                 this.logger.error(`Failed to send email to ${to}`, error);
@@ -123,7 +146,7 @@ let NotificationsProcessor = NotificationsProcessor_1 = class NotificationsProce
             }
         }
         else {
-            this.logger.log(`[DEVELOPMENT EMAIL SENDER - CONSOLE ONLY]\nTo: ${to}\nSubject: ${subject}\nBody: ${text}`);
+            this.logger.log(`[DEVELOPMENT EMAIL SENDER - CONSOLE ONLY]\nFrom: ${fromEmail}\nTo: ${to}\nSubject: ${subject}\nBody: ${text}`);
         }
     }
     async onModuleDestroy() {

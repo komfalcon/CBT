@@ -97,7 +97,7 @@ export function AppNavbar({ student: propStudent, titleBadge, rightAction }: App
           >
             <div className="w-8 h-8 rounded-lg border border-primary/20 overflow-hidden shadow-sm flex items-center justify-center bg-surface-container shrink-0 group-hover:scale-105 transition-transform">
               <img
-                src="/favicon.svg"
+                src="/aurikrex-logo.png"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/favicon.svg';
                 }}

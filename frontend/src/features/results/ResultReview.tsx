@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { getResultDetail, GradedResultRecord } from './api';
+import { getResultDetail, getResultsHistory, GradedResultRecord } from './api';
 import { getMe } from '../auth/api';
 import {
   Award,
@@ -50,11 +50,28 @@ export default function ResultReview() {
   }, []);
 
   useEffect(() => {
-    if (!resultId) return;
     const fetchResult = async () => {
       try {
         setLoading(true);
-        const data = await getResultDetail(undefined, resultId);
+        let data: GradedResultRecord | null = null;
+        if (resultId && resultId !== 'undefined' && resultId !== 'null') {
+          try {
+            data = await getResultDetail(undefined, resultId);
+          } catch (fetchErr) {
+            console.warn('Direct getResultDetail failed, checking result history:', fetchErr);
+            const history = await getResultsHistory();
+            data = history.find((r) => r.resultId === resultId || r.sessionId === resultId) || history[0] || null;
+            if (!data) throw fetchErr;
+          }
+        } else {
+          // If resultId was missing or literal 'undefined', recover from candidate's latest graded result
+          const history = await getResultsHistory();
+          data = history[0] || null;
+        }
+
+        if (!data) {
+          throw new Error('No graded results found');
+        }
         setResult(data);
       } catch (err: any) {
         console.error(err);

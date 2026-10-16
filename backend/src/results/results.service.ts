@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { DRIZZLE } from '../db/database.module';
 import * as schema from '../db/schema';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, and, or, desc } from 'drizzle-orm';
 
 @Injectable()
 export class ResultsService {
@@ -24,7 +24,10 @@ export class ResultsService {
       .from(schema.exam_results)
       .where(
         and(
-          eq(schema.exam_results.id, resultId),
+          or(
+            eq(schema.exam_results.id, resultId),
+            eq(schema.exam_results.sessionId, resultId),
+          ),
           eq(schema.exam_results.userId, userId),
         ),
       )

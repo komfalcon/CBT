@@ -54,8 +54,20 @@ export async function createMockSession(payload: {
   difficultyLevel?: string;
   subjectConfigs?: Record<string, { mode: 'random' | 'specific'; topics: string[] }>;
 }) {
-  const { data } = await examApi.post<ExamSessionRecord>('/sessions/mock', payload);
-  return normalizeExamSession(data);
+  try {
+    const { data } = await examApi.post<ExamSessionRecord>('/sessions/mock', payload);
+    return normalizeExamSession(data);
+  } catch (err: any) {
+    if (err?.response?.status === 404) {
+      // Graceful fallback for environments where unified /sessions is deployed
+      const { data } = await examApi.post<ExamSessionRecord>('/sessions', {
+        ...payload,
+        type: 'mock',
+      });
+      return normalizeExamSession(data);
+    }
+    throw err;
+  }
 }
 
 export async function createDrillSession(payload: {
@@ -64,8 +76,20 @@ export async function createDrillSession(payload: {
   difficultyLevel?: string;
   topics?: string[];
 }) {
-  const { data } = await examApi.post<ExamSessionRecord>('/sessions/drill', payload);
-  return normalizeExamSession(data);
+  try {
+    const { data } = await examApi.post<ExamSessionRecord>('/sessions/drill', payload);
+    return normalizeExamSession(data);
+  } catch (err: any) {
+    if (err?.response?.status === 404) {
+      // Graceful fallback for environments where unified /sessions is deployed
+      const { data } = await examApi.post<ExamSessionRecord>('/sessions', {
+        ...payload,
+        type: 'drill',
+      });
+      return normalizeExamSession(data);
+    }
+    throw err;
+  }
 }
 
 export async function createExamSession(

@@ -121,9 +121,11 @@ export default function AdminLayout() {
         {/* Brand Header */}
         <div className="h-18 flex items-center justify-between px-6 border-b border-border bg-bg-card/80">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-primary via-indigo-500 to-blue-500 flex items-center justify-center font-black text-white shadow-lg shadow-primary/25 text-lg">
-              A
-            </div>
+            <img
+              src="/aurikrex-logo.png"
+              alt="Aurikrex CBT Logo"
+              className="h-10 w-10 rounded-xl object-contain shadow-sm shrink-0"
+            />
             <div className="flex flex-col">
               <span className="font-display font-black text-sm tracking-tight text-text-primary leading-tight">
                 Aurikrex CBT

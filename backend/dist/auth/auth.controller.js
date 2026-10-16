@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const throttler_1 = require("@nestjs/throttler");
 const auth_service_1 = require("./auth.service");
 const register_dto_1 = require("./dto/register.dto");
@@ -63,14 +64,32 @@ __decorate([
     __metadata("design:type", String)
 ], MfaDto.prototype, "otp", void 0);
 let AuthController = class AuthController {
-    constructor(authService) {
+    constructor(authService, configService) {
         this.authService = authService;
+        this.configService = configService;
     }
     register(registerDto) {
         return this.authService.register(registerDto);
     }
     verifyEmail(body) {
         return this.authService.verifyEmail(body.email, body.code);
+    }
+    async verifyEmailGet(email, code, res) {
+        const frontendUrl = (this.configService.get('FRONTEND_URL') || 'https://cbt.aurikrex.com').replace(/\/+$/, '');
+        if (!email || !code) {
+            return res.redirect(`${frontendUrl}/verify-email?status=error&message=missing_parameters`);
+        }
+        try {
+            await this.authService.verifyEmail(email, code);
+            return res.redirect(`${frontendUrl}/verify-email?status=success&email=${encodeURIComponent(email)}`);
+        }
+        catch (err) {
+            const msg = encodeURIComponent(err?.message || 'verification_failed');
+            return res.redirect(`${frontendUrl}/verify-email?status=error&message=${msg}`);
+        }
+    }
+    resendVerification(body) {
+        return this.authService.resendVerification(body.email);
     }
     async login(req, res, _, ipAddress) {
         const result = await this.authService.completeLogin(req.user, ipAddress);
@@ -194,6 +213,24 @@ __decorate([
     __metadata("design:paramtypes", [VerifyEmailDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "verifyEmail", null);
+__decorate([
+    (0, common_1.Get)('verify-email'),
+    __param(0, (0, common_1.Query)('email')),
+    __param(1, (0, common_1.Query)('code')),
+    __param(2, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyEmailGet", null);
+__decorate([
+    (0, common_1.Post)('resend-verification'),
+    (0, throttler_1.Throttle)({ default: { limit: 3, ttl: 15 * 60_000 } }),
+    (0, common_1.HttpCode)(200),
+    __param(0, (0, common_1.Body)(new common_1.ValidationPipe({ whitelist: true }))),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [forgot_password_dto_1.ForgotPasswordDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "resendVerification", null);
 __decorate([
     (0, common_1.Post)('login'),
     (0, throttler_1.Throttle)({ default: { limit: 10, ttl: 60_000 } }),
@@ -324,6 +361,7 @@ __decorate([
 ], AuthController.prototype, "disableMfa", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService,
+        config_1.ConfigService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map
