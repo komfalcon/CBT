@@ -93,8 +93,7 @@ export function StudentLayout({ children, student: propStudent }: StudentLayoutP
   const navItems = [
     { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { label: 'Mock Exams', path: '/mock-setup', icon: ClipboardList },
-    { label: 'Practice by Subject', path: '/questions', icon: GraduationCap },
-    { label: 'Past Questions', path: '/questions?mode=past', icon: FileQuestion },
+    { label: 'Practice by Subject', path: '/practice', icon: GraduationCap },
     { label: 'Syllabus', path: '/study', icon: BookOpen },
     { label: 'AI Study Assistant', path: '/falke-ai', icon: Bot },
     { label: 'Performance', path: '/leaderboard', icon: BarChart3 },
@@ -102,11 +101,7 @@ export function StudentLayout({ children, student: propStudent }: StudentLayoutP
   ];
 
   const isItemActive = (itemPath: string) => {
-    const basePath = itemPath.split('?')[0];
-    if (basePath === '/dashboard') {
-      return location.pathname === '/dashboard';
-    }
-    return location.pathname.startsWith(basePath);
+    return location.pathname === itemPath || location.pathname.startsWith(`${itemPath}/`);
   };
 
   const SidebarContent = () => (

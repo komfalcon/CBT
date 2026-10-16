@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { ExamService } from './exam.service';
-import { CreateSessionDto } from './dto/create-session.dto';
+import { CreateSessionDto, CreateMockSessionDto, CreateDrillSessionDto } from './dto/create-session.dto';
 import { SaveAnswersDto } from './dto/save-answers.dto';
 import { ClefDecisionService } from '../ai/clef-decision.service';
 
@@ -13,6 +13,42 @@ export class ExamController {
     private readonly examService: ExamService,
     private readonly clefDecisionService: ClefDecisionService,
   ) { }
+
+  @Post('sessions/mock')
+  async createMockSession(
+    @CurrentUser() user: any,
+    @Body() body: CreateMockSessionDto,
+  ) {
+    const session = await this.examService.createSession(
+      user.sub,
+      'mock',
+      undefined,
+      body.subjects,
+      body.subjectConfigs,
+      undefined,
+      body.difficultyLevel,
+      undefined,
+    );
+    return this.examService.sanitizeSession(session);
+  }
+
+  @Post('sessions/drill')
+  async createDrillSession(
+    @CurrentUser() user: any,
+    @Body() body: CreateDrillSessionDto,
+  ) {
+    const session = await this.examService.createSession(
+      user.sub,
+      'drill',
+      body.subject,
+      [body.subject],
+      body.topics?.length ? { [body.subject]: { mode: 'specific', topics: body.topics } } : undefined,
+      body.count || 20,
+      body.difficultyLevel,
+      body.topics,
+    );
+    return this.examService.sanitizeSession(session);
+  }
 
   @Post('sessions')
   async createSession(

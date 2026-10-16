@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../components/ToastProvider';
 import { getSubjectTopics, getQuestionSubjects } from '../features/questions/api';
-import { createExamSession } from '../features/exam/api';
+import { createExamSession, createMockSession } from '../features/exam/api';
 import { getSubjectLabel, normalizeSubjectKey } from '../constants/subjects';
 import { StudentLayout } from '../components/StudentLayout';
 import { getMe } from '../features/auth/api';
@@ -165,7 +165,7 @@ export default function MockSetupPage() {
         payload.subjectConfigs = Object.fromEntries(subjectConfigs);
       }
 
-      const session = await createExamSession(payload);
+      const session = await createMockSession(payload);
       if (session.warnings && session.warnings.length > 0) {
         session.warnings.forEach((w: string) =>
           addToast({ type: 'info', title: 'Notice', message: w })

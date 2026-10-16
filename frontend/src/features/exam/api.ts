@@ -49,9 +49,27 @@ export type ExamSessionRecord = {
   resultId?: string;
 };
 
+export async function createMockSession(payload: {
+  subjects: string[];
+  difficultyLevel?: string;
+  subjectConfigs?: Record<string, { mode: 'random' | 'specific'; topics: string[] }>;
+}) {
+  const { data } = await examApi.post<ExamSessionRecord>('/sessions/mock', payload);
+  return normalizeExamSession(data);
+}
+
+export async function createDrillSession(payload: {
+  subject: string;
+  count?: number;
+  difficultyLevel?: string;
+  topics?: string[];
+}) {
+  const { data } = await examApi.post<ExamSessionRecord>('/sessions/drill', payload);
+  return normalizeExamSession(data);
+}
+
 export async function createExamSession(
-  
-  payload: { type: 'mock' | 'drill'; subject?: string; count?: number; difficultyLevel?: string; topics?: string[] },
+  payload: { type: 'mock' | 'drill'; subject?: string; count?: number; difficultyLevel?: string; topics?: string[]; subjects?: string[]; subjectConfigs?: any },
 ) {
   const { data } = await examApi.post<ExamSessionRecord>('/sessions', payload);
   return normalizeExamSession(data);
