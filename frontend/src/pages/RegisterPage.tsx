@@ -316,27 +316,35 @@ function GoogleButton({
     });
   }, [ready, isDark, label]);
 
-  if (!GOOGLE_CLIENT_ID) {
-    return (
+  return (
+    <div className="relative w-full">
+      {/* Visual button that is ALWAYS the exact same length (w-full), height (py-3), radius, and styling as the Sign in button */}
       <button
         type="button"
         onClick={onFallbackClick}
-        className="flex w-full items-center justify-center gap-2.5 rounded-lg border border-[var(--arena-border)] bg-[var(--arena-surface)] hover:bg-[var(--arena-bg-subtle)] active:scale-[0.99] py-2.5 text-xs sm:text-sm font-semibold text-[var(--arena-text-primary)] transition-all shadow-sm cursor-pointer"
+        className="w-full flex items-center justify-center gap-2.5 rounded-lg border border-[var(--arena-border)] bg-[var(--arena-surface)] hover:bg-[var(--arena-bg-subtle)] active:scale-[0.99] py-3 text-xs sm:text-sm font-semibold text-[var(--arena-text-primary)] transition-all shadow-sm cursor-pointer"
       >
         <GoogleMark />
-        {label === 'signup_with' ? 'Sign up with Google' : 'Sign in with Google'}
+        <span>{label === 'signup_with' ? 'Sign up with Google' : 'Sign in with Google'}</span>
       </button>
-    );
-  }
 
-  return <div ref={containerRef} className="flex w-full min-h-[44px] justify-center" />;
+      {/* When GIS client ID is configured, render the interactive GIS button invisibly over the entire button area so clicking anywhere triggers GIS */}
+      {GOOGLE_CLIENT_ID && (
+        <div
+          ref={containerRef}
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full opacity-[0.001] overflow-hidden flex items-center justify-center cursor-pointer pointer-events-auto [&>div]:!w-full [&>div]:!h-full [&_iframe]:!w-full [&_iframe]:!h-full [&_iframe]:!min-w-full [&_iframe]:!scale-125"
+        />
+      )}
+    </div>
+  );
 }
 
-function OrDivider() {
+function OrDivider({ text = 'or continue with Google' }: { text?: string }) {
   return (
     <div className="my-5 flex items-center gap-3 text-[11px] font-medium text-[var(--arena-text-muted)]">
       <span className="h-px flex-1 bg-[var(--arena-border)]" />
-      or continue with email
+      {text}
       <span className="h-px flex-1 bg-[var(--arena-border)]" />
     </div>
   );
@@ -751,18 +759,6 @@ export default function RegisterPage({ defaultTab = 'register' }: { defaultTab?:
           {view === 'register' && (
             <section role="tabpanel" aria-label="Register">
               <ViewHeader title="Create your candidate profile" subtitle="Free during the public beta." />
-              <GoogleButton
-                isDark={isDark}
-                onCredential={handleGoogle}
-                onFallbackClick={() =>
-                  setFeedback({
-                    type: 'error',
-                    text: 'Google Sign-In is initializing. You can sign up with your email below in seconds.',
-                  })
-                }
-                label="signup_with"
-              />
-              <OrDivider />
               <form onSubmit={handleRegister} noValidate className="space-y-4">
                 <Field id="fullName" label="Full name" error={errors.fullName}>
                   <input id="fullName" type="text" required autoComplete="name" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Amaka Okafor" aria-invalid={Boolean(errors.fullName)} aria-describedby={errors.fullName ? 'fullName-error' : undefined} className={inputClass} />
@@ -784,6 +780,18 @@ export default function RegisterPage({ defaultTab = 'register' }: { defaultTab?:
                   <SubmitButton loading={loading}>Create profile</SubmitButton>
                 </div>
               </form>
+              <OrDivider text="or continue with Google" />
+              <GoogleButton
+                isDark={isDark}
+                onCredential={handleGoogle}
+                onFallbackClick={() =>
+                  setFeedback({
+                    type: 'error',
+                    text: 'Google Sign-In is initializing. You can sign up with your email above in seconds.',
+                  })
+                }
+                label="signup_with"
+              />
               <p className="mt-5 text-center text-[11px] text-[var(--arena-text-muted)]">
                 By creating a profile you agree to the{' '}
                 <Link to={siteConfig.urls.termsOfService} className="underline hover:text-[var(--arena-text-primary)]">Terms</Link>{' '}
@@ -797,18 +805,6 @@ export default function RegisterPage({ defaultTab = 'register' }: { defaultTab?:
           {view === 'sign-in' && (
             <section role="tabpanel" aria-label="Sign in">
               <ViewHeader title="Welcome back" subtitle="Sign in to continue your practice." />
-              <GoogleButton
-                isDark={isDark}
-                onCredential={handleGoogle}
-                onFallbackClick={() =>
-                  setFeedback({
-                    type: 'error',
-                    text: 'Google Sign-In is initializing. Please sign in with your email or CBT key below.',
-                  })
-                }
-                label="signin_with"
-              />
-              <OrDivider />
               <form onSubmit={handleSignIn} className="space-y-4">
                 <Field id="loginEmail" label="Email address">
                   <input id="loginEmail" type="email" required autoComplete="email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="you@example.ng" className={inputClass} />
@@ -832,6 +828,18 @@ export default function RegisterPage({ defaultTab = 'register' }: { defaultTab?:
                   <SubmitButton loading={loading}>Sign in</SubmitButton>
                 </div>
               </form>
+              <OrDivider text="or continue with Google" />
+              <GoogleButton
+                isDark={isDark}
+                onCredential={handleGoogle}
+                onFallbackClick={() =>
+                  setFeedback({
+                    type: 'error',
+                    text: 'Google Sign-In is initializing. Please sign in with your email or CBT key above.',
+                  })
+                }
+                label="signin_with"
+              />
               <p className="mt-5 text-center text-[11px] text-[var(--arena-text-muted)]">
                 New here?{' '}
                 <button type="button" onClick={() => goTo('register')} className="font-semibold text-[var(--arena-primary)] hover:underline">
