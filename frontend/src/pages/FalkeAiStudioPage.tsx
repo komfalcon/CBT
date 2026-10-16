@@ -1,25 +1,31 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { chatWithTutor } from '../features/ai/api';
-import { AppNavbar } from '../components/AppNavbar';
+import { useSearchParams } from 'react-router-dom';
+import { chatWithTutor, getChatSessions, createChatSession, getChatSession } from '../features/ai/api';
+import { StudentLayout } from '../components/StudentLayout';
 import { useToast } from '../components/ToastProvider';
+import { getMe } from '../features/auth/api';
+import { Bot, Send, Sparkles, RefreshCw, AlertCircle, PlusCircle, MessageSquare } from 'lucide-react';
 
 interface ChatMsg {
   role: 'user' | 'assistant';
   content: string;
   isCacheHit?: boolean;
+  isError?: boolean;
 }
 
 export default function FalkeAiStudioPage() {
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { addToast } = useToast();
 
+  const [student, setStudent] = useState<any>(null);
+  const [sessions, setSessions] = useState<Array<{ id: string; title: string; createdAt?: string }>>([]);
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [dialect, setDialect] = useState<'english' | 'pidgin'>('english');
   const [messages, setMessages] = useState<ChatMsg[]>([
     {
       role: 'assistant',
       content:
-        'Hello scholar! I am Falke AI, your dedicated curriculum-aligned JAMB UTME tutor. Ask me any past question, formula derivation, or comprehension query in Standard Academic English or Nigerian Pidgin.',
+        'Hello scholar! I am Falke AI, your dedicated curriculum-aligned JAMB UTME tutor. Ask me any question, formula derivation, or comprehension query in Standard Academic English or Nigerian Pidgin.',
       isCacheHit: true,
     },
   ]);
@@ -27,9 +33,62 @@ export default function FalkeAiStudioPage() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Initial prompt from query params
+  useEffect(() => {
+    getMe()
+      .then((data) => setStudent(data))
+      .catch(() => {});
+
+    // Load user chat sessions
+    getChatSessions()
+      .then((data) => {
+        if (Array.isArray(data)) setSessions(data);
+      })
+      .catch(() => {});
+
+    const promptParam = searchParams.get('prompt');
+    if (promptParam) {
+      handleSendMessage(promptParam);
+    }
+  }, []);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const handleSelectSession = async (sessionId: string) => {
+    try {
+      setIsLoading(true);
+      const data = await getChatSession(sessionId);
+      setActiveSessionId(sessionId);
+      if (Array.isArray(data?.messages) && data.messages.length > 0) {
+        setMessages(data.messages);
+      }
+    } catch (err) {
+      console.error('Failed to load session messages', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleStartNewSession = async () => {
+    try {
+      const newSession = await createChatSession({ title: 'New Study Topic' });
+      if (newSession?.id) {
+        setSessions((prev) => [newSession, ...prev]);
+        setActiveSessionId(newSession.id);
+      }
+    } catch {
+      // fallback
+    }
+    setMessages([
+      {
+        role: 'assistant',
+        content: 'New session started. Which JAMB topic or question should we tackle next?',
+        isCacheHit: true,
+      },
+    ]);
+  };
 
   const handleSendMessage = async (textToSend?: string) => {
     const text = textToSend || inputMsg;
@@ -41,10 +100,12 @@ export default function FalkeAiStudioPage() {
     setIsLoading(true);
 
     try {
-      const historyPayload = messages.map((m) => ({
-        role: m.role,
-        content: m.content,
-      }));
+      const historyPayload = messages
+        .filter((m) => !m.isError)
+        .map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
 
       const dialectInstruction =
         dialect === 'pidgin'
@@ -54,6 +115,7 @@ export default function FalkeAiStudioPage() {
       const response = await chatWithTutor({
         message: text + dialectInstruction,
         history: historyPayload,
+        sessionId: activeSessionId || undefined,
       });
 
       const reply = response?.reply || response?.explanation || response?.message || 'Explanation processed.';
@@ -62,27 +124,26 @@ export default function FalkeAiStudioPage() {
         {
           role: 'assistant',
           content: reply,
-          isCacheHit: response?.isCacheHit ?? true,
+          isCacheHit: response?.isCacheHit ?? false,
         },
       ]);
     } catch (err: any) {
       console.error(err);
-      // Fallback domain-accurate explanation if offline or rate limited
+      const errorMessage =
+        err.response?.data?.message ||
+        'Unable to connect to Falke AI tutor server. Please verify your connection or remaining AuriCoins and try again.';
       setMessages((prev) => [
         ...prev,
         {
           role: 'assistant',
-          content:
-            dialect === 'pidgin'
-              ? 'No wahala! For this question, make you remember say according to JAMB syllabus: Work done na Force × Distance in the direction of the force. If angle dey, you go use W = Fd cos(θ). Always check your SI units!'
-              : 'Here is the step-by-step breakdown: First identify the given variables. According to the official JAMB UTME syllabus, apply the fundamental theorem and substitute values with proper SI units to eliminate incorrect distractors.',
-          isCacheHit: true,
+          content: errorMessage,
+          isError: true,
         },
       ]);
       addToast({
-        type: 'info',
-        title: 'Offline / Instant Cache',
-        message: 'Loaded cached curriculum guidance.',
+        type: 'error',
+        title: 'Tutor Query Failed',
+        message: 'Could not fetch explanation from AI service.',
       });
     } finally {
       setIsLoading(false);
@@ -90,267 +151,214 @@ export default function FalkeAiStudioPage() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col font-body selection:bg-accent-royal-blue selection:text-white antialiased">
-      {/* Unified Ecosystem Top Bar */}
-      <AppNavbar titleBadge="Falke AI Studio" />
-
-      {/* 3-COLUMN ACADEMIC CONVERSATION LAYOUT */}
-      <div className="flex-1 w-full max-w-[1440px] mx-auto flex overflow-hidden h-[calc(100dvh-64px)]">
-        {/* LEFT SIDEBAR: Topic Threads & Telemetry */}
-        <aside className="w-72 lg:w-80 flex-shrink-0 bg-bg-secondary border-r border-border flex flex-col justify-between hidden md:flex overflow-y-auto p-4 gap-4">
-          <div className="flex flex-col gap-4">
-            <button
-              onClick={() => {
-                setMessages([
-                  {
-                    role: 'assistant',
-                    content:
-                      'New session initialized. Which JAMB topic or question should we tackle next?',
-                    isCacheHit: true,
-                  },
-                ]);
-              }}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-surface-container hover:bg-surface-variant text-text-primary border border-accent-royal-blue/40 font-label-md text-label-md transition-all shadow-sm"
-            >
-              <span className="material-symbols-outlined text-accent-ai-gold text-[20px]">auto_awesome</span>
-              <span>New Study Session</span>
-            </button>
-
-            {/* Dialect Switcher */}
-            <div className="bg-surface-container-low p-2.5 rounded-xl border border-border flex flex-col gap-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-[11px] font-label-sm text-text-muted uppercase font-semibold">
-                  Tutor Dialect Engine
-                </span>
-                <span className="text-[10px] font-mono-data text-tertiary">Real-Time</span>
-              </div>
-              <div className="grid grid-cols-2 gap-1 bg-surface-container p-1 rounded-lg border border-border">
-                <button
-                  onClick={() => setDialect('english')}
-                  className={`py-1 px-2 rounded text-[12px] font-label-sm font-semibold flex items-center justify-center gap-1 transition-all ${
-                    dialect === 'english'
-                      ? 'bg-accent-royal-blue text-white shadow-sm'
-                      : 'text-text-secondary hover:text-text-primary'
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-[14px]">school</span>
-                  Academic EN
-                </button>
-                <button
-                  onClick={() => setDialect('pidgin')}
-                  className={`py-1 px-2 rounded text-[12px] font-label-sm font-semibold flex items-center justify-center gap-1 transition-all ${
-                    dialect === 'pidgin'
-                      ? 'bg-accent-royal-blue text-white shadow-sm'
-                      : 'text-text-secondary hover:text-text-primary'
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-[14px]">record_voice_over</span>
-                  Naija Pidgin
-                </button>
-              </div>
+    <StudentLayout student={student}>
+      <div className="flex flex-col h-[calc(100vh-140px)] bg-bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
+        {/* Top Header */}
+        <div className="px-5 py-3.5 border-b border-border bg-surface-container flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white shadow-sm shadow-primary/20">
+              <Bot className="w-5 h-5" />
             </div>
-
-            {/* Token & Cache Telemetry */}
-            <div className="bg-bg-card p-3 rounded-xl border border-border flex flex-col gap-2">
-              <div className="flex items-center justify-between text-label-sm font-label-sm">
-                <span className="text-text-secondary flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[15px] text-tertiary">bolt</span>
-                  Cache Efficiency
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-sm font-bold font-display text-text-primary">Falke AI Study Assistant</h1>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono bg-amber-500/15 text-amber-500 border border-amber-500/30">
+                  UTME PRO
                 </span>
-                <span className="text-tertiary font-mono-data font-bold">94.2%</span>
               </div>
-              <div className="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-                <div className="bg-tertiary h-full rounded-full" style={{ width: '94.2%' }} />
-              </div>
-              <p className="text-[11px] text-text-muted leading-relaxed">
-                <strong className="text-text-primary">0 Coins</strong> on SHA-256 cache hits · 5 Coins for new custom AI computations.
+              <p className="text-[11px] text-text-muted">
+                Curriculum-aligned step-by-step tutor for 17 accredited subjects
               </p>
             </div>
-
-            {/* Topic Threads */}
-            <div className="flex flex-col gap-2 pt-1">
-              <span className="text-[11px] font-label-sm font-bold text-text-muted uppercase tracking-wider px-1">
-                Suggested Topics
-              </span>
-              {[
-                { title: 'Oral Forms: Plait vs Plate Phonemes /æ/', sub: 'Use of English' },
-                { title: 'Calculus: Differentiation from First Principles', sub: 'Mathematics' },
-                { title: 'Electromagnetic Induction & Lenz’s Law', sub: 'Physics' },
-                { title: 'Organic Chemistry: IUPAC Nomenclature', sub: 'Chemistry' },
-              ].map((th, i) => (
-                <button
-                  key={i}
-                  onClick={() => handleSendMessage(`Explain ${th.title} in ${th.sub} for JAMB UTME candidates.`)}
-                  className="text-left p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container border border-border transition-colors text-xs flex flex-col gap-1"
-                >
-                  <span className="text-[10px] font-mono-data text-primary font-semibold">{th.sub}</span>
-                  <span className="text-text-primary font-medium truncate">{th.title}</span>
-                </button>
-              ))}
-            </div>
           </div>
-        </aside>
 
-        {/* CENTER CONVERSATION STUDIO */}
-        <main className="flex-1 flex flex-col justify-between bg-bg-card relative overflow-hidden">
-          {/* Mobile Sub-Bar: Dialect Switcher, 0-Coin Cache & New Session (md:hidden, matches Stitch Mobile Spec) */}
-          <div className="md:hidden flex items-center justify-between px-3.5 py-2 bg-surface-container-low border-b border-border text-xs shrink-0 z-10">
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setMessages([
-                    {
-                      role: 'assistant',
-                      content: 'New session initialized. Which JAMB topic or question should we tackle next?',
-                      isCacheHit: true,
-                    },
-                  ]);
-                }}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container text-text-primary border border-border text-xs font-semibold active:scale-95 transition-all shadow-sm"
-              >
-                <span className="material-symbols-outlined text-[15px] text-accent-ai-gold">auto_awesome</span>
-                <span>New</span>
-              </button>
-              <div className="flex items-center gap-1 text-[11px] font-mono-data text-tertiary px-2 py-0.5 rounded bg-tertiary/10 border border-tertiary/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse" />
-                <span>0c Cache</span>
-              </div>
-            </div>
-
-            {/* Mobile Dialect Switcher Pill */}
-            <div className="flex items-center bg-surface-container p-0.5 rounded-lg border border-border text-xs">
+          <div className="flex items-center gap-2">
+            {/* Dialect Switcher */}
+            <div className="flex items-center bg-surface-container-high p-1 rounded-lg border border-border text-xs">
               <button
                 type="button"
                 onClick={() => setDialect('english')}
                 className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all ${
                   dialect === 'english'
-                    ? 'bg-accent-royal-blue text-white shadow-sm'
+                    ? 'bg-primary text-white shadow-sm'
                     : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
-                EN
+                Academic EN
               </button>
               <button
                 type="button"
                 onClick={() => setDialect('pidgin')}
                 className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all ${
                   dialect === 'pidgin'
-                    ? 'bg-accent-royal-blue text-white shadow-sm'
+                    ? 'bg-primary text-white shadow-sm'
                     : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
-                PG
+                Naija Pidgin
               </button>
             </div>
-          </div>
 
-          {/* Mobile Suggested Topic Chips Strip (md:hidden) */}
-          <div className="md:hidden flex items-center gap-2 px-3 py-1.5 overflow-x-auto no-scrollbar border-b border-border bg-bg-secondary text-xs shrink-0">
-            {[
-              { label: 'Oral Forms', prompt: 'Explain Oral Forms: Plait vs Plate Phonemes /æ/ for JAMB UTME candidates.' },
-              { label: 'Calculus', prompt: 'Explain Calculus: Differentiation from First Principles for JAMB UTME.' },
-              { label: 'Lenz’s Law', prompt: 'Explain Electromagnetic Induction & Lenz’s Law for JAMB UTME candidates.' },
-              { label: 'IUPAC Org Chem', prompt: 'Explain Organic Chemistry IUPAC Nomenclature for JAMB UTME.' },
-            ].map((chip, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => handleSendMessage(chip.prompt)}
-                className="shrink-0 px-2.5 py-1 rounded-full bg-surface-container border border-border text-text-secondary text-[11px] whitespace-nowrap active:scale-95 transition-all"
-              >
-                {chip.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Chat Messages Scrollable Canvas */}
-          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 custom-scroll">
-            {messages.map((m, idx) => (
-              <div
-                key={idx}
-                className={`flex gap-3 max-w-3xl ${
-                  m.role === 'user' ? 'ml-auto flex-row-reverse' : 'mr-auto'
-                }`}
-              >
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold ${
-                    m.role === 'user'
-                      ? 'bg-accent-royal-blue text-white'
-                      : 'bg-surface-container text-accent-ai-gold border border-accent-ai-gold/40'
-                  }`}
-                >
-                  {m.role === 'user' ? (
-                    <span className="material-symbols-outlined text-base">person</span>
-                  ) : (
-                    <span className="material-symbols-outlined text-base">smart_toy</span>
-                  )}
-                </div>
-
-                <div
-                  className={`p-4 rounded-2xl text-body-sm leading-relaxed border ${
-                    m.role === 'user'
-                      ? 'bg-accent-royal-blue/15 border-accent-royal-blue/30 text-text-primary'
-                      : 'bg-surface-container-low border-border text-text-primary'
-                  }`}
-                >
-                  {m.role === 'assistant' && (
-                    <div className="flex items-center gap-2 mb-2 pb-2 border-b border-border/60">
-                      <span className="text-[10px] font-mono-data text-accent-ai-gold font-bold">
-                        Falke AI Tutor
-                      </span>
-                      {m.isCacheHit && (
-                        <span className="text-[10px] font-mono-data px-1.5 py-0.2 rounded bg-tertiary/15 text-tertiary border border-tertiary/30">
-                          0 Coins · Instant Hit
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  <p className="whitespace-pre-wrap break-words">{m.content}</p>
-                </div>
-              </div>
-            ))}
-            {isLoading && (
-              <div className="flex items-center gap-2 text-text-muted text-xs p-2">
-                <span className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                <span>Falke AI is deriving curriculum solution...</span>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Chat Input Console */}
-          <div className="p-3 sm:p-4 border-t border-border bg-bg-secondary">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSendMessage();
-              }}
-              className="flex items-center gap-2"
+            <button
+              onClick={handleStartNewSession}
+              className="px-3 py-1.5 rounded-lg border border-border bg-surface-container-high hover:bg-surface-variant text-text-primary text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-[0.98]"
             >
-              <input
-                type="text"
-                placeholder={
-                  dialect === 'pidgin'
-                    ? 'Ask Falke AI in Pidgin... (e.g. wetin be Lenz Law?)'
-                    : 'Ask Falke AI any question or formula problem... [Enter to send]'
-                }
-                value={inputMsg}
-                onChange={(e) => setInputMsg(e.target.value)}
-                className="flex-1 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-border bg-surface-container-low text-text-primary outline-none focus:border-accent-royal-blue text-body-sm"
-              />
-              <button
-                type="submit"
-                disabled={isLoading || !inputMsg.trim()}
-                className="px-3.5 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-accent-royal-blue hover:bg-primary-container text-white font-label-md font-semibold text-sm shadow-md transition-all active:scale-[0.98] disabled:opacity-50 flex items-center gap-1.5 shrink-0"
-              >
-                <span>Send</span>
-                <span className="material-symbols-outlined text-base">send</span>
-              </button>
-            </form>
+              <PlusCircle className="w-3.5 h-3.5 text-primary" />
+              <span className="hidden sm:inline">New Session</span>
+            </button>
           </div>
-        </main>
+        </div>
+
+        {/* Content Body: Sidebar + Chat Canvas */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Left Sessions Sidebar */}
+          <aside className="w-64 border-r border-border bg-surface-container p-3 space-y-3 hidden md:flex flex-col justify-between shrink-0">
+            <div className="space-y-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-text-muted px-2 block">
+                Study Sessions
+              </span>
+              <div className="space-y-1 overflow-y-auto max-h-[300px]">
+                {sessions.length === 0 ? (
+                  <p className="text-[11px] text-text-muted px-2 py-1">No prior sessions recorded.</p>
+                ) : (
+                  sessions.map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => handleSelectSession(s.id)}
+                      className={`w-full text-left px-2.5 py-2 rounded-lg text-xs flex items-center gap-2 truncate transition-colors ${
+                        activeSessionId === s.id
+                          ? 'bg-primary/10 text-primary font-semibold'
+                          : 'text-text-secondary hover:bg-surface-container-high hover:text-text-primary'
+                      }`}
+                    >
+                      <MessageSquare className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">{s.title || 'Study Session'}</span>
+                    </button>
+                  ))
+                )}
+              </div>
+
+              {/* Quick High-Yield Prompts */}
+              <div className="pt-3 border-t border-border space-y-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-text-muted px-2 block">
+                  High-Yield Prompts
+                </span>
+                {[
+                  { label: 'Explain Oral English /æ/ vs /eɪ/', prompt: 'Explain the difference between vowel sounds /æ/ (as in plait) and /eɪ/ (as in plate) with typical JAMB distractor examples.' },
+                  { label: 'Calculus First Principles', prompt: 'Explain Calculus differentiation from first principles for JAMB Mathematics.' },
+                  { label: 'Lenz’s Law & Induction', prompt: 'Explain Lenz’s Law and electromagnetic induction with step-by-step exam breakdown for JAMB Physics.' },
+                  { label: 'IUPAC Organic Chemistry', prompt: 'Explain IUPAC naming rules for branched alkanes and alkenes in JAMB Chemistry.' },
+                ].map((chip, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleSendMessage(chip.prompt)}
+                    className="w-full text-left p-2 rounded-lg bg-surface-container-high hover:bg-surface-variant border border-border text-[11px] text-text-secondary hover:text-text-primary transition-colors flex flex-col gap-0.5"
+                  >
+                    <span className="font-semibold truncate">{chip.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-surface-container-high border border-border text-[11px] text-text-muted">
+              <span className="font-semibold text-text-primary block mb-0.5">AuriCoins Telemetry</span>
+              <span>Each novel AI derivation draws 5 coins. Cached responses consume 0 coins.</span>
+            </div>
+          </aside>
+
+          {/* Main Chat Canvas */}
+          <main className="flex-1 flex flex-col justify-between bg-bg-card relative overflow-hidden">
+            {/* Messages Scroll Area */}
+            <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 custom-scroll">
+              {messages.map((m, idx) => (
+                <div
+                  key={idx}
+                  className={`flex gap-3 max-w-2xl ${m.role === 'user' ? 'ml-auto flex-row-reverse' : 'mr-auto'}`}
+                >
+                  <div
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold ${
+                      m.role === 'user'
+                        ? 'bg-primary text-white'
+                        : m.isError
+                        ? 'bg-rose-500/10 text-rose-500 border border-rose-500/30'
+                        : 'bg-primary/10 text-primary border border-primary/20'
+                    }`}
+                  >
+                    {m.role === 'user' ? 'ME' : <Bot className="w-4 h-4" />}
+                  </div>
+
+                  <div
+                    className={`p-3.5 rounded-2xl text-xs leading-relaxed border ${
+                      m.role === 'user'
+                        ? 'bg-primary text-white border-primary rounded-tr-sm'
+                        : m.isError
+                        ? 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-300 rounded-tl-sm'
+                        : 'bg-surface-container border-border text-text-primary rounded-tl-sm'
+                    }`}
+                  >
+                    {m.role === 'assistant' && !m.isError && (
+                      <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-border/50 text-[10px] text-text-muted">
+                        <span className="font-bold text-primary">Falke AI Tutor</span>
+                        {m.isCacheHit && (
+                          <span className="px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-mono">
+                            0 Coins · Cached
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    {m.isError && (
+                      <div className="flex items-center gap-1.5 mb-1.5 font-bold text-[11px] text-rose-500">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        <span>Query Error</span>
+                      </div>
+                    )}
+                    <p className="whitespace-pre-wrap break-words">{m.content}</p>
+                  </div>
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex items-center gap-2 text-text-muted text-xs p-2">
+                  <span className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  <span>Falke AI is deriving curriculum solution...</span>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Chat Input Console */}
+            <div className="p-3 border-t border-border bg-surface-container">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSendMessage();
+                }}
+                className="flex items-center gap-2"
+              >
+                <input
+                  type="text"
+                  placeholder={
+                    dialect === 'pidgin'
+                      ? 'Ask Falke AI in Pidgin... (e.g. wetin be Lenz Law?)'
+                      : 'Ask Falke AI any question or formula problem... [Enter to send]'
+                  }
+                  value={inputMsg}
+                  onChange={(e) => setInputMsg(e.target.value)}
+                  className="flex-1 px-3.5 py-2.5 rounded-xl border border-border bg-bg-card text-text-primary text-xs outline-none focus:border-primary placeholder:text-text-muted"
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading || !inputMsg.trim()}
+                  className="px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-semibold shadow-sm transition-all active:scale-[0.98] disabled:opacity-50 flex items-center gap-1.5 shrink-0"
+                >
+                  <span>Send</span>
+                  <Send className="w-3.5 h-3.5" />
+                </button>
+              </form>
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </StudentLayout>
   );
 }

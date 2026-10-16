@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Button, Badge, AppNavbar } from '../components';
+import { Card, Button, Badge } from '../components';
+import { StudentLayout } from '../components/StudentLayout';
 import { Calendar, CheckSquare, Clock } from 'lucide-react';
+import { getMe } from '../features/auth/api';
 
 const JAMB_SYLLABUS: Record<string, string[]> = {
   physics: ['Motion', 'Energy', 'Waves', 'Thermodynamics', 'Electricity', 'Magnetism', 'Modern Physics', 'Optics'],
@@ -13,6 +15,7 @@ const JAMB_SYLLABUS: Record<string, string[]> = {
 
 export default function ExamHub() {
   const navigate = useNavigate();
+  const [student, setStudent] = useState<any>(null);
   const [syllabus, setSyllabus] = useState<any[]>([]);
   const [timetable, setTimetable] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -21,6 +24,7 @@ export default function ExamHub() {
   const [expandedSubject, setExpandedSubject] = useState<string | null>(null);
 
   useEffect(() => {
+    getMe().then((data) => setStudent(data)).catch(() => {});
     fetchHubData();
   }, []);
 
@@ -117,11 +121,18 @@ export default function ExamHub() {
   }
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary font-sans overflow-auto relative">
-      {/* Unified Ecosystem Top Bar */}
-      <AppNavbar titleBadge="Exam Hub" />
+    <StudentLayout student={student}>
+      <div className="space-y-6">
+        <div className="pb-2 border-b border-border">
+          <h1 className="text-2xl font-bold font-display text-text-primary tracking-tight">
+            Study Resources &amp; Revision Timetable
+          </h1>
+          <p className="text-xs text-text-secondary mt-0.5">
+            Organize high-yield study sessions and track topic checklist completion.
+          </p>
+        </div>
 
-      <main className="mx-auto max-w-7xl px-6 py-8 grid gap-8 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2">
         <Card className="space-y-4">
           <div className="flex items-center gap-2">
             <CheckSquare className="h-5 w-5 text-primary" />
@@ -262,7 +273,8 @@ export default function ExamHub() {
             </div>
           )}
         </Card>
-      </main>
-    </div>
+      </div>
+      </div>
+    </StudentLayout>
   );
 }

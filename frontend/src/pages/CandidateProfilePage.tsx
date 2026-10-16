@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMe, updateMe } from '../features/auth/api';
-import { AppNavbar } from '../components/AppNavbar';
+import { StudentLayout } from '../components/StudentLayout';
 import { useToast } from '../components/ToastProvider';
 import { getSubjectLabel } from '../constants/subjects';
 
@@ -73,20 +73,16 @@ export default function CandidateProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col font-body selection:bg-accent-royal-blue selection:text-white antialiased">
-      {/* Ecosystem Top Bar */}
-      <AppNavbar student={student} titleBadge="Identity Hub" />
-
-      {/* Main Wrapper */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6">
+    <StudentLayout student={student}>
+      <div className="space-y-6">
         {/* Breadcrumbs & Title */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div className="flex items-center gap-2 text-label-sm font-label-sm text-text-muted">
+          <div className="flex items-center gap-2 text-xs text-text-muted">
             <a href="/dashboard" className="hover:text-text-primary transition-colors">Portal Home</a>
             <span className="material-symbols-outlined text-xs">chevron_right</span>
-            <span className="text-text-secondary">Candidate Profile & Account</span>
+            <span className="text-text-secondary">Candidate Profile &amp; Account</span>
             <span className="material-symbols-outlined text-xs">chevron_right</span>
-            <span className="text-primary font-medium">Identity & UTME Registration</span>
+            <span className="text-primary font-medium">Identity &amp; UTME Registration</span>
           </div>
 
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container text-tertiary border border-border text-label-sm font-label-sm">
@@ -427,11 +423,7 @@ export default function CandidateProfilePage() {
             )}
           </section>
         </div>
-      </main>
-
-      <footer className="w-full py-4 text-center text-xs text-text-muted border-t border-border mt-10">
-        Aurikrex Exam Arena · © 2025/2026 Aurikrex. All rights reserved.
-      </footer>
-    </div>
+      </div>
+    </StudentLayout>
   );
 }

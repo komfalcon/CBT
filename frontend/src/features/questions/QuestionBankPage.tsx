@@ -37,6 +37,7 @@ import {
   QuestionOption,
 } from './api';
 import { Button, Card, Input, Alert, Badge, AppNavbar } from '../../components';
+import { StudentLayout } from '../../components/StudentLayout';
 import { SmartTextRenderer, DiagramRenderer, cleanOptionText } from '../../components/QuestionCard';
 
 const AVAILABLE_SUBJECTS = [
@@ -84,10 +85,28 @@ export default function QuestionBankPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const isAdminView = location.pathname.startsWith('/admin');
+  const [student, setStudent] = useState<any>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
   const [selectedEra, setSelectedEra] = useState<string>('recent');
   const [expandedExplanations, setExpandedExplanations] = useState<Record<string, boolean>>({});
   const [falkeDialectMap, setFalkeDialectMap] = useState<Record<string, 'english' | 'pidgin'>>({});
+
+  useEffect(() => {
+    if (!isAdminView) {
+      import('../../features/auth/api').then(({ getMe }) => {
+        getMe().then((data) => setStudent(data)).catch(() => {});
+      });
+    }
+
+    const params = new URLSearchParams(location.search);
+    const subParam = params.get('subject');
+    if (subParam) setSelectedSubjectFilter(subParam);
+    const modeParam = params.get('mode');
+    if (modeParam === 'past') {
+      // past questions mode filters
+      setSelectedEra('vintage');
+    }
+  }, [location.search, isAdminView]);
 
   // PDF Scanner State
   const [pdfDirPath, setPdfDirPath] = useState('');
@@ -493,13 +512,8 @@ export default function QuestionBankPage() {
     }
   };
 
-  return (
-    <div className={isAdminView ? "space-y-6" : "min-h-screen bg-bg-primary text-text-primary flex flex-col font-body selection:bg-accent-royal-blue selection:text-white antialiased"}>
-      {!isAdminView && (
-        <AppNavbar titleBadge="Question Bank" />
-      )}
-
-      <div className={isAdminView ? "space-y-6" : "max-w-[1440px] w-full mx-auto px-4 md:px-8 py-6 space-y-6 flex-1"}>
+  const content = (
+    <div className={isAdminView ? "space-y-6" : "w-full space-y-6"}>
       {/* ========================================================================= */}
       {/* HERO HEADER SECTION                                                       */}
       {/* ========================================================================= */}
@@ -2013,13 +2027,16 @@ export default function QuestionBankPage() {
           )}
         </div>
       )}
-      </div>
-
-      {!isAdminView && (
-        <footer className="w-full py-4 text-center text-xs text-text-muted border-t border-border mt-10">
-          Aurikrex Exam Arena · © 2025/2026 Aurikrex. Verified UTME Question Bank &amp; Drill Explorer.
-        </footer>
-      )}
     </div>
+  );
+
+  if (isAdminView) {
+    return content;
+  }
+
+  return (
+    <StudentLayout student={student}>
+      {content}
+    </StudentLayout>
   );
 }
