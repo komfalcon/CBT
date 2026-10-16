@@ -55,11 +55,13 @@ export default function UnderMaintenance({ onCheckStatus }: UnderMaintenanceProp
       {/* Top Header */}
       <header className="relative z-10 w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between border-b border-white/[0.06]">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-400 flex items-center justify-center font-black text-slate-950 shadow-lg shadow-amber-500/20 text-sm">
-            F
-          </div>
+          <img
+            src="/aurikrex-logo.png"
+            alt="Aurikrex Logo"
+            className="h-9 w-9 rounded-xl object-contain shadow-sm shrink-0"
+          />
           <div>
-            <span className="font-display font-bold text-base tracking-tight text-white">Falke AI CBT Exam Arena</span>
+            <span className="font-display font-bold text-base tracking-tight text-white">Aurikrex Exam Arena</span>
             <span className="hidden sm:inline-block ml-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-300">
               Under Development
             </span>
@@ -92,7 +94,7 @@ export default function UnderMaintenance({ onCheckStatus }: UnderMaintenanceProp
               Platform Under Active Development
             </h1>
             <p className="max-w-lg mx-auto text-xs sm:text-base leading-6 text-slate-400">
-              The <strong className="text-amber-300 font-semibold">Falke AI CBT Exam Arena</strong> is currently undergoing critical system development and scheduled infrastructure maintenance. Access is temporarily restricted until released by the administrator.
+              The <strong className="text-amber-300 font-semibold">Aurikrex Exam Arena</strong> is currently undergoing critical system development and scheduled infrastructure maintenance. Access is temporarily restricted until released by the administrator.
             </p>
           </div>
 
@@ -144,7 +146,7 @@ export default function UnderMaintenance({ onCheckStatus }: UnderMaintenanceProp
 
       {/* Footer with Discreet Admin Entry */}
       <footer className="relative z-10 w-full max-w-7xl mx-auto px-6 py-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-        <p>© {new Date().getFullYear()} Falke AI CBT Exam Arena. All student records remain securely protected.</p>
+        <p>© {new Date().getFullYear()} Aurikrex Exam Arena. All student records remain securely protected.</p>
         <div className="flex items-center gap-4">
           <Link
             to="/sys/auth-checkpoint"

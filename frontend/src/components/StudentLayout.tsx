@@ -113,7 +113,7 @@ export function StudentLayout({ children, student: propStudent }: StudentLayoutP
           className="flex items-center gap-3 px-2 py-1 group"
         >
           <img
-            src="/favicon.svg"
+            src="/aurikrex-logo.png"
             alt="Aurikrex Exam Arena"
             className="w-10 h-10 rounded-xl object-contain shadow-sm shrink-0 group-hover:scale-105 transition-transform"
           />

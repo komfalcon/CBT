@@ -122,7 +122,7 @@ export default function AdminLayout() {
         <div className="h-18 flex items-center justify-between px-6 border-b border-border bg-bg-card/80">
           <div className="flex items-center gap-3">
             <img
-              src="/favicon.svg"
+              src="/aurikrex-logo.png"
               alt="Aurikrex CBT Logo"
               className="h-10 w-10 rounded-xl object-contain shadow-sm shrink-0"
             />

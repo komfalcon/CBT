@@ -748,7 +748,7 @@ export default function ExamConsole() {
           {/* Left: Brand Emblem & Subtitle */}
           <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
             <img
-              src="/favicon.svg"
+              src="/aurikrex-logo.png"
               alt="Aurikrex Emblem"
               className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl ring-1 ring-border-dark shadow-sm shrink-0"
             />

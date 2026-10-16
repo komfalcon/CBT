@@ -77,7 +77,7 @@ export const DesktopOnlyBarrier: React.FC = () => {
         <div className="flex items-center justify-center gap-2 mb-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 text-xs font-semibold tracking-wider uppercase">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            Falke AI CBT • Strict Desktop Policy
+            Aurikrex Exam Arena • Strict Desktop Policy
           </div>
         </div>
 
@@ -114,7 +114,7 @@ export const DesktopOnlyBarrier: React.FC = () => {
             Desktop Interface Required
           </h1>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            The <strong className="text-cyan-300 font-semibold">Falke AI CBT Exam Arena</strong> is exclusively restricted to desktop and laptop computers to guarantee standard JAMB UTME examination conditions.
+            The <strong className="text-cyan-300 font-semibold">Aurikrex Exam Arena</strong> is exclusively restricted to desktop and laptop computers to guarantee standard JAMB UTME examination conditions.
           </p>
         </div>
 

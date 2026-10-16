@@ -35,20 +35,20 @@ const AdminBilling = React.lazy(() => import('./pages/admin/AdminBilling'));
 const SecureAccess = React.lazy(() => import('./pages/admin/SecureAccess'));
 
 const routeMetadata: Record<string, { title: string; description: string }> = {
-  '/': { title: 'Falke AI CBT Exam Arena — JAMB UTME Practice', description: 'Realistic JAMB UTME mocks, focused drills, explanations, and progress insights.' },
-  '/arena': { title: 'Exam Arena — Falke AI CBT Exam Arena', description: 'Prepare with focused practice sessions and realistic exam simulations.' },
-  '/register': { title: 'Register — Falke AI CBT Exam Arena', description: 'Create your candidate profile for JAMB UTME practice.' },
-  '/auth': { title: 'Sign in — Falke AI CBT Exam Arena', description: 'Sign in or create your Falke AI CBT Exam Arena candidate profile.' },
-  '/help': { title: 'Help Center — Falke AI CBT Exam Arena', description: 'Find answers and support for your Falke AI CBT Exam Arena account and exams.' },
-  '/contact': { title: 'Contact — Falke AI CBT Exam Arena', description: 'Contact the Falke AI CBT Exam Arena support team.' },
-  '/privacy': { title: 'Privacy Policy — Falke AI CBT Exam Arena', description: 'Read how Falke AI CBT Exam Arena handles personal data and privacy.' },
-  '/terms': { title: 'Terms of Service — Falke AI CBT Exam Arena', description: 'Review the terms, subscriptions, refunds, and acceptable use rules.' },
+  '/': { title: 'Aurikrex Exam Arena — JAMB UTME Practice', description: 'Realistic JAMB UTME mocks, focused drills, explanations, and progress insights.' },
+  '/arena': { title: 'Exam Arena — Aurikrex Exam Arena', description: 'Prepare with focused practice sessions and realistic exam simulations.' },
+  '/register': { title: 'Register — Aurikrex Exam Arena', description: 'Create your candidate profile for JAMB UTME practice.' },
+  '/auth': { title: 'Sign in — Aurikrex Exam Arena', description: 'Sign in or create your Aurikrex Exam Arena candidate profile.' },
+  '/help': { title: 'Help Center — Aurikrex Exam Arena', description: 'Find answers and support for your Aurikrex Exam Arena account and exams.' },
+  '/contact': { title: 'Contact — Aurikrex Exam Arena', description: 'Contact the Aurikrex Exam Arena support team.' },
+  '/privacy': { title: 'Privacy Policy — Aurikrex Exam Arena', description: 'Read how Aurikrex Exam Arena handles personal data and privacy.' },
+  '/terms': { title: 'Terms of Service — Aurikrex Exam Arena', description: 'Review the terms, subscriptions, refunds, and acceptable use rules.' },
 };
 
 function RouteMetadata() {
   const { pathname } = useLocation();
   useEffect(() => {
-    const metadata = routeMetadata[pathname] || { title: 'Falke AI CBT Exam Arena', description: 'JAMB UTME preparation and exam practice from Falke AI CBT Exam Arena.' };
+    const metadata = routeMetadata[pathname] || { title: 'Aurikrex Exam Arena', description: 'JAMB UTME preparation and exam practice from Aurikrex Exam Arena.' };
     document.title = metadata.title;
     const setMeta = (selector: string, attribute: string, value: string) => {
       let element = document.head.querySelector<HTMLMetaElement>(selector);
