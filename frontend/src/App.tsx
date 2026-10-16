@@ -23,6 +23,7 @@ import Leaderboard from './pages/Leaderboard';
 import SyllabusTrackerPage from './pages/SyllabusTrackerPage';
 import CandidateProfilePage from './pages/CandidateProfilePage';
 import FalkeAiStudioPage from './pages/FalkeAiStudioPage';
+import PracticeBySubjectPage from './pages/PracticeBySubjectPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 
@@ -151,7 +152,8 @@ function App() {
           <Route path="/falke-ai" element={<ProtectedRoute><FalkeAiStudioPage /></ProtectedRoute>} />
           <Route path="/falke" element={<ProtectedRoute><FalkeAiStudioPage /></ProtectedRoute>} />
           <Route path="/mock-setup" element={<ProtectedRoute><MockSetupPage /></ProtectedRoute>} />
-          <Route path="/questions" element={<ProtectedRoute><QuestionBankPage /></ProtectedRoute>} />
+          <Route path="/practice" element={<ProtectedRoute><PracticeBySubjectPage /></ProtectedRoute>} />
+          <Route path="/questions" element={<AdminRoute><QuestionBankPage /></AdminRoute>} />
           <Route path="/exam/:sessionId" element={<ProtectedRoute><ExamConsole /></ProtectedRoute>} />
           <Route path="/results/:resultId" element={<ProtectedRoute><ResultReview /></ProtectedRoute>} />
           <Route
