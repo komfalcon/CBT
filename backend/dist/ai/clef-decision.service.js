@@ -190,7 +190,19 @@ ${candidate}`;
                     },
                     cell_phone: {
                         type: 'noul',
-                        instructions: 'Is a smartphone, mobile device, tablet, or unauthorized secondary screen visible?',
+                        instructions: 'Is any smartphone, cell phone, mobile phone, iPhone, Android device, tablet, or secondary screen visible anywhere in the frame (including held up, in hands, or on desk)?',
+                    },
+                    holding_device: {
+                        type: 'noul',
+                        instructions: 'Is the person holding, looking at, or using a phone or electronic device in their hands?',
+                    },
+                    candidate_present: {
+                        type: 'noul',
+                        instructions: 'Is a human student, candidate, or person sitting or present in front of the camera?',
+                    },
+                    candidate_absent: {
+                        type: 'noul',
+                        instructions: 'Is the candidate absent, missing, out of camera view, or is the chair/desk empty with no human face visible?',
                     },
                     looking_away: {
                         type: 'noul',
@@ -204,31 +216,39 @@ ${candidate}`;
                     });
                 }
                 const multPeopleProb = answers.multiple_people?.noul ?? 0;
-                const phoneProb = answers.cell_phone?.noul ?? 0;
+                const phoneProb = Math.max(answers.cell_phone?.noul ?? 0, answers.holding_device?.noul ?? 0);
+                const presentProb = answers.candidate_present?.noul ?? 1;
+                const absentProb = answers.candidate_absent?.noul ?? 0;
                 const awayProb = answers.looking_away?.noul ?? 0;
                 let violationFlagged = false;
                 let violationType;
                 const reasons = [];
-                if (phoneProb > 0.6) {
+                if (absentProb >= 0.35 || presentProb <= 0.20) {
                     violationFlagged = true;
-                    violationType = 'cell_phone';
-                    reasons.push('Mobile phone or unauthorized device detected');
+                    violationType = 'candidate_absent';
+                    reasons.push('Candidate absent from exam camera / desk left unattended');
                 }
-                if (multPeopleProb > 0.65) {
+                if (phoneProb >= 0.10) {
+                    violationFlagged = true;
+                    violationType = violationType || 'cell_phone';
+                    reasons.push('Mobile phone or unauthorized device detected in camera frame');
+                }
+                if (multPeopleProb >= 0.25) {
                     violationFlagged = true;
                     violationType = violationType || 'multiple_people';
                     reasons.push('Multiple individuals detected in exam space');
                 }
-                if (awayProb > 0.75) {
+                if (awayProb >= 0.45 && presentProb >= 0.25) {
                     violationFlagged = true;
                     violationType = violationType || 'looking_away';
                     reasons.push('Candidate turned away or looking off-camera');
                 }
-                this.logger.log(`[Falke AI Proctor - Clef] Evaluated -> violation: ${violationFlagged}, phoneProb: ${phoneProb.toFixed(2)}, multPeopleProb: ${multPeopleProb.toFixed(2)}, reasons: ${reasons.join(', ') || 'None'}`);
+                this.logger.log(`[Falke AI Proctor - Clef] Evaluated -> violation: ${violationFlagged}, phoneProb: ${phoneProb.toFixed(2)}, absentProb: ${absentProb.toFixed(2)}, multPeopleProb: ${multPeopleProb.toFixed(2)}, reasons: ${reasons.join(', ') || 'None'}`);
                 return {
                     multiplePeopleProbability: multPeopleProb,
                     cellPhoneProbability: phoneProb,
                     lookingAwayProbability: awayProb,
+                    candidateAbsentProbability: absentProb,
                     violationFlagged,
                     violationType,
                     reasons,

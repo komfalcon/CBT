@@ -124,11 +124,12 @@ export type ProctorCheckResponse = {
   disqualified: boolean;
   message?: string;
   reasons?: string[];
-  violationType?: 'multiple_people' | 'cell_phone' | 'looking_away';
+  violationType?: 'multiple_people' | 'cell_phone' | 'looking_away' | 'candidate_absent';
   resultId?: string;
   multiplePeopleProbability?: number;
   cellPhoneProbability?: number;
   lookingAwayProbability?: number;
+  candidateAbsentProbability?: number;
 };
 
 export async function evaluateExamProctoring(

@@ -392,13 +392,13 @@ export default function ExamConsole() {
 
       if (video.videoWidth === 0 || video.videoHeight === 0) return;
 
-      canvas.width = 320;
-      canvas.height = 240;
+      canvas.width = 640;
+      canvas.height = 480;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      ctx.drawImage(video, 0, 0, 320, 240);
-      const frameBase64 = canvas.toDataURL('image/jpeg', 0.6);
+      ctx.drawImage(video, 0, 0, 640, 480);
+      const frameBase64 = canvas.toDataURL('image/jpeg', 0.8);
 
       try {
         setIsProctorChecking(true);
