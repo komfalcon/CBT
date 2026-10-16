@@ -302,28 +302,28 @@ ${candidate}`;
         const reasons: string[] = [];
 
         // 1. Candidate Absent / Walked away from laptop
-        if (absentProb >= 0.35 || presentProb <= 0.20) {
+        if (absentProb >= 0.20 || presentProb <= 0.40) {
           violationFlagged = true;
           violationType = 'candidate_absent';
           reasons.push('Candidate absent from exam camera / desk left unattended');
         }
 
         // 2. Cell Phone / Secondary Device
-        if (phoneProb >= 0.10) {
+        if (phoneProb >= 0.06) {
           violationFlagged = true;
           violationType = violationType || 'cell_phone';
           reasons.push('Mobile phone or unauthorized device detected in camera frame');
         }
 
         // 3. Multiple People
-        if (multPeopleProb >= 0.25) {
+        if (multPeopleProb >= 0.20) {
           violationFlagged = true;
           violationType = violationType || 'multiple_people';
           reasons.push('Multiple individuals detected in exam space');
         }
 
         // 4. Looking Away
-        if (awayProb >= 0.45 && presentProb >= 0.25) {
+        if (awayProb >= 0.40 && presentProb >= 0.20) {
           violationFlagged = true;
           violationType = violationType || 'looking_away';
           reasons.push('Candidate turned away or looking off-camera');
