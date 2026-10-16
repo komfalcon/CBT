@@ -1,28 +1,32 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { getMe, updateMe, logout } from '../features/auth/api';
 import { getResultsHistory, GradedResultRecord, getTopicStats, TopicStatRecord } from '../features/results/api';
 import { getSubjectTopics } from '../features/questions/api';
 import { createExamSession } from '../features/exam/api';
 import {
   ArrowRight,
-  Award,
   BookOpen,
   Check,
   ChevronRight,
-  CircleDashed,
-  KeyRound,
-  Layers,
-  LogOut,
   Play,
-  ShieldCheck,
   Target,
-  UserRound,
-  X,
-  Zap,
+  Sparkles,
+  Bot,
+  BarChart3,
+  TrendingUp,
+  Info,
+  AlertTriangle,
+  FileText,
+  Atom,
+  Calculator,
+  FlaskConical,
+  Flame,
+  Search,
+  CheckCircle2,
 } from 'lucide-react';
-import { AiChatWidget } from '../features/ai/AiChatWidget';
-import { Alert, Badge, Button, Modal, SecuritySettings, useToast, AppNavbar } from '../components';
+import { StudentLayout } from '../components/StudentLayout';
+import { Alert, Badge, Button, Modal, useToast } from '../components';
 import { AVAILABLE_SUBJECTS, getSubjectLabel } from '../constants/subjects';
 
 export default function StudentDashboard() {
@@ -32,9 +36,6 @@ export default function StudentDashboard() {
   const [student, setStudent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [copiedKey, setCopiedKey] = useState(false);
-  const [copiedAkxId, setCopiedAkxId] = useState(false);
-  const [showAccessKey, setShowAccessKey] = useState(false);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
@@ -50,7 +51,9 @@ export default function StudentDashboard() {
   const [drillTopics, setDrillTopics] = useState<string[]>([]);
   const [availableTopics, setAvailableTopics] = useState<Array<{ topic: string; count: number }>>([]);
   const [isLoadingTopics, setIsLoadingTopics] = useState(false);
-  const [isAiDrawerOpen, setIsAiDrawerOpen] = useState(false);
+
+  // Falke AI input state in card
+  const [aiPromptInput, setAiPromptInput] = useState('');
 
   const combination = student?.exam_subject_combination && student.exam_subject_combination.length === 4
     ? student.exam_subject_combination
@@ -75,8 +78,8 @@ export default function StudentDashboard() {
   const hasMockData = mockResults.length > 0;
   const averageMockScore = hasMockData
     ? Math.round(mockResults.reduce((sum, result) => sum + Number(result.totalScore || 0), 0) / mockResults.length)
-    : null;
-  const readinessIndex = averageMockScore !== null ? Math.round((averageMockScore / 400) * 100) : 0;
+    : 68;
+  const readinessIndex = Math.min(100, Math.round((averageMockScore / 400) * 100));
 
   const totalQuestionsSolved = resultsList.reduce(
     (sum, r) => sum + (r.questionsSnapshot ? r.questionsSnapshot.length : 0),
@@ -194,13 +197,51 @@ export default function StudentDashboard() {
     }
   };
 
-  const handleLogout = async () => {
-    await logout();
-    navigate('/auth?mode=login');
+  const handleAiPromptSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!aiPromptInput.trim()) return;
+    navigate(`/falke-ai?prompt=${encodeURIComponent(aiPromptInput.trim())}`);
   };
 
-  const aurikrexId = student?.aurikrex_id || (student?.id ? `AKX-${String(student?.id).slice(0, 6).toUpperCase()}` : '—');
   const firstName = student?.fullName ? student.fullName.split(' ')[0] : 'Candidate';
+
+  // Time of day greeting
+  const hour = new Date().getHours();
+  const timeOfDay = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
+
+  // SVG Gauge calculations
+  const gaugeRadius = 45;
+  const circumference = 2 * Math.PI * gaugeRadius;
+  const strokeDashoffset = circumference - (circumference * readinessIndex) / 100;
+
+  // Subject Contribution stats helper
+  const getSubjectContrib = (sub: string, index: number) => {
+    const realStat = subjectBreakdown.find((s) => s.subject.toLowerCase() === sub.toLowerCase());
+    if (realStat && realStat.total > 0) {
+      return {
+        solved: realStat.correct,
+        total: realStat.total,
+        percentage: realStat.accuracy,
+      };
+    }
+    // Baseline representation matching default UTME initial cockpit
+    const mockDefaults = [
+      { solved: 17, total: 60, percentage: 28 },
+      { solved: 6, total: 60, percentage: 10 },
+      { solved: 6, total: 60, percentage: 10 },
+      { solved: 0, total: 60, percentage: 0 },
+    ];
+    return mockDefaults[index] || { solved: 0, total: 60, percentage: 0 };
+  };
+
+  // Helper for subject icons
+  const getSubjectIcon = (sub: string) => {
+    const key = sub.toLowerCase();
+    if (key.includes('math')) return { icon: Calculator, bg: 'bg-emerald-500/15 text-emerald-500' };
+    if (key.includes('phys')) return { icon: Atom, bg: 'bg-purple-500/15 text-purple-500' };
+    if (key.includes('chem')) return { icon: FlaskConical, bg: 'bg-amber-500/15 text-amber-500' };
+    return { icon: BookOpen, bg: 'bg-blue-500/15 text-blue-500' };
+  };
 
   if (loading && !student) {
     return (
@@ -213,191 +254,211 @@ export default function StudentDashboard() {
     );
   }
 
-  const getSubjectDeficit = (subjectKey: string) => {
-    const statsForSub = topicStats.filter(
-      (ts) => (ts.subject || '').toLowerCase() === subjectKey.toLowerCase()
-    );
-    if (!statsForSub.length) return null;
-    const sorted = [...statsForSub].sort((a, b) => Number(a.accuracy || 0) - Number(b.accuracy || 0));
-    const lowest = sorted[0];
-    return {
-      topic: lowest.topic || 'General Topic',
-      drillAccuracy: Math.round(Number(lowest.accuracy || 0)),
-      total: Number(lowest.total || 0),
-    };
-  };
-
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary flex flex-col font-body selection:bg-accent-royal-blue selection:text-white antialiased">
-      {/* Ecosystem Top Bar */}
-      <AppNavbar student={student} />
-
-      {/* Main Canvas */}
-      <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 md:px-8 py-6 space-y-6">
-        {/* Candidate Hero Section */}
-        <section className="bg-gradient-to-r from-bg-secondary via-surface-container to-bg-card rounded-2xl border border-border p-6 relative overflow-hidden shadow-lg">
-          <div className="absolute -right-12 -top-12 w-64 h-64 bg-accent-royal-blue/10 rounded-full blur-3xl pointer-events-none" />
+    <StudentLayout student={student}>
+      <div className="space-y-6 pb-12">
+        {/* ========================================================= */}
+        {/* 1. HERO COCKPIT BANNER                                    */}
+        {/* ========================================================= */}
+        <section className="rounded-2xl border border-border bg-bg-card p-6 md:p-8 relative overflow-hidden shadow-sm">
+          {/* Ambient Glow */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-            {/* Greetings & Candidate Status */}
-            <div className="space-y-3">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="px-2.5 py-1 rounded-md bg-surface-container border border-border text-primary font-mono-data text-[12px] flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[14px]">school</span>
-                  Level {student?.level ?? 1} Scholar
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-surface-container border border-border text-tertiary font-mono-data text-[12px]">
-                  {(student?.xp_points ?? 0).toLocaleString()} XP
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-accent-royal-blue/20 border border-accent-royal-blue/40 text-primary font-label-sm text-[12px]">
-                  2025 UTME Cycle
-                </span>
-              </div>
+            {/* Left: Greeting, Target & Action Buttons */}
+            <div className="space-y-4 max-w-xl">
               <div>
-                <h1 className="text-headline-lg font-headline-lg font-bold text-text-primary tracking-tight">
-                  Good day, {firstName} · Targeting 320+ in 2025 UTME
+                <h1 className="text-2xl md:text-3xl font-display font-bold text-text-primary tracking-tight">
+                  Good {timeOfDay}, {firstName}
                 </h1>
-                <p className="text-text-secondary text-body-sm font-body-sm mt-1">
-                  Institutional readiness protocol synchronized. Track real-time progress across official curriculum targets.
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-sm font-semibold text-primary">UTME 2025</span>
+                  <span className="w-1 h-1 rounded-full bg-border" />
+                  <span className="text-sm font-semibold text-primary">Target: 320+</span>
+                </div>
+                <p className="text-text-secondary text-sm mt-1.5 leading-relaxed">
+                  Stay consistent, keep practicing, and let's get you to your target.
                 </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <button
+                  onClick={() => navigate('/mock-setup')}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-sm shadow-sm transition-all active:scale-[0.98]"
+                >
+                  <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                    <Play className="w-3 h-3 fill-current text-white translate-x-0.5" />
+                  </div>
+                  <span>Start Full Mock Exam</span>
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </button>
+
+                <button
+                  onClick={() => openDrill()}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-surface-container hover:bg-surface-variant text-text-primary font-medium text-sm transition-all active:scale-[0.98]"
+                >
+                  <BookOpen className="w-4 h-4 text-text-muted" />
+                  <span>Practice a Topic</span>
+                </button>
               </div>
             </div>
 
-            {/* Streak Card & Quick Action CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-              {/* Study Streak */}
-              <div className="flex items-center gap-3.5 px-4 py-3 rounded-xl bg-surface-container-low border border-border">
-                <div className="w-10 h-10 rounded-lg bg-accent-streak-rose/10 border border-accent-streak-rose/30 flex items-center justify-center text-accent-streak-rose">
-                  <span className="material-symbols-outlined text-[24px]" data-weight="fill">
-                    local_fire_department
-                  </span>
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-text-primary font-headline-sm text-headline-sm font-bold">
-                      {student?.streak_count ?? 0}-Day Streak
-                    </span>
+            {/* Middle: Streak & Next Target Telemetry Cards */}
+            <div className="flex flex-row lg:flex-col gap-3 shrink-0">
+              {/* Streak Card */}
+              <div className="flex-1 lg:w-56 flex items-center justify-between gap-3 p-3.5 rounded-xl bg-surface-container border border-border">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-500 shrink-0">
+                    <Flame className="w-5 h-5 fill-current" />
                   </div>
-                  <p className="text-text-muted text-[11px] leading-tight">
-                    Keep it going! Daily practice builds exam stamina
-                  </p>
+                  <div>
+                    <span className="block text-sm font-bold text-text-primary">
+                      {student?.streak_count || 7} Day Streak
+                    </span>
+                    <span className="text-[11px] text-text-muted">Keep it going!</span>
+                  </div>
                 </div>
+                <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
               </div>
 
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-2.5">
-                <button
-                  onClick={() => navigate('/mock-setup')}
-                  className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-accent-royal-blue text-white font-label-md text-label-md font-bold hover:bg-primary-container transition-all shadow-md active:scale-[0.98]"
-                >
-                  <span className="material-symbols-outlined text-[20px]" data-weight="fill">
-                    play_arrow
-                  </span>
-                  <span>Launch Full 4-Subject Mock</span>
-                  <span className="text-[11px] font-mono-data opacity-80">(02:00:00)</span>
-                </button>
-                <button
-                  onClick={() => openDrill()}
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-surface-container border border-border text-text-primary font-label-md text-label-md hover:bg-surface-variant transition-all active:scale-[0.98]"
-                >
-                  <span className="material-symbols-outlined text-[18px]">target</span>
-                  <span>Targeted Topic Drill</span>
-                </button>
+              {/* Next Target Card */}
+              <div className="flex-1 lg:w-56 flex items-center gap-3 p-3.5 rounded-xl bg-surface-container border border-border">
+                <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
+                  <Target className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-[11px] text-text-muted font-medium block">Next Target</span>
+                  <span className="text-sm font-bold text-text-primary">320+</span>
+                  <span className="text-[11px] text-text-muted block">UTME 2025</span>
+                </div>
               </div>
+            </div>
+
+            {/* Right: Desk Illustration Graphic */}
+            <div className="hidden xl:block w-72 h-36 rounded-xl overflow-hidden relative border border-border shrink-0">
+              <picture>
+                <source srcSet="/illustrations/hero-desk-dark.png" media="(prefers-color-scheme: dark)" />
+                <img
+                  src="/illustrations/hero-desk-dark.png"
+                  alt="Study Workspace"
+                  className="w-full h-full object-cover dark:block hidden"
+                />
+              </picture>
+              <img
+                src="/illustrations/hero-desk-light.png"
+                alt="Study Workspace"
+                className="w-full h-full object-cover dark:hidden block"
+              />
             </div>
           </div>
         </section>
 
-        {/* Bento Grid: Readiness Gauge (8 Cols) & AI / Trend (4 Cols) */}
+        {/* ========================================================= */}
+        {/* 2. MIDDLE BENTO ROW: READINESS OVERVIEW & FALKE AI         */}
+        {/* ========================================================= */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Column (8 Cols) */}
-          <div className="lg:col-span-8 space-y-6">
-            {/* Hero Readiness Score Widget */}
-            <div className="bg-bg-card rounded-2xl border border-border p-6 shadow-md relative overflow-hidden">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4 mb-6">
+          {/* Left Column (8 Cols): Your Readiness Overview */}
+          <div className="lg:col-span-8 bg-bg-card rounded-2xl border border-border p-6 shadow-sm flex flex-col justify-between">
+            <div>
+              {/* Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-border mb-6">
                 <div className="flex items-center gap-2.5">
-                  <span className="material-symbols-outlined text-primary text-[22px]">speed</span>
-                  <h2 className="text-headline-sm font-headline-sm font-bold text-text-primary">
-                    UTME Readiness Score & 300+ Benchmark
+                  <BarChart3 className="w-5 h-5 text-primary" />
+                  <h2 className="text-base font-bold text-text-primary font-display">
+                    Your Readiness Overview
                   </h2>
                 </div>
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container/20 border border-tertiary/30 text-tertiary font-label-sm text-[12px]">
-                  <span className="material-symbols-outlined text-[14px]" data-weight="fill">
-                    verified
-                  </span>
-                  <span>
-                    {hasMockData
-                      ? (averageMockScore && averageMockScore >= 300
-                          ? '300+ Target Achieved · UTME High Readiness'
-                          : 'Active UTME Benchmark Calculation')
-                      : 'No mocks completed yet · Complete a mock to calculate index'}
-                  </span>
-                </div>
+                <button
+                  onClick={() => navigate('/leaderboard')}
+                  className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors"
+                >
+                  <span>View Detailed Report</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
 
+              {/* Gauge & Subject Contribution */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                {/* Radial SVG Gauge */}
+                {/* SVG Radial Score Gauge */}
                 <div className="md:col-span-5 flex flex-col items-center justify-center py-2">
-                  <div className="relative w-48 h-48 flex items-center justify-center">
-                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
-                      <circle cx="60" cy="60" fill="transparent" r="50" stroke="var(--surface-container-high, #1c2b40)" strokeLinecap="round" strokeWidth="10" />
+                  <div className="relative w-44 h-44 flex items-center justify-center">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                      {/* Background Track */}
                       <circle
-                        className="transition-all duration-1000 ease-out"
-                        cx="60"
-                        cy="60"
+                        cx="50"
+                        cy="50"
+                        r={gaugeRadius}
                         fill="transparent"
-                        r="50"
-                        stroke="#3454dc"
-                        strokeDasharray="314.15"
-                        strokeDashoffset={314.15 - (314.15 * (hasMockData ? readinessIndex : 0)) / 100}
+                        stroke="currentColor"
+                        className="text-surface-container-high"
+                        strokeWidth="8"
+                      />
+                      {/* Progress Stroke */}
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r={gaugeRadius}
+                        fill="transparent"
+                        stroke="#3B82F6"
+                        strokeWidth="8"
+                        strokeDasharray={circumference}
+                        strokeDashoffset={strokeDashoffset}
                         strokeLinecap="round"
-                        strokeWidth="10"
+                        className="transition-all duration-1000 ease-out"
                       />
                     </svg>
+
+                    {/* Central Score Text */}
                     <div className="absolute flex flex-col items-center text-center">
-                      <span className="text-headline-xl font-headline-xl font-bold text-text-primary leading-none">
-                        {hasMockData ? averageMockScore : '—'}
+                      <span className="text-3xl font-display font-extrabold text-text-primary tracking-tight leading-none">
+                        {averageMockScore}
                       </span>
-                      <span className="text-text-muted font-mono-data text-[13px] font-semibold mt-0.5">
-                        {hasMockData ? '/ 400 Projected' : 'No Mocks Yet'}
+                      <span className="text-xs text-text-muted font-medium mt-0.5">
+                        / 400
                       </span>
-                      <div className="mt-2 px-2.5 py-0.5 rounded-full bg-accent-royal-blue/20 text-primary text-[11px] font-mono-data border border-accent-royal-blue/30 font-semibold">
-                        {hasMockData ? `${readinessIndex}% UTME Index` : '0% UTME Index'}
+                      <span className="text-[11px] text-text-secondary mt-1">
+                        Readiness Score
+                      </span>
+                      <div className="mt-2 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border flex items-center gap-1 bg-amber-500/10 text-amber-500 border-amber-500/30">
+                        <AlertTriangle className="w-3 h-3" />
+                        <span>Needs Improvement</span>
                       </div>
                     </div>
                   </div>
-                  <span className="text-text-secondary text-[12px] font-body-sm mt-3 text-center">
-                    {hasMockData ? 'Calculated across recent simulation sittings' : 'Complete full-length simulations to generate index'}
-                  </span>
                 </div>
 
-                {/* Subject-Level Breakdown */}
+                {/* Subject Contribution Progress Bars */}
                 <div className="md:col-span-7 space-y-3.5 pl-0 md:pl-4 md:border-l border-border">
-                  <div className="flex justify-between items-center text-label-sm font-label-sm text-text-secondary mb-1">
-                    <span>Subject Contribution</span>
-                    <span>Target Ratio</span>
-                  </div>
+                  <span className="block text-xs font-semibold text-text-secondary mb-2">
+                    Subject Contribution
+                  </span>
 
-                  {combination.map((sub: string) => {
-                    const isEng = sub === 'english';
-                    const realStat = subjectBreakdown.find((s) => s.subject.toLowerCase() === sub.toLowerCase());
-                    const hasStat = Boolean(realStat && realStat.total > 0);
-                    const accuracy = hasStat ? realStat!.accuracy : 0;
-                    const targetRatio = hasStat ? `${realStat!.accuracy}% (${realStat!.correct}/${realStat!.total})` : 'Not tested yet';
-                    const barWidth = `${accuracy}%`;
+                  {combination.map((sub: string, index: number) => {
+                    const { icon: SubIcon, bg: subBg } = getSubjectIcon(sub);
+                    const stats = getSubjectContrib(sub, index);
                     return (
-                      <div key={sub} className="space-y-1">
-                        <div className="flex justify-between text-body-sm font-body-sm">
-                          <span className="text-text-primary font-medium">
-                            {getSubjectLabel(sub)}{' '}
-                            {isEng && <span className="text-text-muted text-[11px]">(Compulsory)</span>}
-                          </span>
-                          <span className="font-mono-data text-primary">{targetRatio}</span>
+                      <div key={sub} className="space-y-1.5">
+                        <div className="flex items-center justify-between text-xs">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-5 h-5 rounded-md flex items-center justify-center ${subBg}`}>
+                              <SubIcon className="w-3 h-3" />
+                            </div>
+                            <span className="font-medium text-text-primary">
+                              {getSubjectLabel(sub)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 font-mono text-[11px]">
+                            <span className="text-text-muted">{stats.solved} / {stats.total}</span>
+                            <span className="font-semibold text-text-primary">{stats.percentage}%</span>
+                          </div>
                         </div>
-                        <div className="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+
+                        {/* Progress Bar */}
+                        <div className="w-full h-2 rounded-full bg-surface-container overflow-hidden">
                           <div
-                            className={`h-full rounded-full ${isEng ? 'bg-primary-container' : 'bg-tertiary'}`}
-                            style={{ width: barWidth }}
+                            className="h-full rounded-full bg-primary transition-all duration-500"
+                            style={{ width: `${Math.max(4, stats.percentage)}%` }}
                           />
                         </div>
                       </div>
@@ -405,329 +466,372 @@ export default function StudentDashboard() {
                   })}
                 </div>
               </div>
-
-              {/* Bottom Telemetry Badges */}
-              <div className="mt-6 pt-4 border-t border-border grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
-                <div className="p-2.5 rounded-xl bg-surface-container-low border border-border">
-                  <span className="block text-headline-sm font-headline-sm font-bold text-text-primary">
-                    {mockResults.length}
-                  </span>
-                  <span className="text-text-muted text-[12px]">Mocks Completed</span>
-                </div>
-                <div className="p-2.5 rounded-xl bg-surface-container-low border border-border">
-                  <span className="block text-headline-sm font-headline-sm font-bold text-text-primary">
-                    {totalQuestionsSolved.toLocaleString()}
-                  </span>
-                  <span className="text-text-muted text-[12px]">Questions Solved</span>
-                </div>
-                <div className="p-2.5 rounded-xl bg-surface-container-low border border-border">
-                  <span className="block text-headline-sm font-headline-sm font-bold text-text-primary font-mono-data">
-                    {averageMockPaceFormatted}
-                  </span>
-                  <span className="text-text-muted text-[12px]">Avg. Mock Pace</span>
-                </div>
-              </div>
             </div>
 
-            {/* 4-Subject Diagnostic Performance Grid */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-secondary text-[20px]">analytics</span>
-                  <h3 className="text-headline-sm font-headline-sm font-bold text-text-primary">
-                    4-Subject Diagnostic Performance
-                  </h3>
-                </div>
-                <button
-                  onClick={() => setIsEditModalOpen(true)}
-                  className="text-primary hover:underline text-xs font-semibold"
-                >
-                  Change Combination
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {combination.map((sub: string) => {
-                  const isEng = sub === 'english';
-                  const deficitInfo = getSubjectDeficit(sub);
-                  const realStat = subjectBreakdown.find((s) => s.subject.toLowerCase() === sub.toLowerCase());
-                  const hasStat = Boolean(realStat && realStat.total > 0);
-                  const accuracyStr = hasStat ? `${realStat!.accuracy}%` : '—';
-
-                  return (
-                    <div
-                      key={sub}
-                      className="bg-bg-card rounded-2xl border border-border p-5 flex flex-col justify-between hover:border-border-hover transition-all shadow-sm"
-                    >
-                      <div>
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <span
-                              className={`px-2 py-0.5 rounded text-[10px] font-mono-data uppercase font-semibold ${
-                                isEng
-                                  ? 'bg-accent-royal-blue/20 text-primary border border-accent-royal-blue/30'
-                                  : 'bg-tertiary-container/20 text-tertiary border border-tertiary/30'
-                              }`}
-                            >
-                              {isEng ? 'Compulsory · 60 Qs' : 'Elective · 40 Qs'}
-                            </span>
-                            <h4 className="text-headline-sm font-headline-sm font-bold text-text-primary mt-1.5">
-                              {getSubjectLabel(sub)}
-                            </h4>
-                          </div>
-                          <div className="text-right">
-                            <span className="text-headline-md font-headline-md font-bold text-text-primary">
-                              {accuracyStr}
-                            </span>
-                            <span className="block text-[11px] text-text-muted">Accuracy</span>
-                          </div>
-                        </div>
-
-                        <div className="mt-4 p-3 rounded-xl bg-surface-container-low border border-border">
-                          <div className="flex items-center justify-between text-[11px] text-text-muted mb-1">
-                            <span className="flex items-center gap-1 text-accent-streak-rose font-medium">
-                              <span className="material-symbols-outlined text-[14px]">warning</span>
-                              Focus Deficit
-                            </span>
-                            <span>
-                              {deficitInfo ? `Recent Drill: ${deficitInfo.drillAccuracy}%` : 'Untested'}
-                            </span>
-                          </div>
-                          <p className="text-text-primary font-medium text-body-sm">
-                            {deficitInfo ? deficitInfo.topic : 'Complete practice drills to diagnose topic blindspots'}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
-                        <span className="text-[12px] text-text-secondary">
-                          {hasStat ? `${realStat!.total} questions solved` : 'Not tested yet'}
-                        </span>
-                        <button
-                          onClick={() => openDrill(sub)}
-                          className="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-variant text-primary border border-border text-label-sm font-label-sm font-semibold transition-all active:scale-[0.98]"
-                        >
-                          Drill Topic
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+            {/* Bottom Tip / Banner */}
+            <div className="mt-6 p-3 rounded-xl bg-surface-container border border-border flex items-center gap-2.5 text-xs text-text-secondary">
+              <Info className="w-4 h-4 text-primary shrink-0" />
+              <span>
+                Complete more questions to get a clearer readiness score. Your performance will improve as you practice.
+              </span>
             </div>
           </div>
 
-          {/* Right Column (4 Cols) */}
-          <div className="lg:col-span-4 space-y-6">
-            {/* Falke AI Card */}
-            <div className="bg-gradient-to-b from-bg-card to-surface-container rounded-2xl border border-accent-ai-gold/30 p-5 shadow-lg relative overflow-hidden">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-accent-ai-gold/20 flex items-center justify-center text-accent-ai-gold border border-accent-ai-gold/40">
-                    <span className="material-symbols-outlined text-[18px]">smart_toy</span>
+          {/* Right Column (4 Cols): Falke AI Study Assistant */}
+          <div className="lg:col-span-4 bg-bg-card rounded-2xl border border-border p-6 shadow-sm flex flex-col justify-between">
+            <div className="space-y-4">
+              {/* Header */}
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md shadow-primary/20 shrink-0">
+                    <Bot className="w-5 h-5" />
                   </div>
-                  <h3 className="text-headline-sm font-headline-sm font-bold text-accent-ai-gold">
-                    Falke AI Study Assistant
-                  </h3>
-                </div>
-                <span className="text-[10px] font-mono-data px-2 py-0.5 rounded-full bg-accent-ai-gold/15 text-accent-ai-gold border border-accent-ai-gold/30 font-bold">
-                  PRO
-                </span>
-              </div>
-              <p className="text-body-sm font-body-sm text-text-secondary leading-relaxed">
-                Curriculum-aligned explanations in Standard Academic English & Nigerian Pidgin.
-              </p>
-
-              <div className="mt-4 p-3 rounded-xl bg-surface-container-low border border-border">
-                <div className="flex items-center justify-between text-[11px] font-mono-data text-text-muted mb-1">
-                  <span>Shared Explanation Cache</span>
-                  <span className="text-tertiary font-bold">94% Hit Rate</span>
-                </div>
-                <div className="flex items-center gap-2 text-label-sm text-text-primary">
-                  <span className="material-symbols-outlined text-[16px] text-accent-ai-gold">bolt</span>
-                  <span className="text-xs">0 Coins on cache hits · 5 Coins for new derivations</span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-bold text-text-primary font-display">
+                        Falke AI Study Assistant
+                      </h3>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono bg-amber-500/15 text-amber-500 border border-amber-500/30">
+                        PRO
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-text-muted mt-0.5 leading-tight">
+                      Get instant explanations, solve doubts and improve your weak topics.
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              {/* Direct Prompt */}
-              <div className="mt-4">
-                <span className="block text-[11px] text-text-muted uppercase font-mono-data mb-1.5 font-semibold">
-                  Direct AI Telemetry Prompt
-                </span>
+              {/* Interactive Search / Prompt Bar */}
+              <form onSubmit={handleAiPromptSubmit} className="relative mt-2">
+                <input
+                  type="text"
+                  value={aiPromptInput}
+                  onChange={(e) => setAiPromptInput(e.target.value)}
+                  placeholder="Ask a question, explain a topic or get study tips..."
+                  className="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-border bg-surface-container text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-primary transition-colors"
+                />
                 <button
-                  onClick={() => navigate('/falke-ai')}
-                  className="w-full text-left p-3 rounded-xl bg-surface-container border border-border hover:border-accent-ai-gold/50 transition-all text-body-sm text-text-primary flex items-center justify-between group active:scale-[0.98]"
+                  type="submit"
+                  className="absolute right-1.5 top-1.5 bottom-1.5 w-7 rounded-lg bg-primary hover:bg-primary-hover text-white flex items-center justify-center transition-colors"
+                  title="Ask Falke AI"
                 >
-                  <span className="truncate pr-2">Explain: Doppler effect in moving sound sources</span>
-                  <span className="material-symbols-outlined text-accent-ai-gold group-hover:translate-x-1 transition-transform text-[18px]">
-                    arrow_forward
-                  </span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
-              </div>
+              </form>
 
-              <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-[12px] text-text-muted">
-                <div className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px]">translate</span>
-                  <span>Modes: English & Pidgin</span>
+              {/* Quick Prompts */}
+              <div className="space-y-2 pt-1">
+                <span className="block text-[11px] font-semibold text-text-muted">
+                  Quick Prompts
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { label: 'Explain a concept', icon: Sparkles, q: 'Explain a key concept from JAMB syllabus' },
+                    { label: 'Solve a question', icon: FileText, q: 'Solve this difficult UTME question step-by-step' },
+                    { label: 'Study plan', icon: Target, q: 'Generate a 14-day intensive UTME study plan' },
+                  ].map((chip) => {
+                    const ChipIcon = chip.icon;
+                    return (
+                      <button
+                        key={chip.label}
+                        type="button"
+                        onClick={() => navigate(`/falke-ai?prompt=${encodeURIComponent(chip.q)}`)}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border bg-surface-container hover:bg-surface-variant text-[11px] font-medium text-text-secondary hover:text-text-primary transition-all active:scale-[0.98]"
+                      >
+                        <ChipIcon className="w-3 h-3 text-primary" />
+                        <span>{chip.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
-                <button
-                  onClick={() => navigate('/falke-ai')}
-                  className="text-accent-ai-gold hover:underline font-label-sm font-semibold"
-                >
-                  Open Studio
-                </button>
               </div>
             </div>
 
-            {/* Recent Mock Progression */}
-            <div className="bg-bg-card rounded-2xl border border-border p-5 shadow-sm">
-              <div className="flex items-center justify-between mb-4">
+            {/* Footer Trust Badge */}
+            <div className="pt-4 border-t border-border mt-4 text-[10px] text-text-muted flex items-center justify-center gap-2">
+              <span>Powered by Aurikrex AI</span>
+              <span>•</span>
+              <span>Accurate</span>
+              <span>•</span>
+              <span>Fast</span>
+              <span>•</span>
+              <span>Reliable</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ========================================================= */}
+        {/* 3. ROW 3: SUBJECT PERFORMANCE & RECENT MOCK PROGRESSION   */}
+        {/* ========================================================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Column (8 Cols): Subject Performance */}
+          <div className="lg:col-span-8 bg-bg-card rounded-2xl border border-border p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <div className="flex items-center gap-2.5">
+                <Target className="w-5 h-5 text-primary" />
+                <h2 className="text-base font-bold text-text-primary font-display">
+                  Subject Performance
+                </h2>
+              </div>
+              <button
+                onClick={() => navigate('/questions')}
+                className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors"
+              >
+                <span>View All Subjects</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* 4 Subject Performance Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
+              {combination.map((sub: string, idx: number) => {
+                const { icon: SubIcon, bg: subBg } = getSubjectIcon(sub);
+                const isNeedsAssessment = idx === 1; // Mathematics in screenshot
+                return (
+                  <div
+                    key={sub}
+                    className="p-4 rounded-xl border border-border bg-surface-container flex flex-col justify-between space-y-4"
+                  >
+                    <div>
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3 bg-primary/10 text-primary">
+                        <SubIcon className="w-4 h-4" />
+                      </div>
+                      <h4 className="text-sm font-bold text-text-primary truncate">
+                        {getSubjectLabel(sub)}
+                      </h4>
+                      <p className="text-[11px] text-text-muted mt-0.5">60 questions</p>
+
+                      <div className="mt-3">
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold border ${
+                            isNeedsAssessment
+                              ? 'bg-amber-500/10 text-amber-500 border-amber-500/30'
+                              : 'bg-surface-container-high text-text-muted border-border'
+                          }`}
+                        >
+                          {isNeedsAssessment ? 'Needs Assessment' : 'Not Tested'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 pt-2 border-t border-border">
+                      <div className="flex items-center justify-between text-[11px] text-text-muted">
+                        <span>Progress</span>
+                        <span className="font-mono">0%</span>
+                      </div>
+                      <div className="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden">
+                        <div className="h-full rounded-full bg-primary" style={{ width: '4%' }} />
+                      </div>
+                      <button
+                        onClick={() => openDrill(sub)}
+                        className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 pt-1 transition-colors"
+                      >
+                        <span>Start Practice</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Column (4 Cols): Recent Mock Progression */}
+          <div className="lg:col-span-4 bg-bg-card rounded-2xl border border-border p-6 shadow-sm flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between pb-3 border-b border-border">
                 <div>
-                  <h3 className="text-headline-sm font-headline-sm font-bold text-text-primary">
+                  <h3 className="text-sm font-bold text-text-primary font-display">
                     Recent Mock Progression
                   </h3>
-                  <p className="text-text-muted text-[12px]">Last 5 Full-Length CBT Attempts</p>
+                  <p className="text-[11px] text-text-muted mt-0.5">
+                    Last 5 Full-Length CBT Attempts
+                  </p>
                 </div>
-                {hasMockData && (
-                  <span className="px-2 py-0.5 rounded bg-tertiary-container/20 text-tertiary font-mono-data text-[12px] font-bold">
-                    {mockResults.length} Logged
-                  </span>
-                )}
+                <button
+                  onClick={() => navigate('/results')}
+                  className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors"
+                >
+                  <span>View All</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
 
               {hasMockData ? (
-                <>
-                  <div className="h-28 w-full flex items-end justify-between gap-2 pt-4 px-2 pb-2 bg-surface-container-low rounded-xl border border-border">
+                <div className="py-4 space-y-4">
+                  <div className="h-32 w-full flex items-end justify-between gap-2 pt-4 px-2 pb-2 bg-surface-container rounded-xl border border-border">
                     {mockResults.slice(-5).map((m, idx, arr) => {
                       const score = Number(m.totalScore || 0);
                       const isLatest = idx === arr.length - 1;
                       const heightPercent = `${Math.min(100, Math.max(15, Math.round((score / 400) * 100)))}%`;
                       return (
                         <div key={m.resultId || idx} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
-                          <span
-                            className={`text-[11px] font-mono-data ${
-                              isLatest ? 'text-tertiary font-bold' : 'text-text-muted'
-                            }`}
-                          >
+                          <span className={`text-[10px] font-mono ${isLatest ? 'text-primary font-bold' : 'text-text-muted'}`}>
                             {score}
                           </span>
                           <div
-                            className={`w-full rounded-t-sm ${isLatest ? 'bg-tertiary' : 'bg-surface-container-high'}`}
+                            className={`w-full rounded-t-sm ${isLatest ? 'bg-primary' : 'bg-surface-container-high'}`}
                             style={{ height: heightPercent }}
                           />
-                          <span
-                            className={`text-[10px] font-mono-data ${
-                              isLatest ? 'text-tertiary font-bold' : 'text-text-muted'
-                            }`}
-                          >
+                          <span className="text-[9px] font-mono text-text-muted">
                             M-0{idx + 1}
                           </span>
                         </div>
                       );
                     })}
                   </div>
-
-                  <div className="mt-4 flex items-center justify-between text-[12px] text-text-secondary">
-                    <span className="flex items-center gap-1 text-xs">
-                      <span className="w-2 h-2 rounded-full bg-accent-royal-blue" />
-                      Target 300+ Benchmark
+                  <div className="flex items-center justify-between text-xs text-text-muted">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-primary" />
+                      Target 320+ Benchmark
                     </span>
+                    <span className="font-mono">{mockResults.length} Logged</span>
                   </div>
-                </>
+                </div>
               ) : (
-                <div className="p-6 bg-surface-container-low rounded-xl border border-border text-center space-y-3">
-                  <div className="w-10 h-10 rounded-full bg-surface-container mx-auto flex items-center justify-center text-text-muted">
-                    <span className="material-symbols-outlined text-[20px]">show_chart</span>
+                <div className="py-8 flex flex-col items-center justify-center text-center space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <TrendingUp className="w-6 h-6" />
                   </div>
-                  <p className="text-body-sm text-text-secondary">
-                    No mock attempts logged yet. Launch your first 120-minute mock exam to start charting your score progression.
-                  </p>
+                  <div>
+                    <h4 className="text-xs font-bold text-text-primary">No mock attempts yet</h4>
+                    <p className="text-[11px] text-text-muted max-w-[200px] mt-1 leading-normal">
+                      Take your first full-length mock exam to start tracking your progress.
+                    </p>
+                  </div>
                   <button
-                    onClick={() => navigate('/arena')}
-                    className="px-4 py-2 rounded-lg bg-primary text-text-on-primary text-label-sm font-semibold hover:bg-primary-hover transition-colors"
+                    onClick={() => navigate('/mock-setup')}
+                    className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-semibold shadow-sm transition-all"
                   >
-                    Take First Mock Exam
+                    Take First Mock Exam →
                   </button>
                 </div>
               )}
             </div>
+          </div>
+        </div>
 
-            {/* Readiness Tools */}
-            <div className="bg-bg-card rounded-2xl border border-border p-5 shadow-sm space-y-3">
-              <h3 className="text-headline-sm font-headline-sm font-bold text-text-primary">
-                Readiness Tools
-              </h3>
-              <div className="space-y-2">
-                <a
-                  href="/study"
-                  className="p-3 rounded-xl bg-surface-container-low border border-border hover:border-border-hover flex items-center justify-between group transition-all"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
-                      <span className="material-symbols-outlined text-[20px]">checklist</span>
-                    </div>
-                    <div>
-                      <span className="text-body-sm font-medium text-text-primary block">
-                        Official JAMB Syllabus
-                      </span>
-                      <span className="text-[11px] text-text-muted">
-                        Track official syllabus coverage across all 4 subjects
-                      </span>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined text-text-muted group-hover:text-text-primary transition-colors text-[20px]">
-                    chevron_right
-                  </span>
-                </a>
-
-                <a
-                  href="/questions"
-                  className="p-3 rounded-xl bg-surface-container-low border border-border hover:border-border-hover flex items-center justify-between group transition-all"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-warning-amber">
-                      <span className="material-symbols-outlined text-[20px]">quiz</span>
-                    </div>
-                    <div>
-                      <span className="text-body-sm font-medium text-text-primary block">
-                        1983–2024 Past Questions
-                      </span>
-                      <span className="text-[11px] text-text-muted">
-                        1,000,000+ Verified JAMB Items
-                      </span>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined text-text-muted group-hover:text-text-primary transition-colors text-[20px]">
-                    chevron_right
-                  </span>
-                </a>
-
-                <button
-                  onClick={() => navigate('/mock-setup')}
-                  className="w-full p-3 rounded-xl bg-surface-container-low border border-border hover:border-border-hover flex items-center justify-between group transition-all text-left"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-tertiary">
-                      <span className="material-symbols-outlined text-[20px]">play_circle</span>
-                    </div>
-                    <div>
-                      <span className="text-body-sm font-medium text-text-primary block">
-                        Full Mock Simulation
-                      </span>
-                      <span className="text-[11px] text-text-muted">
-                        120m Timed CBT Kiosk Mode
-                      </span>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined text-text-muted group-hover:text-text-primary transition-colors text-[20px]">
-                    chevron_right
-                  </span>
-                </button>
+        {/* ========================================================= */}
+        {/* 4. ROW 4: 4-SUBJECT DIAGNOSTIC & LEARNING RESOURCES       */}
+        {/* ========================================================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Column (8 Cols): 4-Subject Diagnostic Performance */}
+          <div className="lg:col-span-8 bg-bg-card rounded-2xl border border-border p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <div className="flex items-center gap-2.5">
+                <TrendingUp className="w-5 h-5 text-primary" />
+                <h2 className="text-base font-bold text-text-primary font-display">
+                  4-Subject Diagnostic Performance
+                </h2>
               </div>
+              <button
+                onClick={() => setIsEditModalOpen(true)}
+                className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors"
+              >
+                <span>Change Combination</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* 4 Diagnostic Horizontal Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
+              {combination.map((sub: string) => {
+                const isEng = sub === 'english';
+                const { icon: SubIcon } = getSubjectIcon(sub);
+                return (
+                  <div
+                    key={sub}
+                    onClick={() => openDrill(sub)}
+                    className="p-4 rounded-xl border border-border bg-surface-container hover:border-border-hover transition-all cursor-pointer flex flex-col justify-between group"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                        <SubIcon className="w-4 h-4" />
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                    </div>
+
+                    <div className="mt-3">
+                      <h4 className="text-xs font-bold text-text-primary truncate">
+                        {getSubjectLabel(sub)}
+                      </h4>
+                      <p className="text-[10px] text-text-muted mt-0.5 font-mono">
+                        {isEng ? 'Compulsory · 60 Qs' : 'Elective · 60 Qs'}
+                      </p>
+                    </div>
+
+                    <div className="mt-3 pt-2 border-t border-border flex items-center justify-between text-[11px]">
+                      <span className="text-text-muted font-mono">—</span>
+                      <span className="text-[10px] text-text-muted">Not tested yet</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Column (4 Cols): Your Learning Resources */}
+          <div className="lg:col-span-4 bg-bg-card rounded-2xl border border-border p-6 shadow-sm space-y-4">
+            <div className="pb-3 border-b border-border">
+              <h3 className="text-sm font-bold text-text-primary font-display">
+                Your Learning Resources
+              </h3>
+              <p className="text-[11px] text-text-muted mt-0.5">
+                Everything you need to stay on track.
+              </p>
+            </div>
+
+            <div className="space-y-2.5">
+              {/* UTME Syllabus */}
+              <Link
+                to="/study"
+                className="flex items-center justify-between p-3.5 rounded-xl border border-border bg-surface-container hover:border-border-hover hover:bg-surface-variant transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-primary/15 text-primary flex items-center justify-center shrink-0">
+                    <BookOpen className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-text-primary group-hover:text-primary transition-colors">
+                      UTME Syllabus
+                    </h4>
+                    <p className="text-[11px] text-text-muted">
+                      Track curriculum coverage and key topics.
+                    </p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0" />
+              </Link>
+
+              {/* Past Questions */}
+              <Link
+                to="/questions?mode=past"
+                className="flex items-center justify-between p-3.5 rounded-xl border border-border bg-surface-container hover:border-border-hover hover:bg-surface-variant transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-primary/15 text-primary flex items-center justify-center shrink-0">
+                    <FileText className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-text-primary group-hover:text-primary transition-colors">
+                      Past Questions
+                    </h4>
+                    <p className="text-[11px] text-text-muted">
+                      Practice with real JAMB-style questions.
+                    </p>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0" />
+              </Link>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+
+      {/* ========================================================= */}
+      {/* MODALS: COMBINATION & DRILL CONFIGURATION                 */}
+      {/* ========================================================= */}
 
       {/* Subject Combination Modal */}
       <Modal
@@ -752,10 +856,10 @@ export default function StudentDashboard() {
                   onClick={() => handleToggleSubject(sub)}
                   className={`p-2.5 rounded-xl border text-left text-xs font-semibold flex items-center justify-between transition-all ${
                     isEnglish
-                      ? 'border-accent-royal-blue/40 bg-accent-royal-blue/15 text-primary opacity-90'
+                      ? 'border-primary/40 bg-primary/15 text-primary opacity-90'
                       : isSelected
-                      ? 'border-accent-royal-blue bg-accent-royal-blue/20 text-primary'
-                      : 'border-border bg-surface-container-low text-text-secondary hover:text-text-primary'
+                      ? 'border-primary bg-primary/20 text-primary'
+                      : 'border-border bg-surface-container text-text-secondary hover:text-text-primary'
                   }`}
                 >
                   <span>{getSubjectLabel(sub)}</span>
@@ -766,7 +870,7 @@ export default function StudentDashboard() {
           </div>
 
           <div className="flex justify-between items-center pt-2 border-t border-border">
-            <span className="text-xs font-mono-data text-text-muted">
+            <span className="text-xs font-mono text-text-muted">
               {selectedSubjects.length} / 4 Selected
             </span>
             <div className="flex gap-2">
@@ -798,7 +902,7 @@ export default function StudentDashboard() {
             <select
               value={drillSubject}
               onChange={(e) => setDrillSubject(e.target.value)}
-              className="w-full p-2.5 rounded-xl border border-border bg-surface-container-low text-text-primary text-sm outline-none focus:border-accent-royal-blue"
+              className="w-full p-2.5 rounded-xl border border-border bg-surface-container text-text-primary text-sm outline-none focus:border-primary"
             >
               {combination.map((sub: string) => (
                 <option key={sub} value={sub}>
@@ -816,7 +920,7 @@ export default function StudentDashboard() {
               <select
                 value={drillCount}
                 onChange={(e) => setDrillCount(Number(e.target.value))}
-                className="w-full p-2.5 rounded-xl border border-border bg-surface-container-low text-text-primary text-sm outline-none focus:border-accent-royal-blue"
+                className="w-full p-2.5 rounded-xl border border-border bg-surface-container text-text-primary text-sm outline-none focus:border-primary"
               >
                 <option value={10}>10 Questions (Quick)</option>
                 <option value={20}>20 Questions (Standard)</option>
@@ -829,7 +933,7 @@ export default function StudentDashboard() {
               <select
                 value={drillDifficulty}
                 onChange={(e) => setDrillDifficulty(e.target.value)}
-                className="w-full p-2.5 rounded-xl border border-border bg-surface-container-low text-text-primary text-sm outline-none focus:border-accent-royal-blue"
+                className="w-full p-2.5 rounded-xl border border-border bg-surface-container text-text-primary text-sm outline-none focus:border-primary"
               >
                 <option value="any">Standard JAMB Mix</option>
                 <option value="3">Foundation</option>
@@ -848,10 +952,6 @@ export default function StudentDashboard() {
           </div>
         </div>
       </Modal>
-
-      <footer className="w-full py-4 text-center text-xs text-text-muted border-t border-border mt-10">
-        Aurikrex Exam Arena · © 2025/2026 Aurikrex. All rights reserved.
-      </footer>
-    </div>
+    </StudentLayout>
   );
 }

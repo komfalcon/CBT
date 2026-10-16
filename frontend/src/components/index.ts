@@ -15,4 +15,5 @@ export * from './PwaInstallPrompt';
 export * from './CloudflareTurnstile';
 export * from './AurikrexAppsSwitcher';
 export * from './AppNavbar';
+export * from './StudentLayout';
 
