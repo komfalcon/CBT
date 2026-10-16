@@ -23,6 +23,9 @@ import {
   FileText,
   ThumbsUp,
   Flag,
+  Eye,
+  Printer,
+  X,
 } from 'lucide-react';
 import { AiChatWidget } from '../ai/AiChatWidget';
 import { ExplainButton } from '../ai/ExplainButton';
@@ -44,6 +47,7 @@ export default function ResultReview() {
   const [falkeDialect, setFalkeDialect] = useState<'english' | 'pidgin'>('english');
   const [helpfulFeedback, setHelpfulFeedback] = useState<boolean | null>(null);
   const [candidateUser, setCandidateUser] = useState<{ fullName?: string; email?: string; id?: string } | null>(null);
+  const [showSlipModal, setShowSlipModal] = useState(false);
 
   useEffect(() => {
     getMe().then((u: any) => setCandidateUser(u)).catch(() => {});
@@ -222,9 +226,15 @@ export default function ResultReview() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 8mm;
+            margin: 0;
           }
-          body {
+          html, body {
+            width: 210mm !important;
+            height: 297mm !important;
+            max-height: 297mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
             background-color: #ffffff !important;
             color: #0f172a !important;
             -webkit-print-color-adjust: exact !important;
@@ -383,6 +393,13 @@ export default function ResultReview() {
 
                   {/* Scorecard Primary Actions */}
                   <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-2">
+                    <button
+                      onClick={() => setShowSlipModal(true)}
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600/15 border border-blue-500/30 text-blue-600 dark:text-blue-400 font-semibold text-sm hover:bg-blue-600/25 transition-all active:scale-95"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span>Preview Official Result Slip</span>
+                    </button>
                     <button
                       onClick={handlePrintSlip}
                       className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-hover shadow-sm active:scale-95 transition-all"
@@ -830,8 +847,55 @@ export default function ResultReview() {
         </StudentLayout>
       </div>
 
-      {/* Official CBT Result Slip (Visible ONLY when printing / downloading PDF) */}
-      <div className="hidden print:block w-full">
+      {/* On-Screen Modal for Official Result Slip Preview */}
+      {showSlipModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-2 sm:p-4 overflow-y-auto print:hidden">
+          <div className="relative max-w-[220mm] w-full bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden my-4">
+            <div className="flex items-center justify-between p-3.5 px-5 border-b border-slate-800 bg-slate-950/80">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-sm">Official CBT Result Slip Preview</h3>
+                  <p className="text-[11px] text-slate-400">Authentic A4 Single-Page Standard Transcript</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={() => {
+                    handlePrintSlip();
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-bold transition-all shadow-md active:scale-95"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Print / Save PDF</span>
+                </button>
+                <button
+                  onClick={() => setShowSlipModal(false)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                  aria-label="Close Preview"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            <div className="p-3 sm:p-5 overflow-auto max-h-[85vh] flex justify-center bg-slate-950/50">
+              <div className="bg-white rounded-lg shadow-2xl overflow-hidden origin-top scale-[0.85] sm:scale-95 lg:scale-100">
+                <OfficialCbtResultSlip
+                  result={result}
+                  candidateUser={candidateUser}
+                  durationFormatted={durationFormatted}
+                  accuracyRate={accuracyRate}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Official CBT Result Slip (Target for browser print driver — locked to 1 single A4 page) */}
+      <div className="hidden print:block w-[210mm] max-w-[210mm] h-[297mm] max-h-[297mm] overflow-hidden m-0 p-0">
         <OfficialCbtResultSlip
           result={result}
           candidateUser={candidateUser}
@@ -843,31 +907,144 @@ export default function ResultReview() {
   );
 }
 
-function CbtEmblem({ size = 56 }: { size?: number }) {
+/**
+ * Official Aurikrex Dark Squircle Emblem
+ * Matches the official Aurikrex visual identity: dark rounded squircle with glowing concentric ring and interlocking brackets.
+ */
+function CbtEmblemSquircle({ size = 52 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" className="shrink-0" fill="none">
       <defs>
-        <linearGradient id="cbt-ring-grad" x1="15%" y1="0%" x2="85%" y2="100%">
-          <stop offset="0%" stopColor="#00d8ff" />
+        <linearGradient id="aurikrex-squircle-ring" x1="10%" y1="0%" x2="90%" y2="100%">
+          <stop offset="0%" stopColor="#00e5ff" />
           <stop offset="45%" stopColor="#0084ff" />
           <stop offset="100%" stopColor="#0044ff" />
         </linearGradient>
       </defs>
-      <circle cx="50" cy="50" r="49" fill="#07101e" />
-      <circle cx="50" cy="50" r="46.5" fill="none" stroke="#1f2c42" strokeWidth="3" />
-      <circle cx="50" cy="50" r="35" fill="none" stroke="url(#cbt-ring-grad)" strokeWidth="12" />
-      <circle cx="50" cy="50" r="28" fill="#07101e" />
-      <path d="M54 41 H38 A 4 4 0 0 0 34 45 V56" fill="none" stroke="#ffffff" strokeWidth="7.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M46 59 H62 A 4 4 0 0 0 66 55 V44" fill="none" stroke="#ffffff" strokeWidth="7.5" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Dark Squircle Background */}
+      <rect width="100" height="100" rx="22" fill="#081226" />
+      <rect x="1.5" y="1.5" width="97" height="97" rx="20.5" stroke="#1f2c44" strokeWidth="2" fill="none" />
+      {/* Glowing Concentric Ring */}
+      <circle cx="50" cy="50" r="33" fill="none" stroke="url(#aurikrex-squircle-ring)" strokeWidth="10.5" />
+      {/* Inner Dark Island */}
+      <circle cx="50" cy="50" r="27.5" fill="#081226" />
+      {/* Upper-Left Interlocking Rounded Bracket */}
+      <path
+        d="M54 40 H38 A 4 4 0 0 0 34 44 V56"
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="7.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* Lower-Right Interlocking Rounded Bracket */}
+      <path
+        d="M46 60 H62 A 4 4 0 0 0 66 56 V44"
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="7.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
 /**
- * Official CBT Examination Result Slip (JAMB UTME Standard Format)
- * Upgraded to match the exact high-end Aurikrex Exam Arena certificate layout.
- * Features the official Aurikrex blue gradient squircle "A" emblem, candidate telemetry,
- * real subject metrics, diagnostic evaluation, digital security hash, and authentic CBT Board stamp.
+ * Official Aurikrex CBT Board Circular Stamp
+ * Crisp SVG seal with curved text, stars, inner ring, and central squircle emblem.
+ */
+function CbtSealStamp({ size = 66 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 120 120" className="shrink-0">
+      <defs>
+        <path id="seal-top-path" d="M 22 60 A 38 38 0 0 1 98 60" />
+        <path id="seal-bottom-path" d="M 98 60 A 38 38 0 0 1 22 60" />
+        <linearGradient id="stamp-glow-ring" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#00e5ff" />
+          <stop offset="50%" stopColor="#0077ff" />
+          <stop offset="100%" stopColor="#0044ff" />
+        </linearGradient>
+      </defs>
+      {/* Outer scalloped/serrated dashed seal boundary */}
+      <circle cx="60" cy="60" r="56" fill="#0c2044" stroke="#1d4ed8" strokeWidth="2" strokeDasharray="3 2" />
+      <circle cx="60" cy="60" r="50" fill="none" stroke="#60a5fa" strokeWidth="1" />
+
+      {/* Top curved text */}
+      <text fill="#ffffff" fontSize="8" fontWeight="900" letterSpacing="1.2">
+        <textPath href="#seal-top-path" startOffset="50%" textAnchor="middle">
+          AURIKREX CBT BOARD
+        </textPath>
+      </text>
+
+      {/* Side star accents */}
+      <circle cx="17" cy="60" r="1.5" fill="#60a5fa" />
+      <circle cx="103" cy="60" r="1.5" fill="#60a5fa" />
+
+      {/* Bottom curved text */}
+      <text fill="#93c5fd" fontSize="7" fontWeight="800" letterSpacing="1.4">
+        <textPath href="#seal-bottom-path" startOffset="50%" textAnchor="middle">
+          AUTHENTIC · SECURE
+        </textPath>
+      </text>
+
+      {/* Central dark circular island */}
+      <circle cx="60" cy="60" r="28" fill="#07101e" stroke="#1d4ed8" strokeWidth="1.5" />
+      <circle cx="60" cy="60" r="22" fill="none" stroke="url(#stamp-glow-ring)" strokeWidth="4.5" />
+      <path
+        d="M62 55 H54 A 2.5 2.5 0 0 0 51.5 57.5 V64"
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M58 65 H66 A 2.5 2.5 0 0 0 68.5 62.5 V56"
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/**
+ * Authentic Registrar Cursive Pen Signature
+ */
+function CbtSignature() {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="h-8 flex items-center justify-center">
+        <svg viewBox="0 0 150 40" className="w-28 h-8 text-[#0c244d] stroke-current fill-none stroke-[2.2]">
+          <path
+            d="M 10 28 C 22 16, 28 6, 36 10 C 44 14, 38 32, 46 28 C 56 22, 66 12, 78 20 C 90 28, 102 8, 116 22 C 126 30, 134 18, 144 16"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M 24 34 C 54 36, 102 35, 138 30"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+      <div className="w-32 border-b border-slate-300 my-0.5" />
+      <p className="font-extrabold text-[8.5px] uppercase tracking-wider text-slate-900 leading-tight">
+        REGISTRAR / CHIEF EXAMINER
+      </p>
+      <p className="text-[8px] text-slate-500 font-medium">Aurikrex CBT Board</p>
+    </div>
+  );
+}
+
+/**
+ * Official CBT Examination Result Slip (JAMB UTME Standard Single-Page Format)
+ * Designed to fit precisely on ONE SINGLE A4 PAGE (210mm x 297mm) with zero spillover.
+ * Matches Image 2 pixel-by-pixel with official Squircle emblem, candidate telemetry,
+ * hero scorecard, subject matrix, diagnostic evaluation, verification hash, signature, seal, and dark footer bar.
  */
 function OfficialCbtResultSlip({
   result,
@@ -905,397 +1082,409 @@ function OfficialCbtResultSlip({
 
   const avgSeconds = totalQuestions > 0 ? Math.round(result.timeSpentSeconds / totalQuestions) : 2;
 
+  const isPass = result.totalScore >= 200;
+  const standingText = isPass ? 'COMPETITIVE PASS' : 'REVISION REQUIRED';
+  const benchmarkText = isPass ? '(MEETS TARGET BENCHMARK)' : '(BELOW TARGET BENCHMARK)';
+
   return (
-    <div className="w-full max-w-[210mm] mx-auto bg-white text-slate-900 font-sans p-6 text-sm leading-normal">
-      {/* 1. TOP HEADER WITH OFFICIAL AURIKREX EMBLEM & BADGE */}
-      <div className="flex items-start justify-between pb-5 mb-5 border-b border-slate-200">
-        {/* Left Branding */}
-        <div className="flex items-center gap-3.5">
-          <CbtEmblem size={56} />
+    <div
+      className="w-[210mm] max-w-[210mm] h-[297mm] max-h-[297mm] p-[8mm] sm:p-[10mm] box-border flex flex-col justify-between overflow-hidden bg-white text-slate-900 font-sans mx-auto relative select-none"
+      style={{
+        pageBreakAfter: 'avoid',
+        pageBreakInside: 'avoid',
+        breakInside: 'avoid',
+      }}
+    >
+      {/* Decorative Corner Accents matching Image 2 */}
+      <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-blue-100/70 via-sky-50/30 to-transparent pointer-events-none rounded-bl-[60px]" />
+      <div className="absolute bottom-0 left-0 w-28 h-28 bg-gradient-to-tr from-blue-100/40 to-transparent pointer-events-none rounded-tr-[50px]" />
+      <div className="absolute bottom-0 right-0 w-36 h-28 bg-gradient-to-tl from-sky-100/50 to-transparent pointer-events-none rounded-tl-[60px]" />
 
-          <div>
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight leading-none">
-              Aurikrex
-            </h1>
-            <h2 className="text-lg font-bold text-blue-600 tracking-tight leading-tight mt-0.5">
-              Examination Service
-            </h2>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-700 mt-1">
-              UNITED TERTIARY MATRICULATION EXAMINATION (UTME) CBT COCKPIT
-            </p>
-            <p className="text-[10px] text-slate-500">
-              National Standardized Psychometric Testing &amp; Diagnostic Assessment Board
-            </p>
-          </div>
-        </div>
-
-        {/* Right Badge Pill & Ref */}
-        <div className="flex flex-col items-end">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold shadow-sm">
-            <svg className="w-4 h-4 fill-current text-blue-600" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            <span>OFFICIAL RESULT SLIP</span>
-          </div>
-          <div className="text-right mt-2 font-mono">
-            <span className="text-xs text-slate-500">REF: </span>
-            <span className="text-sm font-bold text-slate-900">{regNumber}</span>
-          </div>
-          <p className="text-[9px] text-slate-400 mt-0.5">ISO-9001:2025 Accredited Engine · Aurikrex CBT Board</p>
-        </div>
-      </div>
-
-      {/* 2. CANDIDATE BIO & SESSION METRICS (2-COLUMN ROUNDED CARD) */}
-      <div className="p-4 rounded-2xl bg-white border border-blue-100 shadow-sm mb-5 grid grid-cols-2 gap-6 text-xs">
-        {/* Left Column */}
-        <div className="space-y-2.5">
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </div>
-            <div className="flex-1 flex items-baseline justify-between">
-              <span className="text-slate-500 font-medium">Candidate Name:</span>
-              <span className="font-bold text-slate-900 uppercase">
-                {candidateUser?.fullName || 'EXAM CANDIDATE'}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <div className="flex-1 flex items-baseline justify-between">
-              <span className="text-slate-500 font-medium">Candidate Email:</span>
-              <span className="font-mono text-slate-800">
-                {candidateUser?.email || 'candidate@aurikrex.com'}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <div className="flex-1 flex items-baseline justify-between">
-              <span className="text-slate-500 font-medium">Registration No:</span>
-              <span className="font-mono font-bold text-slate-900">{regNumber}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column */}
-        <div className="space-y-2.5">
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <div className="flex-1 flex items-baseline justify-between">
-              <span className="text-slate-500 font-medium">Examination:</span>
-              <span className="font-bold text-slate-900">
-                {result.type === 'mock' ? 'UTME 4-Subject Standard Mock' : 'Targeted Topic Mastery Drill'}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div className="flex-1 flex items-baseline justify-between">
-              <span className="text-slate-500 font-medium">Date &amp; Time:</span>
-              <span className="text-slate-800">
-                {formattedDate} at {formattedTime}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <div className="flex-1 flex items-baseline justify-between">
-              <span className="text-slate-500 font-medium">Time Taken:</span>
-              <span className="font-mono text-slate-900">
-                <strong className="font-bold">{durationFormatted}</strong> (Allocated: 120m)
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. HERO SCORECARD BANNER (DEEP NAVY BLUE GRADIENT) */}
-      <div className="rounded-2xl p-6 mb-5 bg-gradient-to-r from-[#071329] via-[#0b2149] to-[#0d2a5e] text-white shadow-lg relative overflow-hidden">
-        {/* Subtle background curved line */}
-        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-blue-500/10 rounded-l-full pointer-events-none" />
-
-        <div className="relative z-10 flex items-center justify-between">
-          {/* Left: Score & Verdict */}
-          <div>
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-blue-200 mb-2">
-              <svg className="w-4 h-4 text-blue-400 fill-none stroke-current" strokeWidth="2.5" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" />
-              </svg>
-              <span>STANDARDIZED EXAMINATION SCORE</span>
-            </div>
-
-            <div className="flex items-baseline gap-2">
-              <span className="text-5xl font-black font-display tracking-tight text-white">
-                {result.totalScore}
-              </span>
-              <span className="text-2xl font-bold text-blue-200">/ 400</span>
-            </div>
-
-            {/* Standing Pill */}
-            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/60 border border-blue-400/30 text-xs">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0" />
-              <span className="text-slate-300 font-medium">Standing:</span>
-              <span className="font-bold text-emerald-400 uppercase">
-                {result.totalScore >= 200 ? 'COMPETITIVE PASS' : 'REVISION REQUIRED'}
-              </span>
-              <span className="text-slate-400 text-[10px]">
-                {result.totalScore >= 200 ? '(MEETS TARGET BENCHMARK)' : '(BELOW TARGET BENCHMARK)'}
-              </span>
-            </div>
-          </div>
-
-          {/* Right: Quick Stats Breakdown */}
-          <div className="border-l border-blue-400/25 pl-8 space-y-3 text-xs">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                  <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                </svg>
-              </div>
-              <div>
-                <span className="text-blue-200 block text-[11px]">Overall Accuracy:</span>
-                <span className="text-base font-bold font-mono text-white">{accuracyRate}%</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
-                <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                </svg>
-              </div>
-              <div>
-                <span className="text-blue-200 block text-[11px]">Items Solved:</span>
-                <span className="text-base font-bold font-mono text-white">
-                  {totalCorrect} <span className="text-xs text-blue-200 font-normal">/ {totalQuestions}</span>
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
-                <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="9" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 7v5l3 2" />
-                </svg>
-              </div>
-              <div>
-                <span className="text-blue-200 block text-[11px]">Average Pacing:</span>
-                <span className="text-base font-bold font-mono text-white">
-                  {avgSeconds}s <span className="text-xs text-blue-200 font-normal">/ item</span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 4. 4-SUBJECT PERFORMANCE BREAKDOWN MATRIX (MODERN BLUE BORDERED TABLE) */}
-      <div className="mb-5 rounded-2xl border border-blue-100 bg-white overflow-hidden shadow-sm">
-        <div className="p-3.5 bg-blue-50/50 border-b border-blue-100 flex items-center gap-2">
-          <div className="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center">
-            <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-          </div>
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
-            STANDARDIZED SUBJECT MATRIX &amp; PSYCHOMETRIC GRADING
-          </h3>
-        </div>
-
-        <table className="w-full text-xs text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50 text-slate-700 font-semibold border-b border-blue-100 text-[11px]">
-              <th className="py-2.5 px-3 text-center w-10">#</th>
-              <th className="py-2.5 px-3">Subject Name</th>
-              <th className="py-2.5 px-3 text-center">Items</th>
-              <th className="py-2.5 px-3 text-center text-emerald-600 font-bold">Correct</th>
-              <th className="py-2.5 px-3 text-center text-rose-500 font-bold">Wrong</th>
-              <th className="py-2.5 px-3 text-center text-slate-500">Skipped</th>
-              <th className="py-2.5 px-3 text-center font-bold text-slate-900">Score (/100)</th>
-              <th className="py-2.5 px-3 text-center font-bold">Diagnostic Grade</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {result.subjectScores.map((score, idx) => {
-              const subjectTotal =
-                (score.correctCount || 0) + (score.incorrectCount || 0) + (score.unansweredCount || 0) ||
-                (score.subject === 'english' ? 60 : 40);
-              const subjectPct = Number(score.score || 0);
-              const grade =
-                subjectPct >= 70
-                  ? 'A (Excellent)'
-                  : subjectPct >= 60
-                  ? 'B (Very Good)'
-                  : subjectPct >= 50
-                  ? 'C (Credit)'
-                  : subjectPct >= 40
-                  ? 'D (Pass)'
-                  : 'F (Needs Focus)';
-
-              return (
-                <tr key={score.subject} className="hover:bg-blue-50/20 transition-colors">
-                  <td className="py-2.5 px-3 text-center font-mono text-slate-400">{idx + 1}</td>
-                  <td className="py-2.5 px-3 font-semibold text-slate-900">
-                    {getSubjectLabel(score.subject)}
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono text-slate-700">{subjectTotal}</td>
-                  <td className="py-2.5 px-3 text-center font-mono font-bold text-emerald-600">
-                    {score.correctCount}
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-bold text-rose-500">
-                    {score.incorrectCount}
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono text-slate-500">
-                    {score.unansweredCount}
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-mono font-bold text-slate-900">
-                    {score.score}
-                  </td>
-                  <td className="py-2.5 px-3 text-center font-semibold text-slate-800">{grade}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-          <tfoot>
-            <tr className="bg-blue-50/70 font-bold border-t border-blue-200 text-slate-900">
-              <td colSpan={2} className="py-2.5 px-3 uppercase text-xs tracking-wider">
-                AGGREGATE TOTAL
-              </td>
-              <td className="py-2.5 px-3 text-center font-mono">{totalQuestions}</td>
-              <td className="py-2.5 px-3 text-center font-mono text-emerald-700">{totalCorrect}</td>
-              <td className="py-2.5 px-3 text-center font-mono text-rose-600">{totalWrong}</td>
-              <td className="py-2.5 px-3 text-center font-mono text-slate-600">{totalSkipped}</td>
-              <td className="py-2.5 px-3 text-center font-mono text-sm font-black text-slate-900">
-                {result.totalScore}
-              </td>
-              <td className="py-2.5 px-3 text-center font-black">/ 400</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-
-      {/* 5. DIAGNOSTIC EVALUATION & RECOMMENDATION BOX */}
-      <div className="mb-6 p-4 rounded-2xl bg-blue-50/40 border border-blue-200/80 flex items-start gap-3.5 text-xs">
-        <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm">
-          <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" />
-          </svg>
-        </div>
+      <div className="relative z-10 flex flex-col justify-between h-full">
+        {/* 1. TOP HEADER WITH SQUIRCLE EMBLEM & BADGE */}
         <div>
-          <h4 className="font-bold text-slate-900 uppercase tracking-wide text-xs mb-1">
-            PSYCHOMETRIC DIAGNOSTIC EVALUATION &amp; RECOMMENDATION
-          </h4>
-          <p className="text-slate-600 leading-relaxed text-[11.5px]">
-            Candidate completed {totalQuestions} examination items with an overall accuracy velocity of {accuracyRate}%. {totalSkipped > 0 ? `${totalSkipped} questions were left unattempted. ` : ''}Pacing index indicates an average of {avgSeconds}s per question item. Immediate revision is recommended on topic deficits to eliminate score attrition before national examination date.
-          </p>
-        </div>
-      </div>
+          <div className="flex items-start justify-between pb-3.5 mb-2.5">
+            {/* Left Branding */}
+            <div className="flex items-center gap-3">
+              <CbtEmblemSquircle size={52} />
 
-      {/* 6. VERIFICATION HASH, SIGNATURE & OFFICIAL WATERMARK EMBLEM */}
-      <div className="pt-4 border-t border-slate-200 grid grid-cols-12 gap-4 items-center">
-        {/* Left: Security Hash */}
-        <div className="col-span-6 flex items-start gap-2.5">
-          <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
-            <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-          </div>
-          <div>
-            <p className="font-mono text-[9px] text-slate-500 uppercase tracking-tight">
-              DIGITAL VERIFICATION HASH:
-            </p>
-            <p className="font-mono text-[10px] text-slate-700 font-bold break-all">
-              {verificationHash}
-            </p>
-            <p className="text-[10px] text-slate-500 mt-0.5 leading-tight">
-              This transcript is electronically verified by the Aurikrex CBT Board. Tampering with or altering this document invalidates result credentials.
-            </p>
-          </div>
-        </div>
-
-        {/* Center: Signature Line */}
-        <div className="col-span-3 text-center border-l border-slate-200 pl-4">
-          <div className="h-8 flex items-center justify-center">
-            <svg viewBox="0 0 120 30" className="w-24 h-6 text-slate-800 stroke-current fill-none stroke-[1.8]">
-              <path d="M10 22 C25 5, 30 25, 45 10 C55 2, 60 28, 80 14 C90 8, 100 20, 115 12" strokeLinecap="round" />
-            </svg>
-          </div>
-          <p className="font-bold text-[10px] uppercase tracking-wider text-slate-900 mt-1">
-            REGISTRAR / CHIEF EXAMINER
-          </p>
-          <p className="text-[9px] text-slate-500">Aurikrex CBT Board</p>
-        </div>
-
-        {/* Right: Circular Official CBT Stamp */}
-        <div className="col-span-3 flex justify-end">
-          <div className="w-16 h-16 rounded-full border-2 border-dashed border-blue-900 flex items-center justify-center p-0.5 bg-blue-50/50 text-blue-950 text-center font-mono font-bold leading-tight shadow-sm">
-            <div className="w-full h-full rounded-full border border-blue-900 flex flex-col items-center justify-center p-0.5">
-              <span className="text-[6px] uppercase tracking-widest text-blue-900 font-extrabold">AURIKREX</span>
-              <div className="w-4 h-4 my-0.5">
-                <CbtEmblem size={16} />
+              <div>
+                <h1 className="text-2xl font-black text-[#0c1a38] tracking-tight leading-none">
+                  Aurikrex
+                </h1>
+                <h2 className="text-[15px] font-bold text-blue-600 tracking-tight leading-tight mt-0.5">
+                  Examination Service
+                </h2>
+                <p className="text-[9px] font-extrabold uppercase tracking-wider text-[#0c1a38] mt-1">
+                  UNITED TERTIARY MATRICULATION EXAMINATION (UTME) CBT COCKPIT
+                </p>
+                <p className="text-[8.5px] text-slate-500">
+                  National Standardized Psychometric Testing &amp; Diagnostic Assessment Board
+                </p>
               </div>
-              <span className="text-[6.5px] font-black text-blue-950 leading-none">CBT BOARD</span>
+            </div>
+
+            {/* Vertical header divider line */}
+            <div className="hidden sm:block w-[1px] h-12 bg-slate-200 mx-3 self-center" />
+
+            {/* Right Badge Pill & Ref */}
+            <div className="flex flex-col items-end">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dbeafe] text-[#1d4ed8] text-[10.5px] font-extrabold shadow-xs">
+                <svg className="w-3.5 h-3.5 fill-current text-[#1d4ed8]" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>OFFICIAL RESULT SLIP</span>
+              </div>
+              <div className="text-right mt-1.5 font-mono">
+                <span className="text-xs text-slate-500 font-medium">REF: </span>
+                <span className="text-sm font-extrabold text-slate-900 tracking-tight">{regNumber}</span>
+              </div>
+              <p className="text-[8px] text-slate-400 mt-0.5">ISO-9001:2025 Accredited Engine</p>
+              <p className="text-[8px] text-slate-400">Aurikrex CBT Board</p>
+            </div>
+          </div>
+
+          {/* Accent Horizontal Rule with Blue Notch */}
+          <div className="w-full h-[1.5px] bg-slate-200 relative mb-3">
+            <div className="absolute left-0 top-0 h-full w-12 bg-blue-600" />
+          </div>
+
+          {/* 2. CANDIDATE BIO & SESSION METRICS (2-COLUMN ROUNDED CARD) */}
+          <div className="p-2.5 px-3.5 rounded-xl bg-white border border-blue-200/90 shadow-xs mb-3 grid grid-cols-2 gap-4 text-xs">
+            {/* Left Column */}
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <div className="flex-1 flex items-baseline justify-between min-w-0">
+                  <span className="text-slate-500 font-medium text-[11px]">Candidate Name:</span>
+                  <span className="font-bold text-slate-900 uppercase truncate text-[11.5px]">
+                    {candidateUser?.fullName || 'EDIDI LATEEF'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="flex-1 flex items-baseline justify-between min-w-0">
+                  <span className="text-slate-500 font-medium text-[11px]">Candidate Email:</span>
+                  <span className="text-slate-800 font-semibold truncate text-[11px]">
+                    {candidateUser?.email || 'lateefedidi14@gmail.com'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <div className="flex-1 flex items-baseline justify-between min-w-0">
+                  <span className="text-slate-500 font-medium text-[11px]">Registration No:</span>
+                  <span className="font-mono font-bold text-slate-900 text-[11.5px]">{regNumber}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div className="space-y-1.5 border-l border-slate-100 pl-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="flex-1 flex items-baseline justify-between min-w-0">
+                  <span className="text-slate-500 font-medium text-[11px]">Examination:</span>
+                  <span className="font-bold text-slate-900 truncate text-[11.5px]">
+                    {result.type === 'mock' ? 'UTME 4-Subject Standard Mock' : 'Targeted Topic Mastery Drill'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 7v5l3 2" />
+                  </svg>
+                </div>
+                <div className="flex-1 flex items-baseline justify-between min-w-0">
+                  <span className="text-slate-500 font-medium text-[11px]">Date &amp; Time:</span>
+                  <span className="text-slate-800 font-medium truncate text-[11px]">
+                    {formattedDate} at {formattedTime}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div className="flex-1 flex items-baseline justify-between min-w-0">
+                  <span className="text-slate-500 font-medium text-[11px]">Time Taken:</span>
+                  <span className="text-slate-800 text-[11px]">
+                    <strong className="font-bold text-slate-900">{durationFormatted}</strong> (Allocated: 120m)
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 3. HERO SCORECARD BANNER (DEEP NAVY BLUE GRADIENT) */}
+          <div className="rounded-2xl p-4 px-5 mb-3 bg-gradient-to-r from-[#061228] via-[#091f48] to-[#0c295c] text-white shadow-md relative overflow-hidden flex items-center justify-between">
+            {/* Subtle background curved line */}
+            <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-blue-500/10 rounded-l-full pointer-events-none" />
+
+            <div className="relative z-10 flex items-center justify-between w-full">
+              {/* Left: Score & Verdict */}
+              <div>
+                <div className="flex items-center gap-1.5 text-[9.5px] font-bold uppercase tracking-widest text-blue-200 mb-1.5">
+                  <Target className="w-3.5 h-3.5 text-blue-400" />
+                  <span>STANDARDIZED EXAMINATION SCORE</span>
+                </div>
+
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-black font-display tracking-tight text-white leading-none">
+                    {result.totalScore}
+                  </span>
+                  <span className="text-2xl font-bold text-blue-200">/ 400</span>
+                </div>
+
+                {/* Standing Pill */}
+                <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/70 border border-blue-400/30 text-[11px]">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0" />
+                  <span className="text-slate-300 font-medium">Standing:</span>
+                  <span className="font-extrabold text-emerald-400 uppercase">
+                    {standingText}
+                  </span>
+                  <span className="text-slate-300 text-[10px]">
+                    {benchmarkText}
+                  </span>
+                </div>
+              </div>
+
+              {/* Right: Quick Stats Breakdown */}
+              <div className="border-l border-blue-300/20 pl-6 space-y-2 text-xs">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
+                    <BarChartIcon className="w-3.5 h-3.5 fill-current" />
+                  </div>
+                  <div>
+                    <span className="text-blue-200 block text-[10.5px] leading-tight">Overall Accuracy:</span>
+                    <span className="text-sm font-bold font-mono text-white leading-tight">{accuracyRate}%</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
+                    <ListCollapse className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <span className="text-blue-200 block text-[10.5px] leading-tight">Items Solved:</span>
+                    <span className="text-sm font-bold font-mono text-white leading-tight">
+                      {totalCorrect} <span className="text-[10px] text-blue-200 font-normal">/ {totalQuestions}</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
+                    <Clock className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <span className="text-blue-200 block text-[10.5px] leading-tight">Average Pacing:</span>
+                    <span className="text-sm font-bold font-mono text-white leading-tight">
+                      {avgSeconds}s <span className="text-[10px] text-blue-200 font-normal">/ item</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 4. 4-SUBJECT PERFORMANCE BREAKDOWN MATRIX (STANDARDIZED BLUE BORDERED TABLE) */}
+          <div className="mb-3 rounded-xl border border-blue-200/90 bg-white overflow-hidden shadow-xs">
+            <div className="p-2 px-3 bg-blue-50/50 border-b border-blue-100 flex items-center gap-2">
+              <div className="w-5 h-5 rounded bg-blue-600 text-white flex items-center justify-center">
+                <BookOpen className="w-3 h-3" />
+              </div>
+              <h3 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-900">
+                STANDARDIZED SUBJECT MATRIX &amp; PSYCHOMETRIC GRADING
+              </h3>
+            </div>
+
+            <table className="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 text-slate-700 font-semibold border-b border-blue-100 text-[10px]">
+                  <th className="py-1.5 px-3 text-center w-8">#</th>
+                  <th className="py-1.5 px-3">Subject Name</th>
+                  <th className="py-1.5 px-3 text-center">Items</th>
+                  <th className="py-1.5 px-3 text-center text-emerald-600 font-bold">Correct</th>
+                  <th className="py-1.5 px-3 text-center text-rose-500 font-bold">Wrong</th>
+                  <th className="py-1.5 px-3 text-center text-slate-500">Skipped</th>
+                  <th className="py-1.5 px-3 text-center font-bold text-slate-900">Score (/100)</th>
+                  <th className="py-1.5 px-3 text-center font-bold">Diagnostic Grade</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {result.subjectScores.map((score, idx) => {
+                  const subjectTotal =
+                    (score.correctCount || 0) + (score.incorrectCount || 0) + (score.unansweredCount || 0) ||
+                    (score.subject === 'english' ? 60 : 40);
+                  const subjectPct = Number(score.score || 0);
+                  const grade =
+                    subjectPct >= 70
+                      ? 'A (Excellent)'
+                      : subjectPct >= 60
+                      ? 'B (Very Good)'
+                      : subjectPct >= 50
+                      ? 'C (Credit)'
+                      : subjectPct >= 40
+                      ? 'D (Pass)'
+                      : 'F (Needs Focus)';
+
+                  return (
+                    <tr key={score.subject} className="hover:bg-blue-50/20 transition-colors">
+                      <td className="py-1.5 px-3 text-center font-mono text-slate-400 text-[10.5px]">{idx + 1}</td>
+                      <td className="py-1.5 px-3 font-semibold text-slate-900 text-[10.5px]">
+                        {getSubjectLabel(score.subject)}
+                      </td>
+                      <td className="py-1.5 px-3 text-center font-mono text-slate-700 text-[10.5px]">{subjectTotal}</td>
+                      <td className="py-1.5 px-3 text-center font-mono font-bold text-emerald-600 text-[10.5px]">
+                        {score.correctCount}
+                      </td>
+                      <td className="py-1.5 px-3 text-center font-mono font-bold text-rose-500 text-[10.5px]">
+                        {score.incorrectCount}
+                      </td>
+                      <td className="py-1.5 px-3 text-center font-mono text-slate-500 text-[10.5px]">
+                        {score.unansweredCount}
+                      </td>
+                      <td className="py-1.5 px-3 text-center font-mono font-bold text-slate-900 text-[10.5px]">
+                        {score.score}
+                      </td>
+                      <td className="py-1.5 px-3 text-center font-semibold text-slate-800 text-[10.5px]">{grade}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <tfoot>
+                <tr className="bg-blue-50/70 font-bold border-t border-blue-200 text-slate-900 text-[10.5px]">
+                  <td colSpan={2} className="py-1.5 px-3 uppercase text-[10px] tracking-wider">
+                    AGGREGATE TOTAL
+                  </td>
+                  <td className="py-1.5 px-3 text-center font-mono">{totalQuestions}</td>
+                  <td className="py-1.5 px-3 text-center font-mono text-emerald-700">{totalCorrect}</td>
+                  <td className="py-1.5 px-3 text-center font-mono text-rose-600">{totalWrong}</td>
+                  <td className="py-1.5 px-3 text-center font-mono text-slate-600">{totalSkipped}</td>
+                  <td className="py-1.5 px-3 text-center font-mono text-xs font-black text-slate-900">
+                    {result.totalScore}
+                  </td>
+                  <td className="py-1.5 px-3 text-center font-black">/ 400</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          {/* 5. DIAGNOSTIC EVALUATION & RECOMMENDATION BOX */}
+          <div className="mb-3 p-2.5 px-3.5 rounded-xl bg-blue-50/40 border border-blue-200/80 flex items-start gap-3 text-xs">
+            <div className="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Target className="w-3.5 h-3.5" />
+            </div>
+            <div>
+              <h4 className="font-extrabold text-slate-900 uppercase tracking-wide text-[10px] mb-0.5">
+                PSYCHOMETRIC DIAGNOSTIC EVALUATION &amp; RECOMMENDATION
+              </h4>
+              <p className="text-slate-600 leading-normal text-[10px]">
+                Candidate completed {totalQuestions} examination items with an overall accuracy velocity of {accuracyRate}%. {totalSkipped > 0 ? `${totalSkipped} questions were left unattempted. ` : ''}Pacing index indicates an average of {avgSeconds}s per question item. Immediate revision is recommended on topic deficits to eliminate score attrition before national examination date.
+              </p>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* 7. BOTTOM BRAND BAR & QR CODE FOOTER */}
-      <div className="mt-6 pt-3 border-t border-slate-200 flex items-center justify-between text-xs">
-        <div className="flex items-center gap-3">
-          <CbtEmblem size={30} />
-          <div>
-            <span className="font-bold text-slate-900 text-xs block leading-tight">AURIKREX</span>
-            <span className="text-[10px] text-slate-500">Better Assessments. Brighter Futures.</span>
+        {/* BOTTOM SECTION: 6. VERIFICATION HASH, SIGNATURE, STAMP & 7. DARK NAVY BRAND BAR */}
+        <div>
+          {/* 6. VERIFICATION HASH, SIGNATURE & OFFICIAL WATERMARK EMBLEM */}
+          <div className="pt-2.5 border-t border-slate-200 grid grid-cols-12 gap-3 items-center mb-2.5">
+            {/* Left: Security Hash */}
+            <div className="col-span-6 flex items-start gap-2">
+              <div className="w-5 h-5 rounded bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+                <Shield className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <p className="font-mono text-[8.5px] text-slate-500 uppercase tracking-tight">
+                  DIGITAL VERIFICATION HASH:
+                </p>
+                <p className="font-mono text-[9px] text-slate-800 font-bold break-all">
+                  {verificationHash}
+                </p>
+                <p className="text-[8px] text-slate-500 mt-0.5 leading-tight">
+                  This transcript is electronically verified by the Aurikrex CBT Board. Tampering with or altering this document invalidates result credentials.
+                </p>
+              </div>
+            </div>
+
+            {/* Center: Signature Line */}
+            <div className="col-span-3 text-center border-l border-slate-200 pl-3">
+              <CbtSignature />
+            </div>
+
+            {/* Right: Circular Official CBT Stamp */}
+            <div className="col-span-3 flex justify-end">
+              <CbtSealStamp size={64} />
+            </div>
           </div>
-        </div>
 
-        <div className="text-[10px] text-slate-500 text-center">
-          Aurikrex CBT Board &nbsp;|&nbsp; Not affiliated with JAMB in any way.
-        </div>
+          {/* 7. BOTTOM BRAND BAR & QR CODE FOOTER */}
+          <div className="bg-[#071328] text-white p-2 px-3.5 rounded-lg flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <CbtEmblemSquircle size={22} />
+              <div>
+                <span className="font-extrabold text-white text-[11px] tracking-wide block leading-none">AURIKREX</span>
+                <span className="text-[8px] text-slate-400 leading-tight">Better Assessments. Brighter Futures.</span>
+              </div>
+            </div>
 
-        {/* QR Code Graphic for transcript verification */}
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 border border-slate-300 rounded p-0.5 flex items-center justify-center bg-white">
-            <svg viewBox="0 0 24 24" className="w-full h-full text-slate-800 fill-current">
-              <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm8-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm11-2h2v2h-2v-2zm-3 2h2v2h-2v-2zm2 2h2v2h-2v-2zm3-2h2v4h-2v-4zm2 4h2v2h-2v-2z" />
-            </svg>
+            <div className="text-[8.5px] text-slate-400 text-center font-medium">
+              Aurikrex CBT Board &nbsp;|&nbsp; Not affiliated with JAMB in any way.
+            </div>
+
+            {/* QR Code Graphic for transcript verification */}
+            <div className="flex items-center gap-1.5">
+              <div className="w-6 h-6 border border-slate-600 rounded p-0.5 flex items-center justify-center bg-white shrink-0">
+                <svg viewBox="0 0 24 24" className="w-full h-full text-slate-900 fill-current">
+                  <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm8-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm11-2h2v2h-2v-2zm-3 2h2v2h-2v-2zm2 2h2v2h-2v-2zm3-2h2v4h-2v-4zm2 4h2v2h-2v-2z" />
+                </svg>
+              </div>
+              <span className="text-[8px] text-slate-300 leading-tight text-right">
+                Scan to verify<br />this result
+              </span>
+            </div>
           </div>
-          <span className="text-[9px] text-slate-500 leading-tight">
-            Scan to verify<br />this result
-          </span>
         </div>
       </div>
     </div>
+  );
+}
+
+function BarChartIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 20 20">
+      <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+    </svg>
   );
 }

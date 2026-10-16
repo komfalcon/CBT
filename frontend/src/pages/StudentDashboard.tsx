@@ -98,15 +98,25 @@ export default function StudentDashboard() {
   }, [hasMockData, mockResults]);
 
   const nextWeakTopic = useMemo(() => {
-    const sorted = [...topicStats].sort((a, b) => Number(a.accuracy || 0) - Number(b.accuracy || 0));
+    const sorted = [...topicStats]
+      .filter((t) => (t.total || 0) > 0)
+      .sort((a, b) => Number(a.accuracy || 0) - Number(b.accuracy || 0));
     return sorted[0] || null;
   }, [topicStats]);
 
-  const openDrill = (subject = nextWeakTopic?.subject || combination[1] || 'physics') => {
-    setDrillSubject(subject);
+  const weakTopics = useMemo(() => {
+    return topicStats
+      .filter((t) => (t.total || 0) > 0 && Number(t.accuracy || 0) < 70)
+      .sort((a, b) => Number(a.accuracy || 0) - Number(b.accuracy || 0))
+      .slice(0, 4);
+  }, [topicStats]);
+
+  const openDrill = (subject?: string, topicName?: string) => {
+    const targetSubject = subject || nextWeakTopic?.subject || combination[1] || 'physics';
+    setDrillSubject(targetSubject);
     setDrillCount(20);
     setDrillDifficulty('any');
-    setDrillTopics(nextWeakTopic?.topic ? [nextWeakTopic.topic] : []);
+    setDrillTopics(topicName ? [topicName] : nextWeakTopic?.topic ? [nextWeakTopic.topic] : []);
     setIsDrillModalOpen(true);
   };
 
@@ -598,40 +608,61 @@ export default function StudentDashboard() {
         </div>
 
         {/* ========================================================= */}
-        {/* 3. ROW 3: SUBJECT PERFORMANCE & RECENT MOCK PROGRESSION   */}
+        {/* 3. ROW 3: SUBJECT MASTERY & RECENT MOCK PROGRESSION       */}
         {/* ========================================================= */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Column (8 Cols): Subject Performance */}
+          {/* Left Column (8 Cols): Subject Mastery Breakdown */}
           <div className="lg:col-span-8 bg-bg-card rounded-2xl border border-border p-6 shadow-sm space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-border">
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-border">
               <div className="flex items-center gap-2.5">
                 <Target className="w-5 h-5 text-primary" />
-                <h2 className="text-base font-bold text-text-primary font-display">
-                  Subject Performance
-                </h2>
+                <div>
+                  <h2 className="text-base font-bold text-text-primary font-display">
+                    Subject Mastery &amp; Target Breakdown
+                  </h2>
+                  <p className="text-[11px] text-text-muted mt-0.5">
+                    Your 4 UTME Examination Combination Subjects
+                  </p>
+                </div>
               </div>
-              <button
-                onClick={() => navigate('/questions')}
-                className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors"
-              >
-                <span>View All Subjects</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="text-xs font-semibold text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
+                >
+                  Edit Combination
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/practice')}
+                  className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors cursor-pointer"
+                >
+                  <span>Practice Subjects</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
 
             {/* 4 Subject Performance Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
               {combination.map((sub: string) => {
+                const isEng = sub === 'english';
                 const { icon: SubIcon } = getSubjectIcon(sub);
                 const stats = getSubjectContrib(sub);
                 return (
                   <div
                     key={sub}
-                    className="p-4 rounded-xl border border-border bg-surface-container flex flex-col justify-between space-y-4"
+                    className="p-4 rounded-xl border border-border bg-surface-container flex flex-col justify-between space-y-4 hover:border-border-hover transition-all"
                   >
                     <div>
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3 bg-primary/10 text-primary">
-                        <SubIcon className="w-4 h-4" />
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-primary/10 text-primary">
+                          <SubIcon className="w-4 h-4" />
+                        </div>
+                        <span className="text-[10px] font-mono text-text-muted uppercase">
+                          {isEng ? 'Compulsory' : 'Elective'}
+                        </span>
                       </div>
                       <h4 className="text-sm font-bold text-text-primary truncate">
                         {getSubjectLabel(sub)}
@@ -677,8 +708,9 @@ export default function StudentDashboard() {
                         />
                       </div>
                       <button
+                        type="button"
                         onClick={() => openDrill(sub)}
-                        className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 pt-1 transition-colors"
+                        className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 pt-1 transition-colors cursor-pointer"
                       >
                         <span>{stats.tested ? 'Practice More' : 'Start Practice'}</span>
                         <ArrowRight className="w-3 h-3" />
@@ -703,8 +735,9 @@ export default function StudentDashboard() {
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => navigate('/results')}
-                  className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors"
+                  className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <span>View All</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -754,8 +787,9 @@ export default function StudentDashboard() {
                     </p>
                   </div>
                   <button
+                    type="button"
                     onClick={() => navigate('/mock-setup')}
-                    className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-semibold shadow-sm transition-all"
+                    className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-semibold shadow-sm transition-all cursor-pointer"
                   >
                     Take First Mock Exam →
                   </button>
@@ -766,67 +800,109 @@ export default function StudentDashboard() {
         </div>
 
         {/* ========================================================= */}
-        {/* 4. ROW 4: 4-SUBJECT DIAGNOSTIC & LEARNING RESOURCES       */}
+        {/* 4. ROW 4: TOPIC WEAK SPOTS & LEARNING RESOURCES           */}
         {/* ========================================================= */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Left Column (8 Cols): 4-Subject Diagnostic Performance */}
+          {/* Left Column (8 Cols): Topic Weak Spots & Priority Revision */}
           <div className="lg:col-span-8 bg-bg-card rounded-2xl border border-border p-6 shadow-sm space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-border">
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-border">
               <div className="flex items-center gap-2.5">
-                <TrendingUp className="w-5 h-5 text-primary" />
-                <h2 className="text-base font-bold text-text-primary font-display">
-                  4-Subject Diagnostic Performance
-                </h2>
+                <AlertTriangle className="w-5 h-5 text-amber-500" />
+                <div>
+                  <h2 className="text-base font-bold text-text-primary font-display">
+                    Diagnostic Weak Spots &amp; Priority Revision
+                  </h2>
+                  <p className="text-[11px] text-text-muted mt-0.5">
+                    Topics requiring targeted reinforcement based on your attempt telemetry
+                  </p>
+                </div>
               </div>
               <button
-                onClick={() => setIsEditModalOpen(true)}
-                className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors"
+                type="button"
+                onClick={() => navigate('/study')}
+                className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors cursor-pointer"
               >
-                <span>Change Combination</span>
+                <span>Full Syllabus Tracker</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            {/* 4 Diagnostic Horizontal Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
-              {combination.map((sub: string) => {
-                const isEng = sub === 'english';
-                const { icon: SubIcon } = getSubjectIcon(sub);
-                const stats = getSubjectContrib(sub);
-                return (
-                  <div
-                    key={sub}
-                    onClick={() => openDrill(sub)}
-                    className="p-4 rounded-xl border border-border bg-surface-container hover:border-border-hover transition-all cursor-pointer flex flex-col justify-between group"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                        <SubIcon className="w-4 h-4" />
+            {weakTopics.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {weakTopics.map((topic) => {
+                  const acc = Math.round(Number(topic.accuracy || 0));
+                  return (
+                    <div
+                      key={`${topic.subject}-${topic.topic}`}
+                      className="p-4 rounded-xl border border-border bg-surface-container flex flex-col justify-between space-y-3 hover:border-border-hover transition-all"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-1.5">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
+                            {getSubjectLabel(topic.subject)}
+                          </span>
+                          <span className="text-[10px] font-mono text-amber-500 font-semibold">
+                            {acc}% Accuracy
+                          </span>
+                        </div>
+                        <h4 className="text-xs font-bold text-text-primary line-clamp-1">
+                          {topic.topic}
+                        </h4>
+                        <p className="text-[11px] text-text-muted mt-0.5 font-mono">
+                          {topic.total} attempts logged · Deficit detected
+                        </p>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-text-muted group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
-                    </div>
 
-                    <div className="mt-3">
-                      <h4 className="text-xs font-bold text-text-primary truncate">
-                        {getSubjectLabel(sub)}
-                      </h4>
-                      <p className="text-[10px] text-text-muted mt-0.5 font-mono">
-                        {isEng ? 'Compulsory · 60 Qs' : 'Elective · 60 Qs'}
-                      </p>
+                      <div className="pt-2 border-t border-border flex items-center justify-between">
+                        <span className="text-[11px] text-text-muted">
+                          Goal: &ge; 75%
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => openDrill(topic.subject, topic.topic)}
+                          className="px-2.5 py-1 rounded-lg bg-primary hover:bg-primary-hover text-white text-[11px] font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+                        >
+                          <Play className="w-3 h-3 fill-current" />
+                          <span>Drill Topic</span>
+                        </button>
+                      </div>
                     </div>
-
-                    <div className="mt-3 pt-2 border-t border-border flex items-center justify-between text-[11px]">
-                      <span className="font-mono font-bold text-text-primary">
-                        {stats.tested ? `${stats.percentage}%` : '—'}
-                      </span>
-                      <span className="text-[10px] text-text-muted">
-                        {stats.tested ? `${stats.solved}/${stats.total} solved` : 'Not tested yet'}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="py-8 px-4 rounded-xl bg-surface-container border border-border text-center space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-text-primary">
+                    {topicStats.length > 0 ? 'No Critical Weak Spots Detected' : 'No Topic Diagnostic Data Yet'}
+                  </h4>
+                  <p className="text-xs text-text-muted max-w-md mx-auto mt-1 leading-relaxed">
+                    {topicStats.length > 0
+                      ? 'All curriculum topics you have attempted show solid retention (&ge; 70%). Keep practicing to maintain your edge.'
+                      : 'Complete topic-specific drills or a full mock exam to let the diagnostic engine identify topics for priority revision.'}
+                  </p>
+                </div>
+                <div className="flex items-center justify-center gap-3 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => navigate('/practice')}
+                    className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-semibold shadow-sm transition-all cursor-pointer"
+                  >
+                    Start a Topic Drill →
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/study')}
+                    className="px-4 py-2 rounded-xl border border-border bg-surface-container-high hover:bg-surface-variant text-text-primary text-xs font-semibold transition-all cursor-pointer"
+                  >
+                    Explore Syllabus
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right Column (4 Cols): Your Learning Resources */}

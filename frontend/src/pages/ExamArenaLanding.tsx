@@ -52,7 +52,7 @@ export default function ExamArenaLanding() {
       <header className="relative z-20 border-b border-border bg-bg-primary/80 backdrop-blur-xl">
         <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8">
           <Link to="/" className="flex items-center gap-3" aria-label="Aurikrex Exam Arena home">
-            <img src="/favicon.svg" alt="" className="h-10 w-10 shrink-0 rounded-2xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
+            <img src="/aurikrex-logo.png" onError={(e) => { (e.target as HTMLImageElement).src = '/favicon.svg'; }} alt="" className="h-10 w-10 shrink-0 rounded-2xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
             <span>
               <span className="block text-sm font-black tracking-[.16em] text-text-primary">Aurikrex Exam Arena</span>
               <span className="block text-xs font-bold uppercase tracking-[.28em] text-secondary">by Aurikrex</span>

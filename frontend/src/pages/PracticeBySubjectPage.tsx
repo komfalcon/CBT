@@ -309,8 +309,8 @@ export default function PracticeBySubjectPage() {
                   <span className="font-semibold text-emerald-500">Enabled (0 Coins)</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Dedicated Endpoint:</span>
-                  <span className="font-mono text-[10px] text-text-muted">/api/exam/sessions/drill</span>
+                  <span>Drill Mode:</span>
+                  <span className="font-semibold text-text-primary">Instant Targeted Practice</span>
                 </div>
               </div>
 

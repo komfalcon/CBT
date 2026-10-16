@@ -42,7 +42,7 @@ export function SupportPageShell({ children }: SupportPageShellProps) {
       <header className="support-header sticky top-0 z-50 border-b border-border/80 backdrop-blur-xl">
         <div className="support-header-inner mx-auto flex h-[64px] sm:h-[76px] max-w-7xl items-center justify-between px-4 sm:px-8">
           <Link to="/" className="support-brand flex min-w-0 items-center gap-2.5 sm:gap-3" aria-label="Aurikrex Exam Arena home">
-            <img src="/favicon.svg" alt="" className="h-8 w-8 sm:h-10 sm:w-10 shrink-0 rounded-xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
+            <img src="/aurikrex-logo.png" onError={(e) => { (e.target as HTMLImageElement).src = '/favicon.svg'; }} alt="" className="h-8 w-8 sm:h-10 sm:w-10 shrink-0 rounded-xl object-cover shadow-[0_10px_24px_rgba(74,91,255,0.28)]" />
             <span className="min-w-0 leading-tight">
               <span className="block truncate font-display text-[14px] sm:text-[15px] font-semibold tracking-[-0.02em] text-text-primary">Aurikrex Exam Arena</span>
               <span className="mt-0.5 sm:mt-1 block text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-royal-blue dark:text-blue-300">by Aurikrex</span>
