@@ -736,7 +736,7 @@ export default function StudentDashboard() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => navigate('/results')}
+                  onClick={() => navigate('/leaderboard')}
                   className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors cursor-pointer"
                 >
                   <span>View All</span>
@@ -940,7 +940,7 @@ export default function StudentDashboard() {
 
               {/* Past Questions */}
               <Link
-                to="/questions?mode=past"
+                to="/practice"
                 className="flex items-center justify-between p-3.5 rounded-xl border border-border bg-surface-container hover:border-border-hover hover:bg-surface-variant transition-all group"
               >
                 <div className="flex items-center gap-3">
@@ -949,10 +949,10 @@ export default function StudentDashboard() {
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-text-primary group-hover:text-primary transition-colors">
-                      Past Questions
+                      Subject Practice &amp; Drills
                     </h4>
                     <p className="text-[11px] text-text-muted">
-                      Practice with real JAMB-style questions.
+                      Targeted practice across all 17 accredited subjects.
                     </p>
                   </div>
                 </div>

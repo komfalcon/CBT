@@ -155,6 +155,7 @@ function App() {
           <Route path="/practice" element={<ProtectedRoute><PracticeBySubjectPage /></ProtectedRoute>} />
           <Route path="/questions" element={<AdminRoute><QuestionBankPage /></AdminRoute>} />
           <Route path="/exam/:sessionId" element={<ProtectedRoute><ExamConsole /></ProtectedRoute>} />
+          <Route path="/results" element={<Navigate to="/leaderboard" replace />} />
           <Route path="/results/:resultId" element={<ProtectedRoute><ResultReview /></ProtectedRoute>} />
           <Route
             path="/admin/*"
