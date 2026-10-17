@@ -26,6 +26,9 @@ import {
   Eye,
   Printer,
   X,
+  User,
+  Mail,
+  Calendar,
 } from 'lucide-react';
 import { AiChatWidget } from '../ai/AiChatWidget';
 import { ExplainButton } from '../ai/ExplainButton';
@@ -273,160 +276,63 @@ export default function ResultReview() {
               </div>
             </div>
 
-            {/* HERO SUMMARY: SCORECARD & ADMISSIONS BENCHMARK */}
-            <section className="rounded-2xl bg-bg-card border border-border p-6 lg:p-8 relative overflow-hidden shadow-sm">
-              <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute top-1/2 -right-24 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                {/* Score & Percentile Block */}
-                <div className="lg:col-span-5 flex flex-col md:flex-row items-start md:items-center gap-6 border-b lg:border-b-0 lg:border-r border-border pb-6 lg:pb-0 lg:pr-8">
-                  {/* Circular Score Accent Badge */}
-                  <div className="relative shrink-0">
-                    <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
-                      <circle
-                        cx="60"
-                        cy="60"
-                        fill="transparent"
-                        r="50"
-                        className="text-surface-container-high stroke-current"
-                        strokeWidth="9"
-                      />
-                      <circle
-                        cx="60"
-                        cy="60"
-                        fill="transparent"
-                        r="50"
-                        stroke={result.totalScore >= 280 ? '#10b981' : result.totalScore >= 200 ? '#3b82f6' : '#f43f5e'}
-                        strokeDasharray={strokeCircumference}
-                        strokeDashoffset={strokeOffset}
-                        strokeLinecap="round"
-                        strokeWidth="9"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                      <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">Score</span>
-                      <span className="font-mono text-3xl font-black text-text-primary">{result.totalScore}</span>
-                      <span className="font-mono text-xs text-text-muted">/ {maxScore}</span>
-                    </div>
-                  </div>
-
-                  {/* Standings & Eligibility Pill */}
-                  <div className="flex-1 space-y-2.5">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-500/20">
-                        <span className="material-symbols-outlined text-[16px]">stars</span>
-                        {result.totalScore >= 300 ? 'Top 2.8% Nationwide' : result.totalScore >= 250 ? 'Top 15% Nationwide' : 'National Standard'}
-                      </span>
-                      <span className="font-mono text-xs text-text-secondary">
-                        {resultId ? `AKX-${resultId.slice(0, 8).toUpperCase()}` : '—'}
-                      </span>
-                    </div>
-
-                    <h1 className="font-display text-2xl lg:text-3xl font-extrabold text-text-primary tracking-tight">
-                      {result.totalScore >= 300
-                        ? 'Honors Standard Metric Achieved'
-                        : result.totalScore >= 240
-                        ? 'Competitive Foundation Solid'
-                        : 'Targeted Review Required'}
-                    </h1>
-
-                    <div className="p-3 rounded-xl bg-surface-container/60 border border-border flex items-start gap-2.5">
-                      <span className="material-symbols-outlined text-primary text-[18px] mt-0.5 shrink-0">verified</span>
-                      <p className="text-xs text-text-secondary leading-relaxed">
-                        <span className="text-text-primary font-semibold">Admissions Ready:</span>{' '}
-                        {result.totalScore >= 300
-                          ? 'UNILAG, UI, & OAU Medicine & Engineering Cut-Off Benchmarks Exceeded (315+ cut-off).'
-                          : result.totalScore >= 240
-                          ? 'Federal University Administration & Law Cut-Offs in reach (240+ cut-off).'
-                          : 'Focus on topic deficit triage to bridge admission margins before exam day.'}
-                      </p>
-                    </div>
-                  </div>
+            {/* PRIMARY RESULT SLIP ACTION BAR */}
+            <div className="rounded-2xl bg-bg-card border border-border p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                  <FileText className="w-5 h-5" />
                 </div>
-
-                {/* Telemetry Stats Grid & CTAs */}
-                <div className="lg:col-span-7 flex flex-col justify-between h-full space-y-6">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div className="p-3.5 rounded-xl bg-surface-container border border-border min-w-0">
-                      <div className="text-xs text-text-muted flex items-center justify-between mb-1">
-                        <span>Accuracy</span>
-                        <span className="material-symbols-outlined text-[15px] text-emerald-500">check_circle</span>
-                      </div>
-                      <div className="font-mono text-xl text-text-primary font-bold">{accuracyRate}%</div>
-                      <div className="font-mono text-xs text-text-secondary truncate">
-                        {reviewSignals.correct} / {result.questionsSnapshot.length} Correct
-                      </div>
-                    </div>
-
-                    <div className="p-3.5 rounded-xl bg-surface-container border border-border min-w-0">
-                      <div className="text-xs text-text-muted flex items-center justify-between mb-1">
-                        <span>Total Time</span>
-                        <span className="material-symbols-outlined text-[15px] text-blue-500">timer</span>
-                      </div>
-                      <div className="font-mono text-xl text-text-primary font-bold">{durationFormatted}</div>
-                      <div className="font-mono text-xs text-emerald-600 dark:text-emerald-400 truncate">
-                        {result.questionsSnapshot.length ? `${Math.round(result.timeSpentSeconds / result.questionsSnapshot.length)}s / item` : 'Nominal'}
-                      </div>
-                    </div>
-
-                    <div className="p-3.5 rounded-xl bg-surface-container border border-border min-w-0">
-                      <div className="text-xs text-text-muted flex items-center justify-between mb-1">
-                        <span>Pacing</span>
-                        <span className="material-symbols-outlined text-[15px] text-primary">speed</span>
-                      </div>
-                      <div className="font-mono text-xl text-text-primary font-bold">
-                        {result.questionsSnapshot.length ? `${Math.round(result.timeSpentSeconds / result.questionsSnapshot.length)}s` : '36s'}
-                      </div>
-                      <div className="font-mono text-xs text-text-secondary truncate">Target: &lt; 40s/item</div>
-                    </div>
-
-                    <div className="p-3.5 rounded-xl bg-surface-container border border-border min-w-0">
-                      <div className="text-xs text-text-muted flex items-center justify-between mb-1">
-                        <span>Falke AI</span>
-                        <span className="material-symbols-outlined text-[15px] text-amber-500">bolt</span>
-                      </div>
-                      <div className="font-mono text-xl text-amber-500 font-bold">Active</div>
-                      <div className="font-mono text-xs text-emerald-600 dark:text-emerald-400 truncate">0 Coins Cache Hit</div>
-                    </div>
-                  </div>
-
-                  {/* Scorecard Primary Actions */}
-                  <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-2">
-                    <button
-                      onClick={() => setShowSlipModal(true)}
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600/15 border border-blue-500/30 text-blue-600 dark:text-blue-400 font-semibold text-sm hover:bg-blue-600/25 transition-all active:scale-95"
-                    >
-                      <Eye className="w-4 h-4" />
-                      <span>Preview Official Result Slip</span>
-                    </button>
-                    <button
-                      onClick={handlePrintSlip}
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-hover shadow-sm active:scale-95 transition-all"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>Download Official CBT Slip (PDF)</span>
-                    </button>
-                    <button
-                      onClick={() => navigate('/mock-setup')}
-                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-surface-container border border-border text-text-primary font-semibold text-sm hover:bg-surface-variant transition-colors active:scale-95"
-                    >
-                      <RefreshCw className="w-4 h-4 text-rose-500" />
-                      <span>Retake Weak Topics Drill</span>
-                    </button>
-                    <button
-                      onClick={handleShare}
-                      aria-label="Share Scorecard"
-                      className="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-surface-container border border-border text-text-secondary hover:text-text-primary hover:bg-surface-variant transition-colors"
-                      title="Share Scorecard"
-                    >
-                      <Share2 className="w-4 h-4" />
-                      <span className="sm:hidden text-xs font-semibold">Share Scorecard</span>
-                    </button>
-                  </div>
+                <div>
+                  <h2 className="font-display text-base font-bold text-text-primary">Official CBT Examination Transcript</h2>
+                  <p className="text-xs text-text-secondary">Standardized National Psychometric Grading Record · Single-Page A4 Authenticated Format</p>
                 </div>
               </div>
-            </section>
+
+              <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
+                <button
+                  onClick={handlePrintSlip}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary-hover shadow-sm active:scale-95 transition-all"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download Official CBT Slip (PDF)</span>
+                </button>
+                <a
+                  href="#questions-review"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-surface-container border border-border text-text-primary font-semibold text-sm hover:bg-surface-variant transition-colors active:scale-95"
+                >
+                  <BookOpen className="w-4 h-4 text-primary" />
+                  <span>Question Review &amp; Falke AI</span>
+                </a>
+                <button
+                  onClick={() => navigate('/mock-setup')}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-surface-container border border-border text-text-primary font-semibold text-sm hover:bg-surface-variant transition-colors active:scale-95"
+                >
+                  <RefreshCw className="w-4 h-4 text-rose-500" />
+                  <span>Retake Drill</span>
+                </button>
+                <button
+                  onClick={handleShare}
+                  aria-label="Share Scorecard"
+                  className="inline-flex items-center justify-center gap-2 p-2.5 rounded-xl bg-surface-container border border-border text-text-secondary hover:text-text-primary hover:bg-surface-variant transition-colors"
+                  title="Share Scorecard"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* ON-SCREEN OFFICIAL CBT RESULT SLIP (MATCHING TARGET SPECIFICATION) */}
+            <div className="my-6 max-w-[210mm] mx-auto shadow-2xl rounded-3xl overflow-hidden border border-blue-200/90 bg-white">
+              <OfficialCbtResultSlip
+                result={result}
+                candidateUser={candidateUser}
+                durationFormatted={durationFormatted}
+                accuracyRate={accuracyRate}
+              />
+            </div>
+
+            {/* ANCHOR: QUESTION REVIEW & TOPIC DEFICIT TRIAGE */}
+            <div id="questions-review" className="pt-4">
 
             {/* 4-SUBJECT PERFORMANCE MATRIX & TRIAGE ALERT */}
             <section className="space-y-4">
@@ -841,6 +747,7 @@ export default function ResultReview() {
               </div>
             </section>
           </div>
+        </div>
 
           {/* AiChatWidget Integration */}
           <AiChatWidget contextPayload={aiContextPayload} />
@@ -1095,42 +1002,54 @@ function OfficialCbtResultSlip({
         breakInside: 'avoid',
       }}
     >
-      {/* Decorative Corner Accents matching Image 2 */}
-      <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-blue-100/70 via-sky-50/30 to-transparent pointer-events-none rounded-bl-[60px]" />
-      <div className="absolute bottom-0 left-0 w-28 h-28 bg-gradient-to-tr from-blue-100/40 to-transparent pointer-events-none rounded-tr-[50px]" />
-      <div className="absolute bottom-0 right-0 w-36 h-28 bg-gradient-to-tl from-sky-100/50 to-transparent pointer-events-none rounded-tl-[60px]" />
+      {/* Top-Right Angular Blue Geometric Banner matching target image */}
+      <svg className="absolute top-0 right-0 w-40 h-40 pointer-events-none" viewBox="0 0 160 160" fill="none">
+        <polygon points="50,0 160,0 160,110" fill="#38bdf8" />
+        <polygon points="85,0 160,0 160,75" fill="#1877f2" />
+      </svg>
+
+      {/* Bottom-Right Angular Geometric Accent */}
+      <svg className="absolute bottom-0 right-0 w-36 h-36 pointer-events-none" viewBox="0 0 144 144" fill="none">
+        <polygon points="144,45 144,144 45,144" fill="#38bdf8" fillOpacity="0.75" />
+        <polygon points="144,80 144,144 80,144" fill="#1877f2" fillOpacity="0.9" />
+      </svg>
+
+      {/* Bottom-Left Soft Geometric Corner */}
+      <svg className="absolute bottom-0 left-0 w-28 h-28 pointer-events-none" viewBox="0 0 120 120" fill="none">
+        <polygon points="0,55 0,120 65,120" fill="#93c5fd" fillOpacity="0.45" />
+      </svg>
 
       <div className="relative z-10 flex flex-col justify-between h-full">
         {/* 1. TOP HEADER WITH SQUIRCLE EMBLEM & BADGE */}
         <div>
-          <div className="flex items-start justify-between pb-3.5 mb-2.5">
+          <div className="flex items-start justify-between pb-3 mb-2">
             {/* Left Branding */}
-            <div className="flex items-center gap-3">
-              <CbtEmblemSquircle size={52} />
+            <div className="flex items-center gap-3.5">
+              <CbtEmblemSquircle size={56} />
 
               <div>
-                <h1 className="text-2xl font-black text-[#0c1a38] tracking-tight leading-none">
+                <h1 className="text-[28px] font-black text-[#0c1a38] tracking-tight leading-none">
                   Aurikrex
                 </h1>
-                <h2 className="text-[15px] font-bold text-blue-600 tracking-tight leading-tight mt-0.5">
+                <h2 className="text-[18px] font-bold text-[#1877f2] tracking-tight leading-tight mt-0.5">
                   Examination Service
                 </h2>
-                <p className="text-[9px] font-extrabold uppercase tracking-wider text-[#0c1a38] mt-1">
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.04em] text-[#0c1a38] mt-1.5">
                   UNITED TERTIARY MATRICULATION EXAMINATION (UTME) CBT COCKPIT
                 </p>
-                <p className="text-[8.5px] text-slate-500">
+                <p className="text-[9px] text-slate-500 mt-0.5">
                   National Standardized Psychometric Testing &amp; Diagnostic Assessment Board
                 </p>
               </div>
             </div>
 
             {/* Vertical header divider line */}
-            <div className="hidden sm:block w-[1px] h-12 bg-slate-200 mx-3 self-center" />
+            <div className="hidden sm:block w-[1px] h-14 bg-slate-200 mx-4 self-center" />
 
             {/* Right Badge Pill & Ref */}
             <div className="flex flex-col items-end">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dbeafe] text-[#1d4ed8] text-[10.5px] font-extrabold shadow-xs">
-                <svg className="w-3.5 h-3.5 fill-current text-[#1d4ed8]" viewBox="0 0 20 20">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#dbeafe] text-[#1e40af] text-[11px] font-extrabold border border-blue-200/60 shadow-xs">
+                <svg className="w-4 h-4 fill-[#1877f2]" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -1140,105 +1059,80 @@ function OfficialCbtResultSlip({
                 <span>OFFICIAL RESULT SLIP</span>
               </div>
               <div className="text-right mt-1.5 font-mono">
-                <span className="text-xs text-slate-500 font-medium">REF: </span>
-                <span className="text-sm font-extrabold text-slate-900 tracking-tight">{regNumber}</span>
+                <span className="text-xs text-slate-500 font-bold">REF: </span>
+                <span className="text-sm font-black text-slate-900 tracking-wide">{regNumber}</span>
               </div>
-              <p className="text-[8px] text-slate-400 mt-0.5">ISO-9001:2025 Accredited Engine</p>
-              <p className="text-[8px] text-slate-400">Aurikrex CBT Board</p>
+              <p className="text-[8.5px] text-slate-400 mt-0.5">ISO-9001:2025 Accredited Engine</p>
+              <p className="text-[8.5px] text-slate-400">Aurikrex CBT Board</p>
             </div>
           </div>
 
           {/* Accent Horizontal Rule with Blue Notch */}
           <div className="w-full h-[1.5px] bg-slate-200 relative mb-3">
-            <div className="absolute left-0 top-0 h-full w-12 bg-blue-600" />
+            <div className="absolute left-0 top-0 h-full w-14 bg-[#1877f2]" />
           </div>
 
           {/* 2. CANDIDATE BIO & SESSION METRICS (2-COLUMN ROUNDED CARD) */}
-          <div className="p-2.5 px-3.5 rounded-xl bg-white border border-blue-200/90 shadow-xs mb-3 grid grid-cols-2 gap-4 text-xs">
-            {/* Left Column */}
-            <div className="space-y-1.5">
+          <div className="p-3 px-4 rounded-xl bg-white border border-blue-200/90 shadow-xs mb-3 grid grid-cols-2 gap-5 text-xs">
+            {/* Left Column (Clean Outline Icons matching image) */}
+            <div className="space-y-2">
               <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </div>
+                <User className="w-4 h-4 text-[#1877f2] shrink-0 stroke-[2.2]" />
                 <div className="flex-1 flex items-baseline justify-between min-w-0">
-                  <span className="text-slate-500 font-medium text-[11px]">Candidate Name:</span>
-                  <span className="font-bold text-slate-900 uppercase truncate text-[11.5px]">
+                  <span className="text-slate-500 font-semibold text-[11px] w-28 shrink-0">Candidate Name:</span>
+                  <span className="font-black text-slate-900 uppercase truncate text-[11.5px]">
                     {candidateUser?.fullName || 'EDIDI LATEEF'}
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
+                <Mail className="w-4 h-4 text-[#1877f2] shrink-0 stroke-[2.2]" />
                 <div className="flex-1 flex items-baseline justify-between min-w-0">
-                  <span className="text-slate-500 font-medium text-[11px]">Candidate Email:</span>
-                  <span className="text-slate-800 font-semibold truncate text-[11px]">
+                  <span className="text-slate-500 font-semibold text-[11px] w-28 shrink-0">Candidate Email:</span>
+                  <span className="font-bold text-slate-900 truncate text-[11.5px]">
                     {candidateUser?.email || 'lateefedidi14@gmail.com'}
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
+                <FileText className="w-4 h-4 text-[#1877f2] shrink-0 stroke-[2.2]" />
                 <div className="flex-1 flex items-baseline justify-between min-w-0">
-                  <span className="text-slate-500 font-medium text-[11px]">Registration No:</span>
-                  <span className="font-mono font-bold text-slate-900 text-[11.5px]">{regNumber}</span>
+                  <span className="text-slate-500 font-semibold text-[11px] w-28 shrink-0">Registration No:</span>
+                  <span className="font-mono font-black text-slate-900 text-[11.5px]">{regNumber}</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Column */}
-            <div className="space-y-1.5 border-l border-slate-100 pl-3">
+            {/* Right Column (Clean Outline Icons matching image) */}
+            <div className="space-y-2 border-l border-slate-100 pl-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
+                <Calendar className="w-4 h-4 text-[#1877f2] shrink-0 stroke-[2.2]" />
                 <div className="flex-1 flex items-baseline justify-between min-w-0">
-                  <span className="text-slate-500 font-medium text-[11px]">Examination:</span>
-                  <span className="font-bold text-slate-900 truncate text-[11.5px]">
+                  <span className="text-slate-500 font-semibold text-[11px] w-24 shrink-0">Examination:</span>
+                  <span className="font-black text-slate-900 truncate text-[11.5px]">
                     {result.type === 'mock' ? 'UTME 4-Subject Standard Mock' : 'Targeted Topic Mastery Drill'}
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="9" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 7v5l3 2" />
-                  </svg>
-                </div>
+                <Clock className="w-4 h-4 text-[#1877f2] shrink-0 stroke-[2.2]" />
                 <div className="flex-1 flex items-baseline justify-between min-w-0">
-                  <span className="text-slate-500 font-medium text-[11px]">Date &amp; Time:</span>
-                  <span className="text-slate-800 font-medium truncate text-[11px]">
+                  <span className="text-slate-500 font-semibold text-[11px] w-24 shrink-0">Date &amp; Time:</span>
+                  <span className="font-bold text-slate-900 truncate text-[11.5px]">
                     {formattedDate} at {formattedTime}
                   </span>
                 </div>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                  <svg className="w-3.5 h-3.5 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
+                <Clock className="w-4 h-4 text-[#1877f2] shrink-0 stroke-[2.2]" />
                 <div className="flex-1 flex items-baseline justify-between min-w-0">
-                  <span className="text-slate-500 font-medium text-[11px]">Time Taken:</span>
-                  <span className="text-slate-800 text-[11px]">
-                    <strong className="font-bold text-slate-900">{durationFormatted}</strong> (Allocated: 120m)
+                  <span className="text-slate-500 font-semibold text-[11px] w-24 shrink-0">Time Taken:</span>
+                  <span className="text-slate-900 text-[11.5px]">
+                    <strong className="font-black text-slate-900">{durationFormatted}</strong> (Allocated: 120m)
                   </span>
                 </div>
               </div>
@@ -1246,19 +1140,23 @@ function OfficialCbtResultSlip({
           </div>
 
           {/* 3. HERO SCORECARD BANNER (DEEP NAVY BLUE GRADIENT) */}
-          <div className="rounded-2xl p-4 px-5 mb-3 bg-gradient-to-r from-[#061228] via-[#091f48] to-[#0c295c] text-white shadow-md relative overflow-hidden flex items-center justify-between">
-            {/* Subtle background curved line */}
-            <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-blue-500/10 rounded-l-full pointer-events-none" />
+          <div className="rounded-2xl p-4 px-5 mb-3 bg-gradient-to-r from-[#06132a] via-[#091f46] to-[#0c2b62] text-white shadow-md relative overflow-hidden flex items-center justify-between">
+            {/* Background concentric curved lines */}
+            <svg className="absolute right-0 top-0 bottom-0 h-full w-2/5 pointer-events-none opacity-20" viewBox="0 0 200 120" preserveAspectRatio="none">
+              <ellipse cx="200" cy="60" rx="140" ry="90" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
+              <ellipse cx="200" cy="60" rx="100" ry="65" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
+              <ellipse cx="200" cy="60" rx="60" ry="40" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
+            </svg>
 
             <div className="relative z-10 flex items-center justify-between w-full">
               {/* Left: Score & Verdict */}
               <div>
-                <div className="flex items-center gap-1.5 text-[9.5px] font-bold uppercase tracking-widest text-blue-200 mb-1.5">
-                  <Target className="w-3.5 h-3.5 text-blue-400" />
+                <div className="flex items-center gap-1.5 text-[9.5px] font-bold uppercase tracking-[0.16em] text-blue-200 mb-1">
+                  <Target className="w-3.5 h-3.5 text-blue-400 stroke-[2.5]" />
                   <span>STANDARDIZED EXAMINATION SCORE</span>
                 </div>
 
-                <div className="flex items-baseline gap-2">
+                <div className="flex items-baseline gap-1.5">
                   <span className="text-5xl font-black font-display tracking-tight text-white leading-none">
                     {result.totalScore}
                   </span>
@@ -1266,22 +1164,22 @@ function OfficialCbtResultSlip({
                 </div>
 
                 {/* Standing Pill */}
-                <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/70 border border-blue-400/30 text-[11px]">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0" />
+                <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#051125]/85 border border-blue-400/40 text-[11px]">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#10b981] shrink-0" />
                   <span className="text-slate-300 font-medium">Standing:</span>
-                  <span className="font-extrabold text-emerald-400 uppercase">
+                  <span className="font-black text-[#10b981] uppercase">
                     {standingText}
                   </span>
-                  <span className="text-slate-300 text-[10px]">
+                  <span className="text-slate-400 text-[10px]">
                     {benchmarkText}
                   </span>
                 </div>
               </div>
 
               {/* Right: Quick Stats Breakdown */}
-              <div className="border-l border-blue-300/20 pl-6 space-y-2 text-xs">
+              <div className="border-l border-white/15 pl-6 space-y-2 text-xs">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/25 text-blue-300 flex items-center justify-center shrink-0">
                     <BarChartIcon className="w-3.5 h-3.5 fill-current" />
                   </div>
                   <div>
@@ -1291,7 +1189,7 @@ function OfficialCbtResultSlip({
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/25 text-blue-300 flex items-center justify-center shrink-0">
                     <ListCollapse className="w-3.5 h-3.5" />
                   </div>
                   <div>
@@ -1303,7 +1201,7 @@ function OfficialCbtResultSlip({
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-blue-500/25 text-blue-300 flex items-center justify-center shrink-0">
                     <Clock className="w-3.5 h-3.5" />
                   </div>
                   <div>
@@ -1317,28 +1215,28 @@ function OfficialCbtResultSlip({
             </div>
           </div>
 
-          {/* 4. 4-SUBJECT PERFORMANCE BREAKDOWN MATRIX (STANDARDIZED BLUE BORDERED TABLE) */}
+          {/* 4. 4-SUBJECT PERFORMANCE BREAKDOWN MATRIX (WITH VERTICAL BORDERS MATCHING IMAGE) */}
           <div className="mb-3 rounded-xl border border-blue-200/90 bg-white overflow-hidden shadow-xs">
-            <div className="p-2 px-3 bg-blue-50/50 border-b border-blue-100 flex items-center gap-2">
-              <div className="w-5 h-5 rounded bg-blue-600 text-white flex items-center justify-center">
-                <BookOpen className="w-3 h-3" />
+            <div className="p-2 px-3 bg-white border-b border-blue-100 flex items-center gap-2">
+              <div className="w-6 h-6 rounded-md bg-[#072553] text-white flex items-center justify-center shrink-0">
+                <BookOpen className="w-3.5 h-3.5" />
               </div>
-              <h3 className="text-[10px] font-extrabold uppercase tracking-wider text-slate-900">
+              <h3 className="text-[10px] font-black uppercase tracking-wider text-[#0a1b39]">
                 STANDARDIZED SUBJECT MATRIX &amp; PSYCHOMETRIC GRADING
               </h3>
             </div>
 
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50 text-slate-700 font-semibold border-b border-blue-100 text-[10px]">
-                  <th className="py-1.5 px-3 text-center w-8">#</th>
-                  <th className="py-1.5 px-3">Subject Name</th>
-                  <th className="py-1.5 px-3 text-center">Items</th>
-                  <th className="py-1.5 px-3 text-center text-emerald-600 font-bold">Correct</th>
-                  <th className="py-1.5 px-3 text-center text-rose-500 font-bold">Wrong</th>
-                  <th className="py-1.5 px-3 text-center text-slate-500">Skipped</th>
-                  <th className="py-1.5 px-3 text-center font-bold text-slate-900">Score (/100)</th>
-                  <th className="py-1.5 px-3 text-center font-bold">Diagnostic Grade</th>
+                <tr className="bg-[#f8faff] text-slate-700 font-bold border-b border-blue-100 text-[10px]">
+                  <th className="py-1.5 px-3 text-center w-8 border-r border-blue-100/80">#</th>
+                  <th className="py-1.5 px-3 border-r border-blue-100/80">Subject Name</th>
+                  <th className="py-1.5 px-3 text-center border-r border-blue-100/80">Items</th>
+                  <th className="py-1.5 px-3 text-center text-[#10b981] font-bold border-r border-blue-100/80">Correct</th>
+                  <th className="py-1.5 px-3 text-center text-[#ef4444] font-bold border-r border-blue-100/80">Wrong</th>
+                  <th className="py-1.5 px-3 text-center text-slate-500 border-r border-blue-100/80">Skipped</th>
+                  <th className="py-1.5 px-3 text-center font-bold text-slate-900 border-r border-blue-100/80">Score (/100)</th>
+                  <th className="py-1.5 px-3 text-center font-bold text-slate-900">Diagnostic Grade</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -1360,21 +1258,21 @@ function OfficialCbtResultSlip({
 
                   return (
                     <tr key={score.subject} className="hover:bg-blue-50/20 transition-colors">
-                      <td className="py-1.5 px-3 text-center font-mono text-slate-400 text-[10.5px]">{idx + 1}</td>
-                      <td className="py-1.5 px-3 font-semibold text-slate-900 text-[10.5px]">
+                      <td className="py-1.5 px-3 text-center font-mono text-slate-400 text-[10.5px] border-r border-blue-100/80">{idx + 1}</td>
+                      <td className="py-1.5 px-3 font-bold text-slate-900 text-[10.5px] border-r border-blue-100/80">
                         {getSubjectLabel(score.subject)}
                       </td>
-                      <td className="py-1.5 px-3 text-center font-mono text-slate-700 text-[10.5px]">{subjectTotal}</td>
-                      <td className="py-1.5 px-3 text-center font-mono font-bold text-emerald-600 text-[10.5px]">
+                      <td className="py-1.5 px-3 text-center font-mono text-slate-700 text-[10.5px] border-r border-blue-100/80">{subjectTotal}</td>
+                      <td className="py-1.5 px-3 text-center font-mono font-bold text-[#10b981] text-[10.5px] border-r border-blue-100/80">
                         {score.correctCount}
                       </td>
-                      <td className="py-1.5 px-3 text-center font-mono font-bold text-rose-500 text-[10.5px]">
+                      <td className="py-1.5 px-3 text-center font-mono font-bold text-[#ef4444] text-[10.5px] border-r border-blue-100/80">
                         {score.incorrectCount}
                       </td>
-                      <td className="py-1.5 px-3 text-center font-mono text-slate-500 text-[10.5px]">
+                      <td className="py-1.5 px-3 text-center font-mono text-slate-500 text-[10.5px] border-r border-blue-100/80">
                         {score.unansweredCount}
                       </td>
-                      <td className="py-1.5 px-3 text-center font-mono font-bold text-slate-900 text-[10.5px]">
+                      <td className="py-1.5 px-3 text-center font-mono font-bold text-slate-900 text-[10.5px] border-r border-blue-100/80">
                         {score.score}
                       </td>
                       <td className="py-1.5 px-3 text-center font-semibold text-slate-800 text-[10.5px]">{grade}</td>
@@ -1383,15 +1281,15 @@ function OfficialCbtResultSlip({
                 })}
               </tbody>
               <tfoot>
-                <tr className="bg-blue-50/70 font-bold border-t border-blue-200 text-slate-900 text-[10.5px]">
-                  <td colSpan={2} className="py-1.5 px-3 uppercase text-[10px] tracking-wider">
+                <tr className="bg-[#f0f6ff] font-bold border-t-2 border-blue-200 text-slate-900 text-[10.5px]">
+                  <td colSpan={2} className="py-1.5 px-3 uppercase text-[10px] font-black tracking-wider border-r border-blue-100/80">
                     AGGREGATE TOTAL
                   </td>
-                  <td className="py-1.5 px-3 text-center font-mono">{totalQuestions}</td>
-                  <td className="py-1.5 px-3 text-center font-mono text-emerald-700">{totalCorrect}</td>
-                  <td className="py-1.5 px-3 text-center font-mono text-rose-600">{totalWrong}</td>
-                  <td className="py-1.5 px-3 text-center font-mono text-slate-600">{totalSkipped}</td>
-                  <td className="py-1.5 px-3 text-center font-mono text-xs font-black text-slate-900">
+                  <td className="py-1.5 px-3 text-center font-mono font-bold border-r border-blue-100/80">{totalQuestions}</td>
+                  <td className="py-1.5 px-3 text-center font-mono font-bold text-[#10b981] border-r border-blue-100/80">{totalCorrect}</td>
+                  <td className="py-1.5 px-3 text-center font-mono font-bold text-[#ef4444] border-r border-blue-100/80">{totalWrong}</td>
+                  <td className="py-1.5 px-3 text-center font-mono text-slate-600 border-r border-blue-100/80">{totalSkipped}</td>
+                  <td className="py-1.5 px-3 text-center font-mono text-xs font-black text-slate-900 border-r border-blue-100/80">
                     {result.totalScore}
                   </td>
                   <td className="py-1.5 px-3 text-center font-black">/ 400</td>
@@ -1400,16 +1298,18 @@ function OfficialCbtResultSlip({
             </table>
           </div>
 
-          {/* 5. DIAGNOSTIC EVALUATION & RECOMMENDATION BOX */}
-          <div className="mb-3 p-2.5 px-3.5 rounded-xl bg-blue-50/40 border border-blue-200/80 flex items-start gap-3 text-xs">
-            <div className="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <Target className="w-3.5 h-3.5" />
+          {/* 5. DIAGNOSTIC EVALUATION & RECOMMENDATION BOX (WITH VERTICAL ACCENT LINE) */}
+          <div className="mb-3 p-3 px-4 rounded-xl bg-[#f4f8fe] border border-blue-200/90 flex items-center gap-3 text-xs">
+            <div className="w-8 h-8 rounded-full bg-[#1877f2] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Target className="w-4 h-4 stroke-[2.5]" />
             </div>
+            {/* The vertical divider line matching target image */}
+            <div className="w-[3px] self-stretch min-h-[32px] bg-[#1877f2] rounded-full shrink-0" />
             <div>
-              <h4 className="font-extrabold text-slate-900 uppercase tracking-wide text-[10px] mb-0.5">
+              <h4 className="font-black text-[#0a1b39] uppercase tracking-wide text-[10px] mb-0.5">
                 PSYCHOMETRIC DIAGNOSTIC EVALUATION &amp; RECOMMENDATION
               </h4>
-              <p className="text-slate-600 leading-normal text-[10px]">
+              <p className="text-slate-600 leading-normal text-[10.5px]">
                 Candidate completed {totalQuestions} examination items with an overall accuracy velocity of {accuracyRate}%. {totalSkipped > 0 ? `${totalSkipped} questions were left unattempted. ` : ''}Pacing index indicates an average of {avgSeconds}s per question item. Immediate revision is recommended on topic deficits to eliminate score attrition before national examination date.
               </p>
             </div>
@@ -1422,14 +1322,14 @@ function OfficialCbtResultSlip({
           <div className="pt-2.5 border-t border-slate-200 grid grid-cols-12 gap-3 items-center mb-2.5">
             {/* Left: Security Hash */}
             <div className="col-span-6 flex items-start gap-2">
-              <div className="w-5 h-5 rounded bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
-                <Shield className="w-3.5 h-3.5" />
+              <div className="w-5 h-5 rounded bg-blue-50 text-[#1877f2] flex items-center justify-center shrink-0 mt-0.5">
+                <Shield className="w-3.5 h-3.5 stroke-[2.5]" />
               </div>
               <div>
-                <p className="font-mono text-[8.5px] text-slate-500 uppercase tracking-tight">
+                <p className="font-mono text-[8.5px] text-[#1877f2] font-bold uppercase tracking-wider">
                   DIGITAL VERIFICATION HASH:
                 </p>
-                <p className="font-mono text-[9px] text-slate-800 font-bold break-all">
+                <p className="font-mono text-[9px] text-slate-800 font-black break-all">
                   {verificationHash}
                 </p>
                 <p className="text-[8px] text-slate-500 mt-0.5 leading-tight">
@@ -1445,16 +1345,16 @@ function OfficialCbtResultSlip({
 
             {/* Right: Circular Official CBT Stamp */}
             <div className="col-span-3 flex justify-end">
-              <CbtSealStamp size={64} />
+              <CbtSealStamp size={68} />
             </div>
           </div>
 
           {/* 7. BOTTOM BRAND BAR & QR CODE FOOTER */}
-          <div className="bg-[#071328] text-white p-2 px-3.5 rounded-lg flex items-center justify-between text-xs">
+          <div className="bg-[#071328] text-white p-2.5 px-4 rounded-xl flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
-              <CbtEmblemSquircle size={22} />
+              <CbtEmblemSquircle size={24} />
               <div>
-                <span className="font-extrabold text-white text-[11px] tracking-wide block leading-none">AURIKREX</span>
+                <span className="font-black text-white text-[11.5px] tracking-wider block leading-none">AURIKREX</span>
                 <span className="text-[8px] text-slate-400 leading-tight">Better Assessments. Brighter Futures.</span>
               </div>
             </div>
@@ -1464,8 +1364,8 @@ function OfficialCbtResultSlip({
             </div>
 
             {/* QR Code Graphic for transcript verification */}
-            <div className="flex items-center gap-1.5">
-              <div className="w-6 h-6 border border-slate-600 rounded p-0.5 flex items-center justify-center bg-white shrink-0">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 bg-white rounded p-0.5 flex items-center justify-center shrink-0">
                 <svg viewBox="0 0 24 24" className="w-full h-full text-slate-900 fill-current">
                   <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm8-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm11-2h2v2h-2v-2zm-3 2h2v2h-2v-2zm2 2h2v2h-2v-2zm3-2h2v4h-2v-4zm2 4h2v2h-2v-2z" />
                 </svg>
