@@ -19,7 +19,7 @@ async function migrateCbtUsersToCentral() {
   const client = postgres(dbUrl, { max: 1 });
   const db = drizzle(client, { schema });
   const centralUrl = process.env.CENTRAL_API_URL || 'https://aurikrex-central.pxxl.click';
-  const s2sSecret = process.env.AURIKREX_CENTRAL_S2S_SECRET || 'aurikrex-s2s-master-key-2026';
+  const s2sSecret = process.env.AURIKREX_CENTRAL_S2S_SECRET || '';
 
   const cbtUsers = await db.select().from(schema.users);
   console.log(`Found ${cbtUsers.length} total CBT user(s) in database.\n`);
