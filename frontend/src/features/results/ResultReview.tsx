@@ -995,7 +995,7 @@ function OfficialCbtResultSlip({
 
   return (
     <div
-      className="w-[210mm] max-w-[210mm] h-[297mm] max-h-[297mm] p-[8mm] sm:p-[10mm] box-border flex flex-col justify-between overflow-hidden bg-white text-slate-900 font-sans mx-auto relative select-none"
+      className="w-full max-w-[210mm] min-h-0 print:h-[297mm] print:max-h-[297mm] p-6 sm:p-8 print:p-[8mm] box-border flex flex-col justify-start overflow-hidden bg-white text-slate-900 font-sans mx-auto relative select-none"
       style={{
         pageBreakAfter: 'avoid',
         pageBreakInside: 'avoid',
@@ -1019,9 +1019,8 @@ function OfficialCbtResultSlip({
         <polygon points="0,55 0,120 65,120" fill="#93c5fd" fillOpacity="0.45" />
       </svg>
 
-      <div className="relative z-10 flex flex-col justify-between h-full">
+      <div className="relative z-10 flex flex-col space-y-3.5 print:space-y-2">
         {/* 1. TOP HEADER WITH SQUIRCLE EMBLEM & BADGE */}
-        <div>
           <div className="flex items-start justify-between pb-3 mb-2">
             {/* Left Branding */}
             <div className="flex items-center gap-3.5">
@@ -1314,12 +1313,9 @@ function OfficialCbtResultSlip({
               </p>
             </div>
           </div>
-        </div>
 
-        {/* BOTTOM SECTION: 6. VERIFICATION HASH, SIGNATURE, STAMP & 7. DARK NAVY BRAND BAR */}
-        <div>
           {/* 6. VERIFICATION HASH, SIGNATURE & OFFICIAL WATERMARK EMBLEM */}
-          <div className="pt-2.5 border-t border-slate-200 grid grid-cols-12 gap-3 items-center mb-2.5">
+          <div className="pt-3 border-t border-slate-200 grid grid-cols-12 gap-3 items-center">
             {/* Left: Security Hash */}
             <div className="col-span-6 flex items-start gap-2">
               <div className="w-5 h-5 rounded bg-blue-50 text-[#1877f2] flex items-center justify-center shrink-0 mt-0.5">
@@ -1375,7 +1371,6 @@ function OfficialCbtResultSlip({
               </span>
             </div>
           </div>
-        </div>
       </div>
     </div>
   );
